@@ -19,7 +19,7 @@ class _SignUpOnBoardSplashState extends State<SignUpOnBoardSplash> {
     timeDilation = 4.0; // 1.0 means normal animation speed.
     Future.delayed(Duration(milliseconds: 2000), () {
       Navigator.of(context)
-          .push(MaterialPageRoute<void>(builder: (BuildContext context) {
+          .pushReplacement(MaterialPageRoute<void>(builder: (BuildContext context) {
         return SignUpOnBoardBubbleTextView();
       }));
     });

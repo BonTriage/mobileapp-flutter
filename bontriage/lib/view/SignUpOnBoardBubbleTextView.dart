@@ -49,7 +49,7 @@ class _StateSignUpOnBoardBubbleTextView
                 children: [
                   PhotoHero(
                     photo: 'images/user_avatar.png',
-                    width: 70.0,
+                    width: 60.0,
                   ),
                   SizedBox(
                     width: 10,
@@ -67,7 +67,7 @@ class _StateSignUpOnBoardBubbleTextView
               height: 10,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20,vertical:5),
               child: ChatBubbleLeftPointed(
                 painter: ChatBubblePainter(Constant.chatBubbleGreen),
                 child: Container(
@@ -116,9 +116,10 @@ class _StateSignUpOnBoardBubbleTextView
                         child: Text(
                           Constant.next,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
+                              color: Constant.bubbleChatTextView,
+                              fontSize: 13,
+                              fontFamily: "FuturaMaxiLight",
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

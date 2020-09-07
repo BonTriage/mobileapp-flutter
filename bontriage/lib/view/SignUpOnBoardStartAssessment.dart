@@ -53,7 +53,7 @@ class _StateSignUpOnBoardStartAssessment
                       margin: EdgeInsets.only(right: 20),
                       child: Image.asset(
                         Constant.userAvatar,
-                        width: 70,
+                        width: 60,
                       ),
                     ))),
                   ],
@@ -68,10 +68,10 @@ class _StateSignUpOnBoardStartAssessment
                     child: Container(
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
-                        'Let\'s get started!',
+                        Constant.letsStarted,
                         style: TextStyle(
                             fontSize: 14,
-                            color: Colors.black,
+                            color: Constant.bubbleChatTextView,
                             fontFamily: "FuturaMaxiLight",
                             fontWeight: FontWeight.bold),
                       ),
@@ -90,12 +90,12 @@ class _StateSignUpOnBoardStartAssessment
                       onPressed: () {
                         {
                           Navigator.pushReplacementNamed(context,
-                              Constant.signUpFirstStepHeadacheResultRouter);
+                              Constant.signUpOnBoardHeadacheQuestionRouter);
                         }
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            EdgeInsets.symmetric(horizontal: 30,vertical: 10),
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
                           borderRadius: BorderRadius.circular(20),
@@ -104,10 +104,10 @@ class _StateSignUpOnBoardStartAssessment
                           child: Text(
                             Constant.startAssessment,
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
+                                color: Constant.bubbleChatTextView,
+                                fontSize: 13.5,
                                 fontFamily: "FuturaMaxiLight",
-                                fontWeight: FontWeight.normal),
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),

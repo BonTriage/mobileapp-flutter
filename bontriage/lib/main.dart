@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/Home.dart';
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
+import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/Splash.dart';
 import 'package:mobile/view/login_screen.dart';
+import 'package:mobile/view/sign_up_age_screen.dart';
+import 'package:mobile/view/sign_up_location_services.dart';
+import 'package:mobile/view/sign_up_name_screen.dart';
+import 'package:mobile/view/sign_up_on_board_screen.dart';
 import 'package:mobile/view/sign_up_screen.dart';
 
 void main() {
@@ -16,6 +22,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent
+    ));
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -34,7 +43,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpOnBoardSplash(),
+      home: SignUpOnBoardPersonalizedHeadacheCompass(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
@@ -43,9 +52,19 @@ class MyApp extends StatelessWidget {
         Constant.signUpOnBoardSplashRouter: (context) => SignUpOnBoardSplash(),
         Constant.signUpOnBoardStartAssessmentRouter: (context) =>
             SignUpOnBoardStartAssessment(),
+
+        Constant.signUpNameScreenRouter: (context) => SignUpNameScreen(),
+        Constant.signUpAgeScreenRouter: (context) => SignUpAgeScreen(),
+        Constant.signUpLocationServiceRouter: (context) =>
+            SignUpLocationServices(),
+        Constant.signUpOnBoardHeadacheQuestionRouter: (context) =>
+            SignUpOnBoardScreen(),
         Constant.signUpFirstStepHeadacheResultRouter: (context) =>
-            SignUpFirstStepCompassResult()
-      },
+            SignUpFirstStepCompassResult(),
+        Constant.signUpOnBoardPersonalizedHeadacheResultRouter: (context)=>
+            SignUpOnBoardPersonalizedHeadacheCompass(),
+
+    },
       debugShowCheckedModeBanner: false,
     );
   }

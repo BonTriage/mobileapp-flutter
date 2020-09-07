@@ -3,30 +3,50 @@ import 'package:mobile/util/constant.dart';
 
 
 class SignUpAgeScreen extends StatefulWidget {
+  double sliderValue = 3;
+  double sliderMinValue = 3;
+  double sliderMaxValue = 72;
+  String labelText = '';
+
+  SignUpAgeScreen({this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText});
+
   @override
-  _SignUpAgeScreenState createState() => _SignUpAgeScreenState();
+  _SignUpAgeScreenState createState() => _SignUpAgeScreenState(sliderValue: sliderValue, sliderMinValue: sliderMinValue, sliderMaxValue: sliderMaxValue, labelText: labelText);
 }
 
 class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
-  double age = 3;
+
+  double sliderValue = 3;
+  double sliderMinValue = 3;
+  double sliderMaxValue = 72;
+  String labelText = '';
+
+  _SignUpAgeScreenState({this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Center(
         child: Column(
           children: [
-            Slider(
-              value: age,
-              min: 3,
-              max: 72,
-              divisions: 69,
-              onChanged: (double age) {
-                setState(() {
-                  this.age = age;
-                });
-              },
-              activeColor: Constant.chatBubbleGreen,
-              inactiveColor: Color(0xff434351),
+            SliderTheme(
+              data: SliderThemeData(
+                activeTrackColor: Color(0xff434351),
+                inactiveTrackColor: Color(0xff434351),
+                thumbColor: Constant.chatBubbleGreen,
+                overlayColor: Constant.chatBubbleGreenTransparent,
+                trackHeight: 7
+              ),
+              child: Slider(
+                value: sliderValue,
+                min: sliderMinValue,
+                max: sliderMaxValue,
+                onChanged: (double age) {
+                  setState(() {
+                    sliderValue = age;
+                  });
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -34,14 +54,14 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '3',
+                    '${sliderMinValue.toInt()}',
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 18,
                     ),
                   ),
                   Text(
-                    '72',
+                    '${sliderMaxValue.toInt()}',
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 18,
@@ -59,7 +79,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
               ),
               child: Center(
                 child: Text(
-                  age.toInt().toString(),
+                  sliderValue.toInt().toString(),
                   style: TextStyle(
                     color: Constant.chatBubbleGreen,
                     fontSize: 18,
@@ -69,7 +89,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
             ),
             SizedBox(height: 10,),
             Text(
-              'years old',
+              '$labelText',
               style: TextStyle(
                 fontSize: 15,
                 fontFamily: 'FuturaMaxiLight',

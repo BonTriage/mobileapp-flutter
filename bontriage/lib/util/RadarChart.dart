@@ -10,51 +10,65 @@ const defaultGraphColors = [
   Color(0xffafd794),
 ];
 
+const personalizedDefaultGraphColors = [
+  Color(0xff97c289),
+  Color(0xffB8FFFF),
+  Color(0xB8E1FF),
+  Color(0xffafd794),
+];
+
 class RadarChart extends StatefulWidget {
   final List<int> ticks;
   final List<String> features;
   final List<List<int>> data;
   final bool reverseAxis;
+  final bool isPersonalizedHeadacheData;
   final TextStyle ticksTextStyle;
   final TextStyle featuresTextStyle;
   final Color outlineColor;
   final Color axisColor;
   final List<Color> graphColors;
 
-  const RadarChart({
-    Key key,
-    @required this.ticks,
-    @required this.features,
-    @required this.data,
-    this.reverseAxis = false,
-    this.ticksTextStyle = const TextStyle(color: Colors.grey, fontSize: 0),
-    this.featuresTextStyle = const TextStyle(color: Color(0xffafd794), fontSize: 12),
-    this.outlineColor = const Color(0xff0e232f),
-    this.axisColor = const Color(0xfff0e4945),
-    this.graphColors = defaultGraphColors,
-  }) : super(key: key);
+  const RadarChart(
+      {Key key,
+      @required this.ticks,
+      @required this.features,
+      @required this.data,
+      this.reverseAxis = false,
+      this.isPersonalizedHeadacheData = false,
+      this.ticksTextStyle = const TextStyle(color: Colors.grey, fontSize: 0),
+      this.featuresTextStyle =
+          const TextStyle(color: Color(0xffafd794), fontSize: 12),
+      this.outlineColor = const Color(0xff0e232f),
+      this.axisColor = const Color(0xfff0e4945),
+      this.graphColors = defaultGraphColors})
+      : super(key: key);
 
   factory RadarChart.light({
     @required List<int> ticks,
     @required List<String> features,
     @required List<List<int>> data,
-
     bool reverseAxis = false,
+    bool isPersonalizedHeadacheData = false,
   }) {
     return RadarChart(
       ticks: ticks,
       features: features,
       data: data,
       reverseAxis: reverseAxis,
+      isPersonalizedHeadacheData: isPersonalizedHeadacheData,
+      graphColors: isPersonalizedHeadacheData
+          ? personalizedDefaultGraphColors
+          : defaultGraphColors,
     );
   }
 
-  factory RadarChart.dark({
-    @required List<int> ticks,
-    @required List<String> features,
-    @required List<List<int>> data,
-    bool reverseAxis = false,
-  }) {
+  factory RadarChart.dark(
+      {@required List<int> ticks,
+      @required List<String> features,
+      @required List<List<int>> data,
+      bool reverseAxis = false,
+      bool isPersonalizedHeadacheData = false}) {
     return RadarChart(
       ticks: ticks,
       features: features,
@@ -63,6 +77,7 @@ class RadarChart extends StatefulWidget {
       outlineColor: Colors.white,
       axisColor: Colors.grey,
       reverseAxis: reverseAxis,
+      isPersonalizedHeadacheData: isPersonalizedHeadacheData,
     );
   }
 
@@ -79,8 +94,8 @@ class _RadarChartState extends State<RadarChart>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+    animationController =
+        AnimationController(duration: Duration(milliseconds: 600), vsync: this);
 
     animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       curve: Curves.fastOutSlowIn,
@@ -196,7 +211,7 @@ class RadarChartPainter extends CustomPainter {
       var yAngle = sin(angle * index - pi / 2);
 
       var featureOffset =
-      Offset(centerX + radius * xAngle, centerY + radius * yAngle);
+          Offset(centerX + radius * xAngle, centerY + radius * yAngle);
 
       canvas.drawLine(centerOffset, featureOffset, ticksPaint);
 
@@ -204,7 +219,7 @@ class RadarChartPainter extends CustomPainter {
       var featureLabelFontWidth = (featuresTextStyle as TextStyle).fontSize - 4;
       var labelYOffset = yAngle < 0 ? -featureLabelFontHeight : 0;
       var labelXOffset =
-      xAngle < 0 ? -featureLabelFontWidth * feature.length : 0;
+          xAngle < 0 ? -featureLabelFontWidth * feature.length : 0;
 
       /* TextPainter(
         text: TextSpan(text: feature, style: featuresTextStyle),

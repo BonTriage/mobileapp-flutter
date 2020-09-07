@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class ChatBubbleLeftPointed extends SingleChildRenderObjectWidget {
-  ChatBubbleLeftPointed({
+class ChatBubble extends SingleChildRenderObjectWidget {
+  ChatBubble({
     Key key,
     this.painter,
     Widget child,
@@ -24,10 +24,10 @@ class ChatBubbleLeftPointed extends SingleChildRenderObjectWidget {
   }
 }
 
-class ChatBubblePainter extends CustomPainter {
+class ChatBubblePaint extends CustomPainter {
   Color color;
 
-  ChatBubblePainter(this.color);
+  ChatBubblePaint(this.color);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,7 +40,7 @@ class ChatBubblePainter extends CustomPainter {
 
     final pointerPath = Path();
 
-    double x = 75;
+    double x = 20;
     double y = 0;
 
     pointerPath.moveTo(x, y);

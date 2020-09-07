@@ -22,7 +22,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
               Text(
                 Constant.enableLocationServices,
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                   color: Constant.chatBubbleGreen,
                   fontFamily: 'FuturaMaxiLight',
                 ),
@@ -45,7 +46,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
           Text(
             Constant.enableLocationRecommended,
             style: TextStyle(
-                height: 1.2,
+                height: 1.5,
                 fontSize: 15,
                 color: Constant.locationServiceGreen,
                 fontFamily: 'FuturaMaxiLight'

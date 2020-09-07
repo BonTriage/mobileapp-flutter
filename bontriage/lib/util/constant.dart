@@ -10,6 +10,12 @@ class Constant {
       '/signUpOnBoardStartAssessment';
   static String signUpFirstStepHeadacheResultRouter =
       '/signUpFirstStepHeadacheResult';
+  static String signUpOnBoardPersonalizedHeadacheResultRouter =
+      '/signUpOnBoardPersonalizedHeadacheResult';
+  static String signUpNameScreenRouter = '/signUpNameScreen';
+  static String signUpAgeScreenRouter = '/signUpAgeScreen';
+  static String signUpLocationServiceRouter = '/signUpLocationService';
+  static String signUpOnBoardHeadacheQuestionRouter = '/signUpOnBoardHeadacheQuestion';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -41,6 +47,17 @@ class Constant {
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
   static String startAssessment = 'Start Assessment';
+  static String letsStarted = 'Let\'s get started!';
+  static String personalizedHeadacheCompass = 'Generating your personalized Headache Compass...';
+
+  static String howManyDays =
+      'Over the last three months, how many days per month, on average, have you been absolutely headache free?';
+  static String howManyHours =
+      'Over the last three months, how many hours, on average, does a typical headache last if you don\'t treat it?';
+  static String onScaleOf =
+      'On a scale of 1 to 10, 1 being no pain, how bad is the pain of your typical headache, if you don\'t treat it?';
+  static String howDisabled =
+      'Overall, from 0-4, how disabled are you by your headaches, 0 being no disability and 4 being completely disabled?';
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
@@ -58,6 +75,7 @@ class Constant {
   static Color chatBubbleGreenBlue = Color.fromARGB(15, 175, 215, 148);
   static Color locationServiceGreen = Color(0xffCAD7BF);
   static Color bubbleChatTextView = Color(0xff0E1712);
+  static Color chatBubbleGreenTransparent = Color(0x26AFD794);
 
 //images
   static String userAvatar = 'images/user_avatar.png';

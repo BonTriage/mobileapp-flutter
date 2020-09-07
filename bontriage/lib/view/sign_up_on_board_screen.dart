@@ -1,12 +1,12 @@
-import 'package:bouncing_widget/bouncing_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
-import 'package:mobile/view/sign_up_name_screen.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:mobile/util/constant.dart';
 
-import 'ChatBubbleLeftPointed.dart';
+import 'sign_up_name_screen.dart';
+import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class SignUpOnBoardScreen extends StatefulWidget {
   @override
@@ -28,7 +28,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     Constant.firstBasics,
     Constant.whatShouldICallYou,
     Constant.howOld,
-    Constant.likeToEnableLocationServices
+    Constant.likeToEnableLocationServices,
+    Constant.howManyDays,
+    Constant.howManyHours,
+    Constant.onScaleOf,
+    Constant.howDisabled
   ];
 
   @override
@@ -38,8 +42,37 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     _pageViewWidgetList = [
       Container(),
       SignUpNameScreen(),
-      SignUpAgeScreen(),
+      SignUpAgeScreen(
+        sliderValue: 3,
+        sliderMinValue: 3,
+        sliderMaxValue: 72,
+        labelText: 'years old',
+      ),
       SignUpLocationServices(),
+      SignUpAgeScreen(
+        sliderValue: 0,
+        sliderMinValue: 0,
+        sliderMaxValue: 31,
+        labelText: 'days',
+      ),
+      SignUpAgeScreen(
+        sliderValue: 0,
+        sliderMinValue: 0,
+        sliderMaxValue: 24,
+        labelText: 'hours',
+      ),
+      SignUpAgeScreen(
+        sliderValue: 1,
+        sliderMinValue: 1,
+        sliderMaxValue: 10,
+        labelText: '',
+      ),
+      SignUpAgeScreen(
+        sliderValue: 0,
+        sliderMinValue: 0,
+        sliderMaxValue: 4,
+        labelText: '',
+      ),
     ];
   }
 
@@ -107,7 +140,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                       child: Text(
                         questionList[_currentPageIndex],
                         style: TextStyle(
-                            fontSize: 16, color: Constant.chatBubbleGreen),
+                            fontSize: 13,fontWeight: FontWeight.bold,height: 1.5, color: Constant.chatBubbleGreen),
                       ),
                     ),
                   ),
@@ -133,7 +166,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -143,22 +176,25 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                           scaleFactor: 1.5,
                           onPressed: () {
                             setState(() {
-                              if (_progressPercent > 0.1) {
+                              /*if (_progressPercent > 0.1) {
                                 _progressPercent -= 0.11;
                               } else {
                                 _progressPercent = 0;
-                              }
+                              }*/
 
                               if (_currentPageIndex != 0) {
+                                _progressPercent -= 0.14;
                                 _currentPageIndex--;
                                 _pageController.animateToPage(_currentPageIndex,
                                     duration: Duration(milliseconds: 250),
                                     curve: Curves.easeIn);
+                              } else {
+                                _progressPercent = 0;
                               }
                             });
                           },
                           child: Container(
-                            width: 120,
+                            width: 100,
                             height: 30,
                             decoration: BoxDecoration(
                               color: Color(0xffafd794),
@@ -169,8 +205,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                                 Constant.back,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal),
+                                    fontSize: 13,
+                                    fontFamily: "FuturaMaxiLight",
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -184,21 +221,28 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         scaleFactor: 1.5,
                         onPressed: () {
                           setState(() {
-                            if (_progressPercent < 0.9) {
+                            /*if (_progressPercent < 0.9) {
                               _progressPercent += 0.1;
-                            }
-
-                            if (_currentPageIndex !=
-                                _pageViewWidgetList.length - 1) {
-                              _currentPageIndex++;
-                              _pageController.animateToPage(_currentPageIndex,
-                                  duration: Duration(milliseconds: 250),
-                                  curve: Curves.easeIn);
+                            }*/
+                            if (_progressPercent == 1) {
+                              Navigator.pushNamed(context,
+                                  Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
+                            } else {
+                              if (_currentPageIndex !=
+                                  _pageViewWidgetList.length - 1) {
+                                _progressPercent += 0.14;
+                                _currentPageIndex++;
+                                _pageController.animateToPage(_currentPageIndex,
+                                    duration: Duration(milliseconds: 150),
+                                    curve: Curves.easeIn);
+                              } else {
+                                _progressPercent = 1;
+                              }
                             }
                           });
                         },
                         child: Container(
-                          width: 120,
+                          width: 100,
                           height: 30,
                           decoration: BoxDecoration(
                             color: Color(0xffafd794),
@@ -209,8 +253,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                               Constant.next,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
+                                  fontSize: 13,
+                                  fontFamily: "FuturaMaxiLight",
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -227,7 +272,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                     child: LinearPercentIndicator(
                       animation: true,
                       lineHeight: 8.0,
-                      animationDuration: 500,
+                      animationDuration: 200,
                       animateFromLastPercent: true,
                       percent: _progressPercent,
                       backgroundColor: Constant.chatBubbleGreenBlue,
