@@ -95,6 +95,18 @@ class Constant {
   static String alwaysOneSide = 'Always on one side';
   static String usuallyOnOneSide = 'Usually on one side, but sometimes on the other';
   static String usuallyOnBothSide = 'Usually on both sides';
+  static String headacheChanged = 'Have your headaches changed significantly in the last year?';
+  static String howManyTimes = 'How many times have you had this headache in the past?';
+  static String didYourHeadacheStart = 'Did your headaches start following a major event (i.e. trauma, stress, illness, school, start of menses)?';
+  static String isYourHeadache = 'Is your headache present much of the day, more than 15 days per month?';
+  static String separateHeadachesPerDay = 'Do you get 2 or more separate headaches per day?';
+  static String headachesFrequentForDays = 'Are your headaches frequent for days to weeks, then disappear for weeks to months, then become frequent again?';
+  static String headachesOccurSeveralDays = 'Do your headaches occur several days or more per week for many months or years without a break for at least 4 weeks per year?';
+  static String headachesBuild = 'How quickly do your headaches build to maximum severity?';
+  static String headacheLast = 'If untreated, how long does your typical headache last?';
+  static String experienceYourHeadache = 'Where do you experience your headache?';
+  static String isYourHeadacheWorse = 'Is your headache worse with changes in position?';
+  static String headacheStartDuring = 'Does your headache start during or after exertion or straining?';
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

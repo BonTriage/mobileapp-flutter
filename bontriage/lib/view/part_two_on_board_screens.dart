@@ -20,7 +20,19 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
   List<Widget> _pageViewWidgetList;
   List<String> _questionList = [
-    Constant.atWhatAge
+    Constant.atWhatAge,
+    Constant.headacheChanged,
+    Constant.howManyTimes,
+    Constant.didYourHeadacheStart,
+    Constant.isYourHeadache,
+    Constant.separateHeadachesPerDay,
+    Constant.headachesFrequentForDays,
+    Constant.headachesOccurSeveralDays,
+    Constant.headachesBuild,
+    Constant.headacheLast,
+    Constant.experienceYourHeadache,
+    Constant.isYourHeadacheWorse,
+    Constant.headacheStartDuring,
   ];
 
   @override
@@ -47,7 +59,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         sliderMaxValue: 20,
         minText: '0',
         maxText: '20+',
-        labelText: Constant.yearsOld,
+        labelText: Constant.times,
       ),
       OnBoardSelectOptions(selectOptionList: [
         Constant.yes,
@@ -95,6 +107,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         Constant.no
       ],),
     ];
+
+    _progressPercent = 1 / _pageViewWidgetList.length;
   }
   @override
   Widget build(BuildContext context) {
@@ -114,6 +128,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             Expanded(
                 child: PageView.builder(
               controller: _pageController,
+              physics: NeverScrollableScrollPhysics(),
               itemCount: _pageViewWidgetList.length,
               itemBuilder: (BuildContext context, int index) {
                 return _pageViewWidgetList[index];
@@ -121,10 +136,41 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             )),
             OnBoardBottomButtons(
               progressPercent: _progressPercent,
-              backButtonFunction: () {},
-              nextButtonFunction: () {setState(() {
-                _progressPercent += 0.2;
-              });},
+              backButtonFunction: () {
+                setState(() {
+                  double stepOneProgress = 1 / _pageViewWidgetList.length;
+
+                  if (_currentPageIndex != 0) {
+                    _progressPercent -= stepOneProgress;
+                    _currentPageIndex--;
+                    _pageController.animateToPage(_currentPageIndex,
+                        duration: Duration(milliseconds: 250),
+                        curve: Curves.easeIn);
+                  }
+                });
+              },
+              nextButtonFunction: () {
+                setState(() {
+                  double stepOneProgress = 1 / _pageViewWidgetList.length;
+
+                  if (_progressPercent == 1) {
+                    //TODO: Move to next screen
+                  } else {
+                    _currentPageIndex++;
+
+                    if (_currentPageIndex !=
+                        _pageViewWidgetList.length - 1)
+                      _progressPercent += stepOneProgress;
+                    else {
+                      _progressPercent = 1;
+                    }
+
+                    _pageController.animateToPage(_currentPageIndex,
+                        duration: Duration(milliseconds: 250),
+                        curve: Curves.easeInOutCubic);
+                  }
+                });
+              },
               onBoardPart: 2,
             )
           ],

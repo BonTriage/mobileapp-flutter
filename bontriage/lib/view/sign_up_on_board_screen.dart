@@ -186,12 +186,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                           scaleFactor: 1.5,
                           onPressed: () {
                             setState(() {
-                              /*if (_progressPercent > 0.1) {
-                                _progressPercent -= 0.11;
-                              } else {
-                                _progressPercent = 0;
-                              }*/
-
                               if (_currentPageIndex != 0) {
                                 _progressPercent -= 0.14;
                                 _currentPageIndex--;
@@ -231,9 +225,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         scaleFactor: 1.5,
                         onPressed: () {
                           setState(() {
-                            /*if (_progressPercent < 0.9) {
-                              _progressPercent += 0.1;
-                            }*/
                             if (_progressPercent == 1) {
                               Navigator.pushNamed(context,
                                   Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
