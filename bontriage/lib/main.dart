@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PartTwoOnBoardScreens(),
+      home:  SignUpFirstStepCompassResult(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
