@@ -16,6 +16,7 @@ class Constant {
   static String signUpAgeScreenRouter = '/signUpAgeScreen';
   static String signUpLocationServiceRouter = '/signUpLocationService';
   static String signUpOnBoardHeadacheQuestionRouter = '/signUpOnBoardHeadacheQuestion';
+  static String partTwoOnBoardScreenRouter = '/partTwoOnBoardScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -74,6 +75,26 @@ class Constant {
       'On a scale of 1 to 10, 1 being no pain, how bad is the pain of your typical headache, if you don\'t treat it?';
   static String howDisabled =
       'Overall, from 0-4, how disabled are you by your headaches, 0 being no disability and 4 being completely disabled?';
+  static String yearsOld = 'years old';
+  static String days = 'days';
+  static String hours = 'hours';
+  static String blankString = '';
+  static String atWhatAge = 'At what age did you first experience headaches?';
+  static String selectOne = 'Select one';
+  static String yes = 'Yes';
+  static String no = 'No';
+  static String times = 'times';
+  static String lessThanFiveMinutes = 'Less than 5 minutes';
+  static String fiveToTenMinutes = '5 to 10 minutes';
+  static String tenToThirtyMinutes = '10 to 30 minutes';
+  static String moreThanThirtyMinutes = 'More than 30 minutes';
+  static String fewSecAtATime = 'Only a few seconds at a time';
+  static String fewSecUpTo20Min = 'A few seconds up to a 20 minutes';
+  static String moreThan20Min = 'More than 20 minutes, but always less than 3 hours';
+  static String moreThan3To4Hours = 'More than 3-4 hours';
+  static String alwaysOneSide = 'Always on one side';
+  static String usuallyOnOneSide = 'Usually on one side, but sometimes on the other';
+  static String usuallyOnBothSide = 'Usually on both sides';
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
@@ -85,17 +106,21 @@ class Constant {
         Color(0xff0E4C47),
       ]));
 
-//colors
+  //colors
   static Color backgroundColor = Color(0xff0E232F);
   static Color chatBubbleGreen = Color(0xffAFD794);
   static Color chatBubbleGreenBlue = Color.fromARGB(15, 175, 215, 148);
   static Color locationServiceGreen = Color(0xffCAD7BF);
   static Color bubbleChatTextView = Color(0xff0E1712);
   static Color chatBubbleGreenTransparent = Color(0x26AFD794);
+  static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
 
-//images
+  //images
   static String userAvatar = 'images/user_avatar.png';
   static String closeIcon = 'images/close_icon.png';
   static String volumeOn = 'images/volume_on.png';
   static String volumeOff = 'images/volume_off.png';
+
+  //fontFamily
+  static String futuraMaxiLight = "FuturaMaxiLight";
 }
