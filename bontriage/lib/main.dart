@@ -8,6 +8,7 @@ import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/Splash.dart';
 import 'package:mobile/view/login_screen.dart';
+import 'package:mobile/view/part_two_on_board_screens.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpOnBoardPersonalizedHeadacheCompass(),
+      home: PartTwoOnBoardScreens(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
             SignUpFirstStepCompassResult(),
         Constant.signUpOnBoardPersonalizedHeadacheResultRouter: (context)=>
             SignUpOnBoardPersonalizedHeadacheCompass(),
-
+        Constant.partTwoOnBoardScreenRouter: (context) => PartTwoOnBoardScreens()
     },
       debugShowCheckedModeBanner: false,
     );

@@ -6,22 +6,17 @@ class SignUpAgeScreen extends StatefulWidget {
   double sliderValue = 3;
   double sliderMinValue = 3;
   double sliderMaxValue = 72;
+  String minText = '';
+  String maxText = '';
   String labelText = '';
 
-  SignUpAgeScreen({this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText});
+  SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText})  : super(key: key);
 
   @override
-  _SignUpAgeScreenState createState() => _SignUpAgeScreenState(sliderValue: sliderValue, sliderMinValue: sliderMinValue, sliderMaxValue: sliderMaxValue, labelText: labelText);
+  _SignUpAgeScreenState createState() => _SignUpAgeScreenState();
 }
 
 class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
-
-  double sliderValue = 3;
-  double sliderMinValue = 3;
-  double sliderMaxValue = 72;
-  String labelText = '';
-
-  _SignUpAgeScreenState({this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +33,12 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
                 trackHeight: 7
               ),
               child: Slider(
-                value: sliderValue,
-                min: sliderMinValue,
-                max: sliderMaxValue,
+                value: widget.sliderValue,
+                min: widget.sliderMinValue,
+                max: widget.sliderMaxValue,
                 onChanged: (double age) {
                   setState(() {
-                    sliderValue = age;
+                    widget.sliderValue = age;
                   });
                 },
               ),
@@ -54,14 +49,14 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${sliderMinValue.toInt()}',
+                    widget.minText,
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 18,
                     ),
                   ),
                   Text(
-                    '${sliderMaxValue.toInt()}',
+                    widget.maxText,
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 18,
@@ -79,7 +74,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
               ),
               child: Center(
                 child: Text(
-                  sliderValue.toInt().toString(),
+                  widget.sliderValue.toInt().toString(),
                   style: TextStyle(
                     color: Constant.chatBubbleGreen,
                     fontSize: 18,
@@ -89,7 +84,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
             ),
             SizedBox(height: 10,),
             Text(
-              '$labelText',
+              '${widget.labelText}',
               style: TextStyle(
                 fontSize: 15,
                 fontFamily: 'FuturaMaxiLight',

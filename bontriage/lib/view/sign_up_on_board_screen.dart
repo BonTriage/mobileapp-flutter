@@ -46,32 +46,42 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
         sliderValue: 3,
         sliderMinValue: 3,
         sliderMaxValue: 72,
-        labelText: 'years old',
+        minText: '3',
+        maxText: '72',
+        labelText: Constant.yearsOld,
       ),
       SignUpLocationServices(),
       SignUpAgeScreen(
         sliderValue: 0,
         sliderMinValue: 0,
         sliderMaxValue: 31,
-        labelText: 'days',
+        minText: '0',
+        maxText: '31',
+        labelText: Constant.days,
       ),
       SignUpAgeScreen(
         sliderValue: 0,
         sliderMinValue: 0,
         sliderMaxValue: 24,
-        labelText: 'hours',
+        minText: '0',
+        maxText: '24',
+        labelText: Constant.days,
       ),
       SignUpAgeScreen(
         sliderValue: 1,
         sliderMinValue: 1,
         sliderMaxValue: 10,
-        labelText: '',
+        minText: '1',
+        maxText: '10',
+        labelText: Constant.blankString,
       ),
       SignUpAgeScreen(
         sliderValue: 0,
         sliderMinValue: 0,
         sliderMaxValue: 4,
-        labelText: '',
+        minText: '0',
+        maxText: '4',
+        labelText: Constant.blankString,
       ),
     ];
   }
@@ -166,7 +176,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -228,16 +238,18 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                               Navigator.pushNamed(context,
                                   Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
                             } else {
-                              if (_currentPageIndex !=
-                                  _pageViewWidgetList.length - 1) {
-                                _progressPercent += 0.14;
                                 _currentPageIndex++;
+
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
+                                _progressPercent += 0.14;
+                                else {
+                                  _progressPercent = 1;
+                                }
+
                                 _pageController.animateToPage(_currentPageIndex,
                                     duration: Duration(milliseconds: 150),
                                     curve: Curves.easeIn);
-                              } else {
-                                _progressPercent = 1;
-                              }
                             }
                           });
                         },
