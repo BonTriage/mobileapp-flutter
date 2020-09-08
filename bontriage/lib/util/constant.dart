@@ -43,8 +43,24 @@ class Constant {
       'Welcome to MigraineMentor! Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
   static String migraineMentorHelpTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
-  static String compassDiagramTextView =
+   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
+
+  static String welcomePersonalizedHeadacheFirstTextView =
+      'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better';
+
+  static String welcomePersonalizedHeadacheSecondTextView =
+      'Throughout your journey with MigraineMentor, you will work on shrinking the size and changing the shape of your compass to lower your Headache Score.';
+
+  static String welcomePersonalizedHeadacheThirdTextView =
+      'Your Compass is generated based on Intensity, duration, disability, frequency-the four main parameters that headache specialists evaluate when diagnosing migraines and headache .';
+
+  static String welcomePersonalizedHeadacheFourthTextView =
+      'As you get better at managing your headache, you will learn to use the compass to see the impact of different measures like exposure to a possible trigger or starting a new medications.';
+
+  static String welcomePersonalizedHeadacheFifthTextView =
+      'To learn more about each measurement, try clicking on any labels of the below.';
+
 
   static String startAssessment = 'Start Assessment';
   static String letsStarted = 'Let\'s get started!';

@@ -2,10 +2,8 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 
 import 'ChatBubble.dart';
-import 'ChatBubbleRightPointed.dart';
 
 class SignUpFirstStepCompassResult extends StatefulWidget {
   @override
@@ -18,6 +16,22 @@ class _SignUpFirstStepCompassResultState
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
+  int _buttonPressedValue = 0;
+  List<String> _bubbleTextViewList;
+  bool isBackButtonHide = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bubbleTextViewList = [
+      Constant.welcomePersonalizedHeadacheFirstTextView,
+      Constant.welcomePersonalizedHeadacheSecondTextView,
+      Constant.welcomePersonalizedHeadacheThirdTextView,
+      Constant.welcomePersonalizedHeadacheFourthTextView,
+      Constant.welcomePersonalizedHeadacheFifthTextView
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +66,12 @@ class _SignUpFirstStepCompassResultState
                 ],
               ),
               SizedBox(height: 10),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    child: Column(
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Image(
@@ -77,32 +90,31 @@ class _SignUpFirstStepCompassResultState
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: ChatBubble(
-                      painter: ChatBubblePaint(Constant.chatBubbleGreen),
+                    Expanded(
                       child: Container(
-                        child: Text(
-                          Constant.compassDiagramTextView,
-                          style: TextStyle(
-                              height: 1.5,
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontFamily: "FuturaMaxiLight",
-                              fontWeight: FontWeight.bold),
+                        padding: EdgeInsets.only(left: 17, top: 16),
+                        child: ChatBubble(
+                          painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              _bubbleTextViewList[_buttonPressedValue],
+                              style: TextStyle(
+                                  height: 1.5,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontFamily: "FuturaMaxiLight",
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 50,
               ),
               Center(
                 child: Row(
@@ -144,14 +156,14 @@ class _SignUpFirstStepCompassResultState
                                             features: features,
                                             data: data,
                                             reverseAxis: true,
-                                      isPersonalizedHeadacheData: false,
+                                            isPersonalizedHeadacheData: false,
                                           )
                                         : RadarChart.light(
                                             ticks: ticks,
                                             features: features,
                                             data: data,
                                             reverseAxis: true,
-                                      isPersonalizedHeadacheData: false,
+                                            isPersonalizedHeadacheData: false,
                                           ),
                                   ),
                                   Center(
@@ -206,7 +218,7 @@ class _SignUpFirstStepCompassResultState
                 ),
               ),
               SizedBox(
-                height: 80,
+                height: 50,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -218,28 +230,33 @@ class _SignUpFirstStepCompassResultState
                       scaleFactor: 1.5,
                       onPressed: () {
                         setState(() {
-                          /*if (_progressPercent > 0.1) {
-                                _progressPercent -= 0.11;
-                              } else {
-                                _progressPercent = 0;
-                              }*/
+                          if (_buttonPressedValue <= 4 &&
+                              _buttonPressedValue > 1) {
+                            _buttonPressedValue--;
+                          } else {
+                            isBackButtonHide = false;
+                            _buttonPressedValue = 0;
+                          }
                         });
                       },
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: Color(0xffafd794),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: Text(
-                            Constant.back,
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontSize: 13,
-                                fontFamily: "FuturaMaxiLight",
-                                fontWeight: FontWeight.bold),
+                      child: Visibility(
+                        visible: isBackButtonHide,
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xffafd794),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              Constant.back,
+                              style: TextStyle(
+                                  color: Constant.bubbleChatTextView,
+                                  fontSize: 13,
+                                  fontFamily: "FuturaMaxiLight",
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -248,7 +265,16 @@ class _SignUpFirstStepCompassResultState
                       duration: Duration(milliseconds: 100),
                       scaleFactor: 1.5,
                       onPressed: () {
-                        setState(() {});
+                        setState(() {
+                          if (_buttonPressedValue >= 0 &&
+                              _buttonPressedValue < 4) {
+                            _buttonPressedValue++;
+                            isBackButtonHide = true;
+                          } else {
+                            Navigator.pushReplacementNamed(context,
+                                Constant.signUpOnBoardHeadacheQuestionRouter);
+                          }
+                        });
                       },
                       child: Container(
                         width: 100,

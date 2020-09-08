@@ -24,10 +24,10 @@ class ChatBubble extends SingleChildRenderObjectWidget {
   }
 }
 
-class ChatBubblePaint extends CustomPainter {
+class ChatBubblePainter extends CustomPainter {
   Color color;
 
-  ChatBubblePaint(this.color);
+  ChatBubblePainter(this.color);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -40,20 +40,20 @@ class ChatBubblePaint extends CustomPainter {
 
     final pointerPath = Path();
 
-    double x = 20;
-    double y = 0;
+    double x = 0;
+    double y = 15;
 
     pointerPath.moveTo(x, y);
 
     pointerPath.arcToPoint(
-        Offset(x - 20, y - 25),
-        radius: Radius.circular(30),
+        Offset(x - 10, 0),
+        radius: Radius.circular(20),
         clockwise: false
     );
 
     pointerPath.arcToPoint(
-      Offset(x - 20, y),
-      radius: Radius.circular(13),
+      Offset(x + 5, y - 10),
+      radius: Radius.circular(20),
     );
 
     canvas.drawPath(pointerPath, paint);

@@ -21,40 +21,44 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
   void initState() {
     // TODO: implement initState
     super.initState();
-    const oneSec = const Duration(milliseconds: 300);
-    new Timer.periodic(oneSec, (Timer t) {
-      if (startingValue == 1) {
-        startingValue = 2;
-        setState(() {
-          sliderValue = 2;
-          // numberOfFeatures = 4;
-        });
-      } else if (startingValue == 2) {
-        sliderValue = 3;
-        startingValue = 3;
-        setState(() {
+    Future.delayed(Duration(seconds: 1), () {
+      // 5s over, navigate to a new page
+      const oneSec = const Duration(milliseconds: 500);
+      new Timer.periodic(oneSec, (Timer t) {
+        if (startingValue == 1) {
+          startingValue = 2;
+          setState(() {
+            sliderValue = 2;
+            // numberOfFeatures = 4;
+          });
+        } else if (startingValue == 2) {
           sliderValue = 3;
-          // numberOfFeatures = 4;
-        });
-      } else if (startingValue == 3) {
-        sliderValue = 4;
-        startingValue = 4;
-        setState(() {
+          startingValue = 3;
+          setState(() {
+            sliderValue = 3;
+            // numberOfFeatures = 4;
+          });
+        } else if (startingValue == 3) {
           sliderValue = 4;
-          // numberOfFeatures = 4;
-        });
-      } else if (startingValue == 4) {
-        sliderValue = 5;
-        startingValue = 5;
-        setState(() {
+          startingValue = 4;
+          setState(() {
+            sliderValue = 4;
+            // numberOfFeatures = 4;
+          });
+        } else if (startingValue == 4) {
           sliderValue = 5;
-          // numberOfFeatures = 4;
-        });
-      } else {
-        Navigator.pushReplacementNamed(
+          startingValue = 5;
+          setState(() {
+            sliderValue = 5;
+            // numberOfFeatures = 4;
+          });
+        } else {
+           Navigator.pushReplacementNamed(
             context, Constant.signUpFirstStepHeadacheResultRouter);
-      }
+        }
+      });
     });
+
     // Here you can write your code for open new view
   }
 
@@ -110,8 +114,8 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
           .toList();
     }
     return Scaffold(
-      backgroundColor: Colors.red,
       body: Container(
+        decoration: Constant.backgroundBoxDecoration,
         child: SafeArea(
           child: Column(
             children: <Widget>[
