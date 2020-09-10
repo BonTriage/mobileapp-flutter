@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/Home.dart';
+import 'package:mobile/view/PartThreeOnBoardScreens.dart';
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/Splash.dart';
+import 'package:mobile/view/ghy.dart';
 import 'package:mobile/view/login_screen.dart';
 import 'package:mobile/view/part_two_on_board_screens.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
@@ -23,9 +25,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home:  SignUpFirstStepCompassResult(),
+      home: SignUpOnBoardSplash(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
@@ -53,7 +54,6 @@ class MyApp extends StatelessWidget {
         Constant.signUpOnBoardSplashRouter: (context) => SignUpOnBoardSplash(),
         Constant.signUpOnBoardStartAssessmentRouter: (context) =>
             SignUpOnBoardStartAssessment(),
-
         Constant.signUpNameScreenRouter: (context) => SignUpNameScreen(),
         Constant.signUpAgeScreenRouter: (context) => SignUpAgeScreen(),
         Constant.signUpLocationServiceRouter: (context) =>
@@ -62,10 +62,13 @@ class MyApp extends StatelessWidget {
             SignUpOnBoardScreen(),
         Constant.signUpFirstStepHeadacheResultRouter: (context) =>
             SignUpFirstStepCompassResult(),
-        Constant.signUpOnBoardPersonalizedHeadacheResultRouter: (context)=>
+        Constant.signUpOnBoardPersonalizedHeadacheResultRouter: (context) =>
             SignUpOnBoardPersonalizedHeadacheCompass(),
-        Constant.partTwoOnBoardScreenRouter: (context) => PartTwoOnBoardScreens()
-    },
+        Constant.partTwoOnBoardScreenRouter: (context) =>
+            PartTwoOnBoardScreens(),
+        Constant.partThreeOnBoardScreenRouter: (context) =>
+            PartThreeOnBoardScreens()
+      },
       debugShowCheckedModeBanner: false,
     );
   }
