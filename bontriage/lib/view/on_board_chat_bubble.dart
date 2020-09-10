@@ -23,8 +23,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 800),
+    return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

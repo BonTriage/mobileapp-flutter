@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/Home.dart';
+
 import 'package:mobile/view/PartThreeOnBoardScreens.dart';
+
+import 'package:mobile/view/OnBoardInformationScreen.dart';
+
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSplash.dart';

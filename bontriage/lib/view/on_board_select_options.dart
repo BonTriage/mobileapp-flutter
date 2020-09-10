@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class OnBoardSelectOptions extends StatefulWidget {
-  final List<String> selectOptionList;
+  final List<OnBoardSelectOptionModel> selectOptionList;
 
   const OnBoardSelectOptions({Key key, this.selectOptionList}) : super(key: key);
 
@@ -14,7 +15,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
   List<bool> _optionSelectedList = [];
 
   BoxDecoration _getBoxDecoration(int index) {
-    if (!_optionSelectedList[index]) {
+    if (!widget.selectOptionList[index].isSelected) {
       return BoxDecoration(
         border: Border.all(width: 1, color: Constant.selectTextColor),
         borderRadius: BorderRadius.circular(4),
@@ -28,7 +29,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
   }
 
   Color _getOptionTextColor(int index) {
-    if (_optionSelectedList[index]) {
+    if (widget.selectOptionList[index].isSelected) {
       return Constant.bubbleChatTextView;
     } else {
       return Constant.chatBubbleGreen;
@@ -50,8 +51,8 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
   }
 
   void _onOptionSelected(int index) {
-    _optionSelectedList.asMap().forEach((key, value) {
-      _optionSelectedList[key] = index == key;
+    widget.selectOptionList.asMap().forEach((key, value) {
+      widget.selectOptionList[key].isSelected = index == key;
     });
   }
 
@@ -91,7 +92,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           child: Text(
-                            widget.selectOptionList[index],
+                            widget.selectOptionList[index].optionText,
                             style: TextStyle(
                                 fontSize: 14,
                                 color: _getOptionTextColor(index),
