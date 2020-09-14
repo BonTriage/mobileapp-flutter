@@ -7,6 +7,7 @@ import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'package:mobile/view/OnBoardingSignUpScreen.dart';
 import 'package:mobile/view/PartThreeOnBoardScreens.dart';
 import 'package:mobile/view/PostNotificationOnBoardScreen.dart';
 import 'package:mobile/view/PostPartThreeOnBoardScreen.dart';
@@ -16,8 +17,10 @@ import 'package:mobile/view/PrePartThreeOnBoardScreen.dart';
 
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
+import 'package:mobile/view/SignUpOnBoardSecondStepPersonalizedHeadacheCompass..dart';
 import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
+import 'package:mobile/view/SignUpSecondStepCompassResult.dart';
 import 'package:mobile/view/Splash.dart';
 import 'package:mobile/view/WelcomStartAssessmentScreen.dart';
 import 'package:mobile/view/login_screen.dart';
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpOnBoardSplash(),
+      home: SignUpSecondStepCompassResult(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
@@ -81,7 +84,14 @@ class MyApp extends StatelessWidget {
         Constant.partTwoOnBoardScreenRouter: (context) =>
             PartTwoOnBoardScreens(),
         Constant.partThreeOnBoardScreenRouter: (context) =>
-            PartThreeOnBoardScreens()
+            PartThreeOnBoardScreens(),
+        Constant.loginScreenRouter: (context) => LoginScreen(),
+        Constant.onBoardingScreenSignUpRouter: (context) =>
+            OnBoardingSignUpScreen(),
+        Constant.signUpSecondStepHeadacheResultRouter: (context) =>
+            SignUpSecondStepCompassResult(),
+        Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter: (context) =>
+            SignUpOnBoardSecondStepPersonalizedHeadacheCompass(),
       },
       debugShowCheckedModeBanner: false,
     );

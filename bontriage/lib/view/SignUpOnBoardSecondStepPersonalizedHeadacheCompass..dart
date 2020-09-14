@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
 
-class SignUpOnBoardPersonalizedHeadacheCompass extends StatefulWidget {
+class SignUpOnBoardSecondStepPersonalizedHeadacheCompass
+    extends StatefulWidget {
   @override
-  _SignUpOnBoardPersonalizedHeadacheCompassState createState() =>
-      _SignUpOnBoardPersonalizedHeadacheCompassState();
+  _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState createState() =>
+      _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState();
 }
 
-class _SignUpOnBoardPersonalizedHeadacheCompassState
-    extends State<SignUpOnBoardPersonalizedHeadacheCompass> {
+class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
+    extends State<SignUpOnBoardSecondStepPersonalizedHeadacheCompass> {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -23,7 +24,7 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
       // 5s over, navigate to a new page
-      const oneSec = const Duration(milliseconds:1200);
+      const oneSec = const Duration(milliseconds: 1200);
       new Timer.periodic(oneSec, (Timer t) {
         if (startingValue == 1) {
           startingValue = 2;
@@ -42,20 +43,20 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
           sliderValue = 4;
           startingValue = 4;
           setState(() {
-          //  sliderValue = 4;
+            //  sliderValue = 4;
             // numberOfFeatures = 4;
           });
         } else if (startingValue == 4) {
           sliderValue = 5;
           startingValue = 5;
           setState(() {
-           // sliderValue = 5;
+            // sliderValue = 5;
             // numberOfFeatures = 4;
           });
         } else {
-           t.cancel();
-           Navigator.pushReplacementNamed(
-            context, Constant.signUpFirstStepHeadacheResultRouter);
+          t.cancel();
+          Navigator.pushReplacementNamed(
+              context, Constant.signUpSecondStepHeadacheResultRouter);
         }
       });
     });
@@ -131,7 +132,6 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
                       fontWeight: FontWeight.bold),
                 ),
               ),
-
               SizedBox(height: 50),
               Center(
                 child: Container(

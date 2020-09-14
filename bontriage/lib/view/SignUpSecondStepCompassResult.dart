@@ -5,14 +5,14 @@ import 'package:mobile/util/constant.dart';
 
 import 'ChatBubble.dart';
 
-class SignUpFirstStepCompassResult extends StatefulWidget {
+class SignUpSecondStepCompassResult extends StatefulWidget {
   @override
-  _SignUpFirstStepCompassResultState createState() =>
-      _SignUpFirstStepCompassResultState();
+  _SignUpSecondStepCompassResultState createState() =>
+      _SignUpSecondStepCompassResultState();
 }
 
-class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> {
+class _SignUpSecondStepCompassResultState
+    extends State<SignUpSecondStepCompassResult> {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -26,10 +26,8 @@ class _SignUpFirstStepCompassResultState
     super.initState();
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
-      Constant.welcomePersonalizedHeadacheSecondTextView,
-      Constant.welcomePersonalizedHeadacheThirdTextView,
-      Constant.welcomePersonalizedHeadacheFourthTextView,
-      Constant.welcomePersonalizedHeadacheFifthTextView
+      Constant.accurateClinicalImpression,
+      Constant.moreDetailedHistory,
     ];
   }
 
@@ -43,7 +41,7 @@ class _SignUpFirstStepCompassResultState
       "D",
     ];
     var data = [
-      [9, 15, 7, 7]
+      [14, 15, 7, 7]
     ];
 
     return Scaffold(
@@ -96,25 +94,17 @@ class _SignUpFirstStepCompassResultState
                         child: ChatBubble(
                           painter: ChatBubblePainter(Constant.chatBubbleGreen),
                           child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              _bubbleTextViewList[_buttonPressedValue],
-                              style: TextStyle(
-                                  height: 1.5,
-                                  fontSize: 14,
-                                  color: Constant.bubbleChatTextView,
-                                  fontFamily: "FuturaMaxiLight",
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                              padding: EdgeInsets.all(15),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: _getBubbleTextSpans(),
+                                ),
+                              )),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 50,
               ),
               Expanded(
                 child: Center(
@@ -145,8 +135,8 @@ class _SignUpFirstStepCompassResultState
                           ),
                           Center(
                             child: Container(
-                              width: 220,
-                              height: 220,
+                              width: 200,
+                              height: 200,
                               child: Center(
                                 child: Stack(
                                   children: <Widget>[
@@ -173,7 +163,7 @@ class _SignUpFirstStepCompassResultState
                                         height: 36,
                                         child: Center(
                                           child: Text(
-                                            '70',
+                                            '60',
                                             style: TextStyle(
                                                 color: Color(0xff0E1712),
                                                 fontSize: 14,
@@ -220,7 +210,36 @@ class _SignUpFirstStepCompassResultState
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 10,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 40),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Constant.headacheCompassColor),
+                      height: 11,
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Text(
+                      'Red Wine Headache',
+                      style: TextStyle(
+                          color: Constant.locationServiceGreen,
+                          fontSize: 11,
+
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -232,7 +251,7 @@ class _SignUpFirstStepCompassResultState
                       scaleFactor: 1.5,
                       onPressed: () {
                         setState(() {
-                          if (_buttonPressedValue <= 4 &&
+                          if (_buttonPressedValue <= 2 &&
                               _buttonPressedValue > 1) {
                             _buttonPressedValue--;
                           } else {
@@ -269,12 +288,12 @@ class _SignUpFirstStepCompassResultState
                       onPressed: () {
                         setState(() {
                           if (_buttonPressedValue >= 0 &&
-                              _buttonPressedValue < 4) {
+                              _buttonPressedValue < 2) {
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
-                            Navigator.pushReplacementNamed(context,
-                                Constant.partTwoOnBoardScreenRouter);
+                            Navigator.pushReplacementNamed(
+                                context, Constant.partTwoOnBoardScreenRouter);
                           }
                         });
                       },
@@ -299,11 +318,100 @@ class _SignUpFirstStepCompassResultState
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: Center(
+                  child: Text(
+                    Constant.or,
+                    style: TextStyle(
+                        color: Constant.locationServiceGreen,
+                        fontSize: 13,
+                        fontFamily: "FuturaMaxiLight",
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: Center(
+                  child: Text(
+                    Constant.viewDetailedReport,
+                    style: TextStyle(
+                        color: Constant.locationServiceGreen,
+                        fontSize: 13,
+                        decoration: TextDecoration.underline,
+                        fontFamily: "FuturaMaxiLight",
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               )
             ],
           ),
         ),
       ),
     );
+  }
+
+  List<TextSpan> _getBubbleTextSpans() {
+    List<TextSpan> list = [];
+    if (_buttonPressedValue == 0) {
+      list.add(TextSpan(
+          text: 'Based on what you entered, it looks like your ',
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              height: 1.5,
+              fontSize: 13,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+      list.add(TextSpan(
+          text: 'Red Wine Headache ',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+      list.add(TextSpan(
+          text: 'could potentially be considered by doctors to be a ',
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              height: 1.5,
+              fontSize: 13,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+      list.add(TextSpan(
+          text: 'Cluster Headache.',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+      list.add(TextSpan(
+          text:
+              'We\'ll learn more about this as you log your headache and daily habits in the app.',
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              height: 1.5,
+              fontSize: 13,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+    } else {
+      list.add(TextSpan(
+          text: _bubbleTextViewList[_buttonPressedValue],
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              height: 1.5,
+              fontSize: 13,
+              fontFamily: Constant.futuraMaxiLight,
+              color: Constant.bubbleChatTextView)));
+    }
+
+    return list;
   }
 }
