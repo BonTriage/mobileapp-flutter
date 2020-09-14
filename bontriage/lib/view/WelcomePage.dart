@@ -22,7 +22,7 @@ class WelcomePage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Constant.chatBubbleGreen,
-              fontSize: 22,
+              fontSize: 20,
               fontFamily: Constant.futuraMaxiLight,
               fontWeight: FontWeight.bold
             ),

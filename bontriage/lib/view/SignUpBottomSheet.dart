@@ -63,7 +63,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                   style: TextStyle(
                       color: Constant.selectTextColor,
                       fontSize: 12,
-                      fontFamily: "FuturaMaxiLight",
+                      fontFamily: Constant.futuraMaxiLight,
                       fontWeight: FontWeight.normal),
                 ),
               ),

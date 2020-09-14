@@ -7,6 +7,7 @@ import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'package:mobile/view/PartOneOnBoardScreenTwo.dart';
 import 'package:mobile/view/PartThreeOnBoardScreens.dart';
 import 'package:mobile/view/PostNotificationOnBoardScreen.dart';
 import 'package:mobile/view/PostPartThreeOnBoardScreen.dart';
@@ -28,6 +29,16 @@ import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
 import 'package:mobile/view/sign_up_screen.dart';
 import 'package:mobile/view/WelcomeScreen.dart';
+
+import 'util/constant.dart';
+import 'util/constant.dart';
+import 'util/constant.dart';
+import 'view/SignUpOnBoardBubbleTextView.dart';
+import 'view/SignUpOnBoardBubbleTextView.dart';
+import 'view/SignUpOnBoardSplash.dart';
+import 'view/Splash.dart';
+import 'view/Splash.dart';
+import 'view/sign_up_on_board_screen.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -59,7 +70,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpOnBoardSplash(),
+      home: Splash(),
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
@@ -81,7 +92,11 @@ class MyApp extends StatelessWidget {
         Constant.partTwoOnBoardScreenRouter: (context) =>
             PartTwoOnBoardScreens(),
         Constant.partThreeOnBoardScreenRouter: (context) =>
-            PartThreeOnBoardScreens()
+            PartThreeOnBoardScreens(),
+        Constant.welcomeScreenRouter: (context) => WelcomeScreen(),
+        Constant.welcomeStartAssessmentScreenRouter: (context) => WelcomeStartAssessmentScreen(),
+        Constant.onBoardHeadacheInfoScreenRouter: (context) => OnBoardHeadacheInfoScreen(),
+        Constant.partOneOnBoardScreenTwo: (context) => PartOneOnBoardScreenTwo(),
       },
       debugShowCheckedModeBanner: false,
     );

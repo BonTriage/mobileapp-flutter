@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
+import '../util/constant.dart';
+
 class OnBoardHeadacheInfoScreen extends StatefulWidget {
   @override
   _OnBoardHeadacheInfoScreenState createState() => _OnBoardHeadacheInfoScreenState();
@@ -15,7 +17,7 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         chatText: Constant.letsBeginBySeeing,
         isShowNextButton: true,
         nextButtonFunction: () {
-          //TODO: Continue part one on-board
+          Navigator.pushReplacementNamed(context, Constant.partOneOnBoardScreenTwo);
         },
         isShowSecondBottomButton: false,
       ),

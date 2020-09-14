@@ -50,7 +50,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 13,
-                            fontFamily: "FuturaMaxiLight",
+                            fontFamily: Constant.futuraMaxiLight,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -73,7 +73,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 13,
-                          fontFamily: "FuturaMaxiLight",
+                          fontFamily: Constant.futuraMaxiLight,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
