@@ -25,21 +25,27 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
             height: 100,
             child: Scrollbar(
               isAlwaysShown: true,
-
               child: ListView(
                 children: <Widget>[
                   Wrap(
                     spacing: 20,
                     children: <Widget>[
-                      for (var i = 0; i < 30; i++)
+                      for (var i = 0; i < widget.selectOptionList.length; i++)
+                        if(widget.selectOptionList[i].isSelected)
                         Chip(
-                          label: Text('Dust & dander'),
+                          label: Text(widget.selectOptionList[i].answerData),
                           backgroundColor: Constant.chatBubbleGreen,
                           deleteIcon: IconButton(
                             icon: new Image.asset('images/cross.png'),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                widget.selectOptionList[i].isSelected = false;
+                              });
+                            },
                           ),
-                          onDeleted: () {},
+                          onDeleted: () {
+
+                          },
                         ),
                     ],
                   ),
@@ -66,7 +72,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                 child: GestureDetector(
                   onTap: () {
                     showBottomSheet(
-                      elevation: 4,
+                        elevation: 4,
                         backgroundColor: Constant.backgroundTransparentColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -75,7 +81,10 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                         ),
                         context: context,
                         builder: (context) => BottomSheetContainer(
-                            selectOptionList: widget.selectOptionList));
+                            selectOptionList: widget.selectOptionList,
+                            selectedAnswerCallback: (index) {
+                              setState(() {});
+                            }));
                     // BottomSheetContainer();
                   },
                   child: Image(
@@ -102,8 +111,10 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
 
 class BottomSheetContainer extends StatefulWidget {
   final List<SignUpHeadacheAnswerListModel> selectOptionList;
+  final Function(int) selectedAnswerCallback;
 
-  const BottomSheetContainer({Key key, this.selectOptionList})
+  const BottomSheetContainer(
+      {Key key, this.selectOptionList, this.selectedAnswerCallback})
       : super(key: key);
 
   @override
@@ -131,44 +142,71 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
-      child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-        itemCount: widget.selectOptionList.length,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    widget.selectOptionList[index].isSelected =
-                        !widget.selectOptionList[index].isSelected;
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: 2,top: 10,right: 2),
-                  color: _getOptionBackgroundColor(index),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Text(
-                      widget.selectOptionList[index].answerData,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: _getOptionTextColor(index),
-                          fontFamily: Constant.futuraMaxiLight,
-                          height: 1.2),
-                    ),
-                  ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: TextField(
+              style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15),
+              cursorColor: Constant.chatBubbleGreen,
+              decoration: InputDecoration(
+                hintText: Constant.searchType,
+                hintStyle: TextStyle(
+                  color: Constant.chatBubbleGreen,
+                  fontSize: 15,
                 ),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 0),
               ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          );
-        },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              itemCount: widget.selectOptionList.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          widget.selectOptionList[index].isSelected =
+                              !widget.selectOptionList[index].isSelected;
+                          widget.selectedAnswerCallback(index);
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 2, top: 10, right: 2),
+                        color: _getOptionBackgroundColor(index),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text(
+                            widget.selectOptionList[index].answerData,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: _getOptionTextColor(index),
+                                fontFamily: Constant.futuraMaxiLight,
+                                height: 1.2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

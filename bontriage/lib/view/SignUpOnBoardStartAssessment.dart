@@ -52,7 +52,7 @@ class _StateSignUpOnBoardStartAssessment
                       margin: EdgeInsets.only(right: 20),
                       child: Image.asset(
                         Constant.userAvatar,
-                        width: 60,
+                        width: 65,
                       ),
                     ))),
                   ],

@@ -113,9 +113,10 @@ class _RadarChartState extends State<RadarChart>
   @override
   void didUpdateWidget(RadarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    animationController.reset();
-    animationController.forward();
+    if (widget.isPersonalizedHeadacheData) {
+      animationController.reset();
+      animationController.forward();
+    }
   }
 
   @override

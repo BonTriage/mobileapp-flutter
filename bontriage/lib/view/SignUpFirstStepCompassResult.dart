@@ -76,8 +76,8 @@ class _SignUpFirstStepCompassResultState
                       children: [
                         Image(
                           image: AssetImage(Constant.userAvatar),
-                          width: 35.0,
-                          height: 35.0,
+                          width: 60.0,
+                          height: 60.0,
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 10),
@@ -92,7 +92,7 @@ class _SignUpFirstStepCompassResultState
                     ),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.only(left: 17, top: 16),
+                        padding: EdgeInsets.only(left: 17, top: 25),
                         child: ChatBubble(
                           painter: ChatBubblePainter(Constant.chatBubbleGreen),
                           child: Container(
@@ -116,105 +116,107 @@ class _SignUpFirstStepCompassResultState
               SizedBox(
                 height: 50,
               ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    RotatedBox(
-                      quarterTurns: 3,
-                      child: Text(
-                        "Frequency",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 14,
-                            fontFamily: "FuturaMaxiLight",
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          "Intensity",
+              Expanded(
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(
+                          "Frequency",
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
                               fontFamily: "FuturaMaxiLight",
                               fontWeight: FontWeight.bold),
                         ),
-                        Center(
-                          child: Container(
-                            width: 220,
-                            height: 220,
-                            child: Center(
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    child: darkMode
-                                        ? RadarChart.dark(
-                                            ticks: ticks,
-                                            features: features,
-                                            data: data,
-                                            reverseAxis: true,
-                                            isPersonalizedHeadacheData: false,
-                                          )
-                                        : RadarChart.light(
-                                            ticks: ticks,
-                                            features: features,
-                                            data: data,
-                                            reverseAxis: true,
-                                            isPersonalizedHeadacheData: false,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Intensity",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: "FuturaMaxiLight",
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Center(
+                            child: Container(
+                              width: 220,
+                              height: 220,
+                              child: Center(
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      child: darkMode
+                                          ? RadarChart.dark(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: data,
+                                              reverseAxis: true,
+                                              isPersonalizedHeadacheData: false,
+                                            )
+                                          : RadarChart.light(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: data,
+                                              reverseAxis: true,
+                                              isPersonalizedHeadacheData: false,
+                                            ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        width: 36,
+                                        height: 36,
+                                        child: Center(
+                                          child: Text(
+                                            '70',
+                                            style: TextStyle(
+                                                color: Color(0xff0E1712),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      width: 36,
-                                      height: 36,
-                                      child: Center(
-                                        child: Text(
-                                          '70',
-                                          style: TextStyle(
-                                              color: Color(0xff0E1712),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xffB8FFFF),
+                                          border: Border.all(
+                                              color: Color(0xffB8FFFF),
+                                              width: 1.2),
                                         ),
                                       ),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xffB8FFFF),
-                                        border: Border.all(
-                                            color: Color(0xffB8FFFF),
-                                            width: 1.2),
-                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Text(
-                          "Disability",
+                          Text(
+                            "Disability",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: "FuturaMaxiLight",
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Text(
+                          "Duration",
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
                               fontFamily: "FuturaMaxiLight",
                               fontWeight: FontWeight.bold),
                         ),
-                      ],
-                    ),
-                    RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        "Duration",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 14,
-                            fontFamily: "FuturaMaxiLight",
-                            fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -272,7 +274,7 @@ class _SignUpFirstStepCompassResultState
                             isBackButtonHide = true;
                           } else {
                             Navigator.pushReplacementNamed(context,
-                                Constant.signUpOnBoardHeadacheQuestionRouter);
+                                Constant.partTwoOnBoardScreenRouter);
                           }
                         });
                       },

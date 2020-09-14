@@ -27,6 +27,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     Constant.followingDevices,
     Constant.followingLifeStyle,
   ];
+  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Rawal',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Himalaya',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Baddhan',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)];
 
   @override
   void initState() {
@@ -34,8 +35,8 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     super.initState();
 
     _pageViewWidgetList = [
-      SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: true),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: true),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
-      SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
+      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel),
+      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel),
       SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
       SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
 

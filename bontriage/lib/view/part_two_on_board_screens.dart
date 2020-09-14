@@ -162,6 +162,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     double stepOneProgress = 1 / _pageViewWidgetList.length;
 
                     if (_progressPercent == 1) {
+                      Navigator.pushReplacementNamed(context, Constant.partThreeOnBoardScreenRouter);
                       //TODO: Move to next screen
                     } else {
                       _currentPageIndex++;

@@ -23,111 +23,113 @@ class _StateSignUpOnBoardBubbleTextView
 // The blue background emphasizes that it's a new route.
         decoration: Constant.backgroundBoxDecoration,
         alignment: Alignment.topLeft,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Image(
-                    image: AssetImage(Constant.closeIcon),
-                    width: 26,
-                    height: 26,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PhotoHero(
-                    photo: 'images/user_avatar.png',
-                    width: 60.0,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Image(
-                    image: AssetImage(
-                        isVolumeOn ? Constant.volumeOn : Constant.volumeOff),
-                    width: 20,
-                    height: 20,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical:5),
-              child: ChatBubbleLeftPointed(
-                painter: ChatBubblePainter(Constant.chatBubbleGreen),
-                child: Container(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                      '${isFirstTextVisible ? Constant.migraineMentorHelpTextView : Constant.welcomeMigraineMentorTextView}',
-                      style: TextStyle(
-                          height: 1.5,
-                          fontSize: 14,
-                          color: Constant.bubbleChatTextView,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "FuturaMaxiLight")),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image(
+                      image: AssetImage(Constant.closeIcon),
+                      width: 26,
+                      height: 26,
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  BouncingWidget(
-                    duration: Duration(milliseconds: 100),
-                    scaleFactor: 1.5,
-                    onPressed: () {
-                      setState(() {
-                        if (isFirstTextVisible) {
-                          {
-                            Navigator.pushReplacementNamed(context,
-                                Constant.signUpOnBoardStartAssessmentRouter);
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PhotoHero(
+                      photo: 'images/user_avatar.png',
+                      width: 60.0,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image(
+                      image: AssetImage(
+                          isVolumeOn ? Constant.volumeOn : Constant.volumeOff),
+                      width: 20,
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical:5),
+                child: ChatBubbleLeftPointed(
+                  painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                  child: Container(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                        '${isFirstTextVisible ? Constant.migraineMentorHelpTextView : Constant.welcomeMigraineMentorTextView}',
+                        style: TextStyle(
+                            height: 1.5,
+                            fontSize: 14,
+                            color: Constant.bubbleChatTextView,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "FuturaMaxiLight")),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    BouncingWidget(
+                      duration: Duration(milliseconds: 100),
+                      scaleFactor: 1.5,
+                      onPressed: () {
+                        setState(() {
+                          if (isFirstTextVisible) {
+                            {
+                              Navigator.pushReplacementNamed(context,
+                                  Constant.signUpOnBoardStartAssessmentRouter);
+                            }
+                            isFirstTextVisible = false;
+                          } else {
+                            isFirstTextVisible = true;
                           }
-                          isFirstTextVisible = false;
-                        } else {
-                          isFirstTextVisible = true;
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Color(0xffafd794),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          Constant.next,
-                          style: TextStyle(
-                              color: Constant.bubbleChatTextView,
-                              fontSize: 13,
-                              fontFamily: "FuturaMaxiLight",
-                              fontWeight: FontWeight.bold),
+                        });
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Color(0xffafd794),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            Constant.next,
+                            style: TextStyle(
+                                color: Constant.bubbleChatTextView,
+                                fontSize: 13,
+                                fontFamily: "FuturaMaxiLight",
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         /* child: PhotoHero(
               photo: 'images/user_avatar.png',

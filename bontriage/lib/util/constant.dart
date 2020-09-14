@@ -136,6 +136,7 @@ class Constant {
   static String followingLifeStyle =
       'Which of the following lifestyle interventions have you tried to help manage your headache?';
 
+  static String searchType = 'Search or type your own';
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
       gradient: LinearGradient(
@@ -156,6 +157,7 @@ class Constant {
   static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
   static Color transparentColor = Colors.transparent;
   static Color backgroundTransparentColor = Color(0xff0E4C47);
+  static Color oliveGreen = Color(0xff263E3E);
 
   //images
   static String userAvatar = 'images/user_avatar.png';

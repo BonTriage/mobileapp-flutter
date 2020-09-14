@@ -28,7 +28,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -50,8 +50,8 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
               children: [
                 Image(
                   image: AssetImage(Constant.userAvatar),
-                  width: 50,
-                  height: 50,
+                  width: 60,
+                  height: 60,
                 ),
                 SizedBox(
                   width: 10,
@@ -84,7 +84,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: ChatBubbleLeftPointed(
-              painter: ChatBubblePainter(Constant.chatBubbleGreenBlue),
+              painter: ChatBubblePainter(Constant.oliveGreen),
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
