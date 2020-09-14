@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleRightPointed.dart';
 
+import '../util/PhotoHero.dart';
+
 class OnBoardInformationScreen extends StatefulWidget {
   final bool isShowNextButton;
   final String chatText;
@@ -83,8 +85,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                         child: Center(
                             child: Container(
                               margin: EdgeInsets.only(right: 20),
-                              child: Image.asset(
-                                Constant.userAvatar,
+                              child: PhotoHero(
+                                photo: Constant.userAvatar,
                                 width: 60,
                               ),
                             ))),
@@ -104,7 +106,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.bubbleChatTextView,
-                            fontFamily: "FuturaMaxiLight",
+                            fontFamily: Constant.futuraMaxiLight,
                             height: 1.2,
                             fontWeight: FontWeight.bold),
                       ),
@@ -131,7 +133,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 12,
-                                fontFamily: "FuturaMaxiLight",
+                                fontFamily: Constant.futuraMaxiLight,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -162,7 +164,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 13.5,
-                                  fontFamily: "FuturaMaxiLight",
+                                  fontFamily: Constant.futuraMaxiLight,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),

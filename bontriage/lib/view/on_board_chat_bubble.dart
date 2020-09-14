@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 
+import '../util/PhotoHero.dart';
+
 class OnBoardChatBubble extends StatefulWidget {
   final String chatBubbleText;
   final Color chatBubbleColor;
@@ -67,10 +69,9 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image(
-                  image: AssetImage(Constant.userAvatar),
+                PhotoHero(
+                  photo: Constant.userAvatar,
                   width: 60,
-                  height: 60,
                 ),
                 SizedBox(
                   width: 10,

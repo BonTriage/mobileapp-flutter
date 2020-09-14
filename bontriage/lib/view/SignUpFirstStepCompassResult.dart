@@ -103,7 +103,7 @@ class _SignUpFirstStepCompassResultState
                                   height: 1.5,
                                   fontSize: 14,
                                   color: Constant.bubbleChatTextView,
-                                  fontFamily: "FuturaMaxiLight",
+                                  fontFamily: Constant.futuraMaxiLight,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -128,7 +128,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: "FuturaMaxiLight",
+                              fontFamily: Constant.futuraMaxiLight,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -140,7 +140,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: "FuturaMaxiLight",
+                                fontFamily: Constant.futuraMaxiLight,
                                 fontWeight: FontWeight.bold),
                           ),
                           Center(
@@ -199,7 +199,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: "FuturaMaxiLight",
+                                fontFamily: Constant.futuraMaxiLight,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -211,7 +211,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: "FuturaMaxiLight",
+                              fontFamily: Constant.futuraMaxiLight,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -256,7 +256,7 @@ class _SignUpFirstStepCompassResultState
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 13,
-                                  fontFamily: "FuturaMaxiLight",
+                                  fontFamily: Constant.futuraMaxiLight,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -273,8 +273,8 @@ class _SignUpFirstStepCompassResultState
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
-                            Navigator.pushReplacementNamed(context,
-                                Constant.partTwoOnBoardScreenRouter);
+                            Navigator.pushReplacementNamed(
+                                context, Constant.partTwoOnBoardScreenRouter);
                           }
                         });
                       },
@@ -291,7 +291,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 13,
-                                fontFamily: "FuturaMaxiLight",
+                                fontFamily: Constant.futuraMaxiLight,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

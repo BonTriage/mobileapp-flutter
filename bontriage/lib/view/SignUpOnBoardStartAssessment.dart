@@ -71,7 +71,7 @@ class _StateSignUpOnBoardStartAssessment
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.bubbleChatTextView,
-                            fontFamily: "FuturaMaxiLight",
+                            fontFamily: Constant.futuraMaxiLight,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -105,7 +105,7 @@ class _StateSignUpOnBoardStartAssessment
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 13.5,
-                                fontFamily: "FuturaMaxiLight",
+                                fontFamily: Constant.futuraMaxiLight,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

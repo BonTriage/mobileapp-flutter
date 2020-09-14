@@ -96,6 +96,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           _pageController.animateToPage(currentPageIndex,
                               duration: Duration(milliseconds: 250),
                               curve: Curves.easeIn);
+                        } else {
+                          Navigator.pushReplacementNamed(context, Constant.welcomeStartAssessmentScreenRouter);
                         }
                       },
                       child: Container(

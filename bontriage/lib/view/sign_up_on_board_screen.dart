@@ -3,6 +3,7 @@ import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 
+import '../util/PhotoHero.dart';
 import 'sign_up_name_screen.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     Constant.whatShouldICallYou,
     Constant.howOld,
     Constant.likeToEnableLocationServices,
-    Constant.howManyDays,
-    Constant.howManyHours,
-    Constant.onScaleOf,
-    Constant.howDisabled
   ];
 
   @override
@@ -51,38 +48,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
         labelText: Constant.yearsOld,
       ),
       SignUpLocationServices(),
-      SignUpAgeScreen(
-        sliderValue: 0,
-        sliderMinValue: 0,
-        sliderMaxValue: 31,
-        minText: '0',
-        maxText: '31',
-        labelText: Constant.days,
-      ),
-      SignUpAgeScreen(
-        sliderValue: 0,
-        sliderMinValue: 0,
-        sliderMaxValue: 24,
-        minText: '0',
-        maxText: '24',
-        labelText: Constant.days,
-      ),
-      SignUpAgeScreen(
-        sliderValue: 1,
-        sliderMinValue: 1,
-        sliderMaxValue: 10,
-        minText: '1',
-        maxText: '10',
-        labelText: Constant.blankString,
-      ),
-      SignUpAgeScreen(
-        sliderValue: 0,
-        sliderMinValue: 0,
-        sliderMaxValue: 4,
-        minText: '0',
-        maxText: '4',
-        labelText: Constant.blankString,
-      ),
     ];
   }
 
@@ -120,10 +85,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image(
-                        image: AssetImage(Constant.userAvatar),
+                      PhotoHero(
+                        photo: Constant.userAvatar,
                         width: 60,
-                        height: 60,
                       ),
                       SizedBox(
                         width: 10,
@@ -210,7 +174,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 13,
-                                    fontFamily: "FuturaMaxiLight",
+                                    fontFamily: Constant.futuraMaxiLight,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -225,9 +189,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         scaleFactor: 1.5,
                         onPressed: () {
                           setState(() {
-                            if (_progressPercent == 1) {
+                            if (_progressPercent == 0.42) {
                               Navigator.pushNamed(context,
-                                  Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
+                                  Constant.onBoardHeadacheInfoScreenRouter);
                             } else {
                                 _currentPageIndex++;
 
@@ -235,7 +199,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                                     _pageViewWidgetList.length - 1)
                                 _progressPercent += 0.14;
                                 else {
-                                  _progressPercent = 1;
+                                  _progressPercent = 0.42;
                                 }
 
                                 _pageController.animateToPage(_currentPageIndex,
@@ -257,7 +221,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 13,
-                                  fontFamily: "FuturaMaxiLight",
+                                  fontFamily: Constant.futuraMaxiLight,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import '../util/constant.dart';
+
 class WelcomeStartAssessmentScreen extends StatefulWidget {
   @override
   _WelcomeStartAssessmentScreenState createState() => _WelcomeStartAssessmentScreenState();
@@ -61,19 +63,24 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   ),
                 ),
                 SizedBox(height: 100),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Constant.chatBubbleGreen,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    Constant.startYourAssessment,
-                    style: TextStyle(
-                        color: Constant.bubbleChatTextView,
-                        fontSize: 13,
-                        fontFamily: Constant.futuraMaxiLight,
-                        fontWeight: FontWeight.bold
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, Constant.signUpOnBoardSplashRouter);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Constant.chatBubbleGreen,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      Constant.startYourAssessment,
+                      style: TextStyle(
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 13,
+                          fontFamily: Constant.futuraMaxiLight,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),

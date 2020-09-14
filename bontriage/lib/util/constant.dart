@@ -20,12 +20,20 @@ class Constant {
       '/signUpOnBoardHeadacheQuestion';
   static String partTwoOnBoardScreenRouter = '/partTwoOnBoardScreenRouter';
   static String partThreeOnBoardScreenRouter = '/partThreeOnBoardScreenRouter';
+
   static String loginScreenRouter = '/loginScreenRouter';
   static String onBoardingScreenSignUpRouter = '/onBoardingScreenSignUpRouter';
   static String signUpSecondStepHeadacheResultRouter =
       '/signUpSecondStepHeadacheResult';
   static String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
       '/signUpOnBoardSecondStepPersonalizedHeadacheResult';
+
+  static String welcomeScreenRouter = 'WelcomeScreen';
+  static String welcomeStartAssessmentScreenRouter =
+      '/welcomeStartAssessmentScreenRouter';
+  static String onBoardHeadacheInfoScreenRouter =
+      '/onBoardHeadacheInfoScreenRouter';
+  static String partOneOnBoardScreenTwo = '/partOneOnBoardScreenTwo';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -182,6 +190,7 @@ class Constant {
       'Which of the following lifestyle interventions have you tried to help manage your headache?';
 
   static String searchType = 'Search or type your own';
+
   static String signUp = 'Sign Up';
   static String cancel = 'Cancel';
   static String register = 'Register';
@@ -201,6 +210,10 @@ class Constant {
       'You can also provide a much more detailed history, have an opportunity to explain your headaches in greater detail, and get a more complete to take to your doctor report an BonTriage.com';
 
   static String viewDetailedReport = 'View detailed report';
+
+  static String tapToType = 'Tap to type';
+  static String greatWeAreDone =
+      'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
@@ -223,8 +236,12 @@ class Constant {
   static Color transparentColor = Colors.transparent;
   static Color backgroundTransparentColor = Color(0xff0E4C47);
   static Color oliveGreen = Color(0xff263E3E);
+
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);
+
+  static Color splashColor = Color(0xffD7EBC9);
+  static Color splashTextColor = Color(0xff0E232F);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
