@@ -1,4 +1,3 @@
-import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleRightPointed.dart';
@@ -9,9 +8,12 @@ class OnBoardInformationScreen extends StatefulWidget {
   final String bottomButtonText;
   final Function nextButtonFunction;
   final Function bottomButtonFunction;
+  final isShowSecondBottomButton;
+  final String secondBottomButtonText;
+  final Function secondBottomButtonFunction;
 
   const OnBoardInformationScreen(
-      {Key key, this.isShowNextButton, this.chatText, this.bottomButtonText, this.bottomButtonFunction, this.nextButtonFunction})
+      {Key key, this.isShowNextButton, this.chatText, this.bottomButtonText, this.bottomButtonFunction, this.nextButtonFunction, this.isShowSecondBottomButton, this.secondBottomButtonText, this.secondBottomButtonFunction})
       : super(key: key);
 
   @override
@@ -31,8 +33,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return Container(
         decoration: Constant.backgroundBoxDecoration,
         child: SafeArea(
           child: Container(
@@ -99,39 +100,101 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
-                        Constant.letsStarted,
+                        widget.chatText,
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.bubbleChatTextView,
                             fontFamily: "FuturaMaxiLight",
+                            height: 1.2,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(height: 25,),
+                if(widget.isShowNextButton)
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.nextButtonFunction,
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 30,vertical: 10),
+                        EdgeInsets.symmetric(horizontal: 40,vertical: 8),
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
                           child: Text(
-                            Constant.startAssessment,
+                            Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 13.5,
+                                fontSize: 12,
                                 fontFamily: "FuturaMaxiLight",
                                 fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                if(!widget.isShowNextButton)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: widget.bottomButtonFunction,
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: Color(0xffafd794),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.bottomButtonText,
+                              style: TextStyle(
+                                  color: Constant.bubbleChatTextView,
+                                  fontSize: 13.5,
+                                  fontFamily: "FuturaMaxiLight",
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 14,),
+                if(widget.isShowSecondBottomButton)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: widget.secondBottomButtonFunction,
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Constant.chatBubbleGreen),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.secondBottomButtonText,
+                              style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontSize: 13.5,
+                                  fontFamily: "FuturaMaxiLight",
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -145,7 +208,6 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
