@@ -4,14 +4,15 @@ import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 
 class OnBoardChatBubble extends StatefulWidget {
   final String chatBubbleText;
+  final Color chatBubbleColor;
 
-  const OnBoardChatBubble({Key key, this.chatBubbleText}) : super(key: key);
+  const OnBoardChatBubble({Key key, this.chatBubbleText, this.chatBubbleColor}) : super(key: key);
 
   @override
   _OnBoardChatBubbleState createState() => _OnBoardChatBubbleState();
 }
 
-class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTickerProviderStateMixin {
+class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProviderStateMixin {
   bool isVolumeOn = true;
 
   ///Method to toggle volume on or off
@@ -19,6 +20,24 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
     setState(() {
       isVolumeOn = !isVolumeOn;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(OnBoardChatBubble oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -84,7 +103,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: ChatBubbleLeftPointed(
-              painter: ChatBubblePainter(Constant.chatBubbleGreenBlue),
+              painter: ChatBubblePainter((widget.chatBubbleColor == null) ? Constant.chatBubbleGreenBlue : widget.chatBubbleColor),
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
@@ -93,7 +112,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with SingleTicker
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       height: 1.5,
-                      color: Constant.chatBubbleGreen,
+                      color: (widget.chatBubbleColor == null) ? Constant.chatBubbleGreen : Constant.bubbleChatTextView,
                   ),
                 ),
               ),

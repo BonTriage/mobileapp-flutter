@@ -50,6 +50,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       }
     });
   }
+  
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -125,6 +131,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     ];
 
     _progressPercent = 1 / _pageViewWidgetList.length;
+  }
+
+  @override
+  void didUpdateWidget(PartTwoOnBoardScreens oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
   }
   @override
   Widget build(BuildContext context) {
