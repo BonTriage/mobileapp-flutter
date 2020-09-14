@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Constant {
   static String splashRouter = '/splash';
@@ -15,8 +16,10 @@ class Constant {
   static String signUpNameScreenRouter = '/signUpNameScreen';
   static String signUpAgeScreenRouter = '/signUpAgeScreen';
   static String signUpLocationServiceRouter = '/signUpLocationService';
-  static String signUpOnBoardHeadacheQuestionRouter = '/signUpOnBoardHeadacheQuestion';
+  static String signUpOnBoardHeadacheQuestionRouter =
+      '/signUpOnBoardHeadacheQuestion';
   static String partTwoOnBoardScreenRouter = '/partTwoOnBoardScreenRouter';
+  static String partThreeOnBoardScreenRouter = '/partThreeOnBoardScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -45,7 +48,7 @@ class Constant {
       'Welcome to MigraineMentor! Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
   static String migraineMentorHelpTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
-   static String compassDiagramTextView =
+  static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
   static String welcomePersonalizedHeadacheFirstTextView =
@@ -63,10 +66,10 @@ class Constant {
   static String welcomePersonalizedHeadacheFifthTextView =
       'To learn more about each measurement, try clicking on any labels of the below.';
 
-
   static String startAssessment = 'Start Assessment';
   static String letsStarted = 'Let\'s get started!';
-  static String personalizedHeadacheCompass = 'Generating your personalized Headache Compass...';
+  static String personalizedHeadacheCompass =
+      'Generating your personalized Headache Compass...';
 
   static String howManyDays =
       'Over the last three months, how many days per month, on average, have you been absolutely headache free?';
@@ -91,10 +94,12 @@ class Constant {
   static String moreThanThirtyMinutes = 'More than 30 minutes';
   static String fewSecAtATime = 'Only a few seconds at a time';
   static String fewSecUpTo20Min = 'A few seconds up to a 20 minutes';
-  static String moreThan20Min = 'More than 20 minutes, but always less than 3 hours';
+  static String moreThan20Min =
+      'More than 20 minutes, but always less than 3 hours';
   static String moreThan3To4Hours = 'More than 3-4 hours';
   static String alwaysOneSide = 'Always on one side';
-  static String usuallyOnOneSide = 'Usually on one side, but sometimes on the other';
+  static String usuallyOnOneSide =
+      'Usually on one side, but sometimes on the other';
   static String usuallyOnBothSide = 'Usually on both sides';
   static String headacheChanged = 'Have your headaches changed significantly in the last year?';
   static String howManyTimes = 'How many times have you had this headache in the past?';
@@ -136,6 +141,17 @@ class Constant {
   static String untilYouComplete = 'Until you complete the assessment, your personalized headache profile will be incomplete. Without a complete profile, MigraineMentor can’t create a predictive model, and won’t be able to alert you when you are at risk for headaches or suggest steps to avoid them.';
   static String letsBeginBySeeing = 'Let’s begin by seeing what your headaches look like by creating a Compass Diagram of your most problematic headache. Just answer a few questions and you will see your headache like a headache specialist does.';
 
+  static String searchYourType = 'Search or Type your own';
+
+  static String suspectTriggerYourHeadache =
+      'Which of the following do you suspect trigger your headaches?';
+  static String followingMedications =
+      'Which of the following medications have you tried to stop a headache once it has started?';
+  static String followingDevices =
+      'Which of the following devices have you tried to improve your headache?';
+  static String followingLifeStyle =
+      'Which of the following lifestyle interventions have you tried to help manage your headache?';
+
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
       gradient: LinearGradient(
@@ -154,6 +170,8 @@ class Constant {
   static Color bubbleChatTextView = Color(0xff0E1712);
   static Color chatBubbleGreenTransparent = Color(0x26AFD794);
   static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
+  static Color transparentColor = Colors.transparent;
+  static Color backgroundTransparentColor = Color(0xff0E4C47);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -166,6 +184,7 @@ class Constant {
   static String notifsGreenWhite = 'images/notifs_green_white.png';
   static String showPassword = 'images/show_password.png';
   static String hidePassword = 'images/hide_password.png';
+  static String downArrow = 'images/down_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
