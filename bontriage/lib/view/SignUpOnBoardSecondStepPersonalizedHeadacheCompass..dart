@@ -125,11 +125,11 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
                 margin: EdgeInsets.only(top: 120),
                 child: Text(
                   Constant.personalizedHeadacheCompass,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 13,
-                      fontFamily: "FuturaMaxiLight",
-                      fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontFamily: Constant.jostMedium),
                 ),
               ),
               SizedBox(height: 50),

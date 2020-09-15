@@ -16,8 +16,8 @@ class _PartTwoOnBoardMoveOnScreenState extends State<PartTwoOnBoardMoveOnScreen>
           TextSpan(
               text: Constant.experienceTypesOfHeadaches,
               style: TextStyle(
-                  height: 1.5,
-                  fontSize: 12,
+                  height: 1.3,
+                  fontSize: 16,
                   fontFamily: Constant.jostRegular,
                   color: Constant.bubbleChatTextView))
         ],

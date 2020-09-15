@@ -31,22 +31,20 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                     spacing: 20,
                     children: <Widget>[
                       for (var i = 0; i < widget.selectOptionList.length; i++)
-                        if(widget.selectOptionList[i].isSelected)
-                        Chip(
-                          label: Text(widget.selectOptionList[i].answerData),
-                          backgroundColor: Constant.chatBubbleGreen,
-                          deleteIcon: IconButton(
-                            icon: new Image.asset('images/cross.png'),
-                            onPressed: () {
-                              setState(() {
-                                widget.selectOptionList[i].isSelected = false;
-                              });
-                            },
+                        if (widget.selectOptionList[i].isSelected)
+                          Chip(
+                            label: Text(widget.selectOptionList[i].answerData),
+                            backgroundColor: Constant.chatBubbleGreen,
+                            deleteIcon: IconButton(
+                              icon: new Image.asset('images/cross.png'),
+                              onPressed: () {
+                                setState(() {
+                                  widget.selectOptionList[i].isSelected = false;
+                                });
+                              },
+                            ),
+                            onDeleted: () {},
                           ),
-                          onDeleted: () {
-
-                          },
-                        ),
                     ],
                   ),
                 ],
@@ -62,9 +60,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                   Constant.searchYourType,
                   style: TextStyle(
                       color: Constant.selectTextColor,
-                      fontSize: 12,
-                      fontFamily: Constant.futuraMaxiLight,
-                      fontWeight: FontWeight.normal),
+                      fontSize: 14,
+                      fontFamily: Constant.jostMedium),
                 ),
               ),
               Container(
@@ -147,14 +144,17 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: TextField(
-              style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15),
+              style: TextStyle(
+                  color: Constant.chatBubbleGreen,
+                  fontSize: 15,
+                  fontFamily: Constant.jostMedium),
               cursorColor: Constant.chatBubbleGreen,
               decoration: InputDecoration(
                 hintText: Constant.searchType,
                 hintStyle: TextStyle(
-                  color: Constant.chatBubbleGreen,
-                  fontSize: 15,
-                ),
+                    color: Constant.chatBubbleGreen,
+                    fontSize: 15,
+                    fontFamily: Constant.jostMedium),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Constant.chatBubbleGreen)),
                 focusedBorder: UnderlineInputBorder(
@@ -190,9 +190,9 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                           child: Text(
                             widget.selectOptionList[index].answerData,
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
                                 color: _getOptionTextColor(index),
-                                fontFamily: Constant.futuraMaxiLight,
+                                fontFamily: Constant.jostMedium,
                                 height: 1.2),
                           ),
                         ),

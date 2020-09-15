@@ -15,7 +15,7 @@ class _PostPartThreeOnBoardScreenState
       TextSpan(
           text: Constant.qualityOfOurMentorShip,
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 12,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
@@ -24,7 +24,7 @@ class _PostPartThreeOnBoardScreenState
       TextSpan(
           text: Constant.easyToLoseTrack,
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 12,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))

@@ -234,7 +234,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                             border: Border.all(
-                                width: 1, color: Constant.chatBubbleGreen),
+                                width: 1.3, color: Constant.chatBubbleGreen),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
@@ -242,8 +242,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                               widget.secondBottomButtonText,
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
-                                  fontSize: 13.5,
-                                  fontFamily: Constant.jostBold),
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium),
                             ),
                           ),
                         ),

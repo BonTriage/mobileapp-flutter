@@ -13,13 +13,14 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> {
       padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
       child: Center(
         child: TextField(
-          style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15),
+          style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15,fontFamily: Constant.jostMedium),
           cursorColor: Constant.chatBubbleGreen,
           decoration: InputDecoration(
             hintText: Constant.nameHint,
             hintStyle: TextStyle(
               color: Color.fromARGB(50, 175, 215, 148),
               fontSize: 15,
+              fontFamily: Constant.jostMedium
             ),
             enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Constant.chatBubbleGreen)),

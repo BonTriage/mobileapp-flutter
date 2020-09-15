@@ -118,8 +118,7 @@ class _SignUpSecondStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: "FuturaMaxiLight",
-                              fontWeight: FontWeight.bold),
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                       Column(
@@ -130,8 +129,7 @@ class _SignUpSecondStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: "FuturaMaxiLight",
-                                fontWeight: FontWeight.bold),
+                                fontFamily: Constant.jostMedium),
                           ),
                           Center(
                             child: Container(
@@ -167,7 +165,7 @@ class _SignUpSecondStepCompassResultState
                                             style: TextStyle(
                                                 color: Color(0xff0E1712),
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.bold),
+                                                fontFamily: Constant.jostMedium),
                                           ),
                                         ),
                                         decoration: BoxDecoration(
@@ -189,8 +187,7 @@ class _SignUpSecondStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: "FuturaMaxiLight",
-                                fontWeight: FontWeight.bold),
+                                fontFamily: Constant.jostMedium),
                           ),
                         ],
                       ),
@@ -201,8 +198,7 @@ class _SignUpSecondStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: "FuturaMaxiLight",
-                              fontWeight: FontWeight.bold),
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                     ],
@@ -232,8 +228,7 @@ class _SignUpSecondStepCompassResultState
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 11,
-
-                          fontWeight: FontWeight.bold),
+                          fontFamily: Constant.jostMedium),
                     ),
                   ],
                 ),
@@ -274,9 +269,8 @@ class _SignUpSecondStepCompassResultState
                               Constant.back,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
-                                  fontSize: 13,
-                                  fontFamily: "FuturaMaxiLight",
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 15,
+                                  fontFamily: Constant.jostMedium),
                             ),
                           ),
                         ),
@@ -309,9 +303,8 @@ class _SignUpSecondStepCompassResultState
                             Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 13,
-                                fontFamily: "FuturaMaxiLight",
-                                fontWeight: FontWeight.bold),
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),
@@ -329,13 +322,12 @@ class _SignUpSecondStepCompassResultState
                     style: TextStyle(
                         color: Constant.locationServiceGreen,
                         fontSize: 13,
-                        fontFamily: "FuturaMaxiLight",
-                        fontWeight: FontWeight.bold),
+                        fontFamily: Constant.jostMedium),
                   ),
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 child: Center(
@@ -345,8 +337,7 @@ class _SignUpSecondStepCompassResultState
                         color: Constant.locationServiceGreen,
                         fontSize: 13,
                         decoration: TextDecoration.underline,
-                        fontFamily: "FuturaMaxiLight",
-                        fontWeight: FontWeight.bold),
+                        fontFamily: Constant.jostMedium),
                   ),
                 ),
               )
@@ -363,52 +354,47 @@ class _SignUpSecondStepCompassResultState
       list.add(TextSpan(
           text: 'Based on what you entered, it looks like your ',
           style: TextStyle(
-              fontWeight: FontWeight.normal,
-              height: 1.5,
-              fontSize: 13,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 15,
+              fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
           text: 'Red Wine Headache ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-              fontSize: 12,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 13,
+              fontFamily: Constant.jostBold,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
           text: 'could potentially be considered by doctors to be a ',
           style: TextStyle(
-              fontWeight: FontWeight.normal,
-              height: 1.5,
-              fontSize: 13,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 15,
+              fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
           text: 'Cluster Headache.',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-              fontSize: 12,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 13,
+              fontFamily: Constant.jostBold,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
           text:
               'We\'ll learn more about this as you log your headache and daily habits in the app.',
           style: TextStyle(
-              fontWeight: FontWeight.normal,
-              height: 1.5,
-              fontSize: 13,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 15,
+              fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
     } else {
       list.add(TextSpan(
           text: _bubbleTextViewList[_buttonPressedValue],
           style: TextStyle(
               fontWeight: FontWeight.normal,
-              height: 1.5,
-              fontSize: 13,
-              fontFamily: Constant.futuraMaxiLight,
+              height: 1.3,
+              fontSize: 15,
+              fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
     }
 

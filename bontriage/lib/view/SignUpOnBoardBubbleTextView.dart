@@ -15,21 +15,21 @@ class _StateSignUpOnBoardBubbleTextView
       TextSpan(
           text: 'Welcome to',
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)),
       TextSpan(
           text: ' MigraineMentor! ',
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostMedium,
               color: Constant.splashMigraineMentorTextColor)),
       TextSpan(
           text: Constant.welcomeMigraineMentorTextView,
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
@@ -38,14 +38,14 @@ class _StateSignUpOnBoardBubbleTextView
       TextSpan(
           text: 'MigraineMentor! ',
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostMedium,
               color: Constant.splashMigraineMentorTextColor)),
       TextSpan(
           text: Constant.answeringTheNext,
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
@@ -54,7 +54,7 @@ class _StateSignUpOnBoardBubbleTextView
       TextSpan(
           text: Constant.letsStarted,
           style: TextStyle(
-              height: 1.5,
+              height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
@@ -65,21 +65,21 @@ class _StateSignUpOnBoardBubbleTextView
     TextSpan(
         text: 'Welcome to',
         style: TextStyle(
-            height: 1.5,
+            height: 1.3,
             fontSize: 16,
             fontFamily: Constant.jostRegular,
             color: Constant.bubbleChatTextView)),
     TextSpan(
         text: 'MigraineMentor! ',
         style: TextStyle(
-            height: 1.5,
+            height: 1.3,
             fontSize: 16,
             fontFamily: Constant.jostMedium,
             color: Constant.splashMigraineMentorTextColor)),
     TextSpan(
         text: Constant.welcomeMigraineMentorTextView,
         style: TextStyle(
-            height: 1.5,
+            height: 1.3,
             fontSize: 16,
             fontFamily: Constant.jostRegular,
             color: Constant.bubbleChatTextView))

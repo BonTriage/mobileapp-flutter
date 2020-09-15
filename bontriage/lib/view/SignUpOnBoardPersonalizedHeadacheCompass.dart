@@ -119,19 +119,21 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
         decoration: Constant.backgroundBoxDecoration,
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 120),
                 child: Text(
                   Constant.personalizedHeadacheCompass,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 13,
-                      fontFamily: Constant.jostBold),
+                      fontSize: 16,
+                      fontFamily: Constant.jostMedium),
                 ),
               ),
 
-              SizedBox(height: 50),
+              SizedBox(height: 60),
               Center(
                 child: Container(
                   width: 250,

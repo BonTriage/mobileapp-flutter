@@ -48,10 +48,9 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                       child: Text(
                         Constant.back,
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 13,
-                            fontFamily: Constant.futuraMaxiLight,
-                            fontWeight: FontWeight.bold),
+                            color: Constant.bubbleChatTextView,
+                            fontSize: 16,
+                            fontFamily: Constant.jostMedium),
                       ),
                     ),
                   ),
@@ -71,10 +70,9 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                     child: Text(
                       Constant.next,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          fontFamily: Constant.futuraMaxiLight,
-                          fontWeight: FontWeight.bold),
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 16,
+                          fontFamily: Constant.jostMedium),
                     ),
                   ),
                 ),
@@ -109,7 +107,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                 Text(
                   'Part ${widget.onBoardPart} of 3',
                   style: TextStyle(
-                      color: Constant.chatBubbleGreen, fontSize: 13),
+                      color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
                 ),
               ],
             ),

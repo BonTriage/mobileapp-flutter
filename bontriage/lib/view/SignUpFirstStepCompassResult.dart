@@ -100,10 +100,10 @@ class _SignUpFirstStepCompassResultState
                             child: Text(
                               _bubbleTextViewList[_buttonPressedValue],
                               style: TextStyle(
-                                  height: 1.5,
-                                  fontSize: 14,
+                                  height: 1.3,
+                                  fontSize: 15,
                                   color: Constant.bubbleChatTextView,
-                                  fontFamily: Constant.jostBold),
+                                  fontFamily: Constant.jostRegular),
                             ),
                           ),
                         ),
@@ -127,7 +127,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: Constant.jostBold),
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                       Column(
@@ -138,7 +138,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: Constant.jostBold),
+                                fontFamily: Constant.jostMedium),
                           ),
                           Center(
                             child: Container(
@@ -174,7 +174,7 @@ class _SignUpFirstStepCompassResultState
                                             style: TextStyle(
                                                 color: Color(0xff0E1712),
                                                 fontSize: 14,
-                                                fontFamily: Constant.jostBold),
+                                                fontFamily: Constant.jostMedium),
                                           ),
                                         ),
                                         decoration: BoxDecoration(
@@ -196,7 +196,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: Constant.jostBold),
+                                fontFamily: Constant.jostMedium),
                           ),
                         ],
                       ),
@@ -207,7 +207,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: Constant.jostBold),
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                     ],
@@ -250,8 +250,8 @@ class _SignUpFirstStepCompassResultState
                               Constant.back,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
-                                  fontSize: 13,
-                                  fontFamily: Constant.jostRegular),
+                                  fontSize: 15,
+                                  fontFamily: Constant.jostMedium),
                             ),
                           ),
                         ),
@@ -284,8 +284,8 @@ class _SignUpFirstStepCompassResultState
                             Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 13,
-                                fontFamily: Constant.jostRegular),
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),

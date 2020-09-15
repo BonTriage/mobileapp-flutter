@@ -14,8 +14,8 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
       TextSpan(
           text: Constant.nextWeAreGoing,
           style: TextStyle(
-              height: 1.5,
-              fontSize: 12,
+              height: 1.3,
+              fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ],
@@ -23,8 +23,8 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
       TextSpan(
           text: Constant.answeringTheNext,
           style: TextStyle(
-              height: 1.5,
-              fontSize: 12,
+              height: 1.3,
+              fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ]

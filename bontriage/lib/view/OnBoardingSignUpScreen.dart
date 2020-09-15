@@ -9,7 +9,8 @@ class OnBoardingSignUpScreen extends StatefulWidget {
 class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   bool _isHidden = true;
 
-  var isCheck = false;
+  var isTermConditionCheck = false;
+  var isEmailMarkCheck = false;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
@@ -34,8 +35,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   Constant.signUp,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 18,
-                      fontFamily: Constant.jostBold),
+                      fontSize: 20,
+                      fontFamily: Constant.jostMedium),
                 ),
                 SizedBox(
                   height: 20,
@@ -45,9 +46,9 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 13,
-                      height: 1.5,
-                      fontFamily: Constant.jostBold),
+                      fontSize: 15,
+                      height: 1.3,
+                      fontFamily: Constant.jostMedium),
                 ),
                 SizedBox(
                   height: 60,
@@ -60,14 +61,17 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       Container(
                         height: 35,
                         child: TextFormField(
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(
+                              fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 20),
-                            hintStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
+                            hintStyle: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontFamily: Constant.jostMedium),
                             filled: true,
                             fillColor: Constant.locationServiceGreen,
                             enabledBorder: OutlineInputBorder(
@@ -94,8 +98,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           Constant.email,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontSize: 12,
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 13,
                               color: Constant.chatBubbleGreen),
                         ),
                       ),
@@ -106,7 +110,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                         height: 35,
                         child: TextFormField(
                           obscureText: _isHidden,
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(
+                              fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
@@ -150,8 +155,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           Constant.password,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontSize: 12,
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 13,
                               color: Constant.chatBubbleGreen),
                         ),
                       ),
@@ -159,55 +164,61 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Row(
                   children: <Widget>[
-                    Checkbox(
-                      value: isCheck,
-                      checkColor: Constant.bubbleChatTextView,
-                      activeColor: Constant.chatBubbleGreen,
-                      focusColor: Constant.chatBubbleGreen,
-                      onChanged: (bool value) {
-                        setState(() {
-                          isCheck = value;
-                        });
-                      },
+                    Theme(
+                      data:ThemeData(unselectedWidgetColor: Constant.editTextBoarderColor),
+                      child: Checkbox(
+                        value: isTermConditionCheck,
+                        checkColor: Constant.bubbleChatTextView,
+                        activeColor: Constant.chatBubbleGreen,
+                        focusColor: Constant.chatBubbleGreen,
+                        autofocus: true,
+                        onChanged: (bool value) {
+                          setState(() {
+                            isTermConditionCheck = value;
+                          });
+                        },
+                      ),
                     ),
                     Text(
                       Constant.termsAndCondition,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                          fontFamily: Constant.futuraMaxiLight,
-                          fontSize: 11,
+                          height: 1.3,
+                          fontFamily: Constant.jostRegular,
+                          fontSize: 12,
                           color: Constant.chatBubbleGreen),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 Row(
                   children: <Widget>[
-                    Checkbox(
-                      value: isCheck,
-                      checkColor: Constant.bubbleChatTextView,
-                      activeColor: Constant.chatBubbleGreen,
-                      focusColor: Constant.chatBubbleGreen,
-                      onChanged: (bool value) {
-                        setState(() {
-                          isCheck = value;
-                        });
-                      },
+                    Theme(
+                      data:ThemeData(unselectedWidgetColor: Constant.editTextBoarderColor),
+                      child: Checkbox(
+                        value: isEmailMarkCheck,
+                        checkColor: Constant.bubbleChatTextView,
+                        activeColor: Constant.chatBubbleGreen,
+                        focusColor: Constant.chatBubbleGreen,
+                        
+                        onChanged: (bool value) {
+                          setState(() {
+                            isEmailMarkCheck = value;
+                          });
+                        },
+                      ),
                     ),
                     Text(
                       Constant.emailFromMigraineMentor,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                          fontFamily: Constant.futuraMaxiLight,
-                          fontSize: 11,
+                          height: 1.3,
+                          fontFamily: Constant.jostRegular,
+                          fontSize: 12,
                           color: Constant.chatBubbleGreen),
                     ),
                   ],
@@ -217,7 +228,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                 ),
                 FlatButton(
                   onPressed: () {
-
                     Navigator.pushReplacementNamed(
                         context, Constant.prePartTwoOnBoardScreenRouter);
                   },
@@ -230,20 +240,21 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                     child: Text(
                       Constant.signUp,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: Constant.futuraMaxiLight,
-                          color: Constant.bubbleChatTextView, fontSize: 14),
+                          fontFamily: Constant.jostMedium,
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 16),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Text(
                   Constant.cancel,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 16,
+                      fontFamily: Constant.jostRegular,
                       decoration: TextDecoration.underline),
                 )
               ],

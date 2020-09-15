@@ -14,8 +14,8 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
       TextSpan(
           text: Constant.almostReadyToHelp,
           style: TextStyle(
-              height: 1.5,
-              fontSize: 12,
+              height: 1.3,
+              fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ],
@@ -23,8 +23,8 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
     TextSpan(
         text: Constant.quickAndEasySection,
         style: TextStyle(
-            height: 1.5,
-            fontSize: 12,
+            height: 1.3,
+            fontSize: 16,
             fontFamily: Constant.jostRegular,
             color: Constant.bubbleChatTextView))
     ]

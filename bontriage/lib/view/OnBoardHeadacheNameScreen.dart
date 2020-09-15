@@ -29,13 +29,14 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
                 child: TextField(
-                  style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15),
+                  style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15,fontFamily: Constant.jostRegular),
                   cursorColor: Constant.chatBubbleGreen,
                   decoration: InputDecoration(
                     hintText: Constant.tapToType,
                     hintStyle: TextStyle(
                       color: Color.fromARGB(50, 175, 215, 148),
                       fontSize: 15,
+                      fontFamily: Constant.jostMedium
                     ),
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Constant.chatBubbleGreen)),
@@ -66,10 +67,9 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                         child: Text(
                           Constant.back,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontWeight: FontWeight.bold),
+                              color: Constant.bubbleChatTextView,
+                              fontSize: 15,
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                     ),
@@ -92,10 +92,9 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                         child: Text(
                           Constant.next,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontWeight: FontWeight.bold),
+                              color: Constant.bubbleChatTextView,
+                              fontSize: 15,
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                     ),

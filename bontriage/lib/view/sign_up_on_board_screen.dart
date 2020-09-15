@@ -81,7 +81,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
             OnBoardChatBubble(
               chatBubbleText: questionList[_currentPageIndex],
             ),
-            SizedBox(height: 50,),
+            SizedBox(height: 40),
             Expanded(
                 child: PageView.builder(
               controller: _pageController,
@@ -131,9 +131,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                                 Constant.back,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 13,
-                                    fontFamily: Constant.futuraMaxiLight,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium,),
                               ),
                             ),
                           ),
@@ -178,9 +177,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                               Constant.next,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 13,
-                                  fontFamily: Constant.futuraMaxiLight,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium,
+                                  ),
                             ),
                           ),
                         ),
@@ -221,7 +220,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         Text(
                           'Part 1 of 3',
                           style: TextStyle(
-                              color: Constant.chatBubbleGreen, fontSize: 13),
+                              color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
                         ),
                       ],
                     ),

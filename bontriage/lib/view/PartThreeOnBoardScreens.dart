@@ -7,7 +7,6 @@ import 'on_board_bottom_buttons.dart';
 import 'on_board_chat_bubble.dart';
 
 class PartThreeOnBoardScreens extends StatefulWidget {
-
   @override
   _PartThreeOnBoardScreensState createState() =>
       _PartThreeOnBoardScreensState();
@@ -27,7 +26,58 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     Constant.followingDevices,
     Constant.followingLifeStyle,
   ];
-  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Rawal',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Himalaya',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Baddhan',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)];
+  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
+    SignUpHeadacheAnswerListModel(answerData: 'Red wine', isSelected: false),
+    SignUpHeadacheAnswerListModel(
+        answerData: 'Bright lights', isSelected: false),
+    SignUpHeadacheAnswerListModel(
+        answerData: 'High humidity', isSelected: false),
+    SignUpHeadacheAnswerListModel(
+        answerData: 'Dust & dander', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+  ];
+  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel1 = [
+    SignUpHeadacheAnswerListModel(answerData: 'Asprin', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Eletriptan', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Excederin', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Almotriptan', isSelected: false),
+    SignUpHeadacheAnswerListModel(
+        answerData: 'Dexmethasone', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+  ];
+  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel2 = [
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 1', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 2', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 3', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 4', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+  ];
+  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel3 = [
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 1', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 2', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 3', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 4', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+  ];
 
   @override
   void initState() {
@@ -36,10 +86,9 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
 
     _pageViewWidgetList = [
       SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel),
-      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel),
-      SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
-      SignUpBottomSheet(selectOptionList: [SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false),SignUpHeadacheAnswerListModel(answerData: 'Dikshant',isSelected: false)]),
-
+      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel1),
+      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel2),
+      SignUpBottomSheet(selectOptionList: signUpHeadacheAnswerListModel3),
     ];
 
     _progressPercent = 1 / _pageViewWidgetList.length;

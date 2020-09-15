@@ -22,10 +22,9 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
               Text(
                 Constant.enableLocationServices,
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                   color: Constant.chatBubbleGreen,
-                  fontFamily: 'FuturaMaxiLight',
+                  fontFamily: Constant.jostMedium,
                 ),
               ),
               Switch(
@@ -46,10 +45,10 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
           Text(
             Constant.enableLocationRecommended,
             style: TextStyle(
-                height: 1.5,
-                fontSize: 15,
+                height: 1.3,
+                fontSize: 16,
                 color: Constant.locationServiceGreen,
-                fontFamily: 'FuturaMaxiLight'
+                fontFamily: Constant.jostRegular
             ),
           ),
         ],

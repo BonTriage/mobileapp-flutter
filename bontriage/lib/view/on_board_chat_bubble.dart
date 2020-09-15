@@ -132,9 +132,9 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
                     child: Text(
                       widget.chatBubbleText,
                       style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
+                          fontSize: 16,
+                          fontFamily: Constant.jostRegular,
+                          height: 1.3,
                           color: (widget.chatBubbleColor == null) ? Constant.chatBubbleGreen : Constant.bubbleChatTextView,
                       ),
                     ),

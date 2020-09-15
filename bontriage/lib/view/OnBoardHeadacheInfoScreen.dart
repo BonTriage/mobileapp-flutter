@@ -19,8 +19,8 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
           TextSpan(
               text: Constant.letsBeginBySeeing,
               style: TextStyle(
-                  height: 1.5,
-                  fontSize: 12,
+                  height: 1.3,
+                  fontSize: 15,
                   fontFamily: Constant.jostRegular,
                   color: Constant.bubbleChatTextView))
         ],

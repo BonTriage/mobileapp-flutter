@@ -67,7 +67,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
             Constant.selectOne,
             style: TextStyle(
                 fontSize: 13,
-                fontFamily: Constant.futuraMaxiLight,
+                fontFamily: Constant.jostMedium,
                 color: Constant.selectTextColor),
           ),
           SizedBox(
@@ -96,7 +96,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
                             style: TextStyle(
                                 fontSize: 14,
                                 color: _getOptionTextColor(index),
-                                fontFamily: Constant.futuraMaxiLight,
+                                fontFamily: Constant.jostRegular,
                                 height: 1.2
                             ),
                           ),

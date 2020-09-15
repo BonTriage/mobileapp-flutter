@@ -24,6 +24,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
       child: Center(
         child: Column(
           children: [
+            SizedBox(height: 40,),
             SliderTheme(
               data: SliderThemeData(
                 activeTrackColor: Color(0xff434351),
@@ -52,14 +53,16 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
                     widget.minText,
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 18,
+                      fontFamily: Constant.jostMedium,
+                      fontSize: 16,
                     ),
                   ),
                   Text(
                     widget.maxText,
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 18,
+                      fontFamily: Constant.jostMedium,
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -77,6 +80,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
                   widget.sliderValue.toInt().toString(),
                   style: TextStyle(
                     color: Constant.chatBubbleGreen,
+                    fontFamily: Constant.jostMedium,
                     fontSize: 18,
                   ),
                 ),
@@ -87,9 +91,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
               '${widget.labelText}',
               style: TextStyle(
                 fontSize: 15,
-                fontFamily: 'FuturaMaxiLight',
                 color: Constant.chatBubbleGreen,
-                fontWeight: FontWeight.bold
+                fontFamily: Constant.jostMedium,
               ),
             ),
           ],

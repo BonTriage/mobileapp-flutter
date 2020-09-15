@@ -56,7 +56,7 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Constant.locationServiceGreen,
-                    height: 1.5,
+                    height: 1.3,
                     fontSize: 16,
                     fontFamily: Constant.jostRegular,
                   ),
