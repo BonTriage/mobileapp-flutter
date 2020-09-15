@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
-
 class SignUpOnBoardBubbleTextView extends StatefulWidget {
   @override
   _StateSignUpOnBoardBubbleTextView createState() =>
@@ -87,6 +86,14 @@ class _StateSignUpOnBoardBubbleTextView
   ];
 
   int _currentIndex = 0;
+
+  void _onBackPressed() {
+    setState(() {
+      if (_currentIndex != 0) {
+        _currentIndex--;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

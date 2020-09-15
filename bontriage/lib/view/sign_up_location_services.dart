@@ -15,7 +15,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
-          SizedBox(height: 40,),
+          SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

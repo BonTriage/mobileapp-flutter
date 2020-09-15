@@ -35,14 +35,43 @@ class OnBoardInformationScreen extends StatefulWidget {
       _OnBoardInformationScreenState();
 }
 
-class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
+class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
+    with TickerProviderStateMixin {
   bool isVolumeOn = true;
+  AnimationController _animationController;
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
     setState(() {
       isVolumeOn = !isVolumeOn;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 100), vsync: this);
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(OnBoardInformationScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _animationController.dispose();
   }
 
   @override
@@ -128,6 +157,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                         height: 1.2,
                       ),
                     ),*/
+
                       ),
                 ),
               ),
@@ -230,6 +260,4 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
       ),
     );
   }
-
-
 }

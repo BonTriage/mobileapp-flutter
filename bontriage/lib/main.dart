@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/Home.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
@@ -75,6 +76,9 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Splash(),
+      onGenerateRoute: (settings) {
+        return SlideFromRightPageRoute(widget: WelcomeScreen());
+      },
       routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
