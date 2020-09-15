@@ -140,25 +140,32 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                 child: ChatBubbleRightPointed(
                   painter:
                       ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
-                  child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: widget.bubbleChatTextSpanList,
+                  child: AnimatedSize(
+                    vsync: this,
+                    duration: Duration(milliseconds: 100),
+                    child: Container(
+                        padding: const EdgeInsets.all(15.0),
+                        child: FadeTransition(
+                          opacity: _animationController,
+                          child: RichText(
+                            text: TextSpan(
+                              children: widget.bubbleChatTextSpanList,
+                            ),
+                          ),
+                        )
+
+                        /*Text(
+                        widget.chatText,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constant.bubbleChatTextView,
+                          fontFamily: Constant.jostBold,
+                          height: 1.2,
                         ),
-                      )
+                      ),*/
 
-                      /*Text(
-                      widget.chatText,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Constant.bubbleChatTextView,
-                        fontFamily: Constant.jostBold,
-                        height: 1.2,
-                      ),
-                    ),*/
-
-                      ),
+                        ),
+                  ),
                 ),
               ),
               SizedBox(
