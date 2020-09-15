@@ -1,5 +1,8 @@
+import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
+import 'package:mobile/view/on_board_chat_bubble.dart';
+import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 
@@ -28,6 +31,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
   List<String> questionList = [
     Constant.firstBasics,
     Constant.whatShouldICallYou,
+    Constant.withWhatGender,
+    Constant.whatBiologicalSex,
     Constant.howOld,
     Constant.likeToEnableLocationServices,
   ];
@@ -39,6 +44,18 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     _pageViewWidgetList = [
       Container(),
       SignUpNameScreen(),
+      OnBoardSelectOptions(selectOptionList: [
+        OnBoardSelectOptionModel(optionText: Constant.woman, isSelected: true),
+        OnBoardSelectOptionModel(optionText: Constant.man),
+        OnBoardSelectOptionModel(optionText: Constant.genderNonConforming),
+        OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
+      ],),
+      OnBoardSelectOptions(selectOptionList: [
+        OnBoardSelectOptionModel(optionText: Constant.woman, isSelected: true),
+        OnBoardSelectOptionModel(optionText: Constant.man),
+        OnBoardSelectOptionModel(optionText: Constant.interSex),
+        OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
+      ],),
       SignUpAgeScreen(
         sliderValue: 3,
         sliderMinValue: 3,
@@ -61,69 +78,10 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 26,
-                        height: 26,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PhotoHero(
-                        photo: Constant.userAvatar,
-                        width: 60,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Image(
-                        image: AssetImage(isVolumeOn
-                            ? Constant.volumeOn
-                            : Constant.volumeOff),
-                        width: 20,
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: ChatBubbleLeftPointed(
-                    painter: ChatBubblePainter(Constant.oliveGreen),
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        questionList[_currentPageIndex],
-                        style: TextStyle(
-                            fontSize: 13,fontWeight: FontWeight.bold,height: 1.5, color: Constant.chatBubbleGreen),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            OnBoardChatBubble(
+              chatBubbleText: questionList[_currentPageIndex],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 50,),
             Expanded(
                 child: PageView.builder(
               controller: _pageController,
@@ -151,7 +109,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                           onPressed: () {
                             setState(() {
                               if (_currentPageIndex != 0) {
-                                _progressPercent -= 0.14;
+                                _progressPercent -= 0.11;
                                 _currentPageIndex--;
                                 _pageController.animateToPage(_currentPageIndex,
                                     duration: Duration(milliseconds: 250),
@@ -189,7 +147,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         scaleFactor: 1.5,
                         onPressed: () {
                           setState(() {
-                            if (_progressPercent == 0.42) {
+                            if (_progressPercent == 0.55) {
                               Navigator.pushNamed(context,
                                   Constant.onBoardHeadacheInfoScreenRouter);
                             } else {
@@ -197,9 +155,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
                                 if (_currentPageIndex !=
                                     _pageViewWidgetList.length - 1)
-                                _progressPercent += 0.14;
+                                _progressPercent += 0.11;
                                 else {
-                                  _progressPercent = 0.42;
+                                  _progressPercent = 0.55;
                                 }
 
                                 _pageController.animateToPage(_currentPageIndex,

@@ -159,6 +159,13 @@ class Constant {
   static String searchType = 'Search or type your own';
   static String tapToType = 'Tap to type';
   static String greatWeAreDone = 'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
+  static String withWhatGender = 'With what gender do you identify?';
+  static String whatBiologicalSex = 'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
+  static String woman = 'Woman';
+  static String man = 'Man';
+  static String genderNonConforming = 'Gender non-conforming';
+  static String preferNotToAnswer = 'Prefer not to answer';
+  static String interSex = 'Intersex';
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

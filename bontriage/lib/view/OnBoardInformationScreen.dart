@@ -23,14 +23,44 @@ class OnBoardInformationScreen extends StatefulWidget {
       _OnBoardInformationScreenState();
 }
 
-class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
+class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> with TickerProviderStateMixin {
   bool isVolumeOn = true;
+  AnimationController _animationController;
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
     setState(() {
       isVolumeOn = !isVolumeOn;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController = AnimationController(
+        duration: Duration(milliseconds: 100),
+        vsync: this
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(OnBoardInformationScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _animationController.dispose();
   }
 
   @override
@@ -99,16 +129,23 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                   child: ChatBubbleRightPointed(
                     painter:
                     ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        widget.chatText,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.bubbleChatTextView,
-                            fontFamily: Constant.futuraMaxiLight,
-                            height: 1.2,
-                            fontWeight: FontWeight.bold),
+                    child: AnimatedSize(
+                      vsync: this,
+                      duration: Duration(milliseconds: 100),
+                      child: Container(
+                        padding: const EdgeInsets.all(15.0),
+                        child: FadeTransition(
+                          opacity: _animationController,
+                          child: Text(
+                            widget.chatText,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Constant.bubbleChatTextView,
+                                fontFamily: Constant.futuraMaxiLight,
+                                height: 1.2,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ),
                   ),

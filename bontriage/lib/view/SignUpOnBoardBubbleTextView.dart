@@ -22,23 +22,36 @@ class _StateSignUpOnBoardBubbleTextView
 
   int _currentIndex = 0;
 
+  void _onBackPressed() {
+    setState(() {
+      if(_currentIndex != 0) {
+        _currentIndex--;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-          isShowNextButton: _currentIndex != (_questionList.length - 1),
-          chatText: _questionList[_currentIndex],
-          nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
-          },
-          bottomButtonText: Constant.startAssessment,
-          bottomButtonFunction: () {
-            Navigator.pushReplacementNamed(context,
-                Constant.signUpOnBoardHeadacheQuestionRouter);
-          },
-          isShowSecondBottomButton: false
+    return WillPopScope(
+      onWillPop: () {
+       _onBackPressed();
+      },
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+            isShowNextButton: _currentIndex != (_questionList.length - 1),
+            chatText: _questionList[_currentIndex],
+            nextButtonFunction: () {
+              setState(() {
+                _currentIndex++;
+              });
+            },
+            bottomButtonText: Constant.startAssessment,
+            bottomButtonFunction: () {
+              Navigator.pushReplacementNamed(context,
+                  Constant.signUpOnBoardHeadacheQuestionRouter);
+            },
+            isShowSecondBottomButton: false
+        ),
       ),
     );
   }

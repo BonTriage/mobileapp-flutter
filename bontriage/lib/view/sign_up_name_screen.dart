@@ -10,7 +10,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
       child: Center(
         child: TextField(
           style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15),

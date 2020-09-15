@@ -16,7 +16,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   );
 
   int _currentPageIndex = 0;
-  double _progressPercent = 0.52;
+  double _progressPercent = 0.66;
 
   List<Widget> _pageViewWidgetList;
 
@@ -126,7 +126,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                 backButtonFunction: _onBackPressed,
                 nextButtonFunction: () {
                   setState(() {
-                    double stepOneProgress = 0.14;
+                    double stepOneProgress = 0.11;
 
                     if (_progressPercent == 1) {
                       Navigator.pushReplacementNamed(context, Constant.signUpOnBoardPersonalizedHeadacheResultRouter);

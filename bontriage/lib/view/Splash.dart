@@ -13,7 +13,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 2000),(){Navigator.pushReplacementNamed(context,Constant.welcomeScreenRouter);});
+    Future.delayed(Duration(milliseconds: 2000),(){Navigator.pushReplacementNamed(context,Constant.welcomeScreenRouter, arguments: 'args');});
     return Scaffold(
       body: Center(
         child: Padding(

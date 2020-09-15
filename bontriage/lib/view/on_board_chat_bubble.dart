@@ -16,6 +16,7 @@ class OnBoardChatBubble extends StatefulWidget {
 
 class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProviderStateMixin {
   bool isVolumeOn = true;
+  AnimationController _animationController;
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
@@ -28,18 +29,31 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 100),
+      vsync: this
+    );
+
+    _animationController.forward();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _animationController.dispose();
   }
 
   @override
   void didUpdateWidget(OnBoardChatBubble oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
   }
 
   @override
@@ -108,15 +122,22 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
               painter: ChatBubblePainter((widget.chatBubbleColor == null) ? Constant.oliveGreen
                   : widget.chatBubbleColor),
 
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  widget.chatBubbleText,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
-                      color: (widget.chatBubbleColor == null) ? Constant.chatBubbleGreen : Constant.bubbleChatTextView,
+              child: AnimatedSize(
+                vsync: this,
+                duration: Duration(milliseconds: 100),
+                child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  child: FadeTransition(
+                    opacity: _animationController,
+                    child: Text(
+                      widget.chatBubbleText,
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          height: 1.5,
+                          color: (widget.chatBubbleColor == null) ? Constant.chatBubbleGreen : Constant.bubbleChatTextView,
+                      ),
+                    ),
                   ),
                 ),
               ),
