@@ -127,8 +127,7 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 13,
-                      fontFamily: Constant.futuraMaxiLight,
-                      fontWeight: FontWeight.bold),
+                      fontFamily: Constant.jostBold),
                 ),
               ),
 

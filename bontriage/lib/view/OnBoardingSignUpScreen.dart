@@ -35,8 +35,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 18,
-                      fontFamily: Constant.futuraMaxiLight,
-                      fontWeight: FontWeight.bold),
+                      fontFamily: Constant.jostBold),
                 ),
                 SizedBox(
                   height: 20,
@@ -48,8 +47,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       color: Constant.chatBubbleGreen,
                       fontSize: 13,
                       height: 1.5,
-                      fontFamily: Constant.futuraMaxiLight,
-                      fontWeight: FontWeight.bold),
+                      fontFamily: Constant.jostBold),
                 ),
                 SizedBox(
                   height: 60,
@@ -218,7 +216,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   height: 20,
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Navigator.pushReplacementNamed(
+                        context, Constant.prePartTwoOnBoardScreenRouter);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                     decoration: BoxDecoration(

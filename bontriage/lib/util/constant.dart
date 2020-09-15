@@ -33,7 +33,12 @@ class Constant {
       '/welcomeStartAssessmentScreenRouter';
   static String onBoardHeadacheInfoScreenRouter =
       '/onBoardHeadacheInfoScreenRouter';
-  static String partOneOnBoardScreenTwo = '/partOneOnBoardScreenTwo';
+  static String partOneOnBoardScreenTwoRouter = '/partOneOnBoardScreenTwo';
+  static String onBoardCreateAccountScreenRouter = '/onBoardCreateAccountScreen';
+  static String prePartTwoOnBoardScreenRouter = '/prePartTwoOnBoardScreen';
+  static String onBoardHeadacheNameScreenRouter = '/onBoardHeadacheNameScreen';
+  static String partTwoOnBoardMoveOnScreenRouter = '/partTwoOnBoardMoveOnScreen';
+  static String prePartThreeOnBoardScreenRouter = '/prePartThreeOnBoardScreen';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -59,7 +64,7 @@ class Constant {
   static String enableLocationRecommended =
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String welcomeMigraineMentorTextView =
-      'Welcome to MigraineMentor! Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+      'Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
   static String migraineMentorHelpTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
   static String compassDiagramTextView =
@@ -242,6 +247,7 @@ class Constant {
 
   static Color splashColor = Color(0xffD7EBC9);
   static Color splashTextColor = Color(0xff0E232F);
+  static Color splashMigraineMentorTextColor = Color(0xff30af72);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -258,4 +264,7 @@ class Constant {
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
+  static String jostBold = "JostBold";
+  static String jostMedium = "JostMedium";
+  static String jostRegular = "JostRegular";
 }

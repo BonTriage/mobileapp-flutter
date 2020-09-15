@@ -109,8 +109,20 @@ class MyApp extends StatelessWidget {
             WelcomeStartAssessmentScreen(),
         Constant.onBoardHeadacheInfoScreenRouter: (context) =>
             OnBoardHeadacheInfoScreen(),
-        Constant.partOneOnBoardScreenTwo: (context) =>
+        Constant.partOneOnBoardScreenTwoRouter: (context) =>
             PartOneOnBoardScreenTwo(),
+        Constant.onBoardCreateAccountScreenRouter: (context) =>
+            OnBoardCreateAccount(),
+        Constant.onBoardCreateAccountScreenRouter: (context) =>
+            OnBoardCreateAccount(),
+        Constant.prePartTwoOnBoardScreenRouter: (context) =>
+            PrePartTwoOnBoardScreen(),
+        Constant.onBoardHeadacheNameScreenRouter: (context) =>
+            OnBoardHeadacheNameScreen(),
+        Constant.partTwoOnBoardMoveOnScreenRouter: (context) =>
+            PartTwoOnBoardMoveOnScreen(),
+        Constant.prePartThreeOnBoardScreenRouter: (context) =>
+            PrePartThreeOnBoardScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

@@ -70,6 +70,15 @@ flutter:
     - family: FuturaMaxiLight
       fonts:
         - asset: fonts/futura_maxi_light.otf
+    - family: JostBold
+      fonts:
+        - asset: fonts/Jost-Bold.ttf
+    - family: JostMedium
+      fonts:
+        - asset: fonts/Jost-Medium.ttf
+    - family: JostRegular
+      fonts:
+        - asset: fonts/Jost-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

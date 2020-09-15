@@ -97,7 +97,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               duration: Duration(milliseconds: 250),
                               curve: Curves.easeIn);
                         } else {
-                          Navigator.pushReplacementNamed(context, Constant.welcomeStartAssessmentScreenRouter);
+                          Navigator.pushReplacementNamed(context,
+                              Constant.welcomeStartAssessmentScreenRouter);
                         }
                       },
                       child: Container(
@@ -111,9 +112,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: Text(
                             _getButtonText(),
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal),
+                                color: Constant.bubbleChatTextView,
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),

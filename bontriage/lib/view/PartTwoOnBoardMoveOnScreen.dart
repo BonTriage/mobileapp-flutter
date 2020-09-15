@@ -12,10 +12,20 @@ class _PartTwoOnBoardMoveOnScreenState extends State<PartTwoOnBoardMoveOnScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
-        chatText: Constant.experienceTypesOfHeadaches,
+        bubbleChatTextSpanList: [
+          TextSpan(
+              text: Constant.experienceTypesOfHeadaches,
+              style: TextStyle(
+                  height: 1.5,
+                  fontSize: 12,
+                  fontFamily: Constant.jostRegular,
+                  color: Constant.bubbleChatTextView))
+        ],
         isShowNextButton: false,
         bottomButtonText: Constant.moveOnForNow,
         bottomButtonFunction: () {
+          Navigator.pushReplacementNamed(
+              context, Constant.prePartThreeOnBoardScreenRouter);
           //TODO: Move to next screen
         },
         isShowSecondBottomButton: true,

@@ -35,8 +35,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       Constant.migraineMentor,
                       style: TextStyle(
                         color: Constant.chatBubbleGreen,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        fontFamily: Constant.jostRegular,
                       ),
                     ),
                   ],
@@ -46,9 +46,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   Constant.conquerYourHeadaches,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 16,
-                      fontFamily: Constant.futuraMaxiLight,
-                      fontWeight: FontWeight.bold
+                      fontSize: 18,
+                      fontFamily: Constant.jostRegular,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -57,9 +56,9 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Constant.locationServiceGreen,
-                    height: 1.7,
-                    fontSize: 14,
-                    fontFamily: Constant.futuraMaxiLight,
+                    height: 1.5,
+                    fontSize: 16,
+                    fontFamily: Constant.jostRegular,
                   ),
                 ),
                 SizedBox(height: 100),
@@ -68,7 +67,7 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                     Navigator.pushReplacementNamed(context, Constant.signUpOnBoardSplashRouter);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Constant.chatBubbleGreen,
                       borderRadius: BorderRadius.circular(20),
@@ -77,9 +76,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       Constant.startYourAssessment,
                       style: TextStyle(
                           color: Constant.bubbleChatTextView,
-                          fontSize: 13,
-                          fontFamily: Constant.futuraMaxiLight,
-                          fontWeight: FontWeight.bold
+                          fontSize: 15,
+                          fontFamily: Constant.jostMedium,
                       ),
                     ),
                   ),
@@ -93,9 +91,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       style: TextStyle(
                         wordSpacing: 1,
                         color: Constant.chatBubbleGreen,
-                        fontFamily: Constant.futuraMaxiLight,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold
+                        fontFamily: Constant.jostRegular,
+                        fontSize: 14,
                       ),
                     ),
                     GestureDetector(
@@ -104,12 +101,11 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                         Constant.signIn,
                         style: TextStyle(
                           color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.futuraMaxiLight,
+                          fontFamily: Constant.jostRegular,
                             wordSpacing: 1,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                           decoration: TextDecoration.underline,
-                          decorationThickness: 5
+                          decorationThickness: 1
                         ),
                       ),
                     ),
@@ -117,10 +113,9 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       Constant.toAn,
                       style: TextStyle(
                         color: Constant.chatBubbleGreen,
-                        fontFamily: Constant.futuraMaxiLight,
+                        fontFamily: Constant.jostRegular,
                         fontSize: 13,
                         wordSpacing: 1,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -130,9 +125,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   Constant.existingAccount,
                   style: TextStyle(
                     color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.futuraMaxiLight,
+                    fontFamily: Constant.jostRegular,
                     fontSize: 13,
-                    fontWeight: FontWeight.bold,
                     wordSpacing: 1
                   ),
                 ),

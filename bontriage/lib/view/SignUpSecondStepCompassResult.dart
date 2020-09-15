@@ -293,7 +293,7 @@ class _SignUpSecondStepCompassResultState
                             isBackButtonHide = true;
                           } else {
                             Navigator.pushReplacementNamed(
-                                context, Constant.partTwoOnBoardScreenRouter);
+                                context, Constant.partTwoOnBoardMoveOnScreenRouter);
                           }
                         });
                       },

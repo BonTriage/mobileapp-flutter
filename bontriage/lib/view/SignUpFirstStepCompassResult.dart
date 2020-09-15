@@ -103,8 +103,7 @@ class _SignUpFirstStepCompassResultState
                                   height: 1.5,
                                   fontSize: 14,
                                   color: Constant.bubbleChatTextView,
-                                  fontFamily: Constant.futuraMaxiLight,
-                                  fontWeight: FontWeight.bold),
+                                  fontFamily: Constant.jostBold),
                             ),
                           ),
                         ),
@@ -128,8 +127,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: Constant.jostBold),
                         ),
                       ),
                       Column(
@@ -140,8 +138,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: Constant.futuraMaxiLight,
-                                fontWeight: FontWeight.bold),
+                                fontFamily: Constant.jostBold),
                           ),
                           Center(
                             child: Container(
@@ -177,7 +174,7 @@ class _SignUpFirstStepCompassResultState
                                             style: TextStyle(
                                                 color: Color(0xff0E1712),
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.bold),
+                                                fontFamily: Constant.jostBold),
                                           ),
                                         ),
                                         decoration: BoxDecoration(
@@ -199,8 +196,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Color(0xffafd794),
                                 fontSize: 14,
-                                fontFamily: Constant.futuraMaxiLight,
-                                fontWeight: FontWeight.bold),
+                                fontFamily: Constant.jostBold),
                           ),
                         ],
                       ),
@@ -211,8 +207,7 @@ class _SignUpFirstStepCompassResultState
                           style: TextStyle(
                               color: Color(0xffafd794),
                               fontSize: 14,
-                              fontFamily: Constant.futuraMaxiLight,
-                              fontWeight: FontWeight.bold),
+                              fontFamily: Constant.jostBold),
                         ),
                       ),
                     ],
@@ -256,8 +251,7 @@ class _SignUpFirstStepCompassResultState
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 13,
-                                  fontFamily: Constant.futuraMaxiLight,
-                                  fontWeight: FontWeight.bold),
+                                  fontFamily: Constant.jostRegular),
                             ),
                           ),
                         ),
@@ -274,7 +268,7 @@ class _SignUpFirstStepCompassResultState
                             isBackButtonHide = true;
                           } else {
                             Navigator.pushReplacementNamed(
-                                context, Constant.partTwoOnBoardScreenRouter);
+                                context, Constant.onBoardCreateAccountScreenRouter);
                           }
                         });
                       },
@@ -291,8 +285,7 @@ class _SignUpFirstStepCompassResultState
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 13,
-                                fontFamily: Constant.futuraMaxiLight,
-                                fontWeight: FontWeight.bold),
+                                fontFamily: Constant.jostRegular),
                           ),
                         ),
                       ),

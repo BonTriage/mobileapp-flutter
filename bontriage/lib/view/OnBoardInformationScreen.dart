@@ -6,6 +6,8 @@ import '../util/PhotoHero.dart';
 
 class OnBoardInformationScreen extends StatefulWidget {
   final bool isShowNextButton;
+  final bool isSpannable;
+  final List<TextSpan> bubbleChatTextSpanList;
   final String chatText;
   final String bottomButtonText;
   final Function nextButtonFunction;
@@ -15,7 +17,17 @@ class OnBoardInformationScreen extends StatefulWidget {
   final Function secondBottomButtonFunction;
 
   const OnBoardInformationScreen(
-      {Key key, this.isShowNextButton, this.chatText, this.bottomButtonText, this.bottomButtonFunction, this.nextButtonFunction, this.isShowSecondBottomButton, this.secondBottomButtonText, this.secondBottomButtonFunction})
+      {Key key,
+      this.isSpannable = false,
+      this.bubbleChatTextSpanList,
+      this.isShowNextButton,
+      this.chatText,
+      this.bottomButtonText,
+      this.bottomButtonFunction,
+      this.nextButtonFunction,
+      this.isShowSecondBottomButton,
+      this.secondBottomButtonText,
+      this.secondBottomButtonFunction})
       : super(key: key);
 
   @override
@@ -36,85 +48,93 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: Constant.backgroundBoxDecoration,
-        child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Image(
-                      image: AssetImage(Constant.closeIcon),
-                      width: 26,
-                      height: 26,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: GestureDetector(
-                        onTap: _toggleVolume,
-                        child: AnimatedCrossFade(
-                          duration: Duration(milliseconds: 250),
-                          firstChild: Image(
-                            image: AssetImage(
-                                Constant.volumeOn),
-                            width: 20,
-                            height: 20,
-                          ),
-                          secondChild: Image(
-                            image: AssetImage(
-                                Constant.volumeOff),
-                            width: 20,
-                            height: 20,
-                          ),
-                          crossFadeState: isVolumeOn ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      decoration: Constant.backgroundBoxDecoration,
+      child: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image(
+                    image: AssetImage(Constant.closeIcon),
+                    width: 26,
+                    height: 26,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 80,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: GestureDetector(
+                      onTap: _toggleVolume,
+                      child: AnimatedCrossFade(
+                        duration: Duration(milliseconds: 250),
+                        firstChild: Image(
+                          image: AssetImage(Constant.volumeOn),
+                          width: 20,
+                          height: 20,
                         ),
-                      ),
-                    ),
-                    Expanded(
-                        child: Center(
-                            child: Container(
-                              margin: EdgeInsets.only(right: 20),
-                              child: PhotoHero(
-                                photo: Constant.userAvatar,
-                                width: 60,
-                              ),
-                            ))),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  child: ChatBubbleRightPointed(
-                    painter:
-                    ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        widget.chatText,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.bubbleChatTextView,
-                            fontFamily: Constant.futuraMaxiLight,
-                            height: 1.2,
-                            fontWeight: FontWeight.bold),
+                        secondChild: Image(
+                          image: AssetImage(Constant.volumeOff),
+                          width: 20,
+                          height: 20,
+                        ),
+                        crossFadeState: isVolumeOn
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
                       ),
                     ),
                   ),
+                  Expanded(
+                      child: Center(
+                          child: Container(
+                    margin: EdgeInsets.only(right: 20),
+                    child: PhotoHero(
+                      photo: Constant.userAvatar,
+                      width: 60,
+                    ),
+                  ))),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                child: ChatBubbleRightPointed(
+                  painter:
+                      ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
+                  child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: widget.bubbleChatTextSpanList,
+                        ),
+                      )
+
+                      /*Text(
+                      widget.chatText,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.bubbleChatTextView,
+                        fontFamily: Constant.jostBold,
+                        height: 1.2,
+                      ),
+                    ),*/
+                      ),
                 ),
-                SizedBox(height: 25,),
-                if(widget.isShowNextButton)
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              if (widget.isShowNextButton)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -122,7 +142,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                       onTap: widget.nextButtonFunction,
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 40,vertical: 8),
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
                           borderRadius: BorderRadius.circular(20),
@@ -132,19 +152,18 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                             Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 12,
-                                fontFamily: Constant.futuraMaxiLight,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                Expanded(
-                  child: Container(),
-                ),
-                if(!widget.isShowNextButton)
+              Expanded(
+                child: Container(),
+              ),
+              if (!widget.isShowNextButton)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -152,8 +171,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                       child: GestureDetector(
                         onTap: widget.bottomButtonFunction,
                         child: Container(
-                          padding:
-                          EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                             color: Color(0xffafd794),
                             borderRadius: BorderRadius.circular(30),
@@ -163,9 +181,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                               widget.bottomButtonText,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
-                                  fontSize: 13.5,
-                                  fontFamily: Constant.futuraMaxiLight,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium),
                             ),
                           ),
                         ),
@@ -173,8 +190,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 14,),
-                if(widget.isShowSecondBottomButton)
+              SizedBox(
+                height: 14,
+              ),
+              if (widget.isShowSecondBottomButton)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -182,10 +201,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                       child: GestureDetector(
                         onTap: widget.secondBottomButtonFunction,
                         child: Container(
-                          padding:
-                          EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Constant.chatBubbleGreen),
+                            border: Border.all(
+                                width: 1, color: Constant.chatBubbleGreen),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
@@ -194,8 +213,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 13.5,
-                                  fontFamily: "FuturaMaxiLight",
-                                  fontWeight: FontWeight.bold),
+                                  fontFamily: Constant.jostBold),
                             ),
                           ),
                         ),
@@ -203,13 +221,15 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 80,
-                ),
-              ],
-            ),
+              SizedBox(
+                height: 80,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
+
+
 }

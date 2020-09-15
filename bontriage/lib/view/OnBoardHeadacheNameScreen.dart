@@ -77,7 +77,10 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                   BouncingWidget(
                     duration: Duration(milliseconds: 100),
                     scaleFactor: 1.5,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+                    },
                     child: Container(
                       width: 100,
                       height: 30,

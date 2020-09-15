@@ -12,10 +12,21 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
-        chatText: Constant.beforeContinuing,
+        bubbleChatTextSpanList: [
+          TextSpan(
+              text: Constant.beforeContinuing,
+              style: TextStyle(
+                  height: 1.5,
+                  fontSize: 12,
+                  fontFamily: Constant.jostRegular,
+                  color: Constant.bubbleChatTextView))
+        ],
         isShowNextButton: false,
         bottomButtonText: Constant.createAccount,
-        bottomButtonFunction: () {},
+        bottomButtonFunction: () {
+          Navigator.pushReplacementNamed(
+              context, Constant.onBoardingScreenSignUpRouter);
+        },
         isShowSecondBottomButton: false,
       ),
     );

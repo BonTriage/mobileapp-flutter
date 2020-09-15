@@ -4,13 +4,31 @@ import 'package:mobile/view/OnBoardInformationScreen.dart';
 
 class PostPartThreeOnBoardScreen extends StatefulWidget {
   @override
-  _PostPartThreeOnBoardScreenState createState() => _PostPartThreeOnBoardScreenState();
+  _PostPartThreeOnBoardScreenState createState() =>
+      _PostPartThreeOnBoardScreenState();
 }
 
-class _PostPartThreeOnBoardScreenState extends State<PostPartThreeOnBoardScreen> {
-  List<String> _questionList = [
-    Constant.qualityOfOurMentorShip,
-    Constant.easyToLoseTrack
+class _PostPartThreeOnBoardScreenState
+    extends State<PostPartThreeOnBoardScreen> {
+  List<List<TextSpan>> _questionList = [
+    [
+      TextSpan(
+          text: Constant.qualityOfOurMentorShip,
+          style: TextStyle(
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular,
+              color: Constant.bubbleChatTextView))
+    ],
+    [
+      TextSpan(
+          text: Constant.easyToLoseTrack,
+          style: TextStyle(
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular,
+              color: Constant.bubbleChatTextView))
+    ]
   ];
 
   int _currentIndex = 0;
@@ -20,7 +38,7 @@ class _PostPartThreeOnBoardScreenState extends State<PostPartThreeOnBoardScreen>
     return Scaffold(
       body: OnBoardInformationScreen(
         isShowNextButton: _currentIndex != (_questionList.length - 1),
-        chatText: _questionList[_currentIndex],
+        bubbleChatTextSpanList: _questionList[_currentIndex],
         nextButtonFunction: () {
           setState(() {
             _currentIndex++;

@@ -12,7 +12,15 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
-        chatText: Constant.untilYouComplete,
+        bubbleChatTextSpanList: [
+          TextSpan(
+              text: Constant.untilYouComplete,
+              style: TextStyle(
+                  height: 1.5,
+                  fontSize: 12,
+                  fontFamily: Constant.jostRegular,
+                  color: Constant.bubbleChatTextView))
+        ],
         isShowNextButton: false,
         bottomButtonText: Constant.continueSurvey,
         bottomButtonFunction: () {

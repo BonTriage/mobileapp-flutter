@@ -6,7 +6,8 @@ import '../util/constant.dart';
 
 class OnBoardHeadacheInfoScreen extends StatefulWidget {
   @override
-  _OnBoardHeadacheInfoScreenState createState() => _OnBoardHeadacheInfoScreenState();
+  _OnBoardHeadacheInfoScreenState createState() =>
+      _OnBoardHeadacheInfoScreenState();
 }
 
 class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
@@ -14,10 +15,19 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
-        chatText: Constant.letsBeginBySeeing,
+        bubbleChatTextSpanList: [
+          TextSpan(
+              text: Constant.letsBeginBySeeing,
+              style: TextStyle(
+                  height: 1.5,
+                  fontSize: 12,
+                  fontFamily: Constant.jostRegular,
+                  color: Constant.bubbleChatTextView))
+        ],
         isShowNextButton: true,
         nextButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.partOneOnBoardScreenTwo);
+          Navigator.pushReplacementNamed(
+              context, Constant.partOneOnBoardScreenTwoRouter);
         },
         isShowSecondBottomButton: false,
       ),

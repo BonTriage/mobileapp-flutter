@@ -32,7 +32,7 @@ class _SplashState extends State<Splash> {
                 style: TextStyle(
                   color: Constant.splashTextColor,
                   fontSize: 22,
-                  fontFamily: Constant.futuraMaxiLight
+                  fontFamily: Constant.jostRegular
                 ),
               ),
             ],

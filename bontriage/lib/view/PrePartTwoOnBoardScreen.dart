@@ -4,13 +4,30 @@ import 'package:mobile/view/OnBoardInformationScreen.dart';
 
 class PrePartTwoOnBoardScreen extends StatefulWidget {
   @override
-  _PrePartTwoOnBoardScreenState createState() => _PrePartTwoOnBoardScreenState();
+  _PrePartTwoOnBoardScreenState createState() =>
+      _PrePartTwoOnBoardScreenState();
 }
 
 class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
-  List<String> _questionList = [
-    Constant.nextWeAreGoing,
-    Constant.answeringTheNext
+  List<List<TextSpan>> _questionList = [
+    [
+      TextSpan(
+          text: Constant.nextWeAreGoing,
+          style: TextStyle(
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular,
+              color: Constant.bubbleChatTextView))
+    ],
+    [
+      TextSpan(
+          text: Constant.answeringTheNext,
+          style: TextStyle(
+              height: 1.5,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular,
+              color: Constant.bubbleChatTextView))
+    ]
   ];
 
   int _currentIndex = 0;
@@ -20,7 +37,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     return Scaffold(
       body: OnBoardInformationScreen(
         isShowNextButton: _currentIndex != (_questionList.length - 1),
-        chatText: _questionList[_currentIndex],
+        bubbleChatTextSpanList: _questionList[_currentIndex],
         nextButtonFunction: () {
           setState(() {
             _currentIndex++;
@@ -28,7 +45,8 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
         },
         bottomButtonText: Constant.continueText,
         bottomButtonFunction: () {
-          //TODO: Move to next screen
+          Navigator.pushReplacementNamed(
+              context, Constant.partTwoOnBoardScreenRouter);
         },
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,
