@@ -4,10 +4,10 @@ import 'dart:math' as math;
 import 'dart:math' show pi, cos, sin;
 
 const defaultGraphColors = [
-  Color(0xff97c289),
-  Color(0xffafd794),
-  Color(0x80afd794),
-  Color(0xffafd794),
+  Color(0xffB8FFFF),
+  Color(0xffB8FFFF),
+  Color(0x80B8FFFF),
+  Color(0xffB8FFFF),
 ];
 
 const personalizedDefaultGraphColors = [

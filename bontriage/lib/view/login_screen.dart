@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      'Login',
+                      Constant.login,
                       style: TextStyle(color: Constant.bubbleChatTextView, fontSize: 14),
                     ),
                   ),
@@ -156,10 +156,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 15,
                 ),
                 Text(
-                  'Register',
+                  Constant.register,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Constant.futuraMaxiLight,
                       decoration: TextDecoration.underline),
                 )
               ],
