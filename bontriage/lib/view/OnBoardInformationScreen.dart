@@ -52,7 +52,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
     // TODO: implement initState
     super.initState();
     _animationController =
-        AnimationController(duration: Duration(milliseconds: 100), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
   }
@@ -142,7 +142,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                       ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
                   child: AnimatedSize(
                     vsync: this,
-                    duration: Duration(milliseconds: 100),
+                    duration: Duration(milliseconds: 300),
                     child: Container(
                         padding: const EdgeInsets.all(15.0),
                         child: FadeTransition(

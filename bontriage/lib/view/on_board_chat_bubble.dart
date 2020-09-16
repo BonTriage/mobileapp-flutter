@@ -31,7 +31,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 100),
+      duration: Duration(milliseconds: 300),
       vsync: this
     );
 
@@ -124,7 +124,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
 
               child: AnimatedSize(
                 vsync: this,
-                duration: Duration(milliseconds: 100),
+                duration: Duration(milliseconds: 300),
                 child: Container(
                   padding: const EdgeInsets.all(15.0),
                   child: FadeTransition(

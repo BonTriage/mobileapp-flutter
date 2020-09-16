@@ -12,13 +12,14 @@ class SignUpFirstStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> {
+    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin{
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
   int _buttonPressedValue = 0;
   List<String> _bubbleTextViewList;
   bool isBackButtonHide = false;
+  AnimationController _animationController;
 
   @override
   void initState() {
@@ -31,6 +32,24 @@ class _SignUpFirstStepCompassResultState
       Constant.welcomePersonalizedHeadacheFourthTextView,
       Constant.welcomePersonalizedHeadacheFifthTextView
     ];
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 300),
+      vsync: this
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(SignUpFirstStepCompassResult oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
   }
 
   @override
@@ -95,15 +114,22 @@ class _SignUpFirstStepCompassResultState
                         padding: EdgeInsets.only(left: 17, top: 25),
                         child: ChatBubble(
                           painter: ChatBubblePainter(Constant.chatBubbleGreen),
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              _bubbleTextViewList[_buttonPressedValue],
-                              style: TextStyle(
-                                  height: 1.3,
-                                  fontSize: 15,
-                                  color: Constant.bubbleChatTextView,
-                                  fontFamily: Constant.jostRegular),
+                          child: AnimatedSize(
+                            duration: Duration(milliseconds: 300),
+                            vsync: this,
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              child: FadeTransition(
+                                opacity: _animationController,
+                                child: Text(
+                                  _bubbleTextViewList[_buttonPressedValue],
+                                  style: TextStyle(
+                                      height: 1.3,
+                                      fontSize: 15,
+                                      color: Constant.bubbleChatTextView,
+                                      fontFamily: Constant.jostRegular),
+                                ),
+                              ),
                             ),
                           ),
                         ),

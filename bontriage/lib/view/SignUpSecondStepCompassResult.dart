@@ -12,13 +12,14 @@ class SignUpSecondStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpSecondStepCompassResultState
-    extends State<SignUpSecondStepCompassResult> {
+    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
   int _buttonPressedValue = 0;
   List<String> _bubbleTextViewList;
   bool isBackButtonHide = false;
+  AnimationController _animationController;
 
   @override
   void initState() {
@@ -29,6 +30,24 @@ class _SignUpSecondStepCompassResultState
       Constant.accurateClinicalImpression,
       Constant.moreDetailedHistory,
     ];
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 300),
+      vsync: this
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(SignUpSecondStepCompassResult oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
   }
 
   @override
@@ -95,13 +114,20 @@ class _SignUpSecondStepCompassResultState
                           padding: EdgeInsets.only(left: 17, top: 25),
                           child: ChatBubble(
                             painter: ChatBubblePainter(Constant.chatBubbleGreen),
-                            child: Container(
-                                padding: EdgeInsets.all(15),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: _getBubbleTextSpans(),
-                                  ),
-                                )),
+                            child: AnimatedSize(
+                              vsync: this,
+                              duration: Duration(milliseconds: 300),
+                              child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  child: FadeTransition(
+                                    opacity: _animationController,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: _getBubbleTextSpans(),
+                                      ),
+                                    ),
+                                  )),
+                            ),
                           ),
                         ),
                       ),

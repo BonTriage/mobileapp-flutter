@@ -16,7 +16,7 @@ class _SignUpOnBoardSplashState extends State<SignUpOnBoardSplash> {
 
 
   Widget build(BuildContext context) {
-    timeDilation = 4.0; // 1.0 means normal animation speed.
+    //timeDilation = 4.0; // 1.0 means normal animation speed.
     Future.delayed(Duration(milliseconds: 2000), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute<void>(builder: (BuildContext context) {

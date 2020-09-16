@@ -24,7 +24,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
             margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
             height: 100,
             child: Scrollbar(
-              isAlwaysShown: true,
+              isAlwaysShown: false,
               child: ListView(
                 children: <Widget>[
                   Wrap(
@@ -70,7 +70,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                   onTap: () {
                     showBottomSheet(
                         elevation: 4,
-
+                        backgroundColor: Constant.backgroundTransparentColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -144,79 +144,70 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
       child: Column(
         children: <Widget>[
           Container(
-            child: Column(
-
-              children: <Widget>[
-                Text('Dikshant'),
-                Container(
-                  color: Constant.backgroundTransparentColor,
-                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  child: TextField(
-                    style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontSize: 15,
-                        fontFamily: Constant.jostMedium),
-                    cursorColor: Constant.chatBubbleGreen,
-                    decoration: InputDecoration(
-                      hintText: Constant.searchType,
-                      hintStyle: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 13,
-                          fontFamily: Constant.jostMedium),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Constant.chatBubbleGreen)),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Constant.chatBubbleGreen)),
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    itemCount: widget.selectOptionList.length,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                widget.selectOptionList[index].isSelected =
-                                !widget.selectOptionList[index].isSelected;
-                                widget.selectedAnswerCallback(index);
-                              });
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(left: 2, top: 0, right: 2),
-                              color: _getOptionBackgroundColor(index),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                child: Text(
-                                  widget.selectOptionList[index].answerData,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: _getOptionTextColor(index),
-                                      fontFamily: Constant.jostMedium,
-                                      height: 1.2),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 0,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
+            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: TextField(
+              style: TextStyle(
+                  color: Constant.chatBubbleGreen,
+                  fontSize: 15,
+                  fontFamily: Constant.jostMedium),
+              cursorColor: Constant.chatBubbleGreen,
+              decoration: InputDecoration(
+                hintText: Constant.searchType,
+                hintStyle: TextStyle(
+                    color: Constant.chatBubbleGreen,
+                    fontSize: 13,
+                    fontFamily: Constant.jostMedium),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
+                contentPadding:
+                EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              ),
             ),
-          )
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              itemCount: widget.selectOptionList.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          widget.selectOptionList[index].isSelected =
+                          !widget.selectOptionList[index].isSelected;
+                          widget.selectedAnswerCallback(index);
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 2, top: 0, right: 2),
+                        color: _getOptionBackgroundColor(index),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text(
+                            widget.selectOptionList[index].answerData,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: _getOptionTextColor(index),
+                                fontFamily: Constant.jostMedium,
+                                height: 1.2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 0,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
