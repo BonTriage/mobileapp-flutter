@@ -51,7 +51,7 @@ class _SignUpFirstStepCompassResultState
         decoration: Constant.backgroundBoxDecoration,
         height: MediaQuery.of(context).size.height,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -113,7 +113,7 @@ class _SignUpFirstStepCompassResultState
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 30,
               ),
               Expanded(
                 child: Center(
@@ -174,7 +174,8 @@ class _SignUpFirstStepCompassResultState
                                             style: TextStyle(
                                                 color: Color(0xff0E1712),
                                                 fontSize: 14,
-                                                fontFamily: Constant.jostMedium),
+                                                fontFamily:
+                                                    Constant.jostMedium),
                                           ),
                                         ),
                                         decoration: BoxDecoration(
@@ -218,7 +219,6 @@ class _SignUpFirstStepCompassResultState
                 height: 50,
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -239,8 +239,8 @@ class _SignUpFirstStepCompassResultState
                       child: Visibility(
                         visible: isBackButtonHide,
                         child: Container(
-                          width: 100,
-                          height: 30,
+                          width: 130,
+                          height: 34,
                           decoration: BoxDecoration(
                             color: Color(0xffafd794),
                             borderRadius: BorderRadius.circular(20),
@@ -267,14 +267,14 @@ class _SignUpFirstStepCompassResultState
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
-                            Navigator.pushReplacementNamed(
-                                context, Constant.onBoardCreateAccountScreenRouter);
+                            Navigator.pushReplacementNamed(context,
+                                Constant.onBoardCreateAccountScreenRouter);
                           }
                         });
                       },
                       child: Container(
-                        width: 100,
-                        height: 30,
+                        width: 130,
+                        height: 34,
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
                           borderRadius: BorderRadius.circular(20),

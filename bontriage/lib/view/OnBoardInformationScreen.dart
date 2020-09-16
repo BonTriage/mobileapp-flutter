@@ -80,7 +80,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
       decoration: Constant.backgroundBoxDecoration,
       child: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -128,13 +128,13 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                     margin: EdgeInsets.only(right: 20),
                     child: PhotoHero(
                       photo: Constant.userAvatar,
-                      width: 60,
+                      width: 90,
                     ),
                   ))),
                 ],
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 child: ChatBubbleRightPointed(
@@ -179,7 +179,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                       onTap: widget.nextButtonFunction,
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 5),
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
                           borderRadius: BorderRadius.circular(20),
@@ -189,7 +189,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                             Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontFamily: Constant.jostMedium),
                           ),
                         ),
@@ -208,7 +208,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                       child: GestureDetector(
                         onTap: widget.bottomButtonFunction,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
                             color: Color(0xffafd794),
                             borderRadius: BorderRadius.circular(30),
@@ -218,7 +218,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                               widget.bottomButtonText,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontFamily: Constant.jostMedium),
                             ),
                           ),
@@ -238,7 +238,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                       child: GestureDetector(
                         onTap: widget.secondBottomButtonFunction,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
                             border: Border.all(
                                 width: 1.3, color: Constant.chatBubbleGreen),
@@ -249,7 +249,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                               widget.secondBottomButtonText,
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontFamily: Constant.jostMedium),
                             ),
                           ),

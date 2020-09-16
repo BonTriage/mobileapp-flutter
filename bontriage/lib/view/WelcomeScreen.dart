@@ -102,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         }
                       },
                       child: Container(
-                        width: 120,
+                        width: 140,
                         height: 30,
                         decoration: BoxDecoration(
                           color: Color(0xffafd794),
@@ -113,7 +113,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             _getButtonText(),
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontFamily: Constant.jostMedium),
                           ),
                         ),

@@ -29,7 +29,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -38,8 +38,8 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                   scaleFactor: 1.5,
                   onPressed: widget.backButtonFunction,
                   child: Container(
-                    width: 100,
-                    height: 30,
+                    width: 130,
+                    height: 34,
                     decoration: BoxDecoration(
                       color: Color(0xffafd794),
                       borderRadius: BorderRadius.circular(20),
@@ -49,7 +49,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                         Constant.back,
                         style: TextStyle(
                             color: Constant.bubbleChatTextView,
-                            fontSize: 16,
+                            fontSize: 15,
                             fontFamily: Constant.jostMedium),
                       ),
                     ),
@@ -60,8 +60,8 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                 scaleFactor: 1.5,
                 onPressed: widget.nextButtonFunction,
                 child: Container(
-                  width: 100,
-                  height: 30,
+                  width: 130,
+                  height: 34,
                   decoration: BoxDecoration(
                     color: Color(0xffafd794),
                     borderRadius: BorderRadius.circular(20),
@@ -71,7 +71,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                       Constant.next,
                       style: TextStyle(
                           color: Constant.bubbleChatTextView,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontFamily: Constant.jostMedium),
                     ),
                   ),
@@ -84,7 +84,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
           height: 36,
         ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 13),
+            padding: EdgeInsets.symmetric(horizontal: 23),
             child: LinearPercentIndicator(
               animation: true,
               lineHeight: 8.0,
@@ -100,12 +100,12 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
           height: 10.5,
         ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  'Part ${widget.onBoardPart} of 3',
+                  'PART ${widget.onBoardPart} OF 3',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
                 ),

@@ -22,7 +22,7 @@ class WelcomePage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Constant.chatBubbleGreen,
-              fontSize: 22,
+              fontSize: 24,
               fontFamily: Constant.jostRegular,
             ),
           ),
@@ -55,7 +55,7 @@ class WelcomePage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Constant.locationServiceGreen,
-                fontSize: 16,
+                fontSize: 15,
                 height: 1.3,
                 fontFamily: Constant.jostRegular),
           ),

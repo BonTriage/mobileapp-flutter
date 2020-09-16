@@ -59,7 +59,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

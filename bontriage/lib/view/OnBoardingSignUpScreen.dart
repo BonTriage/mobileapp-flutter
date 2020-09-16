@@ -27,7 +27,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
       body: Container(
         child: SafeArea(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 75, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -35,7 +35,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   Constant.signUp,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 20,
+                      fontSize: 24,
                       fontFamily: Constant.jostMedium),
                 ),
                 SizedBox(
@@ -48,7 +48,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       color: Constant.chatBubbleGreen,
                       fontSize: 15,
                       height: 1.3,
-                      fontFamily: Constant.jostMedium),
+                      fontFamily: Constant.jostRegular),
                 ),
                 SizedBox(
                   height: 60,
@@ -69,9 +69,9 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 20),
                             hintStyle: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: Constant.jostMedium),
+                                fontSize: 13,
+                                color: Colors.grey,
+                                fontFamily: Constant.jostRegular),
                             filled: true,
                             fillColor: Constant.locationServiceGreen,
                             enabledBorder: OutlineInputBorder(
@@ -118,7 +118,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 20),
                             hintStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
+                                TextStyle(fontSize: 15, color: Colors.black,),
                             filled: true,
                             fillColor: Constant.locationServiceGreen,
                             suffixIcon: IconButton(
@@ -235,14 +235,14 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                     decoration: BoxDecoration(
                       color: Constant.chatBubbleGreen,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(24),
                     ),
                     child: Text(
                       Constant.signUp,
                       style: TextStyle(
                           fontFamily: Constant.jostMedium,
                           color: Constant.bubbleChatTextView,
-                          fontSize: 16),
+                          fontSize: 15),
                     ),
                   ),
                 ),

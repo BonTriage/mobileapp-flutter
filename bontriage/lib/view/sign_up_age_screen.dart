@@ -22,80 +22,83 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 40,),
-            SliderTheme(
-              data: SliderThemeData(
-                activeTrackColor: Color(0xff434351),
-                inactiveTrackColor: Color(0xff434351),
-                thumbColor: Constant.chatBubbleGreen,
-                overlayColor: Constant.chatBubbleGreenTransparent,
-                trackHeight: 7
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              SizedBox(height: 40,),
+              SliderTheme(
+                data: SliderThemeData(
+                  activeTrackColor: Color(0xff434351),
+                  inactiveTrackColor: Color(0xff434351),
+                  thumbColor: Constant.chatBubbleGreen,
+                  overlayColor: Constant.chatBubbleGreenTransparent,
+                  trackHeight: 7
+                ),
+                child: Slider(
+                  value: widget.sliderValue,
+                  min: widget.sliderMinValue,
+                  max: widget.sliderMaxValue,
+                  onChanged: (double age) {
+                    setState(() {
+                      widget.sliderValue = age;
+                    });
+                  },
+                ),
               ),
-              child: Slider(
-                value: widget.sliderValue,
-                min: widget.sliderMinValue,
-                max: widget.sliderMaxValue,
-                onChanged: (double age) {
-                  setState(() {
-                    widget.sliderValue = age;
-                  });
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.minText,
+                      style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontFamily: Constant.jostMedium,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      widget.maxText,
+                      style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontFamily: Constant.jostMedium,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.minText,
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Constant.chatBubbleGreenBlue
+                ),
+                child: Center(
+                  child: Text(
+                    widget.sliderValue.toInt().toString(),
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostMedium,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
-                  ),
-                  Text(
-                    widget.maxText,
-                    style: TextStyle(
-                      color: Constant.chatBubbleGreen,
-                      fontFamily: Constant.jostMedium,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Constant.chatBubbleGreenBlue
-              ),
-              child: Center(
-                child: Text(
-                  widget.sliderValue.toInt().toString(),
-                  style: TextStyle(
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostMedium,
-                    fontSize: 18,
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 10,),
-            Text(
-              '${widget.labelText}',
-              style: TextStyle(
-                fontSize: 15,
-                color: Constant.chatBubbleGreen,
-                fontFamily: Constant.jostMedium,
+              SizedBox(height: 10,),
+              Text(
+                '${widget.labelText}',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Constant.chatBubbleGreen,
+                  fontFamily: Constant.jostMedium,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -6,10 +6,12 @@ import '../util/constant.dart';
 
 class WelcomeStartAssessmentScreen extends StatefulWidget {
   @override
-  _WelcomeStartAssessmentScreenState createState() => _WelcomeStartAssessmentScreenState();
+  _WelcomeStartAssessmentScreenState createState() =>
+      _WelcomeStartAssessmentScreenState();
 }
 
-class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScreen> {
+class _WelcomeStartAssessmentScreenState
+    extends State<WelcomeStartAssessmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,8 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
         decoration: Constant.backgroundBoxDecoration,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            padding: EdgeInsets.symmetric(
+                vertical: 15, horizontal: Constant.screenHorizontalPadding),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -30,13 +33,15 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       width: 56,
                       height: 50,
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text(
                       Constant.migraineMentor,
                       style: TextStyle(
                         color: Constant.chatBubbleGreen,
-                        fontSize: 22,
-                        fontFamily: Constant.jostRegular,
+                        fontSize: 24,
+                        fontFamily: Constant.jostMedium,
                       ),
                     ),
                   ],
@@ -45,9 +50,9 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                 Text(
                   Constant.conquerYourHeadaches,
                   style: TextStyle(
-                      color: Constant.chatBubbleGreen,
-                      fontSize: 18,
-                      fontFamily: Constant.jostRegular,
+                    color: Constant.chatBubbleGreen,
+                    fontSize: 20,
+                    fontFamily: Constant.jostMedium,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -57,17 +62,18 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                   style: TextStyle(
                     color: Constant.locationServiceGreen,
                     height: 1.3,
-                    fontSize: 16,
+                    fontSize: 15,
                     fontFamily: Constant.jostRegular,
                   ),
                 ),
                 SizedBox(height: 100),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, Constant.signUpOnBoardSplashRouter);
+                    Navigator.pushReplacementNamed(
+                        context, Constant.signUpOnBoardSplashRouter);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
                     decoration: BoxDecoration(
                       color: Constant.chatBubbleGreen,
                       borderRadius: BorderRadius.circular(20),
@@ -75,14 +81,16 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                     child: Text(
                       Constant.startYourAssessment,
                       style: TextStyle(
-                          color: Constant.bubbleChatTextView,
-                          fontSize: 15,
-                          fontFamily: Constant.jostMedium,
+                        color: Constant.bubbleChatTextView,
+                        fontSize: 16,
+                        fontFamily: Constant.jostMedium,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -92,7 +100,7 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                         wordSpacing: 1,
                         color: Constant.chatBubbleGreen,
                         fontFamily: Constant.jostRegular,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                     GestureDetector(
@@ -100,13 +108,12 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       child: Text(
                         Constant.signIn,
                         style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostRegular,
+                            color: Constant.chatBubbleGreen,
+                            fontFamily: Constant.jostBold,
                             wordSpacing: 1,
-                          fontSize: 14,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 1
-                        ),
+                            fontSize: 15,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 1),
                       ),
                     ),
                     Text(
@@ -114,21 +121,22 @@ class _WelcomeStartAssessmentScreenState extends State<WelcomeStartAssessmentScr
                       style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontFamily: Constant.jostRegular,
-                        fontSize: 13,
+                        fontSize: 15,
                         wordSpacing: 1,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 4,),
+                SizedBox(
+                  height: 4,
+                ),
                 Text(
                   Constant.existingAccount,
                   style: TextStyle(
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostRegular,
-                    fontSize: 13,
-                    wordSpacing: 1
-                  ),
+                      color: Constant.chatBubbleGreen,
+                      fontFamily: Constant.jostRegular,
+                      fontSize: 15,
+                      wordSpacing: 1),
                 ),
               ],
             ),

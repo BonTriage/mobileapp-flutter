@@ -29,7 +29,7 @@ class _SignUpOnBoardSplashState extends State<SignUpOnBoardSplash> {
         child: Center(
           child: PhotoHero(
             photo: 'images/user_avatar.png',
-            width: 120.0,
+            width: 130.0,
           ),
         ),
       ),

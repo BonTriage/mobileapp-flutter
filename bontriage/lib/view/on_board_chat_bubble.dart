@@ -63,7 +63,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: EdgeInsets.fromLTRB(Constant.chatBubbleHorizontalPadding, 20, Constant.chatBubbleHorizontalPadding, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -79,7 +79,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
             height: 10,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -116,7 +116,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble> with TickerProvid
             height: 10,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
             child: ChatBubbleLeftPointed(
 
               painter: ChatBubblePainter((widget.chatBubbleColor == null) ? Constant.oliveGreen

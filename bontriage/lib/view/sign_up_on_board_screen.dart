@@ -98,7 +98,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -120,8 +120,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                             });
                           },
                           child: Container(
-                            width: 100,
-                            height: 30,
+                            width: 130,
+                            height: 34,
                             decoration: BoxDecoration(
                               color: Color(0xffafd794),
                               borderRadius: BorderRadius.circular(20),
@@ -130,8 +130,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                               child: Text(
                                 Constant.back,
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
+                                    color: Constant.bubbleChatTextView,
+                                    fontSize: 14,
                                     fontFamily: Constant.jostMedium,),
                               ),
                             ),
@@ -166,8 +166,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                           });
                         },
                         child: Container(
-                          width: 100,
-                          height: 30,
+                          width: 130,
+                          height: 34,
                           decoration: BoxDecoration(
                             color: Color(0xffafd794),
                             borderRadius: BorderRadius.circular(20),
@@ -176,8 +176,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                             child: Text(
                               Constant.next,
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
+                                  color: Constant.bubbleChatTextView,
+                                  fontSize: 14,
                                   fontFamily: Constant.jostMedium,
                                   ),
                             ),
@@ -192,7 +192,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                 ),
                 if (_currentPageIndex != 0)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    padding: EdgeInsets.symmetric(horizontal: 23),
                     child: LinearPercentIndicator(
                       animation: true,
                       lineHeight: 8.0,
@@ -213,12 +213,12 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                 ),
                 if (_currentPageIndex != 0)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          'Part 1 of 3',
+                          'PART 1 OF 3',
                           style: TextStyle(
                               color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
                         ),

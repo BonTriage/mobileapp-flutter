@@ -27,7 +27,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+                padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding, vertical: 80),
                 child: TextField(
                   style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15,fontFamily: Constant.jostRegular),
                   cursorColor: Constant.chatBubbleGreen,
@@ -48,7 +48,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -57,8 +57,8 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                     scaleFactor: 1.5,
                     onPressed: () {},
                     child: Container(
-                      width: 100,
-                      height: 30,
+                      width: 130,
+                      height: 34,
                       decoration: BoxDecoration(
                         color: Color(0xffafd794),
                         borderRadius: BorderRadius.circular(20),
@@ -82,8 +82,8 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                           context, Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
                     },
                     child: Container(
-                      width: 100,
-                      height: 30,
+                      width: 130,
+                      height: 34,
                       decoration: BoxDecoration(
                         color: Color(0xffafd794),
                         borderRadius: BorderRadius.circular(20),

@@ -42,7 +42,7 @@ class Constant {
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
-  static String welcomeToMigraineMentor = 'Welcome to MigraineMentor';
+  static String welcomeToMigraineMentor = 'Welcome to\nMigraineMentor';
   static String developedByATeam =
       'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, and mathematicians, Aurora is an important part of an advanced headache diagnosis and treatment system. By downloading this tool, you have already taken the first step toward better managing your headaches.';
   static String trackRightData = 'Track the right data';
@@ -146,7 +146,7 @@ class Constant {
       'Does your headache start during or after exertion or straining?';
   static String beforeContinuing =
       'Before continuing, please create a secure account with us so that we can track you progress.';
-  static String createAccount = 'Create Account';
+  static String createAccount = 'Create an Account';
   static String nextWeAreGoing =
       'Next, we are going to find out what kind of headaches you have. If you have more than one type of headache, let’s focus on the one that’s most bothersome to you.';
   static String answeringTheNext =
@@ -225,6 +225,11 @@ class Constant {
   static String genderNonConforming = 'Gender non-conforming';
   static String preferNotToAnswer = 'Prefer not to answer';
   static String interSex = 'Intersex';
+
+
+  //Dimensions
+  static final double screenHorizontalPadding = 25;
+  static final double chatBubbleHorizontalPadding = 30;
   
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

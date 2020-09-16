@@ -12,7 +12,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30),
+      padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
       child: Column(
         children: [
           SizedBox(height: 20,),

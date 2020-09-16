@@ -40,7 +40,7 @@ class ChatBubbleRightPointedPainter extends CustomPainter {
 
     final pointerPath = Path();
 
-    double x = (size.width / 2) - 45;
+    double x = (size.width / 2) - 55;
     double y = 0;
 
     pointerPath.moveTo(x, y);
