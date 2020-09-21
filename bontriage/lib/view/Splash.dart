@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
 import '../util/constant.dart';
 import '../util/constant.dart';
-
 
 class Splash extends StatefulWidget {
   @override
@@ -11,9 +12,21 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  Timer timer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
+      timer.cancel();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 2000),(){Navigator.pushReplacementNamed(context,Constant.welcomeScreenRouter, arguments: 'args');});
     return Scaffold(
       body: Center(
         child: Padding(
@@ -26,14 +39,15 @@ class _SplashState extends State<Splash> {
                 width: 56,
                 height: 50,
               ),
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               Text(
                 Constant.migraineMentor,
                 style: TextStyle(
-                  color: Constant.splashTextColor,
-                  fontSize: 22,
-                  fontFamily: Constant.jostRegular
-                ),
+                    color: Constant.splashTextColor,
+                    fontSize: 22,
+                    fontFamily: Constant.jostRegular),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/Home.dart';
@@ -75,11 +76,100 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Splash(),
+      home: SignUpOnBoardScreen(),
       onGenerateRoute: (settings) {
-        return SlideFromRightPageRoute(widget: WelcomeScreen());
+        switch(settings.name) {
+          case Constant.splashRouter: {
+            return SlideFromBottomPageRoute(widget: Splash());
+          }
+          case Constant.welcomeScreenRouter: {
+            return SlideFromRightPageRoute(widget: WelcomeScreen());
+          }
+          case Constant.homeRouter: {
+            return SlideFromRightPageRoute(widget: Home());
+          }
+          case Constant.loginRouter: {
+            return SlideFromRightPageRoute(widget: LoginScreen());
+          }
+          case Constant.signUpRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpScreen());
+          }
+          case Constant.signUpOnBoardSplashRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardSplash());
+          }
+          case Constant.signUpOnBoardStartAssessmentRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardStartAssessment());
+          }
+          case Constant.signUpNameScreenRouter: {
+            return SlideFromRightPageRoute(widget: SignUpNameScreen());
+          }
+          case Constant.signUpAgeScreenRouter: {
+            return SlideFromRightPageRoute(widget: SignUpAgeScreen());
+          }
+          case Constant.signUpLocationServiceRouter: {
+            return SlideFromRightPageRoute(widget: SignUpLocationServices());
+          }
+          case Constant.signUpOnBoardHeadacheQuestionRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardScreen());
+          }
+          case Constant.signUpFirstStepHeadacheResultRouter: {
+            return SlideFromRightPageRoute(widget: SignUpFirstStepCompassResult());
+          }
+          case Constant.signUpOnBoardPersonalizedHeadacheResultRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardPersonalizedHeadacheCompass());
+          }
+          case Constant.partTwoOnBoardScreenRouter: {
+            return SlideFromBottomPageRoute(widget: PartTwoOnBoardScreens());
+          }
+          case Constant.partThreeOnBoardScreenRouter: {
+            return SlideFromBottomPageRoute(widget: PartThreeOnBoardScreens());
+          }
+          case Constant.loginScreenRouter: {
+            return SlideFromRightPageRoute(widget: LoginScreen());
+          }
+          case Constant.onBoardingScreenSignUpRouter: {
+            return SlideFromBottomPageRoute(widget: OnBoardingSignUpScreen());
+          }
+          case Constant.signUpSecondStepHeadacheResultRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpSecondStepCompassResult());
+          }
+          case Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardSecondStepPersonalizedHeadacheCompass());
+          }
+          case Constant.welcomeScreenRouter: {
+            return SlideFromRightPageRoute(widget: WelcomeScreen());
+          }
+          case Constant.welcomeStartAssessmentScreenRouter: {
+            return SlideFromRightPageRoute(widget: WelcomeStartAssessmentScreen());
+          }
+          case Constant.onBoardHeadacheInfoScreenRouter: {
+            return SlideFromBottomPageRoute(widget: OnBoardHeadacheInfoScreen());
+          }
+          case Constant.partOneOnBoardScreenTwoRouter: {
+            return SlideFromBottomPageRoute(widget: PartOneOnBoardScreenTwo());
+          }
+          case Constant.onBoardCreateAccountScreenRouter: {
+            return SlideFromBottomPageRoute(widget: OnBoardCreateAccount());
+          }
+          case Constant.prePartTwoOnBoardScreenRouter: {
+            return SlideFromBottomPageRoute(widget: PrePartTwoOnBoardScreen());
+          }
+          case Constant.onBoardHeadacheNameScreenRouter: {
+            return SlideFromBottomPageRoute(widget: OnBoardHeadacheNameScreen());
+          }
+          case Constant.partTwoOnBoardMoveOnScreenRouter: {
+            return SlideFromBottomPageRoute(widget: PartTwoOnBoardMoveOnScreen());
+          }
+          case Constant.prePartThreeOnBoardScreenRouter: {
+            return SlideFromBottomPageRoute(widget: PrePartThreeOnBoardScreen());
+          }
+          case Constant.signUpOnBoardBubbleTextViewRouter: {
+            return SlideFromBottomPageRoute(widget: SignUpOnBoardBubbleTextView());
+          }
+        }
+        return null;
       },
-      routes: {
+      /*routes: {
         Constant.splashRouter: (context) => Splash(),
         Constant.homeRouter: (context) => Home(),
         Constant.loginRouter: (context) => LoginScreen(),
@@ -117,8 +207,6 @@ class MyApp extends StatelessWidget {
             PartOneOnBoardScreenTwo(),
         Constant.onBoardCreateAccountScreenRouter: (context) =>
             OnBoardCreateAccount(),
-        Constant.onBoardCreateAccountScreenRouter: (context) =>
-            OnBoardCreateAccount(),
         Constant.prePartTwoOnBoardScreenRouter: (context) =>
             PrePartTwoOnBoardScreen(),
         Constant.onBoardHeadacheNameScreenRouter: (context) =>
@@ -127,7 +215,7 @@ class MyApp extends StatelessWidget {
             PartTwoOnBoardMoveOnScreen(),
         Constant.prePartThreeOnBoardScreenRouter: (context) =>
             PrePartThreeOnBoardScreen(),
-      },
+      },*/
       debugShowCheckedModeBanner: false,
     );
   }

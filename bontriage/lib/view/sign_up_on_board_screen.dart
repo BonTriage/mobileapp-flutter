@@ -1,12 +1,10 @@
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 
-import '../util/PhotoHero.dart';
 import 'sign_up_name_screen.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,7 @@ class SignUpOnBoardScreen extends StatefulWidget {
   _SignUpOnBoardScreenState createState() => _SignUpOnBoardScreenState();
 }
 
-class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
+class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTickerProviderStateMixin {
   bool isVolumeOn = true;
   double _progressPercent = 0;
   int _currentPageIndex = 0;
@@ -41,17 +39,18 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _pageViewWidgetList = [
       Container(),
       SignUpNameScreen(),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.woman, isSelected: true),
+        OnBoardSelectOptionModel(optionText: Constant.woman),
         OnBoardSelectOptionModel(optionText: Constant.man),
         OnBoardSelectOptionModel(optionText: Constant.genderNonConforming),
         OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.woman, isSelected: true),
+        OnBoardSelectOptionModel(optionText: Constant.woman),
         OnBoardSelectOptionModel(optionText: Constant.man),
         OnBoardSelectOptionModel(optionText: Constant.interSex),
         OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
@@ -66,6 +65,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
       ),
       SignUpLocationServices(),
     ];
+
+    //_animationController.forward();
   }
 
   @override
@@ -99,23 +100,71 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Stack(
                     children: [
-                      if (_currentPageIndex != 0)
-                        BouncingWidget(
+                        AnimatedPositioned(
+                          left: (_currentPageIndex != 0) ? 0 : (MediaQuery.of(context).size.width - 190),
+                          duration: Duration(milliseconds: 350),
+                          child: BouncingWidget(
+                            duration: Duration(milliseconds: 100),
+                            scaleFactor: 1.5,
+                            onPressed: () {
+                              setState(() {
+                                if (_currentPageIndex != 0) {
+                                  /*isReverseAnimation = true;
+                                  _animationController.reverse();*/
+                                  _progressPercent -= 0.11;
+                                  _currentPageIndex--;
+                                  _pageController.animateToPage(_currentPageIndex,
+                                      duration: Duration(milliseconds: 1),
+                                      curve: Curves.easeIn);
+                                } else {
+                                  _progressPercent = 0;
+                                }
+                              });
+                            },
+                            child: Container(
+                              width: 130,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                color: Color(0xffafd794),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  Constant.back,
+                                  style: TextStyle(
+                                      color: Constant.bubbleChatTextView,
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium,),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: BouncingWidget(
                           duration: Duration(milliseconds: 100),
                           scaleFactor: 1.5,
                           onPressed: () {
                             setState(() {
-                              if (_currentPageIndex != 0) {
-                                _progressPercent -= 0.11;
-                                _currentPageIndex--;
-                                _pageController.animateToPage(_currentPageIndex,
-                                    duration: Duration(milliseconds: 250),
-                                    curve: Curves.easeIn);
+                              if (_progressPercent == 0.55) {
+                                Navigator.pushReplacementNamed(context,
+                                    Constant.onBoardHeadacheInfoScreenRouter);
                               } else {
-                                _progressPercent = 0;
+                                  _currentPageIndex++;
+
+                                  if (_currentPageIndex !=
+                                      _pageViewWidgetList.length - 1)
+                                  _progressPercent += 0.11;
+                                  else {
+                                    _progressPercent = 0.55;
+                                  }
+
+                                  _pageController.animateToPage(_currentPageIndex,
+                                      duration: Duration(milliseconds: 1),
+                                      curve: Curves.easeIn);
                               }
                             });
                           },
@@ -128,58 +177,13 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                Constant.back,
+                                Constant.next,
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
-                                    fontFamily: Constant.jostMedium,),
+                                    fontFamily: Constant.jostMedium,
+                                    ),
                               ),
-                            ),
-                          ),
-                        )
-                      else
-                        SizedBox(
-                          width: 20,
-                        ),
-                      BouncingWidget(
-                        duration: Duration(milliseconds: 100),
-                        scaleFactor: 1.5,
-                        onPressed: () {
-                          setState(() {
-                            if (_progressPercent == 0.55) {
-                              Navigator.pushNamed(context,
-                                  Constant.onBoardHeadacheInfoScreenRouter);
-                            } else {
-                                _currentPageIndex++;
-
-                                if (_currentPageIndex !=
-                                    _pageViewWidgetList.length - 1)
-                                _progressPercent += 0.11;
-                                else {
-                                  _progressPercent = 0.55;
-                                }
-
-                                _pageController.animateToPage(_currentPageIndex,
-                                    duration: Duration(milliseconds: 150),
-                                    curve: Curves.easeIn);
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 130,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            color: Color(0xffafd794),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Text(
-                              Constant.next,
-                              style: TextStyle(
-                                  color: Constant.bubbleChatTextView,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium,
-                                  ),
                             ),
                           ),
                         ),
@@ -206,7 +210,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                   )
                 else
                   SizedBox(
-                    height: 8,
+                    height: 12.5,
                   ),
                 SizedBox(
                   height: 10.5,
