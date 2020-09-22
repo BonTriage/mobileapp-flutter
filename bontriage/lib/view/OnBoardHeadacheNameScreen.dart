@@ -1,5 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 
@@ -7,10 +8,13 @@ import '../util/constant.dart';
 
 class OnBoardHeadacheNameScreen extends StatefulWidget {
   @override
-  _OnBoardHeadacheNameScreenState createState() => _OnBoardHeadacheNameScreenState();
+  _OnBoardHeadacheNameScreenState createState() =>
+      _OnBoardHeadacheNameScreenState();
 }
 
 class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
+  bool isEndOfOnBoard = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,33 +26,42 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             OnBoardChatBubble(
+              isEndOfOnBoard: isEndOfOnBoard,
               chatBubbleText: Constant.greatWeAreDone,
               chatBubbleColor: Constant.chatBubbleGreen,
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding, vertical: 80),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Constant.chatBubbleHorizontalPadding,
+                    vertical: 80),
                 child: TextField(
-                  style: TextStyle(color: Constant.chatBubbleGreen, fontSize: 15,fontFamily: Constant.jostRegular),
+                  style: TextStyle(
+                      color: Constant.chatBubbleGreen,
+                      fontSize: 15,
+                      fontFamily: Constant.jostRegular),
                   cursorColor: Constant.chatBubbleGreen,
                   decoration: InputDecoration(
                     hintText: Constant.tapToType,
                     hintStyle: TextStyle(
-                      color: Color.fromARGB(50, 175, 215, 148),
-                      fontSize: 15,
-                      fontFamily: Constant.jostMedium
-                    ),
+                        color: Color.fromARGB(50, 175, 215, 148),
+                        fontSize: 15,
+                        fontFamily: Constant.jostMedium),
                     enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Constant.chatBubbleGreen)),
+                        borderSide:
+                            BorderSide(color: Constant.chatBubbleGreen)),
                     focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Constant.chatBubbleGreen)),
-                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                        borderSide:
+                            BorderSide(color: Constant.chatBubbleGreen)),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                   ),
                 ),
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Constant.chatBubbleHorizontalPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,8 +91,12 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                     duration: Duration(milliseconds: 100),
                     scaleFactor: 1.5,
                     onPressed: () {
+                      isEndOfOnBoard = true;
+                      TextToSpeechRecognition.pauseSpeechToText(true, "");
                       Navigator.pushReplacementNamed(
-                          context, Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+                          context,
+                          Constant
+                              .signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
                     },
                     child: Container(
                       width: 130,
@@ -102,7 +119,9 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 114.5,),
+            SizedBox(
+              height: 114.5,
+            ),
           ],
         ),
       ),

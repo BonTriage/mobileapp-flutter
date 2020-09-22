@@ -18,11 +18,14 @@ class Constant {
   static const String signUpLocationServiceRouter = '/signUpLocationService';
   static const String signUpOnBoardHeadacheQuestionRouter =
       '/signUpOnBoardHeadacheQuestion';
-  static const String partTwoOnBoardScreenRouter = '/partTwoOnBoardScreenRouter';
-  static const String partThreeOnBoardScreenRouter = '/partThreeOnBoardScreenRouter';
+  static const String partTwoOnBoardScreenRouter =
+      '/partTwoOnBoardScreenRouter';
+  static const String partThreeOnBoardScreenRouter =
+      '/partThreeOnBoardScreenRouter';
 
   static const String loginScreenRouter = '/loginScreenRouter';
-  static const String onBoardingScreenSignUpRouter = '/onBoardingScreenSignUpRouter';
+  static const String onBoardingScreenSignUpRouter =
+      '/onBoardingScreenSignUpRouter';
   static const String signUpSecondStepHeadacheResultRouter =
       '/signUpSecondStepHeadacheResult';
   static const String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
@@ -33,13 +36,25 @@ class Constant {
       '/welcomeStartAssessmentScreenRouter';
   static const String onBoardHeadacheInfoScreenRouter =
       '/onBoardHeadacheInfoScreenRouter';
-  static const String partOneOnBoardScreenTwoRouter = '/partOneOnBoardScreenTwo';
-  static const String onBoardCreateAccountScreenRouter = '/onBoardCreateAccountScreen';
-  static const String prePartTwoOnBoardScreenRouter = '/prePartTwoOnBoardScreen';
-  static const String onBoardHeadacheNameScreenRouter = '/onBoardHeadacheNameScreen';
-  static const String partTwoOnBoardMoveOnScreenRouter = '/partTwoOnBoardMoveOnScreen';
-  static const String prePartThreeOnBoardScreenRouter = '/prePartThreeOnBoardScreen';
-  static const String signUpOnBoardBubbleTextViewRouter = '/signUpOnBoardBubbleTextView';
+
+  static const String partOneOnBoardScreenTwoRouter =
+      '/partOneOnBoardScreenTwo';
+  static const String onBoardCreateAccountScreenRouter =
+      '/onBoardCreateAccountScreen';
+  static const String prePartTwoOnBoardScreenRouter =
+      '/prePartTwoOnBoardScreen';
+  static const String onBoardHeadacheNameScreenRouter =
+      '/onBoardHeadacheNameScreen';
+  static const String partTwoOnBoardMoveOnScreenRouter =
+      '/partTwoOnBoardMoveOnScreen';
+  static const String prePartThreeOnBoardScreenRouter =
+      '/prePartThreeOnBoardScreen';
+  static const String signUpOnBoardBubbleTextViewRouter =
+      '/signUpOnBoardBubbleTextView';
+  static const String postPartThreeOnBoardRouter =
+      '/postPartThreeOnBoardRouter';
+  static const String postNotificationOnBoardRouter =
+      '/postNotificationOnBoardRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -66,6 +81,12 @@ class Constant {
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String welcomeMigraineMentorTextView =
       'Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+
+  static String welcomeMigraineMentorBubbleTextView =
+      'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+  static String answeringTheNextBubbleTextView =
+      'MigraineMentor! Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
+
   static String migraineMentorHelpTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
   static String compassDiagramTextView =
@@ -73,6 +94,9 @@ class Constant {
 
   static String welcomePersonalizedHeadacheFirstTextView =
       'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better';
+
+  static String welcomePersonalizedHeadacheSecondStepFirstTextView =
+      'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app.';
 
   static String welcomePersonalizedHeadacheSecondTextView =
       'Throughout your journey with MigraineMentor, you will work on shrinking the size and changing the shape of your compass to lower your Headache Score.';
@@ -218,20 +242,28 @@ class Constant {
   static String viewDetailedReport = 'View detailed report';
 
   static String tapToType = 'Tap to type';
-  static String greatWeAreDone = 'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
+  static String greatWeAreDone =
+      'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
   static String withWhatGender = 'With what gender do you identify?';
-  static String whatBiologicalSex = 'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
+  static String whatBiologicalSex =
+      'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
   static String woman = 'Woman';
   static String man = 'Man';
   static String genderNonConforming = 'Gender non-conforming';
   static String preferNotToAnswer = 'Prefer not to answer';
   static String interSex = 'Intersex';
 
+  static String compass = 'Compass';
+  static String intensity = 'Intensity';
+  static String frequency = 'Frequency';
+  static String disability = 'Disability';
+  static String duration = 'Duration';
+  static String compassTextView = 'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
-  
+
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
       gradient: LinearGradient(

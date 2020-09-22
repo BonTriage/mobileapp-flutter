@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 
 import 'ChatBubble.dart';
@@ -20,6 +21,8 @@ class _SignUpSecondStepCompassResultState
   List<String> _bubbleTextViewList;
   bool isBackButtonHide = false;
   AnimationController _animationController;
+  bool isEndOfOnBoard = false;
+  bool isVolumeOn = true;
 
   @override
   void initState() {
@@ -31,12 +34,13 @@ class _SignUpSecondStepCompassResultState
       Constant.moreDetailedHistory,
     ];
 
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
-      vsync: this
-    );
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
+    if (!isEndOfOnBoard && isVolumeOn)
+      TextToSpeechRecognition.speechToText(
+          bubbleChatTextView[_buttonPressedValue]);
   }
 
   @override
@@ -44,10 +48,19 @@ class _SignUpSecondStepCompassResultState
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
+  }
+
+  ///Method to toggle volume on or off
+  void _toggleVolume() {
+    setState(() {
+      TextToSpeechRecognition.pauseSpeechToText(
+          isVolumeOn,"");
+      isVolumeOn = !isVolumeOn;
+    });
   }
 
   @override
@@ -60,6 +73,9 @@ class _SignUpSecondStepCompassResultState
   @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
+    if (!isEndOfOnBoard && isVolumeOn)
+      TextToSpeechRecognition.speechToText(
+          bubbleChatTextView[_buttonPressedValue]);
     var features = [
       "A",
       "B",
@@ -105,13 +121,25 @@ class _SignUpSecondStepCompassResultState
                             width: 60.0,
                             height: 60.0,
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Image(
-                              alignment: Alignment.topLeft,
-                              image: AssetImage(Constant.volumeOn),
-                              width: 20,
-                              height: 20,
+                          GestureDetector(
+                            onTap: _toggleVolume,
+                            child: AnimatedCrossFade(
+                              duration: Duration(milliseconds: 250),
+                              firstChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOn),
+                                width: 20,
+                                height: 20,
+                              ),
+                              secondChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOff),
+                                width: 20,
+                                height: 20,
+                              ),
+                              crossFadeState: isVolumeOn
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
                             ),
                           ),
                         ],
@@ -120,7 +148,8 @@ class _SignUpSecondStepCompassResultState
                         child: Container(
                           padding: EdgeInsets.only(left: 17, top: 25),
                           child: ChatBubble(
-                            painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                            painter:
+                                ChatBubblePainter(Constant.chatBubbleGreen),
                             child: AnimatedSize(
                               vsync: this,
                               duration: Duration(milliseconds: 300),
@@ -180,14 +209,16 @@ class _SignUpSecondStepCompassResultState
                                                 features: features,
                                                 data: data,
                                                 reverseAxis: true,
-                                                isPersonalizedHeadacheData: false,
+                                                isPersonalizedHeadacheData:
+                                                    false,
                                               )
                                             : RadarChart.light(
                                                 ticks: ticks,
                                                 features: features,
                                                 data: data,
                                                 reverseAxis: true,
-                                                isPersonalizedHeadacheData: false,
+                                                isPersonalizedHeadacheData:
+                                                    false,
                                               ),
                                       ),
                                       Center(
@@ -321,6 +352,9 @@ class _SignUpSecondStepCompassResultState
                               _buttonPressedValue++;
                               isBackButtonHide = true;
                             } else {
+                              TextToSpeechRecognition.pauseSpeechToText(
+                                  true, "");
+                              isEndOfOnBoard = true;
                               Navigator.pushReplacementNamed(context,
                                   Constant.partTwoOnBoardMoveOnScreenRouter);
                             }
@@ -436,4 +470,10 @@ class _SignUpSecondStepCompassResultState
 
     return list;
   }
+
+  static List<String> bubbleChatTextView = [
+    Constant.welcomePersonalizedHeadacheSecondStepFirstTextView,
+    Constant.accurateClinicalImpression,
+    Constant.moreDetailedHistory,
+  ];
 }

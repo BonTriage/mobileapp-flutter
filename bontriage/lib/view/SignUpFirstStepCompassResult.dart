@@ -1,7 +1,9 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 
 import 'ChatBubble.dart';
 
@@ -12,7 +14,7 @@ class SignUpFirstStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin{
+    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -20,6 +22,8 @@ class _SignUpFirstStepCompassResultState
   List<String> _bubbleTextViewList;
   bool isBackButtonHide = false;
   AnimationController _animationController;
+  bool isEndOfOnBoard = false;
+  bool isVolumeOn = true;
 
   @override
   void initState() {
@@ -33,12 +37,13 @@ class _SignUpFirstStepCompassResultState
       Constant.welcomePersonalizedHeadacheFifthTextView
     ];
 
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
-      vsync: this
-    );
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
+    if (!isEndOfOnBoard && isVolumeOn)
+      TextToSpeechRecognition.speechToText(
+          _bubbleTextViewList[_buttonPressedValue]);
   }
 
   @override
@@ -53,15 +58,26 @@ class _SignUpFirstStepCompassResultState
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
   }
 
+  ///Method to toggle volume on or off
+  void _toggleVolume() {
+    isVolumeOn = !isVolumeOn;
+    setState(() {
+      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn, "");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
+    if (!isEndOfOnBoard && isVolumeOn)
+      TextToSpeechRecognition.speechToText(
+          _bubbleTextViewList[_buttonPressedValue]);
     var features = [
       "A",
       "B",
@@ -105,13 +121,28 @@ class _SignUpFirstStepCompassResultState
                           width: 60.0,
                           height: 60.0,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Image(
-                            alignment: Alignment.topLeft,
-                            image: AssetImage(Constant.volumeOn),
-                            width: 20,
-                            height: 20,
+                        GestureDetector(
+                          onTap: _toggleVolume,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: AnimatedCrossFade(
+                              duration: Duration(milliseconds: 250),
+                              firstChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOn),
+                                width: 20,
+                                height: 20,
+                              ),
+                              secondChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOff),
+                                width: 20,
+                                height: 20,
+                              ),
+                              crossFadeState: isVolumeOn
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                            ),
                           ),
                         ),
                       ],
@@ -155,23 +186,33 @@ class _SignUpFirstStepCompassResultState
                     children: <Widget>[
                       RotatedBox(
                         quarterTurns: 3,
-                        child: Text(
-                          "Frequency",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTutorialDialog(3);
+                          },
+                          child: Text(
+                            "Frequency",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            "Intensity",
-                            style: TextStyle(
-                                color: Color(0xffafd794),
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
+                          GestureDetector(
+                            onTap: () {
+                              _showTutorialDialog(1);
+                            },
+                            child: Text(
+                              "Intensity",
+                              style: TextStyle(
+                                  color: Color(0xffafd794),
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
                           Center(
                             child: Container(
@@ -225,23 +266,33 @@ class _SignUpFirstStepCompassResultState
                               ),
                             ),
                           ),
-                          Text(
-                            "Disability",
-                            style: TextStyle(
-                                color: Color(0xffafd794),
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
+                          GestureDetector(
+                            onTap: () {
+                              _showTutorialDialog(2);
+                            },
+                            child: Text(
+                              "Disability",
+                              style: TextStyle(
+                                  color: Color(0xffafd794),
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
                         ],
                       ),
                       RotatedBox(
                         quarterTurns: 1,
-                        child: Text(
-                          "Duration",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTutorialDialog(4);
+                          },
+                          child: Text(
+                            "Duration",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ),
                     ],
@@ -300,6 +351,8 @@ class _SignUpFirstStepCompassResultState
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
+                            isEndOfOnBoard = true;
+                            TextToSpeechRecognition.pauseSpeechToText(true, "");
                             Navigator.pushReplacementNamed(context,
                                 Constant.onBoardCreateAccountScreenRouter);
                           }
@@ -330,6 +383,20 @@ class _SignUpFirstStepCompassResultState
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showTutorialDialog(int indexValue) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
+        );
+      },
     );
   }
 }

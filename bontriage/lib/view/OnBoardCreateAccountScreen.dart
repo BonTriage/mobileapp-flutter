@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -22,8 +23,10 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
                   color: Constant.bubbleChatTextView))
         ],
         isShowNextButton: false,
+        chatText: Constant.beforeContinuing,
         bottomButtonText: Constant.createAccount,
         bottomButtonFunction: () {
+          TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
               context, Constant.onBoardingScreenSignUpRouter);
         },

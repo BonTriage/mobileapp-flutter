@@ -1,4 +1,5 @@
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
@@ -15,8 +16,10 @@ class SignUpOnBoardScreen extends StatefulWidget {
   _SignUpOnBoardScreenState createState() => _SignUpOnBoardScreenState();
 }
 
-class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTickerProviderStateMixin {
+class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
+    with SingleTickerProviderStateMixin {
   bool isVolumeOn = true;
+  bool isEndOfOnBoard = false;
   double _progressPercent = 0;
   int _currentPageIndex = 0;
 
@@ -43,18 +46,22 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
     _pageViewWidgetList = [
       Container(),
       SignUpNameScreen(),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.woman),
-        OnBoardSelectOptionModel(optionText: Constant.man),
-        OnBoardSelectOptionModel(optionText: Constant.genderNonConforming),
-        OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.woman),
-        OnBoardSelectOptionModel(optionText: Constant.man),
-        OnBoardSelectOptionModel(optionText: Constant.interSex),
-        OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
-      ],),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.woman),
+          OnBoardSelectOptionModel(optionText: Constant.man),
+          OnBoardSelectOptionModel(optionText: Constant.genderNonConforming),
+          OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.woman),
+          OnBoardSelectOptionModel(optionText: Constant.man),
+          OnBoardSelectOptionModel(optionText: Constant.interSex),
+          OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
+        ],
+      ),
       SignUpAgeScreen(
         sliderValue: 3,
         sliderMinValue: 3,
@@ -88,6 +95,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
           children: [
             OnBoardChatBubble(
               chatBubbleText: questionList[_currentPageIndex],
+              isEndOfOnBoard: isEndOfOnBoard,
             ),
             SizedBox(height: 40),
             Expanded(
@@ -106,53 +114,58 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Constant.chatBubbleHorizontalPadding),
                   child: Stack(
                     children: [
-                        AnimatedPositioned(
-                          left: (_currentPageIndex != 0) ? 0 : (MediaQuery.of(context).size.width - 190),
+                      AnimatedPositioned(
+                        left: (_currentPageIndex != 0)
+                            ? 0
+                            : (MediaQuery.of(context).size.width - 190),
+                        duration: Duration(milliseconds: 250),
+                        child: AnimatedOpacity(
+                          opacity: (_currentPageIndex != 0) ? 1.0 : 0.0,
                           duration: Duration(milliseconds: 250),
-                          child: AnimatedOpacity(
-                            opacity: (_currentPageIndex != 0) ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 250),
-                            child: BouncingWidget(
-                              duration: Duration(milliseconds: 100),
-                              scaleFactor: 1.5,
-                              onPressed: () {
-                                setState(() {
-                                  if (_currentPageIndex != 0) {
-                                    /*isReverseAnimation = true;
+                          child: BouncingWidget(
+                            duration: Duration(milliseconds: 100),
+                            scaleFactor: 1.5,
+                            onPressed: () {
+                              setState(() {
+                                if (_currentPageIndex != 0) {
+                                  /*isReverseAnimation = true;
                                     _animationController.reverse();*/
-                                    _progressPercent -= 0.11;
-                                    _currentPageIndex--;
-                                    _pageController.animateToPage(_currentPageIndex,
-                                        duration: Duration(milliseconds: 1),
-                                        curve: Curves.easeIn);
-                                  } else {
-                                    _progressPercent = 0;
-                                  }
-                                });
-                              },
-                              child: Container(
-                                width: 130,
-                                height: 34,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffafd794),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    Constant.back,
-                                    style: TextStyle(
-                                        color: Constant.bubbleChatTextView,
-                                        fontSize: 14,
-                                        fontFamily: Constant.jostMedium,),
+                                  _progressPercent -= 0.11;
+                                  _currentPageIndex--;
+                                  _pageController.animateToPage(
+                                      _currentPageIndex,
+                                      duration: Duration(milliseconds: 1),
+                                      curve: Curves.easeIn);
+                                } else {
+                                  _progressPercent = 0;
+                                }
+                              });
+                            },
+                            child: Container(
+                              width: 130,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                color: Color(0xffafd794),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  Constant.back,
+                                  style: TextStyle(
+                                    color: Constant.bubbleChatTextView,
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
+                      ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: BouncingWidget(
@@ -161,21 +174,24 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
                           onPressed: () {
                             setState(() {
                               if (_progressPercent == 0.55) {
+                                isEndOfOnBoard = true;
+                                TextToSpeechRecognition.pauseSpeechToText(
+                                    true, "");
                                 Navigator.pushReplacementNamed(context,
                                     Constant.onBoardHeadacheInfoScreenRouter);
                               } else {
-                                  _currentPageIndex++;
+                                _currentPageIndex++;
 
-                                  if (_currentPageIndex !=
-                                      _pageViewWidgetList.length - 1)
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
                                   _progressPercent += 0.11;
-                                  else {
-                                    _progressPercent = 0.55;
-                                  }
+                                else {
+                                  _progressPercent = 0.55;
+                                }
 
-                                  _pageController.animateToPage(_currentPageIndex,
-                                      duration: Duration(milliseconds: 1),
-                                      curve: Curves.easeIn);
+                                _pageController.animateToPage(_currentPageIndex,
+                                    duration: Duration(milliseconds: 1),
+                                    curve: Curves.easeIn);
                               }
                             });
                           },
@@ -190,10 +206,10 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
                               child: Text(
                                 Constant.next,
                                 style: TextStyle(
-                                    color: Constant.bubbleChatTextView,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium,
-                                    ),
+                                  color: Constant.bubbleChatTextView,
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium,
+                                ),
                               ),
                             ),
                           ),
@@ -228,14 +244,17 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
                 ),
                 if (_currentPageIndex != 0)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Constant.chatBubbleHorizontalPadding),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           'PART 1 OF 3',
                           style: TextStyle(
-                              color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
+                              color: Constant.chatBubbleGreen,
+                              fontSize: 13,
+                              fontFamily: Constant.jostMedium),
                         ),
                       ],
                     ),

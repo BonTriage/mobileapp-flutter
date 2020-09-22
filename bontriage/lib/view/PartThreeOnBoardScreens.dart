@@ -28,12 +28,9 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   ];
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
     SignUpHeadacheAnswerListModel(answerData: 'Red wine'),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Bright lights'),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High humidity'),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dust & dander'),
+    SignUpHeadacheAnswerListModel(answerData: 'Bright lights'),
+    SignUpHeadacheAnswerListModel(answerData: 'High humidity'),
+    SignUpHeadacheAnswerListModel(answerData: 'Dust & dander'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 5'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
@@ -46,8 +43,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     SignUpHeadacheAnswerListModel(answerData: 'Eletriptan'),
     SignUpHeadacheAnswerListModel(answerData: 'Excederin'),
     SignUpHeadacheAnswerListModel(answerData: 'Almotriptan'),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dexmethasone'),
+    SignUpHeadacheAnswerListModel(answerData: 'Dexmethasone'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
     SignUpHeadacheAnswerListModel(answerData: 'Answer 8'),
@@ -145,6 +141,8 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                   double stepOneProgress = 1 / _pageViewWidgetList.length;
 
                   if (_progressPercent == 1) {
+                    Navigator.pushReplacementNamed(
+                        context, Constant.postPartThreeOnBoardRouter);
                     //TODO: Move to next screen
                   } else {
                     _currentPageIndex++;

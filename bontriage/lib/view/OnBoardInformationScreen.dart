@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleRightPointed.dart';
-
 import '../util/PhotoHero.dart';
 
 class OnBoardInformationScreen extends StatefulWidget {
@@ -43,6 +43,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
   ///Method to toggle volume on or off
   void _toggleVolume() {
     setState(() {
+      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn,widget.chatText);
       isVolumeOn = !isVolumeOn;
     });
   }
@@ -55,6 +56,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
+    TextToSpeechRecognition.speechToText(widget.chatText);
   }
 
   @override
@@ -65,6 +67,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
       _animationController.reset();
       _animationController.forward();
     }
+/*    TextToSpeechRecognition.flutterTts.setStartHandler(() {
+
+    });*/
+    TextToSpeechRecognition.speechToText(widget.chatText);
   }
 
   @override
