@@ -116,10 +116,15 @@ class _SecondStepCompassResultTutorialsState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image(
-                      image: AssetImage(Constant.closeIcon),
-                      width: 20,
-                      height: 20,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 20,
+                        height: 20,
+                      ),
                     ),
                   ],
                 ),

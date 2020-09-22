@@ -55,6 +55,7 @@ class Constant {
       '/postPartThreeOnBoardRouter';
   static const String postNotificationOnBoardRouter =
       '/postNotificationOnBoardRouter';
+  static const String notificationScreenRouter = '/NotificationScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -258,7 +259,14 @@ class Constant {
   static String frequency = 'Frequency';
   static String disability = 'Disability';
   static String duration = 'Duration';
-  static String compassTextView = 'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+  static String compassTextView =
+      'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+  static String notifications = 'Notifications';
+  static String dailyLog = 'Daily Log';
+  static String medication = 'Medication';
+  static String exercise = 'Exercise';
+  static String addCustomNotification = '+  Add Custom Notification';
+  static String save = 'Save';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -286,12 +294,16 @@ class Constant {
   static Color backgroundTransparentColor = Color(0xff0E4C47);
   static Color oliveGreen = Color(0xff263E3E);
 
+
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);
 
   static Color splashColor = Color(0xffD7EBC9);
   static Color splashTextColor = Color(0xff0E232F);
   static Color splashMigraineMentorTextColor = Color(0xff30af72);
+
+  static Color notificationTextColor = Color(0x80AFD794);
+  static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -307,6 +319,7 @@ class Constant {
   static String downArrow = 'images/down_arrow.png';
   static String splashCompass = 'images/splash_compass.png';
   static String compassGreen = 'images/compass_green.png';
+  static String rightArrow = 'images/right_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
