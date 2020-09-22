@@ -43,9 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Constant.migraineMentor,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
-                          fontSize: 20,
-                          fontFamily: Constant.futuraMaxiLight,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 22,
+                          fontFamily: Constant.jostMedium),
                     ),
                   ],
                 ),
@@ -60,7 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         height: 35,
                         child: TextFormField(
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(
+                              fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
@@ -72,9 +72,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             fillColor: Constant.locationServiceGreen,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                    color: Constant.editTextBoarderColor,
+                                    width: 1)
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                    color: Constant.editTextBoarderColor,
+                                    width: 1)
                             ),
                           ),
                         ),
@@ -85,9 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           Constant.email,
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Constant.chatBubbleGreen
-                          ),
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 13,
+                              color: Constant.chatBubbleGreen),
                         ),
                       ),
                       SizedBox(
@@ -97,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 35,
                         child: TextFormField(
                           obscureText: _isHidden,
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(
+                              fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
@@ -117,9 +124,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                    color: Constant.editTextBoarderColor,
+                                    width: 1)
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                    color: Constant.editTextBoarderColor,
+                                    width: 1)
                             ),
                           ),
                         ),
@@ -128,11 +141,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          'Password',
+                          Constant.password,
                           style: TextStyle(
-                              fontSize: 12,
-                              color: Constant.chatBubbleGreen
-                          ),
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 13,
+                              color: Constant.chatBubbleGreen),
                         ),
                       ),
                     ],
@@ -148,20 +161,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text(
                       Constant.login,
-                      style: TextStyle(color: Constant.bubbleChatTextView, fontSize: 14),
+                      style: TextStyle(color: Constant.bubbleChatTextView, fontSize: 14, fontFamily: Constant.jostMedium),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Text(
                   Constant.register,
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Constant.futuraMaxiLight,
+                      fontSize: 14,
+                      fontFamily: Constant.jostMedium,
                       decoration: TextDecoration.underline),
                 )
               ],
