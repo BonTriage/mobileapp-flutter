@@ -11,8 +11,9 @@ class OnBoardSelectOptions extends StatefulWidget {
   _OnBoardSelectOptionsState createState() => _OnBoardSelectOptionsState();
 }
 
-class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
+class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with SingleTickerProviderStateMixin {
   List<bool> _optionSelectedList = [];
+  AnimationController _animationController;
 
   BoxDecoration _getBoxDecoration(int index) {
     if (!widget.selectOptionList[index].isSelected) {
@@ -48,6 +49,31 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
         _optionSelectedList.add(false);
       }
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 800),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(OnBoardSelectOptions oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _onOptionSelected(int index) {
@@ -58,58 +84,61 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            Constant.selectOne,
-            style: TextStyle(
-                fontSize: 13,
-                fontFamily: Constant.jostMedium,
-                color: Constant.selectTextColor),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.selectOptionList.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _onOptionSelected(index);
-                        });
-                      },
-                      child: Container(
-                        decoration: _getBoxDecoration(index),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          child: Text(
-                            widget.selectOptionList[index].optionText,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: _getOptionTextColor(index),
-                                fontFamily: Constant.jostRegular,
-                                height: 1.2
+    return FadeTransition(
+      opacity: _animationController,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              Constant.selectOne,
+              style: TextStyle(
+                  fontSize: 13,
+                  fontFamily: Constant.jostMedium,
+                  color: Constant.selectTextColor),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.selectOptionList.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _onOptionSelected(index);
+                          });
+                        },
+                        child: Container(
+                          decoration: _getBoxDecoration(index),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: Text(
+                              widget.selectOptionList[index].optionText,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: _getOptionTextColor(index),
+                                  fontFamily: Constant.jostRegular,
+                                  height: 1.2
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10,),
-                  ],
-                );
-              },
-            ),
-          )
-        ],
+                      SizedBox(height: 10,),
+                    ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

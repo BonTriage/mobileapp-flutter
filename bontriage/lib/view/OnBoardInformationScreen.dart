@@ -76,8 +76,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override

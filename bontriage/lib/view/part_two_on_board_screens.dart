@@ -47,7 +47,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         _progressPercent -= stepOneProgress;
         _currentPageIndex--;
         _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 250),
+            duration: Duration(milliseconds: 1),
             curve: Curves.easeIn);
       }
     });
@@ -56,6 +56,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -74,8 +75,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         labelText: Constant.yearsOld,
       ),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       SignUpAgeScreen(
         sliderValue: 0,
@@ -86,49 +87,49 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         labelText: Constant.times,
       ),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.lessThanFiveMinutes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.fiveToTenMinutes, isSelected: false),
-        OnBoardSelectOptionModel(optionText: Constant.tenToThirtyMinutes, isSelected: false),
-        OnBoardSelectOptionModel(optionText: Constant.moreThanThirtyMinutes, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.lessThanFiveMinutes),
+        OnBoardSelectOptionModel(optionText: Constant.fiveToTenMinutes),
+        OnBoardSelectOptionModel(optionText: Constant.tenToThirtyMinutes),
+        OnBoardSelectOptionModel(optionText: Constant.moreThanThirtyMinutes),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.fewSecAtATime, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.fewSecUpTo20Min, isSelected: false),
-        OnBoardSelectOptionModel(optionText: Constant.moreThan20Min, isSelected: false),
-        OnBoardSelectOptionModel(optionText: Constant.moreThan3To4Hours, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.fewSecAtATime),
+        OnBoardSelectOptionModel(optionText: Constant.fewSecUpTo20Min),
+        OnBoardSelectOptionModel(optionText: Constant.moreThan20Min),
+        OnBoardSelectOptionModel(optionText: Constant.moreThan3To4Hours),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.alwaysOneSide, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.usuallyOnOneSide, isSelected: false),
-        OnBoardSelectOptionModel(optionText: Constant.usuallyOnBothSide, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.alwaysOneSide),
+        OnBoardSelectOptionModel(optionText: Constant.usuallyOnOneSide),
+        OnBoardSelectOptionModel(optionText: Constant.usuallyOnBothSide),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
       OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes, isSelected: true),
-        OnBoardSelectOptionModel(optionText: Constant.no, isSelected: false),
+        OnBoardSelectOptionModel(optionText: Constant.yes),
+        OnBoardSelectOptionModel(optionText: Constant.no),
       ],),
     ];
 
@@ -193,8 +194,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                       }
 
                       _pageController.animateToPage(_currentPageIndex,
-                          duration: Duration(milliseconds: 250),
-                          curve: Curves.easeInOutCubic);
+                          duration: Duration(milliseconds: 1),
+                          curve: Curves.easeIn);
                     }
                   });
                 },

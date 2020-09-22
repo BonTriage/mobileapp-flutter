@@ -38,7 +38,7 @@ class _SignUpSecondStepCompassResultState
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
-    if (!isEndOfOnBoard)
+    if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
   }
@@ -58,15 +58,22 @@ class _SignUpSecondStepCompassResultState
   void _toggleVolume() {
     setState(() {
       TextToSpeechRecognition.pauseSpeechToText(
-          isVolumeOn, _bubbleTextViewList[_buttonPressedValue]);
+          isVolumeOn,"");
       isVolumeOn = !isVolumeOn;
     });
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
-    if (!isEndOfOnBoard)
+    if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
     var features = [

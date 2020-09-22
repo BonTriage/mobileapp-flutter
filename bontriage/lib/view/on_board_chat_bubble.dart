@@ -51,8 +51,8 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override

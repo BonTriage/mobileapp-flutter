@@ -2,45 +2,59 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Constant {
-  static String splashRouter = '/splash';
-  static String homeRouter = '/home';
-  static String loginRouter = '/login';
-  static String signUpRouter = '/signUP';
-  static String signUpOnBoardSplashRouter = '/signUpOnBoardSplash';
-  static String signUpOnBoardStartAssessmentRouter =
+  static const String splashRouter = '/splash';
+  static const String homeRouter = '/home';
+  static const String loginRouter = '/login';
+  static const String signUpRouter = '/signUP';
+  static const String signUpOnBoardSplashRouter = '/signUpOnBoardSplash';
+  static const String signUpOnBoardStartAssessmentRouter =
       '/signUpOnBoardStartAssessment';
-  static String signUpFirstStepHeadacheResultRouter =
+  static const String signUpFirstStepHeadacheResultRouter =
       '/signUpFirstStepHeadacheResult';
-  static String signUpOnBoardPersonalizedHeadacheResultRouter =
+  static const String signUpOnBoardPersonalizedHeadacheResultRouter =
       '/signUpOnBoardPersonalizedHeadacheResult';
-  static String signUpNameScreenRouter = '/signUpNameScreen';
-  static String signUpAgeScreenRouter = '/signUpAgeScreen';
-  static String signUpLocationServiceRouter = '/signUpLocationService';
-  static String signUpOnBoardHeadacheQuestionRouter =
+  static const String signUpNameScreenRouter = '/signUpNameScreen';
+  static const String signUpAgeScreenRouter = '/signUpAgeScreen';
+  static const String signUpLocationServiceRouter = '/signUpLocationService';
+  static const String signUpOnBoardHeadacheQuestionRouter =
       '/signUpOnBoardHeadacheQuestion';
-  static String partTwoOnBoardScreenRouter = '/partTwoOnBoardScreenRouter';
-  static String partThreeOnBoardScreenRouter = '/partThreeOnBoardScreenRouter';
+  static const String partTwoOnBoardScreenRouter =
+      '/partTwoOnBoardScreenRouter';
+  static const String partThreeOnBoardScreenRouter =
+      '/partThreeOnBoardScreenRouter';
 
-  static String loginScreenRouter = '/loginScreenRouter';
-  static String onBoardingScreenSignUpRouter = '/onBoardingScreenSignUpRouter';
-  static String signUpSecondStepHeadacheResultRouter =
+  static const String loginScreenRouter = '/loginScreenRouter';
+  static const String onBoardingScreenSignUpRouter =
+      '/onBoardingScreenSignUpRouter';
+  static const String signUpSecondStepHeadacheResultRouter =
       '/signUpSecondStepHeadacheResult';
-  static String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
+  static const String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
       '/signUpOnBoardSecondStepPersonalizedHeadacheResult';
 
-  static String welcomeScreenRouter = 'WelcomeScreen';
-  static String welcomeStartAssessmentScreenRouter =
+  static const String welcomeScreenRouter = 'WelcomeScreen';
+  static const String welcomeStartAssessmentScreenRouter =
       '/welcomeStartAssessmentScreenRouter';
-  static String onBoardHeadacheInfoScreenRouter =
+  static const String onBoardHeadacheInfoScreenRouter =
       '/onBoardHeadacheInfoScreenRouter';
-  static String partOneOnBoardScreenTwoRouter = '/partOneOnBoardScreenTwo';
-  static String onBoardCreateAccountScreenRouter =
+
+  static const String partOneOnBoardScreenTwoRouter =
+      '/partOneOnBoardScreenTwo';
+  static const String onBoardCreateAccountScreenRouter =
       '/onBoardCreateAccountScreen';
-  static String prePartTwoOnBoardScreenRouter = '/prePartTwoOnBoardScreen';
-  static String onBoardHeadacheNameScreenRouter = '/onBoardHeadacheNameScreen';
-  static String partTwoOnBoardMoveOnScreenRouter =
+  static const String prePartTwoOnBoardScreenRouter =
+      '/prePartTwoOnBoardScreen';
+  static const String onBoardHeadacheNameScreenRouter =
+      '/onBoardHeadacheNameScreen';
+  static const String partTwoOnBoardMoveOnScreenRouter =
       '/partTwoOnBoardMoveOnScreen';
-  static String prePartThreeOnBoardScreenRouter = '/prePartThreeOnBoardScreen';
+  static const String prePartThreeOnBoardScreenRouter =
+      '/prePartThreeOnBoardScreen';
+  static const String signUpOnBoardBubbleTextViewRouter =
+      '/signUpOnBoardBubbleTextView';
+  static const String postPartThreeOnBoardRouter =
+      '/postPartThreeOnBoardRouter';
+  static const String postNotificationOnBoardRouter =
+      '/postNotificationOnBoardRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -49,10 +63,10 @@ class Constant {
       'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, and mathematicians, Aurora is an important part of an advanced headache diagnosis and treatment system. By downloading this tool, you have already taken the first step toward better managing your headaches.';
   static String trackRightData = 'Track the right data';
   static String mostHeadacheTracking =
-      'Unlinke most headache tracking apps, Aurora utilizes big data - weather changes, pollen counts, sleep quality, exercise, and self-logged triggers - to build your personalized headache risk profile (HRP).';
+      'Unlike most headache tracking apps, MigraineMentor utilizes big data — weather changes, pollen counts, sleep quality, exercise, and self-logged triggers — to build your personalized headache risk profile (HRP).';
   static String conquerYourHeadaches = 'Conquer your headaches';
   static String withRegularUse =
-      'With regular use, Aurora creates a predictive model that can alert you when you are at risk for headaches and can even suggest steps to avoid them you can also get reminders to take your daily medicine or send an update to your doctor to let them know how you are doing.';
+      'With regular use, MigraineMentor creates a predictive model that can alert you when you are at risk for headaches and can even suggest steps to avoid them. You can also set reminders to take your daily medicine or send an update to your doctor to let them know how you are doing.';
   static String next = 'Next';
   static String getGoing = 'Get Going!';
   static String firstBasics = 'First, a few basics...';
@@ -70,7 +84,7 @@ class Constant {
 
   static String welcomeMigraineMentorBubbleTextView =
       'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
-   static String answeringTheNextBubbleTextView =
+  static String answeringTheNextBubbleTextView =
       'MigraineMentor! Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
 
   static String migraineMentorHelpTextView =
@@ -239,6 +253,13 @@ class Constant {
   static String preferNotToAnswer = 'Prefer not to answer';
   static String interSex = 'Intersex';
 
+  static String compass = 'Compass';
+  static String intensity = 'Intensity';
+  static String frequency = 'Frequency';
+  static String disability = 'Disability';
+  static String duration = 'Duration';
+  static String compassTextView = 'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
@@ -284,6 +305,8 @@ class Constant {
   static String showPassword = 'images/show_password.png';
   static String hidePassword = 'images/hide_password.png';
   static String downArrow = 'images/down_arrow.png';
+  static String splashCompass = 'images/splash_compass.png';
+  static String compassGreen = 'images/compass_green.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

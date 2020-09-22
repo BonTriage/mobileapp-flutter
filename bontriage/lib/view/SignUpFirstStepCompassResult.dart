@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 
 import 'ChatBubble.dart';
 
@@ -40,9 +41,16 @@ class _SignUpFirstStepCompassResultState
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
-    if (!isEndOfOnBoard)
+    if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,17 +66,16 @@ class _SignUpFirstStepCompassResultState
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
+    isVolumeOn = !isVolumeOn;
     setState(() {
-           isVolumeOn = !isVolumeOn;
-      TextToSpeechRecognition.pauseSpeechToText(
-          isVolumeOn, _bubbleTextViewList[_buttonPressedValue]);
+      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn, "");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
-    if (!isEndOfOnBoard)
+    if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
     var features = [
@@ -179,23 +186,33 @@ class _SignUpFirstStepCompassResultState
                     children: <Widget>[
                       RotatedBox(
                         quarterTurns: 3,
-                        child: Text(
-                          "Frequency",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTutorialDialog(3);
+                          },
+                          child: Text(
+                            "Frequency",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            "Intensity",
-                            style: TextStyle(
-                                color: Color(0xffafd794),
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
+                          GestureDetector(
+                            onTap: () {
+                              _showTutorialDialog(1);
+                            },
+                            child: Text(
+                              "Intensity",
+                              style: TextStyle(
+                                  color: Color(0xffafd794),
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
                           Center(
                             child: Container(
@@ -249,23 +266,33 @@ class _SignUpFirstStepCompassResultState
                               ),
                             ),
                           ),
-                          Text(
-                            "Disability",
-                            style: TextStyle(
-                                color: Color(0xffafd794),
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
+                          GestureDetector(
+                            onTap: () {
+                              _showTutorialDialog(2);
+                            },
+                            child: Text(
+                              "Disability",
+                              style: TextStyle(
+                                  color: Color(0xffafd794),
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
                         ],
                       ),
                       RotatedBox(
                         quarterTurns: 1,
-                        child: Text(
-                          "Duration",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTutorialDialog(4);
+                          },
+                          child: Text(
+                            "Duration",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 14,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ),
                     ],
@@ -356,6 +383,20 @@ class _SignUpFirstStepCompassResultState
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showTutorialDialog(int indexValue) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
+        );
+      },
     );
   }
 }

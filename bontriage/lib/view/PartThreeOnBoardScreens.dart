@@ -27,56 +27,52 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     Constant.followingLifeStyle,
   ];
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
-    SignUpHeadacheAnswerListModel(answerData: 'Red wine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Bright lights', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High humidity', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dust & dander', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+    SignUpHeadacheAnswerListModel(answerData: 'Red wine'),
+    SignUpHeadacheAnswerListModel(answerData: 'Bright lights'),
+    SignUpHeadacheAnswerListModel(answerData: 'High humidity'),
+    SignUpHeadacheAnswerListModel(answerData: 'Dust & dander'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10')
   ];
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel1 = [
-    SignUpHeadacheAnswerListModel(answerData: 'Asprin', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Eletriptan', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Excederin', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Almotriptan', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dexmethasone', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+    SignUpHeadacheAnswerListModel(answerData: 'Asprin'),
+    SignUpHeadacheAnswerListModel(answerData: 'Eletriptan'),
+    SignUpHeadacheAnswerListModel(answerData: 'Excederin'),
+    SignUpHeadacheAnswerListModel(answerData: 'Almotriptan'),
+    SignUpHeadacheAnswerListModel(answerData: 'Dexmethasone'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10')
   ];
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel2 = [
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 1', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 2', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 3', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 4', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 1'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 2'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 3'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 4'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10')
   ];
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel3 = [
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 1', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 2', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 3', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 4', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 5', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 6', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 7', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 8', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 9', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Answer 10', isSelected: false)
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 1'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 2'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 3'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 4'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 5'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 6'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 7'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 8'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 9'),
+    SignUpHeadacheAnswerListModel(answerData: 'Answer 10')
   ];
 
   @override
@@ -92,6 +88,13 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     ];
 
     _progressPercent = 1 / _pageViewWidgetList.length;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -128,7 +131,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                     _progressPercent -= stepOneProgress;
                     _currentPageIndex--;
                     _pageController.animateToPage(_currentPageIndex,
-                        duration: Duration(milliseconds: 250),
+                        duration: Duration(milliseconds: 1),
                         curve: Curves.easeIn);
                   }
                 });
@@ -138,6 +141,8 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                   double stepOneProgress = 1 / _pageViewWidgetList.length;
 
                   if (_progressPercent == 1) {
+                    Navigator.pushReplacementNamed(
+                        context, Constant.postPartThreeOnBoardRouter);
                     //TODO: Move to next screen
                   } else {
                     _currentPageIndex++;
@@ -149,7 +154,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                     }
 
                     _pageController.animateToPage(_currentPageIndex,
-                        duration: Duration(milliseconds: 250),
+                        duration: Duration(milliseconds: 1),
                         curve: Curves.easeInOutCubic);
                   }
                 });
