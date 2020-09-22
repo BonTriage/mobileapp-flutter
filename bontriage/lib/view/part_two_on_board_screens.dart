@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_bottom_buttons.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -20,6 +21,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   double _progressPercent = 0;
 
   List<Widget> _pageViewWidgetList;
+  bool isEndOfOnBoard = false;
   
   List<String> _questionList = [
     Constant.atWhatAge,
@@ -152,6 +154,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OnBoardChatBubble(
+                isEndOfOnBoard: isEndOfOnBoard,
                 chatBubbleText: _questionList[_currentPageIndex],
               ),
               SizedBox(
@@ -174,6 +177,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     double stepOneProgress = 1 / _pageViewWidgetList.length;
 
                     if (_progressPercent == 1) {
+                       isEndOfOnBoard = true;
+                       TextToSpeechRecognition.pauseSpeechToText(
+                           true, "");
                       Navigator.pushReplacementNamed(context, Constant.onBoardHeadacheNameScreenRouter);
                       //TODO: Move to next screen
                     } else {

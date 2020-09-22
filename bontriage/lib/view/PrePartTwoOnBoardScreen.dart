@@ -30,6 +30,11 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     ]
   ];
 
+   List<String> bubbleChatTextView = [
+    Constant.nextWeAreGoing,
+    Constant.answeringTheNext,
+  ];
+
   int _currentIndex = 0;
 
   @override
@@ -38,6 +43,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
       body: OnBoardInformationScreen(
         isShowNextButton: _currentIndex != (_questionList.length - 1),
         bubbleChatTextSpanList: _questionList[_currentIndex],
+        chatText: bubbleChatTextView[_currentIndex],
         nextButtonFunction: () {
           setState(() {
             _currentIndex++;

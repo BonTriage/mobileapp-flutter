@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 
 import '../util/constant.dart';
 import 'on_board_bottom_buttons.dart';
@@ -7,7 +8,8 @@ import 'sign_up_age_screen.dart';
 
 class PartOneOnBoardScreenTwo extends StatefulWidget {
   @override
-  _PartOneOnBoardScreenStateTwo createState() => _PartOneOnBoardScreenStateTwo();
+  _PartOneOnBoardScreenStateTwo createState() =>
+      _PartOneOnBoardScreenStateTwo();
 }
 
 class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
@@ -19,6 +21,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   double _progressPercent = 0.66;
 
   List<Widget> _pageViewWidgetList;
+  bool isEndOfOnBoard = false;
 
   List<String> _questionList = [
     Constant.howManyDays,
@@ -35,8 +38,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
         _progressPercent -= stepOneProgress;
         _currentPageIndex--;
         _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 250),
-            curve: Curves.easeIn);
+            duration: Duration(milliseconds: 250), curve: Curves.easeIn);
       }
     });
   }
@@ -93,6 +95,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -107,6 +110,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OnBoardChatBubble(
+                isEndOfOnBoard: isEndOfOnBoard,
                 chatBubbleText: _questionList[_currentPageIndex],
               ),
               SizedBox(
@@ -114,13 +118,13 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
               ),
               Expanded(
                   child: PageView.builder(
-                    controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _pageViewWidgetList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _pageViewWidgetList[index];
-                    },
-                  )),
+                controller: _pageController,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _pageViewWidgetList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _pageViewWidgetList[index];
+                },
+              )),
               OnBoardBottomButtons(
                 progressPercent: _progressPercent,
                 backButtonFunction: _onBackPressed,
@@ -129,13 +133,18 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                     double stepOneProgress = 0.11;
 
                     if (_progressPercent == 1) {
-                      Navigator.pushReplacementNamed(context, Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
+                      isEndOfOnBoard = true;
+                      TextToSpeechRecognition.pauseSpeechToText(
+                          true, "");
+                      Navigator.pushReplacementNamed(
+                          context,
+                          Constant
+                              .signUpOnBoardPersonalizedHeadacheResultRouter);
                       //TODO: Move to next screen
                     } else {
                       _currentPageIndex++;
 
-                      if (_currentPageIndex !=
-                          _pageViewWidgetList.length - 1)
+                      if (_currentPageIndex != _pageViewWidgetList.length - 1)
                         _progressPercent += stepOneProgress;
                       else {
                         _progressPercent = 1;

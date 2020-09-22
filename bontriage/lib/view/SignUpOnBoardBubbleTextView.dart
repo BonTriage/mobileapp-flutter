@@ -85,6 +85,14 @@ class _StateSignUpOnBoardBubbleTextView
             color: Constant.bubbleChatTextView))
   ];
 
+ static List<String> bubbleChatTextView = [
+
+   Constant.welcomeMigraineMentorBubbleTextView,
+   Constant.answeringTheNextBubbleTextView,
+   Constant.letsStarted
+
+  ];
+
   int _currentIndex = 0;
 
   void _onBackPressed() {
@@ -100,6 +108,7 @@ class _StateSignUpOnBoardBubbleTextView
     return Scaffold(
       body: OnBoardInformationScreen(
           isSpannable: true,
+          chatText: bubbleChatTextView[_currentIndex],
           bubbleChatTextSpanList: _questionList[_currentIndex],
           isShowNextButton: _currentIndex != (_questionList.length - 1),
           nextButtonFunction: () {

@@ -1,4 +1,5 @@
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -19,6 +20,7 @@ class SignUpOnBoardScreen extends StatefulWidget {
 
 class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
   bool isVolumeOn = true;
+  bool isEndOfOnBoard = false;
   double _progressPercent = 0;
   int _currentPageIndex = 0;
 
@@ -80,6 +82,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
           children: [
             OnBoardChatBubble(
               chatBubbleText: questionList[_currentPageIndex],
+              isEndOfOnBoard: isEndOfOnBoard,
             ),
             SizedBox(height: 40),
             Expanded(
@@ -147,7 +150,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                         onPressed: () {
                           setState(() {
                             if (_progressPercent == 0.55) {
-                              Navigator.pushNamed(context,
+                              isEndOfOnBoard = true;
+                              TextToSpeechRecognition.pauseSpeechToText(true,"");
+                              Navigator.pushReplacementNamed(context,
                                   Constant.onBoardHeadacheInfoScreenRouter);
                             } else {
                                 _currentPageIndex++;

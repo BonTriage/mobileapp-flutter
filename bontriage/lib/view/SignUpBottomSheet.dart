@@ -65,6 +65,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                 ),
               ),
               Container(
+
                 margin: EdgeInsets.only(right: 40),
                 child: GestureDetector(
                   onTap: () {
@@ -140,9 +141,9 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
     return Container(
 
       height: MediaQuery.of(context).size.height * 0.6,
-
       child: Column(
         children: <Widget>[
+
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: TextField(

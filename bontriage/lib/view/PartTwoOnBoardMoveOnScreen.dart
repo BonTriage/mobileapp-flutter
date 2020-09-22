@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
 class PartTwoOnBoardMoveOnScreen extends StatefulWidget {
   @override
-  _PartTwoOnBoardMoveOnScreenState createState() => _PartTwoOnBoardMoveOnScreenState();
+  _PartTwoOnBoardMoveOnScreenState createState() =>
+      _PartTwoOnBoardMoveOnScreenState();
 }
 
-class _PartTwoOnBoardMoveOnScreenState extends State<PartTwoOnBoardMoveOnScreen> {
+class _PartTwoOnBoardMoveOnScreenState
+    extends State<PartTwoOnBoardMoveOnScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +25,10 @@ class _PartTwoOnBoardMoveOnScreenState extends State<PartTwoOnBoardMoveOnScreen>
                   color: Constant.bubbleChatTextView))
         ],
         isShowNextButton: false,
+        chatText: Constant.experienceTypesOfHeadaches,
         bottomButtonText: Constant.moveOnForNow,
         bottomButtonFunction: () {
+          TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
               context, Constant.prePartThreeOnBoardScreenRouter);
           //TODO: Move to next screen

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -25,7 +26,9 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
                   color: Constant.bubbleChatTextView))
         ],
         isShowNextButton: true,
+        chatText: Constant.letsBeginBySeeing,
         nextButtonFunction: () {
+          TextToSpeechRecognition.pauseSpeechToText(true,"");
           Navigator.pushReplacementNamed(
               context, Constant.partOneOnBoardScreenTwoRouter);
         },

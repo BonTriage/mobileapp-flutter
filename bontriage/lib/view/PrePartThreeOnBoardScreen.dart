@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -20,13 +21,13 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
               color: Constant.bubbleChatTextView))
     ],
     [
-    TextSpan(
-        text: Constant.quickAndEasySection,
-        style: TextStyle(
-            height: 1.3,
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            color: Constant.bubbleChatTextView))
+      TextSpan(
+          text: Constant.quickAndEasySection,
+          style: TextStyle(
+              height: 1.3,
+              fontSize: 16,
+              fontFamily: Constant.jostRegular,
+              color: Constant.bubbleChatTextView))
     ]
   ];
 
@@ -43,12 +44,14 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           });
         },
         bottomButtonText: Constant.continueText,
+        chatText: bubbleChatTextView[_currentIndex],
         bottomButtonFunction: () {
+          TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
               context, Constant.partThreeOnBoardScreenRouter);
           //TODO: Move to Part Three On Board Screen
         },
-        bubbleChatTextSpanList:  _questionList[_currentIndex],
+        bubbleChatTextSpanList: _questionList[_currentIndex],
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
@@ -57,4 +60,9 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
       ),
     );
   }
+
+  static List<String> bubbleChatTextView = [
+    Constant.almostReadyToHelp,
+    Constant.quickAndEasySection,
+  ];
 }

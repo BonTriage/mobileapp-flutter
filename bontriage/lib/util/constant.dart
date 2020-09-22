@@ -34,10 +34,12 @@ class Constant {
   static String onBoardHeadacheInfoScreenRouter =
       '/onBoardHeadacheInfoScreenRouter';
   static String partOneOnBoardScreenTwoRouter = '/partOneOnBoardScreenTwo';
-  static String onBoardCreateAccountScreenRouter = '/onBoardCreateAccountScreen';
+  static String onBoardCreateAccountScreenRouter =
+      '/onBoardCreateAccountScreen';
   static String prePartTwoOnBoardScreenRouter = '/prePartTwoOnBoardScreen';
   static String onBoardHeadacheNameScreenRouter = '/onBoardHeadacheNameScreen';
-  static String partTwoOnBoardMoveOnScreenRouter = '/partTwoOnBoardMoveOnScreen';
+  static String partTwoOnBoardMoveOnScreenRouter =
+      '/partTwoOnBoardMoveOnScreen';
   static String prePartThreeOnBoardScreenRouter = '/prePartThreeOnBoardScreen';
 
   //strings
@@ -65,6 +67,12 @@ class Constant {
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String welcomeMigraineMentorTextView =
       'Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+
+  static String welcomeMigraineMentorBubbleTextView =
+      'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+   static String answeringTheNextBubbleTextView =
+      'MigraineMentor! Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
+
   static String migraineMentorHelpTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
   static String compassDiagramTextView =
@@ -72,6 +80,9 @@ class Constant {
 
   static String welcomePersonalizedHeadacheFirstTextView =
       'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better';
+
+  static String welcomePersonalizedHeadacheSecondStepFirstTextView =
+      'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app.';
 
   static String welcomePersonalizedHeadacheSecondTextView =
       'Throughout your journey with MigraineMentor, you will work on shrinking the size and changing the shape of your compass to lower your Headache Score.';
@@ -217,20 +228,21 @@ class Constant {
   static String viewDetailedReport = 'View detailed report';
 
   static String tapToType = 'Tap to type';
-  static String greatWeAreDone = 'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
+  static String greatWeAreDone =
+      'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
   static String withWhatGender = 'With what gender do you identify?';
-  static String whatBiologicalSex = 'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
+  static String whatBiologicalSex =
+      'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
   static String woman = 'Woman';
   static String man = 'Man';
   static String genderNonConforming = 'Gender non-conforming';
   static String preferNotToAnswer = 'Prefer not to answer';
   static String interSex = 'Intersex';
 
-
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
-  
+
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
       gradient: LinearGradient(

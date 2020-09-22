@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 
 import 'ChatBubble.dart';
@@ -12,7 +13,7 @@ class SignUpFirstStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin{
+    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -20,6 +21,8 @@ class _SignUpFirstStepCompassResultState
   List<String> _bubbleTextViewList;
   bool isBackButtonHide = false;
   AnimationController _animationController;
+  bool isEndOfOnBoard = false;
+  bool isVolumeOn = true;
 
   @override
   void initState() {
@@ -33,12 +36,13 @@ class _SignUpFirstStepCompassResultState
       Constant.welcomePersonalizedHeadacheFifthTextView
     ];
 
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
-      vsync: this
-    );
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
+    if (!isEndOfOnBoard)
+      TextToSpeechRecognition.speechToText(
+          _bubbleTextViewList[_buttonPressedValue]);
   }
 
   @override
@@ -46,15 +50,27 @@ class _SignUpFirstStepCompassResultState
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
   }
 
+  ///Method to toggle volume on or off
+  void _toggleVolume() {
+    setState(() {
+           isVolumeOn = !isVolumeOn;
+      TextToSpeechRecognition.pauseSpeechToText(
+          isVolumeOn, _bubbleTextViewList[_buttonPressedValue]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
+    if (!isEndOfOnBoard)
+      TextToSpeechRecognition.speechToText(
+          _bubbleTextViewList[_buttonPressedValue]);
     var features = [
       "A",
       "B",
@@ -98,13 +114,28 @@ class _SignUpFirstStepCompassResultState
                           width: 60.0,
                           height: 60.0,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Image(
-                            alignment: Alignment.topLeft,
-                            image: AssetImage(Constant.volumeOn),
-                            width: 20,
-                            height: 20,
+                        GestureDetector(
+                          onTap: _toggleVolume,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: AnimatedCrossFade(
+                              duration: Duration(milliseconds: 250),
+                              firstChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOn),
+                                width: 20,
+                                height: 20,
+                              ),
+                              secondChild: Image(
+                                alignment: Alignment.topLeft,
+                                image: AssetImage(Constant.volumeOff),
+                                width: 20,
+                                height: 20,
+                              ),
+                              crossFadeState: isVolumeOn
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                            ),
                           ),
                         ),
                       ],
@@ -293,6 +324,8 @@ class _SignUpFirstStepCompassResultState
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
+                            isEndOfOnBoard = true;
+                            TextToSpeechRecognition.pauseSpeechToText(true, "");
                             Navigator.pushReplacementNamed(context,
                                 Constant.onBoardCreateAccountScreenRouter);
                           }

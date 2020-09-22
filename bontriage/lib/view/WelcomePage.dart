@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class WelcomePage extends StatelessWidget {
   final String headerText;
   final String imagePath;
   final String subText;
 
-  const WelcomePage({Key key, this.headerText, this.imagePath, this.subText})
+   const WelcomePage({Key key, this.headerText, this.imagePath, this.subText})
       : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,4 +67,10 @@ class WelcomePage extends StatelessWidget {
       ),
     );
   }
+
+
+
+
+
+
 }
