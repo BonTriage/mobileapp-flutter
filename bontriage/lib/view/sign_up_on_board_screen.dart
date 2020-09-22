@@ -70,6 +70,13 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.backgroundColor,
@@ -104,39 +111,43 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> with SingleTi
                     children: [
                         AnimatedPositioned(
                           left: (_currentPageIndex != 0) ? 0 : (MediaQuery.of(context).size.width - 190),
-                          duration: Duration(milliseconds: 350),
-                          child: BouncingWidget(
-                            duration: Duration(milliseconds: 100),
-                            scaleFactor: 1.5,
-                            onPressed: () {
-                              setState(() {
-                                if (_currentPageIndex != 0) {
-                                  /*isReverseAnimation = true;
-                                  _animationController.reverse();*/
-                                  _progressPercent -= 0.11;
-                                  _currentPageIndex--;
-                                  _pageController.animateToPage(_currentPageIndex,
-                                      duration: Duration(milliseconds: 1),
-                                      curve: Curves.easeIn);
-                                } else {
-                                  _progressPercent = 0;
-                                }
-                              });
-                            },
-                            child: Container(
-                              width: 130,
-                              height: 34,
-                              decoration: BoxDecoration(
-                                color: Color(0xffafd794),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  Constant.back,
-                                  style: TextStyle(
-                                      color: Constant.bubbleChatTextView,
-                                      fontSize: 14,
-                                      fontFamily: Constant.jostMedium,),
+                          duration: Duration(milliseconds: 250),
+                          child: AnimatedOpacity(
+                            opacity: (_currentPageIndex != 0) ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 250),
+                            child: BouncingWidget(
+                              duration: Duration(milliseconds: 100),
+                              scaleFactor: 1.5,
+                              onPressed: () {
+                                setState(() {
+                                  if (_currentPageIndex != 0) {
+                                    /*isReverseAnimation = true;
+                                    _animationController.reverse();*/
+                                    _progressPercent -= 0.11;
+                                    _currentPageIndex--;
+                                    _pageController.animateToPage(_currentPageIndex,
+                                        duration: Duration(milliseconds: 1),
+                                        curve: Curves.easeIn);
+                                  } else {
+                                    _progressPercent = 0;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 130,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffafd794),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    Constant.back,
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontSize: 14,
+                                        fontFamily: Constant.jostMedium,),
+                                  ),
                                 ),
                               ),
                             ),

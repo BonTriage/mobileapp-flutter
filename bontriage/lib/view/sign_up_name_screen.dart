@@ -35,8 +35,8 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerPr
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {

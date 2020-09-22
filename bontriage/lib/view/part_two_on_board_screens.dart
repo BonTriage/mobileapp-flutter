@@ -45,7 +45,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         _progressPercent -= stepOneProgress;
         _currentPageIndex--;
         _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 250),
+            duration: Duration(milliseconds: 1),
             curve: Curves.easeIn);
       }
     });
@@ -54,6 +54,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _pageController.dispose();
     super.dispose();
   }
 

@@ -12,95 +12,131 @@ class SignUpBottomSheet extends StatefulWidget {
   _SignUpBottomSheetState createState() => _SignUpBottomSheetState();
 }
 
-class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
+class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 800),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(SignUpBottomSheet oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            height: 100,
-            child: Scrollbar(
-              isAlwaysShown: false,
-              child: ListView(
-                children: <Widget>[
-                  Wrap(
-                    spacing: 20,
-                    children: <Widget>[
-                      for (var i = 0; i < widget.selectOptionList.length; i++)
-                        if (widget.selectOptionList[i].isSelected)
-                          Chip(
-                            label: Text(widget.selectOptionList[i].answerData),
-                            backgroundColor: Constant.chatBubbleGreen,
-                            deleteIcon: IconButton(
-                              icon: new Image.asset('images/cross.png'),
-                              onPressed: () {
-                                setState(() {
-                                  widget.selectOptionList[i].isSelected = false;
-                                });
-                              },
+    return FadeTransition(
+      opacity: _animationController,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              height: 100,
+              child: Scrollbar(
+                isAlwaysShown: false,
+                child: ListView(
+                  children: <Widget>[
+                    Wrap(
+                      spacing: 20,
+                      children: <Widget>[
+                        for (var i = 0; i < widget.selectOptionList.length; i++)
+                          if (widget.selectOptionList[i].isSelected)
+                            Chip(
+                              label: Text(widget.selectOptionList[i].answerData),
+                              backgroundColor: Constant.chatBubbleGreen,
+                              deleteIcon: IconButton(
+                                icon: new Image.asset('images/cross.png'),
+                                onPressed: () {
+                                  setState(() {
+                                    widget.selectOptionList[i].isSelected = false;
+                                  });
+                                },
+                              ),
+                              onDeleted: () {},
                             ),
-                            onDeleted: () {},
-                          ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 50),
-                child: Text(
-                  Constant.searchYourType,
-                  style: TextStyle(
-                      color: Constant.selectTextColor,
-                      fontSize: 14,
-                      fontFamily: Constant.jostMedium),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 40),
-                child: GestureDetector(
-                  onTap: () {
-                    showBottomSheet(
-                        elevation: 4,
-                        backgroundColor: Constant.backgroundTransparentColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10)),
-                        ),
-                        context: context,
-                        builder: (context) => BottomSheetContainer(
-                            selectOptionList: widget.selectOptionList,
-                            selectedAnswerCallback: (index) {
-                              setState(() {});
-                            }));
-                    // BottomSheetContainer();
-                  },
-                  child: Image(
-                    image: AssetImage(Constant.downArrow),
-                    width: 16,
-                    height: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 50),
+                  child: Text(
+                    Constant.searchYourType,
+                    style: TextStyle(
+                        color: Constant.selectTextColor,
+                        fontSize: 14,
+                        fontFamily: Constant.jostMedium),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Divider(
-            color: Constant.chatBubbleGreen,
-            height: 7,
-            thickness: 2,
-            indent: 40,
-            endIndent: 40,
-          ),
-        ],
+                Container(
+                  margin: EdgeInsets.only(right: 40),
+                  child: GestureDetector(
+                    onTap: () {
+                      showBottomSheet(
+                          elevation: 4,
+                          backgroundColor: Constant.backgroundTransparentColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10)),
+                          ),
+                          context: context,
+                          builder: (context) => BottomSheetContainer(
+                              selectOptionList: widget.selectOptionList,
+                              selectedAnswerCallback: (index) {
+                                setState(() {});
+                              }));
+                      // BottomSheetContainer();
+                    },
+                    child: Image(
+                      image: AssetImage(Constant.downArrow),
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Constant.chatBubbleGreen,
+              height: 7,
+              thickness: 2,
+              indent: 40,
+              endIndent: 40,
+            ),
+          ],
+        ),
       ),
     );
   }

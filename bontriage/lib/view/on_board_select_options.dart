@@ -72,8 +72,8 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with Single
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   void _onOptionSelected(int index) {

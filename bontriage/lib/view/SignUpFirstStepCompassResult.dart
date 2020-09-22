@@ -42,6 +42,13 @@ class _SignUpFirstStepCompassResultState
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(SignUpFirstStepCompassResult oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);

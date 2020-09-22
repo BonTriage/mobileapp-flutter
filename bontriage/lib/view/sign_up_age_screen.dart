@@ -45,6 +45,13 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _animationController,
@@ -74,56 +81,96 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.minText,
-                        style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostMedium,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        widget.maxText,
-                        style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostMedium,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Constant.chatBubbleGreenBlue
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.sliderValue.toInt().toString(),
-                      style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontFamily: Constant.jostMedium,
-                        fontSize: 18,
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.minText,
+                                style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 3,),
+                              Text(
+                                'MIN',
+                                style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                widget.maxText,
+                                style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 3,),
+                              Text(
+                                'MAX',
+                                style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 10,),
-                Text(
-                  '${widget.labelText}',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostMedium,
-                  ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 15,),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Constant.chatBubbleGreenBlue
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.sliderValue.toInt().toString(),
+                                style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5,),
+                          Text(
+                            '${widget.labelText}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Constant.chatBubbleGreen,
+                              fontFamily: Constant.jostMedium,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

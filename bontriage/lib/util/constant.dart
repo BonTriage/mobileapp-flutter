@@ -273,6 +273,8 @@ class Constant {
   static String showPassword = 'images/show_password.png';
   static String hidePassword = 'images/hide_password.png';
   static String downArrow = 'images/down_arrow.png';
+  static String splashCompass = 'images/splash_compass.png';
+  static String compassGreen = 'images/compass_green.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

@@ -51,6 +51,13 @@ class _SignUpSecondStepCompassResultState
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     const ticks = [7, 14, 21, 28, 35];
     var features = [

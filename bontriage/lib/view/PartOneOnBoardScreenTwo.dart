@@ -35,7 +35,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
         _progressPercent -= stepOneProgress;
         _currentPageIndex--;
         _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 250),
+            duration: Duration(milliseconds: 1),
             curve: Curves.easeIn);
       }
     });
@@ -44,6 +44,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -67,7 +68,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
         sliderMaxValue: 24,
         minText: '0',
         maxText: '24',
-        labelText: Constant.days,
+        labelText: Constant.hours,
       ),
       SignUpAgeScreen(
         sliderValue: 1,
@@ -88,11 +89,6 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
     ];
   }
 
-  @override
-  void didUpdateWidget(PartOneOnBoardScreenTwo oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -142,8 +138,8 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                       }
 
                       _pageController.animateToPage(_currentPageIndex,
-                          duration: Duration(milliseconds: 250),
-                          curve: Curves.easeInOutCubic);
+                          duration: Duration(milliseconds: 1),
+                          curve: Curves.easeIn);
                     }
                   });
                 },

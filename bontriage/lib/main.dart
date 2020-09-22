@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpOnBoardScreen(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch(settings.name) {
           case Constant.splashRouter: {

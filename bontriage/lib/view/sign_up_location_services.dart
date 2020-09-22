@@ -37,8 +37,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> with Si
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override

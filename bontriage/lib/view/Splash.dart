@@ -35,9 +35,9 @@ class _SplashState extends State<Splash> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                image: AssetImage(Constant.brain),
-                width: 56,
-                height: 50,
+                image: AssetImage(Constant.splashCompass),
+                width: 78,
+                height: 78,
               ),
               SizedBox(
                 width: 10,
