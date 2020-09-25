@@ -7,7 +7,11 @@ import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+<<<<<<< HEAD
 import 'package:mobile/view/LogDayScreen.dart';
+=======
+import 'package:mobile/view/NotificationScreen.dart';
+>>>>>>> 7e7ae81fefbb211d7637dcf36d31032d04909f19
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
@@ -80,7 +84,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AddHeadacheOnGoingScreen(),
+      home: NotificationScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -222,6 +226,10 @@ class MyApp extends StatelessWidget {
             {
               return SlideFromBottomPageRoute(
                   widget: PostNotificationOnBoardScreen());
+            }
+          case Constant.notificationScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: NotificationScreen());
             }
         }
         return null;

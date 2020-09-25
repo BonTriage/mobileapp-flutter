@@ -55,6 +55,7 @@ class Constant {
       '/postPartThreeOnBoardRouter';
   static const String postNotificationOnBoardRouter =
       '/postNotificationOnBoardRouter';
+  static const String notificationScreenRouter = '/NotificationScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -276,6 +277,12 @@ class Constant {
   static String time = 'Time';
   static String whenHeadacheStart = 'When did your headache start?';
   static String start = 'START';
+  static String notifications = 'Notifications';
+  static String dailyLog = 'Daily Log';
+  static String medication = 'Medication';
+  static String exercise = 'Exercise';
+  static String addCustomNotification = '+  Add Custom Notification';
+  static String save = 'Save';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -310,6 +317,9 @@ class Constant {
   static Color splashMigraineMentorTextColor = Color(0xff30af72);
   static Color doubleTapTextColor = Color(0xff1DAA6D);
 
+  static Color notificationTextColor = Color(0x80AFD794);
+  static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
+
   //images
   static String userAvatar = 'images/user_avatar.png';
   static String closeIcon = 'images/close_icon.png';
@@ -327,6 +337,7 @@ class Constant {
   static String brainShadow = 'images/brain_shadow.png';
   static String chartShadow = 'images/chart_shadow.png';
   static String notifsGreenShadow = 'images/notifs_green_shadow.png';
+  static String rightArrow = 'images/right_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
