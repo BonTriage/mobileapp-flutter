@@ -3,7 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
+import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
+import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
@@ -76,7 +80,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUpFirstStepCompassResult(),
+      home: AddHeadacheOnGoingScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:

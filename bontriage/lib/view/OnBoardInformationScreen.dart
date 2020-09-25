@@ -187,7 +187,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 5),
                         decoration: BoxDecoration(
-                          color: Color(0xffafd794),
+                          color: Constant.chatBubbleGreen,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
