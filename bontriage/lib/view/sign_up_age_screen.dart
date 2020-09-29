@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -8,9 +9,13 @@ class SignUpAgeScreen extends StatefulWidget {
   double sliderMaxValue = 72;
   String minText = '';
   String maxText = '';
+  String minTextLabel = '';
+  String maxTextLabel = '';
   String labelText = '';
+  double horizontalPadding;
+  bool isAnimate;
 
-  SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText})  : super(key: key);
+  SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true})  : super(key: key);
 
   @override
   _SignUpAgeScreenState createState() => _SignUpAgeScreenState();
@@ -26,7 +31,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: widget.isAnimate ? 800 : 0),
       vsync: this
     );
 
@@ -58,17 +63,17 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
       child: Container(
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: (widget.horizontalPadding == null) ? 15 : widget.horizontalPadding),
             child: Column(
               children: [
-                SizedBox(height: 40,),
+                SizedBox(height: (widget.horizontalPadding == null) ? 40 : 15,),
                 SliderTheme(
                   data: SliderThemeData(
-                    activeTrackColor: Color(0xff434351),
-                    inactiveTrackColor: Color(0xff434351),
+                    activeTrackColor: Constant.sliderTrackColor,
+                    inactiveTrackColor: Constant.sliderTrackColor,
                     thumbColor: Constant.chatBubbleGreen,
                     overlayColor: Constant.chatBubbleGreenTransparent,
-                    trackHeight: 7
+                    trackHeight: 7,
                   ),
                   child: Slider(
                     value: widget.sliderValue,
@@ -101,7 +106,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
                               ),
                               SizedBox(height: 3,),
                               Text(
-                                'MIN',
+                                (widget.minTextLabel == null) ? Constant.min : widget.minTextLabel,
+                                textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontFamily: Constant.jostRegular,
@@ -123,7 +129,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
                               ),
                               SizedBox(height: 3,),
                               Text(
-                                'MAX',
+                                (widget.maxTextLabel == null) ? Constant.max : widget.maxTextLabel,
+                                textAlign: TextAlign.right,
                                 style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontFamily: Constant.jostRegular,

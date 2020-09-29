@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
+import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
+import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
-import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
-import 'package:mobile/view/OnBoardInformationScreen.dart';
 import 'package:mobile/view/OnBoardingSignUpScreen.dart';
 
 import 'package:mobile/view/PartOneOnBoardScreenTwo.dart';
@@ -19,8 +20,6 @@ import 'package:mobile/view/PostPartThreeOnBoardScreen.dart';
 import 'package:mobile/view/PrePartTwoOnBoardScreen.dart';
 import 'package:mobile/view/PartTwoOnBoardMoveOnScreen.dart';
 import 'package:mobile/view/PrePartThreeOnBoardScreen.dart';
-import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
-
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSecondStepPersonalizedHeadacheCompass..dart';
@@ -39,12 +38,8 @@ import 'package:mobile/view/sign_up_screen.dart';
 import 'package:mobile/view/WelcomeScreen.dart';
 
 import 'util/constant.dart';
-import 'util/constant.dart';
-import 'util/constant.dart';
-import 'view/SignUpOnBoardBubbleTextView.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
 import 'view/SignUpOnBoardSplash.dart';
-import 'view/Splash.dart';
 import 'view/Splash.dart';
 import 'view/sign_up_on_board_screen.dart';
 
@@ -223,6 +218,20 @@ class MyApp extends StatelessWidget {
           case Constant.notificationScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: NotificationScreen());
+            }
+          case Constant.headacheStartedScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: HeadacheStartedScreen());
+            }
+          case Constant.currentHeadacheProgressScreenRouter:
+            {
+              return SlideFromBottomPageRoute(
+                  widget: CurrentHeadacheProgressScreen());
+            }
+          case Constant.addHeadacheOnGoingScreenRouter:
+            {
+              return SlideFromBottomPageRoute(
+                  widget: AddHeadacheOnGoingScreen());
             }
         }
         return null;

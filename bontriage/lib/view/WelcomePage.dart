@@ -35,21 +35,13 @@ class WelcomePage extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(
-                left: imagePath == Constant.notifsGreenWhite ? 15 : 0),
+                left: imagePath == Constant.notifsGreenShadow ? 15 : 0),
             child: Image(
               width: 170,
               height: 170,
               alignment: Alignment.center,
               image: AssetImage(imagePath),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Image(
-            width: imagePath == Constant.notifsGreenWhite ? 100 : 170,
-            alignment: Alignment.center,
-            image: AssetImage(Constant.ellipse),
           ),
           SizedBox(
             height: 50,

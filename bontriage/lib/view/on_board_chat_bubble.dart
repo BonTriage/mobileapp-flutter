@@ -9,12 +9,18 @@ class OnBoardChatBubble extends StatefulWidget {
   final String chatBubbleText;
   final Color chatBubbleColor;
   final bool isEndOfOnBoard;
+  final bool isShowCrossButton;
+  final bool isSpannable;
+  final List<TextSpan> textSpanList;
 
   const OnBoardChatBubble(
       {Key key,
       this.chatBubbleText,
       this.isEndOfOnBoard = false,
-      this.chatBubbleColor})
+      this.chatBubbleColor,
+      this.isShowCrossButton = true,
+      this.isSpannable = false,
+      this.textSpanList})
       : super(key: key);
 
   @override
@@ -68,24 +74,49 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
       TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
 
+  Widget _getTextWidget() {
+    if(widget.isSpannable) {
+      return RichText(
+        text: TextSpan(
+          children: widget.textSpanList,
+        ),
+      );
+    } else {
+      return Text(
+        widget.chatBubbleText,
+        style: TextStyle(
+          fontSize: 16,
+          fontFamily: Constant.jostRegular,
+          height: 1.3,
+          color: (widget.chatBubbleColor == null)
+              ? Constant.chatBubbleGreen
+              : Constant.bubbleChatTextView,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(Constant.chatBubbleHorizontalPadding,
-                20, Constant.chatBubbleHorizontalPadding, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image(
-                  image: AssetImage(Constant.closeIcon),
-                  width: 26,
-                  height: 26,
-                ),
-              ],
+          Visibility(
+            visible: widget.isShowCrossButton,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(Constant.chatBubbleHorizontalPadding,
+                  20, Constant.chatBubbleHorizontalPadding, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image(
+                    image: AssetImage(Constant.closeIcon),
+                    width: 26,
+                    height: 26,
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
@@ -143,17 +174,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
                   padding: const EdgeInsets.all(15.0),
                   child: FadeTransition(
                     opacity: _animationController,
-                    child: Text(
-                      widget.chatBubbleText,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: Constant.jostRegular,
-                        height: 1.3,
-                        color: (widget.chatBubbleColor == null)
-                            ? Constant.chatBubbleGreen
-                            : Constant.bubbleChatTextView,
-                      ),
-                    ),
+                    child: _getTextWidget(),
                   ),
                 ),
               ),

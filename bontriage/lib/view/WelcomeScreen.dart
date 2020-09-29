@@ -42,17 +42,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _pageViewWidgets = [
       WelcomePage(
         headerText: Constant.welcomeToMigraineMentor,
-        imagePath: Constant.brain,
+        imagePath: Constant.brainShadow,
         subText: Constant.developedByATeam,
       ),
       WelcomePage(
         headerText: Constant.trackRightData,
-        imagePath: Constant.chart,
+        imagePath: Constant.chartShadow,
         subText: Constant.mostHeadacheTracking,
       ),
       WelcomePage(
         headerText: Constant.conquerYourHeadaches,
-        imagePath: Constant.notifsGreenWhite,
+        imagePath: Constant.notifsGreenShadow,
         subText: Constant.withRegularUse,
       ),
     ];

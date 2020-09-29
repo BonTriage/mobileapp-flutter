@@ -56,6 +56,10 @@ class Constant {
   static const String postNotificationOnBoardRouter =
       '/postNotificationOnBoardRouter';
   static const String notificationScreenRouter = '/NotificationScreenRouter';
+  static const String headacheStartedScreenRouter = '/HeadacheStartedScreenRouter';
+  static const String currentHeadacheProgressScreenRouter = '/CurrentHeadacheProgressScreenRouter';
+  static const String addHeadacheOnGoingScreenRouter = '/addHeadacheOnGoingScreenRouter';
+
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -259,18 +263,53 @@ class Constant {
   static String frequency = 'Frequency';
   static String disability = 'Disability';
   static String duration = 'Duration';
-  static String compassTextView =
-      'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+  static String compassTextView = 'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+  static String doubleTapAnItem = 'Double tap an item to keep it pre-selected for next time you come back to enter a log.';
+  static String sleep = 'Sleep';
+  static String howFeelWakingUp = 'How did you feel waking up this morning?';
+  static String energizedRefreshed = 'Energized\n& refreshed';
+  static String couldHaveBeenBetter = 'Could have\nbeen better';
+  static String headacheLogStarted = 'Headache log started.';
+  static String feelFreeToComeBack = ' Feel free to come back when you’re feeling better.';
+  static String viewCurrentLog = 'View Current Log';
+  static String addDetails = 'Add Details';
+  static String yourCurrentHeadache = 'Your current headache:';
+  static String started = 'STARTED';
+  static String endHeadache = 'End Headache';
+  static String headacheType = 'Headache Type';
+  static String whatKindOfHeadache = 'What kind of headache is it?';
+  static String time = 'Time';
+  static String whenHeadacheStart = 'When did your headache start?';
+  static String start = 'START';
   static String notifications = 'Notifications';
   static String dailyLog = 'Daily Log';
   static String medication = 'Medication';
   static String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
+
   static const String profileName = 'profile.firstname';
   static const String profileAge = 'profile.age';
   static const String profileSex = 'profile.sex';
   static const String profileLocation = 'profile.location';
+
+  static String end = 'END';
+  static String tapHereToEnd = 'Headache in progress. Tap here to end.';
+  static String onAScaleOf1To10 = 'On a scale of 1 - 10, how painful is this headache?';
+  static String min = 'MIN';
+  static String max = 'MAX';
+  static String one = '1';
+  static String ten = '10';
+  static String mild = 'MILD';
+  static String veryPainful = 'VERY\nPAINFUL';
+  static String onAScaleOf1To10Disability = 'On a scale of 1- 10, how much disability are you experienciing as result of this headache?';
+  static String noneAtALL = 'NONE AT\nALL';
+  static String totalDisability = 'TOTAL\nDISABILITY';
+  static String addANote = '+ Add a Note';
+  static String at = 'at';
+  static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
+  static String reset = 'Reset';
+
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -300,10 +339,12 @@ class Constant {
 
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);
-
+  static Color unselectedTextColor = Color(0x80AFD794);
   static Color splashColor = Color(0xffD7EBC9);
   static Color splashTextColor = Color(0xff0E232F);
   static Color splashMigraineMentorTextColor = Color(0xff30af72);
+  static Color doubleTapTextColor = Color(0xff1DAA6D);
+  static Color sliderTrackColor = Color(0xff434351);
 
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
@@ -322,6 +363,9 @@ class Constant {
   static String downArrow = 'images/down_arrow.png';
   static String splashCompass = 'images/splash_compass.png';
   static String compassGreen = 'images/compass_green.png';
+  static String brainShadow = 'images/brain_shadow.png';
+  static String chartShadow = 'images/chart_shadow.png';
+  static String notifsGreenShadow = 'images/notifs_green_shadow.png';
   static String rightArrow = 'images/right_arrow.png';
 
   //fontFamily
