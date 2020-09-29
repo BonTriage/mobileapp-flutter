@@ -261,10 +261,48 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     );
   }
 
-  addFilteredQuestionListData(List<dynamic> questionListData) {
+  addFilteredQuestionListData(List<Questions> questionListData) {
     if (questionListData != null) {
       questionListData.forEach((element) {
-        switch (element.tag) {
+
+        switch (element.questionType){
+          case "number":
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpAgeScreen(
+                  sliderValue: element.min.toDouble(),
+                  sliderMinValue: element.min.toDouble(),
+                  sliderMaxValue: element.max.toDouble(),
+                  minText: element.min.toString(),
+                  maxText: element.max.toString(),
+                  labelText: "",
+                )));
+            break;
+
+          case "text":
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpNameScreen()));
+            break;
+
+          case "single":
+          List<OnBoardSelectOptionModel> valuesListData;
+          element.values.forEach((element) {
+            valuesListData.add(OnBoardSelectOptionModel(optionId: element.valueNumber,optionText: element.text));
+          });
+          _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+              questions: element.helpText,
+              questionsWidget: OnBoardSelectOptions(
+                selectOptionList: valuesListData,
+              )));
+          break;
+          case "location":
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpLocationServices()));
+            break;
+        }
+   /*     switch (element.tag) {
           case Constant.profileName:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
@@ -303,7 +341,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questions: element.helpText,
                 questionsWidget: SignUpLocationServices()));
             break;
-        }
+        }*/
         isAlreadyDataFiltered = true;
       });
       print(questionListData);
