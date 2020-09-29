@@ -5,35 +5,35 @@ import 'package:mobile/repository/AddHeadacheLogRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 
 class AddHeadacheLogBloc {
-  AddHeadacheLogRepository _welcomeOnBoardProfileRepository;
-  StreamController<dynamic> _signUpFirstStepDataStreamController;
+  AddHeadacheLogRepository _addHeadacheLogRepository;
+  StreamController<dynamic> _addHeadacheLogStreamController;
   int count = 0;
 
-  StreamSink<dynamic> get signUpFirstStepDataSink =>
-      _signUpFirstStepDataStreamController.sink;
+  StreamSink<dynamic> get addHeadacheLogDataSink =>
+      _addHeadacheLogStreamController.sink;
 
-  Stream<dynamic> get albumDataStream =>
-      _signUpFirstStepDataStreamController.stream;
+  Stream<dynamic> get addHeadacheLogDataStream =>
+      _addHeadacheLogStreamController.stream;
 
   AddHeadacheLogBloc({this.count = 0}) {
-    _signUpFirstStepDataStreamController = StreamController<dynamic>();
-    _welcomeOnBoardProfileRepository = AddHeadacheLogRepository();
+    _addHeadacheLogStreamController = StreamController<dynamic>();
+    _addHeadacheLogRepository = AddHeadacheLogRepository();
   }
 
   fetchSignUpFirstStepData() async {
     try {
       var signUpFirstStepData =
-      await _welcomeOnBoardProfileRepository.serviceCall(
+      await _addHeadacheLogRepository.serviceCall(
           'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
           RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
-        signUpFirstStepDataSink.add(signUpFirstStepData.toString());
+        addHeadacheLogDataSink.add(signUpFirstStepData.toString());
       } else {
         var filterQuestionsListData = LinearListFilter.getQuestionSeries(
             signUpFirstStepData.questionnaires[0].initialQuestion,
             signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
-        signUpFirstStepDataSink.add(filterQuestionsListData);
+        addHeadacheLogDataSink.add(filterQuestionsListData);
       }
     } catch (Exception) {
       //  signUpFirstStepDataSink.add("Error");
@@ -41,6 +41,6 @@ class AddHeadacheLogBloc {
   }
 
   void dispose() {
-    _signUpFirstStepDataStreamController?.close();
+    _addHeadacheLogStreamController?.close();
   }
 }
