@@ -1,4 +1,7 @@
+import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
+import 'package:mobile/models/SignupModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -22,12 +25,14 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   bool isEndOfOnBoard = false;
   double _progressPercent = 0;
   int _currentPageIndex = 0;
+  WelcomeOnBoardProfileBloc welcomeOnBoardProfileBloc;
+  bool isAlreadyDataFiltered = false;
 
   PageController _pageController = PageController(
     initialPage: 0,
   );
 
-  List<Widget> _pageViewWidgetList;
+  List<SignUpOnBoardFirstStepQuestionsModel> _pageViewWidgetList;
 
   List<String> questionList = [
     Constant.firstBasics,
@@ -42,38 +47,14 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    welcomeOnBoardProfileBloc = WelcomeOnBoardProfileBloc();
+    welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
 
     _pageViewWidgetList = [
-      Container(),
-      SignUpNameScreen(),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.woman),
-          OnBoardSelectOptionModel(optionText: Constant.man),
-          OnBoardSelectOptionModel(optionText: Constant.genderNonConforming),
-          OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.woman),
-          OnBoardSelectOptionModel(optionText: Constant.man),
-          OnBoardSelectOptionModel(optionText: Constant.interSex),
-          OnBoardSelectOptionModel(optionText: Constant.preferNotToAnswer)
-        ],
-      ),
-      SignUpAgeScreen(
-        sliderValue: 3,
-        sliderMinValue: 3,
-        sliderMaxValue: 72,
-        minText: '3',
-        maxText: '72',
-        labelText: Constant.yearsOld,
-      ),
-      SignUpLocationServices(),
+      SignUpOnBoardFirstStepQuestionsModel(
+          questions: Constant.firstBasics, questionsWidget: Container())
     ];
 
-    //_animationController.forward();
   }
 
   @override
@@ -94,19 +75,25 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             OnBoardChatBubble(
-              chatBubbleText: questionList[_currentPageIndex],
+              chatBubbleText: _pageViewWidgetList[_currentPageIndex].questions,
               isEndOfOnBoard: isEndOfOnBoard,
             ),
             SizedBox(height: 40),
             Expanded(
-                child: PageView.builder(
-              controller: _pageController,
-              itemCount: _pageViewWidgetList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _pageViewWidgetList[index];
-              },
-              physics: NeverScrollableScrollPhysics(),
-            )),
+                child: StreamBuilder<dynamic>(
+                    stream: welcomeOnBoardProfileBloc.albumDataStream,
+                    builder: (context, snapshot) {
+                      if (!isAlreadyDataFiltered)
+                        addFilteredQuestionListData(snapshot.data);
+                      return PageView.builder(
+                        controller: _pageController,
+                        itemCount: _pageViewWidgetList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _pageViewWidgetList[index].questionsWidget;
+                        },
+                        physics: NeverScrollableScrollPhysics(),
+                      );
+                    })),
             SizedBox(
               height: 20,
             ),
@@ -272,5 +259,54 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
         ),
       ),
     );
+  }
+
+  addFilteredQuestionListData(List<dynamic> questionListData) {
+    if (questionListData != null) {
+      questionListData.forEach((element) {
+        switch (element.tag) {
+          case Constant.profileName:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpNameScreen()));
+
+            break;
+          case Constant.profileAge:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpAgeScreen(
+                  sliderValue: element.min.toDouble(),
+                  sliderMinValue: element.min.toDouble(),
+                  sliderMaxValue: element.max.toDouble(),
+                  minText: element.min.toString(),
+                  maxText: element.max.toString(),
+                  labelText: Constant.yearsOld,
+                )));
+
+            break;
+          case Constant.profileSex:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: OnBoardSelectOptions(
+                  selectOptionList: [
+                    OnBoardSelectOptionModel(optionText: Constant.woman),
+                    OnBoardSelectOptionModel(optionText: Constant.man),
+                    OnBoardSelectOptionModel(optionText: Constant.interSex),
+                    OnBoardSelectOptionModel(
+                        optionText: Constant.preferNotToAnswer)
+                  ],
+                )));
+
+            break;
+          case Constant.profileLocation:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpLocationServices()));
+            break;
+        }
+        isAlreadyDataFiltered = true;
+      });
+      print(questionListData);
+    }
   }
 }

@@ -267,6 +267,10 @@ class Constant {
   static String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
+  static const String profileName = 'profile.firstname';
+  static const String profileAge = 'profile.age';
+  static const String profileSex = 'profile.sex';
+  static const String profileLocation = 'profile.location';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -293,7 +297,6 @@ class Constant {
   static Color transparentColor = Colors.transparent;
   static Color backgroundTransparentColor = Color(0xff0E4C47);
   static Color oliveGreen = Color(0xff263E3E);
-
 
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);

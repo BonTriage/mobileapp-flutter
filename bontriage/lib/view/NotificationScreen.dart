@@ -158,7 +158,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text( 
+                        Text(
                           Constant.exercise,
                           style: TextStyle(
                               color: Constant.locationServiceGreen,
