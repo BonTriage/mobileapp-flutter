@@ -1,17 +1,17 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/CirleLogOptions.dart';
+import 'package:mobile/view/AddHeadacheSection.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   @override
   _AddHeadacheOnGoingScreenState createState() => _AddHeadacheOnGoingScreenState();
 }
 
-class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> {
+class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> with SingleTickerProviderStateMixin {
   DateTime _dateTime;
-  AnimationController _animationController;
 
   @override
   void initState() {
@@ -19,6 +19,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> {
     super.initState();
     _dateTime = DateTime.now();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,140 +63,92 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> {
                       thickness: 1,
                       color: Constant.chatBubbleGreen,
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Constant.headacheType,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Constant.chatBubbleGreen,
-                            fontFamily: Constant.jostMedium
-                        ),
-                      ),
+                    AddHeadacheSection(
+                      headerText: Constant.headacheType,
+                      subText: Constant.whatKindOfHeadache,
+                      contentType: 'ht',
                     ),
-                    SizedBox(height: 7,),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Constant.whatKindOfHeadache,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular
-                        ),
-                      ),
+                    AddHeadacheSection(
+                      headerText: Constant.time,
+                      subText: Constant.whenHeadacheStart,
+                      contentType: 'time',
                     ),
-                    SizedBox(height: 10,),
-                    CircleLogOptions(
-                      logOptions: [
-                        'abc',
-                        'abc',
-                        'abc',
-                        'abc',
-                        'abc',
-                        'abc',
-                        'abc',
-                        'abc',
-                      ],
+                    AddHeadacheSection(
+                      headerText: Constant.intensity,
+                      subText: Constant.onAScaleOf1To10,
+                      contentType: 'in',
                     ),
-                    Divider(
-                      height: 40,
-                      thickness: 0.5,
-                      color: Constant.chatBubbleGreen,
+                    AddHeadacheSection(
+                      headerText: Constant.intensity,
+                      subText: Constant.onAScaleOf1To10,
+                      contentType: 'dis',
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        Constant.time,
+                        Constant.addANote,
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Constant.chatBubbleGreen,
-                            fontFamily: Constant.jostMedium
+                            fontSize: 16,
+                            color: Constant.addCustomNotificationTextColor,
+                            fontFamily: Constant.jostRegular,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    SizedBox(height: 7,),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Constant.whatKindOfHeadache,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Constant.start,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 20,),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              color: Constant.backgroundTransparentColor,
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                    child: Text(
-                                      'Aug 16, 2020',
-                                      style: TextStyle(
-                                        color: Constant.splashColor,
-                                        fontFamily: Constant.jostRegular,
-                                        fontSize: 14
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                        BouncingWidget(
+                          onPressed: () {},
+                          child: Container(
+                            width: 120,
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            decoration: BoxDecoration(
+                              color: Constant.chatBubbleGreen,
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              color: Constant.backgroundTransparentColor,
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                    child: Text(
-                                      '10:30 AM',
-                                      style: TextStyle(
-                                          color: Constant.splashColor,
-                                          fontFamily: Constant.jostRegular,
-                                          fontSize: 14
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                            child: Center(
+                              child: Text(
+                                Constant.save,
+                                style: TextStyle(
+                                    color: Constant.bubbleChatTextView,
+                                    fontSize: 15,
+                                    fontFamily: Constant.jostMedium),
                               ),
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BouncingWidget(
+                          onPressed: () {},
+                          child: Container(
+                            width: 120,
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1.3, color: Constant.chatBubbleGreen),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(
+                              child: Text(
+                                Constant.cancel,
+                                style: TextStyle(
+                                    color: Constant.chatBubbleGreen,
+                                    fontSize: 15,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20,),
                   ],
                 ),
               ),

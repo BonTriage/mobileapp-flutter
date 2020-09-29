@@ -56,6 +56,10 @@ class Constant {
   static const String postNotificationOnBoardRouter =
       '/postNotificationOnBoardRouter';
   static const String notificationScreenRouter = '/NotificationScreenRouter';
+  static const String headacheStartedScreenRouter = '/HeadacheStartedScreenRouter';
+  static const String currentHeadacheProgressScreenRouter = '/CurrentHeadacheProgressScreenRouter';
+  static const String addHeadacheOnGoingScreenRouter = '/addHeadacheOnGoingScreenRouter';
+
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -283,6 +287,22 @@ class Constant {
   static String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
+  static String end = 'END';
+  static String tapHereToEnd = 'Headache in progress. Tap here to end.';
+  static String onAScaleOf1To10 = 'On a scale of 1 - 10, how painful is this headache?';
+  static String min = 'MIN';
+  static String max = 'MAX';
+  static String one = '1';
+  static String ten = '10';
+  static String mild = 'MILD';
+  static String veryPainful = 'VERY\nPAINFUL';
+  static String onAScaleOf1To10Disability = 'On a scale of 1- 10, how much disability are you experienciing as result of this headache?';
+  static String noneAtALL = 'NONE AT\nALL';
+  static String totalDisability = 'TOTAL\nDISABILITY';
+  static String addANote = '+ Add a Note';
+  static String at = 'at';
+  static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
+  static String reset = 'Reset';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -316,6 +336,7 @@ class Constant {
   static Color splashTextColor = Color(0xff0E232F);
   static Color splashMigraineMentorTextColor = Color(0xff30af72);
   static Color doubleTapTextColor = Color(0xff1DAA6D);
+  static Color sliderTrackColor = Color(0xff434351);
 
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);

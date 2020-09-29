@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -10,12 +15,41 @@ class CurrentHeadacheProgressScreen extends StatefulWidget {
 
 class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressScreen>{
   DateTime _dateTime;
+  int _totalTime = 0; //in minutes
+  Timer _timer;
+
+  String _displayTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
+    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+      if(_totalTime == (24*60)) {
+        timer.cancel();
+      } else {
+        setState(() {
+          _totalTime++;
+        });
+      }
+    });
+
+    _displayTime = '0 h 0 m';
+  }
+
+  String _getDisplayTime() {
+    int hours = _totalTime ~/ 60;
+    int minutes = _totalTime % 60;
+
+    return '$hours h $minutes m';
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer.cancel();
   }
 
 
@@ -79,13 +113,14 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                       ),
                       SizedBox(height: 50,),
                       Container(
+                        width: 170,
                         height: 170,
                         child: Stack(
                           children: [
                             Align(
                               alignment: Alignment.center,
                               child: ClipPath(
-                                clipper: ProgressClipper(percent: (((16*60) + 45)/(24 * 60)) * 100),
+                                clipper: ProgressClipper(percent: ((_totalTime)/(24 * 60)) * 100),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -100,6 +135,11 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                                 ),
                               )
                             ),
+                            /*Container(
+                              child: GradientProgressBar(
+                                painter: GradientProgressBarPainter(),
+                              ),
+                            ),*/
                             Align(
                               alignment: Alignment.center,
                               child: Container(
@@ -110,7 +150,7 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '16h 45m',
+                                    _getDisplayTime(),
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontFamily: Constant.jostMedium,
@@ -152,7 +192,9 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           BouncingWidget(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
+                            },
                             child: Container(
                               width: 150,
                               padding: EdgeInsets.symmetric(vertical: 13),
@@ -323,4 +365,48 @@ class ProgressClipper extends CustomClipper<Path> {
     // TODO: implement shouldReclip
     return true;
   }
+}
+
+class GradientProgressBar extends SingleChildRenderObjectWidget {
+  GradientProgressBar({
+    Key key,
+    this.painter,
+    Widget child,
+  }) : super(key: key, child: child);
+
+  final CustomPainter painter;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return RenderCustomPaint(
+      painter: painter,
+    );
+  }
+
+  @override
+  void updateRenderObject(BuildContext context, RenderCustomPaint renderObject) {
+    renderObject..painter = painter;
+  }
+}
+
+class GradientProgressBarPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: implement paint
+    final paint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Constant.chatBubbleGreen;
+
+    print(size.width);
+
+    var circleRect = Offset(85, 0) & Size(170, 170);
+    canvas.drawArc(circleRect, -pi/3, pi*3, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return true;
+  }
+
 }

@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
@@ -326,8 +327,8 @@ class _HomeState extends State<Home> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                onTap: () {},
+                              BouncingWidget(
+                                onPressed: () {},
                                 child: Container(
                                   key: _keyLogDay,
                                   padding: EdgeInsets.symmetric(
@@ -358,8 +359,10 @@ class _HomeState extends State<Home> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {},
+                        BouncingWidget(
+                          onPressed: () {
+                            Navigator.pushNamed(context, Constant.headacheStartedScreenRouter);
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),

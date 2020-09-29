@@ -15,15 +15,15 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 70,
       child: ListView.builder(
         itemCount: widget.logOptions.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.only(right: 10),
-            width: 80,
-            height: 80,
+            width: 70,
+            height: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(

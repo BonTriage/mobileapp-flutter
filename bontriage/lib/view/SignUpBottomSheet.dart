@@ -175,11 +175,9 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       height: MediaQuery.of(context).size.height * 0.6,
       child: Column(
         children: <Widget>[
-
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: TextField(
