@@ -1,7 +1,6 @@
 import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
-import 'package:mobile/models/SignupModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -61,6 +60,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   void dispose() {
     // TODO: implement dispose
     _pageController.dispose();
+    welcomeOnBoardProfileBloc.dispose();
     super.dispose();
   }
 

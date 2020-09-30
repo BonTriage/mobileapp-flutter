@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/DateTimePicker.dart';
 
 class TimeSection extends StatefulWidget {
   @override
@@ -59,7 +61,9 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
@@ -95,7 +99,9 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        _openDatePickerBottomSheet(CupertinoDatePickerMode.time);
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
@@ -143,7 +149,9 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
+                            },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                               child: Text(
@@ -179,7 +187,9 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              _openDatePickerBottomSheet(CupertinoDatePickerMode.time);
+                            },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                               child: Text(
@@ -239,6 +249,21 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
           ),
         ),
       ],
+    );
+  }
+
+  void _openDatePickerBottomSheet(CupertinoDatePickerMode cupertinoDatePickerMode) {
+    showBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DateTimePicker(
+          cupertinoDatePickerMode: cupertinoDatePickerMode,
+        )
     );
   }
 }

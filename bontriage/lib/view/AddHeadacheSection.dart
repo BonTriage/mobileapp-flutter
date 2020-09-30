@@ -8,8 +8,10 @@ class AddHeadacheSection extends StatefulWidget {
   final String headerText;
   final String subText;
   final String contentType;
+  final double min;
+  final double max;
 
-  const AddHeadacheSection({Key key, this.headerText, this.subText, this.contentType}) : super(key: key);
+  const AddHeadacheSection({Key key, this.headerText, this.subText, this.contentType, this.min, this.max}) : super(key: key);
   @override
   _AddHeadacheSectionState createState() => _AddHeadacheSectionState();
 }
@@ -18,7 +20,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection> {
 
   Widget _getSectionWidget() {
     switch(widget.contentType) {
-      case 'ht':
+      case 'headacheType':
         return CircleLogOptions(
           logOptions: [
             'abc',
@@ -31,28 +33,28 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection> {
             'abc',
           ],
         );
-      case 'time':
+      case 'onset':
         return TimeSection();
-      case 'in':
+      case 'severity':
         return SignUpAgeScreen(
-          sliderValue: 1,
+          sliderValue: widget.min,
           minText: Constant.one,
           maxText: Constant.ten,
-          sliderMinValue: 1,
-          sliderMaxValue: 10,
+          sliderMinValue: widget.min,
+          sliderMaxValue: widget.max,
           minTextLabel: Constant.mild,
           maxTextLabel: Constant.veryPainful,
           labelText: '',
           horizontalPadding: 0,
           isAnimate: false,
         );
-      case 'dis':
+      case 'disability':
         return SignUpAgeScreen(
-          sliderValue: 1,
+          sliderValue: widget.min,
           minText: Constant.one,
           maxText: Constant.ten,
-          sliderMinValue: 1,
-          sliderMaxValue: 10,
+          sliderMinValue: widget.min,
+          sliderMaxValue: widget.max,
           minTextLabel: Constant.noneAtALL,
           maxTextLabel: Constant.totalDisability,
           labelText: '',
@@ -60,7 +62,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection> {
           isAnimate: false,
         );
       default:
-        return null;
+        return Container();
     }
   }
   @override
