@@ -1,10 +1,12 @@
 
 import 'dart:convert';
 
+import 'QuestionsModel.dart';
 
 
-class SignUpOnBoardFirstStepModel {
-  SignUpOnBoardFirstStepModel({
+
+class SignUpOnBoardSecondStepModel {
+  SignUpOnBoardSecondStepModel({
     this.initialQuestionnaire,
     this.questionnaires,
   });
@@ -12,7 +14,7 @@ class SignUpOnBoardFirstStepModel {
   String initialQuestionnaire;
   List<Questionnaire> questionnaires;
 
-  factory SignUpOnBoardFirstStepModel.fromJson(Map<String, dynamic> json) => SignUpOnBoardFirstStepModel(
+  factory SignUpOnBoardSecondStepModel.fromJson(Map<String, dynamic> json) => SignUpOnBoardSecondStepModel(
     initialQuestionnaire: json["initial_questionnaire"],
     questionnaires: List<Questionnaire>.from(json["questionnaires"].map((x) => Questionnaire.fromJson(x))),
   );
@@ -66,11 +68,11 @@ class QuestionGroup {
   });
 
   int groupNumber;
-  List<Question> questions;
+  List<Questions> questions;
 
   factory QuestionGroup.fromJson(Map<String, dynamic> json) => QuestionGroup(
     groupNumber: json["group_number"],
-    questions: List<Question>.from(json["questions"].map((x) => Question.fromJson(x))),
+    questions: List<Questions>.from(json["questions"].map((x) => Questions.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,77 +81,7 @@ class QuestionGroup {
   };
 }
 
-class Question {
-  Question({
-    this.tag,
-    this.id,
-    this.questionType,
-    this.precondition,
-    this.next,
-    this.text,
-    this.helpText,
-    this.values,
-    this.min,
-    this.max,
-    this.updatedAt,
-    this.exclusiveValue,
-    this.phi,
-    this.required,
-    this.uiHints,
-  });
 
-  String tag;
-  int id;
-  QuestionType questionType;
-  String precondition;
-  String next;
-  Text text;
-  String helpText;
-  List<Value> values;
-  int min;
-  int max;
-  DateTime updatedAt;
-  String exclusiveValue;
-  int phi;
-  int required;
-  UiHints uiHints;
-
-  factory Question.fromJson(Map<String, dynamic> json) => Question(
-    tag: json["tag"],
-    id: json["id"],
-    questionType: questionTypeValues.map[json["question_type"]],
-    precondition: json["precondition"],
-    next: json["next"],
-    text: textValues.map[json["text"]],
-    helpText: json["help_text"],
-    values: List<Value>.from(json["values"].map((x) => Value.fromJson(x))),
-    min: json["min"],
-    max: json["max"],
-    updatedAt: DateTime.parse(json["updated_at"]),
-    exclusiveValue: json["exclusive_value"],
-    phi: json["phi"],
-    required: json["required"],
-    uiHints: uiHintsValues.map[json["ui_hints"]],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "tag": tag,
-    "id": id,
-    "question_type": questionTypeValues.reverse[questionType],
-    "precondition": precondition,
-    "next": next,
-    "text": textValues.reverse[text],
-    "help_text": helpText,
-    "values": List<dynamic>.from(values.map((x) => x.toJson())),
-    "min": min,
-    "max": max,
-    "updated_at": updatedAt.toIso8601String(),
-    "exclusive_value": exclusiveValue,
-    "phi": phi,
-    "required": required,
-    "ui_hints": uiHintsValues.reverse[uiHints],
-  };
-}
 
 enum QuestionType { SINGLE, NUMBER, INFO, MULTI }
 
@@ -174,25 +106,7 @@ final uiHintsValues = EnumValues({
   "minlabel= ;maxlabel= ": UiHints.MINLABEL_MAXLABEL
 });
 
-class Value {
-  Value({
-    this.valueNumber,
-    this.text,
-  });
 
-  String valueNumber;
-  String text;
-
-  factory Value.fromJson(Map<String, dynamic> json) => Value(
-    valueNumber: json["value_number"],
-    text: json["text"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "value_number": valueNumber,
-    "text": text,
-  };
-}
 
 class EnumValues<T> {
   Map<String, T> map;

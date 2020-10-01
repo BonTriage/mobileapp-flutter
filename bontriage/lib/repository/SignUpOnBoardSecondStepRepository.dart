@@ -2,7 +2,7 @@ import 'dart:convert';
 
 
 import 'package:http/http.dart' as http;
-import 'package:mobile/models/SignUpOnBoardFirstStepModel.dart';
+import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -19,7 +19,7 @@ class SignUpOnBoardFirstStepRepository{
       if(response is AppException){
         return response;
       }else{
-        album = SignUpOnBoardFirstStepModel.fromJson(json.decode(response));
+        album = SignUpOnBoardSecondStepModel.fromJson(json.decode(response));
         return album;
       }
     }catch(Exception){
