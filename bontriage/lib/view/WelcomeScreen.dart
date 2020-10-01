@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'slide_dots.dart';
@@ -42,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _pageViewWidgets = [
       WelcomePage(
         headerText: Constant.welcomeToMigraineMentor,
-        imagePath: Constant.brainShadow,
+        imagePath: Constant.logoShadow,
         subText: Constant.developedByATeam,
       ),
       WelcomePage(
@@ -90,8 +91,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     SizedBox(
                       height: 15,
                     ),
-                    GestureDetector(
-                      onTap: () {
+                    BouncingWidget(
+                      onPressed: () {
                         if (currentPageIndex != 2) {
                           currentPageIndex++;
                           _pageController.animateToPage(currentPageIndex,

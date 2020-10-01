@@ -1,6 +1,8 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/AddHeadacheLogBloc.dart';
+import 'package:mobile/models/AddHeadacheLogModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
@@ -12,12 +14,22 @@ class AddHeadacheOnGoingScreen extends StatefulWidget {
 
 class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> with SingleTickerProviderStateMixin {
   DateTime _dateTime;
+  AddHeadacheLogBloc _addHeadacheLogBloc;
+  String headacheType = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
+
+    _addHeadacheLogBloc = AddHeadacheLogBloc();
+    _addHeadacheLogBloc.fetchAddHeadacheLogData();
+  }
+
+  @override
+  void dispose() {
+    _addHeadacheLogBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,7 +75,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                       thickness: 1,
                       color: Constant.chatBubbleGreen,
                     ),
-                    AddHeadacheSection(
+                    /*AddHeadacheSection(
                       headerText: Constant.headacheType,
                       subText: Constant.whatKindOfHeadache,
                       contentType: 'ht',
@@ -82,6 +94,20 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                       headerText: Constant.intensity,
                       subText: Constant.onAScaleOf1To10,
                       contentType: 'dis',
+                    ),*/
+                    Container(
+                      child: StreamBuilder<dynamic>(
+                        stream: _addHeadacheLogBloc.addHeadacheLogDataStream,
+                        builder: (context, snapshot) {
+                          if(snapshot.hasData) {
+                            return Column(
+                              children: _getAddHeadacheSection(snapshot.data),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -157,5 +183,24 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
         ),
       ),
     );
+  }
+
+  List<Widget> _getAddHeadacheSection(List<dynamic> addHeadacheListData) {
+    List<Widget> listOfWidgets = [];
+
+    addHeadacheListData.forEach((element) {
+      listOfWidgets.add(
+          AddHeadacheSection(
+            headerText: element.text,
+            subText: element.helpText,
+            contentType: element.tag,
+            min: element.min.toDouble(),
+            max: element.max.toDouble(),
+            valuesList: element.values,
+          )
+      );
+    });
+
+    return listOfWidgets;
   }
 }
