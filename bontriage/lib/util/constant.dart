@@ -288,10 +288,10 @@ class Constant {
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
 
-  static const String profileName = 'profile.firstname';
-  static const String profileAge = 'profile.age';
-  static const String profileSex = 'profile.sex';
-  static const String profileLocation = 'profile.location';
+  static const String QuestionNumberType = 'number';
+  static const String QuestionTextType = 'text';
+  static const String QuestionSingleType = 'single';
+  static const String QuestionLocationType = 'location';
 
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
