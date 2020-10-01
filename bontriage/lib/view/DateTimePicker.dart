@@ -4,8 +4,9 @@ import 'package:mobile/util/constant.dart';
 
 class DateTimePicker extends StatefulWidget {
   final CupertinoDatePickerMode cupertinoDatePickerMode;
+  final Function(DateTime) onDateTimeSelected;
 
-  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode}) : super(key: key);
+  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode, @required this.onDateTimeSelected}) : super(key: key);
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
@@ -13,12 +14,14 @@ class DateTimePicker extends StatefulWidget {
 
 class _DateTimePickerState extends State<DateTimePicker> {
   DateTime _dateTime;
+  DateTime _selectedDateTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
+    _selectedDateTime = _dateTime;
   }
 
   @override
@@ -53,13 +56,19 @@ class _DateTimePickerState extends State<DateTimePicker> {
                     alignment: Alignment.topRight,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 10, right: 15),
-                      child: Text(
-                        'Done',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: Constant.jostMedium,
-                          fontWeight: FontWeight.w500,
-                          color: Constant.locationServiceGreen
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.onDateTimeSelected(_selectedDateTime);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: Constant.jostMedium,
+                            fontWeight: FontWeight.w500,
+                            color: Constant.locationServiceGreen
+                          ),
                         ),
                       ),
                     ),
@@ -77,11 +86,10 @@ class _DateTimePickerState extends State<DateTimePicker> {
                           backgroundColor: Colors.transparent,
                           mode: widget.cupertinoDatePickerMode,
                           use24hFormat: false,
+                          maximumDate: _dateTime,
+                          maximumYear: _dateTime.year,
                           onDateTimeChanged: (dateTime) {
-                            print(dateTime);
-                            setState(() {
-                              _dateTime = dateTime;
-                            });
+                            _selectedDateTime = dateTime;
                           },
                         ),
                       ),

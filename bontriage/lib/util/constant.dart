@@ -367,6 +367,7 @@ class Constant {
   static String chartShadow = 'images/chart_shadow.png';
   static String notifsGreenShadow = 'images/notifs_green_shadow.png';
   static String rightArrow = 'images/right_arrow.png';
+  static String logoShadow = 'images/logo_shadow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/AddHeadacheLogBloc.dart';
+import 'package:mobile/models/AddHeadacheLogModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
@@ -14,6 +15,7 @@ class AddHeadacheOnGoingScreen extends StatefulWidget {
 class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   AddHeadacheLogBloc _addHeadacheLogBloc;
+  String headacheType = '';
 
   @override
   void initState() {
@@ -194,6 +196,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
             contentType: element.tag,
             min: element.min.toDouble(),
             max: element.max.toDouble(),
+            valuesList: element.values,
           )
       );
     });

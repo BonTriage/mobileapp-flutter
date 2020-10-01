@@ -156,10 +156,12 @@ class Value {
   Value({
     this.valueNumber,
     this.text,
+    this.isSelected = false
   });
 
   String valueNumber;
   String text;
+  bool isSelected;
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
     valueNumber: json["value_number"],
@@ -169,5 +171,6 @@ class Value {
   Map<String, dynamic> toJson() => {
     "value_number": valueNumber,
     "text": text,
+    "isSelected": isSelected,
   };
 }

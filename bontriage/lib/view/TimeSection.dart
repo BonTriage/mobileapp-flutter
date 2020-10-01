@@ -9,8 +9,13 @@ class TimeSection extends StatefulWidget {
   _TimeSectionState createState() => _TimeSectionState();
 }
 
-class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStateMixin{
+class _TimeSectionState extends State<TimeSection>
+    with SingleTickerProviderStateMixin {
   DateTime _dateTime;
+  DateTime _selectedStartDate;
+  DateTime _selectedEndDate;
+  DateTime _selectedStartTime;
+  DateTime _selectedEndTime;
   AnimationController _animationController;
   bool _isEndTimeExpanded = false;
 
@@ -34,6 +39,53 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
     super.dispose();
   }
 
+  void _onStartDateSelected(DateTime dateTime) {
+    DateTime currentDateTime = DateTime.now();
+
+    if (currentDateTime.isAfter(dateTime) ||
+        currentDateTime.isAtSameMomentAs(dateTime)) {
+      setState(() {
+        _selectedStartDate = dateTime;
+      });
+    }
+  }
+
+  void _onEndDateSelected(DateTime dateTime) {
+    DateTime currentDateTime = DateTime.now();
+
+    if (currentDateTime.isAfter(dateTime) ||
+        currentDateTime.isAtSameMomentAs(dateTime)) {
+      setState(() {
+        _selectedEndDate = dateTime;
+      });
+    }
+    print(dateTime);
+  }
+
+  void _onStartTimeSelected(DateTime dateTime) {
+    DateTime currentDateTime = DateTime.now();
+
+    if (currentDateTime.isAfter(dateTime) ||
+        currentDateTime.isAtSameMomentAs(dateTime)) {
+      setState(() {
+        _selectedStartTime = dateTime;
+      });
+    }
+    print(dateTime);
+  }
+
+  void _onEndTimeSelected(DateTime dateTime) {
+    DateTime currentDateTime = DateTime.now();
+
+    if (currentDateTime.isAfter(dateTime) ||
+        currentDateTime.isAtSameMomentAs(dateTime)) {
+      setState(() {
+        _selectedEndTime = dateTime;
+      });
+    }
+    print(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,11 +97,12 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
             style: TextStyle(
                 fontSize: 14,
                 color: Constant.locationServiceGreen,
-                fontFamily: Constant.jostRegular
-            ),
+                fontFamily: Constant.jostRegular),
           ),
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Row(
           children: [
             Align(
@@ -62,17 +115,20 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
+                        _openDatePickerBottomSheet(
+                            CupertinoDatePickerMode.date, 0);
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
-                          'Aug 16, 2020',
+                          (_selectedStartDate == null)
+                              ? 'Aug 16, 2020'
+                              : _getDateTime(_selectedStartDate, 0),
                           style: TextStyle(
                               color: Constant.splashColor,
                               fontFamily: Constant.jostRegular,
-                              fontSize: 14
-                          ),
+                              fontSize: 14),
                         ),
                       ),
                     ),
@@ -80,16 +136,19 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                 ),
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Text(
               Constant.at,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.locationServiceGreen,
-                  fontFamily: Constant.jostRegular
-              ),
+                  fontFamily: Constant.jostRegular),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: ClipRRect(
@@ -100,17 +159,20 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        _openDatePickerBottomSheet(CupertinoDatePickerMode.time);
+                        _openDatePickerBottomSheet(
+                            CupertinoDatePickerMode.time, 1);
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
-                          '10:30 AM',
+                          (_selectedStartTime == null)
+                              ? '10:30 AM'
+                              : _getDateTime(_selectedStartTime, 1),
                           style: TextStyle(
                               color: Constant.splashColor,
                               fontFamily: Constant.jostRegular,
-                              fontSize: 14
-                          ),
+                              fontSize: 14),
                         ),
                       ),
                     ),
@@ -120,7 +182,9 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
             ),
           ],
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -128,8 +192,7 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
             style: TextStyle(
                 fontSize: 14,
                 color: Constant.locationServiceGreen,
-                fontFamily: Constant.jostRegular
-            ),
+                fontFamily: Constant.jostRegular),
           ),
         ),
         SizeTransition(
@@ -150,17 +213,20 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
+                              _openDatePickerBottomSheet(
+                                  CupertinoDatePickerMode.date, 2);
                             },
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               child: Text(
-                                '${Utils.getShortMonthName(_dateTime.month)} ${_dateTime.day}, ${_dateTime.year}',
+                                (_selectedEndDate == null)
+                                    ? '${Utils.getShortMonthName(_dateTime.month)} ${_dateTime.day}, ${_dateTime.year}'
+                                    : _getDateTime(_selectedEndDate, 0),
                                 style: TextStyle(
                                     color: Constant.splashColor,
                                     fontFamily: Constant.jostRegular,
-                                    fontSize: 14
-                                ),
+                                    fontSize: 14),
                               ),
                             ),
                           ),
@@ -168,16 +234,19 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     Constant.at,
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
-                        fontFamily: Constant.jostRegular
-                    ),
+                        fontFamily: Constant.jostRegular),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: ClipRRect(
@@ -188,17 +257,21 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              _openDatePickerBottomSheet(CupertinoDatePickerMode.time);
+                              _openDatePickerBottomSheet(
+                                  CupertinoDatePickerMode.time, 3);
                             },
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               child: Text(
-                                Utils.getTimeInAmPmFormat(_dateTime.hour, _dateTime.minute),
+                                (_selectedEndTime == null)
+                                    ? Utils.getTimeInAmPmFormat(
+                                        _dateTime.hour, _dateTime.minute)
+                                    : _getDateTime(_selectedEndTime, 1),
                                 style: TextStyle(
                                     color: Constant.splashColor,
                                     fontFamily: Constant.jostRegular,
-                                    fontSize: 14
-                                ),
+                                    fontSize: 14),
                               ),
                             ),
                           ),
@@ -206,22 +279,25 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     Constant.reset,
                     style: TextStyle(
                         fontSize: 12,
                         fontFamily: Constant.jostRegular,
                         fontWeight: FontWeight.w500,
-                        color: Constant.addCustomNotificationTextColor
-                    ),
+                        color: Constant.addCustomNotificationTextColor),
                   ),
                 ],
               ),
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: GestureDetector(
@@ -229,22 +305,22 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
               setState(() {
                 _isEndTimeExpanded = !_isEndTimeExpanded;
 
-                if(_isEndTimeExpanded) {
+                if (_isEndTimeExpanded) {
                   _dateTime = DateTime.now();
                   _animationController.forward();
                 } else {
                   _animationController.reverse();
                 }
               });
-
             },
             child: Text(
-              (_isEndTimeExpanded) ? Constant.tapHereIfInProgress :Constant.tapHereToEnd,
+              (_isEndTimeExpanded)
+                  ? Constant.tapHereIfInProgress
+                  : Constant.tapHereToEnd,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.addCustomNotificationTextColor,
-                  fontFamily: Constant.jostRegular
-              ),
+                  fontFamily: Constant.jostRegular),
             ),
           ),
         ),
@@ -252,18 +328,54 @@ class _TimeSectionState extends State<TimeSection> with SingleTickerProviderStat
     );
   }
 
-  void _openDatePickerBottomSheet(CupertinoDatePickerMode cupertinoDatePickerMode) {
-    showBottomSheet(
+  Function _getDateTimeCallbackFunction(int whichPickerClicked) {
+    switch (whichPickerClicked) {
+      case 0:
+        return _onStartDateSelected;
+      case 1:
+        return _onStartTimeSelected;
+      case 2:
+        return _onEndDateSelected;
+      case 3:
+        return _onEndTimeSelected;
+      default:
+        return null;
+    }
+  }
+
+  ///@param dateTime: DateTime instance
+  ///@param type: 0 for date, 1 for time
+  String _getDateTime(DateTime dateTime, int type) {
+    String dateTimeString = '';
+    switch (type) {
+      case 0:
+        dateTimeString =
+            '${Utils.getShortMonthName(dateTime.month)} ${dateTime.day}, ${dateTime.year}';
+        return dateTimeString;
+      case 1:
+        dateTimeString =
+            Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+        return dateTimeString;
+      default:
+        return dateTimeString;
+    }
+  }
+
+  /// @param cupertinoDatePickerMode: for time and date mode selection
+  /// @param whichPickerClicked: 0 for startDate, 1 for startTime, 2 for endDate, 3 for endTime
+  void _openDatePickerBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode, int whichPickerClicked) {
+    showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10)),
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
         builder: (context) => DateTimePicker(
-          cupertinoDatePickerMode: cupertinoDatePickerMode,
-        )
-    );
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected:
+                  _getDateTimeCallbackFunction(whichPickerClicked),
+            ));
   }
 }
