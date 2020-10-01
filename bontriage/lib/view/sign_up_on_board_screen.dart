@@ -262,12 +262,12 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     );
   }
 
-  addFilteredQuestionListData(List<Questions> questionListData) {
+  addFilteredQuestionListData(List<dynamic> questionListData) {
     if (questionListData != null) {
       questionListData.forEach((element) {
 
         switch (element.questionType){
-          case "number":
+          case Constant.QuestionNumberType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: SignUpAgeScreen(
@@ -280,14 +280,14 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 )));
             break;
 
-          case "text":
+          case Constant.QuestionTextType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: SignUpNameScreen()));
             break;
 
-          case "single":
-          List<OnBoardSelectOptionModel> valuesListData;
+          case Constant.QuestionSingleType:
+          List<OnBoardSelectOptionModel> valuesListData = [];
           element.values.forEach((element) {
             valuesListData.add(OnBoardSelectOptionModel(optionId: element.valueNumber,optionText: element.text));
           });
@@ -297,7 +297,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 selectOptionList: valuesListData,
               )));
           break;
-          case "location":
+          case Constant.QuestionLocationType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: SignUpLocationServices()));

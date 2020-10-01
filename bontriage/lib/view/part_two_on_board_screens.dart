@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/SignUpOnBoardSecondStepBloc.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_bottom_buttons.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
+import 'package:mobile/view/sign_up_location_services.dart';
+import 'package:mobile/view/sign_up_name_screen.dart';
 
 class PartTwoOnBoardScreens extends StatefulWidget {
   @override
@@ -20,9 +24,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   int _currentPageIndex = 0;
   double _progressPercent = 0;
 
-  List<Widget> _pageViewWidgetList;
+  List<SignUpOnBoardFirstStepQuestionsModel> _pageViewWidgetList;
   bool isEndOfOnBoard = false;
-  
+  bool isAlreadyDataFiltered = false;
+  SignUpOnBoardSecondStepBloc _signUpOnBoardSecondStepBloc;
+
   List<String> _questionList = [
     Constant.atWhatAge,
     Constant.headacheChanged,
@@ -47,12 +53,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         _progressPercent -= stepOneProgress;
         _currentPageIndex--;
         _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 1),
-            curve: Curves.easeIn);
+            duration: Duration(milliseconds: 1), curve: Curves.easeIn);
       }
     });
   }
-  
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -64,8 +69,15 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _signUpOnBoardSecondStepBloc = SignUpOnBoardSecondStepBloc();
+    _signUpOnBoardSecondStepBloc.fetchSignUpOnBoardSecondStepData();
 
     _pageViewWidgetList = [
+      SignUpOnBoardFirstStepQuestionsModel(
+          questions: Constant.firstBasics, questionsWidget: Container())
+    ];
+
+/*    _pageViewWidgetList = [
       SignUpAgeScreen(
         sliderValue: 3,
         sliderMinValue: 3,
@@ -74,10 +86,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         maxText: '72',
         labelText: Constant.yearsOld,
       ),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
       SignUpAgeScreen(
         sliderValue: 0,
         sliderMinValue: 0,
@@ -86,54 +100,74 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         maxText: '20+',
         labelText: Constant.times,
       ),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.lessThanFiveMinutes),
-        OnBoardSelectOptionModel(optionText: Constant.fiveToTenMinutes),
-        OnBoardSelectOptionModel(optionText: Constant.tenToThirtyMinutes),
-        OnBoardSelectOptionModel(optionText: Constant.moreThanThirtyMinutes),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.fewSecAtATime),
-        OnBoardSelectOptionModel(optionText: Constant.fewSecUpTo20Min),
-        OnBoardSelectOptionModel(optionText: Constant.moreThan20Min),
-        OnBoardSelectOptionModel(optionText: Constant.moreThan3To4Hours),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.alwaysOneSide),
-        OnBoardSelectOptionModel(optionText: Constant.usuallyOnOneSide),
-        OnBoardSelectOptionModel(optionText: Constant.usuallyOnBothSide),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-      OnBoardSelectOptions(selectOptionList: [
-        OnBoardSelectOptionModel(optionText: Constant.yes),
-        OnBoardSelectOptionModel(optionText: Constant.no),
-      ],),
-    ];
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.lessThanFiveMinutes),
+          OnBoardSelectOptionModel(optionText: Constant.fiveToTenMinutes),
+          OnBoardSelectOptionModel(optionText: Constant.tenToThirtyMinutes),
+          OnBoardSelectOptionModel(optionText: Constant.moreThanThirtyMinutes),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.fewSecAtATime),
+          OnBoardSelectOptionModel(optionText: Constant.fewSecUpTo20Min),
+          OnBoardSelectOptionModel(optionText: Constant.moreThan20Min),
+          OnBoardSelectOptionModel(optionText: Constant.moreThan3To4Hours),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.alwaysOneSide),
+          OnBoardSelectOptionModel(optionText: Constant.usuallyOnOneSide),
+          OnBoardSelectOptionModel(optionText: Constant.usuallyOnBothSide),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+      OnBoardSelectOptions(
+        selectOptionList: [
+          OnBoardSelectOptionModel(optionText: Constant.yes),
+          OnBoardSelectOptionModel(optionText: Constant.no),
+        ],
+      ),
+    ];*/
 
-    _progressPercent = 1 / _pageViewWidgetList.length;
+  //  _progressPercent = 1 / _pageViewWidgetList.length;
   }
 
   @override
@@ -141,6 +175,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -156,20 +191,28 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             children: [
               OnBoardChatBubble(
                 isEndOfOnBoard: isEndOfOnBoard,
-                chatBubbleText: _questionList[_currentPageIndex],
+                chatBubbleText:
+                    _pageViewWidgetList[_currentPageIndex].questions,
               ),
               SizedBox(
                 height: 50,
               ),
               Expanded(
-                  child: PageView.builder(
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _pageViewWidgetList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _pageViewWidgetList[index];
-                },
-              )),
+                  child: StreamBuilder<dynamic>(
+                      stream: _signUpOnBoardSecondStepBloc
+                          .signUpOnBoardSecondStepDataStream,
+                      builder: (context, snapshot) {
+                        if (!isAlreadyDataFiltered)
+                          addFilteredQuestionListData(snapshot.data);
+                        return PageView.builder(
+                          controller: _pageController,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: _pageViewWidgetList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _pageViewWidgetList[index].questionsWidget;
+                          },
+                        );
+                      })),
               OnBoardBottomButtons(
                 progressPercent: _progressPercent,
                 backButtonFunction: _onBackPressed,
@@ -178,16 +221,15 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     double stepOneProgress = 1 / _pageViewWidgetList.length;
 
                     if (_progressPercent == 1) {
-                       isEndOfOnBoard = true;
-                       TextToSpeechRecognition.pauseSpeechToText(
-                           true, "");
-                      Navigator.pushReplacementNamed(context, Constant.onBoardHeadacheNameScreenRouter);
+                      isEndOfOnBoard = true;
+                      TextToSpeechRecognition.pauseSpeechToText(true, "");
+                      Navigator.pushReplacementNamed(
+                          context, Constant.onBoardHeadacheNameScreenRouter);
                       //TODO: Move to next screen
                     } else {
                       _currentPageIndex++;
 
-                      if (_currentPageIndex !=
-                          _pageViewWidgetList.length - 1)
+                      if (_currentPageIndex != _pageViewWidgetList.length - 1)
                         _progressPercent += stepOneProgress;
                       else {
                         _progressPercent = 1;
@@ -206,5 +248,48 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         ),
       ),
     );
+  }
+
+  addFilteredQuestionListData(List<dynamic> questionListData) {
+    if (questionListData != null) {
+      questionListData.forEach((element) {
+        switch (element.questionType) {
+          case Constant.QuestionNumberType:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpAgeScreen(
+                  sliderValue: element.min.toDouble(),
+                  sliderMinValue: element.min.toDouble(),
+                  sliderMaxValue: element.max.toDouble(),
+                  minText: element.min.toString(),
+                  maxText: element.max.toString(),
+                  labelText: "",
+                )));
+            break;
+
+          case Constant.QuestionTextType:
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: SignUpNameScreen()));
+            break;
+
+          case Constant.QuestionSingleType:
+            List<OnBoardSelectOptionModel> valuesListData = [];
+            element.values.forEach((element) {
+              valuesListData.add(OnBoardSelectOptionModel(
+                  optionId: element.valueNumber, optionText: element.text));
+            });
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: OnBoardSelectOptions(
+                  selectOptionList: valuesListData,
+                )));
+            break;
+        }
+        isAlreadyDataFiltered = true;
+      });
+      print(questionListData);
+      _progressPercent = 1 / _pageViewWidgetList.length;
+    }
   }
 }
