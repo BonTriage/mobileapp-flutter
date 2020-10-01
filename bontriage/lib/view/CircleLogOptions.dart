@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class CircleLogOptions extends StatefulWidget {
-  final List<Value> logOptions;
+  final List<Values> logOptions;
 
   const CircleLogOptions({Key key, this.logOptions}) : super(key: key);
 

@@ -33,7 +33,7 @@ class AddHeadacheLogBloc {
         var addHeadacheLogListData = AddHeadacheLinearListFilter.getQuestionSeries(
             addHeadacheLogData.questionnaires[0].initialQuestion,
             addHeadacheLogData.questionnaires[0].questionGroups[0].questions);
-        print(addHeadacheLogListData);
+        print(addHeadacheLogListData[0].values);
         addHeadacheLogDataSink.add(addHeadacheLogListData);
       }
     } catch (Exception) {

@@ -81,7 +81,7 @@ class Questions {
 class Values {
   String valueNumber;
   String text;
-  bool isSelected;
+  bool isSelected = false;
 
   Values({this.valueNumber, this.text, this.isSelected = false});
 
@@ -94,6 +94,7 @@ class Values {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['value_number'] = this.valueNumber;
     data['text'] = this.text;
+    data['isSelected'] = this.isSelected;
     return data;
   }
 }
