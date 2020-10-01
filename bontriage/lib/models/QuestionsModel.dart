@@ -81,8 +81,9 @@ class Questions {
 class Values {
   String valueNumber;
   String text;
+  bool isSelected;
 
-  Values({this.valueNumber, this.text});
+  Values({this.valueNumber, this.text, this.isSelected = false});
 
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];

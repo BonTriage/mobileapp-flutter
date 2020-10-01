@@ -1,5 +1,6 @@
 import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
