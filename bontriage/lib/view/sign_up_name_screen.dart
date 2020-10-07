@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpNameScreen extends StatefulWidget {
+  final String tag;
+  final Function(String, String) selectedAnswerCallBack;
+
+  const SignUpNameScreen({Key key, this.tag, this.selectedAnswerCallBack})
+      : super(key: key);
+
   @override
   _SignUpNameScreenState createState() => _SignUpNameScreenState();
 }
 
-class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerProviderStateMixin {
+class _SignUpNameScreenState extends State<SignUpNameScreen>
+    with SingleTickerProviderStateMixin {
   AnimationController _animationController;
+
+  TextEditingController textEditingController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    textEditingController = TextEditingController();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
@@ -26,7 +38,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerPr
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
@@ -35,9 +47,12 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerPr
   @override
   void dispose() {
     // TODO: implement dispose
+    widget.selectedAnswerCallBack(widget.tag, textEditingController.text);
+    //  setAnswerValueInLocalDatabase(widget.tag);
     _animationController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
@@ -47,6 +62,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerPr
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
           child: TextField(
+            controller: textEditingController,
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontSize: 15,
@@ -69,4 +85,11 @@ class _SignUpNameScreenState extends State<SignUpNameScreen> with SingleTickerPr
       ),
     );
   }
+
+/* setAnswerValueInLocalDatabase(String tag) {
+    SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
+    SignUpOnBoardSelectedAnswersModel();
+    signUpOnBoardSelectedAnswersModel.selectedAnswers.add(
+        SelectedAnswers(questionTag: tag, answer: textEditingController.text));
+  }*/
 }

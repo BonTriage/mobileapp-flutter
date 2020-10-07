@@ -1,8 +1,13 @@
 import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
+import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
@@ -43,18 +48,26 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     Constant.likeToEnableLocationServices,
   ];
 
+  List<Questions> currentQuestionListData;
+
+  SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
+      SignUpOnBoardSelectedAnswersModel();
+
+  int currentScreenPosition = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     welcomeOnBoardProfileBloc = WelcomeOnBoardProfileBloc();
-    welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
-
+    signUpOnBoardSelectedAnswersModel.eventType = "0";
+    signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
     _pageViewWidgetList = [
       SignUpOnBoardFirstStepQuestionsModel(
           questions: Constant.firstBasics, questionsWidget: Container())
     ];
-
+    requestService();
+    getCurrentUserPosition();
   }
 
   @override
@@ -84,7 +97,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 child: StreamBuilder<dynamic>(
                     stream: welcomeOnBoardProfileBloc.albumDataStream,
                     builder: (context, snapshot) {
-                      if (!isAlreadyDataFiltered)
+                      if (snapshot.hasData)
                         addFilteredQuestionListData(snapshot.data);
                       return PageView.builder(
                         controller: _pageController,
@@ -161,6 +174,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                           scaleFactor: 1.5,
                           onPressed: () {
                             setState(() {
+                              getCurrentQuestionTag(_currentPageIndex);
                               if (_progressPercent == 0.55) {
                                 isEndOfOnBoard = true;
                                 TextToSpeechRecognition.pauseSpeechToText(
@@ -264,9 +278,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   addFilteredQuestionListData(List<dynamic> questionListData) {
     if (questionListData != null) {
+      currentQuestionListData = questionListData;
       questionListData.forEach((element) {
-
-        switch (element.questionType){
+        switch (element.questionType) {
           case Constant.QuestionNumberType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
@@ -277,75 +291,122 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   minText: element.min.toString(),
                   maxText: element.max.toString(),
                   labelText: "",
+                  currentTag: element.tag,
+                  selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
+                    print(currentTag + selectedUserAnswer);
+                    selectedAnswerListData(currentTag, selectedUserAnswer);
+                  },
                 )));
             break;
 
           case Constant.QuestionTextType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
-                questionsWidget: SignUpNameScreen()));
+                questionsWidget: SignUpNameScreen(
+                  tag: element.tag,
+                  selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
+                    print(currentTag + selectedUserAnswer);
+                    selectedAnswerListData(currentTag, selectedUserAnswer);
+                  },
+                )));
             break;
 
           case Constant.QuestionSingleType:
-          List<OnBoardSelectOptionModel> valuesListData = [];
-          element.values.forEach((element) {
-            valuesListData.add(OnBoardSelectOptionModel(optionId: element.valueNumber,optionText: element.text));
-          });
-          _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
-              questions: element.helpText,
-              questionsWidget: OnBoardSelectOptions(
-                selectOptionList: valuesListData,
-              )));
-          break;
+            List<OnBoardSelectOptionModel> valuesListData = [];
+            element.values.forEach((element) {
+              valuesListData.add(OnBoardSelectOptionModel(
+                  optionId: element.valueNumber, optionText: element.text));
+            });
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: OnBoardSelectOptions(
+                  selectOptionList: valuesListData,
+                  questionTag: element.tag,
+                  selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
+                    selectedAnswerListData(currentTag, selectedUserAnswer);
+                  },
+                )));
+            break;
           case Constant.QuestionLocationType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: SignUpLocationServices()));
             break;
         }
-   /*     switch (element.tag) {
-          case Constant.profileName:
-            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
-                questions: element.helpText,
-                questionsWidget: SignUpNameScreen()));
-
-            break;
-          case Constant.profileAge:
-            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
-                questions: element.helpText,
-                questionsWidget: SignUpAgeScreen(
-                  sliderValue: element.min.toDouble(),
-                  sliderMinValue: element.min.toDouble(),
-                  sliderMaxValue: element.max.toDouble(),
-                  minText: element.min.toString(),
-                  maxText: element.max.toString(),
-                  labelText: Constant.yearsOld,
-                )));
-
-            break;
-          case Constant.profileSex:
-            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
-                questions: element.helpText,
-                questionsWidget: OnBoardSelectOptions(
-                  selectOptionList: [
-                    OnBoardSelectOptionModel(optionText: Constant.woman),
-                    OnBoardSelectOptionModel(optionText: Constant.man),
-                    OnBoardSelectOptionModel(optionText: Constant.interSex),
-                    OnBoardSelectOptionModel(
-                        optionText: Constant.preferNotToAnswer)
-                  ],
-                )));
-
-            break;
-          case Constant.profileLocation:
-            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
-                questions: element.helpText,
-                questionsWidget: SignUpLocationServices()));
-            break;
-        }*/
         isAlreadyDataFiltered = true;
       });
+
+      _pageController = PageController(initialPage: currentScreenPosition);
       print(questionListData);
     }
+  }
+
+  void requestService() async {
+    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
+    if (isDataBaseExists) {
+      welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase();
+    } else {
+      welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
+    }
+  }
+
+  void getCurrentUserPosition() async {
+    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
+    if (isDataBaseExists) {
+      UserProgressDataModel userProgressModel =
+          await SignUpOnBoardProviders.db.getUserProgress();
+      currentScreenPosition = userProgressModel.userScreenPosition;
+      print(userProgressModel);
+    }
+  }
+
+  void getCurrentQuestionTag(int currentPageIndex) async {
+    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
+    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
+
+    if (!isDataBaseExists) {
+      userProgressDataModel =
+          await welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
+    } else {
+      int userProgressDataCount = await SignUpOnBoardProviders.db
+          .checkUserProgressDataAvailable(
+              SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+      userProgressDataModel.userId = "1";
+      userProgressDataModel.step = "0";
+      userProgressDataModel.userScreenPosition = currentPageIndex;
+      userProgressDataModel.questionTag =
+          currentQuestionListData[currentPageIndex].tag;
+
+      if (userProgressDataCount == 0) {
+        SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
+      } else {
+        SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
+      }
+    }
+  }
+
+  void selectedAnswerListData(String currentTag, String selectedUserAnswer) {
+    SelectedAnswers selectedAnswers;
+    if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
+      selectedAnswers = signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .firstWhere((model) => model.questionTag == currentTag,
+              orElse: () => null);
+    }
+    if (selectedAnswers != null) {
+      selectedAnswers.answer = selectedUserAnswer;
+    } else {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers.add(
+          SelectedAnswers(questionTag: currentTag, answer: selectedUserAnswer));
+      print(signUpOnBoardSelectedAnswersModel.selectedAnswers);
+    }
+    updateSelectedAnswerDataOnLocalDatabase();
+  }
+
+  updateSelectedAnswerDataOnLocalDatabase() {
+    var answerStringData =
+        Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
+    LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
+    localQuestionnaire.selectedAnswers = answerStringData;
+    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, "0");
   }
 }

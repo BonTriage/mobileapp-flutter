@@ -119,7 +119,7 @@ class _StateSignUpOnBoardBubbleTextView
           bottomButtonText: Constant.startAssessment,
           bottomButtonFunction: () {
             Navigator.pushReplacementNamed(
-                context, Constant.signUpOnBoardHeadacheQuestionRouter);
+                context, Constant.signUpOnBoardProfileQuestionRouter);
           },
           isShowSecondBottomButton: false),
     );

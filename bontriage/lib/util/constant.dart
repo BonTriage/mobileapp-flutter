@@ -16,7 +16,7 @@ class Constant {
   static const String signUpNameScreenRouter = '/signUpNameScreen';
   static const String signUpAgeScreenRouter = '/signUpAgeScreen';
   static const String signUpLocationServiceRouter = '/signUpLocationService';
-  static const String signUpOnBoardHeadacheQuestionRouter =
+  static const String signUpOnBoardProfileQuestionRouter =
       '/signUpOnBoardHeadacheQuestion';
   static const String partTwoOnBoardScreenRouter =
       '/partTwoOnBoardScreenRouter';
@@ -309,6 +309,8 @@ class Constant {
   static String at = 'at';
   static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
   static String reset = 'Reset';
+
+  static String tutorialsState = 'tutorialsState';
 
 
   //Dimensions

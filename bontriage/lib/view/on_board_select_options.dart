@@ -4,16 +4,25 @@ import 'package:mobile/util/constant.dart';
 
 class OnBoardSelectOptions extends StatefulWidget {
   final List<OnBoardSelectOptionModel> selectOptionList;
+  final Function(String, String) selectedAnswerCallBack;
+  final String questionTag;
 
-  const OnBoardSelectOptions({Key key, this.selectOptionList}) : super(key: key);
+  const OnBoardSelectOptions(
+      {Key key,
+      this.selectOptionList,
+      this.questionTag,
+      this.selectedAnswerCallBack})
+      : super(key: key);
 
   @override
   _OnBoardSelectOptionsState createState() => _OnBoardSelectOptionsState();
 }
 
-class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with SingleTickerProviderStateMixin {
+class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
+    with SingleTickerProviderStateMixin {
   List<bool> _optionSelectedList = [];
   AnimationController _animationController;
+  String selectedValue = "1";
 
   BoxDecoration _getBoxDecoration(int index) {
     if (!widget.selectOptionList[index].isSelected) {
@@ -63,7 +72,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with Single
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
@@ -73,6 +82,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with Single
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
+    widget.selectedAnswerCallBack(widget.questionTag, selectedValue);
     super.dispose();
   }
 
@@ -87,7 +97,8 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with Single
     return FadeTransition(
       opacity: _animationController,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+        padding: EdgeInsets.symmetric(
+            horizontal: Constant.chatBubbleHorizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -112,26 +123,30 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions> with Single
                       GestureDetector(
                         onTap: () {
                           setState(() {
+                            selectedValue =
+                                widget.selectOptionList[index].optionId;
                             _onOptionSelected(index);
                           });
                         },
                         child: Container(
                           decoration: _getBoxDecoration(index),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                             child: Text(
                               widget.selectOptionList[index].optionText,
                               style: TextStyle(
                                   fontSize: 14,
                                   color: _getOptionTextColor(index),
                                   fontFamily: Constant.jostRegular,
-                                  height: 1.2
-                              ),
+                                  height: 1.2),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                     ],
                   );
                 },
