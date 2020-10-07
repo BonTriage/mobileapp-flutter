@@ -1,12 +1,11 @@
-
-import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 
 class AddHeadacheLinearListFilter{
-  static List<Question> getQuestionSeries(String initialQuestion ,List<Question> questionGroup){
-    List<Question> localListOfDataPriority = new List<Question>();
+  static List<Questions> getQuestionSeries(String initialQuestion ,List<Questions> questionGroup){
+    List<Questions> localListOfDataPriority = new List<Questions>();
     var nextTag = initialQuestion;
     do{
-      Question model = questionGroup.firstWhere((model) => model.tag == nextTag);
+      Questions model = questionGroup.firstWhere((model) => model.tag == nextTag);
       localListOfDataPriority.add(model);
       nextTag = model.next;
       questionGroup.remove(model);

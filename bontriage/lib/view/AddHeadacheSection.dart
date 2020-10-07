@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
 import 'package:mobile/view/TimeSection.dart';
@@ -11,7 +12,7 @@ class AddHeadacheSection extends StatefulWidget {
   final String contentType;
   final double min;
   final double max;
-  final List<Value> valuesList;
+  final List<Values> valuesList;
 
   const AddHeadacheSection({Key key, this.headerText, this.subText, this.contentType, this.min, this.max, this.valuesList}) : super(key: key);
   @override

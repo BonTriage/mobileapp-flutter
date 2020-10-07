@@ -4,6 +4,8 @@
 
 
 
+import 'QuestionsModel.dart';
+
 class AddHeadacheLogModel {
   AddHeadacheLogModel({
     this.initialQuestionnaire,
@@ -67,11 +69,11 @@ class QuestionGroup {
   });
 
   int groupNumber;
-  List<Question> questions;
+  List<Questions> questions;
 
   factory QuestionGroup.fromJson(Map<String, dynamic> json) => QuestionGroup(
     groupNumber: json["group_number"],
-    questions: List<Question>.from(json["questions"].map((x) => Question.fromJson(x))),
+    questions: List<Questions>.from(json["questions"].map((x) => Questions.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -80,97 +82,3 @@ class QuestionGroup {
   };
 }
 
-class Question {
-  Question({
-    this.tag,
-    this.id,
-    this.questionType,
-    this.precondition,
-    this.next,
-    this.text,
-    this.helpText,
-    this.values,
-    this.min,
-    this.max,
-    this.updatedAt,
-    this.exclusiveValue,
-    this.phi,
-    this.required,
-    this.uiHints,
-  });
-
-  String tag;
-  int id;
-  String questionType;
-  String precondition;
-  String next;
-  String text;
-  String helpText;
-  List<Value> values;
-  int min;
-  int max;
-  DateTime updatedAt;
-  String exclusiveValue;
-  int phi;
-  int required;
-  String uiHints;
-
-  factory Question.fromJson(Map<String, dynamic> json) => Question(
-    tag: json["tag"],
-    id: json["id"],
-    questionType: json["question_type"],
-    precondition: json["precondition"],
-    next: json["next"],
-    text: json["text"],
-    helpText: json["help_text"],
-    values: List<Value>.from(json["values"].map((x) => Value.fromJson(x))),
-    min: json["min"],
-    max: json["max"],
-    updatedAt: DateTime.parse(json["updated_at"]),
-    exclusiveValue: json["exclusive_value"],
-    phi: json["phi"],
-    required: json["required"],
-    uiHints: json["ui_hints"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "tag": tag,
-    "id": id,
-    "question_type": questionType,
-    "precondition": precondition,
-    "next": next,
-    "text": text,
-    "help_text": helpText,
-    "values": List<dynamic>.from(values.map((x) => x.toJson())),
-    "min": min,
-    "max": max,
-    "updated_at": updatedAt.toIso8601String(),
-    "exclusive_value": exclusiveValue,
-    "phi": phi,
-    "required": required,
-    "ui_hints": uiHints,
-  };
-}
-
-class Value {
-  Value({
-    this.valueNumber,
-    this.text,
-    this.isSelected = false
-  });
-
-  String valueNumber;
-  String text;
-  bool isSelected;
-
-  factory Value.fromJson(Map<String, dynamic> json) => Value(
-    valueNumber: json["value_number"],
-    text: json["text"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "value_number": valueNumber,
-    "text": text,
-    "isSelected": isSelected,
-  };
-}
