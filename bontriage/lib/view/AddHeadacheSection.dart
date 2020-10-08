@@ -55,6 +55,29 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection> {
           horizontalPadding: 0,
           isAnimate: false,
         ));
+      case 'sleep':
+        return _getWidget(CircleLogOptions(
+          isForLogDay: true,
+          logOptions: widget.valuesList,
+        ));
+      case 'activity':
+        return _getWidget(CircleLogOptions(
+          logOptions: widget.valuesList,
+        ));
+      case 'meal_schedule':
+        return _getWidget(CircleLogOptions(
+          logOptions: widget.valuesList,
+        ));
+      case 'medications':
+        return _getWidget(CircleLogOptions(
+          isForLogDay: true,
+          logOptions: widget.valuesList,
+        ));
+      case 'triggers':
+        return _getWidget(CircleLogOptions(
+          isForLogDay: true,
+          logOptions: widget.valuesList,
+        ));
       default:
         return Container();
     }

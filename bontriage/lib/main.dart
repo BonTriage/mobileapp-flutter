@@ -7,6 +7,7 @@ import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
@@ -20,6 +21,7 @@ import 'package:mobile/view/PostPartThreeOnBoardScreen.dart';
 import 'package:mobile/view/PrePartTwoOnBoardScreen.dart';
 import 'package:mobile/view/PartTwoOnBoardMoveOnScreen.dart';
 import 'package:mobile/view/PrePartThreeOnBoardScreen.dart';
+import 'package:mobile/view/RecordDayScreen.dart';
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSecondStepPersonalizedHeadacheCompass..dart';
@@ -72,7 +74,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnBoardCreateAccount(),
+      home: RecordDayScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:

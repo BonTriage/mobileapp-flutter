@@ -212,9 +212,7 @@ class Constant {
       'Until you complete the assessment, your personalized headache profile will be incomplete. Without a complete profile, MigraineMentor can’t create a predictive model, and won’t be able to alert you when you are at risk for headaches or suggest steps to avoid them.';
   static String letsBeginBySeeing =
       'Let’s begin by seeing what your headaches look like by creating a Compass Diagram of your most problematic headache. Just answer a few questions and you will see your headache like a headache specialist does.';
-
   static String searchYourType = 'Search or Type your own';
-
   static String suspectTriggerYourHeadache =
       'Which of the following do you suspect trigger your headaches?';
   static String followingMedications =
@@ -223,29 +221,22 @@ class Constant {
       'Which of the following devices have you tried to improve your headache?';
   static String followingLifeStyle =
       'Which of the following lifestyle interventions have you tried to help manage your headache?';
-
   static String searchType = 'Search or type your own';
-
   static String signUp = 'Sign Up';
   static String cancel = 'Cancel';
   static String register = 'Register';
   static String login = 'Login';
   static String secureMigraineMentorAccount =
       'Please complete the information below to create your secure MigraineMentor account.';
-
   static String termsAndCondition =
       'I agree to the Terms & Conditions and Privacy\nPolicy';
   static String emailFromMigraineMentor =
       'I\'d like to receive emails from MigraineMentor\nregarding my progress and app updates';
-
   static String accurateClinicalImpression =
       'This is not a diagnosis, but it is an accurate clinical impression, based,on your answer, of how your headache best matches up to known headache types. If you haven\'t already done so, you should see a qualified medical professional for a firm diagnosis.';
-
   static String moreDetailedHistory =
       'You can also provide a much more detailed history, have an opportunity to explain your headaches in greater detail, and get a more complete to take to your doctor report an BonTriage.com';
-
   static String viewDetailedReport = 'View detailed report';
-
   static String tapToType = 'Tap to type';
   static String greatWeAreDone =
       'Great we’re done with that part! For your future reference of this headache in the app, what would you like to call this type of headache?';
@@ -257,7 +248,6 @@ class Constant {
   static String genderNonConforming = 'Gender non-conforming';
   static String preferNotToAnswer = 'Prefer not to answer';
   static String interSex = 'Intersex';
-
   static String compass = 'Compass';
   static String intensity = 'Intensity';
   static String frequency = 'Frequency';
@@ -287,12 +277,10 @@ class Constant {
   static String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
-
   static const String QuestionNumberType = 'number';
   static const String QuestionTextType = 'text';
   static const String QuestionSingleType = 'single';
   static const String QuestionLocationType = 'location';
-
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 = 'On a scale of 1 - 10, how painful is this headache?';
@@ -309,7 +297,7 @@ class Constant {
   static String at = 'at';
   static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
   static String reset = 'Reset';
-
+  static String submit = 'Submit';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -332,11 +320,12 @@ class Constant {
   static Color locationServiceGreen = Color(0xffCAD7BF);
   static Color bubbleChatTextView = Color(0xff0E1712);
   static Color chatBubbleGreenTransparent = Color(0x26AFD794);
+  static Color chatBubbleGreen60Alpha = Color(0x99AFD794);
+
   static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
   static Color transparentColor = Colors.transparent;
   static Color backgroundTransparentColor = Color(0xff0E4C47);
   static Color oliveGreen = Color(0xff263E3E);
-
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);
   static Color unselectedTextColor = Color(0x80AFD794);
@@ -345,9 +334,9 @@ class Constant {
   static Color splashMigraineMentorTextColor = Color(0xff30af72);
   static Color doubleTapTextColor = Color(0xff1DAA6D);
   static Color sliderTrackColor = Color(0xff434351);
-
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
+  static Color pinkTriggerColor = Color(0xffF479D9);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -368,6 +357,16 @@ class Constant {
   static String notifsGreenShadow = 'images/notifs_green_shadow.png';
   static String rightArrow = 'images/right_arrow.png';
   static String logoShadow = 'images/logo_shadow.png';
+  static String backArrow = 'images/back_arrow.png';
+  static String nextArrow = 'images/next_arrow.png';
+  static String migraineIcon = 'images/migraine_icon.png';
+  static String mealIcon = 'images/meal_icon.png';
+  static String pillIcon = 'images/pill_icon.png';
+  static String sleepIcon = 'images/sleep_icon.png';
+  static String waterDropIcon = 'images/water_drop_icon.png';
+  static String weatherIcon = 'images/weather_icon.png';
+  static String warningPink = 'images/warning_pink.png';
+  static String addCircleIcon = 'images/add_circle_icon.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

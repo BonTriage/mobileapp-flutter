@@ -146,7 +146,13 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                                 height: 120,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Color(0xffB8E1FF),
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: <Color>[
+                                        Color(0xff0E4C47),
+                                        Color(0xff0E232F),
+                                      ]),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -154,7 +160,7 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontFamily: Constant.jostMedium,
-                                      color: Constant.bubbleChatTextView
+                                      color: Constant.chatBubbleGreen
                                     ),
                                   ),
                                 ),
