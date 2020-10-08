@@ -6,8 +6,13 @@ import 'package:mobile/util/constant.dart';
 class SignUpNameScreen extends StatefulWidget {
   final String tag;
   final Function(String, String) selectedAnswerCallBack;
+  final List<SelectedAnswers> selectedAnswerListData;
 
-  const SignUpNameScreen({Key key, this.tag, this.selectedAnswerCallBack})
+  const SignUpNameScreen(
+      {Key key,
+      this.tag,
+      this.selectedAnswerListData,
+      this.selectedAnswerCallBack})
       : super(key: key);
 
   @override
@@ -17,14 +22,24 @@ class SignUpNameScreen extends StatefulWidget {
 class _SignUpNameScreenState extends State<SignUpNameScreen>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-
   TextEditingController textEditingController;
+  SelectedAnswers selectedAnswers;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     textEditingController = TextEditingController();
+
+   if(widget.selectedAnswerListData != null){
+     selectedAnswers = widget.selectedAnswerListData.firstWhere(
+             (model) => model.questionTag == widget.tag,
+         orElse: () => null);
+     if (selectedAnswers != null) {
+       textEditingController.text = selectedAnswers.answer;
+     }
+
+   }
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
@@ -86,10 +101,4 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
     );
   }
 
-/* setAnswerValueInLocalDatabase(String tag) {
-    SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
-    SignUpOnBoardSelectedAnswersModel();
-    signUpOnBoardSelectedAnswersModel.selectedAnswers.add(
-        SelectedAnswers(questionTag: tag, answer: textEditingController.text));
-  }*/
 }

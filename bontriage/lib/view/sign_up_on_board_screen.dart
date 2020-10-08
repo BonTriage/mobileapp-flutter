@@ -298,7 +298,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   minText: element.min.toString(),
                   maxText: element.max.toString(),
                   labelText: "",
-                  currentTag: element.tag,
+                  currentTag: element.tag,selectedAnswerListData:
+                signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -311,6 +312,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questions: element.helpText,
                 questionsWidget: SignUpNameScreen(
                   tag: element.tag,
+                  selectedAnswerListData:
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -328,7 +331,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questions: element.helpText,
                 questionsWidget: OnBoardSelectOptions(
                   selectOptionList: valuesListData,
-                  questionTag: element.tag,
+                  questionTag: element.tag, selectedAnswerListData:
+                signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
@@ -355,7 +359,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   void requestService() async {
     var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
     if (isDataBaseExists) {
-      welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase();
+      signUpOnBoardSelectedAnswersModel =
+          await welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase();
     } else {
       welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
     }

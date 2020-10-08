@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -53,20 +54,20 @@ class WelcomeOnBoardProfileBloc {
   fetchDataFromLocalDatabase() async {
     List<LocalQuestionnaire> localQuestionnaireData =
         await SignUpOnBoardProviders.db.getQuestionnaire();
-  LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
+    LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
         WelcomeOnBoardProfileModel();
     welcomeOnBoardProfileModel = WelcomeOnBoardProfileModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
         welcomeOnBoardProfileModel.questionnaires[0].initialQuestion,
-        welcomeOnBoardProfileModel.questionnaires[0].questionGroups[0].questions);
+        welcomeOnBoardProfileModel
+            .questionnaires[0].questionGroups[0].questions);
     signUpFirstStepDataSink.add(filterQuestionsListData);
+
+    return SignUpOnBoardSelectedAnswersModel.fromJson(
+        json.decode(localQuestionnaireEventData.selectedAnswers));
   }
 
- Future<UserProgressDataModel> fetchUserSignUpProgressLocalData() async {
-    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
-    userProgressDataModel = await SignUpOnBoardProviders.db.getUserProgress();
-      return userProgressDataModel;
-  }
+
 }

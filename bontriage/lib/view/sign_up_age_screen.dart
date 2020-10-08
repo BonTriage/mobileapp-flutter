@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 
@@ -16,18 +17,23 @@ class SignUpAgeScreen extends StatefulWidget {
   bool isAnimate;
   final String currentTag;
   final Function(String, String) selectedAnswerCallBack;
+  final List<SelectedAnswers> selectedAnswerListData;
 
 
-
-    SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true,this.currentTag,this.selectedAnswerCallBack})  : super(key: key);
+  SignUpAgeScreen(
+      {Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true, this.currentTag, this.selectedAnswerListData, this.selectedAnswerCallBack})
+      : super(key: key);
 
   @override
   _SignUpAgeScreenState createState() => _SignUpAgeScreenState();
 }
 
-class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProviderStateMixin {
+class _SignUpAgeScreenState extends State<SignUpAgeScreen>
+    with SingleTickerProviderStateMixin {
 
   AnimationController _animationController;
+
+  SelectedAnswers selectedAnswers;
 
   @override
   void initState() {
@@ -35,11 +41,25 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
     super.initState();
 
     _animationController = AnimationController(
-      duration: Duration(milliseconds: widget.isAnimate ? 800 : 0),
-      vsync: this
+        duration: Duration(milliseconds: widget.isAnimate ? 800 : 0),
+        vsync: this
     );
 
     _animationController.forward();
+
+    if (widget.selectedAnswerListData != null) {
+      selectedAnswers = widget.selectedAnswerListData.firstWhere(
+              (model) => model.questionTag == widget.currentTag,
+          orElse: () => null);
+      if (selectedAnswers != null) {
+        String selectedValue = selectedAnswers.answer;
+        try {
+          widget.sliderValue = double.parse(selectedValue);
+        } catch (e) {
+          e.toString();
+        }
+      }
+    }
   }
 
   @override
@@ -47,7 +67,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
@@ -57,7 +77,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
-    widget.selectedAnswerCallBack(widget.currentTag, widget.sliderValue.toString());
+    widget.selectedAnswerCallBack(
+        widget.currentTag, widget.sliderValue.toInt().toString());
     super.dispose();
   }
 
@@ -68,7 +89,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
       child: Container(
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: (widget.horizontalPadding == null) ? 15 : widget.horizontalPadding),
+            padding: EdgeInsets.symmetric(
+                horizontal: (widget.horizontalPadding == null) ? 15 : widget
+                    .horizontalPadding),
             child: Column(
               children: [
                 SizedBox(height: (widget.horizontalPadding == null) ? 40 : 15,),
@@ -111,7 +134,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
                               ),
                               SizedBox(height: 3,),
                               Text(
-                                (widget.minTextLabel == null) ? Constant.min : widget.minTextLabel,
+                                (widget.minTextLabel == null)
+                                    ? Constant.min
+                                    : widget.minTextLabel,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: Constant.chatBubbleGreen,
@@ -134,7 +159,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
                               ),
                               SizedBox(height: 3,),
                               Text(
-                                (widget.maxTextLabel == null) ? Constant.max : widget.maxTextLabel,
+                                (widget.maxTextLabel == null)
+                                    ? Constant.max
+                                    : widget.maxTextLabel,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   color: Constant.chatBubbleGreen,
