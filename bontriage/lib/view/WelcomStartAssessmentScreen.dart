@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 import '../util/constant.dart';
@@ -69,8 +70,7 @@ class _WelcomeStartAssessmentScreenState
                 SizedBox(height: 100),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, Constant.signUpOnBoardSplashRouter);
+                    navigateToUserOnProfileBoard();
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
@@ -105,7 +105,8 @@ class _WelcomeStartAssessmentScreenState
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, Constant.loginScreenRouter);
+                        Navigator.pushReplacementNamed(
+                            context, Constant.loginScreenRouter);
                       },
                       child: Text(
                         Constant.signIn,
@@ -146,5 +147,16 @@ class _WelcomeStartAssessmentScreenState
         ),
       ),
     );
+  }
+
+  void navigateToUserOnProfileBoard() async {
+    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
+    if (isDataBaseExists) {
+      Navigator.pushReplacementNamed(
+          context, Constant.signUpOnBoardProfileQuestionRouter);
+    } else {
+      Navigator.pushReplacementNamed(
+          context, Constant.signUpOnBoardSplashRouter);
+    }
   }
 }

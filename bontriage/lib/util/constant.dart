@@ -16,7 +16,7 @@ class Constant {
   static const String signUpNameScreenRouter = '/signUpNameScreen';
   static const String signUpAgeScreenRouter = '/signUpAgeScreen';
   static const String signUpLocationServiceRouter = '/signUpLocationService';
-  static const String signUpOnBoardHeadacheQuestionRouter =
+  static const String signUpOnBoardProfileQuestionRouter =
       '/signUpOnBoardHeadacheQuestion';
   static const String partTwoOnBoardScreenRouter =
       '/partTwoOnBoardScreenRouter';
@@ -298,6 +298,8 @@ class Constant {
   static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
   static String reset = 'Reset';
   static String submit = 'Submit';
+  static String tutorialsState = 'tutorialsState';
+
 
   //Dimensions
   static final double screenHorizontalPadding = 25;

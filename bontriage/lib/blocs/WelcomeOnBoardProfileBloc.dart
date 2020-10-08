@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/WelcomeOnBoardProfileRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 
@@ -18,7 +23,7 @@ class WelcomeOnBoardProfileBloc {
   WelcomeOnBoardProfileBloc({this.count = 0}) {
     _signUpFirstStepDataStreamController = StreamController<dynamic>();
     _welcomeOnBoardProfileRepository = WelcomeOnBoardProfileRepository();
-   // fetchSignUpFirstStepData();
+    // fetchSignUpFirstStepData();
   }
 
   fetchSignUpFirstStepData() async {
@@ -37,11 +42,31 @@ class WelcomeOnBoardProfileBloc {
         signUpFirstStepDataSink.add(filterQuestionsListData);
       }
     } catch (Exception) {
-    //  signUpFirstStepDataSink.add("Error");
+      //  signUpFirstStepDataSink.add("Error");
     }
   }
 
   void dispose() {
     _signUpFirstStepDataStreamController?.close();
+  }
+
+  fetchDataFromLocalDatabase() async {
+    List<LocalQuestionnaire> localQuestionnaireData =
+        await SignUpOnBoardProviders.db.getQuestionnaire();
+  LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
+    WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
+        WelcomeOnBoardProfileModel();
+    welcomeOnBoardProfileModel = WelcomeOnBoardProfileModel.fromJson(
+        json.decode(localQuestionnaireEventData.questionnaires));
+    var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+        welcomeOnBoardProfileModel.questionnaires[0].initialQuestion,
+        welcomeOnBoardProfileModel.questionnaires[0].questionGroups[0].questions);
+    signUpFirstStepDataSink.add(filterQuestionsListData);
+  }
+
+ Future<UserProgressDataModel> fetchUserSignUpProgressLocalData() async {
+    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
+    userProgressDataModel = await SignUpOnBoardProviders.db.getUserProgress();
+      return userProgressDataModel;
   }
 }

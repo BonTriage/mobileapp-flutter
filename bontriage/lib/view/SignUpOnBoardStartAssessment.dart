@@ -88,7 +88,7 @@ class _StateSignUpOnBoardStartAssessment
                       onPressed: () {
                         {
                           Navigator.pushReplacementNamed(context,
-                              Constant.signUpOnBoardHeadacheQuestionRouter);
+                              Constant.signUpOnBoardProfileQuestionRouter);
                         }
                       },
                       child: Container(

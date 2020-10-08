@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: RecordDayScreen(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
             {
               return SlideFromRightPageRoute(widget: SignUpLocationServices());
             }
-          case Constant.signUpOnBoardHeadacheQuestionRouter:
+          case Constant.signUpOnBoardProfileQuestionRouter:
             {
               return SlideFromBottomPageRoute(widget: SignUpOnBoardScreen());
             }

@@ -6,6 +6,7 @@ import 'package:mobile/util/constant.dart';
 
 import '../util/constant.dart';
 import '../util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -14,16 +15,12 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   Timer timer;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    timer = Timer.periodic(Duration(seconds: 2), (timer) {
-
-      Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
-      timer.cancel();
-    });
+    getTutorialsState();
   }
 
   @override
@@ -56,5 +53,23 @@ class _SplashState extends State<Splash> {
       ),
       backgroundColor: Constant.splashColor,
     );
+  }
+
+  void getTutorialsState() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isTutorialsHasSeen =
+        sharedPreferences.getBool(Constant.tutorialsState);
+    if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
+      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+        Navigator.pushReplacementNamed(
+            context, Constant.welcomeStartAssessmentScreenRouter);
+        timer.cancel();
+      });
+    } else {
+      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+        Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
+        timer.cancel();
+      });
+    }
   }
 }

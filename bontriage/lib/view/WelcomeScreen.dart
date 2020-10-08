@@ -1,14 +1,15 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 import 'slide_dots.dart';
 import 'WelcomePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
-
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   int currentPageIndex = 0;
@@ -99,8 +100,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               duration: Duration(milliseconds: 250),
                               curve: Curves.easeIn);
                         } else {
-                          Navigator.pushReplacementNamed(context,
-                              Constant.welcomeStartAssessmentScreenRouter);
+                          saveTutorialsState();
+                          Navigator.pushReplacementNamed(
+                              context, Constant.welcomeStartAssessmentScreenRouter);
                         }
                       },
                       child: Container(
@@ -132,5 +134,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
       ),
     );
+  }
+
+  void saveTutorialsState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.tutorialsState, true);
   }
 }

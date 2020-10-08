@@ -14,8 +14,12 @@ class SignUpAgeScreen extends StatefulWidget {
   String labelText = '';
   double horizontalPadding;
   bool isAnimate;
+  final String currentTag;
+  final Function(String, String) selectedAnswerCallBack;
 
-  SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true})  : super(key: key);
+
+
+    SignUpAgeScreen({Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true,this.currentTag,this.selectedAnswerCallBack})  : super(key: key);
 
   @override
   _SignUpAgeScreenState createState() => _SignUpAgeScreenState();
@@ -53,6 +57,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen> with SingleTickerProv
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
+    widget.selectedAnswerCallBack(widget.currentTag, widget.sliderValue.toString());
     super.dispose();
   }
 

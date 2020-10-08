@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constant.dart';
+
 class Utils {
   static String getMonthName(int monthNum) {
     String month = '';
@@ -112,4 +117,18 @@ class Utils {
 
     return time;
   }
+
+ static String getStringFromJson(dynamic jsonObject){
+    return jsonEncode(jsonObject);
+  }
+
+  Map<String,dynamic> _getJsonFromString(String response){
+    return json.decode(response);
+  }
+
+  static void saveTutorialsState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.tutorialsState, true);
+  }
+
 }
