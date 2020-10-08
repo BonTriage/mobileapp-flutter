@@ -14,7 +14,6 @@ class SignUpOnBoardProviders {
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
 
-
   SignUpOnBoardProviders._();
 
   static final SignUpOnBoardProviders db = SignUpOnBoardProviders._();
@@ -43,8 +42,8 @@ class SignUpOnBoardProviders {
       batch.execute("CREATE TABLE $TABLE_USER_PROGRESS ("
           "$USER_ID TEXT PRIMARY KEY,"
           "$STEP TEXT,"
-          "$QUESTION_TAG TEXT"
-          "$USER_SCREEN_POSITION INT"
+          "$QUESTION_TAG TEXT,"
+          "$USER_SCREEN_POSITION integer"
           ")");
       batch.execute("CREATE TABLE $TABLE_QUESTIONNAIRES ("
           "$EVENT_TYPE TEXT PRIMARY KEY,"
@@ -83,8 +82,8 @@ class SignUpOnBoardProviders {
   Future<UserProgressDataModel> getUserProgress() async {
     final db = await database;
     UserProgressDataModel userProgress;
-    var userProgressDetail = await db
-        .query(TABLE_USER_PROGRESS, columns: [USER_ID, STEP, QUESTION_TAG,USER_SCREEN_POSITION]);
+    var userProgressDetail = await db.query(TABLE_USER_PROGRESS,
+        columns: [USER_ID, STEP, QUESTION_TAG, USER_SCREEN_POSITION]);
     userProgressDetail.forEach((userProgressDetail) {
       userProgress = UserProgressDataModel.fromMap(userProgressDetail);
     });
