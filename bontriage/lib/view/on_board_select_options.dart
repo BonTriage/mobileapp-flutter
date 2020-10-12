@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class OnBoardSelectOptions extends StatefulWidget {
   final List<OnBoardSelectOptionModel> selectOptionList;
   final Function(String, String) selectedAnswerCallBack;
   final String questionTag;
+  final List<SelectedAnswers> selectedAnswerListData;
 
   const OnBoardSelectOptions(
       {Key key,
       this.selectOptionList,
       this.questionTag,
+      this.selectedAnswerListData,
       this.selectedAnswerCallBack})
       : super(key: key);
 
@@ -23,6 +26,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
   List<bool> _optionSelectedList = [];
   AnimationController _animationController;
   String selectedValue = "1";
+  SelectedAnswers selectedAnswers;
 
   BoxDecoration _getBoxDecoration(int index) {
     if (!widget.selectOptionList[index].isSelected) {
@@ -51,13 +55,21 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
     // TODO: implement initState
     super.initState();
 
-    widget.selectOptionList.asMap().forEach((index, value) {
-      if (index == 0) {
-        _optionSelectedList.add(true);
-      } else {
-        _optionSelectedList.add(false);
+    if(widget.selectedAnswerListData != null){
+      selectedAnswers = widget.selectedAnswerListData.firstWhere(
+              (model) => model.questionTag == widget.questionTag,
+          orElse: () => null);
+      if (selectedAnswers != null) {
+        try{
+          int userSelectedValue = int.parse(selectedAnswers.answer);
+          widget.selectOptionList[userSelectedValue - 1].isSelected = true;
+        }catch(e){
+          e.toString();
+        }
+
       }
-    });
+    }
+
 
     _animationController = AnimationController(
       vsync: this,
