@@ -3,16 +3,18 @@ import 'package:mobile/util/constant.dart';
 
 class RecordDayPage extends StatefulWidget {
   final bool hasData;
+  final DateTime dateTime;
 
-  const RecordDayPage({Key key, this.hasData = false}) : super(key: key);
+  const RecordDayPage({Key key, this.hasData = false, this.dateTime}) : super(key: key);
 
   @override
   _RecordDayPageState createState() => _RecordDayPageState();
 }
 
-class _RecordDayPageState extends State<RecordDayPage> {
+class _RecordDayPageState extends State<RecordDayPage> with SingleTickerProviderStateMixin {
 
   GlobalKey _globalKey = GlobalKey();
+  AnimationController _animationController;
 
   List<Widget> _getSections() {
     if (widget.hasData) {
@@ -179,16 +181,47 @@ class _RecordDayPageState extends State<RecordDayPage> {
       final size = renderBox.size;
       print(size);
     });
+
+    print(widget.dateTime);
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 1000),
+      reverseDuration: Duration(milliseconds: 1000),
+      vsync: this
+    );
+    _animationController.forward();
+
+
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(RecordDayPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print(widget.dateTime);
+
+    if(!_animationController.isAnimating) {
+      _animationController.reverse();
+      _animationController.forward();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      key: _globalKey,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _getSections(),
+    return FadeTransition(
+      opacity: _animationController,
+      child: Padding(
+        key: _globalKey,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _getSections(),
+        ),
       ),
     );
   }

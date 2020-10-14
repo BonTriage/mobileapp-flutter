@@ -18,6 +18,9 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
   PageController _pageController;
   int _currentPageIndex;
 
+
+  bool isPageChanged = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,11 +31,11 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
     _pageController = PageController(initialPage: _currentPageIndex);
 
     _pageViewWidgetList = [
-      RecordDayPage(),
+      Container(),
       RecordDayPage(
         hasData: true,
       ),
-      RecordDayPage(),
+      Container(),
     ];
   }
 
@@ -68,7 +71,11 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      _pageController.animateToPage(0,
+                                          duration: Duration(milliseconds: 200),
+                                          curve: Curves.linear);
+                                    },
                                     child: Image(
                                       height: 12,
                                       width: 8,
@@ -91,7 +98,11 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
                                     width: 20,
                                   ),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      _pageController.animateToPage(2,
+                                          duration: Duration(milliseconds: 200),
+                                          curve: Curves.linear);
+                                    },
                                     child: Image(
                                       height: 12,
                                       width: 8,
@@ -122,105 +133,44 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
                               child: PageView.builder(
                                 itemCount: _pageViewWidgetList.length,
                                 controller: _pageController,
+                                physics: NeverScrollableScrollPhysics(),
                                 onPageChanged: (index) {
-                                  setState(() {
-                                    print(index);
+
+                                  if (index == 0 || index == 2) {
+                                    setState(() {
+                                      if (index > _currentPageIndex) {
+                                        _dateTime = DateTime(
+                                            _dateTime.year,
+                                            _dateTime.month,
+                                            _dateTime.day + 1);
+                                      } else if (index < _currentPageIndex) {
+                                        _dateTime = DateTime(
+                                            _dateTime.year,
+                                            _dateTime.month,
+                                            _dateTime.day - 1);
+                                      }
+                                    });
+                                  }
+
+                                  _currentPageIndex = index;
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    _pageController.jumpToPage(1);
                                   });
                                 },
                                 itemBuilder: (context, index) {
-                                  return _pageViewWidgetList[_currentPageIndex];
+                                  switch(index) {
+                                    case 0:
+                                    case 2:
+                                      return _pageViewWidgetList[index];
+                                    default:
+                                      return RecordDayPage(
+                                        hasData: true,
+                                        dateTime: _dateTime
+                                      );
+                                  }
                                 },
                               ),
-                              /*Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      _getSectionWidget(
-                                        Constant.migraineIcon,
-                                        'Migrane',
-                                        '3:21 hours, Intensity: 4, Disability: 3',
-                                        '“Lorem ipsum dolor sit amet, consectetur adipiscing elit”',
-                                        '',
-                                      ),
-                                      _getSectionWidget(
-                                          Constant.sleepIcon,
-                                          'Sleep',
-                                          '7:47 hours, Woke up frequently',
-                                          '',
-                                          'This is worse than usual'),
-                                      _getSectionWidget(
-                                          Constant.waterDropIcon,
-                                          'Water',
-                                          '4 cups',
-                                          '',
-                                          'This is less than recommended'),
-                                      _getSectionWidget(Constant.mealIcon, 'Meals',
-                                          'Regular meal times', '', ''),
-                                      _getSectionWidget(
-                                          Constant.weatherIcon,
-                                          'Weather',
-                                          '90% humidity',
-                                          '',
-                                          'This is higher than usual'),
-                                      _getSectionWidget(Constant.pillIcon,
-                                          'Medication', 'Ibuprofen (200mg)', '', ''),
-                                      Text(
-                                        'Note:\n“Lorem ipsum dolor sit amet, consectetur adipiscing elit”',
-                                        style: TextStyle(
-                                            color: Constant.chatBubbleGreen60Alpha,
-                                            fontFamily: Constant.jostRegular,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(),
-                                      FlatButton.icon(
-                                        padding: EdgeInsets.all(0),
-                                        onPressed: () {},
-                                        icon: Image.asset(
-                                          Constant.addCircleIcon,
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        label: Text(
-                                          'Add/Edit Info',
-                                          style: TextStyle(
-                                              color: Constant.chatBubbleGreen,
-                                              fontFamily: Constant.jostRegular,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18),
-                                        ),
-                                        materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      FlatButton.icon(
-                                        padding: EdgeInsets.all(0),
-                                        onPressed: () {},
-                                        icon: Image.asset(
-                                          Constant.addCircleIcon,
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        label: Text(
-                                          'Add/Edit Headache',
-                                          style: TextStyle(
-                                              color: Constant.chatBubbleGreen,
-                                              fontFamily: Constant.jostRegular,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18),
-                                        ),
-                                        materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                      ),
-                                    ],
-                                  ),
-                                ),*/
                             ),
                           ),
                         ],
