@@ -2,10 +2,13 @@ import 'dart:convert';
 
 
 import 'package:http/http.dart' as http;
+import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/constant.dart';
 
 
 class SignUpOnBoardFirstStepRepository{
@@ -20,6 +23,11 @@ class SignUpOnBoardFirstStepRepository{
         return response;
       }else{
         album = SignUpOnBoardSecondStepModel.fromJson(json.decode(response));
+        LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
+        localQuestionnaire.eventType = Constant.firstEventStep;
+        localQuestionnaire.questionnaires = response;
+        localQuestionnaire.selectedAnswers = "";
+        SignUpOnBoardProviders.db.insertQuestionnaire(localQuestionnaire);
         return album;
       }
     }catch(Exception){

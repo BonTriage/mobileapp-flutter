@@ -178,10 +178,13 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                     isButtonClicked = true;
                                     setState(() {
                                       if (_progressPercent == 0.55) {
+                                   /*     welcomeOnBoardProfileBloc
+                                            .sendSignUpFirstStepData(
+                                                signUpOnBoardSelectedAnswersModel);*/
                                         isEndOfOnBoard = true;
                                         TextToSpeechRecognition
                                             .pauseSpeechToText(true, "");
-                                        Navigator.pushReplacementNamed(
+                                         Navigator.pushReplacementNamed(
                                             context,
                                             Constant
                                                 .onBoardHeadacheInfoScreenRouter);
@@ -298,8 +301,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   minText: element.min.toString(),
                   maxText: element.max.toString(),
                   labelText: "",
-                  currentTag: element.tag,selectedAnswerListData:
-                signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                  currentTag: element.tag,
+                  selectedAnswerListData:
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -331,8 +335,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questions: element.helpText,
                 questionsWidget: OnBoardSelectOptions(
                   selectOptionList: valuesListData,
-                  questionTag: element.tag, selectedAnswerListData:
-                signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                  questionTag: element.tag,
+                  selectedAnswerListData:
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },

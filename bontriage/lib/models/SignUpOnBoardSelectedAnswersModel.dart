@@ -1,11 +1,13 @@
 class SignUpOnBoardSelectedAnswersModel {
   String eventType;
-  List<SelectedAnswers> selectedAnswers ;
+  String calendarEntryAt;
+  List<SelectedAnswers> selectedAnswers;
 
   SignUpOnBoardSelectedAnswersModel({this.eventType, this.selectedAnswers});
 
   SignUpOnBoardSelectedAnswersModel.fromJson(Map<String, dynamic> json) {
     eventType = json['event_type'];
+    calendarEntryAt = json['calendar_entry_at'];
     if (json['selected_answers'] != null) {
       selectedAnswers = new List<SelectedAnswers>();
       json['selected_answers'].forEach((v) {

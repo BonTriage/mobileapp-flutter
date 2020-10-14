@@ -299,6 +299,9 @@ class Constant {
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
+  static String zeroEventStep = "1";
+  static String firstEventStep = "2";
+  static String secondEventStep = "3";
 
 
   //Dimensions

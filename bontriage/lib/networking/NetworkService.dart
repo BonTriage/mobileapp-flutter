@@ -33,6 +33,7 @@ class NetworkService{
   dynamic getApiResponse(http.Response response){
     switch(response.statusCode){
       case 200:
+      case 201:
         return response.body;
       case 400:
         return BadRequestException();

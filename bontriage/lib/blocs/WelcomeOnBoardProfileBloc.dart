@@ -24,7 +24,6 @@ class WelcomeOnBoardProfileBloc {
   WelcomeOnBoardProfileBloc({this.count = 0}) {
     _signUpFirstStepDataStreamController = StreamController<dynamic>();
     _welcomeOnBoardProfileRepository = WelcomeOnBoardProfileRepository();
-    // fetchSignUpFirstStepData();
   }
 
   fetchSignUpFirstStepData() async {
@@ -41,6 +40,26 @@ class WelcomeOnBoardProfileBloc {
             signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
         signUpFirstStepDataSink.add(filterQuestionsListData);
+      }
+    } catch (Exception) {
+      //  signUpFirstStepDataSink.add("Error");
+    }
+  }
+
+  sendSignUpFirstStepData(SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+    try {
+      var signUpFirstStepData =
+      await _welcomeOnBoardProfileRepository.signUpProfileInfoObjectServiceCall(
+          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
+          RequestMethod.POST,signUpOnBoardSelectedAnswersModel);
+      if (signUpFirstStepData is AppException) {
+        //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
+      } else {
+     /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+            signUpFirstStepData.questionnaires[0].initialQuestion,
+            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
+        print(filterQuestionsListData);
+        signUpFirstStepDataSink.add(filterQuestionsListData);*/
       }
     } catch (Exception) {
       //  signUpFirstStepDataSink.add("Error");
