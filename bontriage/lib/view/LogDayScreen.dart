@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:mobile/blocs/LogDayBloc.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -12,14 +13,28 @@ class LogDayScreen extends StatefulWidget {
   _LogDayScreenState createState() => _LogDayScreenState();
 }
 
-class _LogDayScreenState extends State<LogDayScreen> {
+class _LogDayScreenState extends State<LogDayScreen> with SingleTickerProviderStateMixin {
   DateTime _dateTime;
+  LogDayBloc _logDayBloc;
+  List<Widget> _sectionWidgetList;
+  List<Questions> _sleepValuesList = [];
+  List<Questions> _medicationValuesList = [];
+  List<Questions> _triggerValuesList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
+    _sectionWidgetList = [];
+
+    _logDayBloc = LogDayBloc();
+
+    requestService();
+  }
+
+  void requestService() async {
+    _logDayBloc.fetchLogDayData();
   }
 
   @override
@@ -73,55 +88,90 @@ class _LogDayScreenState extends State<LogDayScreen> {
                           fontFamily: Constant.jostRegular
                       ),
                     ),
-                    SizedBox(height: 30,),
-                    AddHeadacheSection(
-                      headerText: Constant.sleep,
-                      subText: Constant.howFeelWakingUp,
-                      contentType: 'sleep',
-                      valuesList: [
-                        Values(text: 'Energized\n& refreshed', isSelected: false, valueNumber: '1'),
-                        Values(text: 'Could have been better', isSelected: false, valueNumber: '2'),
-                      ],
-                    ),
-                    AddHeadacheSection(
-                      headerText: 'Activity',
-                      subText: 'Did you have 20+ minutes of aerobic exercise?',
-                      contentType: 'activity',
-                      valuesList: [
-                        Values(text: 'Yes', isSelected: false, valueNumber: '1'),
-                        Values(text: 'No', isSelected: false, valueNumber: '2'),
-                      ],
-                    ),
-                    AddHeadacheSection(
-                      headerText: 'Meal Schedule',
-                      subText: 'Did you eat on time without skipping or dealying meals?',
-                      contentType: 'meal_schedule',
-                      valuesList: [
-                        Values(text: 'Yes', isSelected: false, valueNumber: '1'),
-                        Values(text: 'No', isSelected: false, valueNumber: '2'),
-                      ],
-                    ),
-                    AddHeadacheSection(
-                      headerText: 'Medications',
-                      subText: 'What medications, if any, did you take?',
-                      contentType: 'medications',
-                      valuesList: [
-                        Values(text: 'abc', isSelected: false, valueNumber: '1'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '2'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '3'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '4'),
-                      ],
-                    ),
-                    AddHeadacheSection(
-                      headerText: 'Triggers',
-                      subText: 'What potential triggers, if any, did you experience?',
-                      contentType: 'triggers',
-                      valuesList: [
-                        Values(text: 'abc', isSelected: false, valueNumber: '1'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '2'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '3'),
-                        Values(text: 'abc', isSelected: false, valueNumber: '4'),
-                      ],
+                    SizedBox(height: 20,),
+                    StreamBuilder<dynamic>(
+                      stream: _logDayBloc.logDayDataStream,
+                      builder: (context, snapshot) {
+                        if(snapshot.hasData) {
+                          addNewWidgets(snapshot.data);
+                          return Column(
+                            children: /*[
+                              AddHeadacheSection(
+                                headerText: Constant.sleep,
+                                subText: Constant.howFeelWakingUp,
+                                contentType: 'sleep',
+                                valuesList: [
+                                  Values(text: 'Energized\n& refreshed', valueNumber: '1'),
+                                  Values(text: 'Could have been better', valueNumber: '2'),
+                                ],
+                                chipsValuesList: [
+                                  Values(text: 'Fell asleep earlier than usual', valueNumber: '1'),
+                                  Values(text: 'Fell asleep later than usual', valueNumber: '2'),
+                                  Values(text: 'Woke up earlier than usual', valueNumber: '3'),
+                                  Values(text: 'Woke up later than usual', valueNumber: '4'),
+                                  Values(text: 'Didn’t get enough sleep', valueNumber: '5'),
+                                  Values(text: 'Woke up frequently', valueNumber: '6'),
+                                ],
+                              ),
+                              AddHeadacheSection(
+                                headerText: 'Activity',
+                                subText: 'Did you have 20+ minutes of aerobic exercise?',
+                                contentType: 'activity',
+                                valuesList: [
+                                  Values(text: 'Yes', valueNumber: '1'),
+                                  Values(text: 'No', valueNumber: '2'),
+                                ],
+                              ),
+                              AddHeadacheSection(
+                                headerText: 'Meal Schedule',
+                                subText: 'Did you eat on time without skipping or dealying meals?',
+                                contentType: 'meal_schedule',
+                                valuesList: [
+                                  Values(text: 'Yes', valueNumber: '1'),
+                                  Values(text: 'No', valueNumber: '2'),
+                                ],
+                              ),
+                              AddHeadacheSection(
+                                headerText: 'Medications',
+                                subText: 'What medications, if any, did you take?',
+                                contentType: 'medications',
+                                valuesList: [
+                                  Values(text: 'None', valueNumber: '1'),
+                                  Values(text: '[Saved medication]', valueNumber: '2'),
+                                  Values(text: '[Saved medication]', valueNumber: '3'),
+                                  Values(text: '+', valueNumber: '4'),
+                                ],
+                                dosageList: [
+                                  Values(text: '[Relevant dosage option]', valueNumber: '1'),
+                                  Values(text: '[Relevant dosage option]', valueNumber: '2'),
+                                  Values(text: '[Relevant dosage option]', valueNumber: '3'),
+                                  Values(text: '[Relevant dosage option]', valueNumber: '4'),
+                                ],
+                              ),
+                              AddHeadacheSection(
+                                headerText: 'Triggers',
+                                subText: 'What potential triggers, if any, did you experience?',
+                                contentType: 'triggers',
+                                valuesList: [
+                                  Values(text: 'None', valueNumber: '1'),
+                                  Values(text: 'Alchohol', valueNumber: '2'),
+                                  Values(text: 'Caffeine', valueNumber: '3'),
+                                  Values(text: 'Change in schedule', valueNumber: '4'),
+                                ],
+                              ),
+                            ],*/_sectionWidgetList
+                          );
+                        } else {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: CircularProgressIndicator(
+                                backgroundColor: Constant.chatBubbleGreen,
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -197,5 +247,42 @@ class _LogDayScreenState extends State<LogDayScreen> {
         ),
       ),
     );
+  }
+
+  void addNewWidgets(List<Questions> questionList) {
+    questionList.forEach((element) {
+      if(element.precondition.contains('behavior.presleep')) {
+        _sleepValuesList.add(element);
+      } else if (element.precondition.contains('medication')) {
+        _medicationValuesList.add(element);
+      } else if (element.precondition.contains('triggers1')) {
+        _triggerValuesList.add(element);
+      }
+    });
+    
+    questionList.removeWhere((element) => _sleepValuesList.contains(element));
+    questionList.removeWhere((element) => _medicationValuesList.contains(element));
+    questionList.removeWhere((element) => _triggerValuesList.contains(element));
+
+    questionList.forEach((element) {
+      if(element.precondition == null || element.precondition.isEmpty) {
+        _sectionWidgetList.add(
+          AddHeadacheSection(
+            headerText: element.text,
+            subText: element.helpText,
+            contentType: element.tag,
+            sleepExpandableWidgetList: _sleepValuesList,
+            medicationExpandableWidgetList: _medicationValuesList,
+            valuesList: element.values,
+            dosageList: [
+              Values(text: 'abc', valueNumber: "1"),
+              Values(text: 'abc', valueNumber: "2"),
+              Values(text: 'abc', valueNumber: "3"),
+              Values(text: 'abc', valueNumber: "4"),
+            ],
+          ),
+        );
+      }
+    });
   }
 }
