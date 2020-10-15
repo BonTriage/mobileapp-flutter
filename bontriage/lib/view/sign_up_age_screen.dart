@@ -77,6 +77,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
+    if(widget.selectedAnswerCallBack != null)
     widget.selectedAnswerCallBack(
         widget.currentTag, widget.sliderValue.toInt().toString());
     super.dispose();
