@@ -8,6 +8,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
+import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
 class LogDayScreen extends StatefulWidget {
   @override
@@ -31,6 +32,9 @@ class _LogDayScreenState extends State<LogDayScreen>
     _logDayBloc = LogDayBloc();
 
     requestService();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showDoubleTapDialog();
+    });
   }
 
   void requestService() async {
@@ -96,73 +100,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                         if (snapshot.hasData) {
                           addNewWidgets(snapshot.data);
                           return Column(
-                              children:
-                                  /*[
-                              AddHeadacheSection(
-                                headerText: Constant.sleep,
-                                subText: Constant.howFeelWakingUp,
-                                contentType: 'sleep',
-                                valuesList: [
-                                  Values(text: 'Energized\n& refreshed', valueNumber: '1'),
-                                  Values(text: 'Could have been better', valueNumber: '2'),
-                                ],
-                                chipsValuesList: [
-                                  Values(text: 'Fell asleep earlier than usual', valueNumber: '1'),
-                                  Values(text: 'Fell asleep later than usual', valueNumber: '2'),
-                                  Values(text: 'Woke up earlier than usual', valueNumber: '3'),
-                                  Values(text: 'Woke up later than usual', valueNumber: '4'),
-                                  Values(text: 'Didn’t get enough sleep', valueNumber: '5'),
-                                  Values(text: 'Woke up frequently', valueNumber: '6'),
-                                ],
-                              ),
-                              AddHeadacheSection(
-                                headerText: 'Activity',
-                                subText: 'Did you have 20+ minutes of aerobic exercise?',
-                                contentType: 'activity',
-                                valuesList: [
-                                  Values(text: 'Yes', valueNumber: '1'),
-                                  Values(text: 'No', valueNumber: '2'),
-                                ],
-                              ),
-                              AddHeadacheSection(
-                                headerText: 'Meal Schedule',
-                                subText: 'Did you eat on time without skipping or dealying meals?',
-                                contentType: 'meal_schedule',
-                                valuesList: [
-                                  Values(text: 'Yes', valueNumber: '1'),
-                                  Values(text: 'No', valueNumber: '2'),
-                                ],
-                              ),
-                              AddHeadacheSection(
-                                headerText: 'Medications',
-                                subText: 'What medications, if any, did you take?',
-                                contentType: 'medications',
-                                valuesList: [
-                                  Values(text: 'None', valueNumber: '1'),
-                                  Values(text: '[Saved medication]', valueNumber: '2'),
-                                  Values(text: '[Saved medication]', valueNumber: '3'),
-                                  Values(text: '+', valueNumber: '4'),
-                                ],
-                                dosageList: [
-                                  Values(text: '[Relevant dosage option]', valueNumber: '1'),
-                                  Values(text: '[Relevant dosage option]', valueNumber: '2'),
-                                  Values(text: '[Relevant dosage option]', valueNumber: '3'),
-                                  Values(text: '[Relevant dosage option]', valueNumber: '4'),
-                                ],
-                              ),
-                              AddHeadacheSection(
-                                headerText: 'Triggers',
-                                subText: 'What potential triggers, if any, did you experience?',
-                                contentType: 'triggers',
-                                valuesList: [
-                                  Values(text: 'None', valueNumber: '1'),
-                                  Values(text: 'Alchohol', valueNumber: '2'),
-                                  Values(text: 'Caffeine', valueNumber: '3'),
-                                  Values(text: 'Change in schedule', valueNumber: '4'),
-                                ],
-                              ),
-                            ],*/
-                                  _sectionWidgetList);
+                              children: _sectionWidgetList
+                          );
                         } else {
                           return Center(
                             child: Padding(
@@ -307,5 +246,19 @@ class _LogDayScreenState extends State<LogDayScreen>
         );
       }
     });
+  }
+
+  Future<void> _showDoubleTapDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: LogDayDoubleTapDialog(),
+        );
+      },
+    );
   }
 }

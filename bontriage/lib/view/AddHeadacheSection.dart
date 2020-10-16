@@ -8,6 +8,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
 import 'package:mobile/view/DateTimePicker.dart';
+import 'package:mobile/view/LogDayChipList.dart';
 import 'package:mobile/view/TimeSection.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 
@@ -294,13 +295,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             ),
             Container(
               height: 35,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.medicationExpandableWidgetList[whichMedicationItemSelected].values.length,
-                itemBuilder: (context, index) {
-                  return _getOverlayedChip(index);
-                },
-              ),
+              child: LogDayChipList(question: widget.medicationExpandableWidgetList[whichMedicationItemSelected],),
             ),
             SizedBox(
               height: 10,
@@ -452,42 +447,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       ),
                       Container(
                         height: 30,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: questions.values.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                margin: EdgeInsets.only(right: 8),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Constant.chatBubbleGreen,
-                                  ),
-                                  color: questions.values[index].isSelected
-                                      ? Constant.chatBubbleGreen
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    questions.values[index].text,
-                                    style: TextStyle(
-                                        color: questions.values[index]
-                                            .isSelected
-                                            ? Constant.bubbleChatTextView
-                                            : Constant.locationServiceGreen,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: Constant.jostRegular),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                        child: LogDayChipList(question: questions,)),
                       SizedBox(height: 10,),
                     ],
                   )));
@@ -558,12 +518,30 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       chipsList.add(GestureDetector(
         onTap: () {
           setState(() {
-            element.isSelected = !element.isSelected;
+            if(element.isSelected) {
+              element.isSelected = false;
+              element.isDoubleTapped = false;
+            } else {
+              element.isSelected = true;
+            }
 
             if(element.isSelected) {
               numberOfSleepItemSelected++;
             } else {
               numberOfSleepItemSelected--;
+            }
+          });
+        },
+        onDoubleTap: () {
+          setState(() {
+            if(element.isDoubleTapped) {
+              element.isDoubleTapped = false;
+            } else {
+              element.isDoubleTapped = true;
+              if(!element.isSelected) {
+                numberOfSleepItemSelected++;
+              }
+              element.isSelected = true;
             }
           });
         },
@@ -574,7 +552,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           ),
           decoration: BoxDecoration(
             border: Border.all(
-              color: Constant.chatBubbleGreen,
+              color: element.isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen,
+              width: element.isDoubleTapped ? 2 : 1
             ),
             color: element.isSelected ? Constant.chatBubbleGreen : Colors.transparent,
             borderRadius: BorderRadius.circular(20),

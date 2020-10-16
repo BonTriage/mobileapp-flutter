@@ -41,7 +41,13 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                 onTap: () {
                   setState(() {
                     if(widget.questionType == 'multi') {
-                      widget.logOptions[index].isSelected = !widget.logOptions[index].isSelected;
+                      Values value = widget.logOptions[index];
+                      if(value.isSelected) {
+                        value.isSelected = false;
+                        value.isDoubleTapped = false;
+                      } else {
+                        value.isSelected = true;
+                      }
                     } else {
                       widget.logOptions.asMap().forEach((key, value) {
                         if(key == index) {
@@ -58,17 +64,22 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                       });
                     }
                     if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);
+                    print('onTap');
                   });
                 },
                 onDoubleTap: () {
                   setState(() {
                     if(widget.questionType == 'multi') {
-                      widget.logOptions[index].isSelected = !widget.logOptions[index].isSelected;
+                      if(widget.logOptions[index].isDoubleTapped) {
+                        widget.logOptions[index].isDoubleTapped = false;
+                      } else {
+                        widget.logOptions[index].isSelected = true;
+                        widget.logOptions[index].isDoubleTapped = true;
+                      }
                     } else {
                       widget.logOptions.asMap().forEach((key, value) {
                         if(key == index) {
-                          if(value.isSelected) {
-                            value.isSelected = false;
+                          if(value.isDoubleTapped) {
                             value.isDoubleTapped = false;
                           } else {
                             value.isSelected = true;
@@ -83,6 +94,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   });
 
                   if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);
+                  print('onDoubleTap');
                 },
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
