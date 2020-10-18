@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:mobile/blocs/LogDayBloc.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
@@ -23,6 +26,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   List<Questions> _sleepValuesList = [];
   List<Questions> _medicationValuesList = [];
   List<Questions> _triggerValuesList = [];
+  List<SelectedAnswers> selectedAnswers = [];
 
   @override
   void initState() {
@@ -38,7 +42,23 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void requestService() async {
+    List<Map> logDayDataList = await _logDayBloc.getAllLogDayData('4214');
+    if(logDayDataList.length > 0) {
+      logDayDataList.forEach((element) {
+        List<dynamic> map = jsonDecode(element['selectedAnswers']);
+        map.forEach((element) {
+          selectedAnswers.add(SelectedAnswers(questionTag: element['questionTag'], answer: element['answer']));
+        });
+      });
+    }
     _logDayBloc.fetchLogDayData();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('dispose');
   }
 
   @override
@@ -214,6 +234,16 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void addNewWidgets(List<Questions> questionList) {
+    if(selectedAnswers.length != 0) {
+      selectedAnswers.forEach((element) {
+        Questions questions = questionList.firstWhere((element1) => element1.tag == element.questionTag);
+        int index = int.parse(element.answer) - 1;
+        questions.values[index].isSelected = true;
+        questions.values[index].isDoubleTapped = true;
+      });
+    }
+    List<Questions> allQuestionList = [];
+    allQuestionList.addAll(questionList);
     _sectionWidgetList = [];
     questionList.forEach((element) {
       if (element.precondition.contains('behavior.presleep')) {
@@ -242,6 +272,8 @@ class _LogDayScreenState extends State<LogDayScreen>
             triggerExpandableWidgetList: _triggerValuesList,
             valuesList: element.values,
             questionType: element.questionType,
+            allQuestionsList: allQuestionList,
+            selectedAnswers: selectedAnswers
           ),
         );
       }

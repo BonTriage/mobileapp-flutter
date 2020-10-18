@@ -1,4 +1,5 @@
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/LogDayQuestionnaire.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,6 +14,10 @@ class SignUpOnBoardProviders {
   static const String QUESTIONNAIRES = "questionnaires";
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
+
+  //For Log Day Screen
+  static const String TABLE_LOG_DAY = "tableLogDay";
+
 
   SignUpOnBoardProviders._();
 
@@ -49,6 +54,10 @@ class SignUpOnBoardProviders {
           "$EVENT_TYPE TEXT PRIMARY KEY,"
           "$QUESTION_TAG TEXT,"
           "$QUESTIONNAIRES TEXT,"
+          "$SELECTED_ANSWERS TEXT"
+          ")");
+      batch.execute("CREATE TABLE $TABLE_LOG_DAY ("
+          "$USER_ID TEXT PRIMARY KEY,"
           "$SELECTED_ANSWERS TEXT"
           ")");
       await batch.commit();
@@ -131,5 +140,38 @@ class SignUpOnBoardProviders {
     var localDir = await getDatabasesPath();
     var dbPath = join(localDir, "bonTriageDB.db");
     return await databaseExists(dbPath);
+  }
+
+  Future<LogDayQuestionnaire> insertLogDayData(
+      LogDayQuestionnaire logDayQuestionnaire) async {
+    final db = await database;
+    await db.insert(TABLE_LOG_DAY, logDayQuestionnaire.toMap());
+    return logDayQuestionnaire;
+  }
+
+  Future<List<Map>> getLogDayData(String userId) async{
+    final db = await database;
+    List<Map> logDayQuestionnaire;
+    try {
+      logDayQuestionnaire = await db.rawQuery(
+          "SELECT * FROM $TABLE_LOG_DAY WHERE $USER_ID = $userId");
+    } catch(e) {
+      print(e.toString());
+    }
+    print(logDayQuestionnaire);
+    return logDayQuestionnaire;
+  }
+
+  void updateLogDayData(String selectedAnswers, String userId) async {
+    final db = await database;
+    await db.update(
+      TABLE_LOG_DAY,
+      {
+        SELECTED_ANSWERS: selectedAnswers
+      },
+      where: "$USER_ID = ?",
+      whereArgs: [userId],
+    );
+    print("Log updated");
   }
 }

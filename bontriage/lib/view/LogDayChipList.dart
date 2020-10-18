@@ -46,7 +46,7 @@ class _LogDayChipListState extends State<LogDayChipList> {
             });
           },
           onDoubleTap: () {
-            setState(() {
+            /*setState(() {
               if(widget.question.questionType == 'multi') {
                 if(widget.question.values[index].isDoubleTapped) {
                   widget.question.values[index].isDoubleTapped = false;
@@ -69,7 +69,7 @@ class _LogDayChipListState extends State<LogDayChipList> {
                   }
                 });
               }
-            });
+            });*/
           },
           child: Container(
             margin: EdgeInsets.only(right: 8),

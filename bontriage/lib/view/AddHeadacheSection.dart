@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/LogDayQuestionnaire.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/TriggerWidgetModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
@@ -19,11 +23,13 @@ class AddHeadacheSection extends StatefulWidget {
   final String questionType;
   final double min;
   final double max;
+  final List<Questions> allQuestionsList;
   final List<Questions> sleepExpandableWidgetList;
   final List<Questions> medicationExpandableWidgetList;
   final List<Questions> triggerExpandableWidgetList;
   final List<Values> valuesList;
   final List<Values> chipsValuesList;
+  final List<SelectedAnswers> selectedAnswers;
 
   const AddHeadacheSection(
       {Key key,
@@ -37,7 +43,9 @@ class AddHeadacheSection extends StatefulWidget {
       this.sleepExpandableWidgetList,
       this.medicationExpandableWidgetList,
       this.triggerExpandableWidgetList,
-      this.questionType})
+      this.questionType,
+      this.allQuestionsList,
+      this.selectedAnswers})
       : super(key: key);
 
   @override
@@ -89,33 +97,111 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           isAnimate: false,
         ));
       case 'behavior.presleep':
+        Values value = widget.valuesList.firstWhere((element) => element.isDoubleTapped, orElse: () => null);
+        if(value != null) {
+          try {
+            _onSleepItemSelected(int.parse(value.valueNumber) - 1);
+          } catch(e) {
+            print(e.toString());
+          }
+        }
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           preCondition: widget.sleepExpandableWidgetList[0].precondition,
           overlayNumber: numberOfSleepItemSelected,
           onCircleItemSelected: _onSleepItemSelected,
+          onDoubleTapItem: _onDoubleTapItem,
+          currentTag: widget.contentType,
         ));
       case 'behavior.premeal':
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
+          onDoubleTapItem: _onDoubleTapItem,
+          currentTag: widget.contentType,
         ));
       case 'behavior.preexercise':
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
+          onDoubleTapItem: _onDoubleTapItem,
+          currentTag: widget.contentType,
         ));
       case 'medication':
+        Values value = widget.valuesList.firstWhere((element) => element.isDoubleTapped, orElse: () => null);
+        if(value != null) {
+          _onMedicationItemSelected(int.parse(value.valueNumber) - 1);
+        }
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           onCircleItemSelected: _onMedicationItemSelected,
+          onDoubleTapItem: _onDoubleTapItem,
+          currentTag: widget.contentType,
         ));
       case 'triggers1':
+        widget.valuesList.asMap().forEach((index, element) {
+          if(element.isSelected && element.isDoubleTapped) {
+            Future.delayed(Duration(seconds: index * 2), () {
+              _onTriggerItemSelected(index);
+            });
+          }
+        });
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           questionType: widget.questionType,
           onCircleItemSelected: _onTriggerItemSelected,
+          onDoubleTapItem: _onDoubleTapItem,
+          currentTag: widget.contentType,
         ));
       default:
         return Container();
+    }
+  }
+
+  void _onDoubleTapItem(String currentTag, String selectedAnswer, String questionType, bool isDoubleTapped) {
+    if(isDoubleTapped) {
+      if(questionType == 'multi') {
+        widget.selectedAnswers.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+      } else {
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
+        if(selectedAnswerObj == null) {
+          widget.selectedAnswers.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        } else {
+          selectedAnswerObj.answer = selectedAnswer;
+        }
+      }
+    } else {
+      if(questionType == 'multi') {
+        List<SelectedAnswers> selectedAnswerList = [];
+        widget.selectedAnswers.forEach((element) {
+          if(element.questionTag == currentTag && element.answer == selectedAnswer) {
+            selectedAnswerList.add(element);
+          }
+        });
+
+        selectedAnswerList.forEach((element) {
+          widget.selectedAnswers.remove(element);
+        });
+      } else {
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
+
+        if(selectedAnswerObj != null) {
+          widget.selectedAnswers.remove(selectedAnswerObj);
+        }
+      }
+    }
+    storeLogDayDataIntoDatabase();
+    print(widget.selectedAnswers.length);
+  }
+
+  void storeLogDayDataIntoDatabase() async{
+    List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData('4214');
+
+    if(userLogDataMap == null || userLogDataMap.length == 0) {
+      LogDayQuestionnaire logDayQuestionnaire = LogDayQuestionnaire();
+      logDayQuestionnaire.userId = '4214';
+      logDayQuestionnaire.selectedAnswers = jsonEncode(widget.selectedAnswers);
+      SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
+    } else {
+      SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.selectedAnswers), '4214');
     }
   }
 
@@ -134,6 +220,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     setState(() {
       whichMedicationItemSelected = index;
     });
+
     if(widget.valuesList[index].isSelected) {
       _animationController.forward();
     } else {
@@ -294,7 +381,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               height: 10,
             ),
             Container(
-              height: 35,
+              height: 30,
               child: LogDayChipList(question: widget.medicationExpandableWidgetList[whichMedicationItemSelected],),
             ),
             SizedBox(
@@ -533,7 +620,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           });
         },
         onDoubleTap: () {
-          setState(() {
+          /*setState(() {
             if(element.isDoubleTapped) {
               element.isDoubleTapped = false;
             } else {
@@ -543,7 +630,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               }
               element.isSelected = true;
             }
-          });
+          });*/
         },
         child: Container(
           margin: EdgeInsets.only(

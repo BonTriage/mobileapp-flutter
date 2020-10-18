@@ -10,6 +10,8 @@ class CircleLogOptions extends StatefulWidget {
   final int overlayNumber;
   final Function(int) onCircleItemSelected;
   final String questionType;
+  final String currentTag;
+  final Function(String, String, String, bool) onDoubleTapItem;
 
   const CircleLogOptions(
       {Key key,
@@ -18,7 +20,9 @@ class CircleLogOptions extends StatefulWidget {
       this.preCondition = '',
       this.overlayNumber = 0,
       this.onCircleItemSelected,
-      this.questionType = ''})
+      this.questionType = '',
+      this.currentTag,
+      this.onDoubleTapItem})
       : super(key: key);
 
   @override
@@ -91,6 +95,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                         }
                       });
                     }
+                    widget.onDoubleTapItem(widget.currentTag, widget.logOptions[index].valueNumber, widget.questionType, widget.logOptions[index].isDoubleTapped);
                   });
 
                   if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);

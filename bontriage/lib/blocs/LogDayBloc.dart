@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -83,12 +84,17 @@ class LogDayBloc {
             logDayData.questionnaires[0].initialQuestion,
             logDayData.questionnaires[0].questionGroups[0].questions));
         print(filterQuestionsListData);
+        //_logDayRepository.insertLogDayData(json.encode(filterQuestionsListData));
         logDayDataSink.add(filterQuestionsListData);
       }
     } catch (e) {
       //  signUpFirstStepDataSink.add("Error");
       print(e.toString());
     }
+  }
+
+  Future<List<Map>> getAllLogDayData(String userId) async {
+    return await _logDayRepository.getAllLogDayData(userId);
   }
 
   void dispose() {
