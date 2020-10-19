@@ -18,6 +18,10 @@ import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 
 class PartTwoOnBoardScreens extends StatefulWidget {
+  final String argumentsName;
+
+  const PartTwoOnBoardScreens({this.argumentsName});
+
   @override
   _PartTwoOnBoardScreensState createState() => _PartTwoOnBoardScreensState();
 }
@@ -35,41 +39,37 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   bool isAlreadyDataFiltered = false;
   SignUpOnBoardSecondStepBloc _signUpOnBoardSecondStepBloc;
 
-  List<String> _questionList = [
-    Constant.atWhatAge,
-    Constant.headacheChanged,
-    Constant.howManyTimes,
-    Constant.didYourHeadacheStart,
-    Constant.isYourHeadache,
-    Constant.separateHeadachesPerDay,
-    Constant.headachesFrequentForDays,
-    Constant.headachesOccurSeveralDays,
-    Constant.headachesBuild,
-    Constant.headacheLast,
-    Constant.experienceYourHeadache,
-    Constant.isYourHeadacheWorse,
-    Constant.headacheStartDuring,
-  ];
-
   bool isButtonClicked = false;
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
-  SignUpOnBoardSelectedAnswersModel();
+      SignUpOnBoardSelectedAnswersModel();
 
   int currentScreenPosition = 0;
 
   List<Questions> currentQuestionListData;
 
   void _onBackPressed() {
-    setState(() {
-      double stepOneProgress = 1 / _pageViewWidgetList.length;
+    if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+      var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .firstWhere((model) => model.questionTag == "nameClinicalImpression");
+      Navigator.pop(context,userHeadacheName.answer);
+    } else {
+      setState(() {
+        double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-      if (_currentPageIndex != 0) {
-        _progressPercent -= stepOneProgress;
-        _currentPageIndex--;
-        _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-      }
-    });
+        if (_currentPageIndex != 0) {
+          _progressPercent -= stepOneProgress;
+          _currentPageIndex--;
+          _pageController.animateToPage(_currentPageIndex,
+              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+        }
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -83,6 +83,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _signUpOnBoardSecondStepBloc = SignUpOnBoardSecondStepBloc();
     signUpOnBoardSelectedAnswersModel.eventType = Constant.firstEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
@@ -91,100 +92,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       SignUpOnBoardFirstStepQuestionsModel(
           questions: Constant.firstBasics, questionsWidget: Container())
     ];
-
     getCurrentUserPosition();
-
-/*    _pageViewWidgetList = [
-      SignUpAgeScreen(
-        sliderValue: 3,
-        sliderMinValue: 3,
-        sliderMaxValue: 72,
-        minText: '3',
-        maxText: '72',
-        labelText: Constant.yearsOld,
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      SignUpAgeScreen(
-        sliderValue: 0,
-        sliderMinValue: 0,
-        sliderMaxValue: 20,
-        minText: '0',
-        maxText: '20+',
-        labelText: Constant.times,
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.lessThanFiveMinutes),
-          OnBoardSelectOptionModel(optionText: Constant.fiveToTenMinutes),
-          OnBoardSelectOptionModel(optionText: Constant.tenToThirtyMinutes),
-          OnBoardSelectOptionModel(optionText: Constant.moreThanThirtyMinutes),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.fewSecAtATime),
-          OnBoardSelectOptionModel(optionText: Constant.fewSecUpTo20Min),
-          OnBoardSelectOptionModel(optionText: Constant.moreThan20Min),
-          OnBoardSelectOptionModel(optionText: Constant.moreThan3To4Hours),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.alwaysOneSide),
-          OnBoardSelectOptionModel(optionText: Constant.usuallyOnOneSide),
-          OnBoardSelectOptionModel(optionText: Constant.usuallyOnBothSide),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-      OnBoardSelectOptions(
-        selectOptionList: [
-          OnBoardSelectOptionModel(optionText: Constant.yes),
-          OnBoardSelectOptionModel(optionText: Constant.no),
-        ],
-      ),
-    ];*/
-
-  //  _progressPercent = 1 / _pageViewWidgetList.length;
   }
 
   @override
@@ -195,83 +103,74 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        _onBackPressed();
-      },
-      child: Scaffold(
-        backgroundColor: Constant.backgroundColor,
-        body: SafeArea(
-
+    return Scaffold(
+      backgroundColor: Constant.backgroundColor,
+      body: SafeArea(
           child: StreamBuilder<dynamic>(
               stream: _signUpOnBoardSecondStepBloc
                   .signUpOnBoardSecondStepDataStream,
-            builder: (context,snapshot){
-              if (!isAlreadyDataFiltered && snapshot.hasData && !isButtonClicked)
-                addFilteredQuestionListData(snapshot.data);
-              isButtonClicked = false;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  OnBoardChatBubble(
-                    isEndOfOnBoard: isEndOfOnBoard,
-                    chatBubbleText:
-                    _pageViewWidgetList[_currentPageIndex].questions,
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Expanded(
-                      child:PageView.builder(
-                              controller: _pageController,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: _pageViewWidgetList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return _pageViewWidgetList[index].questionsWidget;
-                              },
-                            )
-                          ),
-                  OnBoardBottomButtons(
-                    progressPercent: _progressPercent,
-                    backButtonFunction: _onBackPressed,
-                    nextButtonFunction: () {
-                      setState(() {
-                        double stepOneProgress = 1 / _pageViewWidgetList.length;
+              builder: (context, snapshot) {
+                if (!isAlreadyDataFiltered &&
+                    snapshot.hasData &&
+                    !isButtonClicked)
+                  addFilteredQuestionListData(snapshot.data);
+                isButtonClicked = false;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OnBoardChatBubble(
+                      isEndOfOnBoard: isEndOfOnBoard,
+                      chatBubbleText:
+                          _pageViewWidgetList[_currentPageIndex].questions,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Expanded(
+                        child: PageView.builder(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _pageViewWidgetList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _pageViewWidgetList[index].questionsWidget;
+                      },
+                    )),
+                    OnBoardBottomButtons(
+                      progressPercent: _progressPercent,
+                      backButtonFunction: _onBackPressed,
+                      nextButtonFunction: () {
+                        setState(() {
+                          double stepOneProgress =
+                              1 / _pageViewWidgetList.length;
 
-                        if (_progressPercent == 1) {
-                          isEndOfOnBoard = true;
-                          TextToSpeechRecognition.pauseSpeechToText(true, "");
-                          Navigator.pushReplacementNamed(
-                              context, Constant.onBoardHeadacheNameScreenRouter);
-                          //TODO: Move to next screen
-                        } else {
-                          _currentPageIndex++;
+                          if (_progressPercent == 1) {
+                            isEndOfOnBoard = true;
+                            TextToSpeechRecognition.pauseSpeechToText(true, "");
+                            moveUserToNextScreen();
+                            //TODO: Move to next screen
+                          } else {
+                            _currentPageIndex++;
 
-                          if (_currentPageIndex != _pageViewWidgetList.length - 1)
-                            _progressPercent += stepOneProgress;
-                          else {
-                            _progressPercent = 1;
+                            if (_currentPageIndex !=
+                                _pageViewWidgetList.length - 1)
+                              _progressPercent += stepOneProgress;
+                            else {
+                              _progressPercent = 1;
+                            }
+
+                            _pageController.animateToPage(_currentPageIndex,
+                                duration: Duration(milliseconds: 1),
+                                curve: Curves.easeIn);
                           }
-
-                          _pageController.animateToPage(_currentPageIndex,
-                              duration: Duration(milliseconds: 1),
-                              curve: Curves.easeIn);
-                        }
-                        getCurrentQuestionTag(_currentPageIndex);
-                      });
-                    },
-                    onBoardPart: 2,
-                  )
-                ],
-              );
-            }
-
-
-
-          )
-        ),
-      ),
+                          getCurrentQuestionTag(_currentPageIndex);
+                        });
+                      },
+                      onBoardPart: 2,
+                    )
+                  ],
+                );
+              })),
     );
   }
 
@@ -290,9 +189,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                   sliderMaxValue: element.max.toDouble(),
                   minText: element.min.toString(),
                   maxText: element.max.toString(),
-                  labelText: "",currentTag: element.tag,
+                  labelText: "",
+                  currentTag: element.tag,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -303,16 +203,19 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           case Constant.QuestionTextType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
-                questionsWidget: SignUpNameScreen(   tag: element.tag,
+                questionsWidget: SignUpNameScreen(
+                  tag: element.tag,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
-                  },)));
+                  },
+                )));
             break;
 
           case Constant.QuestionSingleType:
+          case Constant.QuestionMultiType:
             List<OnBoardSelectOptionModel> valuesListData = [];
             element.values.forEach((element) {
               valuesListData.add(OnBoardSelectOptionModel(
@@ -321,13 +224,13 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: OnBoardSelectOptions(
-                  selectOptionList: valuesListData, questionTag: element.tag,
+                    selectOptionList: valuesListData,
+                    questionTag: element.tag,
                     selectedAnswerListData:
-                    signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                        signUpOnBoardSelectedAnswersModel.selectedAnswers,
                     selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                       selectedAnswerListData(currentTag, selectedUserAnswer);
-                    }
-                )));
+                    })));
             break;
         }
         isAlreadyDataFiltered = true;
@@ -344,7 +247,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
     if (isDataBaseExists) {
       UserProgressDataModel userProgressModel =
-      await SignUpOnBoardProviders.db.getUserProgress();
+          await SignUpOnBoardProviders.db.getUserProgress();
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
@@ -358,9 +261,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
     if (isDataBaseExists) {
       signUpOnBoardSelectedAnswersModel =
-      await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase();
+          await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase();
     } else {
-      _signUpOnBoardSecondStepBloc.fetchSignUpOnBoardSecondStepData();
+      _signUpOnBoardSecondStepBloc
+          .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
     }
   }
 
@@ -371,12 +275,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     UserProgressDataModel userProgressDataModel = UserProgressDataModel();
 
     if (!isDataBaseExists) {
-      userProgressDataModel =
-      await _signUpOnBoardSecondStepBloc.fetchSignUpOnBoardSecondStepData();
+      userProgressDataModel = await _signUpOnBoardSecondStepBloc
+          .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
-          SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+              SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = "1";
       userProgressDataModel.step = Constant.firstEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
@@ -397,7 +301,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
       selectedAnswers = signUpOnBoardSelectedAnswersModel.selectedAnswers
           .firstWhere((model) => model.questionTag == currentTag,
-          orElse: () => null);
+              orElse: () => null);
     }
     if (selectedAnswers != null) {
       selectedAnswers.answer = selectedUserAnswer;
@@ -412,9 +316,22 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// This method will be use for update the answer in to the database on the basis of event type.
   updateSelectedAnswerDataOnLocalDatabase() {
     var answerStringData =
-    Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
+        Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, Constant.firstEventStep);
+    SignUpOnBoardProviders.db
+        .updateSelectedAnswers(answerStringData, Constant.firstEventStep);
+  }
+
+  void moveUserToNextScreen() async {
+    // await _signUpOnBoardSecondStepBloc.sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
+    if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+      var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .firstWhere((model) => model.questionTag == "nameClinicalImpression");
+      Navigator.pop(context,userHeadacheName.answer);
+    } else {
+      Navigator.pushReplacementNamed(context,
+          Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+    }
   }
 }

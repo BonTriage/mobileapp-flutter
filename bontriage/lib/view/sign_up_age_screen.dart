@@ -107,6 +107,11 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                     value: widget.sliderValue,
                     min: widget.sliderMinValue,
                     max: widget.sliderMaxValue,
+                    onChangeEnd: (age){
+                      if(!widget.isAnimate)
+                        widget.selectedAnswerCallBack(
+                            widget.currentTag, widget.sliderValue.toInt().toString());
+                    },
                     onChanged: (double age) {
                       setState(() {
                         widget.sliderValue = age;

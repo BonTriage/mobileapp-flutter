@@ -7,6 +7,18 @@ import 'package:mobile/view/DateTimePicker.dart';
 class TimeSection extends StatefulWidget {
   @override
   _TimeSectionState createState() => _TimeSectionState();
+
+  final Function(String, String) addHeadacheDateTimeDetailsData;
+
+  final String currentTag;
+  final String updatedDateValue;
+
+  const TimeSection(
+      {Key key,
+      this.currentTag,
+      this.updatedDateValue,
+      this.addHeadacheDateTimeDetailsData})
+      : super(key: key);
 }
 
 class _TimeSectionState extends State<TimeSection>
@@ -16,6 +28,7 @@ class _TimeSectionState extends State<TimeSection>
   DateTime _selectedEndDate;
   DateTime _selectedStartTime;
   DateTime _selectedEndTime;
+  DateTime _selectedEndDateAndTime;
   AnimationController _animationController;
   bool _isEndTimeExpanded = false;
 
@@ -24,6 +37,9 @@ class _TimeSectionState extends State<TimeSection>
     // TODO: implement initState
     super.initState();
 
+    widget.addHeadacheDateTimeDetailsData(
+        "onset", DateTime.now().toUtc().toString());
+
     _animationController = AnimationController(
       duration: Duration(milliseconds: 350),
       reverseDuration: Duration(milliseconds: 350),
@@ -31,6 +47,16 @@ class _TimeSectionState extends State<TimeSection>
     );
 
     _dateTime = DateTime.now();
+
+    if (widget.updatedDateValue != null) {
+      try {
+        _selectedStartDate = DateTime.parse(widget.updatedDateValue).toLocal();
+        print(_selectedStartDate);
+        _selectedStartTime = _selectedStartDate;
+      } catch (e) {
+        e.toString();
+      }
+    }
   }
 
   @override
@@ -41,22 +67,47 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onStartDateSelected(DateTime dateTime) {
     DateTime currentDateTime = DateTime.now();
-
     if (currentDateTime.isAfter(dateTime) ||
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
-        _selectedStartDate = dateTime;
+        if (_selectedStartTime == null) {
+          _selectedStartDate = dateTime;
+        } else {
+          _selectedStartDate = DateTime(
+              dateTime.year,
+              dateTime.month,
+              dateTime.day,
+              _selectedStartTime.hour,
+              _selectedStartTime.minute,
+              _selectedStartTime.second);
+        }
+        widget.addHeadacheDateTimeDetailsData(
+            "onset", _selectedStartDate.toUtc().toString());
       });
     }
   }
 
   void _onEndDateSelected(DateTime dateTime) {
     DateTime currentDateTime = DateTime.now();
-
     if (currentDateTime.isAfter(dateTime) ||
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
-        _selectedEndDate = dateTime;
+        if (_selectedEndTime == null) {
+          _selectedEndDate = dateTime;
+        } else {
+          _selectedEndDate = DateTime(
+              dateTime.year,
+              dateTime.month,
+              dateTime.day,
+              _selectedEndTime.hour,
+              _selectedEndTime.minute,
+              _selectedEndTime.second);
+        }
+
+        _selectedEndDateAndTime = _selectedEndDate;
+
+        widget.addHeadacheDateTimeDetailsData(
+            "endtime", _selectedEndDate.toUtc().toString());
       });
     }
     print(dateTime);
@@ -64,11 +115,22 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onStartTimeSelected(DateTime dateTime) {
     DateTime currentDateTime = DateTime.now();
-
     if (currentDateTime.isAfter(dateTime) ||
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
-        _selectedStartTime = dateTime;
+        if (_selectedStartDate == null) {
+          _selectedStartTime = dateTime;
+        } else {
+          _selectedStartTime = DateTime(
+              _selectedStartDate.year,
+              _selectedStartDate.month,
+              _selectedStartDate.day,
+              dateTime.hour,
+              dateTime.minute,
+              dateTime.second);
+        }
+        widget.addHeadacheDateTimeDetailsData(
+            "onset", _selectedStartTime.toUtc().toString());
       });
     }
     print(dateTime);
@@ -76,11 +138,23 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onEndTimeSelected(DateTime dateTime) {
     DateTime currentDateTime = DateTime.now();
-
     if (currentDateTime.isAfter(dateTime) ||
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
-        _selectedEndTime = dateTime;
+        if (_selectedEndDate == null) {
+          _selectedEndTime = dateTime;
+        } else {
+          _selectedEndTime = DateTime(
+              _selectedEndDate.year,
+              _selectedEndDate.month,
+              _selectedEndDate.day,
+              dateTime.hour,
+              dateTime.minute,
+              dateTime.second);
+        }
+        _selectedEndDateAndTime = _selectedEndTime;
+        widget.addHeadacheDateTimeDetailsData(
+            "endtime", _selectedEndTime.toUtc().toString());
       });
     }
     print(dateTime);
@@ -123,7 +197,7 @@ class _TimeSectionState extends State<TimeSection>
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
                           (_selectedStartDate == null)
-                              ? 'Aug 16, 2020'
+                              ? _getDateTime(DateTime.now(), 0)
                               : _getDateTime(_selectedStartDate, 0),
                           style: TextStyle(
                               color: Constant.splashColor,
@@ -167,7 +241,8 @@ class _TimeSectionState extends State<TimeSection>
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
                           (_selectedStartTime == null)
-                              ? '10:30 AM'
+                              ? Utils.getTimeInAmPmFormat(
+                                  DateTime.now().hour, DateTime.now().minute)
                               : _getDateTime(_selectedStartTime, 1),
                           style: TextStyle(
                               color: Constant.splashColor,
@@ -310,6 +385,18 @@ class _TimeSectionState extends State<TimeSection>
                   _animationController.forward();
                 } else {
                   _animationController.reverse();
+                }
+                if (_isEndTimeExpanded) {
+                  widget.addHeadacheDateTimeDetailsData("ongoing", "No");
+                  if (_selectedEndDateAndTime == null) {
+                    widget.addHeadacheDateTimeDetailsData(
+                        "endtime", DateTime.now().toUtc().toString());
+                  } else
+                    widget.addHeadacheDateTimeDetailsData(
+                        "endtime", _selectedEndDateAndTime.toUtc().toString());
+                } else {
+                  widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
+                  widget.addHeadacheDateTimeDetailsData("endtime", "");
                 }
               });
             },

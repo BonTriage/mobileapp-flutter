@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LogDayScreen(),
+      home: AddHeadacheOnGoingScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -134,7 +134,8 @@ class MyApp extends StatelessWidget {
             }
           case Constant.partTwoOnBoardScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: PartTwoOnBoardScreens());
+              String argsName = settings.arguments;
+              return SlideFromBottomPageRoute(widget: PartTwoOnBoardScreens(argumentsName: argsName));
             }
           case Constant.partThreeOnBoardScreenRouter:
             {

@@ -1,5 +1,8 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -91,12 +94,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                     duration: Duration(milliseconds: 100),
                     scaleFactor: 1.5,
                     onPressed: () {
-                      isEndOfOnBoard = true;
-                      TextToSpeechRecognition.pauseSpeechToText(true, "");
-                      Navigator.pushReplacementNamed(
-                          context,
-                          Constant
-                              .signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+                      saveHeadacheNameInLocalDataBase();
                     },
                     child: Container(
                       width: 130,
@@ -127,4 +125,14 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
       ),
     );
   }
+
+  void saveHeadacheNameInLocalDataBase() {
+    isEndOfOnBoard = true;
+    TextToSpeechRecognition.pauseSpeechToText(true, "");
+    Navigator.pushReplacementNamed(
+        context,
+        Constant
+            .signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+  }
+
 }

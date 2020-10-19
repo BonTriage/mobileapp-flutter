@@ -1,4 +1,5 @@
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,6 +14,18 @@ class SignUpOnBoardProviders {
   static const String QUESTIONNAIRES = "questionnaires";
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
+
+
+  static const String TABLE_ADD_HEADACHE = "addHeadache";
+  static const String HEADACHE_TYPE = "headacheType";
+  static const String HEADACHE_START_DATE = "headacheStartDate";
+  static const String HEADACHE_START_TIME = "headacheStartTime";
+  static const String HEADACHE_END_DATE = "headacheEndDate";
+  static const String HEADACHE_END_TIME = "headacheEndTime";
+  static const String HEADACHE_INTENSITY = "headacheIntensity";
+  static const String HEADACHE_DISABILITY = "headacheDisability";
+  static const String HEADACHE_NOTE = "headacheNote";
+  static const String HEADACHE_ONGOING = "headacheOnGoing";
 
   SignUpOnBoardProviders._();
 
@@ -51,6 +64,12 @@ class SignUpOnBoardProviders {
           "$QUESTIONNAIRES TEXT,"
           "$SELECTED_ANSWERS TEXT"
           ")");
+
+
+      batch.execute("CREATE TABLE $TABLE_ADD_HEADACHE ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$SELECTED_ANSWERS TEXT"
+          ")");
       await batch.commit();
     });
   }
@@ -61,6 +80,9 @@ class SignUpOnBoardProviders {
     await db.insert(TABLE_USER_PROGRESS, userProgressDataModel.toMap());
     return userProgressDataModel;
   }
+
+
+
 
   void updateUserProgress(UserProgressDataModel userProgressDataModel) async {
     final db = await database;
@@ -132,4 +154,35 @@ class SignUpOnBoardProviders {
     var dbPath = join(localDir, "bonTriageDB.db");
     return await databaseExists(dbPath);
   }
+
+  Future<UserAddHeadacheLogModel> insertAddHeadacheDetails(
+      UserAddHeadacheLogModel userAddHeadacheLogModel) async {
+    final db = await database;
+    await db.insert(TABLE_ADD_HEADACHE, userAddHeadacheLogModel.toMap());
+    return userAddHeadacheLogModel;
+  }
+
+  void updateAddHeadacheDetails(UserAddHeadacheLogModel userAddHeadacheLogModel) async {
+    final db = await database;
+    await db.update(
+      TABLE_ADD_HEADACHE,
+      userAddHeadacheLogModel.toMap(),
+      where: "$USER_ID = ?",
+      whereArgs: [userAddHeadacheLogModel.userId],
+    );
+  }
+
+  Future<List<Map>> getUserHeadacheData(String userId) async{
+    final db = await database;
+    List<Map> logDayQuestionnaire;
+    try {
+      logDayQuestionnaire = await db.rawQuery(
+          "SELECT * FROM $TABLE_ADD_HEADACHE WHERE $USER_ID = $userId");
+    } catch(e) {
+      print(e.toString());
+    }
+    print(logDayQuestionnaire);
+    return logDayQuestionnaire;
+  }
+
 }

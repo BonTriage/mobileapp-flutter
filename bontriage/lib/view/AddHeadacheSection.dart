@@ -11,6 +11,7 @@ class AddHeadacheSection extends StatefulWidget {
   final String headerText;
   final String subText;
   final String contentType;
+  final String selectedCurrentValue;
   final double min;
   final double max;
   final List<Questions> sleepExpandableWidgetList;
@@ -18,6 +19,9 @@ class AddHeadacheSection extends StatefulWidget {
   final List<Values> valuesList;
   final List<Values> chipsValuesList;
   final List<Values> dosageList;
+  final Function(String, String) addHeadacheDetailsData;
+  final Function moveWelcomeOnBoardTwoScreen;
+  final String updateAtValue;
 
   const AddHeadacheSection(
       {Key key,
@@ -30,7 +34,11 @@ class AddHeadacheSection extends StatefulWidget {
       this.chipsValuesList,
       this.dosageList,
       this.sleepExpandableWidgetList,
-      this.medicationExpandableWidgetList})
+      this.medicationExpandableWidgetList,
+      this.addHeadacheDetailsData,
+      this.selectedCurrentValue,
+      this.updateAtValue,
+      this.moveWelcomeOnBoardTwoScreen})
       : super(key: key);
 
   @override
@@ -47,60 +55,58 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   Widget _getSectionWidget() {
     switch (widget.contentType) {
       case 'headacheType':
+        var value = widget.valuesList.firstWhere(
+            (model) => model.text == Constant.plusText,
+            orElse: () => null);
+        if (value == null) {
+          widget.valuesList.add(Values(
+              text: Constant.plusText,
+              valueNumber: widget.valuesList.length.toString()));
+        }
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
+          onCircleItemSelected: _onHeadacheTypeItemSelected,
         ));
       case 'onset':
-        return _getWidget(TimeSection());
+        return _getWidget(TimeSection(currentTag: widget.contentType,updatedDateValue: widget.updateAtValue,
+            addHeadacheDateTimeDetailsData: _onHeadacheDateTimeSelected));
       case 'severity':
         return _getWidget(SignUpAgeScreen(
-          sliderValue: widget.min,
+          sliderValue: (widget.selectedCurrentValue == null ||
+                  widget.selectedCurrentValue.isEmpty)
+              ? widget.min
+              : double.parse(widget.selectedCurrentValue),
           minText: Constant.one,
           maxText: Constant.ten,
+          currentTag: widget.contentType,
           sliderMinValue: widget.min,
           sliderMaxValue: widget.max,
           minTextLabel: Constant.mild,
           maxTextLabel: Constant.veryPainful,
           labelText: '',
           horizontalPadding: 0,
+          selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
         ));
       case 'disability':
         return _getWidget(SignUpAgeScreen(
-          sliderValue: widget.min,
+          sliderValue: (widget.selectedCurrentValue == null ||
+                  widget.selectedCurrentValue.isEmpty)
+              ? widget.min
+              : double.parse(widget.selectedCurrentValue),
           minText: Constant.one,
           maxText: Constant.ten,
+          currentTag: widget.contentType,
           sliderMinValue: widget.min,
           sliderMaxValue: widget.max,
           minTextLabel: Constant.noneAtALL,
           maxTextLabel: Constant.totalDisability,
           labelText: '',
           horizontalPadding: 0,
+          selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
         ));
-      /*case 'sleep':
-        return _getWidget(CircleLogOptions(
-          isForLogDay: true,
-          logOptions: widget.valuesList,
-        ));
-      case 'activity':
-        return _getWidget(CircleLogOptions(
-          logOptions: widget.valuesList,
-        ));
-      case 'meal_schedule':
-        return _getWidget(CircleLogOptions(
-          logOptions: widget.valuesList,
-        ));
-      case 'medications':
-        return _getWidget(CircleLogOptions(
-          isForLogDay: true,
-          logOptions: widget.valuesList,
-        ));
-      case 'triggers':
-        return _getWidget(CircleLogOptions(
-          isForLogDay: true,
-          logOptions: widget.valuesList,
-        ));*/
+
       case 'behavior.presleep':
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
@@ -130,11 +136,27 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
   }
 
+  void _onHeadacheTypeItemSelected(int index) {
+    if (widget.valuesList[index].text == Constant.plusText) {
+      widget.moveWelcomeOnBoardTwoScreen();
+    } else
+      widget.addHeadacheDetailsData(
+          widget.contentType, widget.valuesList[index].text);
+  }
+
+  void _onHeadacheIntensitySelected(String currentTag, String currentValue) {
+    widget.addHeadacheDetailsData(currentTag, currentValue);
+  }
+
+  void _onHeadacheDateTimeSelected(String currentTag, String currentValue) {
+    widget.addHeadacheDetailsData(currentTag, currentValue);
+  }
+
   void _onSleepItemSelected(int index) {
     String preCondition = widget.sleepExpandableWidgetList[0].precondition;
     String text = widget.valuesList[index].text;
 
-    if(preCondition.contains(text) && widget.valuesList[index].isSelected) {
+    if (preCondition.contains(text) && widget.valuesList[index].isSelected) {
       _animationController.forward();
     } else {
       _animationController.reverse();
@@ -145,7 +167,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     setState(() {
       whichMedicationItemSelected = index;
     });
-    if(widget.valuesList[index].isSelected) {
+    if (widget.valuesList[index].isSelected) {
       _animationController.forward();
     } else {
       _animationController.reverse();
@@ -285,7 +307,10 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               height: 35,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: widget.medicationExpandableWidgetList[whichMedicationItemSelected].values.length,
+                itemCount: widget
+                    .medicationExpandableWidgetList[whichMedicationItemSelected]
+                    .values
+                    .length,
                 itemBuilder: (context, index) {
                   return _getOverlayedChip(index);
                 },
@@ -368,8 +393,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               cursorColor: Constant.unselectedTextColor,
               textAlign: TextAlign.start,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 5, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 hintText: 'Tap to type',
                 hintStyle: TextStyle(
                     fontSize: 14,
@@ -397,7 +422,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   Widget _getOverlayedChip(int index) {
-    Values value = widget.medicationExpandableWidgetList[whichMedicationItemSelected].values[index];
+    Values value = widget
+        .medicationExpandableWidgetList[whichMedicationItemSelected]
+        .values[index];
     return Container(
       margin: EdgeInsets.only(
         right: 5,
@@ -435,7 +462,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           setState(() {
             element.isSelected = !element.isSelected;
 
-            if(element.isSelected) {
+            if (element.isSelected) {
               numberOfSleepItemSelected++;
             } else {
               numberOfSleepItemSelected--;
@@ -451,7 +478,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             border: Border.all(
               color: Constant.chatBubbleGreen,
             ),
-            color: element.isSelected ? Constant.chatBubbleGreen : Colors.transparent,
+            color: element.isSelected
+                ? Constant.chatBubbleGreen
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
@@ -459,7 +488,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             child: Text(
               element.text,
               style: TextStyle(
-                  color: element.isSelected ? Constant.bubbleChatTextView : Constant.locationServiceGreen,
+                  color: element.isSelected
+                      ? Constant.bubbleChatTextView
+                      : Constant.locationServiceGreen,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   fontFamily: Constant.jostRegular),

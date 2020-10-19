@@ -30,7 +30,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     ]
   ];
 
-   List<String> bubbleChatTextView = [
+  List<String> bubbleChatTextView = [
     Constant.nextWeAreGoing,
     Constant.answeringTheNext,
   ];
@@ -52,7 +52,8 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
         bottomButtonText: Constant.continueText,
         bottomButtonFunction: () {
           Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter);
+              context, Constant.partTwoOnBoardScreenRouter,
+              arguments: "clinical_impression_short2");
         },
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,

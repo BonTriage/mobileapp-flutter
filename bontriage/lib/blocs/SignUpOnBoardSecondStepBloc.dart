@@ -25,12 +25,12 @@ class SignUpOnBoardSecondStepBloc {
     _signUpOnBoardFirstStepRepository = SignUpOnBoardFirstStepRepository();
   }
 
-  fetchSignUpOnBoardSecondStepData() async {
+  fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
       var signUpFirstStepData =
       await _signUpOnBoardFirstStepRepository.serviceCall(
           'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-          RequestMethod.POST);
+          RequestMethod.POST,argumentsName);
       if (signUpFirstStepData is AppException) {
         signUpOnBoardSecondStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -64,5 +64,21 @@ class SignUpOnBoardSecondStepBloc {
 
   void dispose() {
     __signUpOnBoardSecondStepRepositoryDataStreamController?.close();
+  }
+
+  sendSignUpFirstStepData(SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+    try {
+      var signUpFirstStepData =
+      await _signUpOnBoardFirstStepRepository.signUpWelcomeOnBoardSecondStepServiceCall(
+          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
+          RequestMethod.POST,signUpOnBoardSelectedAnswersModel);
+      if (signUpFirstStepData is AppException) {
+        print(signUpFirstStepData);
+      } else {
+        print(signUpFirstStepData);
+      }
+    } catch (Exception) {
+      //  signUpFirstStepDataSink.add("Error");
+    }
   }
 }

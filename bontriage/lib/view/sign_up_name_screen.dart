@@ -31,21 +31,22 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
     super.initState();
     textEditingController = TextEditingController();
 
-   if(widget.selectedAnswerListData != null){
-     selectedAnswers = widget.selectedAnswerListData.firstWhere(
-             (model) => model.questionTag == widget.tag,
-         orElse: () => null);
-     if (selectedAnswers != null) {
-       textEditingController.text = selectedAnswers.answer;
-     }
-
-   }
+    if (widget.selectedAnswerListData != null) {
+      selectedAnswers = widget.selectedAnswerListData.firstWhere(
+          (model) => model.questionTag == widget.tag,
+          orElse: () => null);
+      if (selectedAnswers != null) {
+        textEditingController.text = selectedAnswers.answer;
+      }
+    }
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
     );
 
     _animationController.forward();
+
+    textEditingController.addListener(_printLatestValue);
   }
 
   @override
@@ -59,12 +60,17 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
     }
   }
 
+  _printLatestValue() {
+    print("Second text field: ${textEditingController.text}");
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     widget.selectedAnswerCallBack(widget.tag, textEditingController.text);
     //  setAnswerValueInLocalDatabase(widget.tag);
     _animationController.dispose();
+    textEditingController.dispose();
     super.dispose();
   }
 
@@ -77,7 +83,19 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
           child: TextField(
+            onEditingComplete: () {
+              widget.selectedAnswerCallBack(
+                  widget.tag, textEditingController.text);
+            },
+            onSubmitted: (String value) {
+              widget.selectedAnswerCallBack(widget.tag, value);
+            },
             controller: textEditingController,
+            onChanged: (String value) {
+              widget.selectedAnswerCallBack(
+                  widget.tag, value);
+              print(value);
+            },
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontSize: 15,
@@ -100,5 +118,4 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
       ),
     );
   }
-
 }

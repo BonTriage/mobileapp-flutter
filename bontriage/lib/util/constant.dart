@@ -280,6 +280,7 @@ class Constant {
   static const String QuestionNumberType = 'number';
   static const String QuestionTextType = 'text';
   static const String QuestionSingleType = 'single';
+  static const String QuestionMultiType = 'multi';
   static const String QuestionLocationType = 'location';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
@@ -302,6 +303,19 @@ class Constant {
   static String zeroEventStep = "1";
   static String firstEventStep = "2";
   static String secondEventStep = "3";
+  static String plusText = "+";
+  static String clinicalImpressionEventType = "clinical_impression";
+  static String welcomeOnBoardStepTwoEventType = "clinical_impression_short2";
+
+  static const String severityTag = "severity";
+  static const String onSetTag = "onset";
+  static const String disabilityTag = "disability";
+  static const String onGoingTag = "ongoing";
+  static const String endTimeTag = "endtime";
+  static const String headacheTypeTag = "headacheType";
+  static const String singleTypeTag = "single";
+  static const String numberTypeTag = "number";
+  static const String dateTimeTypeTag = "datetime";
 
 
   //Dimensions

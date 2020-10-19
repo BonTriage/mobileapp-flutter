@@ -1,28 +1,56 @@
+import 'dart:convert';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/AddHeadacheLogBloc.dart';
+import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserAddHeadacheLogModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   @override
-  _AddHeadacheOnGoingScreenState createState() => _AddHeadacheOnGoingScreenState();
+  _AddHeadacheOnGoingScreenState createState() =>
+      _AddHeadacheOnGoingScreenState();
 }
 
-class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> with SingleTickerProviderStateMixin {
+class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
+    with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   AddHeadacheLogBloc _addHeadacheLogBloc;
   String headacheType = '';
+  SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
+      SignUpOnBoardSelectedAnswersModel();
+
+  List<Questions> _addHeadacheUserListData;
+
+  List<SelectedAnswers> selectedAnswers = [];
 
   @override
   void initState() {
     super.initState();
     _dateTime = DateTime.now();
+    signUpOnBoardSelectedAnswersModel.eventType = "Headache";
+    signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _addHeadacheLogBloc = AddHeadacheLogBloc();
-    _addHeadacheLogBloc.fetchAddHeadacheLogData();
+    requestService();
+  }
+
+  @override
+  void didUpdateWidget(AddHeadacheOnGoingScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -38,16 +66,17 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
         decoration: Constant.backgroundBoxDecoration,
         child: SingleChildScrollView(
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height
-            ),
+            constraints:
+                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
             child: SafeArea(
               child: Container(
                 margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 decoration: BoxDecoration(
                   color: Constant.backgroundColor,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                 ),
                 child: Column(
                   children: [
@@ -59,8 +88,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                           style: TextStyle(
                               fontSize: 18,
                               color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostMedium
-                          ),
+                              fontFamily: Constant.jostMedium),
                         ),
                         Image(
                           image: AssetImage(Constant.closeIcon),
@@ -98,7 +126,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                       child: StreamBuilder<dynamic>(
                         stream: _addHeadacheLogBloc.addHeadacheLogDataStream,
                         builder: (context, snapshot) {
-                          if(snapshot.hasData) {
+                          if (snapshot.hasData) {
                             return Column(
                               children: _getAddHeadacheSection(snapshot.data),
                             );
@@ -113,19 +141,23 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                       child: Text(
                         Constant.addANote,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: Constant.addCustomNotificationTextColor,
-                            fontFamily: Constant.jostRegular,
+                          fontSize: 16,
+                          color: Constant.addCustomNotificationTextColor,
+                          fontFamily: Constant.jostRegular,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BouncingWidget(
-                          onPressed: () {},
+                          onPressed: () {
+                            saveDataInLocalDataBaseOrSever();
+                          },
                           child: Container(
                             width: 120,
                             padding: EdgeInsets.symmetric(vertical: 13),
@@ -146,7 +178,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                         ),
                       ],
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -173,7 +207,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
                         ),
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
@@ -184,22 +220,147 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen> wit
     );
   }
 
+  /// This method will be use for add widget from the help of ADDHeadacheSection class.
   List<Widget> _getAddHeadacheSection(List<dynamic> addHeadacheListData) {
     List<Widget> listOfWidgets = [];
-
-    addHeadacheListData.forEach((element) {
-      listOfWidgets.add(
-          AddHeadacheSection(
-            headerText: element.text,
-            subText: element.helpText,
-            contentType: element.tag,
-            min: element.min.toDouble(),
-            max: element.max.toDouble(),
-            valuesList: element.values,
-          )
-      );
+    _addHeadacheUserListData = addHeadacheListData;
+    selectedAnswers.forEach((element) {
+      Questions questionsTag = _addHeadacheUserListData
+          .firstWhere((element1) => element1.tag == element.questionTag);
+      switch (questionsTag.questionType) {
+        case Constant.singleTypeTag:
+          Values answerValuesData = questionsTag.values
+              .firstWhere((element1) => element1.text == element.answer);
+          answerValuesData.isSelected = true;
+          break;
+        case Constant.numberTypeTag:
+          questionsTag.currentValue = element.answer;
+          break;
+        case Constant.dateTimeTypeTag:
+          questionsTag.updatedAt = element.answer;
+          break;
+      }
     });
 
+    _addHeadacheUserListData.forEach((element) {
+      listOfWidgets.add(AddHeadacheSection(
+        headerText: element.text,
+        subText: element.helpText,
+        contentType: element.tag,
+        min: element.min.toDouble(),
+        max: element.max.toDouble(),
+        valuesList: element.values,
+        updateAtValue: element.updatedAt,
+        selectedCurrentValue: element.currentValue,
+        addHeadacheDetailsData: addSelectedHeadacheDetailsData,
+        moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
+      ));
+    });
     return listOfWidgets;
+  }
+
+  /// This method will be use for to insert and update his answer in the local model.So we will save his answer on the basis of current Tag
+  void addSelectedHeadacheDetailsData(String currentTag, String selectedValue) {
+    SelectedAnswers selectedAnswers;
+    if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
+      selectedAnswers = signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .firstWhere((model) => model.questionTag == currentTag,
+              orElse: () => null);
+    }
+    if (selectedAnswers != null) {
+      selectedAnswers.answer = selectedValue;
+    } else {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .add(SelectedAnswers(questionTag: currentTag, answer: selectedValue));
+      print(signUpOnBoardSelectedAnswersModel.selectedAnswers);
+    }
+  }
+
+  /// This method will be use for if user click Headache Plus Icon and he want to add another headache name of Add headache Screen.
+  /// So we will move to the user  2nd Step of welcome OnBoard Screen in which he will add all information related to his headache.
+
+  moveOnWelcomeBoardSecondStepScreens() async {
+    final pushToScreenResult = await Navigator.pushNamed(
+        context, Constant.partTwoOnBoardScreenRouter,
+        arguments: "clinical_impression");
+    if (pushToScreenResult != null) {
+      setState(() {
+        if (_addHeadacheUserListData != null) {
+          Questions questions = _addHeadacheUserListData.firstWhere(
+              (element) => element.tag == "headacheType",
+              orElse: () => null);
+          if (questions != null) {
+            questions.values.removeLast();
+            Values values = questions.values.firstWhere(
+                (element) => element.isSelected,
+                orElse: () => null);
+            if (values != null) {
+              values.isSelected = false;
+            }
+            questions.values
+                .add(Values(text: pushToScreenResult, isSelected: true));
+          }
+
+          addSelectedHeadacheDetailsData("headacheType", pushToScreenResult);
+        }
+      });
+    }
+    print(pushToScreenResult);
+  }
+
+  void saveDataInLocalDataBaseOrSever() {
+    UserAddHeadacheLogModel userAddHeadacheLogModel = UserAddHeadacheLogModel();
+    List<SelectedAnswers> selectedAnswerList =
+        signUpOnBoardSelectedAnswersModel.selectedAnswers;
+
+    SelectedAnswers selectedAnswer = selectedAnswerList.firstWhere(
+        (element) => element.questionTag == "ongoing",
+        orElse: () => null);
+    if (selectedAnswer == null || selectedAnswer.answer == "Yes") {
+      userAddHeadacheLogModel.selectedAnswers = json.encode(selectedAnswerList);
+      userAddHeadacheLogModel.userId = "4214";
+      saveAndUpdateDataInLocalDatabase(userAddHeadacheLogModel);
+    } else {
+      _addHeadacheLogBloc
+          .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
+    }
+  }
+
+  void saveAndUpdateDataInLocalDatabase(
+      UserAddHeadacheLogModel userAddHeadacheLogModel) async {
+    try {
+      int userProgressDataCount = await SignUpOnBoardProviders.db
+          .checkUserProgressDataAvailable(
+              SignUpOnBoardProviders.TABLE_ADD_HEADACHE);
+      if (userProgressDataCount == 0) {
+        SignUpOnBoardProviders.db
+            .insertAddHeadacheDetails(userAddHeadacheLogModel);
+      } else {
+        SignUpOnBoardProviders.db
+            .updateAddHeadacheDetails(userAddHeadacheLogModel);
+      }
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  void requestService() async {
+    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
+    if (isDataBaseExists) {
+      List<Map> userHeadacheDataList =
+          await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
+      if (userHeadacheDataList.length > 0) {
+        userHeadacheDataList.forEach((element) {
+          List<dynamic> map = jsonDecode(element['selectedAnswers']);
+          map.forEach((element) {
+            selectedAnswers.add(SelectedAnswers(
+                questionTag: element['questionTag'],
+                answer: element['answer']));
+          });
+        });
+        signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
+      }
+    }
+    _addHeadacheLogBloc.fetchAddHeadacheLogData();
   }
 }
