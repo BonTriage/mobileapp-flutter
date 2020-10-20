@@ -11,7 +11,7 @@ class CircleLogOptions extends StatefulWidget {
   final Function(int) onCircleItemSelected;
   final String questionType;
   final String currentTag;
-  final Function(String, String, String, bool) onDoubleTapItem;
+  final Function(String, String, String, bool, int) onDoubleTapItem;
 
   const CircleLogOptions(
       {Key key,
@@ -72,34 +72,36 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   });
                 },
                 onDoubleTap: () {
-                  setState(() {
-                    if(widget.questionType == 'multi') {
-                      if(widget.logOptions[index].isDoubleTapped) {
-                        widget.logOptions[index].isDoubleTapped = false;
-                      } else {
-                        widget.logOptions[index].isSelected = true;
-                        widget.logOptions[index].isDoubleTapped = true;
-                      }
-                    } else {
-                      widget.logOptions.asMap().forEach((key, value) {
-                        if(key == index) {
-                          if(value.isDoubleTapped) {
-                            value.isDoubleTapped = false;
-                          } else {
-                            value.isSelected = true;
-                            value.isDoubleTapped = true;
-                          }
+                  if(widget.onDoubleTapItem != null) {
+                    setState(() {
+                      if(widget.questionType == 'multi') {
+                        if(widget.logOptions[index].isDoubleTapped) {
+                          widget.logOptions[index].isDoubleTapped = false;
                         } else {
-                          value.isSelected = false;
-                          value.isDoubleTapped = false;
+                          widget.logOptions[index].isSelected = true;
+                          widget.logOptions[index].isDoubleTapped = true;
                         }
-                      });
-                    }
-                    widget.onDoubleTapItem(widget.currentTag, widget.logOptions[index].valueNumber, widget.questionType, widget.logOptions[index].isDoubleTapped);
-                  });
+                      } else {
+                        widget.logOptions.asMap().forEach((key, value) {
+                          if(key == index) {
+                            if(value.isDoubleTapped) {
+                              value.isDoubleTapped = false;
+                            } else {
+                              value.isSelected = true;
+                              value.isDoubleTapped = true;
+                            }
+                          } else {
+                            value.isSelected = false;
+                            value.isDoubleTapped = false;
+                          }
+                        });
+                      }
+                      widget.onDoubleTapItem(widget.currentTag, widget.logOptions[index].valueNumber, widget.questionType, widget.logOptions[index].isDoubleTapped, index);
+                    });
 
-                  if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);
-                  print('onDoubleTap');
+                    if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);
+                    print('onDoubleTap');
+                  }
                 },
                 child: Container(
                   margin: EdgeInsets.only(right: 10),

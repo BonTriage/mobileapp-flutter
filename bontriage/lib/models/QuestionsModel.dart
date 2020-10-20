@@ -14,6 +14,7 @@ class Questions {
   int phi;
   int required;
   String uiHints;
+  String currentValue;
 
   Questions(
       {this.tag,
@@ -30,7 +31,8 @@ class Questions {
       this.exclusiveValue,
       this.phi,
       this.required,
-      this.uiHints});
+      this.uiHints,
+      this.currentValue});
 
   Questions.fromJson(Map<String, dynamic> json) {
     tag = json['tag'];
@@ -89,6 +91,7 @@ class Values {
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];
     text = json['text'];
+    isSelected = (json['isSelected'] == null) ? false : json['isSelected'];
   }
 
   Map<String, dynamic> toJson() {

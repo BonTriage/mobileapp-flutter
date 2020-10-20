@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class LogDayChipList extends StatefulWidget {
   final Questions question;
+  final Function(String, String) onSelectCallback;
 
-  const LogDayChipList({Key key, this.question}) : super(key: key);
+  const LogDayChipList({Key key, this.question, this.onSelectCallback}) : super(key: key);
 
   @override
   _LogDayChipListState createState() => _LogDayChipListState();
@@ -44,6 +47,10 @@ class _LogDayChipListState extends State<LogDayChipList> {
                 });
               }
             });
+
+            if(widget.onSelectCallback != null) {
+              widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+            }
           },
           onDoubleTap: () {
             /*setState(() {
@@ -76,8 +83,8 @@ class _LogDayChipListState extends State<LogDayChipList> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               border: Border.all(
-                  color: widget.question.values[index].isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen,
-                  width: widget.question.values[index].isDoubleTapped ? 2 : 1
+                  color: /*widget.question.values[index].isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen*/Constant.chatBubbleGreen,
+                  width: widget.question.values[index].isDoubleTapped ? /*2*/1 : 1
               ),
               color: widget.question.values[index].isSelected
                   ? Constant.chatBubbleGreen

@@ -22,7 +22,7 @@ class _LogDayScreenState extends State<LogDayScreen>
     with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   LogDayBloc _logDayBloc;
-  List<Widget> _sectionWidgetList;
+  List<Widget> _sectionWidgetList = [];
   List<Questions> _sleepValuesList = [];
   List<Questions> _medicationValuesList = [];
   List<Questions> _triggerValuesList = [];
@@ -234,12 +234,19 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void addNewWidgets(List<Questions> questionList) {
-    if(selectedAnswers.length != 0) {
+    if(_sectionWidgetList.length == 0) {
+      if(selectedAnswers.length != 0) {
       selectedAnswers.forEach((element) {
-        Questions questions = questionList.firstWhere((element1) => element1.tag == element.questionTag);
-        int index = int.parse(element.answer) - 1;
-        questions.values[index].isSelected = true;
-        questions.values[index].isDoubleTapped = true;
+        Questions questions = questionList.firstWhere((element1) => element1.tag == element.questionTag, orElse: () => null);
+        if(questions != null && (questions.questionType == 'multi' || questions.questionType == 'single')) {
+          try {
+            int index = int.parse(element.answer) - 1;
+            questions.values[index].isSelected = true;
+            questions.values[index].isDoubleTapped = true;
+          } catch(e) {
+            print(e.toString());
+          }
+        }
       });
     }
     List<Questions> allQuestionList = [];
@@ -260,24 +267,25 @@ class _LogDayScreenState extends State<LogDayScreen>
         .removeWhere((element) => _medicationValuesList.contains(element));
     questionList.removeWhere((element) => _triggerValuesList.contains(element));
 
-    questionList.forEach((element) {
-      if (element.precondition == null || element.precondition.isEmpty) {
-        _sectionWidgetList.add(
-          AddHeadacheSection(
-            headerText: element.text,
-            subText: element.helpText,
-            contentType: element.tag,
-            sleepExpandableWidgetList: _sleepValuesList,
-            medicationExpandableWidgetList: _medicationValuesList,
-            triggerExpandableWidgetList: _triggerValuesList,
-            valuesList: element.values,
-            questionType: element.questionType,
-            allQuestionsList: allQuestionList,
-            selectedAnswers: selectedAnswers
-          ),
-        );
-      }
-    });
+      questionList.forEach((element) {
+        if (element.precondition == null || element.precondition.isEmpty) {
+          _sectionWidgetList.add(
+            AddHeadacheSection(
+                headerText: element.text,
+                subText: element.helpText,
+                contentType: element.tag,
+                sleepExpandableWidgetList: _sleepValuesList,
+                medicationExpandableWidgetList: _medicationValuesList,
+                triggerExpandableWidgetList: _triggerValuesList,
+                valuesList: element.values,
+                questionType: element.questionType,
+                allQuestionsList: allQuestionList,
+                selectedAnswers: selectedAnswers
+            ),
+          );
+        }
+      });
+    }
   }
 
   Future<void> _showDoubleTapDialog() async {
