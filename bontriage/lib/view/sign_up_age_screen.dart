@@ -18,10 +18,11 @@ class SignUpAgeScreen extends StatefulWidget {
   final String currentTag;
   final Function(String, String) selectedAnswerCallBack;
   final List<SelectedAnswers> selectedAnswerListData;
+  final Function(String, String) onValueChangeCallback;
 
 
   SignUpAgeScreen(
-      {Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true, this.currentTag, this.selectedAnswerListData, this.selectedAnswerCallBack})
+      {Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true, this.currentTag, this.selectedAnswerListData, this.selectedAnswerCallBack, this.onValueChangeCallback})
       : super(key: key);
 
   @override
@@ -77,6 +78,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
+    if(widget.selectedAnswerCallBack != null)
     widget.selectedAnswerCallBack(
         widget.currentTag, widget.sliderValue.toInt().toString());
     super.dispose();
@@ -115,6 +117,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                     onChanged: (double age) {
                       setState(() {
                         widget.sliderValue = age;
+                        if(widget.onValueChangeCallback != null)
+                          widget.onValueChangeCallback(widget.currentTag, age.toInt().toString());
                       });
                     },
                   ),

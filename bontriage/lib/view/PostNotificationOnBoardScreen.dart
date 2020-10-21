@@ -40,7 +40,7 @@ class _PostNotificationOnBoardScreenState
         isShowNextButton: true,
         nextButtonFunction: () {
           if (_currentIndex == _questionList.length - 1) {
-            //TODO: Move to next screen
+            Navigator.pushReplacementNamed(context, Constant.homeRouter);
             print('Move to Next Screen');
           } else {
             setState(() {

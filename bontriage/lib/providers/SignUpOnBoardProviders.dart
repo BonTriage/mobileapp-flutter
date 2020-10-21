@@ -1,5 +1,9 @@
 import 'package:mobile/models/LocalQuestionnaire.dart';
+
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
+
+import 'package:mobile/models/LogDayQuestionnaire.dart';
+
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,7 +19,6 @@ class SignUpOnBoardProviders {
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
 
-
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
   static const String HEADACHE_START_DATE = "headacheStartDate";
@@ -26,6 +29,9 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_DISABILITY = "headacheDisability";
   static const String HEADACHE_NOTE = "headacheNote";
   static const String HEADACHE_ONGOING = "headacheOnGoing";
+
+  //For Log Day Screen
+  static const String TABLE_LOG_DAY = "tableLogDay";
 
   SignUpOnBoardProviders._();
 
@@ -65,8 +71,11 @@ class SignUpOnBoardProviders {
           "$SELECTED_ANSWERS TEXT"
           ")");
 
-
       batch.execute("CREATE TABLE $TABLE_ADD_HEADACHE ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$SELECTED_ANSWERS TEXT"
+          ")");
+      batch.execute("CREATE TABLE $TABLE_LOG_DAY ("
           "$USER_ID TEXT PRIMARY KEY,"
           "$SELECTED_ANSWERS TEXT"
           ")");
@@ -80,9 +89,6 @@ class SignUpOnBoardProviders {
     await db.insert(TABLE_USER_PROGRESS, userProgressDataModel.toMap());
     return userProgressDataModel;
   }
-
-
-
 
   void updateUserProgress(UserProgressDataModel userProgressDataModel) async {
     final db = await database;
@@ -119,16 +125,24 @@ class SignUpOnBoardProviders {
     return questionnaire;
   }
 
-  Future<List<LocalQuestionnaire>> getQuestionnaire() async {
+  Future<List<LocalQuestionnaire>> getQuestionnaire(String eventType) async {
     final db = await database;
     List<LocalQuestionnaire> localQuestionnaire = List<LocalQuestionnaire>();
+    try {
+      var localQuestionnaireData = await db.rawQuery(
+          "SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType");
+
+      localQuestionnaireData.forEach((currentQuestionnaire) {
+        LocalQuestionnaire questionnaire =
+            LocalQuestionnaire.fromJson(currentQuestionnaire);
+        localQuestionnaire.add(questionnaire);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
     var localQuestionnaireData = await db.query(TABLE_QUESTIONNAIRES,
         columns: [EVENT_TYPE, QUESTIONNAIRES, SELECTED_ANSWERS]);
-    localQuestionnaireData.forEach((currentQuestionnaire) {
-      LocalQuestionnaire questionnaire =
-          LocalQuestionnaire.fromJson(currentQuestionnaire);
-      localQuestionnaire.add(questionnaire);
-    });
+
     return localQuestionnaire;
   }
 
@@ -162,7 +176,8 @@ class SignUpOnBoardProviders {
     return userAddHeadacheLogModel;
   }
 
-  void updateAddHeadacheDetails(UserAddHeadacheLogModel userAddHeadacheLogModel) async {
+  void updateAddHeadacheDetails(
+      UserAddHeadacheLogModel userAddHeadacheLogModel) async {
     final db = await database;
     await db.update(
       TABLE_ADD_HEADACHE,
@@ -172,17 +187,47 @@ class SignUpOnBoardProviders {
     );
   }
 
-  Future<List<Map>> getUserHeadacheData(String userId) async{
+  Future<List<Map>> getUserHeadacheData(String userId) async {
     final db = await database;
     List<Map> logDayQuestionnaire;
     try {
       logDayQuestionnaire = await db.rawQuery(
           "SELECT * FROM $TABLE_ADD_HEADACHE WHERE $USER_ID = $userId");
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
     }
     print(logDayQuestionnaire);
     return logDayQuestionnaire;
   }
 
+  void updateLogDayData(String selectedAnswers, String userId) async {
+    final db = await database;
+    await db.update(
+      TABLE_LOG_DAY,
+      {SELECTED_ANSWERS: selectedAnswers},
+      where: "$USER_ID = ?",
+      whereArgs: [userId],
+    );
+    print("Log updated");
+  }
+
+  Future<List<Map>> getLogDayData(String userId) async {
+    final db = await database;
+    List<Map> logDayQuestionnaire;
+    try {
+      logDayQuestionnaire = await db
+          .rawQuery("SELECT * FROM $TABLE_LOG_DAY WHERE $USER_ID = $userId");
+    } catch (e) {
+      print(e.toString());
+    }
+    print(logDayQuestionnaire);
+    return logDayQuestionnaire;
+  }
+
+  Future<LogDayQuestionnaire> insertLogDayData(
+      LogDayQuestionnaire logDayQuestionnaire) async {
+    final db = await database;
+    await db.insert(TABLE_LOG_DAY, logDayQuestionnaire.toMap());
+    return logDayQuestionnaire;
+  }
 }

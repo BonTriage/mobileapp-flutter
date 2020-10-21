@@ -57,6 +57,7 @@ class _TimeSectionState extends State<TimeSection>
         e.toString();
       }
     }
+
   }
 
   @override
@@ -166,108 +167,117 @@ class _TimeSectionState extends State<TimeSection>
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            Constant.start,
-            style: TextStyle(
-                fontSize: 14,
-                color: Constant.locationServiceGreen,
-                fontFamily: Constant.jostRegular),
-          ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Row(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Container(
-                  color: Constant.backgroundTransparentColor,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        _openDatePickerBottomSheet(
-                            CupertinoDatePickerMode.date, 0);
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Text(
-                          (_selectedStartDate == null)
-                              ? _getDateTime(DateTime.now(), 0)
-                              : _getDateTime(_selectedStartDate, 0),
-                          style: TextStyle(
-                              color: Constant.splashColor,
-                              fontFamily: Constant.jostRegular,
-                              fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              Constant.at,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              Constant.start,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.locationServiceGreen,
                   fontFamily: Constant.jostRegular),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Container(
-                  color: Constant.backgroundTransparentColor,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        _openDatePickerBottomSheet(
-                            CupertinoDatePickerMode.time, 1);
-                      },
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Text(
-                          (_selectedStartTime == null)
-                              ? Utils.getTimeInAmPmFormat(
-                                  DateTime.now().hour, DateTime.now().minute)
-                              : _getDateTime(_selectedStartTime, 1),
-                          style: TextStyle(
-                              color: Constant.splashColor,
-                              fontFamily: Constant.jostRegular,
-                              fontSize: 14),
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    color: Constant.backgroundTransparentColor,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          _openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.date, 0);
+                        },
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text(
+                            (_selectedStartDate == null)
+                                ? _getDateTime(DateTime.now(), 0)
+                                : _getDateTime(_selectedStartDate, 0),
+                            style: TextStyle(
+                                color: Constant.splashColor,
+                                fontFamily: Constant.jostRegular,
+                                fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                Constant.at,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Constant.locationServiceGreen,
+                    fontFamily: Constant.jostRegular),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    color: Constant.backgroundTransparentColor,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          _openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.time, 1);
+                        },
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text(
+                            (_selectedStartTime == null)
+                                ? Utils.getTimeInAmPmFormat(
+                                    DateTime.now().hour, DateTime.now().minute)
+                                : _getDateTime(_selectedStartTime, 1),
+                            style: TextStyle(
+                                color: Constant.splashColor,
+                                fontFamily: Constant.jostRegular,
+                                fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(
           height: 20,
         ),
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            Constant.end,
-            style: TextStyle(
-                fontSize: 14,
-                color: Constant.locationServiceGreen,
-                fontFamily: Constant.jostRegular),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              Constant.end,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Constant.locationServiceGreen,
+                  fontFamily: Constant.jostRegular),
+            ),
           ),
         ),
         SizeTransition(
@@ -400,14 +410,17 @@ class _TimeSectionState extends State<TimeSection>
                 }
               });
             },
-            child: Text(
-              (_isEndTimeExpanded)
-                  ? Constant.tapHereIfInProgress
-                  : Constant.tapHereToEnd,
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Constant.addCustomNotificationTextColor,
-                  fontFamily: Constant.jostRegular),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                (_isEndTimeExpanded)
+                    ? Constant.tapHereIfInProgress
+                    : Constant.tapHereToEnd,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Constant.addCustomNotificationTextColor,
+                    fontFamily: Constant.jostRegular),
+              ),
             ),
           ),
         ),

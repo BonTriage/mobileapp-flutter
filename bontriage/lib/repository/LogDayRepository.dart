@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/LogDayQuestionnaire.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 
 
 class LogDayRepository {
@@ -31,5 +35,24 @@ class LogDayRepository {
   String _getPayload() {
     return jsonEncode(
         <String, String>{"event_type": eventType, "mobile_user_id": "4214"});
+  }
+
+  /*void insertLogDayData(String logDayData) async{
+    List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData('4214');
+
+    if(userLogDataMap == null) {
+      LogDayQuestionnaire logDayQuestionnaire = LogDayQuestionnaire();
+      logDayQuestionnaire.userId = '4214';
+      logDayQuestionnaire.questionnaires = logDayData;
+      SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
+    } else {
+      SignUpOnBoardProviders.db.updateLogDayData(logDayData, '4214');
+    }
+    //SignUpOnBoardProviders.db.getLogDayData('4214');
+  }*/
+
+  Future<List<Map>> getAllLogDayData(String userId) async{
+    List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData(userId);
+    return userLogDataMap;
   }
 }

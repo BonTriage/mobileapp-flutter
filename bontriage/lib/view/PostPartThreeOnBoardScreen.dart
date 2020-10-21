@@ -46,12 +46,13 @@ class _PostPartThreeOnBoardScreenState
         },
         bottomButtonText: Constant.setUpNotifications,
         bottomButtonFunction: () {
-          //TODO: Move to next screen
+          Navigator.pushReplacementNamed(
+              context, Constant.notificationScreenRouter);
         },
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.notNow,
         secondBottomButtonFunction: () {
-          //TODO: Not Now button Implementation
+          Navigator.pushReplacementNamed(context, Constant.homeRouter);
         },
       ),
     );

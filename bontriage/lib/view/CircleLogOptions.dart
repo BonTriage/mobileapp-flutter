@@ -9,6 +9,9 @@ class CircleLogOptions extends StatefulWidget {
   final String preCondition;
   final int overlayNumber;
   final Function(int) onCircleItemSelected;
+  final String questionType;
+  final String currentTag;
+  final Function(String, String, String, bool, int) onDoubleTapItem;
 
   const CircleLogOptions(
       {Key key,
@@ -16,7 +19,10 @@ class CircleLogOptions extends StatefulWidget {
       this.isForLogDay = false,
       this.preCondition = '',
       this.overlayNumber = 0,
-      this.onCircleItemSelected})
+      this.onCircleItemSelected,
+      this.questionType = '',
+      this.currentTag,
+      this.onDoubleTapItem})
       : super(key: key);
 
   @override
@@ -24,90 +30,150 @@ class CircleLogOptions extends StatefulWidget {
 }
 
 class _CircleLogOptionsState extends State<CircleLogOptions> {
-  int lastIndexSelected = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 78,
       child: ListView.builder(
         itemCount: widget.logOptions.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if (!widget.logOptions[index].isSelected) {
-                      widget.logOptions[lastIndexSelected].isSelected = false;
-                      widget.logOptions[index].isSelected =
-                          !widget.logOptions[index].isSelected;
-                      lastIndexSelected = index;
-                    } else {
-                      widget.logOptions[index].isSelected = false;
-                    }
+          return Padding(
+            padding: EdgeInsets.only(left: (index == 0) ? 15 : 0),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (widget.questionType == 'multi') {
+                        Values value = widget.logOptions[index];
+                        if (value.isSelected) {
+                          value.isSelected = false;
+                          value.isDoubleTapped = false;
+                        } else {
+                          value.isSelected = true;
+                        }
+                      } else {
+                        widget.logOptions.asMap().forEach((key, value) {
+                          if (key == index) {
+                            if (value.isSelected) {
+                              value.isSelected = false;
+                              value.isDoubleTapped = false;
+                            } else {
+                              value.isSelected = true;
+                            }
+                          } else {
+                            value.isSelected = false;
+                            value.isDoubleTapped = false;
+                          }
+                        });
+                      }
+                      if (widget.onCircleItemSelected != null)
+                        widget.onCircleItemSelected(index);
+                      print('onTap');
+                    });
+                  },
+                  onDoubleTap: () {
+                    if (widget.onDoubleTapItem != null) {
+                      setState(() {
+                        if (widget.questionType == 'multi') {
+                          if (widget.logOptions[index].isDoubleTapped) {
+                            widget.logOptions[index].isDoubleTapped = false;
+                          } else {
+                            widget.logOptions[index].isSelected = true;
+                            widget.logOptions[index].isDoubleTapped = true;
+                          }
+                        } else {
+                          widget.logOptions.asMap().forEach((key, value) {
+                            if (key == index) {
+                              if (value.isDoubleTapped) {
+                                value.isDoubleTapped = false;
+                              } else {
+                                value.isSelected = true;
+                                value.isDoubleTapped = true;
+                              }
+                            } else {
+                              value.isSelected = false;
+                              value.isDoubleTapped = false;
+                            }
+                          });
+                        }
+                        widget.onDoubleTapItem(
+                            widget.currentTag,
+                            widget.logOptions[index].valueNumber,
+                            widget.questionType,
+                            widget.logOptions[index].isDoubleTapped,
+                            index);
+                      });
 
-                    if (widget.onCircleItemSelected != null) widget.onCircleItemSelected(index);
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding: EdgeInsets.all(10),
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Constant.chatBubbleGreen),
-                      color: (widget.logOptions[index].isSelected)
-                          ? Constant.chatBubbleGreen
-                          : Colors.transparent),
-                  child: Center(
-                    child: Text(
-                      widget.logOptions[index].text,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
+                      if (widget.onCircleItemSelected != null)
+                        widget.onCircleItemSelected(index);
+                      print('onDoubleTap');
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.all(10),
+                    width: 68,
+                    height: 68,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: widget.logOptions[index].isDoubleTapped
+                                ? Constant.doubleTapTextColor
+                                : Constant.chatBubbleGreen,
+                            width: 1.5),
                         color: (widget.logOptions[index].isSelected)
-                            ? Constant.bubbleChatTextView
-                            : Constant.locationServiceGreen,
-                        fontFamily: Constant.jostRegular,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: 90,
-                height: 90,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Visibility(
-                    visible: widget.logOptions[index].isSelected &&
-                        (widget.preCondition
-                            .contains(widget.logOptions[index].text)),
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 3, right: 8),
-                      width: 25,
-                      height: 25,
-                      child: CircleAvatar(
-                        backgroundColor:
-                            Constant.addCustomNotificationTextColor,
+                            ? Constant.chatBubbleGreen
+                            : Colors.transparent),
+                    child: Center(
+                      child: SingleChildScrollView(
                         child: Text(
-                          widget.overlayNumber.toString(),
+                          widget.logOptions[index].text,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Constant.locationServiceGreen,
-                              fontSize: 12,
-                              fontFamily: Constant.jostRegular,
-                              fontWeight: FontWeight.w500),
+                            fontSize: 10,
+                            color: (widget.logOptions[index].isSelected)
+                                ? Constant.bubbleChatTextView
+                                : Constant.locationServiceGreen,
+                            fontFamily: Constant.jostMedium,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  width: 67,
+                  height: 67,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Visibility(
+                      visible: widget.logOptions[index].isSelected &&
+                          (widget.preCondition
+                              .contains(widget.logOptions[index].text)),
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        child: CircleAvatar(
+                          backgroundColor:
+                              Constant.addCustomNotificationTextColor,
+                          child: Text(
+                            widget.overlayNumber.toString(),
+                            style: TextStyle(
+                                color: Constant.locationServiceGreen,
+                                fontSize: 10,
+                                fontFamily: Constant.jostRegular,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

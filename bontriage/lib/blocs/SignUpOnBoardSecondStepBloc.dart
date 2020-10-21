@@ -11,7 +11,8 @@ import 'package:mobile/util/LinearListFilter.dart';
 
 class SignUpOnBoardSecondStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
-  StreamController<dynamic> __signUpOnBoardSecondStepRepositoryDataStreamController;
+  StreamController<dynamic>
+      __signUpOnBoardSecondStepRepositoryDataStreamController;
   int count = 0;
 
   StreamSink<dynamic> get signUpOnBoardSecondStepDataSink =>
@@ -21,16 +22,18 @@ class SignUpOnBoardSecondStepBloc {
       __signUpOnBoardSecondStepRepositoryDataStreamController.stream;
 
   SignUpOnBoardSecondStepBloc({this.count = 0}) {
-    __signUpOnBoardSecondStepRepositoryDataStreamController = StreamController<dynamic>();
+    __signUpOnBoardSecondStepRepositoryDataStreamController =
+        StreamController<dynamic>();
     _signUpOnBoardFirstStepRepository = SignUpOnBoardFirstStepRepository();
   }
 
   fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
       var signUpFirstStepData =
-      await _signUpOnBoardFirstStepRepository.serviceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-          RequestMethod.POST,argumentsName);
+          await _signUpOnBoardFirstStepRepository.serviceCall(
+              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
+              RequestMethod.POST,
+              argumentsName);
       if (signUpFirstStepData is AppException) {
         signUpOnBoardSecondStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -44,12 +47,12 @@ class SignUpOnBoardSecondStepBloc {
       //  signUpFirstStepDataSink.add("Error");
     }
   }
-  fetchDataFromLocalDatabase() async {
-    List<LocalQuestionnaire> localQuestionnaireData =
-    await SignUpOnBoardProviders.db.getQuestionnaire();
+
+  fetchDataFromLocalDatabase(
+      List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel =
-    SignUpOnBoardSecondStepModel();
+        SignUpOnBoardSecondStepModel();
     welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
@@ -66,12 +69,15 @@ class SignUpOnBoardSecondStepBloc {
     __signUpOnBoardSecondStepRepositoryDataStreamController?.close();
   }
 
-  sendSignUpFirstStepData(SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+  sendSignUpFirstStepData(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
     try {
-      var signUpFirstStepData =
-      await _signUpOnBoardFirstStepRepository.signUpWelcomeOnBoardSecondStepServiceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
-          RequestMethod.POST,signUpOnBoardSelectedAnswersModel);
+      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
+          .signUpWelcomeOnBoardSecondStepServiceCall(
+              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         print(signUpFirstStepData);
       } else {

@@ -59,6 +59,7 @@ class Constant {
   static const String headacheStartedScreenRouter = '/HeadacheStartedScreenRouter';
   static const String currentHeadacheProgressScreenRouter = '/CurrentHeadacheProgressScreenRouter';
   static const String addHeadacheOnGoingScreenRouter = '/addHeadacheOnGoingScreenRouter';
+  static const String logDayScreenRouter = '/logDayScreenRouter';
 
 
   //strings
@@ -263,6 +264,7 @@ class Constant {
   static String feelFreeToComeBack = ' Feel free to come back when you’re feeling better.';
   static String viewCurrentLog = 'View Current Log';
   static String addDetails = 'Add Details';
+  static String addEditDetails = 'Add/Edit Details';
   static String yourCurrentHeadache = 'Your current headache:';
   static String started = 'STARTED';
   static String endHeadache = 'End Headache';
@@ -300,9 +302,10 @@ class Constant {
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
-  static String zeroEventStep = "1";
-  static String firstEventStep = "2";
-  static String secondEventStep = "3";
+  static const String zeroEventStep = "1";
+  static const String firstEventStep = "2";
+  static const String secondEventStep = "3";
+
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
   static String welcomeOnBoardStepTwoEventType = "clinical_impression_short2";
@@ -316,6 +319,12 @@ class Constant {
   static const String singleTypeTag = "single";
   static const String numberTypeTag = "number";
   static const String dateTimeTypeTag = "datetime";
+
+  static String whenYouAreLoggingYourDay = 'When you’re logging your day, you can double tap any items you experience frequently to keep them pre-selected for every time you come back. For example, if you drink coffee every morning, you could double tap “Caffeine.”';
+  static String doubleTappedItems = 'Double tapped items — indicated by a green border — are pre-selected for you every time you enter a log. Deselecting an item on any given day toggles pre-select off, and you can always toggle it back on by double tapping again later.';
+  static String tryDoubleTappingMe = 'Try double tapping me!';
+  static String gotIt = 'Got it!';
+  static String logDayEvenFaster = 'Log your day even faster with Double Tap!';
 
 
   //Dimensions

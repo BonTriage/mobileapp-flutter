@@ -33,10 +33,15 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                     children: [
                       Align(
                         alignment: Alignment.topRight,
-                        child: Image(
-                          image: AssetImage(Constant.closeIcon),
-                          width: 26,
-                          height: 26,
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: Image(
+                            image: AssetImage(Constant.closeIcon),
+                            width: 22,
+                            height: 22,
+                          ),
                         ),
                       ),
                       SizedBox(height: 80,),
@@ -48,7 +53,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                             Constant.headacheLogStarted,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Constant.chatBubbleGreen,
                               fontFamily: Constant.jostMedium
                             ),
@@ -64,7 +69,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                             Constant.feelFreeToComeBack,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium
                             ),
@@ -73,13 +78,13 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                       ),
                       SizedBox(height: 80,),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
                             Navigator.pushNamed(context, Constant.currentHeadacheProgressScreenRouter);
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 13),
+                            padding: EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               color: Constant.chatBubbleGreen,
                               borderRadius: BorderRadius.circular(30),
@@ -98,13 +103,13 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                       ),
                       SizedBox(height: 20,),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
                             Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 13),
+                            padding: EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               border: Border.all(
                                   width: 1.3, color: Constant.chatBubbleGreen),

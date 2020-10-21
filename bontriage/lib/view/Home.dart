@@ -51,21 +51,21 @@ class _HomeState extends State<Home> {
 
     textSpanList = [
       TextSpan(
-        text: 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the ',
+        text:
+            'When you’re on the home screen of the app, you’ll be able to log your day by pressing the ',
         style: TextStyle(
-          fontSize: 16,
-          fontFamily: Constant.jostRegular,
-          height: 1.3,
-          color: Constant.chatBubbleGreen
-        ),
+            fontSize: 16,
+            fontFamily: Constant.jostRegular,
+            height: 1.3,
+            color: Constant.chatBubbleGreen),
       ),
       TextSpan(
         text: 'Log Day',
         style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostMedium,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
+          fontSize: 16,
+          fontFamily: Constant.jostMedium,
+          height: 1.3,
+          color: Constant.chatBubbleGreen,
         ),
       ),
       TextSpan(
@@ -74,8 +74,7 @@ class _HomeState extends State<Home> {
             fontSize: 16,
             fontFamily: Constant.jostRegular,
             height: 1.3,
-            color: Constant.chatBubbleGreen
-        ),
+            color: Constant.chatBubbleGreen),
       ),
       TextSpan(
         text: 'Add Headache',
@@ -83,8 +82,7 @@ class _HomeState extends State<Home> {
             fontSize: 16,
             fontFamily: Constant.jostMedium,
             height: 1.3,
-            color: Constant.chatBubbleGreen
-        ),
+            color: Constant.chatBubbleGreen),
       ),
       TextSpan(
         text: ' button.',
@@ -92,8 +90,7 @@ class _HomeState extends State<Home> {
             fontSize: 16,
             fontFamily: Constant.jostRegular,
             height: 1.3,
-            color: Constant.chatBubbleGreen
-        ),
+            color: Constant.chatBubbleGreen),
       ),
     ];
   }
@@ -152,7 +149,8 @@ class _HomeState extends State<Home> {
                             height: 10,
                           ),
                           Table(
-                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
                             children: [
                               TableRow(children: [
                                 Padding(
@@ -317,22 +315,25 @@ class _HomeState extends State<Home> {
                             'Good morning!\nWhat’s been\ngoing on today?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.chatBubbleGreen),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 15,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               BouncingWidget(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, Constant.logDayScreenRouter);
+                                },
                                 child: Container(
                                   key: _keyLogDay,
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                      horizontal: 22, vertical: 6),
                                   decoration: BoxDecoration(
                                     color: Constant.chatBubbleGreen,
                                     borderRadius: BorderRadius.circular(20),
@@ -361,11 +362,12 @@ class _HomeState extends State<Home> {
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            Navigator.pushNamed(context, Constant.headacheStartedScreenRouter);
+                            Navigator.pushNamed(
+                                context, Constant.headacheStartedScreenRouter);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
+                                horizontal: 18, vertical: 7),
                             decoration: BoxDecoration(
                               color: Constant.chatBubbleGreen,
                               borderRadius: BorderRadius.circular(20),
@@ -508,11 +510,11 @@ class ButtonClipper extends CustomClipper<Path> {
     print(logDayX);
     return Path.combine(
       PathOperation.difference,
-      Path()..addRect(
-          Rect.fromLTWH(0, 0, size.width, size.height)
-      ),
+      Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
       Path()
-        ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(logDayX, logDayY, logDayWidth, logDayHeight), Radius.circular(20)))
+        ..addRRect(RRect.fromRectAndRadius(
+            Rect.fromLTWH(logDayX, logDayY, logDayWidth, logDayHeight),
+            Radius.circular(20)))
         ..close(),
     );
   }
@@ -522,5 +524,4 @@ class ButtonClipper extends CustomClipper<Path> {
     // TODO: implement shouldReclip
     return true;
   }
-
 }

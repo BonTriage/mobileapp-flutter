@@ -81,15 +81,20 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                           Text(
                             '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium
                             ),
                           ),
-                          Image(
-                            image: AssetImage(Constant.closeIcon),
-                            width: 26,
-                            height: 26,
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Image(
+                              image: AssetImage(Constant.closeIcon),
+                              width: 22,
+                              height: 22,
+                            ),
                           ),
                         ],
                       ),
@@ -181,7 +186,7 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 5,),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -202,8 +207,8 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                               Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
                             },
                             child: Container(
-                              width: 150,
-                              padding: EdgeInsets.symmetric(vertical: 13),
+                              width: 130,
+                              padding: EdgeInsets.symmetric(vertical: 7),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     width: 1.3, color: Constant.chatBubbleGreen),
@@ -211,10 +216,10 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                               ),
                               child: Center(
                                 child: Text(
-                                  Constant.addDetails,
+                                  Constant.addEditDetails,
                                   style: TextStyle(
                                       color: Constant.chatBubbleGreen,
-                                      fontSize: 15,
+                                      fontSize: 13,
                                       fontFamily: Constant.jostMedium),
                                 ),
                               ),
@@ -229,8 +234,8 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                           BouncingWidget(
                             onPressed: () {},
                             child: Container(
-                              width: 150,
-                              padding: EdgeInsets.symmetric(vertical: 13),
+                              width: 130,
+                              padding: EdgeInsets.symmetric(vertical: 7),
                               decoration: BoxDecoration(
                                 color: Constant.chatBubbleGreen,
                                 borderRadius: BorderRadius.circular(30),
@@ -240,7 +245,7 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                                   Constant.endHeadache,
                                   style: TextStyle(
                                       color: Constant.bubbleChatTextView,
-                                      fontSize: 15,
+                                      fontSize: 13,
                                       fontFamily: Constant.jostMedium),
                                 ),
                               ),

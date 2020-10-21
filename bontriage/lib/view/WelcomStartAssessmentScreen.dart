@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -150,10 +151,22 @@ class _WelcomeStartAssessmentScreenState
   }
 
   void navigateToUserOnProfileBoard() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
-      Navigator.pushReplacementNamed(
-          context, Constant.signUpOnBoardProfileQuestionRouter);
+    UserProgressDataModel userProgressModel =
+        await SignUpOnBoardProviders.db.getUserProgress();
+    if (userProgressModel != null) {
+      switch (userProgressModel.step) {
+        case Constant.zeroEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.signUpOnBoardProfileQuestionRouter);
+          break;
+        case Constant.firstEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.partTwoOnBoardScreenRouter);
+          break;
+        default:
+          Navigator.pushReplacementNamed(
+              context, Constant.signUpOnBoardSplashRouter);
+      }
     } else {
       Navigator.pushReplacementNamed(
           context, Constant.signUpOnBoardSplashRouter);

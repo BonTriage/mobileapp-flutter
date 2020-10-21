@@ -84,12 +84,14 @@ class Values {
   String valueNumber;
   String text;
   bool isSelected = false;
+  bool isDoubleTapped = false;
 
-  Values({this.valueNumber, this.text, this.isSelected = false});
+  Values({this.valueNumber, this.text, this.isSelected = false, this.isDoubleTapped = false});
 
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];
     text = json['text'];
+    isSelected = (json['isSelected'] == null) ? false : json['isSelected'];
   }
 
   Map<String, dynamic> toJson() {

@@ -51,7 +51,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if (widget.argumentsName == Constant.clinicalImpressionEventType) {
       var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
           .firstWhere((model) => model.questionTag == "nameClinicalImpression");
-      Navigator.pop(context,userHeadacheName.answer);
+      Navigator.pop(context, userHeadacheName.answer);
     } else {
       setState(() {
         double stepOneProgress = 1 / _pageViewWidgetList.length;
@@ -88,10 +88,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     signUpOnBoardSelectedAnswersModel.eventType = Constant.firstEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
-    _pageViewWidgetList = [
-      SignUpOnBoardFirstStepQuestionsModel(
-          questions: Constant.firstBasics, questionsWidget: Container())
-    ];
+    _pageViewWidgetList = [];
+
     getCurrentUserPosition();
   }
 
@@ -110,66 +108,76 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               stream: _signUpOnBoardSecondStepBloc
                   .signUpOnBoardSecondStepDataStream,
               builder: (context, snapshot) {
-                if (!isAlreadyDataFiltered &&
-                    snapshot.hasData &&
-                    !isButtonClicked)
-                  addFilteredQuestionListData(snapshot.data);
-                isButtonClicked = false;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    OnBoardChatBubble(
-                      isEndOfOnBoard: isEndOfOnBoard,
-                      chatBubbleText:
-                          _pageViewWidgetList[_currentPageIndex].questions,
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Expanded(
-                        child: PageView.builder(
-                      controller: _pageController,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: _pageViewWidgetList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _pageViewWidgetList[index].questionsWidget;
-                      },
-                    )),
-                    OnBoardBottomButtons(
-                      progressPercent: _progressPercent,
-                      backButtonFunction: _onBackPressed,
-                      nextButtonFunction: () {
-                        setState(() {
-                          double stepOneProgress =
-                              1 / _pageViewWidgetList.length;
+                if (snapshot.hasData) {
+                  if(!isAlreadyDataFiltered && !isButtonClicked) {
+                    addFilteredQuestionListData(snapshot.data);
+                    isButtonClicked = false;
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      OnBoardChatBubble(
+                        isEndOfOnBoard: isEndOfOnBoard,
+                        chatBubbleText:
+                            _pageViewWidgetList[_currentPageIndex].questions,
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Expanded(
+                          child: PageView.builder(
+                        controller: _pageController,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _pageViewWidgetList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _pageViewWidgetList[index].questionsWidget;
+                        },
+                      )),
+                      OnBoardBottomButtons(
+                        progressPercent: _progressPercent,
+                        backButtonFunction: _onBackPressed,
+                        nextButtonFunction: () {
+                          setState(() {
+                            double stepOneProgress =
+                                1 / _pageViewWidgetList.length;
+                            if (_progressPercent == 1) {
+                              isEndOfOnBoard = true;
+                              TextToSpeechRecognition.pauseSpeechToText(
+                                  true, "");
+                              moveUserToNextScreen();
+                              //TODO: Move to next screen
+                            } else {
+                              _currentPageIndex++;
 
-                          if (_progressPercent == 1) {
-                            isEndOfOnBoard = true;
-                            TextToSpeechRecognition.pauseSpeechToText(true, "");
-                            moveUserToNextScreen();
-                            //TODO: Move to next screen
-                          } else {
-                            _currentPageIndex++;
+                              if (_currentPageIndex !=
+                                  _pageViewWidgetList.length - 1)
+                                _progressPercent += stepOneProgress;
+                              else {
+                                _progressPercent = 1;
+                              }
 
-                            if (_currentPageIndex !=
-                                _pageViewWidgetList.length - 1)
-                              _progressPercent += stepOneProgress;
-                            else {
-                              _progressPercent = 1;
+                              _pageController.animateToPage(_currentPageIndex,
+                                  duration: Duration(milliseconds: 1),
+                                  curve: Curves.easeIn);
                             }
-
-                            _pageController.animateToPage(_currentPageIndex,
-                                duration: Duration(milliseconds: 1),
-                                curve: Curves.easeIn);
-                          }
-                          getCurrentQuestionTag(_currentPageIndex);
-                        });
-                      },
-                      onBoardPart: 2,
-                    )
-                  ],
-                );
+                            getCurrentQuestionTag(_currentPageIndex);
+                          });
+                        },
+                        onBoardPart: 2,
+                      )
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CircularProgressIndicator(
+                        backgroundColor: Constant.chatBubbleGreen,
+                      ),
+                    ),
+                  );
+                }
               })),
     );
   }
@@ -244,13 +252,13 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// This method will be use for to get current position of the user. When he last time quit the application or click the close
   /// icon. We will fetch last position from Local database.
   void getCurrentUserPosition() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
-      UserProgressDataModel userProgressModel =
-          await SignUpOnBoardProviders.db.getUserProgress();
+    UserProgressDataModel userProgressModel =
+        await SignUpOnBoardProviders.db.getUserProgress();
+    if (userProgressModel != null) {
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
+
     requestService();
   }
 
@@ -258,10 +266,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// then we hit the API and save the all questions data in to the database. if not then we will fetch the all data from the local
   /// database of respective table.
   void requestService() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
+    List<LocalQuestionnaire> localQuestionnaireData =
+        await SignUpOnBoardProviders.db.getQuestionnaire(Constant.firstEventStep);
+
+    if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
       signUpOnBoardSelectedAnswersModel =
-          await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase();
+          await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       _signUpOnBoardSecondStepBloc
           .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
@@ -328,7 +338,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if (widget.argumentsName == Constant.clinicalImpressionEventType) {
       var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
           .firstWhere((model) => model.questionTag == "nameClinicalImpression");
-      Navigator.pop(context,userHeadacheName.answer);
+      Navigator.pop(context, userHeadacheName.answer);
     } else {
       Navigator.pushReplacementNamed(context,
           Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);

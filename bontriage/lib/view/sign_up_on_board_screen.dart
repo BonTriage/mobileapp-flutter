@@ -88,64 +88,131 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
           child: StreamBuilder<dynamic>(
               stream: welcomeOnBoardProfileBloc.albumDataStream,
               builder: (context, snapshot) {
-                if (snapshot.hasData && !isButtonClicked)
-                  addFilteredQuestionListData(snapshot.data);
-                isButtonClicked = false;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    OnBoardChatBubble(
-                      chatBubbleText:
-                          _pageViewWidgetList[_currentPageIndex].questions,
-                      isEndOfOnBoard: isEndOfOnBoard,
-                    ),
-                    SizedBox(height: 40),
-                    Expanded(
-                        child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: _pageViewWidgetList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _pageViewWidgetList[index].questionsWidget;
-                      },
-                      physics: NeverScrollableScrollPhysics(),
-                    )),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Constant.chatBubbleHorizontalPadding),
-                          child: Stack(
-                            children: [
-                              AnimatedPositioned(
-                                left: (_currentPageIndex != 0)
-                                    ? 0
-                                    : (MediaQuery.of(context).size.width - 190),
-                                duration: Duration(milliseconds: 250),
-                                child: AnimatedOpacity(
-                                  opacity: (_currentPageIndex != 0) ? 1.0 : 0.0,
+                if (snapshot.hasData) {
+                  if (!isButtonClicked) {
+                    addFilteredQuestionListData(snapshot.data);
+                    isButtonClicked = false;
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      OnBoardChatBubble(
+                        chatBubbleText:
+                            _pageViewWidgetList[_currentPageIndex].questions,
+                        isEndOfOnBoard: isEndOfOnBoard,
+                      ),
+                      SizedBox(height: 40),
+                      Expanded(
+                          child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: _pageViewWidgetList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _pageViewWidgetList[index].questionsWidget;
+                        },
+                        physics: NeverScrollableScrollPhysics(),
+                      )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    Constant.chatBubbleHorizontalPadding),
+                            child: Stack(
+                              children: [
+                                AnimatedPositioned(
+                                  left: (_currentPageIndex != 0)
+                                      ? 0
+                                      : (MediaQuery.of(context).size.width -
+                                          190),
                                   duration: Duration(milliseconds: 250),
+                                  child: AnimatedOpacity(
+                                    opacity:
+                                        (_currentPageIndex != 0) ? 1.0 : 0.0,
+                                    duration: Duration(milliseconds: 250),
+                                    child: BouncingWidget(
+                                      duration: Duration(milliseconds: 100),
+                                      scaleFactor: 1.5,
+                                      onPressed: () {
+                                        isButtonClicked = true;
+                                        setState(() {
+                                          if (_currentPageIndex != 0) {
+                                            _progressPercent -= 0.11;
+                                            _currentPageIndex--;
+                                            _pageController.animateToPage(
+                                                _currentPageIndex,
+                                                duration:
+                                                    Duration(milliseconds: 1),
+                                                curve: Curves.easeIn);
+                                          } else {
+                                            _progressPercent = 0;
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 130,
+                                        height: 34,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xffafd794),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            Constant.back,
+                                            style: TextStyle(
+                                              color:
+                                                  Constant.bubbleChatTextView,
+                                              fontSize: 14,
+                                              fontFamily: Constant.jostMedium,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
                                   child: BouncingWidget(
                                     duration: Duration(milliseconds: 100),
                                     scaleFactor: 1.5,
                                     onPressed: () {
                                       isButtonClicked = true;
                                       setState(() {
-                                        if (_currentPageIndex != 0) {
-                                          _progressPercent -= 0.11;
-                                          _currentPageIndex--;
+                                        if (_progressPercent == 0.55) {
+                                          /*     welcomeOnBoardProfileBloc
+                                            .sendSignUpFirstStepData(
+                                                signUpOnBoardSelectedAnswersModel);*/
+                                          isEndOfOnBoard = true;
+                                          TextToSpeechRecognition
+                                              .pauseSpeechToText(true, "");
+                                          Navigator.pushReplacementNamed(
+                                              context,
+                                              Constant
+                                                  .onBoardHeadacheInfoScreenRouter);
+                                        } else {
+                                          _currentPageIndex++;
+
+                                          if (_currentPageIndex !=
+                                              _pageViewWidgetList.length - 1)
+                                            _progressPercent += 0.11;
+                                          else {
+                                            _progressPercent = 0.55;
+                                          }
+
                                           _pageController.animateToPage(
                                               _currentPageIndex,
                                               duration:
                                                   Duration(milliseconds: 1),
                                               curve: Curves.easeIn);
-                                        } else {
-                                          _progressPercent = 0;
                                         }
+                                        getCurrentQuestionTag(
+                                            _currentPageIndex);
                                       });
                                     },
                                     child: Container(
@@ -157,7 +224,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                       ),
                                       child: Center(
                                         child: Text(
-                                          Constant.back,
+                                          Constant.next,
                                           style: TextStyle(
                                             color: Constant.bubbleChatTextView,
                                             fontSize: 14,
@@ -168,120 +235,72 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                     ),
                                   ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: BouncingWidget(
-                                  duration: Duration(milliseconds: 100),
-                                  scaleFactor: 1.5,
-                                  onPressed: () {
-                                    isButtonClicked = true;
-                                    setState(() {
-                                      if (_progressPercent == 0.55) {
-                                   /*     welcomeOnBoardProfileBloc
-                                            .sendSignUpFirstStepData(
-                                                signUpOnBoardSelectedAnswersModel);*/
-                                        isEndOfOnBoard = true;
-                                        TextToSpeechRecognition
-                                            .pauseSpeechToText(true, "");
-                                         Navigator.pushReplacementNamed(
-                                            context,
-                                            Constant
-                                                .onBoardHeadacheInfoScreenRouter);
-                                      } else {
-                                        _currentPageIndex++;
-
-                                        if (_currentPageIndex !=
-                                            _pageViewWidgetList.length - 1)
-                                          _progressPercent += 0.11;
-                                        else {
-                                          _progressPercent = 0.55;
-                                        }
-
-                                        _pageController.animateToPage(
-                                            _currentPageIndex,
-                                            duration: Duration(milliseconds: 1),
-                                            curve: Curves.easeIn);
-                                      }
-                                      getCurrentQuestionTag(_currentPageIndex);
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 130,
-                                    height: 34,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffafd794),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        Constant.next,
-                                        style: TextStyle(
-                                          color: Constant.bubbleChatTextView,
-                                          fontSize: 14,
-                                          fontFamily: Constant.jostMedium,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 36,
-                        ),
-                        if (_currentPageIndex != 0)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 23),
-                            child: LinearPercentIndicator(
-                              animation: true,
-                              lineHeight: 8.0,
-                              animationDuration: 200,
-                              animateFromLastPercent: true,
-                              percent: _progressPercent,
-                              backgroundColor: Constant.chatBubbleGreenBlue,
-                              linearStrokeCap: LinearStrokeCap.roundAll,
-                              progressColor: Constant.chatBubbleGreen,
-                            ),
-                          )
-                        else
-                          SizedBox(
-                            height: 12.5,
-                          ),
-                        SizedBox(
-                          height: 10.5,
-                        ),
-                        if (_currentPageIndex != 0)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    Constant.chatBubbleHorizontalPadding),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'PART 1 OF 3',
-                                  style: TextStyle(
-                                      color: Constant.chatBubbleGreen,
-                                      fontSize: 13,
-                                      fontFamily: Constant.jostMedium),
-                                ),
                               ],
                             ),
-                          )
-                        else
-                          SizedBox(
-                            height: 14,
                           ),
-                        SizedBox(
-                          height: 46,
-                        )
-                      ],
+                          SizedBox(
+                            height: 36,
+                          ),
+                          if (_currentPageIndex != 0)
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 23),
+                              child: LinearPercentIndicator(
+                                animation: true,
+                                lineHeight: 8.0,
+                                animationDuration: 200,
+                                animateFromLastPercent: true,
+                                percent: _progressPercent,
+                                backgroundColor: Constant.chatBubbleGreenBlue,
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                progressColor: Constant.chatBubbleGreen,
+                              ),
+                            )
+                          else
+                            SizedBox(
+                              height: 12.5,
+                            ),
+                          SizedBox(
+                            height: 10.5,
+                          ),
+                          if (_currentPageIndex != 0)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      Constant.chatBubbleHorizontalPadding),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'PART 1 OF 3',
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontSize: 13,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ],
+                              ),
+                            )
+                          else
+                            SizedBox(
+                              height: 14,
+                            ),
+                          SizedBox(
+                            height: 46,
+                          )
+                        ],
+                      ),
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CircularProgressIndicator(
+                        backgroundColor: Constant.chatBubbleGreen,
+                      ),
                     ),
-                  ],
-                );
+                  );
+                }
               })),
     );
   }
@@ -354,31 +373,33 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
       _currentPageIndex = currentScreenPosition;
       _progressPercent = (_currentPageIndex + 1) * 0.11;
-      _pageController.animateToPage(currentScreenPosition,
-          duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+      _pageController = PageController(initialPage: currentScreenPosition);
+      /*_pageController.animateToPage(currentScreenPosition,
+          duration: Duration(milliseconds: 1), curve: Curves.easeIn);*/
 
       print(questionListData);
     }
   }
 
   void requestService() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
+    List<LocalQuestionnaire> localQuestionnaireData =
+    await SignUpOnBoardProviders.db.getQuestionnaire(Constant.zeroEventStep);
+    if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
       signUpOnBoardSelectedAnswersModel =
-          await welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase();
+          await welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
     }
   }
 
   void getCurrentUserPosition() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
       UserProgressDataModel userProgressModel =
           await SignUpOnBoardProviders.db.getUserProgress();
-      currentScreenPosition = userProgressModel.userScreenPosition;
-      print(userProgressModel);
-    }
+      if(userProgressModel != null) {
+        currentScreenPosition = userProgressModel.userScreenPosition;
+        print(userProgressModel);
+      }
+
 
     requestService();
   }

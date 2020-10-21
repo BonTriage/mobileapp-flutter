@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AddHeadacheOnGoingScreen(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -135,7 +135,8 @@ class MyApp extends StatelessWidget {
           case Constant.partTwoOnBoardScreenRouter:
             {
               String argsName = settings.arguments;
-              return SlideFromBottomPageRoute(widget: PartTwoOnBoardScreens(argumentsName: argsName));
+              return SlideFromBottomPageRoute(
+                  widget: PartTwoOnBoardScreens(argumentsName: argsName));
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
@@ -236,56 +237,14 @@ class MyApp extends StatelessWidget {
               return SlideFromBottomPageRoute(
                   widget: AddHeadacheOnGoingScreen());
             }
+
+          case Constant.logDayScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: LogDayScreen());
+            }
         }
         return null;
       },
-      /*routes: {
-        Constant.splashRouter: (context) => Splash(),
-        Constant.homeRouter: (context) => Home(),
-        Constant.loginRouter: (context) => LoginScreen(),
-        Constant.signUpRouter: (context) => SignUpScreen(),
-        Constant.signUpOnBoardSplashRouter: (context) => SignUpOnBoardSplash(),
-        Constant.signUpOnBoardStartAssessmentRouter: (context) =>
-            SignUpOnBoardStartAssessment(),
-        Constant.signUpNameScreenRouter: (context) => SignUpNameScreen(),
-        Constant.signUpAgeScreenRouter: (context) => SignUpAgeScreen(),
-        Constant.signUpLocationServiceRouter: (context) =>
-            SignUpLocationServices(),
-        Constant.signUpOnBoardHeadacheQuestionRouter: (context) =>
-            SignUpOnBoardScreen(),
-        Constant.signUpFirstStepHeadacheResultRouter: (context) =>
-            SignUpFirstStepCompassResult(),
-        Constant.signUpOnBoardPersonalizedHeadacheResultRouter: (context) =>
-            SignUpOnBoardPersonalizedHeadacheCompass(),
-        Constant.partTwoOnBoardScreenRouter: (context) =>
-            PartTwoOnBoardScreens(),
-        Constant.partThreeOnBoardScreenRouter: (context) =>
-            PartThreeOnBoardScreens(),
-        Constant.loginScreenRouter: (context) => LoginScreen(),
-        Constant.onBoardingScreenSignUpRouter: (context) =>
-            OnBoardingSignUpScreen(),
-        Constant.signUpSecondStepHeadacheResultRouter: (context) =>
-            SignUpSecondStepCompassResult(),
-        Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter:
-            (context) => SignUpOnBoardSecondStepPersonalizedHeadacheCompass(),
-        Constant.welcomeScreenRouter: (context) => WelcomeScreen(),
-        Constant.welcomeStartAssessmentScreenRouter: (context) =>
-            WelcomeStartAssessmentScreen(),
-        Constant.onBoardHeadacheInfoScreenRouter: (context) =>
-            OnBoardHeadacheInfoScreen(),
-        Constant.partOneOnBoardScreenTwoRouter: (context) =>
-            PartOneOnBoardScreenTwo(),
-        Constant.onBoardCreateAccountScreenRouter: (context) =>
-            OnBoardCreateAccount(),
-        Constant.prePartTwoOnBoardScreenRouter: (context) =>
-            PrePartTwoOnBoardScreen(),
-        Constant.onBoardHeadacheNameScreenRouter: (context) =>
-            OnBoardHeadacheNameScreen(),
-        Constant.partTwoOnBoardMoveOnScreenRouter: (context) =>
-            PartTwoOnBoardMoveOnScreen(),
-        Constant.prePartThreeOnBoardScreenRouter: (context) =>
-            PrePartThreeOnBoardScreen(),
-      },*/
       debugShowCheckedModeBanner: false,
     );
   }

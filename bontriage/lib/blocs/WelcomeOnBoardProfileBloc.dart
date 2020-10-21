@@ -70,9 +70,8 @@ class WelcomeOnBoardProfileBloc {
     _signUpFirstStepDataStreamController?.close();
   }
 
-  fetchDataFromLocalDatabase() async {
-    List<LocalQuestionnaire> localQuestionnaireData =
-        await SignUpOnBoardProviders.db.getQuestionnaire();
+  fetchDataFromLocalDatabase(List<LocalQuestionnaire> localQuestionnaireData) async {
+
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
         WelcomeOnBoardProfileModel();
