@@ -12,12 +12,14 @@ class TimeSection extends StatefulWidget {
 
   final String currentTag;
   final String updatedDateValue;
+  final bool isHeadacheEnded;
 
   const TimeSection(
       {Key key,
       this.currentTag,
       this.updatedDateValue,
-      this.addHeadacheDateTimeDetailsData})
+      this.addHeadacheDateTimeDetailsData,
+      this.isHeadacheEnded})
       : super(key: key);
 }
 
@@ -58,6 +60,22 @@ class _TimeSectionState extends State<TimeSection>
       }
     }
 
+    print(widget.isHeadacheEnded);
+
+    if(widget.isHeadacheEnded != null && widget.isHeadacheEnded) {
+      _isEndTimeExpanded = true;
+      if(_selectedEndDate == null) {
+        widget.addHeadacheDateTimeDetailsData(
+            "endtime", DateTime.now().toUtc().toString());
+      } else {
+        widget.addHeadacheDateTimeDetailsData(
+            "endtime", _selectedEndDate.toUtc().toString());
+      }
+      Future.delayed(Duration(milliseconds: 500), () {
+        widget.addHeadacheDateTimeDetailsData("ongoing", "No");
+      });
+      _animationController.forward();
+    }
   }
 
   @override
@@ -285,7 +303,7 @@ class _TimeSectionState extends State<TimeSection>
           child: FadeTransition(
             opacity: _animationController,
             child: Padding(
-              padding: const EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
               child: Row(
                 children: [
                   Align(
@@ -367,13 +385,22 @@ class _TimeSectionState extends State<TimeSection>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    Constant.reset,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: Constant.jostRegular,
-                        fontWeight: FontWeight.w500,
-                        color: Constant.addCustomNotificationTextColor),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedEndDate = DateTime.now();
+                        _selectedEndTime = _selectedEndDate;
+                      });
+                      widget.addHeadacheDateTimeDetailsData("endtime", _selectedEndDate.toUtc().toString());
+                    },
+                    child: Text(
+                      Constant.reset,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: Constant.jostRegular,
+                          fontWeight: FontWeight.w500,
+                          color: Constant.addCustomNotificationTextColor),
+                    ),
                   ),
                 ],
               ),

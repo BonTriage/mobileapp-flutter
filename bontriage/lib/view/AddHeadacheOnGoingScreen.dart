@@ -15,6 +15,9 @@ import 'package:mobile/view/AddHeadacheSection.dart';
 import 'AddNoteBottomSheet.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
+  final bool isHeadacheEnded;
+
+  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded}) : super(key: key);
   @override
   _AddHeadacheOnGoingScreenState createState() =>
       _AddHeadacheOnGoingScreenState();
@@ -275,6 +278,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         selectedCurrentValue: element.currentValue,
         addHeadacheDetailsData: addSelectedHeadacheDetailsData,
         moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
+        isHeadacheEnded: widget.isHeadacheEnded
       ));
     });
     return listOfWidgets;
