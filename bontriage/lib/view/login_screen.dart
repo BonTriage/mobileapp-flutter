@@ -32,9 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Image(
-                      image: AssetImage(Constant.brain),
-                      width: 56,
-                      height: 50,
+                      image: AssetImage(Constant.compassGreen),
+                      width: 78,
+                      height: 78,
                     ),
                     SizedBox(
                       width: 10,
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Constant.migraineMentor,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
-                          fontSize: 22,
+                          fontSize: 24,
                           fontFamily: Constant.jostMedium),
                     ),
                   ],
