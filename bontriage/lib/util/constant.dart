@@ -60,6 +60,8 @@ class Constant {
   static const String currentHeadacheProgressScreenRouter = '/CurrentHeadacheProgressScreenRouter';
   static const String addHeadacheOnGoingScreenRouter = '/addHeadacheOnGoingScreenRouter';
   static const String logDayScreenRouter = '/logDayScreenRouter';
+  static const String addHeadacheSuccessScreenRouter = '/addHeadacheSuccessScreenRouter';
+  static const String logDaySuccessScreenRouter = '/logDaySuccessScreenRouter';
 
 
   //strings
@@ -325,6 +327,12 @@ class Constant {
   static String tryDoubleTappingMe = 'Try double tapping me!';
   static String gotIt = 'Got it!';
   static String logDayEvenFaster = 'Log your day even faster with Double Tap!';
+  static String viewTrends = 'View Trends';
+  static String logDay = 'Log Day';
+  static String logYourDayToAssess = ' Log your day to assess potential triggers.';
+  static String headacheAdded = ' Headache Added!';
+  static String dayLogged = ' Day Logged!';
+  static String loggedDaysInARow = 'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
 
 
   //Dimensions

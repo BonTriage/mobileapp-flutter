@@ -4,10 +4,12 @@ import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
+import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
 import 'package:mobile/view/LogDayScreen.dart';
+import 'package:mobile/view/LogDaySuccessScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
@@ -241,6 +243,14 @@ class MyApp extends StatelessWidget {
           case Constant.logDayScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: LogDayScreen());
+            }
+          case Constant.addHeadacheSuccessScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: AddHeadacheSuccessScreen());
+            }
+          case Constant.logDaySuccessScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: LogDaySuccessScreen());
             }
         }
         return null;
