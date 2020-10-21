@@ -232,7 +232,9 @@ class _CurrentHeadacheProgressScreenState extends State<CurrentHeadacheProgressS
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           BouncingWidget(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: true);
+                            },
                             child: Container(
                               width: 130,
                               padding: EdgeInsets.symmetric(vertical: 7),

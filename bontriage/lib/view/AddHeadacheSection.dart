@@ -33,6 +33,7 @@ class AddHeadacheSection extends StatefulWidget {
   final Function moveWelcomeOnBoardTwoScreen;
   final String updateAtValue;
   final List<SelectedAnswers> selectedAnswers;
+  final bool isHeadacheEnded;
 
   const AddHeadacheSection(
       {Key key,
@@ -52,7 +53,8 @@ class AddHeadacheSection extends StatefulWidget {
       this.triggerExpandableWidgetList,
       this.questionType,
       this.allQuestionsList,
-      this.selectedAnswers})
+      this.selectedAnswers,
+      this.isHeadacheEnded})
       : super(key: key);
 
   @override
@@ -91,7 +93,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         return _getWidget(TimeSection(
             currentTag: widget.contentType,
             updatedDateValue: widget.updateAtValue,
-            addHeadacheDateTimeDetailsData: _onHeadacheDateTimeSelected));
+            addHeadacheDateTimeDetailsData: _onHeadacheDateTimeSelected,
+            isHeadacheEnded: widget.isHeadacheEnded,));
       case 'severity':
         return _getWidget(SignUpAgeScreen(
           sliderValue: (widget.selectedCurrentValue == null ||
@@ -230,7 +233,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   void _onHeadacheDateTimeSelected(String currentTag, String currentValue) {
     widget.addHeadacheDetailsData(currentTag, currentValue);
-
   }
 
   void _onDoubleTapItem(String currentTag, String selectedAnswer,

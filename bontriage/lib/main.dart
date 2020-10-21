@@ -237,7 +237,7 @@ class MyApp extends StatelessWidget {
           case Constant.addHeadacheOnGoingScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: AddHeadacheOnGoingScreen());
+                  widget: AddHeadacheOnGoingScreen(isHeadacheEnded: settings.arguments,));
             }
 
           case Constant.logDayScreenRouter:

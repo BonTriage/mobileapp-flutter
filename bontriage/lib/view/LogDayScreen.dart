@@ -97,7 +97,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                           ),
                           GestureDetector(
                             onTap: (){
-                              Navigator.pop(context);
+                              _showDeleteLogOptionBottomSheet();
+                              //Navigator.pop(context);
                             },
                             child: Image(
                               image: AssetImage(Constant.closeIcon),
@@ -311,6 +312,10 @@ class _LogDayScreenState extends State<LogDayScreen>
         }
       });
     }
+  }
+
+  void _showDeleteLogOptionBottomSheet() {
+
   }
 
   Future<void> _showDoubleTapDialog() async {
