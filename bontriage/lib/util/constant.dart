@@ -304,9 +304,9 @@ class Constant {
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
-  static const String zeroEventStep = "1";
-  static const String firstEventStep = "2";
-  static const String secondEventStep = "3";
+  static const String zeroEventStep = "0";
+  static const String firstEventStep = "1";
+  static const String secondEventStep = "2";
 
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
