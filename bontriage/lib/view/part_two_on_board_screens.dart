@@ -109,7 +109,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                   .signUpOnBoardSecondStepDataStream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if(!isAlreadyDataFiltered && !isButtonClicked) {
+                  if (!isAlreadyDataFiltered && !isButtonClicked) {
                     addFilteredQuestionListData(snapshot.data);
                     isButtonClicked = false;
                   }
@@ -245,7 +245,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       });
       print(questionListData);
       // We have to change this condition
-      _progressPercent = 1 / _pageViewWidgetList.length;
+      _currentPageIndex = currentScreenPosition;
+      _progressPercent = _currentPageIndex * (1 / _pageViewWidgetList.length);
+      _pageController = PageController(initialPage: currentScreenPosition);
     }
   }
 
@@ -267,11 +269,12 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// database of respective table.
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData =
-        await SignUpOnBoardProviders.db.getQuestionnaire(Constant.firstEventStep);
+        await SignUpOnBoardProviders.db
+            .getQuestionnaire(Constant.firstEventStep);
 
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
-      signUpOnBoardSelectedAnswersModel =
-          await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
+      signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
+          .fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       _signUpOnBoardSecondStepBloc
           .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
