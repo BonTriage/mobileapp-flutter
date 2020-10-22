@@ -27,14 +27,15 @@ class LogDayBloc {
     _logDayRepository = LogDayRepository();
   }
 
-  fetchLogDayData() async {
+  Future<dynamic> fetchLogDayData() async {
     _logDayRepository.eventType = 'behaviors';
-    try {
+    //try {
       var logDayData = await _logDayRepository.serviceCall(
           'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
           RequestMethod.POST);
       if (logDayData is AppException) {
-        logDayDataSink.add(logDayData.toString());
+        //logDayDataSink.add(logDayData.toString());
+        logDayDataSink.addError(logDayData);
       } else {
         filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
             logDayData.questionnaires[0].initialQuestion,
@@ -43,10 +44,10 @@ class LogDayBloc {
         fetchLogDayData1();
         //logDayDataSink.add(filterQuestionsListData);
       }
-    } catch (e) {
+    /*} catch (e) {
       //  signUpFirstStepDataSink.add("Error");
       print(e.toString());
-    }
+    }*/
   }
 
   fetchLogDayData1() async {
