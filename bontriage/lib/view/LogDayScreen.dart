@@ -7,10 +7,12 @@ import 'package:flutter/painting.dart';
 import 'package:mobile/blocs/LogDayBloc.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
+import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
 class LogDayScreen extends StatefulWidget {
@@ -314,8 +316,20 @@ class _LogDayScreenState extends State<LogDayScreen>
     }
   }
 
-  void _showDeleteLogOptionBottomSheet() {
-
+  void _showDeleteLogOptionBottomSheet() async{
+    var resultOfDeleteBottomSheet = await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DeleteLogOptionsBottomSheet()
+    );
+    if (resultOfDeleteBottomSheet == Constant.deleteLog) {
+      SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _showDoubleTapDialog() async {

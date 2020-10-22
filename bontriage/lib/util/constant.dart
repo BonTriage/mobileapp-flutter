@@ -332,6 +332,7 @@ class Constant {
   static String logYourDayToAssess = ' Log your day to assess potential triggers.';
   static String headacheAdded = ' Headache Added!';
   static String dayLogged = ' Day Logged!';
+  static String deleteLog = ' Delete Log';
   static String loggedDaysInARow = 'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
 
 
@@ -373,6 +374,8 @@ class Constant {
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
   static Color pinkTriggerColor = Color(0xffF479D9);
+  static Color deleteLogRedColor = Color(0xffFF2D55);
+  static Color cancelBlueColor = Color(0xff007AFF);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
