@@ -416,7 +416,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
           .checkUserProgressDataAvailable(
               SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = "1";
-      userProgressDataModel.step = "0";
+      userProgressDataModel.step = Constant.zeroEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
           currentQuestionListData[currentPageIndex].tag;

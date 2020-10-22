@@ -55,21 +55,20 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
     // TODO: implement initState
     super.initState();
 
-    if(widget.selectedAnswerListData != null){
+    if (widget.selectedAnswerListData != null) {
       selectedAnswers = widget.selectedAnswerListData.firstWhere(
-              (model) => model.questionTag == widget.questionTag,
+          (model) => model.questionTag == widget.questionTag,
           orElse: () => null);
       if (selectedAnswers != null) {
-        try{
+        try {
           int userSelectedValue = int.parse(selectedAnswers.answer);
+          selectedValue = selectedAnswers.answer;
           widget.selectOptionList[userSelectedValue - 1].isSelected = true;
-        }catch(e){
+        } catch (e) {
           e.toString();
         }
-
       }
     }
-
 
     _animationController = AnimationController(
       vsync: this,
