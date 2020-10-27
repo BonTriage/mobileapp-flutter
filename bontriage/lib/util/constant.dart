@@ -275,10 +275,10 @@ class Constant {
   static String time = 'Time';
   static String whenHeadacheStart = 'When did your headache start?';
   static String start = 'START';
-  static String notifications = 'Notifications';
-  static String dailyLog = 'Daily Log';
-  static String medication = 'Medication';
-  static String exercise = 'Exercise';
+  static const String notifications = 'Notifications';
+  static const String dailyLog = 'Daily Log';
+  static const String medication = 'Medication';
+  static const String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
   static const String QuestionNumberType = 'number';
@@ -334,7 +334,59 @@ class Constant {
   static String dayLogged = ' Day Logged!';
   static String deleteLog = ' Delete Log';
   static String loggedDaysInARow = 'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
+  static const String settings = ' Settings';
+  static String allowed = 'Allowed';
+  static const String myInfo = 'My Info';
+  static String locationServices = 'Location Services';
+  static String appleWatch = 'Apple Watch';
+  static String notSetUp = 'Not set up';
+  static String appleHealth = 'Apple Health';
+  static String connected = 'Connected';
+  static String darkTheme = 'Dark Theme';
+  static String duringMigraine = 'During Migraine';
+  static String firstDayOfTheWeek = 'First day of the week';
+  static String sunday = 'Sunday';
+  static String timeFormat = 'Time format';
+  static String twelveHourAMPM = '12 hour AM/PM';
+  static const String generateReport = 'Generate Report';
+  static const String support = 'Support';
+  static String dateRange = 'Date Range';
+  static String dataToInclude = 'Data to include';
+  static String all = 'All';
+  static String last2Weeks = 'Last 2 weeks';
+  static String fileType = 'File type';
+  static String pdf = 'PDF';
+  static const String faq = 'FAQ';
+  static String connectTheAuroraTeam = 'Connect the Aurora team';
+  static String medicalHelp = 'Medical Help';
+  static String call911 = 'Call 911';
+  static String callADoctor = 'Call a doctor (urgent care)';
+  static String findALocalDoctor = 'Find a local doctor (non-urgent)';
+  static String openYourProviderApp = 'Open your provider’s app';
+  static String lindaJonesPdf = 'Linda_Jones_4_29_20.pdf';
+  static String text = 'Text';
+  static String print = 'Print';
+  static String name = 'Name';
+  static String lindaJones = 'Linda Jones';
+  static String age = 'Age';
+  static String twentyTwo = '22';
+  static String gender = 'Gender';
+  static String female = 'Female';
+  static String sex = 'Sex';
+  static String homeLocation = 'Home Location';
+  static String stanfordCA = 'Stanford, CA';
+  static String reCompleteInitialAssessment = 'Re-complete initial assessment';
+  static String questionOne = 'Question 1';
+  static String anInsightfulAndWellWorded = 'An insightful and well-worded answer to question 1 and all related concerns.';
+  static String theSecondQuestion = 'The second question?';
+  static String hereIsASimple = 'Here is a simple answer to your question!';
+  static String whatIfMyQuestion = 'What if my question is more compilicated?';
+  static String aMoreComplicated = 'A more complicated question deserves a well-thought out and complicated answer that may take several lines to explain in full detail.';
+  static String delete = ' Delete';
 
+  //Action Sheet Identifier
+  static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
+  static const String generateReportActionSheet = 'generateReportActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -376,6 +428,12 @@ class Constant {
   static Color pinkTriggerColor = Color(0xffF479D9);
   static Color deleteLogRedColor = Color(0xffFF2D55);
   static Color cancelBlueColor = Color(0xff007AFF);
+  static Color moreBackgroundColor = Color(0xCC0E232F);
+  static Color whiteColorAlpha85 = Color(0xD9FFFFFF);
+  static Color greyColor = Color(0xff8C8C8C);
+  static Color actionSheetDividerColor = Color(0xffCDCED2);
+  static Color selectedNotificationColor = Color(0xff145C56);
+
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -406,6 +464,7 @@ class Constant {
   static String weatherIcon = 'images/weather_icon.png';
   static String warningPink = 'images/warning_pink.png';
   static String addCircleIcon = 'images/add_circle_icon.png';
+  static String leftArrow = 'images/left_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

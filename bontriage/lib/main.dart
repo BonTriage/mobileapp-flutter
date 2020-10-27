@@ -8,8 +8,14 @@ import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
+import 'package:mobile/view/MoreGenerateReportScreen.dart';
+import 'package:mobile/view/MoreMyInfoScreen.dart';
+import 'package:mobile/view/MoreScreen.dart';
+import 'package:mobile/view/MoreSettingScreen.dart';
+import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
@@ -76,7 +82,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Splash(),
+      home: HomeScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:

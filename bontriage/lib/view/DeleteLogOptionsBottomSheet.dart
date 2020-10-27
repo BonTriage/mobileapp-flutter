@@ -23,7 +23,7 @@ class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomShee
               height: 45,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
+                  color: Constant.whiteColorAlpha85
               ),
               child: Center(
                 child: Text(
