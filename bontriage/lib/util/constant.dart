@@ -137,6 +137,7 @@ class Constant {
   static String blankString = '';
   static String atWhatAge = 'At what age did you first experience headaches?';
   static String selectOne = 'Select one';
+  static String selectAllThatApply = 'Select all that apply';
   static String yes = 'Yes';
   static String no = 'No';
   static String times = 'times';
@@ -383,6 +384,7 @@ class Constant {
   static String whatIfMyQuestion = 'What if my question is more compilicated?';
   static String aMoreComplicated = 'A more complicated question deserves a well-thought out and complicated answer that may take several lines to explain in full detail.';
   static String delete = ' Delete';
+  static String threeDots = '...';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
@@ -391,6 +393,7 @@ class Constant {
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
+  static const double chatBubbleMaxHeight = 75;
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

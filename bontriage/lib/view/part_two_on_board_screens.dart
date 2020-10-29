@@ -10,6 +10,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/OnBoardMultiSelectOption.dart';
 import 'package:mobile/view/on_board_bottom_buttons.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
@@ -123,7 +124,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                             _pageViewWidgetList[_currentPageIndex].questions,
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 15,
                       ),
                       Expanded(
                           child: PageView.builder(
@@ -134,6 +135,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                           return _pageViewWidgetList[index].questionsWidget;
                         },
                       )),
+                      SizedBox(height: 15,),
                       OnBoardBottomButtons(
                         progressPercent: _progressPercent,
                         backButtonFunction: _onBackPressed,
@@ -223,7 +225,6 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             break;
 
           case Constant.QuestionSingleType:
-          case Constant.QuestionMultiType:
             List<OnBoardSelectOptionModel> valuesListData = [];
             element.values.forEach((element) {
               valuesListData.add(OnBoardSelectOptionModel(
@@ -236,6 +237,23 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     questionTag: element.tag,
                     selectedAnswerListData:
                         signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                    selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
+                      selectedAnswerListData(currentTag, selectedUserAnswer);
+                    })));
+            break;
+          case Constant.QuestionMultiType:
+            List<OnBoardSelectOptionModel> valuesListData = [];
+            element.values.forEach((element) {
+              valuesListData.add(OnBoardSelectOptionModel(
+                  optionId: element.valueNumber, optionText: element.text));
+            });
+            _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
+                questions: element.helpText,
+                questionsWidget: OnBoardMultiSelectOptions(
+                    selectOptionList: valuesListData,
+                    questionTag: element.tag,
+                    selectedAnswerListData:
+                    signUpOnBoardSelectedAnswersModel.selectedAnswers,
                     selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                       selectedAnswerListData(currentTag, selectedUserAnswer);
                     })));

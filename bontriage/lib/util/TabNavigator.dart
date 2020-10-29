@@ -9,7 +9,7 @@ import 'package:mobile/view/MoreNotificationScreen.dart';
 import 'package:mobile/view/MoreScreen.dart';
 import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
-import 'package:mobile/view/RecordScreen.dart';
+import 'package:mobile/view/DemoRecordScreen.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;

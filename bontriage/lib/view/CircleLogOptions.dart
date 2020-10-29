@@ -5,7 +5,7 @@ import 'package:mobile/util/constant.dart';
 
 class CircleLogOptions extends StatefulWidget {
   final List<Values> logOptions;
-  final bool isForLogDay;
+  final bool isForMedication;
   final String preCondition;
   final int overlayNumber;
   final Function(int) onCircleItemSelected;
@@ -16,7 +16,7 @@ class CircleLogOptions extends StatefulWidget {
   const CircleLogOptions(
       {Key key,
       this.logOptions,
-      this.isForLogDay = false,
+      this.isForMedication = false,
       this.preCondition = '',
       this.overlayNumber = 0,
       this.onCircleItemSelected,
@@ -120,11 +120,11 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                         shape: BoxShape.circle,
                         border: Border.all(
                             color: widget.logOptions[index].isDoubleTapped
-                                ? Constant.doubleTapTextColor
+                                ? Constant.addCustomNotificationTextColor
                                 : Constant.chatBubbleGreen,
                             width: 1.5),
                         color: (widget.logOptions[index].isSelected)
-                            ? Constant.chatBubbleGreen
+                            ? (widget.logOptions[index].isDoubleTapped) ? Constant.addCustomNotificationTextColor : Constant.chatBubbleGreen
                             : Colors.transparent),
                     child: Center(
                       child: SingleChildScrollView(
@@ -150,22 +150,25 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Visibility(
-                      visible: widget.logOptions[index].isSelected &&
+                      visible: ((widget.isForMedication && widget.logOptions[index].isSelected) || (widget.logOptions[index].isSelected &&
                           (widget.preCondition
-                              .contains(widget.logOptions[index].text)),
+                              .contains(widget.logOptions[index].text)))),
                       child: Container(
                         width: 20,
                         height: 20,
                         child: CircleAvatar(
                           backgroundColor:
-                              Constant.addCustomNotificationTextColor,
-                          child: Text(
-                            widget.overlayNumber.toString(),
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontSize: 10,
-                                fontFamily: Constant.jostRegular,
-                                fontWeight: FontWeight.w500),
+                              Constant.backgroundTransparentColor,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              Constant.threeDots,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 10,
+                                  fontFamily: Constant.jostRegular,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ),
                       ),

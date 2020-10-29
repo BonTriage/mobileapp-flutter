@@ -159,13 +159,21 @@ class _SignUpFirstStepCompassResultState
                               padding: EdgeInsets.all(15),
                               child: FadeTransition(
                                 opacity: _animationController,
-                                child: Text(
-                                  _bubbleTextViewList[_buttonPressedValue],
-                                  style: TextStyle(
-                                      height: 1.3,
-                                      fontSize: 15,
-                                      color: Constant.bubbleChatTextView,
-                                      fontFamily: Constant.jostRegular),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: Constant.chatBubbleMaxHeight,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    child: Text(
+                                      _bubbleTextViewList[_buttonPressedValue],
+                                      style: TextStyle(
+                                          height: 1.3,
+                                          fontSize: 15,
+                                          color: Constant.bubbleChatTextView,
+                                          fontFamily: Constant.jostRegular),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

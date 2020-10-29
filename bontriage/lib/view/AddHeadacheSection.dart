@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/LogDayQuestionnaire.dart';
+import 'package:mobile/models/MedicationSelectedDataModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/TriggerWidgetModel.dart';
@@ -67,9 +68,13 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   int numberOfSleepItemSelected = 0;
   int whichSleepItemSelected = 0;
   int whichMedicationItemSelected = 0;
+  int _whichExpandedMedicationItemSelected = 0;
   int whichTriggerItemSelected = 0;
   bool isValuesUpdated = false;
-  List<DateTime> _medicineTimeList;
+  List<List<String>> _medicineTimeList = [];
+  List<List<Questions>> _medicationDosageList = [];
+  List<int> _numberOfDosageAddedList = [];
+  MedicationSelectedDataModel _medicationSelectedDataModel;
   List<TriggerWidgetModel> _triggerWidgetList = [];
   String previousMedicationTag;
   List<SelectedAnswers> selectedAnswerListOfTriggers = [];
@@ -174,27 +179,33 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           currentTag: widget.contentType,
         ));
       case 'medication':
-        if (!isValuesUpdated) {
-          isValuesUpdated = true;
-          Values value = widget.valuesList.firstWhere(
-              (element) => element.isDoubleTapped,
-              orElse: () => null);
-          if (value != null) {
-            _onMedicationItemSelected(int.parse(value.valueNumber) - 1);
-            SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere(
-                (element) => element.questionTag == 'administered',
+        try {
+          if (!isValuesUpdated) {
+            isValuesUpdated = true;
+            Values value = widget.valuesList.firstWhere(
+                    (element) => element.isDoubleTapped,
                 orElse: () => null);
-            if (selectedAnswers != null) {
-              _medicineTimeList[whichMedicationItemSelected] =
-                  DateTime.parse(selectedAnswers.answer);
+            if (value != null) {
+              _onMedicationItemSelected(int.parse(value.valueNumber) - 1);
+              SelectedAnswers selectedAnswers = widget.selectedAnswers
+                  .firstWhere(
+                      (element) => element.questionTag == 'administered',
+                  orElse: () => null);
+              if (selectedAnswers != null) {
+                _medicineTimeList[whichMedicationItemSelected][0] =
+                    DateTime.parse(selectedAnswers.answer).toString();
+              }
             }
           }
+        } catch(e) {
+          print(e.toString());
         }
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           onCircleItemSelected: _onMedicationItemSelected,
           onDoubleTapItem: _onDoubleTapItem,
           currentTag: widget.contentType,
+          isForMedication: true,
         ));
       case 'triggers1':
         if (!isValuesUpdated) {
@@ -240,6 +251,10 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     whichSleepItemSelected = index;
     whichMedicationItemSelected = index;
     whichTriggerItemSelected = index;
+    
+    if(widget.contentType == 'medication')
+      _updateMedicationSelectedDataModel();
+    
     if (isDoubleTapped) {
       if (questionType == 'multi') {
         widget.selectedAnswers.add(
@@ -309,11 +324,10 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if (selectedAnswers == null) {
           widget.selectedAnswers.add(SelectedAnswers(
               questionTag: 'administered',
-              answer:
-                  _medicineTimeList[whichMedicationItemSelected].toString()));
+              answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
         } else {
           selectedAnswers.answer =
-              _medicineTimeList[whichMedicationItemSelected].toString();
+              medicationSelectedDataModelToJson(_medicationSelectedDataModel);
         }
 
         if (previousMedicationTag != null) {
@@ -399,6 +413,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     setState(() {
       whichMedicationItemSelected = index;
     });
+
+    _updateMedicationSelectedDataModel();
 
     if (widget.valuesList[index].isSelected) {
       _animationController.forward();
@@ -505,6 +521,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: 100),
               child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: SingleChildScrollView(
                   child: Wrap(children: _getChipsWidget()),
                 ),
@@ -517,6 +534,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         Questions questions = widget.medicationExpandableWidgetList.firstWhere(
             (element) => element.precondition.contains(medName),
             orElse: () => null);
+
+        DateTime _medicationDateTime = DateTime.now();
+
+        try {
+          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]);
+        } catch(e) {
+          print(e.toString());
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -545,16 +570,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        _whichExpandedMedicationItemSelected = 0;
                         _openDatePickerBottomSheet(
                             CupertinoDatePickerMode.time, 1);
                       },
                       child: Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
                           Utils.getTimeInAmPmFormat(
-                              _medicineTimeList[whichMedicationItemSelected].hour,
-                              _medicineTimeList[whichMedicationItemSelected]
+                              _medicationDateTime.hour,
+                              _medicationDateTime
                                   .minute),
                           style: TextStyle(
                               color: Constant.splashColor,
@@ -586,20 +612,68 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             SizedBox(
               height: 10,
             ),
+            if(_medicationDosageList[whichMedicationItemSelected][0].values != null)
             Container(
               height: 30,
               child: LogDayChipList(
-                question: widget.medicationExpandableWidgetList[
-                    whichMedicationItemSelected],
+                question: _medicationDosageList[whichMedicationItemSelected][0],
+                onSelectCallback: _onMedicationChipSelectedCallback,
               ),
-            ),
+            )
+            else
+              Container(),
             SizedBox(
               height: 10,
             ),
+            _getAddedDosageList(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    _numberOfDosageAddedList[whichMedicationItemSelected] = _numberOfDosageAddedList[whichMedicationItemSelected] + 1;
+                    _medicineTimeList[whichMedicationItemSelected].add(DateTime.now().toString());
+
+                    String medName = widget.valuesList[whichMedicationItemSelected].text;
+                    Questions questions1 = widget.medicationExpandableWidgetList.firstWhere(
+                            (element) => element.precondition.contains(medName),
+                        orElse: () => null);
+
+                    if(questions1 != null) {
+                      List<Values> valuesList = [];
+
+                      questions1.values.forEach((element) {
+                        valuesList.add(Values(text: element.text,
+                            valueNumber: element.valueNumber,
+                            isSelected: element.isSelected));
+                      });
+
+                      Questions questions2 = Questions(
+                          tag: questions1.tag,
+                          id: questions1.id,
+                          questionType: questions1.questionType,
+                          precondition: questions1.precondition,
+                          next: questions1.next,
+                          text: questions1.text,
+                          helpText: questions1.helpText,
+                          values: valuesList,
+                          min: questions1.min,
+                          max: questions1.max,
+                          updatedAt: questions1.updatedAt,
+                          exclusiveValue: questions1.exclusiveValue,
+                          phi: questions1.phi,
+                          required: questions1.required,
+                          uiHints: questions1.uiHints,
+                          currentValue: questions1.currentValue
+                      );
+                      _medicationDosageList[whichMedicationItemSelected].add(
+                          questions2);
+                    } else {
+                      _medicationDosageList[whichMedicationItemSelected].add(
+                          Questions());
+                    }
+                  });
+                },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -833,6 +907,142 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
   }
 
+  void _onMedicationChipSelectedCallback(String tag, String data) {
+    _updateMedicationSelectedDataModel();
+  }
+
+  Widget _getAddedDosageList() {
+    if(_numberOfDosageAddedList[whichMedicationItemSelected] > 0) {
+      String medName = widget.valuesList[whichMedicationItemSelected].text;
+      Questions questions = widget.medicationExpandableWidgetList.firstWhere(
+              (element) => element.precondition.contains(medName),
+          orElse: () => null);
+
+      DateTime medicationDateTime = DateTime.now();
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(_numberOfDosageAddedList[whichMedicationItemSelected], (index) {
+          try {
+            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]);
+          } catch(e) {
+            print(e.toString());
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  'When did you take $medName?',
+                  style: TextStyle(
+                      color: Constant.locationServiceGreen,
+                      fontFamily: Constant.jostRegular,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    color: Constant.backgroundTransparentColor,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          _whichExpandedMedicationItemSelected = index + 1;
+                          _openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.time, 1);
+                        },
+                        child: Padding(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text(
+                            Utils.getTimeInAmPmFormat(
+                                medicationDateTime.hour,
+                                medicationDateTime
+                                    .minute),
+                            style: TextStyle(
+                                color: Constant.splashColor,
+                                fontFamily: Constant.jostRegular,
+                                fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _numberOfDosageAddedList[whichMedicationItemSelected] = _numberOfDosageAddedList[whichMedicationItemSelected] - 1;
+                      _medicineTimeList[whichMedicationItemSelected].removeAt(index + 1);
+                      _medicationDosageList[whichMedicationItemSelected].removeAt(index + 1);
+
+                      _updateMedicationSelectedDataModel();
+                    });
+                  },
+                  child: Text(
+                    'Tap here to remove this dose',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Constant.addCustomNotificationTextColor,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: Constant.jostRegular,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  (questions == null)
+                      ? 'What dosage did you take?'
+                      : questions.helpText,
+                  style: TextStyle(
+                      color: Constant.locationServiceGreen,
+                      fontFamily: Constant.jostRegular,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              if(_medicationDosageList[whichMedicationItemSelected][index + 1].values != null)
+                Container(
+                  height: 30,
+                  child: LogDayChipList(
+                    question: _medicationDosageList[whichMedicationItemSelected][index + 1],
+                    onSelectCallback: _onMedicationChipSelectedCallback,
+                  ),
+                )
+              else
+                Container(),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          );
+        }),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   void onValueChangedCallback(String currentTag, String value) {
     SelectedAnswers selectedAnswersObj = selectedAnswerListOfTriggers
         .firstWhere((element) => element.questionTag == currentTag,
@@ -923,9 +1133,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
-    _medicineTimeList =
-        List.generate(widget.valuesList.length, (index) => DateTime.now());
-
     if (widget.selectedAnswers != null) {
       widget.selectedAnswers.forEach((element) {
         if (element.questionTag.contains('triggers1.')) {
@@ -933,6 +1140,160 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
       });
     }
+
+    if (widget.contentType == 'medication') {
+      for (var i = 0; i < widget.valuesList.length; i++) {
+        _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+      }
+
+      _numberOfDosageAddedList = List.generate(widget.valuesList.length, (index) => 0);
+
+      for(var i = 0; i < widget.valuesList.length; i++) {
+        String medName = widget.valuesList[i].text;
+        Questions questions = widget.medicationExpandableWidgetList.firstWhere(
+                (element) => element.precondition.contains(medName),
+            orElse: () => null);
+
+        if(questions != null) {
+          List<Values> valuesList = [];
+
+          questions.values.forEach((element) {
+            valuesList.add(Values(text: element.text,
+                valueNumber: element.valueNumber,
+                isSelected: element.isSelected));
+          });
+
+          Questions questions1 = Questions(
+              tag: questions.tag,
+              id: questions.id,
+              questionType: questions.questionType,
+              precondition: questions.precondition,
+              next: questions.next,
+              text: questions.text,
+              helpText: questions.helpText,
+              values: valuesList,
+              min: questions.min,
+              max: questions.max,
+              updatedAt: questions.updatedAt,
+              exclusiveValue: questions.exclusiveValue,
+              phi: questions.phi,
+              required: questions.required,
+              uiHints: questions.uiHints,
+              currentValue: questions.currentValue
+          );
+          _medicationDosageList.add(List.generate(1, (index) => questions1));
+        } else {
+          _medicationDosageList.add(List.generate(1, (index) => Questions()));
+        }
+      }
+      
+      SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'administered', orElse: () => null);
+
+      if(selectedAnswers != null)
+        _medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(json.decode(selectedAnswers.answer));
+
+      if(_medicationSelectedDataModel != null) {
+        whichMedicationItemSelected = _medicationSelectedDataModel.selectedMedicationIndex;
+        _numberOfDosageAddedList[whichMedicationItemSelected] = _medicationSelectedDataModel.selectedMedicationDateList.length - 1;
+        _medicineTimeList[whichMedicationItemSelected] = _medicationSelectedDataModel.selectedMedicationDateList;
+
+        for(var i = 0; i < _numberOfDosageAddedList[whichMedicationItemSelected]; i++) {
+          String medName = widget.valuesList[whichMedicationItemSelected].text;
+          Questions questions = widget.medicationExpandableWidgetList.firstWhere(
+                  (element) => element.precondition.contains(medName),
+              orElse: () => null);
+
+          if(questions != null) {
+            List<Values> valuesList = [];
+
+            questions.values.forEach((element) {
+              valuesList.add(Values(text: element.text,
+                  valueNumber: element.valueNumber,
+                  isSelected: element.isSelected));
+            });
+
+            Questions questions1 = Questions(
+                tag: questions.tag,
+                id: questions.id,
+                questionType: questions.questionType,
+                precondition: questions.precondition,
+                next: questions.next,
+                text: questions.text,
+                helpText: questions.helpText,
+                values: valuesList,
+                min: questions.min,
+                max: questions.max,
+                updatedAt: questions.updatedAt,
+                exclusiveValue: questions.exclusiveValue,
+                phi: questions.phi,
+                required: questions.required,
+                uiHints: questions.uiHints,
+                currentValue: questions.currentValue
+            );
+            _medicationDosageList[whichMedicationItemSelected].add(questions1);
+          } else {
+            _medicationDosageList[whichMedicationItemSelected].add(Questions());
+          }
+        }
+
+        if(_medicationSelectedDataModel.selectedMedicationDosageList.length > 0) {
+          _medicationSelectedDataModel.selectedMedicationDosageList.asMap().forEach((index, value) {
+            //if(index == 0) {
+              try {
+                int selectedValueIndex = int.parse(value) - 1;
+                _medicationDosageList[whichMedicationItemSelected][index].values[selectedValueIndex].isSelected = true;
+              } catch(e) {
+                print(e.toString());
+              }
+             /*else {
+              String medName = widget.valuesList[whichMedicationItemSelected].text;
+              Questions questions = widget.medicationExpandableWidgetList.firstWhere(
+                      (element) => element.precondition.contains(medName),
+                  orElse: () => null);
+
+              if(questions != null) {
+                List<Values> valuesList = [];
+
+                questions.values.forEach((element) {
+                  valuesList.add(Values(text: element.text,
+                      valueNumber: element.valueNumber,
+                      isSelected: element.isSelected));
+                });
+
+                Questions questions1 = Questions(
+                    tag: questions.tag,
+                    id: questions.id,
+                    questionType: questions.questionType,
+                    precondition: questions.precondition,
+                    next: questions.next,
+                    text: questions.text,
+                    helpText: questions.helpText,
+                    values: valuesList,
+                    min: questions.min,
+                    max: questions.max,
+                    updatedAt: questions.updatedAt,
+                    exclusiveValue: questions.exclusiveValue,
+                    phi: questions.phi,
+                    required: questions.required,
+                    uiHints: questions.uiHints,
+                    currentValue: questions.currentValue
+                );
+                _medicationDosageList[whichMedicationItemSelected].add(questions1);
+                try {
+                  int selectedValueIndex = int.parse(value) - 1;
+                  _medicationDosageList[whichMedicationItemSelected][index].values[selectedValueIndex].isSelected = true;
+                } catch(e) {
+                  print(e.toString());
+                }
+              } else {
+                _medicationDosageList[whichMedicationItemSelected].add(Questions());
+              }*/
+            }
+          );
+        }
+      }
+    }
+    //print("asdasd: ${_medicationDosageList[whichMedicationItemSelected].length}");
   }
 
   @override
@@ -970,7 +1331,29 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   void _onDateSelected(DateTime dateTime) {
     setState(() {
-      _medicineTimeList[whichMedicationItemSelected] = dateTime;
+      _medicineTimeList[whichMedicationItemSelected][_whichExpandedMedicationItemSelected] = dateTime.toString();
     });
+
+    _updateMedicationSelectedDataModel();
+  }
+
+  void _updateMedicationSelectedDataModel() {
+    List<String> selectedMedicationDosageList = [];
+
+    _medicationDosageList[whichMedicationItemSelected].forEach((element) {
+      if(element.values != null) {
+        element.values.forEach((element1) {
+          if(element1.isSelected) {
+            selectedMedicationDosageList.add(element1.valueNumber);
+          }
+        });
+      }
+    });
+
+    _medicationSelectedDataModel = MedicationSelectedDataModel(
+      selectedMedicationIndex: whichMedicationItemSelected,
+      selectedMedicationDateList: _medicineTimeList[whichMedicationItemSelected],
+      selectedMedicationDosageList: selectedMedicationDosageList,
+    );
   }
 }
