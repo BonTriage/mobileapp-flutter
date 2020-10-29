@@ -56,13 +56,21 @@ class Constant {
   static const String postNotificationOnBoardRouter =
       '/postNotificationOnBoardRouter';
   static const String notificationScreenRouter = '/NotificationScreenRouter';
-  static const String headacheStartedScreenRouter = '/HeadacheStartedScreenRouter';
-  static const String currentHeadacheProgressScreenRouter = '/CurrentHeadacheProgressScreenRouter';
-  static const String addHeadacheOnGoingScreenRouter = '/addHeadacheOnGoingScreenRouter';
+  static const String headacheStartedScreenRouter =
+      '/HeadacheStartedScreenRouter';
+  static const String currentHeadacheProgressScreenRouter =
+      '/CurrentHeadacheProgressScreenRouter';
+  static const String addHeadacheOnGoingScreenRouter =
+      '/addHeadacheOnGoingScreenRouter';
   static const String logDayScreenRouter = '/logDayScreenRouter';
-  static const String addHeadacheSuccessScreenRouter = '/addHeadacheSuccessScreenRouter';
+  static const String addHeadacheSuccessScreenRouter =
+      '/addHeadacheSuccessScreenRouter';
   static const String logDaySuccessScreenRouter = '/logDaySuccessScreenRouter';
-
+  static const String profileCompleteScreenRouter = '/profileCompleteScreenRouter';
+  static const String notificationTimerRouter = '/notificationTimerRouter';
+  static const String calendarTriggersScreenRouter = '/calendarTriggersScreenRouter';
+  static const String calendarSeverityScreenRouter = '/calendarSeverityScreenRouter';
+  static const String logDayNoHeadacheScreenRouter = '/logDayNoHeadacheScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -199,6 +207,7 @@ class Constant {
       'We know it can be easy to lose track of this, and we found it works best if you let us send you a daily reminder — we recommend the late afternoon or evening. Can we set that up for you?';
   static String addAnotherHeadache = 'Add Another Headache';
   static String saveAndFinishLater = 'Save & Finish Later';
+  static String finish = 'Finish';
   static String notNow = 'Not Now';
   static String migraineMentor = 'MigraineMentor';
   static String personalizedUnderstanding =
@@ -256,14 +265,17 @@ class Constant {
   static String frequency = 'Frequency';
   static String disability = 'Disability';
   static String duration = 'Duration';
-  static String compassTextView = 'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
-  static String doubleTapAnItem = 'Double tap an item to keep it pre-selected for next time you come back to enter a log.';
+  static String compassTextView =
+      'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+  static String doubleTapAnItem =
+      'Double tap an item to keep it pre-selected for next time you come back to enter a log.';
   static String sleep = 'Sleep';
   static String howFeelWakingUp = 'How did you feel waking up this morning?';
   static String energizedRefreshed = 'Energized\n& refreshed';
   static String couldHaveBeenBetter = 'Could have\nbeen better';
   static String headacheLogStarted = 'Headache log started.';
-  static String feelFreeToComeBack = ' Feel free to come back when you’re feeling better.';
+  static String feelFreeToComeBack =
+      ' Feel free to come back when you’re feeling better.';
   static String viewCurrentLog = 'View Current Log';
   static String addDetails = 'Add Details';
   static String addEditDetails = 'Add/Edit Details';
@@ -288,19 +300,22 @@ class Constant {
   static const String QuestionLocationType = 'location';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
-  static String onAScaleOf1To10 = 'On a scale of 1 - 10, how painful is this headache?';
+  static String onAScaleOf1To10 =
+      'On a scale of 1 - 10, how painful is this headache?';
   static String min = 'MIN';
   static String max = 'MAX';
   static String one = '1';
   static String ten = '10';
   static String mild = 'MILD';
   static String veryPainful = 'VERY\nPAINFUL';
-  static String onAScaleOf1To10Disability = 'On a scale of 1- 10, how much disability are you experienciing as result of this headache?';
+  static String onAScaleOf1To10Disability =
+      'On a scale of 1- 10, how much disability are you experienciing as result of this headache?';
   static String noneAtALL = 'NONE AT\nALL';
   static String totalDisability = 'TOTAL\nDISABILITY';
   static String addANote = '+ Add a Note';
   static String at = 'at';
-  static String tapHereIfInProgress = 'Tap here if headache is still in progress.';
+  static String tapHereIfInProgress =
+      'Tap here if headache is still in progress.';
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
@@ -322,18 +337,39 @@ class Constant {
   static const String numberTypeTag = "number";
   static const String dateTimeTypeTag = "datetime";
 
-  static String whenYouAreLoggingYourDay = 'When you’re logging your day, you can double tap any items you experience frequently to keep them pre-selected for every time you come back. For example, if you drink coffee every morning, you could double tap “Caffeine.”';
-  static String doubleTappedItems = 'Double tapped items — indicated by a green border — are pre-selected for you every time you enter a log. Deselecting an item on any given day toggles pre-select off, and you can always toggle it back on by double tapping again later.';
+  static String whenYouAreLoggingYourDay =
+      'When you’re logging your day, you can double tap any items you experience frequently to keep them pre-selected for every time you come back. For example, if you drink coffee every morning, you could double tap “Caffeine.”';
+  static String doubleTappedItems =
+      'Double tapped items — indicated by a green border — are pre-selected for you every time you enter a log. Deselecting an item on any given day toggles pre-select off, and you can always toggle it back on by double tapping again later.';
   static String tryDoubleTappingMe = 'Try double tapping me!';
   static String gotIt = 'Got it!';
   static String logDayEvenFaster = 'Log your day even faster with Double Tap!';
   static String viewTrends = 'View Trends';
   static String logDay = 'Log Day';
-  static String logYourDayToAssess = ' Log your day to assess potential triggers.';
+  static String logYourDayToAssess =
+      ' Log your day to assess potential triggers.';
   static String headacheAdded = ' Headache Added!';
   static String dayLogged = ' Day Logged!';
-  static String loggedDaysInARow = 'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
+  static String loggedDaysInARow =
+      'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
+  static String profileCompleteThatNow = 'That\'s it for now! Thanks for using' ;
+  static String profileCompleteCommentsSignedInfo = 'We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
 
+  static String profileCompleteTextView = 'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage' ;
+
+  static String thankYouProfile = ' Thank you!\nYour profile is complete.';
+  static String daily = ' Daily';
+  static String weekDays = ' weekDays';
+  static String off = ' off';
+  static String skip = ' Skip';
+  static String delete = ' Delete';
+  static String calendar = ' Calendar';
+  static String trends = ' Trends';
+  static String triggers = ' Triggers';
+  static String sortedCalenderTextView = 'Sorted from your most to least logged, view the trends of your personalized triggers. (Select up to 3 at a time)';
+  static String calculatedSeverityCalendarTextView = ' Calculated from your Headache Score, see the most severe headache on a particular day';
+
+ static String LogDayNoHeadacheTextView = 'We noticed you didn’t log a headache today. Can you confirm what happened?';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -373,6 +409,10 @@ class Constant {
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
   static Color pinkTriggerColor = Color(0xffF479D9);
+  static Color mildTriggerColor = Color(0xff55AE88);
+  static Color moderateTriggerColor = Color(0xfff69466);
+  static Color severeTriggerColor = Color(0xffEB5757);
+  static Color migraineColor = Color(0xffB8E1FF);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -403,6 +443,8 @@ class Constant {
   static String weatherIcon = 'images/weather_icon.png';
   static String warningPink = 'images/warning_pink.png';
   static String addCircleIcon = 'images/add_circle_icon.png';
+  static String calenderBackArrow = 'images/calender_back_arrow.png';
+  static String calenderNextArrow = 'images/calender_next_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
