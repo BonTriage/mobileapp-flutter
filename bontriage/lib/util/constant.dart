@@ -66,11 +66,15 @@ class Constant {
   static const String addHeadacheSuccessScreenRouter =
       '/addHeadacheSuccessScreenRouter';
   static const String logDaySuccessScreenRouter = '/logDaySuccessScreenRouter';
-  static const String profileCompleteScreenRouter = '/profileCompleteScreenRouter';
+  static const String profileCompleteScreenRouter =
+      '/profileCompleteScreenRouter';
   static const String notificationTimerRouter = '/notificationTimerRouter';
-  static const String calendarTriggersScreenRouter = '/calendarTriggersScreenRouter';
-  static const String calendarSeverityScreenRouter = '/calendarSeverityScreenRouter';
-  static const String logDayNoHeadacheScreenRouter = '/logDayNoHeadacheScreenRouter';
+  static const String calendarTriggersScreenRouter =
+      '/calendarTriggersScreenRouter';
+  static const String calendarSeverityScreenRouter =
+      '/calendarSeverityScreenRouter';
+  static const String logDayNoHeadacheScreenRouter =
+      '/logDayNoHeadacheScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -145,6 +149,7 @@ class Constant {
   static String blankString = '';
   static String atWhatAge = 'At what age did you first experience headaches?';
   static String selectOne = 'Select one';
+  static String selectAllThatApply = 'Select all that apply';
   static String yes = 'Yes';
   static String no = 'No';
   static String times = 'times';
@@ -287,10 +292,10 @@ class Constant {
   static String time = 'Time';
   static String whenHeadacheStart = 'When did your headache start?';
   static String start = 'START';
-  static String notifications = 'Notifications';
-  static String dailyLog = 'Daily Log';
-  static String medication = 'Medication';
-  static String exercise = 'Exercise';
+  static const String notifications = 'Notifications';
+  static const String dailyLog = 'Daily Log';
+  static const String medication = 'Medication';
+  static const String exercise = 'Exercise';
   static String addCustomNotification = '+  Add Custom Notification';
   static String save = 'Save';
   static const String QuestionNumberType = 'number';
@@ -350,12 +355,16 @@ class Constant {
       ' Log your day to assess potential triggers.';
   static String headacheAdded = ' Headache Added!';
   static String dayLogged = ' Day Logged!';
+
   static String loggedDaysInARow =
       'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
-  static String profileCompleteThatNow = 'That\'s it for now! Thanks for using' ;
-  static String profileCompleteCommentsSignedInfo = 'We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+  static String profileCompleteThatNow = 'That\'s it for now! Thanks for using';
 
-  static String profileCompleteTextView = 'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage' ;
+  static String profileCompleteCommentsSignedInfo =
+      'We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+
+  static String profileCompleteTextView =
+      'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
 
   static String thankYouProfile = ' Thank you!\nYour profile is complete.';
   static String daily = ' Daily';
@@ -366,14 +375,75 @@ class Constant {
   static String calendar = ' Calendar';
   static String trends = ' Trends';
   static String triggers = ' Triggers';
-  static String sortedCalenderTextView = 'Sorted from your most to least logged, view the trends of your personalized triggers. (Select up to 3 at a time)';
-  static String calculatedSeverityCalendarTextView = ' Calculated from your Headache Score, see the most severe headache on a particular day';
+  static String sortedCalenderTextView =
+      'Sorted from your most to least logged, view the trends of your personalized triggers. (Select up to 3 at a time)';
+  static String calculatedSeverityCalendarTextView =
+      ' Calculated from your Headache Score, see the most severe headache on a particular day';
 
- static String LogDayNoHeadacheTextView = 'We noticed you didn’t log a headache today. Can you confirm what happened?';
+  static String LogDayNoHeadacheTextView =
+      'We noticed you didn’t log a headache today. Can you confirm what happened?';
+
+  static String deleteLog = ' Delete Log';
+  static const String settings = ' Settings';
+  static String allowed = 'Allowed';
+  static const String myInfo = 'My Info';
+  static String locationServices = 'Location Services';
+  static String appleWatch = 'Apple Watch';
+  static String notSetUp = 'Not set up';
+  static String appleHealth = 'Apple Health';
+  static String connected = 'Connected';
+  static String darkTheme = 'Dark Theme';
+  static String duringMigraine = 'During Migraine';
+  static String firstDayOfTheWeek = 'First day of the week';
+  static String sunday = 'Sunday';
+  static String timeFormat = 'Time format';
+  static String twelveHourAMPM = '12 hour AM/PM';
+  static const String generateReport = 'Generate Report';
+  static const String support = 'Support';
+  static String dateRange = 'Date Range';
+  static String dataToInclude = 'Data to include';
+  static String all = 'All';
+  static String last2Weeks = 'Last 2 weeks';
+  static String fileType = 'File type';
+  static String pdf = 'PDF';
+  static const String faq = 'FAQ';
+  static String connectTheAuroraTeam = 'Connect the Aurora team';
+  static String medicalHelp = 'Medical Help';
+  static String call911 = 'Call 911';
+  static String callADoctor = 'Call a doctor (urgent care)';
+  static String findALocalDoctor = 'Find a local doctor (non-urgent)';
+  static String openYourProviderApp = 'Open your provider’s app';
+  static String lindaJonesPdf = 'Linda_Jones_4_29_20.pdf';
+  static String text = 'Text';
+  static String print = 'Print';
+  static String name = 'Name';
+  static String lindaJones = 'Linda Jones';
+  static String age = 'Age';
+  static String twentyTwo = '22';
+  static String gender = 'Gender';
+  static String female = 'Female';
+  static String sex = 'Sex';
+  static String homeLocation = 'Home Location';
+  static String stanfordCA = 'Stanford, CA';
+  static String reCompleteInitialAssessment = 'Re-complete initial assessment';
+  static String questionOne = 'Question 1';
+  static String anInsightfulAndWellWorded =
+      'An insightful and well-worded answer to question 1 and all related concerns.';
+  static String theSecondQuestion = 'The second question?';
+  static String hereIsASimple = 'Here is a simple answer to your question!';
+  static String whatIfMyQuestion = 'What if my question is more compilicated?';
+  static String aMoreComplicated =
+      'A more complicated question deserves a well-thought out and complicated answer that may take several lines to explain in full detail.';
+  static String threeDots = '...';
+
+  //Action Sheet Identifier
+  static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
+  static const String generateReportActionSheet = 'generateReportActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
+  static const double chatBubbleMaxHeight = 75;
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(
@@ -409,10 +479,19 @@ class Constant {
   static Color notificationTextColor = Color(0x80AFD794);
   static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
   static Color pinkTriggerColor = Color(0xffF479D9);
+
   static Color mildTriggerColor = Color(0xff55AE88);
   static Color moderateTriggerColor = Color(0xfff69466);
   static Color severeTriggerColor = Color(0xffEB5757);
   static Color migraineColor = Color(0xffB8E1FF);
+
+  static Color deleteLogRedColor = Color(0xffFF2D55);
+  static Color cancelBlueColor = Color(0xff007AFF);
+  static Color moreBackgroundColor = Color(0xCC0E232F);
+  static Color whiteColorAlpha85 = Color(0xD9FFFFFF);
+  static Color greyColor = Color(0xff8C8C8C);
+  static Color actionSheetDividerColor = Color(0xffCDCED2);
+  static Color selectedNotificationColor = Color(0xff145C56);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -445,6 +524,8 @@ class Constant {
   static String addCircleIcon = 'images/add_circle_icon.png';
   static String calenderBackArrow = 'images/calender_back_arrow.png';
   static String calenderNextArrow = 'images/calender_next_arrow.png';
+
+  static String leftArrow = 'images/left_arrow.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

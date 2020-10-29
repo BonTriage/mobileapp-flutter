@@ -65,6 +65,11 @@ class _LogDayDoubleTapDialogState extends State<LogDayDoubleTapDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
+                    onTap: () {
+                      if(isDoubleTapped) {
+                        Navigator.pop(context);
+                      }
+                    },
                     onDoubleTap: () {
                       if(!isDoubleTapped) {
                         setState(() {
@@ -79,9 +84,9 @@ class _LogDayDoubleTapDialogState extends State<LogDayDoubleTapDialog> {
                       height: 67,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen, width: 2),
+                          border: Border.all(color: isDoubleTapped ? Constant.addCustomNotificationTextColor : Constant.chatBubbleGreen, width: 2),
                           color: isDoubleTapped
-                              ? Constant.chatBubbleGreen
+                              ? Constant.addCustomNotificationTextColor
                               : Colors.transparent),
                       child: Center(
                         child: SingleChildScrollView(

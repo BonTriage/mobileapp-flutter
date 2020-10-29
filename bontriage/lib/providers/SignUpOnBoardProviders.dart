@@ -230,4 +230,9 @@ class SignUpOnBoardProviders {
     await db.insert(TABLE_LOG_DAY, logDayQuestionnaire.toMap());
     return logDayQuestionnaire;
   }
+
+  Future<void> deleteAllUserLogDayData() async{
+    final db = await database;
+    await db.delete(TABLE_LOG_DAY);
+  }
 }

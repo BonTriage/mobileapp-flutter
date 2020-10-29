@@ -76,21 +76,37 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
 
   Widget _getTextWidget() {
     if(widget.isSpannable) {
-      return RichText(
-        text: TextSpan(
-          children: widget.textSpanList,
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: Constant.chatBubbleMaxHeight,
+        ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: RichText(
+            text: TextSpan(
+              children: widget.textSpanList,
+            ),
+          ),
         ),
       );
     } else {
-      return Text(
-        widget.chatBubbleText,
-        style: TextStyle(
-          fontSize: 16,
-          fontFamily: Constant.jostRegular,
-          height: 1.3,
-          color: (widget.chatBubbleColor == null)
-              ? Constant.chatBubbleGreen
-              : Constant.bubbleChatTextView,
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: Constant.chatBubbleMaxHeight,
+        ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Text(
+            widget.chatBubbleText,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: Constant.jostRegular,
+              height: 1.3,
+              color: (widget.chatBubbleColor == null)
+                  ? Constant.chatBubbleGreen
+                  : Constant.bubbleChatTextView,
+            ),
+          ),
         ),
       );
     }

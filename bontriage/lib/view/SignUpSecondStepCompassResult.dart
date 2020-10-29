@@ -121,6 +121,7 @@ class _SignUpSecondStepCompassResultState
                             width: 60.0,
                             height: 60.0,
                           ),
+                          SizedBox(height: 10,),
                           GestureDetector(
                             onTap: _toggleVolume,
                             child: AnimatedCrossFade(
@@ -157,9 +158,17 @@ class _SignUpSecondStepCompassResultState
                                   padding: EdgeInsets.all(15),
                                   child: FadeTransition(
                                     opacity: _animationController,
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: _getBubbleTextSpans(),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: Constant.chatBubbleMaxHeight,
+                                      ),
+                                      child: SingleChildScrollView(
+                                        physics: BouncingScrollPhysics(),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: _getBubbleTextSpans(),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )),

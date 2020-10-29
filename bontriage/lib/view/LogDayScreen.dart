@@ -7,10 +7,12 @@ import 'package:flutter/painting.dart';
 import 'package:mobile/blocs/LogDayBloc.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
+import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
 class LogDayScreen extends StatefulWidget {
@@ -117,19 +119,6 @@ class _LogDayScreenState extends State<LogDayScreen>
                         height: 30,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        Constant.doubleTapAnItem,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Constant.doubleTapTextColor,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
                     StreamBuilder<dynamic>(
                       stream: _logDayBloc.logDayDataStream,
                       builder: (context, snapshot) {
@@ -137,6 +126,19 @@ class _LogDayScreenState extends State<LogDayScreen>
                           addNewWidgets(snapshot.data);
                           return Column(
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  Constant.doubleTapAnItem,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: Constant.doubleTapTextColor,
+                                      fontFamily: Constant.jostRegular),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
                               Column(children: _sectionWidgetList),
                               Align(
                                 alignment: Alignment.centerLeft,
@@ -220,6 +222,44 @@ class _LogDayScreenState extends State<LogDayScreen>
                               ),
                             ],
 
+                          );
+                        } else if (snapshot.hasError) {
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+                                child: Text(
+                                  snapshot.error.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: Constant.jostMedium,
+                                    color: Constant.chatBubbleGreen
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15,),
+                              BouncingWidget(
+                                onPressed: () {
+
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Constant.chatBubbleGreen,
+                                  ),
+                                  child: Text(
+                                    'Tap to Retry',
+                                    style: TextStyle(
+                                      color: Constant.bubbleChatTextView,
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           );
                         } else {
                           return Center(
@@ -314,8 +354,20 @@ class _LogDayScreenState extends State<LogDayScreen>
     }
   }
 
-  void _showDeleteLogOptionBottomSheet() {
-
+  void _showDeleteLogOptionBottomSheet() async{
+    var resultOfDeleteBottomSheet = await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DeleteLogOptionsBottomSheet()
+    );
+    if (resultOfDeleteBottomSheet == Constant.deleteLog) {
+      SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _showDoubleTapDialog() async {

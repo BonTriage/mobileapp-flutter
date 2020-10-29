@@ -3,25 +3,25 @@ import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
-class OnBoardSelectOptions extends StatefulWidget {
+class OnBoardMultiSelectOptions extends StatefulWidget {
   final List<OnBoardSelectOptionModel> selectOptionList;
   final Function(String, String) selectedAnswerCallBack;
   final String questionTag;
   final List<SelectedAnswers> selectedAnswerListData;
 
-  const OnBoardSelectOptions(
+  const OnBoardMultiSelectOptions(
       {Key key,
-      this.selectOptionList,
-      this.questionTag,
-      this.selectedAnswerListData,
-      this.selectedAnswerCallBack})
+        this.selectOptionList,
+        this.questionTag,
+        this.selectedAnswerListData,
+        this.selectedAnswerCallBack})
       : super(key: key);
 
   @override
-  _OnBoardSelectOptionsState createState() => _OnBoardSelectOptionsState();
+  _OnBoardMultiSelectOptionsState createState() => _OnBoardMultiSelectOptionsState();
 }
 
-class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
+class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
     with SingleTickerProviderStateMixin {
   List<bool> _optionSelectedList = [];
   AnimationController _animationController;
@@ -57,7 +57,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
 
     if (widget.selectedAnswerListData != null) {
       selectedAnswers = widget.selectedAnswerListData.firstWhere(
-          (model) => model.questionTag == widget.questionTag,
+              (model) => model.questionTag == widget.questionTag,
           orElse: () => null);
       if (selectedAnswers != null) {
         try {
@@ -79,7 +79,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
   }
 
   @override
-  void didUpdateWidget(OnBoardSelectOptions oldWidget) {
+  void didUpdateWidget(OnBoardMultiSelectOptions oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
@@ -98,9 +98,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
   }
 
   void _onOptionSelected(int index) {
-    widget.selectOptionList.asMap().forEach((key, value) {
-      widget.selectOptionList[key].isSelected = index == key;
-    });
+    widget.selectOptionList[index].isSelected = !widget.selectOptionList[index].isSelected;
   }
 
   @override
@@ -114,7 +112,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              Constant.selectOne,
+              Constant.selectAllThatApply,
               style: TextStyle(
                   fontSize: 13,
                   fontFamily: Constant.jostMedium,

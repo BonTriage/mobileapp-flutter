@@ -9,9 +9,16 @@ import 'package:mobile/view/CalendarSeverityScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+
 import 'package:mobile/view/LogDayNoHeadacheScreen.dart';
+import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
+import 'package:mobile/view/MoreGenerateReportScreen.dart';
+import 'package:mobile/view/MoreMyInfoScreen.dart';
+import 'package:mobile/view/MoreScreen.dart';
+import 'package:mobile/view/MoreSettingScreen.dart';
+import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
