@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async =>
-      !await navigatorKey[currentIndex].currentState.maybePop(),
+          !await navigatorKey[currentIndex].currentState.maybePop(),
       child: Scaffold(
         body: Container(
           decoration: Constant.backgroundBoxDecoration,
@@ -125,9 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  
+
   String _getRootRoute(int index) {
-    switch(index) {
+    switch (index) {
       case 0:
         return TabNavigatorRoutes.meRoot;
       case 1:
@@ -145,13 +146,14 @@ class _HomeScreenState extends State<HomeScreen> {
       child: TabNavigator(
         navigatorKey: navigatorKey[index],
         root: _getRootRoute(index),
+        navigateToOtherScreenCallback: navigateToOtherScreen,
         openActionSheetCallback: _openActionSheet,
       ),
     );
   }
 
   void _openActionSheet(String actionSheetType) async {
-    switch(actionSheetType) {
+    switch (actionSheetType) {
       case Constant.medicalHelpActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
             backgroundColor: Colors.transparent,
@@ -160,8 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             context: context,
-            builder: (context) => MedicalHelpActionSheet()
-        );
+            builder: (context) => MedicalHelpActionSheet());
         break;
       case Constant.generateReportActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -171,9 +172,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             context: context,
-            builder: (context) => GenerateReportActionSheet()
-        );
+            builder: (context) => GenerateReportActionSheet());
         break;
     }
+  }
+
+  Future<dynamic> navigateToOtherScreen(String routerName) async {
+    if (routerName == TabNavigatorRoutes.recordsRoot) {
+      await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
+      setState(() {
+        currentIndex = 1;
+      });
+    } else
+      return await Navigator.pushNamed(context, routerName);
   }
 }

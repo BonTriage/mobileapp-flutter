@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
-import 'package:mobile/repository/WelcomeOnBoardProfileRepository.dart';
+import 'package:mobile/repository/SignUpOnBoardFirstStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 
-class WelcomeOnBoardProfileBloc {
-  WelcomeOnBoardProfileRepository _welcomeOnBoardProfileRepository;
+class SignUpBoardFirstStepBloc {
+  SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
   StreamController<dynamic> _signUpFirstStepDataStreamController;
   int count = 0;
 
@@ -20,17 +19,17 @@ class WelcomeOnBoardProfileBloc {
   Stream<dynamic> get albumDataStream =>
       _signUpFirstStepDataStreamController.stream;
 
-  WelcomeOnBoardProfileBloc({this.count = 0}) {
+  SignUpBoardFirstStepBloc({this.count = 0}) {
     _signUpFirstStepDataStreamController = StreamController<dynamic>();
-    _welcomeOnBoardProfileRepository = WelcomeOnBoardProfileRepository();
+    _signUpOnBoardFirstStepRepository = SignUpOnBoardFirstStepRepository();
   }
-
+// QA Url it will be change.
   fetchSignUpFirstStepData() async {
     try {
       var signUpFirstStepData =
-          await _welcomeOnBoardProfileRepository.serviceCall(
-              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-              RequestMethod.POST);
+      await _signUpOnBoardFirstStepRepository.serviceCall(
+          'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
+          RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
         signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -45,16 +44,18 @@ class WelcomeOnBoardProfileBloc {
     }
   }
 
-  sendSignUpFirstStepData(SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+  sendSignUpFirstStepData(
+      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
     try {
       var signUpFirstStepData =
-      await _welcomeOnBoardProfileRepository.signUpProfileInfoObjectServiceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
-          RequestMethod.POST,signUpOnBoardSelectedAnswersModel);
+      await _signUpOnBoardFirstStepRepository
+          .signUpFirstStepInfoObjectServiceCall(
+          'http://34.222.200.187:8080/mobileapi/v0/event',
+          RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-     /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+        /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
             signUpFirstStepData.questionnaires[0].initialQuestion,
             signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
@@ -69,11 +70,11 @@ class WelcomeOnBoardProfileBloc {
     _signUpFirstStepDataStreamController?.close();
   }
 
-  fetchDataFromLocalDatabase(List<LocalQuestionnaire> localQuestionnaireData) async {
-
+  fetchDataFromLocalDatabase(
+      List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
-        WelcomeOnBoardProfileModel();
+    WelcomeOnBoardProfileModel();
     welcomeOnBoardProfileModel = WelcomeOnBoardProfileModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
@@ -85,6 +86,4 @@ class WelcomeOnBoardProfileBloc {
     return SignUpOnBoardSelectedAnswersModel.fromJson(
         json.decode(localQuestionnaireEventData.selectedAnswers));
   }
-
-
 }

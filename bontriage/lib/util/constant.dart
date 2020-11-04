@@ -75,6 +75,7 @@ class Constant {
       '/calendarSeverityScreenRouter';
   static const String logDayNoHeadacheScreenRouter =
       '/logDayNoHeadacheScreenRouter';
+  static const String calenderScreenRouter = 'calenderScreenRouter' ;
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -324,6 +325,7 @@ class Constant {
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
+  static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
   static const String secondEventStep = "2";
@@ -443,7 +445,7 @@ class Constant {
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
-  static const double chatBubbleMaxHeight = 75;
+  static const double chatBubbleMaxHeight = 78;
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

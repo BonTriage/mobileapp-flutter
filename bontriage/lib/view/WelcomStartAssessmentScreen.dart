@@ -161,6 +161,10 @@ class _WelcomeStartAssessmentScreenState
           break;
         case Constant.firstEventStep:
           Navigator.pushReplacementNamed(
+              context, Constant.partOneOnBoardScreenTwoRouter);
+          break;
+        case Constant.secondEventStep:
+          Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardScreenRouter);
           break;
         default:

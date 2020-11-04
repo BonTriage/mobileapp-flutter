@@ -86,7 +86,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     super.initState();
 
     _signUpOnBoardSecondStepBloc = SignUpOnBoardSecondStepBloc();
-    signUpOnBoardSelectedAnswersModel.eventType = Constant.firstEventStep;
+    signUpOnBoardSelectedAnswersModel.eventType = Constant.secondEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _pageViewWidgetList = [];
@@ -274,7 +274,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void getCurrentUserPosition() async {
     UserProgressDataModel userProgressModel =
         await SignUpOnBoardProviders.db.getUserProgress();
-    if (userProgressModel != null) {
+    if (userProgressModel != null && userProgressModel.step == Constant.secondEventStep) {
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
@@ -288,7 +288,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData =
         await SignUpOnBoardProviders.db
-            .getQuestionnaire(Constant.firstEventStep);
+            .getQuestionnaire(Constant.secondEventStep);
 
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
@@ -313,7 +313,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           .checkUserProgressDataAvailable(
               SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = "1";
-      userProgressDataModel.step = Constant.firstEventStep;
+      userProgressDataModel.step = Constant.secondEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
           currentQuestionListData[currentPageIndex].tag;
@@ -351,7 +351,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db
-        .updateSelectedAnswers(answerStringData, Constant.firstEventStep);
+        .updateSelectedAnswers(answerStringData, Constant.secondEventStep);
   }
 
   void moveUserToNextScreen() async {

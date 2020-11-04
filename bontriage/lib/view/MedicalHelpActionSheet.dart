@@ -164,6 +164,7 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
               ),
             ),
           ),
+          SizedBox(height: 10,)
         ],
       ),
     );

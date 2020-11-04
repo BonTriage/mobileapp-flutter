@@ -3,8 +3,9 @@ import 'package:mobile/util/constant.dart';
 
 class DateWidget extends StatelessWidget {
   final String weekDateData;
+  final int calendarType;
 
-  DateWidget(this.weekDateData);
+  DateWidget(this.weekDateData, this.calendarType);
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +39,10 @@ class DateWidget extends StatelessWidget {
                             Color(0xff5E8063),
                           ]),
                       shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Color(0xff5E8063),
-                    width: 2,
-                  )
-                    ),
+                      border: Border.all(
+                        color: Color(0xff5E8063),
+                        width: 2,
+                      )),
               padding: EdgeInsets.all(2),
               child: Center(
                 child: Text(
@@ -56,77 +56,84 @@ class DateWidget extends StatelessWidget {
                 ),
               ),
             ),
-           /* Container(
-              width: 31,
-              height: 31,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child:Container(
-                  margin: EdgeInsets.only(top: 3,left: 5.5),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color:
-                          Constant.bubbleChatTextView,
-                          width: 1),
-                      borderRadius:
-                      BorderRadius.circular(20),
-                      color: Color(0xffD85B00)),
+            Visibility(
+              visible: calendarType == 0 ? false : calendarType == 1,
+              child: Container(
+                width: 31,
+                height: 31,
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 3, left: 5.5),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Constant.bubbleChatTextView, width: 1),
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xffD85B00)),
+                  ),
                 ),
               ),
-            ),Container(
-              width: 31,
-              height: 31,
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child:Container(
-                  margin: EdgeInsets.only(top: 3,right: 5.5),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color:
-                          Constant.bubbleChatTextView,
-                          width: 1),
-                      borderRadius:
-                      BorderRadius.circular(20),
-                      color: Color(0XFF7E00CB)),
+            ),
+            Visibility(
+              visible: calendarType == 0 ? false : calendarType == 1,
+              child: Container(
+                width: 31,
+                height: 31,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 3, right: 5.5),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Constant.bubbleChatTextView, width: 1),
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0XFF7E00CB)),
+                  ),
                 ),
               ),
-            ),Container(
-              width: 31,
-              height: 31,
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child:Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color:
-                          Constant.bubbleChatTextView,
-                          width: 1),
-                      borderRadius:
-                      BorderRadius.circular(20),
-                      color: Color(0XFF00A8CD)),
+            ),
+            Visibility(
+              visible: calendarType == 0 ? false : calendarType == 1,
+              child: Container(
+                width: 31,
+                height: 31,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 8),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Constant.bubbleChatTextView, width: 1),
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0XFF00A8CD)),
+                  ),
                 ),
               ),
-            ),*/
-            Container(
-              width: 31,
-              height: 31,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child:Container(
-                  margin: EdgeInsets.only(bottom: 2,),
-                  width: 16,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Constant.severeTriggerColor,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(5),
+            ),
+            Visibility(
+              visible: calendarType == 0 ? false : calendarType == 2,
+              child: Container(
+                width: 31,
+                height: 31,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      bottom: 2,
+                    ),
+                    width: 16,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: Constant.severeTriggerColor,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                   ),
                 ),
               ),

@@ -62,7 +62,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     // TODO: implement initState
     super.initState();
     welcomeOnBoardProfileBloc = WelcomeOnBoardProfileBloc();
-    signUpOnBoardSelectedAnswersModel.eventType = "0";
+    signUpOnBoardSelectedAnswersModel.eventType = Constant.zeroEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
     _pageViewWidgetList = [
       SignUpOnBoardFirstStepQuestionsModel(
@@ -395,12 +395,10 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   void getCurrentUserPosition() async {
       UserProgressDataModel userProgressModel =
           await SignUpOnBoardProviders.db.getUserProgress();
-      if(userProgressModel != null) {
+      if(userProgressModel != null && userProgressModel.step == Constant.zeroEventStep) {
         currentScreenPosition = userProgressModel.userScreenPosition;
         print(userProgressModel);
       }
-
-
     requestService();
   }
 
@@ -451,6 +449,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, "0");
+    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, Constant.zeroEventStep);
   }
 }

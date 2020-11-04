@@ -101,15 +101,15 @@ class Utils {
       hrs = hours % 12;
     }
 
-    if(hrs < 10) {
+    if (hrs < 10) {
       hrsString = '0$hrs';
     }
 
-    if(minutes < 10) {
+    if (minutes < 10) {
       minString = '0$minutes';
     }
 
-    if(hours >= 12) {
+    if (hours >= 12) {
       amPm = 'PM';
     }
 
@@ -118,11 +118,11 @@ class Utils {
     return time;
   }
 
- static String getStringFromJson(dynamic jsonObject){
+  static String getStringFromJson(dynamic jsonObject) {
     return jsonEncode(jsonObject);
   }
 
-  Map<String,dynamic> _getJsonFromString(String response){
+  Map<String, dynamic> _getJsonFromString(String response) {
     return json.decode(response);
   }
 
@@ -132,11 +132,15 @@ class Utils {
   }
 
   // this returns the last date of the month using DateTime
-  static int daysInMonth(DateTime date){
+  static int daysInMonth(DateTime date) {
     var firstDayThisMonth = new DateTime(date.year, date.month, date.day);
-    var firstDayNextMonth = new DateTime(firstDayThisMonth.year, firstDayThisMonth.month + 1, firstDayThisMonth.day);
+    var firstDayNextMonth = new DateTime(firstDayThisMonth.year,
+        firstDayThisMonth.month + 1, firstDayThisMonth.day);
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 
-
+  static Future<void> saveDataInSharedPreference(String keyName, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(keyName, value);
+  }
 }

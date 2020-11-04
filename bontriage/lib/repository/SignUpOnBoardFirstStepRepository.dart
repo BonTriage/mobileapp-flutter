@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardAnswersRequestModel.dart';
-import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -13,22 +13,19 @@ import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardFirstStepRepository {
   String url;
-  String eventTypeName;
 
-  Future<dynamic> serviceCall(
-      String url, RequestMethod requestMethod, String argumentsName) async {
+  Future<dynamic> serviceCall(String url, RequestMethod requestMethod) async {
     var client = http.Client();
     var album;
     try {
-      eventTypeName = argumentsName;
       var response =
           await NetworkService(url, requestMethod, _getPayload()).serviceCall();
       if (response is AppException) {
         return response;
       } else {
-        album = SignUpOnBoardSecondStepModel.fromJson(json.decode(response));
+        album = WelcomeOnBoardProfileModel.fromJson(json.decode(response));
         LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
-        localQuestionnaire.eventType = Constant.secondEventStep;
+        localQuestionnaire.eventType = Constant.firstEventStep;
         localQuestionnaire.questionnaires = response;
         localQuestionnaire.selectedAnswers = "";
         SignUpOnBoardProviders.db.insertQuestionnaire(localQuestionnaire);
@@ -39,16 +36,16 @@ class SignUpOnBoardFirstStepRepository {
     }
   }
 
-  Future<dynamic> signUpWelcomeOnBoardSecondStepServiceCall(
+  Future<dynamic> signUpFirstStepInfoObjectServiceCall(
       String url,
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
-      signUpOnBoardSelectedAnswersModel) async {
+          signUpOnBoardSelectedAnswersModel) async {
     var client = http.Client();
     var album;
     try {
       var response = await NetworkService(url, requestMethod,
-          _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel))
+              _setUserFirstStepSignUpPayload(signUpOnBoardSelectedAnswersModel))
           .serviceCall();
       if (response is AppException) {
         return response;
@@ -62,13 +59,20 @@ class SignUpOnBoardFirstStepRepository {
     }
   }
 
-  String _setUserSecondStepPayload(
+  String _getPayload() {
+    return jsonEncode(<String, String>{
+      "event_type": "clinical_impression_short0",
+      "mobile_user_id": "4214"
+    });
+  }
+
+  String _setUserFirstStepSignUpPayload(
       SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
-    SignUpOnBoardAnswersRequestModel();
+        SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType =
         signUpOnBoardSelectedAnswersModel.eventType;
-    signUpOnBoardAnswersRequestModel.userId = 4214;
+    signUpOnBoardAnswersRequestModel.userId = 4551;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
@@ -86,12 +90,5 @@ class SignUpOnBoardFirstStepRepository {
     }
 
     return jsonEncode(signUpOnBoardAnswersRequestModel);
-  }
-
-  String _getPayload() {
-    return jsonEncode(<String, String>{
-      "event_type": eventTypeName,
-      "mobile_user_id": "4214"
-    });
   }
 }

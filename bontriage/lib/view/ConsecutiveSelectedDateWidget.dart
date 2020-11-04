@@ -4,12 +4,13 @@ import 'package:mobile/view/DateWidget.dart';
 
 class ConsecutiveSelectedDateWidget extends StatelessWidget {
   final String weekDateData;
+  final int calendarType;
 
-  ConsecutiveSelectedDateWidget(this.weekDateData);
+  ConsecutiveSelectedDateWidget(this.weekDateData,this.calendarType);
 
   @override
   Widget build(BuildContext context) {
     return DrawHorizontalLine(
-        painter: HorizontalLinePainter(), child: DateWidget(weekDateData));
+        painter: HorizontalLinePainter(), child: DateWidget(weekDateData,calendarType));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
-import 'package:mobile/view/DemoMeScreen.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
+import 'package:mobile/view/LogDayScreen.dart';
+import 'package:mobile/view/MeScreen.dart';
 import 'package:mobile/view/MoreFaqScreen.dart';
 import 'package:mobile/view/MoreGenerateReportScreen.dart';
 import 'package:mobile/view/MoreMyInfoScreen.dart';
@@ -9,14 +10,17 @@ import 'package:mobile/view/MoreNotificationScreen.dart';
 import 'package:mobile/view/MoreScreen.dart';
 import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
-import 'package:mobile/view/DemoRecordScreen.dart';
+import 'package:mobile/view/RecordScreen.dart';
+
+import 'constant.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final String root;
   final Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String) navigateToOtherScreenCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback});
 
   void _push(BuildContext context, String routeName) {
     var routeBuilders = _routeBuilders(context);
@@ -45,14 +49,16 @@ class TabNavigator extends StatelessWidget {
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
-      TabNavigatorRoutes.root: (context) =>
-          DemoMeScreen(onPush: (context, routeName) {
+      TabNavigatorRoutes.root: (context) => MeScreen(navigateToOtherScreenCallback: navigateToOtherScreenCallback,
+          /*onPush: (context, routeName) {
             _push(context, routeName);
-          }),
-      TabNavigatorRoutes.meRoot: (context) =>
-          DemoMeScreen(onPush: (context, routeName) {
+          }*/
+          ),
+      TabNavigatorRoutes.meRoot: (context) => MeScreen(navigateToOtherScreenCallback: navigateToOtherScreenCallback
+          /*onPush: (context, routeName) {
             _push(context, routeName);
-          }),
+          }*/
+          ),
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(onPush: (context, routeName) {
             _push(context, routeName);
@@ -70,8 +76,8 @@ class TabNavigator extends StatelessWidget {
             },
           ),
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
-        onPush: _push,
-      ),
+            onPush: _push,
+          ),
       TabNavigatorRoutes.moreMyInfoScreenRoute: (context) => MoreMyInfoScreen(),
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
@@ -83,10 +89,12 @@ class TabNavigator extends StatelessWidget {
             },
           ),
       TabNavigatorRoutes.moreSupportRoute: (context) => MoreSupportScreen(
-        onPush: _push,
-      ),
+            onPush: _push,
+          ),
       TabNavigatorRoutes.moreFaqScreenRoute: (context) => MoreFaqScreen(),
-      TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MoreNotificationScreen(),
+      TabNavigatorRoutes.moreNotificationScreenRoute: (context) =>
+          MoreNotificationScreen(),
+      Constant.logDayScreenRouter:(context)=> LogDayScreen()
     };
   }
 
