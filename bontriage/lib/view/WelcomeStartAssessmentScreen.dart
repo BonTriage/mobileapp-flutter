@@ -163,9 +163,21 @@ class _WelcomeStartAssessmentScreenState
           Navigator.pushReplacementNamed(
               context, Constant.partOneOnBoardScreenTwoRouter);
           break;
+        case Constant.firstCompassEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.signUpFirstStepHeadacheResultRouter);
+          break;
+        case Constant.secondCompassEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.signUpSecondStepHeadacheResultRouter);
+          break;
         case Constant.secondEventStep:
           Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardScreenRouter);
+          break;
+        case Constant.thirdEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.partThreeOnBoardScreenRouter);
           break;
         default:
           Navigator.pushReplacementNamed(

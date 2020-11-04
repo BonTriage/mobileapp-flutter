@@ -1,5 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
@@ -41,6 +43,8 @@ class _SignUpSecondStepCompassResultState
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
+    //Save User Progress
+    saveUserProgressInDataBase();
   }
 
   @override
@@ -57,8 +61,7 @@ class _SignUpSecondStepCompassResultState
   ///Method to toggle volume on or off
   void _toggleVolume() {
     setState(() {
-      TextToSpeechRecognition.pauseSpeechToText(
-          isVolumeOn,"");
+      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn, "");
       isVolumeOn = !isVolumeOn;
     });
   }
@@ -121,7 +124,9 @@ class _SignUpSecondStepCompassResultState
                             width: 60.0,
                             height: 60.0,
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           GestureDetector(
                             onTap: _toggleVolume,
                             child: AnimatedCrossFade(
@@ -485,4 +490,21 @@ class _SignUpSecondStepCompassResultState
     Constant.accurateClinicalImpression,
     Constant.moreDetailedHistory,
   ];
+
+  void saveUserProgressInDataBase() async {
+    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
+    int userProgressDataCount = await SignUpOnBoardProviders.db
+        .checkUserProgressDataAvailable(
+            SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+    userProgressDataModel.userId = Constant.userID;
+    userProgressDataModel.step = Constant.secondCompassEventStep;
+    userProgressDataModel.userScreenPosition = 0;
+    userProgressDataModel.questionTag = "";
+
+    if (userProgressDataCount == 0) {
+      SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
+    } else {
+      SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
+    }
+  }
 }

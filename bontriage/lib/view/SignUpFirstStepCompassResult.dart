@@ -1,5 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
@@ -44,6 +46,9 @@ class _SignUpFirstStepCompassResultState
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
+
+    // Save user progress database
+    saveUserProgressInDataBase();
   }
 
   @override
@@ -406,5 +411,21 @@ class _SignUpFirstStepCompassResultState
         );
       },
     );
+  }
+  void saveUserProgressInDataBase() async{
+    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
+    int userProgressDataCount = await SignUpOnBoardProviders.db
+        .checkUserProgressDataAvailable(
+        SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+    userProgressDataModel.userId = Constant.userID;
+    userProgressDataModel.step = Constant.firstCompassEventStep;
+    userProgressDataModel.userScreenPosition = 0;
+    userProgressDataModel.questionTag = "";
+
+    if (userProgressDataCount == 0) {
+      SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
+    } else {
+      SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
+    }
   }
 }

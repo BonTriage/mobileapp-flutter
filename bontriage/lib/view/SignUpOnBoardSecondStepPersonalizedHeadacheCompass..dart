@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/UserProgressDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -61,7 +63,8 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
       });
     });
 
-    // Here you can write your code for open new view
+    // Save User Progress
+    saveUserProgressInDataBase();
   }
 
   @override
@@ -167,5 +170,21 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
         ),
       ),
     );
+  }
+  void saveUserProgressInDataBase() async{
+    UserProgressDataModel userProgressDataModel = UserProgressDataModel();
+    int userProgressDataCount = await SignUpOnBoardProviders.db
+        .checkUserProgressDataAvailable(
+        SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+    userProgressDataModel.userId = Constant.userID;
+    userProgressDataModel.step = Constant.secondCompassEventStep;
+    userProgressDataModel.userScreenPosition = 0;
+    userProgressDataModel.questionTag = "";
+
+    if (userProgressDataCount == 0) {
+      SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
+    } else {
+      SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
+    }
   }
 }

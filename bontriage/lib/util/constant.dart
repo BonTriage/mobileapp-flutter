@@ -328,8 +328,11 @@ class Constant {
   static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
+  static const String firstCompassEventStep = "1.1";
   static const String secondEventStep = "2";
+  static const String secondCompassEventStep = "2.1";
   static const String thirdEventStep = '3';
+  static const String userID = "4214";
 
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";

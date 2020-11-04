@@ -312,7 +312,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
               SignUpOnBoardProviders.TABLE_USER_PROGRESS);
-      userProgressDataModel.userId = "1";
+      userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.secondEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
