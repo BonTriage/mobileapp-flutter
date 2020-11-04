@@ -43,7 +43,7 @@ class _StateSignUpOnBoardBubbleTextView
               fontFamily: Constant.jostMedium,
               color: Constant.splashMigraineMentorTextColor)),
       TextSpan(
-          text: Constant.answeringTheNext,
+          text: Constant.migraineMentorHelpTextView,
           style: TextStyle(
               height: 1.3,
               fontSize: 16,

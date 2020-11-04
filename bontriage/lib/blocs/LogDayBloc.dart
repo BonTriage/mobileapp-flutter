@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:mobile/models/LogDayResponseModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -31,18 +32,31 @@ class LogDayBloc {
     _logDayRepository.eventType = 'behaviors';
     //try {
       var logDayData = await _logDayRepository.serviceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-          RequestMethod.POST);
+          'http://34.222.200.187:8080/mobileapi/v0/logday?mobile_user_id=4214',
+          RequestMethod.GET);
       if (logDayData is AppException) {
         //logDayDataSink.add(logDayData.toString());
         logDayDataSink.addError(logDayData);
       } else {
-        filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
+        if(logDayData is LogDayResponseModel) {
+          filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
+              logDayData.behaviors.questionnaires[0].initialQuestion,
+              logDayData.behaviors.questionnaires[0].questionGroups[0].questions));
+
+          filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
+              logDayData.medication.questionnaires[0].initialQuestion,
+              logDayData.medication.questionnaires[0].questionGroups[0].questions));
+
+          filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
+              logDayData.triggers.questionnaires[0].initialQuestion,
+              logDayData.triggers.questionnaires[0].questionGroups[0].questions));
+        }
+        /*filterQuestionsListData.addAll(LinearListFilter.getQuestionSeries(
             logDayData.questionnaires[0].initialQuestion,
-            logDayData.questionnaires[0].questionGroups[0].questions));
+            logDayData.questionnaires[0].questionGroups[0].questions));*/
         print(filterQuestionsListData);
-        fetchLogDayData1();
-        //logDayDataSink.add(filterQuestionsListData);
+        //fetchLogDayData1();
+        logDayDataSink.add(filterQuestionsListData);
       }
     /*} catch (e) {
       //  signUpFirstStepDataSink.add("Error");

@@ -101,7 +101,7 @@ class Constant {
   static String enableLocationRecommended =
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String welcomeMigraineMentorTextView =
-      'Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+      '\nUnlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
 
   static String welcomeMigraineMentorBubbleTextView =
       'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
@@ -109,7 +109,7 @@ class Constant {
       'MigraineMentor! Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
 
   static String migraineMentorHelpTextView =
-      'MigraineMentor can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
+      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
@@ -288,7 +288,7 @@ class Constant {
   static String yourCurrentHeadache = 'Your current headache:';
   static String started = 'STARTED';
   static String endHeadache = 'End Headache';
-  static String headacheType = 'Headache Type';
+  static const String headacheType = 'Headache Type';
   static String whatKindOfHeadache = 'What kind of headache is it?';
   static String time = 'Time';
   static String whenHeadacheStart = 'When did your headache start?';
@@ -329,6 +329,7 @@ class Constant {
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
   static const String secondEventStep = "2";
+  static const String thirdEventStep = '3';
 
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
@@ -389,7 +390,8 @@ class Constant {
   static const String settings = ' Settings';
   static String allowed = 'Allowed';
   static const String myInfo = 'My Info';
-  static String locationServices = 'Location Services';
+  static const String myProfile = 'My Profile';
+  static const String locationServices = 'Location Services';
   static String appleWatch = 'Apple Watch';
   static String notSetUp = 'Not set up';
   static String appleHealth = 'Apple Health';
@@ -409,7 +411,7 @@ class Constant {
   static String fileType = 'File type';
   static String pdf = 'PDF';
   static const String faq = 'FAQ';
-  static String connectTheAuroraTeam = 'Connect the Aurora team';
+  static String connectTheMigraineMentorTeam = 'Connect the Migraine Mentor team';
   static String medicalHelp = 'Medical Help';
   static String call911 = 'Call 911';
   static String callADoctor = 'Call a doctor (urgent care)';
@@ -418,13 +420,15 @@ class Constant {
   static String lindaJonesPdf = 'Linda_Jones_4_29_20.pdf';
   static String text = 'Text';
   static String print = 'Print';
-  static String name = 'Name';
+  static const String name = 'Name';
   static String lindaJones = 'Linda Jones';
-  static String age = 'Age';
+  static const String age = 'Age';
+  static const String viewReport = 'View Report';
   static String twentyTwo = '22';
-  static String gender = 'Gender';
+  static const String gender = 'Gender';
   static String female = 'Female';
-  static String sex = 'Sex';
+  static String male = 'Male';
+  static const String sex = 'Sex';
   static String homeLocation = 'Home Location';
   static String stanfordCA = 'Stanford, CA';
   static String reCompleteInitialAssessment = 'Re-complete initial assessment';
@@ -437,10 +441,30 @@ class Constant {
   static String aMoreComplicated =
       'A more complicated question deserves a well-thought out and complicated answer that may take several lines to explain in full detail.';
   static String threeDots = '...';
+  static String logOut = 'Logout';
+  static String headacheTypes = 'Headache Types';
+  static const String myTriggers = 'My Triggers';
+  static const String myMedications = 'My Medications';
+  static String reCompleteDiagnosticAssessment = 'Re-complete diagnostic assessment';
+  static String deleteHeadacheType = 'Delete Headache Type';
+  static String basedOnWhatYouEntered = 'Based on what you entered, it looks like your [My Headache Type] could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
+  static String weKnowItCanBeEasy = 'We know it can be easy to lose track of daily logging, and we found it works best if you let us send you a daily reminder— we recommend the late afternoon or evening.';
+  static String enablingLocationServices = 'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
+  static String tapToTypeYourName = 'Tap to type your name';
+  static String slideToEnterYourAge = 'Slide to enter your age.';
+  static String selectTheGender = 'Select the gender with which you identify.';
+  static String toProvideDiagnosticInfo = 'To provide diagnostic information about your headaches, please select the biological sex you were assigned at birth.';
+  static String whichOfTheFollowingDoYouSuspect = 'Which of the following do you suspect trigger your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
+  static String whichOfTheFollowingMedication = 'Which of the following medications do you take for your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
+  static String me = 'ME';
+  static String records = 'RECORDS';
+  static String discover = 'DISCOVER';
+  static String more = 'MORE';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
   static const String generateReportActionSheet = 'generateReportActionSheet';
+  static const String deleteHeadacheTypeActionSheet = 'deleteHeadacheTypeActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -528,6 +552,15 @@ class Constant {
   static String calenderNextArrow = 'images/calender_next_arrow.png';
 
   static String leftArrow = 'images/left_arrow.png';
+  static String downArrow2 = 'images/down_arrow_2.png';
+  static String meUnselected = 'images/me_unselected.png';
+  static String meSelected = 'images/me_selected.png';
+  static String recordsUnselected = 'images/records_unselected.png';
+  static String recordsSelected = 'images/records_selected.png';
+  static String discoverUnselected = 'images/discover_unselected.png';
+  static String discoverSelected = 'images/discover_selected.png';
+  static String moreUnselected = 'images/more_unselected.png';
+  static String moreSelected = 'images/more_selected.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

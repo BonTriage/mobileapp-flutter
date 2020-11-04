@@ -35,7 +35,7 @@ import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/SignUpSecondStepCompassResult.dart';
 import 'package:mobile/view/Splash.dart';
-import 'package:mobile/view/WelcomStartAssessmentScreen.dart';
+import 'package:mobile/view/WelcomeStartAssessmentScreen.dart';
 import 'package:mobile/view/WelcomeScreen.dart';
 import 'package:mobile/view/login_screen.dart';
 import 'package:mobile/view/part_two_on_board_screens.dart';
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Splash(),
-    onGenerateRoute: (settings) {
+      onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
             {

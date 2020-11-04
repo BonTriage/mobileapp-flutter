@@ -46,8 +46,8 @@ class _MoreScreenState extends State<MoreScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     MoreSection(
-                      currentTag: Constant.settings,
-                      text: 'Settings',
+                      currentTag: Constant.myProfile,
+                      text: Constant.myProfile,
                       moreStatus: '',
                       isShowDivider: true,
                       navigateToOtherScreenCallback: _navigateToOtherScreen,
@@ -55,6 +55,13 @@ class _MoreScreenState extends State<MoreScreen> {
                     MoreSection(
                       currentTag: Constant.generateReport,
                       text: Constant.generateReport,
+                      moreStatus: '',
+                      isShowDivider: true,
+                      navigateToOtherScreenCallback: _navigateToOtherScreen,
+                    ),
+                    MoreSection(
+                      currentTag: Constant.settings,
+                      text: 'Settings',
                       moreStatus: '',
                       isShowDivider: true,
                       navigateToOtherScreenCallback: _navigateToOtherScreen,
@@ -71,6 +78,32 @@ class _MoreScreenState extends State<MoreScreen> {
               ),
               SizedBox(
                 height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BouncingWidget(
+                    onPressed: () {},
+                    child: Container(
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Constant.locationServiceGreen, width: 2)
+                      ),
+                      child: Text(
+                        Constant.logOut,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constant.locationServiceGreen,
+                          fontFamily: Constant.jostMedium,),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -98,6 +131,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: 20,),
             ],
           ),
         ),

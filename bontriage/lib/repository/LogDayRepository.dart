@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/LogDayQuestionnaire.dart';
+import 'package:mobile/models/LogDayResponseModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
@@ -24,7 +25,7 @@ class LogDayRepository {
       if (response is AppException) {
         return response;
       } else {
-        album = WelcomeOnBoardProfileModel.fromJson(json.decode(response));
+        album = LogDayResponseModel.fromJson(json.decode(response));
         return album;
       }
     } catch (Exception) {

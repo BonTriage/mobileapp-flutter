@@ -83,18 +83,21 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
           child: TextField(
+
             onEditingComplete: () {
               widget.selectedAnswerCallBack(
                   widget.tag, textEditingController.text);
             },
             onSubmitted: (String value) {
               widget.selectedAnswerCallBack(widget.tag, value);
+              FocusScope.of(context).requestFocus(FocusNode());
             },
             controller: textEditingController,
             onChanged: (String value) {
               widget.selectedAnswerCallBack(
                   widget.tag, value);
               print(value);
+
             },
             style: TextStyle(
                 color: Constant.chatBubbleGreen,

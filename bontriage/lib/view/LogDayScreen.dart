@@ -273,7 +273,6 @@ class _LogDayScreenState extends State<LogDayScreen>
                         }
                       },
                     ),
-
                   ],
                 ),
               ),

@@ -17,14 +17,14 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
   Widget build(BuildContext context) {
     return Container(
         decoration: Constant.backgroundBoxDecoration,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: SingleChildScrollView(
+              child: SafeArea(
                 child: Column(
                   children: [
                     SizedBox(
@@ -76,13 +76,6 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MoreSection(
-                            currentTag: Constant.myInfo,
-                            text: Constant.myInfo,
-                            moreStatus: '',
-                            isShowDivider: true,
-                            navigateToOtherScreenCallback: _navigateToOtherScreen,
-                          ),
-                          MoreSection(
                             currentTag: Constant.notifications,
                             text: Constant.notifications,
                             moreStatus: Constant.allowed,
@@ -90,9 +83,11 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                             navigateToOtherScreenCallback: _navigateToOtherScreen,
                           ),
                           MoreSection(
+                            currentTag: Constant.locationServices,
                             text: Constant.locationServices,
                             moreStatus: Constant.allowed,
                             isShowDivider: true,
+                            navigateToOtherScreenCallback: _navigateToOtherScreen,
                           ),
                           MoreSection(
                             text: Constant.appleWatch,
@@ -102,21 +97,6 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                           MoreSection(
                             text: Constant.appleHealth,
                             moreStatus: Constant.connected,
-                            isShowDivider: true,
-                          ),
-                          MoreSection(
-                            text: Constant.darkTheme,
-                            moreStatus: Constant.duringMigraine,
-                            isShowDivider: true,
-                          ),
-                          MoreSection(
-                            text: Constant.firstDayOfTheWeek,
-                            moreStatus: Constant.sunday,
-                            isShowDivider: true,
-                          ),
-                          MoreSection(
-                            text: Constant.timeFormat,
-                            moreStatus: Constant.twelveHourAMPM,
                             isShowDivider: true,
                           ),
                           GestureDetector(

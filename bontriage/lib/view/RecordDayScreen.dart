@@ -135,7 +135,6 @@ class _RecordDayScreenState extends State<RecordDayScreen> {
                                 controller: _pageController,
                                 physics: NeverScrollableScrollPhysics(),
                                 onPageChanged: (index) {
-
                                   if (index == 0 || index == 2) {
                                     setState(() {
                                       if (index > _currentPageIndex) {

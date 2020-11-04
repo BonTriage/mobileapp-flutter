@@ -1,18 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpBottomSheet extends StatefulWidget {
-  final List<SignUpHeadacheAnswerListModel> selectOptionList;
+  final Questions question;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final Function(Questions) selectAnswerCallback;
+  final List<SelectedAnswers> selectAnswerListData;
 
-  SignUpBottomSheet({Key key, this.selectOptionList}) : super(key: key);
+  SignUpBottomSheet({Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData}) : super(key: key);
 
   @override
   _SignUpBottomSheetState createState() => _SignUpBottomSheetState();
 }
 
-class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTickerProviderStateMixin {
+class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
@@ -26,6 +31,15 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTicker
     );
 
     _animationController.forward();
+
+    if(widget.selectAnswerListData != null) {
+      SelectedAnswers selectedAnswers = widget.selectAnswerListData.firstWhere((element) => element.questionTag == widget.question.tag, orElse: () => null);
+
+      if(selectedAnswers != null) {
+        Questions questions = Questions.fromJson(jsonDecode(selectedAnswers.answer));
+        widget.question.values = questions.values;
+      }
+    }
   }
 
   @override
@@ -50,47 +64,50 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTicker
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _animationController,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              height: 100,
-              child: Scrollbar(
-                isAlwaysShown: false,
-                child: ListView(
-                  children: <Widget>[
-                    Wrap(
-                      spacing: 20,
-                      children: <Widget>[
-                        for (var i = 0; i < widget.selectOptionList.length; i++)
-                          if (widget.selectOptionList[i].isSelected)
-                            Chip(
-                              label: Text(widget.selectOptionList[i].answerData),
-                              backgroundColor: Constant.chatBubbleGreen,
-                              deleteIcon: IconButton(
-                                icon: new Image.asset('images/cross.png'),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.selectOptionList[i].isSelected = false;
-                                  });
-                                },
-                              ),
-                              onDeleted: () {},
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 100),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              child: AnimatedSize(
+                vsync: this,
+                duration: Duration(milliseconds: 350),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Wrap(
+                    spacing: 20,
+                    children: <Widget>[
+                      for (var i = 0; i < widget.question.values.length; i++)
+                        if (widget.question.values[i].isSelected)
+                          Chip(
+                            label: Text(widget.question.values[i].text),
+                            backgroundColor: Constant.chatBubbleGreen,
+                            deleteIcon: IconButton(
+                              icon: new Image.asset('images/cross.png'),
+                              onPressed: () {
+                                setState(() {
+                                  widget.question.values[i].isSelected = false;
+                                });
+                                widget.selectAnswerCallback(widget.question);
+                              },
                             ),
-                      ],
-                    ),
-                  ],
+                            onDeleted: () {},
+                          ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            Row(
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left: 50),
                   child: Text(
                     Constant.searchYourType,
                     style: TextStyle(
@@ -99,9 +116,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTicker
                         fontFamily: Constant.jostMedium),
                   ),
                 ),
-
                 Container(
-                  margin: EdgeInsets.only(right: 40),
                   child: GestureDetector(
                     onTap: () {
                       showBottomSheet(
@@ -114,8 +129,9 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTicker
                           ),
                           context: context,
                           builder: (context) => BottomSheetContainer(
-                              selectOptionList: widget.selectOptionList,
+                              question: widget.question,
                               selectedAnswerCallback: (index) {
+                                widget.selectAnswerCallback(widget.question);
                                 setState(() {});
                               }));
                       // BottomSheetContainer();
@@ -129,26 +145,26 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with SingleTicker
                 ),
               ],
             ),
-            Divider(
-              color: Constant.chatBubbleGreen,
-              height: 7,
-              thickness: 2,
-              indent: 40,
-              endIndent: 40,
-            ),
-          ],
-        ),
+          ),
+          Divider(
+            color: Constant.chatBubbleGreen,
+            thickness: 2,
+            height: 10,
+            indent: 30,
+            endIndent: 30,
+          ),
+        ],
       ),
     );
   }
 }
 
 class BottomSheetContainer extends StatefulWidget {
-  final List<SignUpHeadacheAnswerListModel> selectOptionList;
+  final Questions question;
   final Function(int) selectedAnswerCallback;
 
   const BottomSheetContainer(
-      {Key key, this.selectOptionList, this.selectedAnswerCallback})
+      {Key key, this.selectedAnswerCallback, this.question})
       : super(key: key);
 
   @override
@@ -156,8 +172,10 @@ class BottomSheetContainer extends StatefulWidget {
 }
 
 class _BottomSheetContainerState extends State<BottomSheetContainer> {
+  String searchText = '';
+  bool _isExtraDataAdded = false;
   Color _getOptionTextColor(int index) {
-    if (widget.selectOptionList[index].isSelected) {
+    if (widget.question.values[index].isSelected) {
       return Constant.bubbleChatTextView;
     } else {
       return Constant.chatBubbleGreen;
@@ -165,11 +183,17 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   }
 
   Color _getOptionBackgroundColor(int index) {
-    if (widget.selectOptionList[index].isSelected) {
+    if (widget.question.values[index].isSelected) {
       return Constant.chatBubbleGreen;
     } else {
       return Constant.transparentColor;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -181,6 +205,23 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: TextField(
+              onChanged: (searchText) {
+                if(searchText.trim().isNotEmpty) {
+                  Values valueData = widget.question.values.firstWhere((element) => element.text.toLowerCase().contains(searchText.toLowerCase().trim()), orElse: () => null);
+
+                  if(valueData == null) {
+                    if(!_isExtraDataAdded) {
+                      widget.question.values.add(Values(text: searchText));
+                      _isExtraDataAdded = true;
+                    } else {
+                      widget.question.values.last.text = searchText;
+                    }
+                  }
+                }
+                setState(() {
+                  this.searchText = searchText;
+                });
+              },
               style: TextStyle(
                   color: Constant.chatBubbleGreen,
                   fontSize: 15,
@@ -204,7 +245,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              itemCount: widget.selectOptionList.length,
+              itemCount: widget.question.values.length,
               physics: BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return Column(
@@ -213,24 +254,27 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          widget.selectOptionList[index].isSelected =
-                          !widget.selectOptionList[index].isSelected;
+                          widget.question.values[index].isSelected =
+                          !widget.question.values[index].isSelected;
                           widget.selectedAnswerCallback(index);
                         });
                       },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 2, top: 0, right: 2),
-                        color: _getOptionBackgroundColor(index),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Text(
-                            widget.selectOptionList[index].answerData,
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: _getOptionTextColor(index),
-                                fontFamily: Constant.jostMedium,
-                                height: 1.2),
+                      child: Visibility(
+                        visible: (searchText.trim().isNotEmpty) ? widget.question.values[index].text.toLowerCase().contains(searchText.trim().toLowerCase()) : true,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 2, top: 0, right: 2),
+                          color: _getOptionBackgroundColor(index),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Text(
+                              widget.question.values[index].text,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: _getOptionTextColor(index),
+                                  fontFamily: Constant.jostMedium,
+                                  height: 1.2),
+                            ),
                           ),
                         ),
                       ),
