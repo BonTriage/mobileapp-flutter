@@ -452,7 +452,6 @@ class Constant {
   static String slideToEnterYourAge = 'Slide to enter your age.';
   static String selectTheGender = 'Select the gender with which you identify.';
   static String toProvideDiagnosticInfo = 'To provide diagnostic information about your headaches, please select the biological sex you were assigned at birth.';
-  static String triggers = 'Triggers';
   static String whichOfTheFollowingDoYouSuspect = 'Which of the following do you suspect trigger your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
   static String whichOfTheFollowingMedication = 'Which of the following medications do you take for your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
   static String me = 'ME';
