@@ -1,8 +1,12 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/DrawHorizontalLine.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/DateWidget.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
+
+import 'ConsecutiveSelectedDateWidget.dart';
 
 double logDayHeight = 0;
 double logDayWidth = 0;
@@ -25,6 +29,8 @@ class _HomeState extends State<Home> {
   List<TextSpan> textSpanList;
   GlobalKey _keyLogDay = GlobalKey();
   GlobalKey _keyAddAHeadache = GlobalKey();
+  List<Widget> currentWeekListData = [];
+  List<bool> currentWeekConsData = [];
 
   void _afterLayout(_) {
     final RenderBox renderBoxRed = _keyLogDay.currentContext.findRenderObject();
@@ -48,6 +54,38 @@ class _HomeState extends State<Home> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     _dateTime = DateTime.now();
+
+    var _firstDayOfTheWeek =
+        _dateTime.subtract(new Duration(days: _dateTime.weekday));
+
+    currentWeekConsData.add(true);
+    currentWeekConsData.add(false);
+    currentWeekConsData.add(true);
+    currentWeekConsData.add(true);
+    currentWeekConsData.add(true);
+    currentWeekConsData.add(false);
+    currentWeekConsData.add(true);
+
+    for (int i = 0; i < 7; i++) {
+      if (currentWeekConsData[i]) {
+        var j = i + 1;
+        if (j < 7 && currentWeekConsData[i] == currentWeekConsData[j]) {
+          currentWeekListData.add(
+              ConsecutiveSelectedDateWidget(_firstDayOfTheWeek.day.toString()));
+        } else {
+          currentWeekListData
+              .add(DateWidget(_firstDayOfTheWeek.day.toString()));
+        }
+      } else {
+        currentWeekListData.add(DateWidget(_firstDayOfTheWeek.day.toString()));
+      }
+
+      _firstDayOfTheWeek = DateTime(_firstDayOfTheWeek.year,
+          _firstDayOfTheWeek.month, _firstDayOfTheWeek.day + 1);
+    }
+
+    print(currentWeekListData);
+    print(currentWeekConsData);
 
     textSpanList = [
       TextSpan(
@@ -220,71 +258,7 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                               ]),
-                              TableRow(children: [
-                                Center(
-                                  child: Text(
-                                    '19',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '20',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '21',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '22',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '23',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '24',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '25',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                              ]),
+                              TableRow(children: currentWeekListData),
                             ],
                           ),
                         ],

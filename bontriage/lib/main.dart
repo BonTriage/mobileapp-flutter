@@ -5,9 +5,12 @@ import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
+import 'package:mobile/view/CalendarSeverityScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/Home.dart';
+
+import 'package:mobile/view/LogDayNoHeadacheScreen.dart';
 import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
@@ -17,6 +20,7 @@ import 'package:mobile/view/MoreScreen.dart';
 import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
+import 'package:mobile/view/NotificationTimer.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
@@ -29,7 +33,9 @@ import 'package:mobile/view/PostPartThreeOnBoardScreen.dart';
 import 'package:mobile/view/PrePartTwoOnBoardScreen.dart';
 import 'package:mobile/view/PartTwoOnBoardMoveOnScreen.dart';
 import 'package:mobile/view/PrePartThreeOnBoardScreen.dart';
+import 'package:mobile/view/ProfileComplete.dart';
 import 'package:mobile/view/RecordDayScreen.dart';
+import 'package:mobile/view/CalenderTriggersScreen.dart';
 import 'package:mobile/view/SignUpFirstStepCompassResult.dart';
 import 'package:mobile/view/SignUpOnBoardPersonalizedHeadacheCompass.dart';
 import 'package:mobile/view/SignUpOnBoardSecondStepPersonalizedHeadacheCompass..dart';
@@ -82,7 +88,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PartThreeOnBoardScreens(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -243,7 +249,9 @@ class MyApp extends StatelessWidget {
           case Constant.addHeadacheOnGoingScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: AddHeadacheOnGoingScreen(isHeadacheEnded: settings.arguments,));
+                  widget: AddHeadacheOnGoingScreen(
+                isHeadacheEnded: settings.arguments,
+              ));
             }
 
           case Constant.logDayScreenRouter:
@@ -252,11 +260,32 @@ class MyApp extends StatelessWidget {
             }
           case Constant.addHeadacheSuccessScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: AddHeadacheSuccessScreen());
+              return SlideFromBottomPageRoute(
+                  widget: AddHeadacheSuccessScreen());
             }
           case Constant.logDaySuccessScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: LogDaySuccessScreen());
+            }
+          case Constant.profileCompleteScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: ProfileComplete());
+            }
+          case Constant.notificationTimerRouter:
+            {
+              return SlideFromBottomPageRoute(widget: NotificationTimer());
+            }
+          case Constant.calendarTriggersScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: CalendarTriggersScreen());
+            }
+          case Constant.calendarSeverityScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: CalendarSeverityScreen());
+            }
+          case Constant.logDayNoHeadacheScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: LogDayNoHeadacheScreen());
             }
         }
         return null;
