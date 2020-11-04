@@ -12,7 +12,7 @@ import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
 import 'package:mobile/view/MoreGenerateReportScreen.dart';
-import 'package:mobile/view/MoreMyInfoScreen.dart';
+import 'package:mobile/view/MoreMyProfileScreen.dart';
 import 'package:mobile/view/MoreScreen.dart';
 import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Splash(),
+      home: PartThreeOnBoardScreens(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.homeRouter:
             {
-              return SlideFromRightPageRoute(widget: Home());
+              return SlideFromRightPageRoute(widget: HomeScreen());
             }
           case Constant.loginRouter:
             {

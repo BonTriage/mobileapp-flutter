@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
+import 'package:mobile/view/MoreTriggersScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -47,15 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Image.asset(
-                'images/me_unselected.png',
+                Constant.meUnselected,
                 height: 25,
               ),
               activeIcon: Image.asset(
-                'images/me_selected.png',
+                Constant.meSelected,
                 height: 25,
               ),
               title: Text(
-                'ME',
+                Constant.me,
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: Constant.jostMedium,
@@ -64,15 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'images/records_unselected.png',
+                Constant.recordsUnselected,
                 height: 25,
               ),
               activeIcon: Image.asset(
-                'images/records_selected.png',
+                Constant.recordsSelected,
                 height: 25,
               ),
               title: Text(
-                'RECORDS',
+                Constant.records,
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: Constant.jostMedium,
@@ -81,15 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'images/discover_unselected.png',
+                Constant.discoverUnselected,
                 height: 25,
               ),
               activeIcon: Image.asset(
-                'images/discover_unselected.png',
+                Constant.discoverSelected,
                 height: 25,
               ),
               title: Text(
-                'DISCOVER',
+                Constant.discover,
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: Constant.jostMedium,
@@ -98,17 +101,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'images/more_unselected.png',
+                Constant.moreUnselected,
                 height: 25,
                 width: 30,
               ),
               activeIcon: Image.asset(
-                'images/more_unselected.png',
+                Constant.moreSelected,
                 height: 25,
                 width: 30,
               ),
               title: Text(
-                'MORE',
+                Constant.more,
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: Constant.jostMedium,
@@ -146,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
         navigatorKey: navigatorKey[index],
         root: _getRootRoute(index),
         openActionSheetCallback: _openActionSheet,
+        openTriggerMedicationActionSheetCallback: _openTriggersMedicationActionSheet,
       ),
     );
   }
@@ -174,6 +178,34 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => GenerateReportActionSheet()
         );
         break;
+      case Constant.deleteHeadacheTypeActionSheet:
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => DeleteHeadacheTypeActionSheet()
+        );
+        break;
     }
+  }
+
+  void _openTriggersMedicationActionSheet(List<Values> valuesList) {
+    showModalBottomSheet(
+        elevation: 4,
+        backgroundColor: Constant.backgroundTransparentColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => BottomSheetContainer(
+            selectOptionList: valuesList,
+            selectedAnswerCallback: (index) {
+              setState(() {});
+            }));
   }
 }

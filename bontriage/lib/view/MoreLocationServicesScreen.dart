@@ -1,37 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/MoreSection.dart';
 
-class MoreNotificationScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
-
-  const MoreNotificationScreen({Key key, this.onPush})
-      : super(key: key);
+class MoreLocationServicesScreen extends StatefulWidget {
   @override
-  _MoreNotificationScreenState createState() => _MoreNotificationScreenState();
+  _MoreLocationServicesScreenState createState() =>
+      _MoreLocationServicesScreenState();
 }
 
-class _MoreNotificationScreenState extends State<MoreNotificationScreen> with SingleTickerProviderStateMixin {
-
-  String dailyLogStatus = 'Daily, 8:00 PM';
-  String medicationStatus = 'Daily, 2:30 PM';
-  String exerciseStatus = 'Off';
-
-  AnimationController _animationController;
-
-  bool _notificationSwitchState = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 350),
-      reverseDuration: Duration(milliseconds: 350),
-      vsync: this
-    );
-  }
+class _MoreLocationServicesScreenState
+    extends State<MoreLocationServicesScreen> {
+  bool _locationServicesSwitchState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +51,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen> with Si
                             width: 10,
                           ),
                           Text(
-                            Constant.notifications,
+                            Constant.locationServices,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -97,7 +75,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen> with Si
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
                           child: Text(
-                            Constant.notifications,
+                            Constant.locationServices,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -108,16 +86,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen> with Si
                         Padding(
                           padding: const EdgeInsets.only(right: 5),
                           child: Switch(
-                            value: _notificationSwitchState,
+                            value: _locationServicesSwitchState,
                             onChanged: (bool state) {
                               setState(() {
-                                _notificationSwitchState = state;
-
-                                if(state) {
-                                  _animationController.forward();
-                                } else {
-                                  _animationController.reverse();
-                                }
+                                _locationServicesSwitchState = state;
                               });
                             },
                             activeColor: Constant.chatBubbleGreen,
@@ -128,64 +100,11 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen> with Si
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  SizeTransition(
-                    sizeFactor: _animationController,
-                    child: FadeTransition(
-                      opacity: _animationController,
-                      child: Container(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Constant.moreBackgroundColor,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            MoreSection(
-                              currentTag: Constant.dailyLog,
-                              text: Constant.dailyLog,
-                              moreStatus: dailyLogStatus,
-                              isShowDivider: true,
-                            ),
-                            MoreSection(
-                              currentTag: Constant.medication,
-                              text: Constant.medication,
-                              moreStatus: medicationStatus,
-                              isShowDivider: true,
-                            ),
-                            MoreSection(
-                              currentTag: Constant.exercise,
-                              text: Constant.exercise,
-                              moreStatus: exerciseStatus,
-                              isShowDivider: true,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                child: Text(
-                                  Constant.addCustomNotification,
-                                  style: TextStyle(
-                                    color: Constant.addCustomNotificationTextColor,
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                      Constant.weKnowItCanBeEasy,
+                      Constant.enablingLocationServices,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,

@@ -8,6 +8,10 @@ class WelcomeOnBoardProfileModel {
 
   WelcomeOnBoardProfileModel.fromJson(Map<String, dynamic> json) {
     initialQuestionnaire = json['initial_questionnaire'];
+
+    if(json['initialQuestionnaire'] != null)
+      initialQuestionnaire = json['initialQuestionnaire'];
+
     if (json['questionnaires'] != null) {
       questionnaires = new List<Questionnaires>();
       json['questionnaires'].forEach((v) {
@@ -48,13 +52,28 @@ class Questionnaires {
     precondition = json['precondition'];
     next = json['next'];
     initialQuestion = json['initial_question'];
+
+    if(json['initialQuestion'] != null)
+      initialQuestion = json['initialQuestion'];
+
     if (json['question_groups'] != null) {
       questionGroups = new List<QuestionGroups>();
       json['question_groups'].forEach((v) {
         questionGroups.add(new QuestionGroups.fromJson(v));
       });
     }
+
+    if (json['questionGroups'] != null) {
+      questionGroups = new List<QuestionGroups>();
+      json['questionGroups'].forEach((v) {
+        questionGroups.add(new QuestionGroups.fromJson(v));
+      });
+    }
     updatedAt = json['updated_at'];
+
+    if(json['updatedAt'] != null) {
+      updatedAt = json['updatedAt'];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +99,10 @@ class QuestionGroups {
 
   QuestionGroups.fromJson(Map<String, dynamic> json) {
     groupNumber = json['group_number'];
+
+    if(json['groupNumber'] != null)
+      groupNumber = json['groupNumber'];
+
     if (json['questions'] != null) {
       questions = new List<Questions>();
       json['questions'].forEach((v) {

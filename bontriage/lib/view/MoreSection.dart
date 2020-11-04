@@ -49,14 +49,38 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                   case Constant.support:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSupportRoute);
                     break;
-                  case Constant.myInfo:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyInfoScreenRoute);
+                  case Constant.myProfile:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyProfileScreenRoute);
                     break;
                   case Constant.notifications:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNotificationScreenRoute);
                     break;
                   case Constant.faq:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute);
+                    break;
+                  case Constant.headacheType:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute);
+                    break;
+                  case Constant.locationServices:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute);
+                    break;
+                  case Constant.name:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute);
+                    break;
+                  case Constant.age:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute);
+                    break;
+                  case Constant.gender:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute);
+                    break;
+                  case Constant.sex:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute);
+                    break;
+                  case Constant.myTriggers:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute);
+                    break;
+                  case Constant.myMedications:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute);
                     break;
                   case Constant.dailyLog:
                   case Constant.medication:
@@ -234,7 +258,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                 ),
               ),
               Text(
-                Constant.delete,
+                Constant.reset,
                 style: TextStyle(
                   color: Constant.addCustomNotificationTextColor,
                   fontSize: 12,

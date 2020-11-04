@@ -38,6 +38,10 @@ class Questions {
     tag = json['tag'];
     id = json['id'];
     questionType = json['question_type'];
+
+    if(json['questionType'] != null)
+      questionType = json['questionType'];
+
     precondition = json['precondition'];
     next = json['next'];
     text = json['text'];
@@ -51,10 +55,21 @@ class Questions {
     min = json['min'];
     max = json['max'];
     updatedAt = json['updated_at'];
+
+    if(json['updatedAt'] != null)
+      updatedAt = json['updatedAt'];
+
     exclusiveValue = json['exclusive_value'];
+
+    if(json['exclusiveValue'] != null)
+      exclusiveValue = json['exclusiveValue'];
+
     phi = json['phi'];
     required = json['required'];
     uiHints = json['ui_hints'];
+
+    if(json['uiHints'] != null)
+      uiHints = json['uiHints'];
   }
 
   Map<String, dynamic> toJson() {

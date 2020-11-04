@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/view/DemoMeScreen.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
+import 'package:mobile/view/MoreAgeScreen.dart';
 import 'package:mobile/view/MoreFaqScreen.dart';
+import 'package:mobile/view/MoreGenderScreen.dart';
 import 'package:mobile/view/MoreGenerateReportScreen.dart';
-import 'package:mobile/view/MoreMyInfoScreen.dart';
+import 'package:mobile/view/MoreHeadachesScreen.dart';
+import 'package:mobile/view/MoreLocationServicesScreen.dart';
+import 'package:mobile/view/MoreMedicationScreen.dart';
+import 'package:mobile/view/MoreMyProfileScreen.dart';
+import 'package:mobile/view/MoreNameScreen.dart';
 import 'package:mobile/view/MoreNotificationScreen.dart';
 import 'package:mobile/view/MoreScreen.dart';
 import 'package:mobile/view/MoreSettingScreen.dart';
+import 'package:mobile/view/MoreSexScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/DemoRecordScreen.dart';
+import 'package:mobile/view/MoreTriggersScreen.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final String root;
   final Function(String) openActionSheetCallback;
+  final Function(List<Values>) openTriggerMedicationActionSheetCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback, this.openTriggerMedicationActionSheetCallback});
 
   void _push(BuildContext context, String routeName) {
     var routeBuilders = _routeBuilders(context);
@@ -72,7 +82,9 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
         onPush: _push,
       ),
-      TabNavigatorRoutes.moreMyInfoScreenRoute: (context) => MoreMyInfoScreen(),
+      TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => MoreMyProfileScreen(
+        onPush: _push,
+      ),
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
             onPush: (context, routeName) {
@@ -87,6 +99,20 @@ class TabNavigator extends StatelessWidget {
       ),
       TabNavigatorRoutes.moreFaqScreenRoute: (context) => MoreFaqScreen(),
       TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MoreNotificationScreen(),
+      TabNavigatorRoutes.moreHeadachesScreenRoute: (context) => MoreHeadachesScreen(
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
+      TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(),
+      TabNavigatorRoutes.moreAgeScreenRoute: (context) => MoreAgeScreen(),
+      TabNavigatorRoutes.moreGenderScreenRoute: (context) => MoreGenderScreen(),
+      TabNavigatorRoutes.moreSexScreenRoute: (context) => MoreSexScreen(),
+      TabNavigatorRoutes.moreTriggersScreenRoute: (context) => MoreTriggersScreen(
+        openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreMedicationsScreenRoute: (context) => MoreMedicationScreen(
+        openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+      ),
     };
   }
 

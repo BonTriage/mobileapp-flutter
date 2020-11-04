@@ -134,6 +134,10 @@ class Questions {
     tag = json['tag'];
     id = json['id'];
     questionType = json['question_type'];
+
+    if(json['questionType'] != null)
+      questionType = json['questionType'];
+
     precondition = json['precondition'];
     next = json['next'];
     text = json['text'];
