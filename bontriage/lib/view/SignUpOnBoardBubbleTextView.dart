@@ -121,7 +121,11 @@ class _StateSignUpOnBoardBubbleTextView
             Navigator.pushReplacementNamed(
                 context, Constant.signUpOnBoardProfileQuestionRouter);
           },
-          isShowSecondBottomButton: false),
+          isShowSecondBottomButton: false,
+        closeButtonFunction: () {
+            Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+        },
+      ),
     );
   }
 }

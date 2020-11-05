@@ -12,6 +12,7 @@ class OnBoardChatBubble extends StatefulWidget {
   final bool isShowCrossButton;
   final bool isSpannable;
   final List<TextSpan> textSpanList;
+  final Function closeButtonFunction;
 
   const OnBoardChatBubble(
       {Key key,
@@ -20,7 +21,8 @@ class OnBoardChatBubble extends StatefulWidget {
       this.chatBubbleColor,
       this.isShowCrossButton = true,
       this.isSpannable = false,
-      this.textSpanList})
+      this.textSpanList,
+      this.closeButtonFunction})
       : super(key: key);
 
   @override
@@ -126,10 +128,13 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Image(
-                    image: AssetImage(Constant.closeIcon),
-                    width: 26,
-                    height: 26,
+                  GestureDetector(
+                    onTap: widget.closeButtonFunction,
+                    child: Image(
+                      image: AssetImage(Constant.closeIcon),
+                      width: 26,
+                      height: 26,
+                    ),
                   ),
                 ],
               ),

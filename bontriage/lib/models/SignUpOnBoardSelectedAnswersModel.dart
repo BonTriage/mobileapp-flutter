@@ -1,3 +1,5 @@
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+
 class SignUpOnBoardSelectedAnswersModel {
   String eventType;
   String calendarEntryAt;
@@ -18,9 +20,9 @@ class SignUpOnBoardSelectedAnswersModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['event_type'] = this.eventType;
+    data[SignUpOnBoardProviders.EVENT_TYPE] = this.eventType;
     if (this.selectedAnswers != null) {
-      data['selected_answers'] =
+      data[SignUpOnBoardProviders.SELECTED_ANSWERS] =
           this.selectedAnswers.map((v) => v.toJson()).toList();
     }
     return data;

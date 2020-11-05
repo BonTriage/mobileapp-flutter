@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -34,6 +35,13 @@ class _PostPartThreeOnBoardScreenState
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Utils.saveUserProgress(0, Constant.postPartThreeEventStep);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
@@ -53,6 +61,9 @@ class _PostPartThreeOnBoardScreenState
         secondBottomButtonText: Constant.notNow,
         secondBottomButtonFunction: () {
           Navigator.pushReplacementNamed(context, Constant.homeRouter);
+        },
+        closeButtonFunction: () {
+          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
         },
       ),
     );

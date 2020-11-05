@@ -76,6 +76,7 @@ class Constant {
   static const String logDayNoHeadacheScreenRouter =
       '/logDayNoHeadacheScreenRouter';
   static const String calenderScreenRouter = 'calenderScreenRouter' ;
+  static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter' ;
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -332,6 +333,15 @@ class Constant {
   static const String secondEventStep = "2";
   static const String secondCompassEventStep = "2.1";
   static const String thirdEventStep = '3';
+  static const String headacheInfoEventStep = '1.2';
+  static const String createAccountEventStep = '1.3';
+  static const String signUpEventStep = '1.4';
+  static const String prePartTwoEventStep = '1.5';
+  static const String onBoardMoveOnForNowEventStep = '2.2';
+  static const String prePartThreeEventStep = '2.3';
+  static const String postPartThreeEventStep = '3.1';
+  static const String notificationEventStep = '3.2';
+  static const String postNotificationEventStep = '3.3';
   static const String userID = "4214";
 
   static String plusText = "+";
@@ -570,4 +580,7 @@ class Constant {
   static String jostBold = "JostBold";
   static String jostMedium = "JostMedium";
   static String jostRegular = "JostRegular";
+
+  //event types
+  static const String clinicalImpressionShort3 = 'clinical_impression_short3';
 }

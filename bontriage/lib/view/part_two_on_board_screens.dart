@@ -46,7 +46,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
   int currentScreenPosition = 0;
 
-  List<Questions> currentQuestionListData;
+  List<Questions> currentQuestionListData = [];
 
   void _onBackPressed() {
     if (widget.argumentsName == Constant.clinicalImpressionEventType) {
@@ -104,6 +104,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: StreamBuilder<dynamic>(
               stream: _signUpOnBoardSecondStepBloc
@@ -122,6 +123,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                         isEndOfOnBoard: isEndOfOnBoard,
                         chatBubbleText:
                             _pageViewWidgetList[_currentPageIndex].questions,
+                        closeButtonFunction: () {
+                          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                        },
                       ),
                       SizedBox(
                         height: 15,
@@ -135,36 +139,42 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                           return _pageViewWidgetList[index].questionsWidget;
                         },
                       )),
-                      SizedBox(height: 15,),
+                      SizedBox(
+                        height: 15,
+                      ),
                       OnBoardBottomButtons(
                         progressPercent: _progressPercent,
                         backButtonFunction: _onBackPressed,
                         nextButtonFunction: () {
-                          setState(() {
-                            double stepOneProgress =
-                                1 / _pageViewWidgetList.length;
-                            if (_progressPercent == 1) {
-                              isEndOfOnBoard = true;
-                              TextToSpeechRecognition.pauseSpeechToText(
-                                  true, "");
-                              moveUserToNextScreen();
-                              //TODO: Move to next screen
-                            } else {
-                              _currentPageIndex++;
+                          if (Utils.validationForOnBoard(
+                              signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                              currentQuestionListData[_currentPageIndex])) {
+                            setState(() {
+                              double stepOneProgress =
+                                  1 / _pageViewWidgetList.length;
+                              if (_progressPercent == 1) {
+                                isEndOfOnBoard = true;
+                                TextToSpeechRecognition.pauseSpeechToText(
+                                    true, "");
+                                moveUserToNextScreen();
+                                //TODO: Move to next screen
+                              } else {
+                                _currentPageIndex++;
 
-                              if (_currentPageIndex !=
-                                  _pageViewWidgetList.length - 1)
-                                _progressPercent += stepOneProgress;
-                              else {
-                                _progressPercent = 1;
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
+                                  _progressPercent += stepOneProgress;
+                                else {
+                                  _progressPercent = 1;
+                                }
+
+                                _pageController.animateToPage(_currentPageIndex,
+                                    duration: Duration(milliseconds: 1),
+                                    curve: Curves.easeIn);
                               }
-
-                              _pageController.animateToPage(_currentPageIndex,
-                                  duration: Duration(milliseconds: 1),
-                                  curve: Curves.easeIn);
-                            }
-                            getCurrentQuestionTag(_currentPageIndex);
-                          });
+                              getCurrentQuestionTag(_currentPageIndex);
+                            });
+                          }
                         },
                         onBoardPart: 2,
                       )
@@ -215,6 +225,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 questions: element.helpText,
                 questionsWidget: SignUpNameScreen(
                   tag: element.tag,
+                  helpText: element.helpText,
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
@@ -253,7 +264,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     selectOptionList: valuesListData,
                     questionTag: element.tag,
                     selectedAnswerListData:
-                    signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                        signUpOnBoardSelectedAnswersModel.selectedAnswers,
                     selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                       selectedAnswerListData(currentTag, selectedUserAnswer);
                     })));
@@ -264,7 +275,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       print(questionListData);
       // We have to change this condition
       _currentPageIndex = currentScreenPosition;
-      _progressPercent = _currentPageIndex * (1 / _pageViewWidgetList.length);
+      _progressPercent =
+          (_currentPageIndex + 1) * (1 / _pageViewWidgetList.length);
       _pageController = PageController(initialPage: currentScreenPosition);
     }
   }
@@ -274,10 +286,13 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void getCurrentUserPosition() async {
     UserProgressDataModel userProgressModel =
         await SignUpOnBoardProviders.db.getUserProgress();
-    if (userProgressModel != null && userProgressModel.step == Constant.secondEventStep) {
+    if (userProgressModel != null &&
+        userProgressModel.step == Constant.secondEventStep) {
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
+
+    getCurrentQuestionTag(currentScreenPosition);
 
     requestService();
   }
@@ -316,7 +331,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       userProgressDataModel.step = Constant.secondEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
-          currentQuestionListData[currentPageIndex].tag;
+        (currentQuestionListData.length > 0) ? currentQuestionListData[currentPageIndex].tag : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -351,7 +366,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db
-        .updateSelectedAnswers(answerStringData, Constant.secondEventStep);
+        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.secondEventStep);
   }
 
   void moveUserToNextScreen() async {

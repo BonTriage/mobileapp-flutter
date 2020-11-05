@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 import '../util/constant.dart';
@@ -71,7 +72,7 @@ class _WelcomeStartAssessmentScreenState
                 SizedBox(height: 100),
                 GestureDetector(
                   onTap: () {
-                    navigateToUserOnProfileBoard();
+                    Utils.navigateToUserOnProfileBoard(context);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
@@ -148,44 +149,5 @@ class _WelcomeStartAssessmentScreenState
         ),
       ),
     );
-  }
-
-  void navigateToUserOnProfileBoard() async {
-    UserProgressDataModel userProgressModel =
-        await SignUpOnBoardProviders.db.getUserProgress();
-    if (userProgressModel != null) {
-      switch (userProgressModel.step) {
-        case Constant.zeroEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.signUpOnBoardProfileQuestionRouter);
-          break;
-        case Constant.firstEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.partOneOnBoardScreenTwoRouter);
-          break;
-        case Constant.firstCompassEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.signUpFirstStepHeadacheResultRouter);
-          break;
-        case Constant.secondCompassEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.signUpSecondStepHeadacheResultRouter);
-          break;
-        case Constant.secondEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter);
-          break;
-        case Constant.thirdEventStep:
-          Navigator.pushReplacementNamed(
-              context, Constant.partThreeOnBoardScreenRouter);
-          break;
-        default:
-          Navigator.pushReplacementNamed(
-              context, Constant.signUpOnBoardSplashRouter);
-      }
-    } else {
-      Navigator.pushReplacementNamed(
-          context, Constant.signUpOnBoardSplashRouter);
-    }
   }
 }

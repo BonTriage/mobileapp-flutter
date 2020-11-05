@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 
@@ -152,15 +155,32 @@ class SignUpOnBoardProviders {
         'INSERT INTO $TABLE_QUESTIONNAIRES($SELECTED_ANSWERS) VALUES($answer) WHERE $EVENT_TYPE = $eventType');
   }
 
-  void updateSelectedAnswers(String selectedAnswer, String eventType) async {
-    Map<String, dynamic> map = {SELECTED_ANSWERS: selectedAnswer};
+  void updateSelectedAnswers(SignUpOnBoardSelectedAnswersModel selectedAnswer, String eventType) async {
+    Map<String, dynamic> map = {
+      SELECTED_ANSWERS: jsonEncode(selectedAnswer.selectedAnswers)
+    };
     final db = await database;
+
+    /*await db.update(
+      TABLE_QUESTIONNAIRES,
+      map,
+      where: "$EVENT_TYPE = ?",
+      whereArgs: [eventType],
+    );*/
+
+    List<Map> selectedAnswerMapData = await db.rawQuery('SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType');
+
+
     await db.update(
       TABLE_QUESTIONNAIRES,
       map,
       where: "$EVENT_TYPE = ?",
       whereArgs: [eventType],
     );
+
+    List<Map> selectedAnswerMapData1 = await db.rawQuery('SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType');
+
+    print(selectedAnswerMapData1);
   }
 
   Future<bool> isDatabaseExist() async {
@@ -234,5 +254,18 @@ class SignUpOnBoardProviders {
   Future<void> deleteAllUserLogDayData() async{
     final db = await database;
     await db.delete(TABLE_LOG_DAY);
+  }
+
+  Future<List<Map>> getAllSelectedAnswers(String eventType) async {
+    final db = await database;
+
+    List<Map> selectedAnswerMapData = await db.rawQuery(
+        'SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType');
+
+    var kjgnj = SignUpOnBoardSelectedAnswersModel.fromJson(selectedAnswerMapData[0]);
+    print(kjgnj);
+
+
+    return selectedAnswerMapData;
   }
 }

@@ -15,6 +15,8 @@ class OnBoardInformationScreen extends StatefulWidget {
   final isShowSecondBottomButton;
   final String secondBottomButtonText;
   final Function secondBottomButtonFunction;
+  final Function closeButtonFunction;
+  final bool isShowCloseButton;
 
   const OnBoardInformationScreen(
       {Key key,
@@ -27,7 +29,9 @@ class OnBoardInformationScreen extends StatefulWidget {
       this.nextButtonFunction,
       this.isShowSecondBottomButton,
       this.secondBottomButtonText,
-      this.secondBottomButtonFunction})
+      this.secondBottomButtonFunction,
+      this.closeButtonFunction,
+      this.isShowCloseButton = true})
       : super(key: key);
 
   @override
@@ -93,10 +97,16 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Image(
-                    image: AssetImage(Constant.closeIcon),
-                    width: 26,
-                    height: 26,
+                  Visibility(
+                    visible: widget.isShowCloseButton,
+                    child: GestureDetector(
+                      onTap: widget.closeButtonFunction,
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 26,
+                        height: 26,
+                      ),
+                    ),
                   ),
                 ],
               ),

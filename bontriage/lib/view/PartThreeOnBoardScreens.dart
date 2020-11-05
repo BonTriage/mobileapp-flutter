@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardThirdStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/QuestionsModel.dart';
-import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
@@ -37,9 +36,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   SignUpOnBoardSelectedAnswersModel _signUpOnBoardSelectedAnswersModel;
 
   int currentScreenPosition = 0;
-
-  bool _isEndOfOnBoard = false;
-  List<Questions> _currentQuestionLists;
+  List<Questions> _currentQuestionLists = [];
 
   @override
   void initState() {
@@ -61,11 +58,13 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   /// icon. We will fetch last position from Local database.
   void _getCurrentUserPosition() async {
     UserProgressDataModel userProgressModel =
-    await SignUpOnBoardProviders.db.getUserProgress();
-    if (userProgressModel != null && userProgressModel.step == Constant.thirdEventStep) {
+        await SignUpOnBoardProviders.db.getUserProgress();
+    if (userProgressModel != null &&
+        userProgressModel.step == Constant.thirdEventStep) {
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
+    _getCurrentQuestionTag(currentScreenPosition);
 
     requestService();
   }
@@ -75,14 +74,16 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   /// database of respective table.
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData =
-    await SignUpOnBoardProviders.db
-        .getQuestionnaire(Constant.thirdEventStep);
+        await SignUpOnBoardProviders.db
+            .getQuestionnaire(Constant.thirdEventStep);
 
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
-      _signUpOnBoardSelectedAnswersModel = await _signUpOnBoardThirdStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
+      _signUpOnBoardSelectedAnswersModel = await _signUpOnBoardThirdStepBloc
+          .fetchDataFromLocalDatabase(localQuestionnaireData);
       print(_signUpOnBoardSelectedAnswersModel);
     } else {
-      _signUpOnBoardThirdStepBloc.fetchSignUpOnBoardThirdStepData('clinical_impression_short3');
+      _signUpOnBoardThirdStepBloc
+          .fetchSignUpOnBoardThirdStepData(Constant.clinicalImpressionShort3);
     }
   }
 
@@ -97,13 +98,14 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: StreamBuilder<dynamic>(
           stream: _signUpOnBoardThirdStepBloc.signUpOnBoardThirdStepDataStream,
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
+            if (snapshot.hasData) {
               print(snapshot.hasData);
-              if(!_isAlreadyDataFiltered) {
+              if (!_isAlreadyDataFiltered) {
                 _addPageViewWidgets(snapshot.data);
               }
               return Column(
@@ -111,17 +113,21 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   OnBoardChatBubble(
-                    chatBubbleText: _pageViewWidgetList[_currentPageIndex].questions,
+                    chatBubbleText:
+                        _pageViewWidgetList[_currentPageIndex].questions,
+                    closeButtonFunction: () {
+                      Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                    },
                   ),
                   Expanded(
                       child: PageView.builder(
-                        controller: _pageController,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _pageViewWidgetList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return _pageViewWidgetList[index].questionsWidget;
-                        },
-                      )),
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _pageViewWidgetList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _pageViewWidgetList[index].questionsWidget;
+                    },
+                  )),
                   OnBoardBottomButtons(
                     progressPercent: _progressPercent,
                     backButtonFunction: () {
@@ -138,32 +144,36 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                       });
                     },
                     nextButtonFunction: () {
-                      setState(() {
-                        double stepOneProgress = 1 / _pageViewWidgetList.length;
+                      if (Utils.validationForOnBoard(
+                          _signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                          _currentQuestionLists[_currentPageIndex])) {
+                        setState(() {
+                          double stepOneProgress =
+                              1 / _pageViewWidgetList.length;
 
-                        if (_progressPercent == 1) {
-                          _isEndOfOnBoard = true;
-                          TextToSpeechRecognition.pauseSpeechToText(
-                              true, "");
-                          Navigator.pushReplacementNamed(
-                              context, Constant.postPartThreeOnBoardRouter);
-                          //TODO: Move to next screen
-                        } else {
-                          _currentPageIndex++;
+                          if (_progressPercent == 1) {
+                            TextToSpeechRecognition.pauseSpeechToText(true, "");
+                            Navigator.pushReplacementNamed(
+                                context, Constant.postPartThreeOnBoardRouter);
+                            //TODO: Move to next screen
+                          } else {
+                            _currentPageIndex++;
 
-                          if (_currentPageIndex != _pageViewWidgetList.length - 1)
-                            _progressPercent += stepOneProgress;
-                          else {
-                            _progressPercent = 1;
+                            if (_currentPageIndex !=
+                                _pageViewWidgetList.length - 1)
+                              _progressPercent += stepOneProgress;
+                            else {
+                              _progressPercent = 1;
+                            }
+
+                            _pageController.animateToPage(_currentPageIndex,
+                                duration: Duration(milliseconds: 1),
+                                curve: Curves.easeInOutCubic);
+
+                            _getCurrentQuestionTag(_currentPageIndex);
                           }
-
-                          _pageController.animateToPage(_currentPageIndex,
-                              duration: Duration(milliseconds: 1),
-                              curve: Curves.easeInOutCubic);
-
-                          _getCurrentQuestionTag(_currentPageIndex);
-                        }
-                      });
+                        });
+                      }
                     },
                     onBoardPart: 3,
                   )
@@ -189,13 +199,14 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   void _addPageViewWidgets(List<Questions> questionsList) {
     _currentQuestionLists = questionsList;
     questionsList.forEach((element) {
-      if(element.questionType == Constant.QuestionMultiType) {
+      if (element.questionType == Constant.QuestionMultiType) {
         _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
           questions: element.helpText,
           questionsWidget: SignUpBottomSheet(
             question: element,
             selectAnswerCallback: _selectedAnswerListData,
-            selectAnswerListData: _signUpOnBoardSelectedAnswersModel.selectedAnswers,
+            selectAnswerListData:
+                _signUpOnBoardSelectedAnswersModel.selectedAnswers,
           ),
         ));
       }
@@ -204,7 +215,8 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     _isAlreadyDataFiltered = true;
 
     _currentPageIndex = currentScreenPosition;
-    _progressPercent = (_currentPageIndex + 1) * (1 / _pageViewWidgetList.length);
+    _progressPercent =
+        (_currentPageIndex + 1) * (1 / _pageViewWidgetList.length);
     _pageController = PageController(initialPage: currentScreenPosition);
   }
 
@@ -216,16 +228,16 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
 
     if (!isDataBaseExists) {
       userProgressDataModel = await _signUpOnBoardThirdStepBloc
-          .fetchSignUpOnBoardThirdStepData('clinical_impression_short3');
+          .fetchSignUpOnBoardThirdStepData(Constant.clinicalImpressionShort3);
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
-          SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+              SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.thirdEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
-          _currentQuestionLists[currentPageIndex].tag;
+      (_currentQuestionLists.length > 0) ? _currentQuestionLists[currentPageIndex].tag : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -236,16 +248,19 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   /// This method will be use for select the answer data on the basis of current Tag. and also update the selected answer in local database.
-  void _selectedAnswerListData(Questions question) {
+  void _selectedAnswerListData(
+      Questions question, List<String> valuesSelectedList) {
     SelectedAnswers selectedAnswers;
     if (_signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
-      selectedAnswers = _signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((model) => model.questionTag == question.tag, orElse: () => null);
+      selectedAnswers = _signUpOnBoardSelectedAnswersModel.selectedAnswers
+          .firstWhere((model) => model.questionTag == question.tag,
+              orElse: () => null);
     }
     if (selectedAnswers != null) {
-      selectedAnswers.answer = jsonEncode(question);
+      selectedAnswers.answer = jsonEncode(valuesSelectedList);
     } else {
-      _signUpOnBoardSelectedAnswersModel.selectedAnswers.add(
-          SelectedAnswers(questionTag: question.tag, answer: jsonEncode(question)));
+      _signUpOnBoardSelectedAnswersModel.selectedAnswers.add(SelectedAnswers(
+          questionTag: question.tag, answer: jsonEncode(valuesSelectedList)));
       print(_signUpOnBoardSelectedAnswersModel.selectedAnswers);
     }
     _updateSelectedAnswerDataOnLocalDatabase();
@@ -254,9 +269,10 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   /// This method will be use for update the answer in to the database on the basis of event type.
   void _updateSelectedAnswerDataOnLocalDatabase() {
     var answerStringData =
-    Utils.getStringFromJson(_signUpOnBoardSelectedAnswersModel);
+        Utils.getStringFromJson(_signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, Constant.thirdEventStep);
+    SignUpOnBoardProviders.db
+        .updateSelectedAnswers(_signUpOnBoardSelectedAnswersModel, Constant.thirdEventStep);
   }
 }

@@ -17,6 +17,7 @@ import 'package:mobile/view/LogDaySuccessScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
+import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
 import 'package:mobile/view/OnBoardingSignUpScreen.dart';
@@ -282,6 +283,10 @@ class MyApp extends StatelessWidget {
           case Constant.calenderScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: CalendarScreen());
+            }
+          case Constant.onBoardExitScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: OnBoardExitScreen());
             }
         }
         return null;

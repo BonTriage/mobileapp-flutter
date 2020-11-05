@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -12,6 +13,14 @@ class OnBoardHeadacheInfoScreen extends StatefulWidget {
 }
 
 class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Utils.saveUserProgress(0, Constant.headacheInfoEventStep);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +42,9 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
               context, Constant.partOneOnBoardScreenTwoRouter);
         },
         isShowSecondBottomButton: false,
+        closeButtonFunction: () {
+          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+        },
       ),
     );
   }

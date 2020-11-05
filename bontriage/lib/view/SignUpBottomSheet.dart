@@ -8,7 +8,7 @@ import 'package:mobile/util/constant.dart';
 class SignUpBottomSheet extends StatefulWidget {
   final Questions question;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final Function(Questions) selectAnswerCallback;
+  final Function(Questions, List<String>) selectAnswerCallback;
   final List<SelectedAnswers> selectAnswerListData;
 
   SignUpBottomSheet({Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData}) : super(key: key);
@@ -19,6 +19,7 @@ class SignUpBottomSheet extends StatefulWidget {
 
 class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProviderStateMixin {
   AnimationController _animationController;
+  List<String> _valuesSelectedList = [];
 
   @override
   void initState() {
@@ -36,8 +37,21 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
       SelectedAnswers selectedAnswers = widget.selectAnswerListData.firstWhere((element) => element.questionTag == widget.question.tag, orElse: () => null);
 
       if(selectedAnswers != null) {
-        Questions questions = Questions.fromJson(jsonDecode(selectedAnswers.answer));
-        widget.question.values = questions.values;
+        try {
+          _valuesSelectedList =
+              (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
+                  String>();
+          _valuesSelectedList.forEach((element) {
+            Values value = widget.question.values.firstWhere((
+                valueElement) => valueElement.text == element,
+                orElse: () => null);
+
+            if (value != null)
+              value.isSelected = true;
+          });
+        } catch (e) {
+          print(e.toString());
+        }
       }
     }
   }
@@ -91,7 +105,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
                                 setState(() {
                                   widget.question.values[i].isSelected = false;
                                 });
-                                widget.selectAnswerCallback(widget.question);
+                                _valuesSelectedList.remove(widget.question.values[i].text);
+                                widget.selectAnswerCallback(widget.question, _valuesSelectedList);
                               },
                             ),
                             onDeleted: () {},
@@ -131,7 +146,12 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
                           builder: (context) => BottomSheetContainer(
                               question: widget.question,
                               selectedAnswerCallback: (index) {
-                                widget.selectAnswerCallback(widget.question);
+                                if(widget.question.values[index].isSelected) {
+                                  _valuesSelectedList.add(widget.question.values[index].text);
+                                } else {
+                                  _valuesSelectedList.remove(widget.question.values[index].text);
+                                }
+                                widget.selectAnswerCallback(widget.question, _valuesSelectedList);
                                 setState(() {});
                               }));
                       // BottomSheetContainer();

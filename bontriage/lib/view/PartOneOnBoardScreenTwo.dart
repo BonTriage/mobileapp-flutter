@@ -81,6 +81,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: StreamBuilder<dynamic>(
         stream: signUpBoardFirstStepBloc.albumDataStream,
@@ -98,6 +99,9 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   isEndOfOnBoard: isEndOfOnBoard,
                   chatBubbleText:
                       _pageViewWidgetList[_currentPageIndex].questions,
+                  closeButtonFunction: () {
+                    Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                  },
                 ),
                 SizedBox(
                   height: 50,
@@ -116,36 +120,39 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   backButtonFunction: _onBackPressed,
                   nextButtonFunction: () {
                     isButtonClicked = true;
-                    setState(() {
-                      double stepOneProgress = 0.11;
+                    if(Utils.validationForOnBoard(signUpOnBoardSelectedAnswersModel.selectedAnswers, currentQuestionListData[_currentPageIndex])) {
+                      setState(() {
+                        double stepOneProgress = 0.11;
 
-                      if (_progressPercent == 1) {
-                             signUpBoardFirstStepBloc
-                                            .sendSignUpFirstStepData(
-                                                signUpOnBoardSelectedAnswersModel);
-                        isEndOfOnBoard = true;
-                        TextToSpeechRecognition.pauseSpeechToText(true, "");
-                        Navigator.pushReplacementNamed(
-                            context,
-                            Constant
-                                .signUpOnBoardPersonalizedHeadacheResultRouter);
-                        //TODO: Move to next screen
-                      } else {
-                        _currentPageIndex++;
+                        if (_progressPercent == 1) {
+                          signUpBoardFirstStepBloc
+                              .sendSignUpFirstStepData(
+                              signUpOnBoardSelectedAnswersModel);
+                          isEndOfOnBoard = true;
+                          TextToSpeechRecognition.pauseSpeechToText(true, "");
+                          Navigator.pushReplacementNamed(
+                              context,
+                              Constant
+                                  .signUpOnBoardPersonalizedHeadacheResultRouter);
+                          //TODO: Move to next screen
+                        } else {
+                          _currentPageIndex++;
 
-                        if (_currentPageIndex != _pageViewWidgetList.length - 1)
-                          _progressPercent += stepOneProgress;
-                        else {
-                          _progressPercent = 1;
+                          if (_currentPageIndex !=
+                              _pageViewWidgetList.length - 1)
+                            _progressPercent += stepOneProgress;
+                          else {
+                            _progressPercent = 1;
+                          }
+
+                          _pageController.animateToPage(_currentPageIndex,
+                              duration: Duration(milliseconds: 1),
+                              curve: Curves.easeIn);
                         }
-
-                        _pageController.animateToPage(_currentPageIndex,
-                            duration: Duration(milliseconds: 1),
-                            curve: Curves.easeIn);
-                      }
-                      getCurrentQuestionTag(
-                          _currentPageIndex);
-                    });
+                        getCurrentQuestionTag(
+                            _currentPageIndex);
+                      });
+                    }
                   },
                   onBoardPart: 1,
                 )
@@ -174,6 +181,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
       currentScreenPosition = userProgressModel.userScreenPosition;
       print(userProgressModel);
     }
+    getCurrentQuestionTag(currentScreenPosition);
     requestService();
   }
 
@@ -204,7 +212,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
       userProgressDataModel.step = Constant.firstEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
-          currentQuestionListData[currentPageIndex].tag;
+      (currentQuestionListData != null) ? currentQuestionListData[currentPageIndex].tag : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -237,7 +245,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db
-        .updateSelectedAnswers(answerStringData, Constant.firstEventStep);
+        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.firstEventStep);
   }
 
   addFilteredQuestionListData(List<dynamic> questionListData) {
@@ -270,6 +278,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                 questions: element.helpText,
                 questionsWidget: SignUpNameScreen(
                   tag: element.tag,
+                  helpText: element.helpText,
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
@@ -304,8 +313,6 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
       _currentPageIndex = currentScreenPosition;
       _progressPercent = (_currentPageIndex + 1) * 0.11;
       _pageController = PageController(initialPage: currentScreenPosition);
-      /*_pageController.animateToPage(currentScreenPosition,
-          duration: Duration(milliseconds: 1), curve: Curves.easeIn);*/
 
       print(questionListData);
     }

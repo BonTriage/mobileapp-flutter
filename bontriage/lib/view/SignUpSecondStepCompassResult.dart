@@ -103,10 +103,15 @@ class _SignUpSecondStepCompassResultState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image(
-                      image: AssetImage(Constant.closeIcon),
-                      width: 26,
-                      height: 26,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                      },
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 26,
+                        height: 26,
+                      ),
                     ),
                   ],
                 ),
