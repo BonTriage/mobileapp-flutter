@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 
@@ -152,8 +156,23 @@ class SignUpOnBoardProviders {
         'INSERT INTO $TABLE_QUESTIONNAIRES($SELECTED_ANSWERS) VALUES($answer) WHERE $EVENT_TYPE = $eventType');
   }
 
-  void updateSelectedAnswers(String selectedAnswer, String eventType) async {
-    Map<String, dynamic> map = {SELECTED_ANSWERS: selectedAnswer};
+  Future<List<SelectedAnswers>> getAllSelectedAnswers(String eventType) async {
+    final db = await database;
+    List<dynamic> selectedAnswerMapData = await db.rawQuery(
+        'SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType');
+    Iterable l = json.decode(selectedAnswerMapData[0].row[3]);
+    List<SelectedAnswers> posts =
+        l.map((e) => SelectedAnswers.fromJson(e)).toList();
+    return posts;
+  }
+
+  void updateSelectedAnswers(
+      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,
+      String eventType) async {
+    Map<String, dynamic> map = {
+      SELECTED_ANSWERS:
+          jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)
+    };
     final db = await database;
     await db.update(
       TABLE_QUESTIONNAIRES,
@@ -231,7 +250,7 @@ class SignUpOnBoardProviders {
     return logDayQuestionnaire;
   }
 
-  Future<void> deleteAllUserLogDayData() async{
+  Future<void> deleteAllUserLogDayData() async {
     final db = await database;
     await db.delete(TABLE_LOG_DAY);
   }

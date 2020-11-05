@@ -463,6 +463,10 @@ class Constant {
   static String records = 'RECORDS';
   static String discover = 'DISCOVER';
   static String more = 'MORE';
+  static String signUpAlertMessage = 'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
+  static String userNotFound = 'User Not Found';
+  static String messageTextKey = 'message_text';
+
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

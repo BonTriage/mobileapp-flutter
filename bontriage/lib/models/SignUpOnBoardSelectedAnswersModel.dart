@@ -33,7 +33,7 @@ class SelectedAnswers {
 
   SelectedAnswers({this.questionTag, this.answer});
 
-  SelectedAnswers.fromJson(Map<String, dynamic> json) {
+  SelectedAnswers.fromJson(Map<dynamic, dynamic> json) {
     questionTag = json['questionTag'];
     answer = json['answer'];
   }

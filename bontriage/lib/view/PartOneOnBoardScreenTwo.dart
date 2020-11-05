@@ -237,7 +237,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db
-        .updateSelectedAnswers(answerStringData, Constant.firstEventStep);
+        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.firstEventStep);
   }
 
   addFilteredQuestionListData(List<dynamic> questionListData) {

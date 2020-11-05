@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
@@ -12,6 +13,12 @@ class OnBoardHeadacheInfoScreen extends StatefulWidget {
 }
 
 class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +35,14 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         isShowNextButton: true,
         chatText: Constant.letsBeginBySeeing,
         nextButtonFunction: () {
-          TextToSpeechRecognition.pauseSpeechToText(true,"");
+          TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
-              context, Constant.partOneOnBoardScreenTwoRouter);
+              context, Constant.onBoardingScreenSignUpRouter);
         },
         isShowSecondBottomButton: false,
       ),
     );
   }
+
+
 }

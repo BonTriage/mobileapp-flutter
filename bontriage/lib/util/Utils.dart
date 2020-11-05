@@ -139,8 +139,28 @@ class Utils {
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 
-  static Future<void> saveDataInSharedPreference(String keyName, String value) async {
+  static Future<void> saveDataInSharedPreference(
+      String keyName, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(keyName, value);
+  }
+
+  /// For Validate Email
+  static bool validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    return (!regex.hasMatch(value)) ? false : true;
+  }
+
+  /// For Validate Password
+  // r'^
+  //   (?=.*[A-Z])       // should contain at least one upper case
+  //   (?=.*[a-z])       // should contain at least one lower case
+  //   (?=.*?[0-9])          // should contain at least one digit
+  static bool validatePassword(String value) {
+    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])';
+    RegExp regExp = new RegExp(pattern);
+    return regExp.hasMatch(value);
   }
 }

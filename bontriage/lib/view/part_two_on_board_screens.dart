@@ -351,7 +351,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db
-        .updateSelectedAnswers(answerStringData, Constant.secondEventStep);
+        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.secondEventStep);
   }
 
   void moveUserToNextScreen() async {

@@ -449,6 +449,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, Constant.zeroEventStep);
+    SignUpOnBoardProviders.db.updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.zeroEventStep);
   }
+
+
 }

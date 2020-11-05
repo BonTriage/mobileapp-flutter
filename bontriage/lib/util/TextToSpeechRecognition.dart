@@ -5,6 +5,8 @@ class TextToSpeechRecognition {
 
   static Future<void> speechToText(String chatText) async {
 
+
+
     await flutterTts.setLanguage("en-US");
 
     await flutterTts.setSpeechRate(1.0);
@@ -18,7 +20,6 @@ class TextToSpeechRecognition {
         .setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
       IosTextToSpeechAudioCategoryOptions.allowBluetooth,
       IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-      IosTextToSpeechAudioCategoryOptions.mixWithOthers
     ]);
     await flutterTts.speak(chatText);
   }

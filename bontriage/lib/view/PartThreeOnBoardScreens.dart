@@ -257,6 +257,6 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     Utils.getStringFromJson(_signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(answerStringData, Constant.thirdEventStep);
+    SignUpOnBoardProviders.db.updateSelectedAnswers(_signUpOnBoardSelectedAnswersModel, Constant.thirdEventStep);
   }
 }

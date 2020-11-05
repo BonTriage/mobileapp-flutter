@@ -40,6 +40,7 @@ class NetworkService{
       case 401:
         return UnauthorisedException();
       case 404:
+        return response.body;
       case 500:
         return ServerResponseException();
       default:
