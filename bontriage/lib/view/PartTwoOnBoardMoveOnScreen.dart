@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -11,6 +12,14 @@ class PartTwoOnBoardMoveOnScreen extends StatefulWidget {
 
 class _PartTwoOnBoardMoveOnScreenState
     extends State<PartTwoOnBoardMoveOnScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Utils.saveUserProgress(0, Constant.onBoardMoveOnForNowEventStep);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +46,9 @@ class _PartTwoOnBoardMoveOnScreenState
         secondBottomButtonText: Constant.addAnotherHeadache,
         secondBottomButtonFunction: () {
           //TODO: Add Another Headache button implementation
+        },
+        closeButtonFunction: () {
+          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
         },
       ),
     );

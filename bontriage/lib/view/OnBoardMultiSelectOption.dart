@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -23,10 +25,10 @@ class OnBoardMultiSelectOptions extends StatefulWidget {
 
 class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
     with SingleTickerProviderStateMixin {
-  List<bool> _optionSelectedList = [];
   AnimationController _animationController;
   String selectedValue;
   SelectedAnswers selectedAnswers;
+  List<String> _valuesSelectedList = [];
 
   BoxDecoration _getBoxDecoration(int index) {
     if (!widget.selectOptionList[index].isSelected) {
@@ -61,11 +63,19 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
           orElse: () => null);
       if (selectedAnswers != null) {
         try {
-          int userSelectedValue = int.parse(selectedAnswers.answer);
-          selectedValue = selectedAnswers.answer;
-          widget.selectOptionList[userSelectedValue - 1].isSelected = true;
+          _valuesSelectedList =
+              (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
+                  String>();
+          _valuesSelectedList.forEach((element) {
+            OnBoardSelectOptionModel value = widget.selectOptionList
+                .firstWhere((valueElement) =>
+            valueElement.optionText == element, orElse: () => null);
+
+            if (value != null)
+              value.isSelected = true;
+          });
         } catch (e) {
-          e.toString();
+          print(e.toString());
         }
       }
     }
@@ -93,7 +103,6 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
-    widget.selectedAnswerCallBack(widget.questionTag, selectedValue);
     super.dispose();
   }
 
@@ -132,9 +141,16 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            selectedValue =
-                                widget.selectOptionList[index].optionId;
+                            /*selectedValue =
+                                widget.selectOptionList[index].optionText;*/
                             _onOptionSelected(index);
+                            if(widget.selectOptionList[index].isSelected) {
+                              _valuesSelectedList.add(widget.selectOptionList[index].optionText);
+                            } else {
+                              _valuesSelectedList.remove(widget.selectOptionList[index].optionText);
+                            }
+
+                            widget.selectedAnswerCallBack(widget.questionTag, jsonEncode(_valuesSelectedList));
                           });
                         },
                         child: Container(

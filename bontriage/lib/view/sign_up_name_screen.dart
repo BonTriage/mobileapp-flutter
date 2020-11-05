@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpNameScreen extends StatefulWidget {
   final String tag;
+  final String helpText;
   final Function(String, String) selectedAnswerCallBack;
   final List<SelectedAnswers> selectedAnswerListData;
 
   const SignUpNameScreen(
       {Key key,
       this.tag,
+        this.helpText,
       this.selectedAnswerListData,
       this.selectedAnswerCallBack})
       : super(key: key);
@@ -105,7 +106,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
                 fontFamily: Constant.jostMedium),
             cursorColor: Constant.chatBubbleGreen,
             decoration: InputDecoration(
-              hintText: Constant.nameHint,
+              hintText: 'Tap to Type',
               hintStyle: TextStyle(
                   color: Color.fromARGB(50, 175, 215, 148),
                   fontSize: 15,

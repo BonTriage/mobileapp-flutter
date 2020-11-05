@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -25,12 +26,14 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
         bottomButtonText: Constant.continueSurvey,
         bottomButtonFunction: () {
           //TODO: Move to next screen
+          Utils.navigateToUserOnProfileBoard(context);
         },
         isShowSecondBottomButton: true,
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
-          //TODO: Add Another Headache button implementation
+          //TODO: Save and Finish later button implementation
         },
+        isShowCloseButton: false,
       ),
     );
   }

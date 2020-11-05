@@ -39,16 +39,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   List<SignUpOnBoardFirstStepQuestionsModel> _pageViewWidgetList;
 
-  List<String> questionList = [
-    Constant.firstBasics,
-    Constant.whatShouldICallYou,
-    Constant.withWhatGender,
-    Constant.whatBiologicalSex,
-    Constant.howOld,
-    Constant.likeToEnableLocationServices,
-  ];
-
-  List<Questions> currentQuestionListData;
+  List<Questions> currentQuestionListData = [];
 
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
       SignUpOnBoardSelectedAnswersModel();
@@ -61,6 +52,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    currentQuestionListData.add(Questions());
     welcomeOnBoardProfileBloc = WelcomeOnBoardProfileBloc();
     signUpOnBoardSelectedAnswersModel.eventType = Constant.zeroEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
@@ -101,6 +93,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                         chatBubbleText:
                             _pageViewWidgetList[_currentPageIndex].questions,
                         isEndOfOnBoard: isEndOfOnBoard,
+                        closeButtonFunction: () {
+                          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                        },
                       ),
                       SizedBox(height: 40),
                       Expanded(
@@ -183,37 +178,41 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                     scaleFactor: 1.5,
                                     onPressed: () {
                                       isButtonClicked = true;
-                                      setState(() {
-                                        if (_progressPercent == 0.55) {
-                                          /*     welcomeOnBoardProfileBloc
+                                      if(Utils.validationForOnBoard(signUpOnBoardSelectedAnswersModel.selectedAnswers, currentQuestionListData[_currentPageIndex])) {
+                                        setState(() {
+                                          if (_progressPercent == 0.55) {
+                                            checkData();
+                                            /*     welcomeOnBoardProfileBloc
                                             .sendSignUpFirstStepData(
                                                 signUpOnBoardSelectedAnswersModel);*/
-                                          isEndOfOnBoard = true;
-                                          TextToSpeechRecognition
-                                              .pauseSpeechToText(true, "");
-                                          Navigator.pushReplacementNamed(
-                                              context,
-                                              Constant
-                                                  .onBoardHeadacheInfoScreenRouter);
-                                        } else {
-                                          _currentPageIndex++;
+                                            isEndOfOnBoard = true;
+                                            TextToSpeechRecognition
+                                                .pauseSpeechToText(true, "");
+                                            Navigator.pushReplacementNamed(
+                                                context,
+                                                Constant
+                                                    .onBoardHeadacheInfoScreenRouter);
+                                          } else {
+                                            _currentPageIndex++;
 
-                                          if (_currentPageIndex !=
-                                              _pageViewWidgetList.length - 1)
-                                            _progressPercent += 0.11;
-                                          else {
-                                            _progressPercent = 0.55;
+                                            if (_currentPageIndex !=
+                                                _pageViewWidgetList.length - 1)
+                                              _progressPercent += 0.11;
+                                            else {
+                                              _progressPercent = 0.55;
+                                            }
+
+                                            _pageController.animateToPage(
+                                                _currentPageIndex,
+                                                duration:
+                                                Duration(milliseconds: 1),
+                                                curve: Curves.easeIn);
+
+                                            getCurrentQuestionTag(
+                                                _currentPageIndex);
                                           }
-
-                                          _pageController.animateToPage(
-                                              _currentPageIndex,
-                                              duration:
-                                                  Duration(milliseconds: 1),
-                                              curve: Curves.easeIn);
-                                        }
-                                        getCurrentQuestionTag(
-                                            _currentPageIndex);
-                                      });
+                                        });
+                                      }
                                     },
                                     child: Container(
                                       width: 130,
@@ -305,9 +304,9 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     );
   }
 
-  addFilteredQuestionListData(List<dynamic> questionListData) {
+  addFilteredQuestionListData(List<Questions> questionListData) {
     if (questionListData != null) {
-      currentQuestionListData = questionListData;
+      currentQuestionListData.addAll(questionListData);
       questionListData.forEach((element) {
         switch (element.questionType) {
           case Constant.QuestionNumberType:
@@ -335,6 +334,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questions: element.helpText,
                 questionsWidget: SignUpNameScreen(
                   tag: element.tag,
+                  helpText: element.helpText,
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
@@ -365,7 +365,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
           case Constant.QuestionLocationType:
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
-                questionsWidget: SignUpLocationServices()));
+                questionsWidget: SignUpLocationServices(
+                  question: element,
+                  selectedAnswerListData: signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                  selectedAnswerCallBack: selectedAnswerListData,
+                )));
             break;
         }
         isAlreadyDataFiltered = true;
@@ -383,22 +387,25 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData =
-    await SignUpOnBoardProviders.db.getQuestionnaire(Constant.zeroEventStep);
+        await SignUpOnBoardProviders.db
+            .getQuestionnaire(Constant.zeroEventStep);
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
-      signUpOnBoardSelectedAnswersModel =
-          await welcomeOnBoardProfileBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
+      signUpOnBoardSelectedAnswersModel = await welcomeOnBoardProfileBloc
+          .fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
     }
   }
 
   void getCurrentUserPosition() async {
-      UserProgressDataModel userProgressModel =
-          await SignUpOnBoardProviders.db.getUserProgress();
-      if(userProgressModel != null && userProgressModel.step == Constant.zeroEventStep) {
-        currentScreenPosition = userProgressModel.userScreenPosition;
-        print(userProgressModel);
-      }
+    UserProgressDataModel userProgressModel =
+        await SignUpOnBoardProviders.db.getUserProgress();
+    if (userProgressModel != null &&
+        userProgressModel.step == Constant.zeroEventStep) {
+      currentScreenPosition = userProgressModel.userScreenPosition;
+      print(userProgressModel);
+    }
+    getCurrentQuestionTag(currentScreenPosition);
     requestService();
   }
 
@@ -417,7 +424,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
       userProgressDataModel.step = Constant.zeroEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag =
-          currentQuestionListData[currentPageIndex].tag;
+      (currentQuestionListData.length > 0) ? currentQuestionListData[currentPageIndex].tag : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -449,7 +456,14 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.zeroEventStep);
+    SignUpOnBoardProviders.db
+        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.zeroEventStep);
+  }
+  
+  void checkData() async {
+    var adas = await SignUpOnBoardProviders.db.getAllSelectedAnswers("0");
+    print(adas);
+
   }
 
 

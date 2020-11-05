@@ -3,26 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
-
 class SignUpAgeScreen extends StatefulWidget {
-  double sliderValue = 3;
-  double sliderMinValue = 3;
-  double sliderMaxValue = 72;
-  String minText = '';
-  String maxText = '';
-  String minTextLabel = '';
-  String maxTextLabel = '';
-  String labelText = '';
-  double horizontalPadding;
-  bool isAnimate;
+  double sliderValue;
+  final double sliderMinValue;
+  final double sliderMaxValue;
+  final String minText;
+  final String maxText;
+  final String minTextLabel;
+  final String maxTextLabel;
+  final String labelText;
+  final double horizontalPadding;
+  final bool isAnimate;
   final String currentTag;
   final Function(String, String) selectedAnswerCallBack;
   final List<SelectedAnswers> selectedAnswerListData;
   final Function(String, String) onValueChangeCallback;
 
-
   SignUpAgeScreen(
-      {Key key, this.sliderValue, this.sliderMinValue, this.sliderMaxValue, this.labelText, this.minText, this.maxText, this.minTextLabel, this.maxTextLabel, this.horizontalPadding, this.isAnimate = true, this.currentTag, this.selectedAnswerListData, this.selectedAnswerCallBack, this.onValueChangeCallback})
+      {Key key,
+      this.sliderValue,
+      this.sliderMinValue,
+      this.sliderMaxValue,
+      this.labelText,
+      this.minText,
+      this.maxText,
+      this.minTextLabel,
+      this.maxTextLabel,
+      this.horizontalPadding,
+      this.isAnimate = true,
+      this.currentTag,
+      this.selectedAnswerListData,
+      this.selectedAnswerCallBack,
+      this.onValueChangeCallback})
       : super(key: key);
 
   @override
@@ -31,7 +43,6 @@ class SignUpAgeScreen extends StatefulWidget {
 
 class _SignUpAgeScreenState extends State<SignUpAgeScreen>
     with SingleTickerProviderStateMixin {
-
   AnimationController _animationController;
 
   SelectedAnswers selectedAnswers;
@@ -43,14 +54,13 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
 
     _animationController = AnimationController(
         duration: Duration(milliseconds: widget.isAnimate ? 800 : 0),
-        vsync: this
-    );
+        vsync: this);
 
     _animationController.forward();
 
     if (widget.selectedAnswerListData != null) {
       selectedAnswers = widget.selectedAnswerListData.firstWhere(
-              (model) => model.questionTag == widget.currentTag,
+          (model) => model.questionTag == widget.currentTag,
           orElse: () => null);
       if (selectedAnswers != null) {
         String selectedValue = selectedAnswers.answer;
@@ -61,6 +71,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         }
       }
     }
+    if (widget.selectedAnswerCallBack != null)
+      widget.selectedAnswerCallBack(
+          widget.currentTag, widget.sliderValue.toInt().toString());
   }
 
   @override
@@ -78,9 +91,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
-    if(widget.selectedAnswerCallBack != null)
-    widget.selectedAnswerCallBack(
-        widget.currentTag, widget.sliderValue.toInt().toString());
+    if (widget.selectedAnswerCallBack != null)
+      widget.selectedAnswerCallBack(
+          widget.currentTag, widget.sliderValue.toInt().toString());
     super.dispose();
   }
 
@@ -92,11 +105,14 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         child: Center(
           child: Container(
             padding: EdgeInsets.symmetric(
-                horizontal: (widget.horizontalPadding == null) ? 15 : widget
-                    .horizontalPadding),
+                horizontal: (widget.horizontalPadding == null)
+                    ? 15
+                    : widget.horizontalPadding),
             child: Column(
               children: [
-                SizedBox(height: (widget.horizontalPadding == null) ? 0 : 15,),
+                SizedBox(
+                  height: (widget.horizontalPadding == null) ? 0 : 15,
+                ),
                 Expanded(
                   child: Center(
                     child: Wrap(
@@ -113,16 +129,18 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                             value: widget.sliderValue,
                             min: widget.sliderMinValue,
                             max: widget.sliderMaxValue,
-                            onChangeEnd: (age){
-                           //   if(!widget.isAnimate)
-                                widget.selectedAnswerCallBack(
-                                    widget.currentTag, widget.sliderValue.toInt().toString());
+                            onChangeEnd: (age) {
+                              //   if(!widget.isAnimate)
+                              if(widget.selectedAnswerCallBack != null)
+                                widget.selectedAnswerCallBack(widget.currentTag, widget.sliderValue.toInt().toString());
                             },
                             onChanged: (double age) {
                               setState(() {
                                 widget.sliderValue = age;
-                                if(widget.onValueChangeCallback != null)
-                                  widget.onValueChangeCallback(widget.currentTag, age.toInt().toString());
+                                if (widget.onValueChangeCallback != null)
+                                  widget.onValueChangeCallback(
+                                      widget.currentTag,
+                                      age.toInt().toString());
                               });
                             },
                           ),
@@ -130,12 +148,15 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                         Stack(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.minText,
@@ -145,7 +166,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                           fontSize: 16,
                                         ),
                                       ),
-                                      SizedBox(height: 3,),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
                                       Text(
                                         (widget.minTextLabel == null)
                                             ? Constant.min
@@ -170,7 +193,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                           fontSize: 16,
                                         ),
                                       ),
-                                      SizedBox(height: 3,),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
                                       Text(
                                         (widget.maxTextLabel == null)
                                             ? Constant.max
@@ -191,14 +216,15 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                               alignment: Alignment.center,
                               child: Column(
                                 children: [
-                                  SizedBox(height: 15,),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
                                   Container(
                                     width: 50,
                                     height: 50,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Constant.chatBubbleGreenBlue
-                                    ),
+                                        color: Constant.chatBubbleGreenBlue),
                                     child: Center(
                                       child: Text(
                                         widget.sliderValue.toInt().toString(),
@@ -210,7 +236,9 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
                                     '${widget.labelText}',
                                     style: TextStyle(

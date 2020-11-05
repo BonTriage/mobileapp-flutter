@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
-
 import 'package:mobile/models/LogDayQuestionnaire.dart';
-
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -166,13 +164,8 @@ class SignUpOnBoardProviders {
     return posts;
   }
 
-  void updateSelectedAnswers(
-      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,
-      String eventType) async {
-    Map<String, dynamic> map = {
-      SELECTED_ANSWERS:
-          jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)
-    };
+  void updateSelectedAnswers( SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,String eventType) async {
+    Map<String, dynamic> map = {SELECTED_ANSWERS:jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)};
     final db = await database;
     await db.update(
       TABLE_QUESTIONNAIRES,
@@ -254,4 +247,5 @@ class SignUpOnBoardProviders {
     final db = await database;
     await db.delete(TABLE_LOG_DAY);
   }
+
 }

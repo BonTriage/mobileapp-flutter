@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpLocationServices extends StatefulWidget {
+  final Questions question;
+  final Function(String, String) selectedAnswerCallBack;
+  final List<SelectedAnswers> selectedAnswerListData;
+
+  const SignUpLocationServices(
+      {Key key,
+      this.question,
+      this.selectedAnswerCallBack,
+      this.selectedAnswerListData})
+      : super(key: key);
+
   @override
   _SignUpLocationServicesState createState() => _SignUpLocationServicesState();
 }
 
-class _SignUpLocationServicesState extends State<SignUpLocationServices> with SingleTickerProviderStateMixin {
+class _SignUpLocationServicesState extends State<SignUpLocationServices>
+    with SingleTickerProviderStateMixin {
   bool _locationServicesSwitchState = false;
   AnimationController _animationController;
 
@@ -14,21 +28,29 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> with Si
   void initState() {
     // TODO: implement initState
     super.initState();
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
-      vsync: this
-    );
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 800), vsync: this);
 
     _animationController.forward();
-  }
 
+    if (widget.selectedAnswerListData != null) {
+      SelectedAnswers selectedAnswers = widget.selectedAnswerListData.firstWhere((model) => model.questionTag == widget.question.tag, orElse: () => null);
+
+      if(selectedAnswers != null) {
+        _locationServicesSwitchState = selectedAnswers.answer.toLowerCase() == 'true';
+      }
+    }
+
+    widget.selectedAnswerCallBack(
+        widget.question.tag, _locationServicesSwitchState.toString());
+  }
 
   @override
   void didUpdateWidget(SignUpLocationServices oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
@@ -46,10 +68,13 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> with Si
     return FadeTransition(
       opacity: _animationController,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
+        padding: EdgeInsets.symmetric(
+            horizontal: Constant.chatBubbleHorizontalPadding),
         child: Column(
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -66,6 +91,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> with Si
                   onChanged: (bool state) {
                     setState(() {
                       _locationServicesSwitchState = state;
+                      widget.selectedAnswerCallBack(widget.question.tag,
+                          _locationServicesSwitchState.toString());
                       print(state);
                     });
                   },
@@ -75,15 +102,16 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices> with Si
                 ),
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Text(
               Constant.enableLocationRecommended,
               style: TextStyle(
                   height: 1.3,
                   fontSize: 16,
                   color: Constant.locationServiceGreen,
-                  fontFamily: Constant.jostRegular
-              ),
+                  fontFamily: Constant.jostRegular),
             ),
           ],
         ),

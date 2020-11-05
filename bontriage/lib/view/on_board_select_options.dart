@@ -23,7 +23,6 @@ class OnBoardSelectOptions extends StatefulWidget {
 
 class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
     with SingleTickerProviderStateMixin {
-  List<bool> _optionSelectedList = [];
   AnimationController _animationController;
   String selectedValue;
   SelectedAnswers selectedAnswers;
@@ -60,13 +59,17 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
           (model) => model.questionTag == widget.questionTag,
           orElse: () => null);
       if (selectedAnswers != null) {
-        try {
+        OnBoardSelectOptionModel onBoardSelectOptionModelData = widget.selectOptionList.firstWhere((element) => element.optionText == selectedAnswers.answer, orElse: () => null);
+        if(onBoardSelectOptionModelData != null) {
+          onBoardSelectOptionModelData.isSelected = true;
+        }
+        /*try {
           int userSelectedValue = int.parse(selectedAnswers.answer);
           selectedValue = selectedAnswers.answer;
           widget.selectOptionList[userSelectedValue - 1].isSelected = true;
         } catch (e) {
           e.toString();
-        }
+        }*/
       }
     }
 
@@ -93,7 +96,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
-    widget.selectedAnswerCallBack(widget.questionTag, selectedValue);
+    //widget.selectedAnswerCallBack(widget.questionTag, selectedValue);
     super.dispose();
   }
 
@@ -135,7 +138,8 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
                         onTap: () {
                           setState(() {
                             selectedValue =
-                                widget.selectOptionList[index].optionId;
+                                widget.selectOptionList[index].optionText;
+                            widget.selectedAnswerCallBack(widget.questionTag, selectedValue);
                             _onOptionSelected(index);
                           });
                         },

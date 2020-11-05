@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
@@ -34,6 +35,13 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Utils.saveUserProgress(0, Constant.prePartThreeEventStep);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnBoardInformationScreen(
@@ -56,6 +64,9 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
           //TODO: Save & Finish Later button implementation
+        },
+        closeButtonFunction: () {
+          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
         },
       ),
     );

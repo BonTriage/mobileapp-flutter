@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 
@@ -9,6 +10,13 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   bool _locationServicesSwitchState = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Utils.saveUserProgress(0, Constant.notificationEventStep);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +35,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
                       },
-                      child: Text(
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 26,
+                        height: 26,
+                      ),/*Text(
                         'Cancel',
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 14,
                             fontFamily: Constant.jostMedium),
-                      ),
+                      ),*/
                       /*child: Icon(
                         Icons.close,
                         color: Constant.locationServiceGreen,
