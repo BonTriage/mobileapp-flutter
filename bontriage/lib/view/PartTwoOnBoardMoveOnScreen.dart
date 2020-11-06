@@ -12,7 +12,6 @@ class PartTwoOnBoardMoveOnScreen extends StatefulWidget {
 
 class _PartTwoOnBoardMoveOnScreenState
     extends State<PartTwoOnBoardMoveOnScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -40,15 +39,16 @@ class _PartTwoOnBoardMoveOnScreenState
           TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
               context, Constant.prePartThreeOnBoardScreenRouter);
-          //TODO: Move to next screen
         },
         isShowSecondBottomButton: true,
         secondBottomButtonText: Constant.addAnotherHeadache,
         secondBottomButtonFunction: () {
-          //TODO: Add Another Headache button implementation
+          Utils.saveUserProgress(0, Constant.secondEventStep);
+          Navigator.pushReplacementNamed(
+              context, Constant.partTwoOnBoardScreenRouter);
         },
         closeButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+          Utils.navigateToUserOnProfileBoard(context);
         },
       ),
     );

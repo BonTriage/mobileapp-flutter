@@ -112,7 +112,10 @@ class SignUpOnBoardProviders {
   Future<UserProfileInfoModel> insertUserProfileInfo(
       UserProfileInfoModel userProfileInfoModel) async {
     final db = await database;
-    Map<String,dynamic> userProfileInfoMap = {USER_ID: userProfileInfoModel.userId,USER_PROFILE_INFO_MODEL:jsonEncode(userProfileInfoModel)};
+    Map<String, dynamic> userProfileInfoMap = {
+      USER_ID: userProfileInfoModel.userId,
+      USER_PROFILE_INFO_MODEL: jsonEncode(userProfileInfoModel)
+    };
     await db.insert(TABLE_USER_PROFILE_INFO, userProfileInfoMap);
     return userProfileInfoModel;
   }
@@ -125,6 +128,23 @@ class SignUpOnBoardProviders {
       where: "$USER_ID = ?",
       whereArgs: [userProfileInfoModel.userId],
     );
+  }
+
+  Future<bool> isUserAlreadyLoggedIn() async {
+    final db = await database;
+    List<dynamic> userInfoListData =
+        await db.rawQuery('SELECT * FROM $TABLE_USER_PROFILE_INFO');
+    return userInfoListData.length != 0;
+  }
+
+  Future<UserProfileInfoModel> getLoggedInUserAllInformation() async {
+    final db = await database;
+    UserProfileInfoModel userProfileInfoModel;
+    List<dynamic> userInfoListData =
+        await db.rawQuery('SELECT * FROM $TABLE_USER_PROFILE_INFO ');
+    userProfileInfoModel = UserProfileInfoModel.fromJson(
+        jsonDecode(userInfoListData[0][USER_PROFILE_INFO_MODEL]));
+    return userProfileInfoModel;
   }
 
   Future<int> checkUserProgressDataAvailable(String tableName) async {
@@ -276,5 +296,19 @@ class SignUpOnBoardProviders {
   Future<void> deleteAllUserLogDayData() async {
     final db = await database;
     await db.delete(TABLE_LOG_DAY);
+  }
+
+  Future<void> deleteAllTableData() async {
+    final db = await database;
+    await db.delete(TABLE_QUESTIONNAIRES);
+    await db.delete(TABLE_USER_PROGRESS);
+    await db.delete(TABLE_USER_PROFILE_INFO);
+  }
+
+  Future<void> deleteOnBoardQuestionnaireProgress(String eventType)async {
+    final db = await database;
+    await db.delete(TABLE_QUESTIONNAIRES,where: "$EVENT_TYPE = ?",
+      whereArgs: [eventType],
+    );
   }
 }

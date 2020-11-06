@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/SignUpScreenRepository.dart';
 
 class SignUpScreenBloc {
@@ -19,6 +22,7 @@ class SignUpScreenBloc {
     _signUpScreenRepository = SignUpScreenRepository();
   }
 
+  /// This method will be use for implement API for to check USer Already registered in to the application or not.
   Future<dynamic> checkUserAlreadyExistsOrNot(String emailValue) async {
     try {
       String url = 'https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/?' +
@@ -27,7 +31,7 @@ class SignUpScreenBloc {
           "&" +
           "check_user_exists=1";
       var album =
-      await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
+          await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
       if (album is AppException) {
         albumDataSink.add(album.toString());
       } else {
@@ -38,18 +42,32 @@ class SignUpScreenBloc {
     }
   }
 
-  Future<dynamic> signUpOfNewUser(List<SelectedAnswers> selectedAnswerListData) async {
+  /// This method will be use for implement API for SignUp into the app.
+  Future<dynamic> signUpOfNewUser(List<SelectedAnswers> selectedAnswerListData,
+      String emailValue, String passwordValue) async {
+    bool apiResponse;
+    UserProfileInfoModel userProfileInfoModel;
     try {
-      var album =
-      await _signUpScreenRepository.signUpServiceCall("https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/", RequestMethod.POST,selectedAnswerListData);
-      if (album is AppException) {
-        albumDataSink.add(album.toString());
+      var response = await _signUpScreenRepository.signUpServiceCall(
+          "https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/",
+          RequestMethod.POST,
+          selectedAnswerListData,
+          emailValue,
+          passwordValue);
+      if (response is AppException) {
+        apiResponse = false;
       } else {
-        return album;
+        apiResponse = true;
+        userProfileInfoModel =
+            UserProfileInfoModel.fromJson(jsonDecode(response));
+        var loggedInUserInformationData = await SignUpOnBoardProviders.db
+            .insertUserProfileInfo(userProfileInfoModel);
+        print(loggedInUserInformationData);
       }
     } catch (Exception) {
-      albumDataSink.add("Error");
+      apiResponse = false;
     }
+    return apiResponse;
   }
 
   void dispose() {

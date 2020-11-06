@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 
@@ -31,7 +31,7 @@ class SignUpOnBoardSecondStepBloc {
     try {
       var signUpFirstStepData =
           await _signUpOnBoardFirstStepRepository.serviceCall(
-              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
+              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
               RequestMethod.POST,
               argumentsName);
       if (signUpFirstStepData is AppException) {
@@ -69,21 +69,25 @@ class SignUpOnBoardSecondStepBloc {
     __signUpOnBoardSecondStepRepositoryDataStreamController?.close();
   }
 
-  sendSignUpFirstStepData(
+  sendSignUpSecondStepData(
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
+    bool response;
     try {
       var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
           .signUpWelcomeOnBoardSecondStepServiceCall(
-              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
+              'http://34.222.200.187:8080/mobileapi/v0/event',
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         print(signUpFirstStepData);
+        response = false;
       } else {
         print(signUpFirstStepData);
+        response = true;
       }
     } catch (Exception) {
+      response = false;
       //  signUpFirstStepDataSink.add("Error");
     }
   }

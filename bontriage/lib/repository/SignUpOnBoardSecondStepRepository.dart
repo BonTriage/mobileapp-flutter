@@ -66,8 +66,7 @@ class SignUpOnBoardFirstStepRepository {
       SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
     SignUpOnBoardAnswersRequestModel();
-    signUpOnBoardAnswersRequestModel.eventType =
-        signUpOnBoardSelectedAnswersModel.eventType;
+    signUpOnBoardAnswersRequestModel.eventType = Constant.clinicalImpressionShort1 ;
     signUpOnBoardAnswersRequestModel.userId = 4214;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";

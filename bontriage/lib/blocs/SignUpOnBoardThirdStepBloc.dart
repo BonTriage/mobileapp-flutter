@@ -13,7 +13,7 @@ import 'package:mobile/util/LinearListFilter.dart';
 class SignUpOnBoardThirdStepBloc {
   SignUpOnBoardThirdStepRepository _signUpOnBoardThirdStepRepository;
   StreamController<dynamic>
-  __signUpOnBoardThirdStepRepositoryDataStreamController;
+      __signUpOnBoardThirdStepRepositoryDataStreamController;
   int count = 0;
 
   StreamSink<dynamic> get signUpOnBoardThirdStepDataSink =>
@@ -31,10 +31,10 @@ class SignUpOnBoardThirdStepBloc {
   fetchSignUpOnBoardThirdStepData(String argumentsName) async {
     try {
       var signUpFirstStepData =
-      await _signUpOnBoardThirdStepRepository.serviceCall(
-          'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
-          RequestMethod.POST,
-          argumentsName);
+          await _signUpOnBoardThirdStepRepository.serviceCall(
+              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
+              RequestMethod.POST,
+              argumentsName);
       if (signUpFirstStepData is AppException) {
         signUpOnBoardThirdStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -52,9 +52,14 @@ class SignUpOnBoardThirdStepBloc {
   fetchDataFromLocalDatabase(
       List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
-    SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel();
-    welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(json.decode(localQuestionnaireEventData.questionnaires));
-    var filterQuestionsListData = LinearListFilter.getQuestionSeries(welcomeOnBoardProfileModel.questionnaires[0].initialQuestion, welcomeOnBoardProfileModel.questionnaires[0].questionGroups[0].questions);
+    SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel =
+        SignUpOnBoardSecondStepModel();
+    welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(
+        json.decode(localQuestionnaireEventData.questionnaires));
+    var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+        welcomeOnBoardProfileModel.questionnaires[0].initialQuestion,
+        welcomeOnBoardProfileModel
+            .questionnaires[0].questionGroups[0].questions);
     signUpOnBoardThirdStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
@@ -65,22 +70,26 @@ class SignUpOnBoardThirdStepBloc {
     __signUpOnBoardThirdStepRepositoryDataStreamController?.close();
   }
 
-  /*sendSignUpFirstStepData(
+  sendSignUpThirdStepData(
       SignUpOnBoardSelectedAnswersModel
-      signUpOnBoardSelectedAnswersModel) async {
+          signUpOnBoardSelectedAnswersModel) async {
+    bool apiResponse;
     try {
       var signUpFirstStepData = await _signUpOnBoardThirdStepRepository
-          .signUpWelcomeOnBoardSecondStepServiceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
-          RequestMethod.POST,
-          signUpOnBoardSelectedAnswersModel);
+          .signUpThirdStepInfoObjectServiceCall(
+              'http://34.222.200.187:8080/mobileapi/v0/event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         print(signUpFirstStepData);
+        apiResponse = false;
       } else {
         print(signUpFirstStepData);
+        apiResponse = true;
       }
     } catch (Exception) {
-      //  signUpFirstStepDataSink.add("Error");
+      apiResponse = false;
     }
-  }*/
+    return apiResponse;
+  }
 }

@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnBoardingSignUpScreen(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -286,7 +286,8 @@ class MyApp extends StatelessWidget {
             }
           case Constant.onBoardExitScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: OnBoardExitScreen());
+              bool isUserAlreadyLoggedIn = settings.arguments;
+              return SlideFromBottomPageRoute(widget: OnBoardExitScreen(isAlreadyLoggedIn: isUserAlreadyLoggedIn));
             }
         }
         return null;

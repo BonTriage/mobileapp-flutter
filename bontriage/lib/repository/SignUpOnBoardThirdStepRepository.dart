@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardAnswersRequestModel.dart';
 import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -10,7 +12,6 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardThirdStepRepository {
-
   String eventTypeName;
 
   Future<dynamic> serviceCall(
@@ -20,7 +21,7 @@ class SignUpOnBoardThirdStepRepository {
     try {
       eventTypeName = argumentsName;
       var response =
-      await NetworkService(url, requestMethod, _getPayload()).serviceCall();
+          await NetworkService(url, requestMethod, _getPayload()).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -35,6 +36,59 @@ class SignUpOnBoardThirdStepRepository {
     } catch (Exception) {
       return album;
     }
+  }
+
+  Future<dynamic> signUpThirdStepInfoObjectServiceCall(
+      String url,
+      RequestMethod requestMethod,
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
+    var client = http.Client();
+    var album;
+    try {
+      var dataPayload =
+          await _setSignUpThirdStepPayload(signUpOnBoardSelectedAnswersModel);
+      var response =
+          await NetworkService(url, requestMethod, dataPayload).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        //album = WelcomeOnBoardProfileModel.fromJson(json.decode(response));
+
+        return album;
+      }
+    } catch (Exception) {
+      return album;
+    }
+  }
+
+  Future<String> _setSignUpThirdStepPayload(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
+    SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
+        SignUpOnBoardAnswersRequestModel();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    signUpOnBoardAnswersRequestModel.eventType =
+        Constant.clinicalImpressionShort3;
+    signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
+    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
+    try {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
+        signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+            MobileEventDetails(
+                questionTag: model.questionTag,
+                questionJson: "",
+                updatedAt: "2020-10-08T08:18:21Z",
+                value: [model.answer]));
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    return jsonEncode(signUpOnBoardAnswersRequestModel);
   }
 
   String _getPayload() {

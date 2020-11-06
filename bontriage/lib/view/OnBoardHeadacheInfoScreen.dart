@@ -40,11 +40,11 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         nextButtonFunction: () {
           TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
-              context, Constant.onBoardingScreenSignUpRouter);
+              context, Constant.partOneOnBoardScreenTwoRouter);
         },
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+          Utils.navigateToUserOnProfileBoard(context);
         },
       ),
     );

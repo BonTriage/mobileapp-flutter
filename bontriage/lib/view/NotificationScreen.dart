@@ -35,24 +35,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                        Utils.navigateToUserOnProfileBoard(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
                         width: 26,
                         height: 26,
-                      ),/*Text(
-                        'Cancel',
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 14,
-                            fontFamily: Constant.jostMedium),
-                      ),*/
-                      /*child: Icon(
-                        Icons.close,
-                        color: Constant.locationServiceGreen,
-                        size: 22,
-                      ),*/
+                      ),
                     ),
                   ],
                 ),

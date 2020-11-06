@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 import '../util/constant.dart';
@@ -20,7 +21,9 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTutorialsState();
+   getTutorialsState();
+
+
   }
 
   @override

@@ -26,12 +26,12 @@ class SignUpScreenRepository {
   }
 
   Future<dynamic> signUpServiceCall(String url, RequestMethod requestMethod,
-      List<SelectedAnswers> selectedAnswerListData) async {
+      List<SelectedAnswers> selectedAnswerListData, String emailValue, String passwordValue) async {
     var client = http.Client();
     var album;
     try {
       var response = await NetworkService(
-              url, requestMethod, _setUserSignUpPayload(selectedAnswerListData))
+              url, requestMethod, _setUserSignUpPayload(selectedAnswerListData,emailValue,passwordValue))
           .serviceCall();
       if (response is AppException) {
         return response;
@@ -43,7 +43,7 @@ class SignUpScreenRepository {
     }
   }
 
-  String _setUserSignUpPayload(List<SelectedAnswers> selectedAnswers) {
+  String _setUserSignUpPayload(List<SelectedAnswers> selectedAnswers, String emailValue, String passwordValue) {
     SignUpScreenOnBoardModel signUpScreenOnBoardModel =
         SignUpScreenOnBoardModel();
 
@@ -54,13 +54,13 @@ class SignUpScreenRepository {
     SelectedAnswers nameValue = selectedAnswers
         .firstWhere((model) => model.questionTag == "profile.firstname");
 
-    signUpScreenOnBoardModel.email = "dikshant12@gmail.com";
+    signUpScreenOnBoardModel.email = emailValue;
     signUpScreenOnBoardModel.age = ageValue.answer;
     signUpScreenOnBoardModel.firstName = nameValue.answer;
-    signUpScreenOnBoardModel.lastName = "Rawal";
+    signUpScreenOnBoardModel.lastName = "";
     signUpScreenOnBoardModel.location = "";
     signUpScreenOnBoardModel.notificationKey = "";
-    signUpScreenOnBoardModel.password = "123456";
+    signUpScreenOnBoardModel.password = passwordValue;
     signUpScreenOnBoardModel.sex = genderValue.answer;
 
     return jsonEncode(signUpScreenOnBoardModel);

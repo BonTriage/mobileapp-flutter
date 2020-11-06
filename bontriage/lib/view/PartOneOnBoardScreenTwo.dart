@@ -100,7 +100,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   chatBubbleText:
                       _pageViewWidgetList[_currentPageIndex].questions,
                   closeButtonFunction: () {
-                    Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                    Utils.navigateToUserOnProfileBoard(context);
                   },
                 ),
                 SizedBox(
@@ -120,14 +120,13 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   backButtonFunction: _onBackPressed,
                   nextButtonFunction: () {
                     isButtonClicked = true;
-                    if(Utils.validationForOnBoard(signUpOnBoardSelectedAnswersModel.selectedAnswers, currentQuestionListData[_currentPageIndex])) {
+                    if (Utils.validationForOnBoard(
+                        signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                        currentQuestionListData[_currentPageIndex])) {
                       setState(() {
                         double stepOneProgress = 0.11;
 
                         if (_progressPercent == 1) {
-                          signUpBoardFirstStepBloc
-                              .sendSignUpFirstStepData(
-                              signUpOnBoardSelectedAnswersModel);
                           isEndOfOnBoard = true;
                           TextToSpeechRecognition.pauseSpeechToText(true, "");
                           Navigator.pushReplacementNamed(
@@ -149,8 +148,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                               duration: Duration(milliseconds: 1),
                               curve: Curves.easeIn);
                         }
-                        getCurrentQuestionTag(
-                            _currentPageIndex);
+                        getCurrentQuestionTag(_currentPageIndex);
                       });
                     }
                   },
@@ -211,8 +209,9 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.firstEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
-      userProgressDataModel.questionTag =
-      (currentQuestionListData != null) ? currentQuestionListData[currentPageIndex].tag : '';
+      userProgressDataModel.questionTag = (currentQuestionListData != null)
+          ? currentQuestionListData[currentPageIndex].tag
+          : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -244,8 +243,8 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db
-        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.firstEventStep);
+    SignUpOnBoardProviders.db.updateSelectedAnswers(
+        signUpOnBoardSelectedAnswersModel, Constant.firstEventStep);
   }
 
   addFilteredQuestionListData(List<dynamic> questionListData) {

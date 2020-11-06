@@ -285,6 +285,10 @@ class Utils {
           Navigator.pushReplacementNamed(
               context, Constant.prePartTwoOnBoardScreenRouter);
           break;
+        case Constant.signUpEventStep:
+          Navigator.pushReplacementNamed(
+              context, Constant.onBoardingScreenSignUpRouter);
+          break;
         case Constant.onBoardMoveOnForNowEventStep:
           Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardMoveOnScreenRouter);
@@ -298,10 +302,12 @@ class Utils {
               context, Constant.postPartThreeOnBoardRouter);
           break;
         case Constant.notificationEventStep:
-          Navigator.pushReplacementNamed(context, Constant.notificationScreenRouter);
+          Navigator.pushReplacementNamed(
+              context, Constant.notificationScreenRouter);
           break;
         case Constant.postNotificationEventStep:
-          Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
+          Navigator.pushReplacementNamed(
+              context, Constant.postNotificationOnBoardRouter);
           break;
         default:
           Navigator.pushReplacementNamed(
@@ -319,10 +325,10 @@ class Utils {
     var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
     UserProgressDataModel userProgressDataModel = UserProgressDataModel();
 
-    if(isDataBaseExists) {
+    if (isDataBaseExists) {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
-          SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+              SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = eventStep;
       userProgressDataModel.userScreenPosition = userScreenPosition;
@@ -335,4 +341,14 @@ class Utils {
       }
     }
   }
+
+  void navigateToExitScreen(BuildContext buildContext) async {
+    var isUserAlreadyLoggedIn =
+        await SignUpOnBoardProviders.db.isUserAlreadyLoggedIn();
+    Navigator.pushReplacementNamed(
+        buildContext, Constant.onBoardExitScreenRouter,
+        arguments: isUserAlreadyLoggedIn);
+  }
+
+  void getUserInformation() {}
 }

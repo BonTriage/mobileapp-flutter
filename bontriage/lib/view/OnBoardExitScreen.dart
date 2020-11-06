@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
 class OnBoardExitScreen extends StatefulWidget {
+  final bool isAlreadyLoggedIn;
+
+  const OnBoardExitScreen({Key key, this.isAlreadyLoggedIn = false})
+      : super(key: key);
+
   @override
   _OnBoardExitScreenState createState() => _OnBoardExitScreenState();
 }
@@ -15,7 +21,9 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
       body: OnBoardInformationScreen(
         bubbleChatTextSpanList: [
           TextSpan(
-              text: Constant.untilYouComplete,
+              text: widget.isAlreadyLoggedIn
+                  ? Constant.untilYouCompleteInitialAssessment
+                  : Constant.untilYouComplete,
               style: TextStyle(
                   height: 1.3,
                   fontSize: 16,
@@ -23,18 +31,28 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
                   color: Constant.bubbleChatTextView))
         ],
         isShowNextButton: false,
-        bottomButtonText: Constant.continueSurvey,
+        bottomButtonText: Constant.continueAssessment,
         bottomButtonFunction: () {
-          //TODO: Move to next screen
           Utils.navigateToUserOnProfileBoard(context);
         },
         isShowSecondBottomButton: true,
-        secondBottomButtonText: Constant.saveAndFinishLater,
+        secondBottomButtonText: widget.isAlreadyLoggedIn
+            ? Constant.exitAndLoseProgress
+            : Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
-          //TODO: Save and Finish later button implementation
+          if (widget.isAlreadyLoggedIn) {
+            Navigator.pushReplacementNamed(context, Constant.homeRouter);
+          } else {
+            deleteUserAllWelComeBoardData();
+          }
         },
         isShowCloseButton: false,
       ),
     );
+  }
+
+  void deleteUserAllWelComeBoardData() async {
+    await SignUpOnBoardProviders.db.deleteAllTableData();
+    Navigator.pop(context);
   }
 }

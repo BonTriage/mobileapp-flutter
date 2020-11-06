@@ -50,8 +50,6 @@ class SignUpOnBoardFirstStepRepository {
       if (response is AppException) {
         return response;
       } else {
-        //album = WelcomeOnBoardProfileModel.fromJson(json.decode(response));
-
         return response;
       }
     } catch (Exception) {

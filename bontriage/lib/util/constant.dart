@@ -75,8 +75,9 @@ class Constant {
       '/calendarSeverityScreenRouter';
   static const String logDayNoHeadacheScreenRouter =
       '/logDayNoHeadacheScreenRouter';
-  static const String calenderScreenRouter = 'calenderScreenRouter' ;
-  static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter' ;
+  static const String calenderScreenRouter = 'calenderScreenRouter';
+
+  static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -227,6 +228,10 @@ class Constant {
   static String email = 'Email';
   static String password = 'Password';
   static String continueSurvey = 'Continue Survey';
+  static String continueAssessment = 'Continue Assessment';
+  static String exitAndLoseProgress = 'Exit & Lose Progress';
+  static String untilYouCompleteInitialAssessment =
+      'Until you complete the initial assessment and create your account, you will not be able to use MigraineMentor. Please continue through the first step, it shouldn\'t take more than a minute or two.';
   static String untilYouComplete =
       'Until you complete the assessment, your personalized headache profile will be incomplete. Without a complete profile, MigraineMentor can’t create a predictive model, and won’t be able to alert you when you are at risk for headaches or suggest steps to avoid them.';
   static String letsBeginBySeeing =
@@ -424,7 +429,8 @@ class Constant {
   static String fileType = 'File type';
   static String pdf = 'PDF';
   static const String faq = 'FAQ';
-  static String connectTheMigraineMentorTeam = 'Connect the Migraine Mentor team';
+  static String connectTheMigraineMentorTeam =
+      'Connect the Migraine Mentor team';
   static String medicalHelp = 'Medical Help';
   static String call911 = 'Call 911';
   static String callADoctor = 'Call a doctor (urgent care)';
@@ -458,30 +464,38 @@ class Constant {
   static String headacheTypes = 'Headache Types';
   static const String myTriggers = 'My Triggers';
   static const String myMedications = 'My Medications';
-  static String reCompleteDiagnosticAssessment = 'Re-complete diagnostic assessment';
+  static String reCompleteDiagnosticAssessment =
+      'Re-complete diagnostic assessment';
   static String deleteHeadacheType = 'Delete Headache Type';
-  static String basedOnWhatYouEntered = 'Based on what you entered, it looks like your [My Headache Type] could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
-  static String weKnowItCanBeEasy = 'We know it can be easy to lose track of daily logging, and we found it works best if you let us send you a daily reminder— we recommend the late afternoon or evening.';
-  static String enablingLocationServices = 'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
+  static String basedOnWhatYouEntered =
+      'Based on what you entered, it looks like your [My Headache Type] could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
+  static String weKnowItCanBeEasy =
+      'We know it can be easy to lose track of daily logging, and we found it works best if you let us send you a daily reminder— we recommend the late afternoon or evening.';
+  static String enablingLocationServices =
+      'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String tapToTypeYourName = 'Tap to type your name';
   static String slideToEnterYourAge = 'Slide to enter your age.';
   static String selectTheGender = 'Select the gender with which you identify.';
-  static String toProvideDiagnosticInfo = 'To provide diagnostic information about your headaches, please select the biological sex you were assigned at birth.';
-  static String whichOfTheFollowingDoYouSuspect = 'Which of the following do you suspect trigger your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
-  static String whichOfTheFollowingMedication = 'Which of the following medications do you take for your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
+  static String toProvideDiagnosticInfo =
+      'To provide diagnostic information about your headaches, please select the biological sex you were assigned at birth.';
+  static String whichOfTheFollowingDoYouSuspect =
+      'Which of the following do you suspect trigger your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
+  static String whichOfTheFollowingMedication =
+      'Which of the following medications do you take for your headaches? Select any that apply. Type to search or add a trigger that’s not on our list.';
   static String me = 'ME';
   static String records = 'RECORDS';
   static String discover = 'DISCOVER';
   static String more = 'MORE';
-  static String signUpAlertMessage = 'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
+  static String signUpAlertMessage =
+      'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
   static String userNotFound = 'User Not Found';
   static String messageTextKey = 'message_text';
-
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
   static const String generateReportActionSheet = 'generateReportActionSheet';
-  static const String deleteHeadacheTypeActionSheet = 'deleteHeadacheTypeActionSheet';
+  static const String deleteHeadacheTypeActionSheet =
+      'deleteHeadacheTypeActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -587,4 +601,7 @@ class Constant {
 
   //event types
   static const String clinicalImpressionShort3 = 'clinical_impression_short3';
+  static const String clinicalImpressionShort0 = 'clinical_impression_short0';
+  static const String clinicalImpressionShort1 = 'clinical_impression_short1';
+  static const String profileEventType = 'profile';
 }

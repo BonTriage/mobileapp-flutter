@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/SignUpOnBoardFirstStepBloc.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
@@ -10,12 +13,17 @@ class PrePartTwoOnBoardScreen extends StatefulWidget {
 }
 
 class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
+  SignUpBoardFirstStepBloc signUpBoardFirstStepBloc;
+  SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
+    signUpOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
     Utils.saveUserProgress(0, Constant.prePartTwoEventStep);
+    getFirstStepUserDataFromLocalDatabase();
   }
 
   List<List<TextSpan>> _questionList = [
@@ -67,12 +75,21 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
-          //TODO: Save & Finish Later Button implementation
+          Navigator.pushReplacementNamed(context, Constant.homeRouter);
         },
         closeButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+          Utils.navigateToUserOnProfileBoard(context);
         },
       ),
     );
+  }
+
+  void getFirstStepUserDataFromLocalDatabase() async {
+    var signUpOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db
+        .getAllSelectedAnswers(Constant.firstEventStep);
+    signUpOnBoardSelectedAnswersModel.selectedAnswers =
+        signUpOnBoardSelectedAnswersListModel;
+    signUpBoardFirstStepBloc
+        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
   }
 }

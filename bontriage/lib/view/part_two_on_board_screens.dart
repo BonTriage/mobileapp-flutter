@@ -124,7 +124,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                         chatBubbleText:
                             _pageViewWidgetList[_currentPageIndex].questions,
                         closeButtonFunction: () {
-                          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                          Utils.navigateToUserOnProfileBoard(context);
                         },
                       ),
                       SizedBox(
@@ -157,7 +157,6 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                 TextToSpeechRecognition.pauseSpeechToText(
                                     true, "");
                                 moveUserToNextScreen();
-                                //TODO: Move to next screen
                               } else {
                                 _currentPageIndex++;
 
@@ -330,8 +329,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.secondEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
-      userProgressDataModel.questionTag =
-        (currentQuestionListData.length > 0) ? currentQuestionListData[currentPageIndex].tag : '';
+      userProgressDataModel.questionTag = (currentQuestionListData.length > 0)
+          ? currentQuestionListData[currentPageIndex].tag
+          : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -365,19 +365,25 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db
-        .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.secondEventStep);
+    SignUpOnBoardProviders.db.updateSelectedAnswers(
+        signUpOnBoardSelectedAnswersModel, Constant.secondEventStep);
   }
 
   void moveUserToNextScreen() async {
-    // await _signUpOnBoardSecondStepBloc.sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
-    if (widget.argumentsName == Constant.clinicalImpressionEventType) {
-      var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
-          .firstWhere((model) => model.questionTag == "nameClinicalImpression");
-      Navigator.pop(context, userHeadacheName.answer);
-    } else {
-      Navigator.pushReplacementNamed(context,
-          Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+    var response = await _signUpOnBoardSecondStepBloc
+        .sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel);
+    if (response) {
+      await SignUpOnBoardProviders.db
+          .deleteOnBoardQuestionnaireProgress(Constant.secondEventStep);
+      if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+        var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
+            .firstWhere(
+                (model) => model.questionTag == "nameClinicalImpression");
+        Navigator.pop(context, userHeadacheName.answer);
+      } else {
+        Navigator.pushReplacementNamed(context,
+            Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+      }
     }
   }
 }

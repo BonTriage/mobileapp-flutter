@@ -23,13 +23,14 @@ class SignUpBoardFirstStepBloc {
     _signUpFirstStepDataStreamController = StreamController<dynamic>();
     _signUpOnBoardFirstStepRepository = SignUpOnBoardFirstStepRepository();
   }
+
 // QA Url it will be change.
   fetchSignUpFirstStepData() async {
     try {
       var signUpFirstStepData =
-      await _signUpOnBoardFirstStepRepository.serviceCall(
-          'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
-          RequestMethod.POST);
+          await _signUpOnBoardFirstStepRepository.serviceCall(
+              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
+              RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
         signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -45,25 +46,25 @@ class SignUpBoardFirstStepBloc {
   }
 
   sendSignUpFirstStepData(
-      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
+    bool apiResponse;
     try {
-      var signUpFirstStepData =
-      await _signUpOnBoardFirstStepRepository
+      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
           .signUpFirstStepInfoObjectServiceCall(
-          'http://34.222.200.187:8080/mobileapi/v0/event',
-          RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+              'http://34.222.200.187:8080/mobileapi/v0/event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
+        apiResponse = false;
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-        /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
-        print(filterQuestionsListData);
-        signUpFirstStepDataSink.add(filterQuestionsListData);*/
+        apiResponse = true;
       }
     } catch (Exception) {
-      //  signUpFirstStepDataSink.add("Error");
+      apiResponse = false;
     }
+    return apiResponse;
   }
 
   void dispose() {
@@ -74,7 +75,7 @@ class SignUpBoardFirstStepBloc {
       List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
-    WelcomeOnBoardProfileModel();
+        WelcomeOnBoardProfileModel();
     welcomeOnBoardProfileModel = WelcomeOnBoardProfileModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(

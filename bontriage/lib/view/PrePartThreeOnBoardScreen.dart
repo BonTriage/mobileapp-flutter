@@ -57,7 +57,6 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           TextToSpeechRecognition.pauseSpeechToText(true, "");
           Navigator.pushReplacementNamed(
               context, Constant.partThreeOnBoardScreenRouter);
-          //TODO: Move to Part Three On Board Screen
         },
         bubbleChatTextSpanList: _questionList[_currentIndex],
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
@@ -66,7 +65,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           //TODO: Save & Finish Later button implementation
         },
         closeButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+          Utils.navigateToUserOnProfileBoard(context);
         },
       ),
     );

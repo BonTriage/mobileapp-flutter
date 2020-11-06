@@ -63,7 +63,7 @@ class _PostPartThreeOnBoardScreenState
           Navigator.pushReplacementNamed(context, Constant.homeRouter);
         },
         closeButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+          Utils.navigateToUserOnProfileBoard(context);
         },
       ),
     );

@@ -116,7 +116,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                     chatBubbleText:
                         _pageViewWidgetList[_currentPageIndex].questions,
                     closeButtonFunction: () {
-                      Navigator.pushReplacementNamed(context, Constant.onBoardExitScreenRouter);
+                      Utils.navigateToUserOnProfileBoard(context);
                     },
                   ),
                   Expanded(
@@ -152,9 +152,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                               1 / _pageViewWidgetList.length;
 
                           if (_progressPercent == 1) {
-                            TextToSpeechRecognition.pauseSpeechToText(true, "");
-                            Navigator.pushReplacementNamed(
-                                context, Constant.postPartThreeOnBoardRouter);
+                            sendUserDataAndMoveInToNextScreen();
                             //TODO: Move to next screen
                           } else {
                             _currentPageIndex++;
@@ -236,8 +234,9 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.thirdEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
-      userProgressDataModel.questionTag =
-      (_currentQuestionLists.length > 0) ? _currentQuestionLists[currentPageIndex].tag : '';
+      userProgressDataModel.questionTag = (_currentQuestionLists.length > 0)
+          ? _currentQuestionLists[currentPageIndex].tag
+          : '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -272,7 +271,17 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
         Utils.getStringFromJson(_signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
-    SignUpOnBoardProviders.db.updateSelectedAnswers(_signUpOnBoardSelectedAnswersModel, Constant.thirdEventStep);
+    SignUpOnBoardProviders.db.updateSelectedAnswers(
+        _signUpOnBoardSelectedAnswersModel, Constant.thirdEventStep);
+  }
 
+  void sendUserDataAndMoveInToNextScreen() async {
+    var response = await _signUpOnBoardThirdStepBloc
+        .sendSignUpThirdStepData(_signUpOnBoardSelectedAnswersModel);
+    if (response) {
+      TextToSpeechRecognition.pauseSpeechToText(true, "");
+      Navigator.pushReplacementNamed(
+          context, Constant.postPartThreeOnBoardRouter);
+    }
   }
 }

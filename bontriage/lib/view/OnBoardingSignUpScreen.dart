@@ -40,6 +40,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     passwordTextEditingController = TextEditingController();
     signUpScreenBloc = SignUpScreenBloc();
     userProfileInfoModel = UserProfileInfoModel();
+    Utils.saveUserProgress(0, Constant.signUpEventStep);
   }
 
   @override
@@ -378,13 +379,18 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      Constant.cancel,
-                      style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 16,
-                          fontFamily: Constant.jostRegular,
-                          decoration: TextDecoration.underline),
+                    GestureDetector(
+                      onTap: () {
+                        Utils.navigateToUserOnProfileBoard(context);
+                      },
+                      child: Text(
+                        Constant.cancel,
+                        style: TextStyle(
+                            color: Constant.chatBubbleGreen,
+                            fontSize: 16,
+                            fontFamily: Constant.jostRegular,
+                            decoration: TextDecoration.underline),
+                      ),
                     )
                   ],
                 ),
@@ -412,6 +418,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     }
   }
 
+  /// In this method we will check if user is already registered into the application. If user already registered then we will save User basic
+  /// info data in local database for further use.If not then user can SignUp from the application.
   void checkUserAlreadySignUp() async {
     var signUpResponse =
         await signUpScreenBloc.checkUserAlreadyExistsOrNot(emailValue);
@@ -435,12 +443,18 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     }
   }
 
+  /// This method will be use for to get User Profile data from Local database, If user didn't SignUp into the application.After We will
+  /// get user Profile data from the local database then we implement SignUp Api to register user into the application.
   void getAnswerDataFromDatabase() async {
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
-    signUpScreenBloc.signUpOfNewUser(selectedAnswerListData);
-    print(selectedAnswerListData);
-    Navigator.pushReplacementNamed(
-        context, Constant.prePartTwoOnBoardScreenRouter);
+    var response = await signUpScreenBloc.signUpOfNewUser(
+        selectedAnswerListData, emailValue, passwordValue);
+    if (response) {
+      print(selectedAnswerListData);
+
+      Navigator.pushReplacementNamed(
+          context, Constant.prePartTwoOnBoardScreenRouter);
+    }
   }
 }
