@@ -22,7 +22,6 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
     Utils.saveUserProgress(0, Constant.headacheInfoEventStep);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

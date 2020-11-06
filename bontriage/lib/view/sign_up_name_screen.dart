@@ -95,10 +95,9 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             },
             controller: textEditingController,
             onChanged: (String value) {
-           /*   widget.selectedAnswerCallBack(
+              widget.selectedAnswerCallBack(
                   widget.tag, value);
-              print(value);*/
-
+              //print(value);
             },
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
