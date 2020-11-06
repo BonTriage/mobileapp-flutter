@@ -181,7 +181,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                       if(Utils.validationForOnBoard(signUpOnBoardSelectedAnswersModel.selectedAnswers, currentQuestionListData[_currentPageIndex])) {
                                         setState(() {
                                           if (_progressPercent == 0.55) {
-                                            checkData();
                                             /*     welcomeOnBoardProfileBloc
                                             .sendSignUpFirstStepData(
                                                 signUpOnBoardSelectedAnswersModel);*/
@@ -459,12 +458,4 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     SignUpOnBoardProviders.db
         .updateSelectedAnswers(signUpOnBoardSelectedAnswersModel, Constant.zeroEventStep);
   }
-  
-  void checkData() async {
-    var adas = await SignUpOnBoardProviders.db.getAllSelectedAnswers("0");
-    print(adas);
-
-  }
-
-
 }

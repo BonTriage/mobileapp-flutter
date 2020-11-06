@@ -109,11 +109,12 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                     ? 15
                     : widget.horizontalPadding),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: (widget.horizontalPadding == null) ? 0 : 15,
                 ),
-                Expanded(
+                Container(
                   child: Center(
                     child: Wrap(
                       children: [
