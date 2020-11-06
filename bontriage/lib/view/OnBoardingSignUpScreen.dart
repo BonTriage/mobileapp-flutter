@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -22,6 +23,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   TextEditingController emailTextEditingController;
   TextEditingController passwordTextEditingController;
   SignUpScreenBloc signUpScreenBloc;
+  UserProfileInfoModel userProfileInfoModel;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
@@ -37,6 +39,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     emailTextEditingController = TextEditingController();
     passwordTextEditingController = TextEditingController();
     signUpScreenBloc = SignUpScreenBloc();
+    userProfileInfoModel = UserProfileInfoModel();
   }
 
   @override
@@ -402,8 +405,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         isTermConditionCheck) {
       _isShowAlert = false;
       checkUserAlreadySignUp();
-      /* Navigator.pushReplacementNamed(
-          context, Constant.prePartTwoOnBoardScreenRouter);*/
     } else {
       setState(() {
         _isShowAlert = true;
@@ -424,6 +425,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
           }
         }
       } else {
+        userProfileInfoModel =
+            UserProfileInfoModel.fromJson(jsonDecode(signUpResponse));
+        var selectedAnswerListData = await SignUpOnBoardProviders.db
+            .insertUserProfileInfo(userProfileInfoModel);
+        print(selectedAnswerListData);
         Navigator.pushReplacementNamed(context, Constant.homeRouter);
       }
     }
@@ -434,5 +440,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         .getAllSelectedAnswers(Constant.zeroEventStep);
     signUpScreenBloc.signUpOfNewUser(selectedAnswerListData);
     print(selectedAnswerListData);
+    Navigator.pushReplacementNamed(
+        context, Constant.prePartTwoOnBoardScreenRouter);
   }
 }

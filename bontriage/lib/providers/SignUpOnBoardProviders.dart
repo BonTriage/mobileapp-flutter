@@ -6,6 +6,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 import 'package:mobile/models/LogDayQuestionnaire.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,6 +21,7 @@ class SignUpOnBoardProviders {
   static const String QUESTIONNAIRES = "questionnaires";
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
+  static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
 
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
@@ -31,6 +33,7 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_DISABILITY = "headacheDisability";
   static const String HEADACHE_NOTE = "headacheNote";
   static const String HEADACHE_ONGOING = "headacheOnGoing";
+  static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -66,6 +69,10 @@ class SignUpOnBoardProviders {
           "$QUESTION_TAG TEXT,"
           "$USER_SCREEN_POSITION integer"
           ")");
+      batch.execute("CREATE TABLE $TABLE_USER_PROFILE_INFO ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$USER_PROFILE_INFO_MODEL TEXT"
+          ")");
       batch.execute("CREATE TABLE $TABLE_QUESTIONNAIRES ("
           "$EVENT_TYPE TEXT PRIMARY KEY,"
           "$QUESTION_TAG TEXT,"
@@ -99,6 +106,24 @@ class SignUpOnBoardProviders {
       userProgressDataModel.toMap(),
       where: "$USER_ID = ?",
       whereArgs: [userProgressDataModel.userId],
+    );
+  }
+
+  Future<UserProfileInfoModel> insertUserProfileInfo(
+      UserProfileInfoModel userProfileInfoModel) async {
+    final db = await database;
+    Map<String,dynamic> userProfileInfoMap = {USER_ID: userProfileInfoModel.userId,USER_PROFILE_INFO_MODEL:jsonEncode(userProfileInfoModel)};
+    await db.insert(TABLE_USER_PROFILE_INFO, userProfileInfoMap);
+    return userProfileInfoModel;
+  }
+
+  void updateUserProfileInfo(UserProfileInfoModel userProfileInfoModel) async {
+    final db = await database;
+    await db.update(
+      TABLE_USER_PROFILE_INFO,
+      userProfileInfoModel.toJson(),
+      where: "$USER_ID = ?",
+      whereArgs: [userProfileInfoModel.userId],
     );
   }
 
@@ -164,8 +189,13 @@ class SignUpOnBoardProviders {
     return posts;
   }
 
-  void updateSelectedAnswers( SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,String eventType) async {
-    Map<String, dynamic> map = {SELECTED_ANSWERS:jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)};
+  void updateSelectedAnswers(
+      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,
+      String eventType) async {
+    Map<String, dynamic> map = {
+      SELECTED_ANSWERS:
+          jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)
+    };
     final db = await database;
     await db.update(
       TABLE_QUESTIONNAIRES,
@@ -247,5 +277,4 @@ class SignUpOnBoardProviders {
     final db = await database;
     await db.delete(TABLE_LOG_DAY);
   }
-
 }
