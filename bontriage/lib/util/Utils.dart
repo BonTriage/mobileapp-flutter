@@ -342,7 +342,7 @@ class Utils {
     }
   }
 
-  void navigateToExitScreen(BuildContext buildContext) async {
+  static void navigateToExitScreen(BuildContext buildContext) async {
     var isUserAlreadyLoggedIn =
         await SignUpOnBoardProviders.db.isUserAlreadyLoggedIn();
     Navigator.pushReplacementNamed(

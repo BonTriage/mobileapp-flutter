@@ -60,7 +60,7 @@ class _PostNotificationOnBoardScreenState
         bubbleChatTextSpanList: _questionList[_currentIndex],
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

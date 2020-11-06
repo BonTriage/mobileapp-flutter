@@ -41,7 +41,7 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
         },
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

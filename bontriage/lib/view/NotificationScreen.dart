@@ -35,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Utils.navigateToUserOnProfileBoard(context);
+                        Utils.navigateToExitScreen(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),

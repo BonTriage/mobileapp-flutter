@@ -381,7 +381,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Utils.navigateToUserOnProfileBoard(context);
+                        Utils.navigateToExitScreen(context);
                       },
                       child: Text(
                         Constant.cancel,

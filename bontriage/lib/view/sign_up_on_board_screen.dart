@@ -94,7 +94,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                             _pageViewWidgetList[_currentPageIndex].questions,
                         isEndOfOnBoard: isEndOfOnBoard,
                         closeButtonFunction: () {
-                          Utils.navigateToUserOnProfileBoard(context);
+                          Utils.navigateToExitScreen(context);
                         },
                       ),
                       SizedBox(height: 40),

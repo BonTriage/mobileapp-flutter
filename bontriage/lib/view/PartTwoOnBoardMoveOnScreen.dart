@@ -48,7 +48,7 @@ class _PartTwoOnBoardMoveOnScreenState
               context, Constant.partTwoOnBoardScreenRouter);
         },
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

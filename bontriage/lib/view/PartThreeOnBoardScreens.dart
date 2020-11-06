@@ -116,7 +116,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                     chatBubbleText:
                         _pageViewWidgetList[_currentPageIndex].questions,
                     closeButtonFunction: () {
-                      Utils.navigateToUserOnProfileBoard(context);
+                      Utils.navigateToExitScreen(context);
                     },
                   ),
                   Expanded(

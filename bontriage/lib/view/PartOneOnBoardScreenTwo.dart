@@ -100,7 +100,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   chatBubbleText:
                       _pageViewWidgetList[_currentPageIndex].questions,
                   closeButtonFunction: () {
-                    Utils.navigateToUserOnProfileBoard(context);
+                    Utils.navigateToExitScreen(context);
                   },
                 ),
                 SizedBox(
