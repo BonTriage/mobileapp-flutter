@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
-import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -279,13 +278,43 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             },
                           ),
                         ),
-                        Text(
-                          Constant.termsAndCondition,
-                          style: TextStyle(
-                              height: 1.3,
-                              fontFamily: Constant.jostRegular,
-                              fontSize: 12,
-                              color: Constant.chatBubbleGreen),
+                        RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: "I agree to the ",
+                              style: TextStyle(
+                                  height: 1.3,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                  color: Constant.chatBubbleGreen),
+                            ),
+                            TextSpan(
+                              text: "Terms & Condition",
+                              style: TextStyle(
+                                  height: 1.3,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                  decoration: TextDecoration.underline,
+                                  color: Constant.chatBubbleGreen),
+                            ),
+                            TextSpan(
+                              text: " and ",
+                              style: TextStyle(
+                                  height: 1.3,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                  color: Constant.chatBubbleGreen),
+                            ),
+                            TextSpan(
+                              text: "Privacy Policy",
+                              style: TextStyle(
+                                  height: 1.3,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                  decoration: TextDecoration.underline,
+                                  color: Constant.chatBubbleGreen),
+                            ),
+                          ]),
                         ),
                       ],
                     ),
@@ -369,7 +398,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   void signUpButtonClicked() {
     if (Utils.validateEmail(emailValue) &&
         passwordValue.length >= 8 &&
-        Utils.validatePassword(passwordValue)) {
+        Utils.validatePassword(passwordValue) &&
+        isTermConditionCheck) {
       _isShowAlert = false;
       checkUserAlreadySignUp();
       /* Navigator.pushReplacementNamed(
@@ -386,19 +416,22 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         await signUpScreenBloc.checkUserAlreadyExistsOrNot(emailValue);
     if (signUpResponse != null) {
       if (jsonDecode(signUpResponse)[Constant.messageTextKey] != null) {
-        String messageValue = jsonDecode(signUpResponse)[Constant.messageTextKey];
+        String messageValue =
+            jsonDecode(signUpResponse)[Constant.messageTextKey];
         if (messageValue != null) {
-          if(messageValue == Constant.userNotFound){
-           getAnswerDataFromDatabase();
-
+          if (messageValue == Constant.userNotFound) {
+            getAnswerDataFromDatabase();
           }
         }
+      } else {
+        Navigator.pushReplacementNamed(context, Constant.homeRouter);
       }
     }
   }
-  void getAnswerDataFromDatabase()async {
-    var selectedAnswerListData =
-        await SignUpOnBoardProviders.db.getAllSelectedAnswers(Constant.zeroEventStep);
+
+  void getAnswerDataFromDatabase() async {
+    var selectedAnswerListData = await SignUpOnBoardProviders.db
+        .getAllSelectedAnswers(Constant.zeroEventStep);
     signUpScreenBloc.signUpOfNewUser(selectedAnswerListData);
     print(selectedAnswerListData);
   }
