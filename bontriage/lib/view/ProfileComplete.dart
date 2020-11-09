@@ -17,15 +17,13 @@ class _ProfileCompleteState extends State<ProfileComplete>
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
-  void _toggleVolume() {
-    setState(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-      TextToSpeechRecognition.pauseSpeechToText(
-          Constant.profileCompleteTextView);
+  void _toggleVolume() async {
+    setState(() {
       isVolumeOn = !isVolumeOn;
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+    TextToSpeechRecognition.speechToText(Constant.profileCompleteTextView);
   }
 
   List<TextSpan> _spannableTextViewList = [

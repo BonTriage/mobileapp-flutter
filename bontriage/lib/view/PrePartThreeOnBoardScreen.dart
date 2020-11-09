@@ -64,7 +64,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           //TODO: Save & Finish Later button implementation
         },
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );
@@ -76,9 +76,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
   ];
 
   void moveToNextScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.partThreeOnBoardScreenRouter);
   }

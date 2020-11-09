@@ -9,6 +9,7 @@ import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/repository/SignUpOnBoardThirdStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardThirdStepBloc {
   SignUpOnBoardThirdStepRepository _signUpOnBoardThirdStepRepository;
@@ -63,7 +64,7 @@ class SignUpOnBoardThirdStepBloc {
     signUpOnBoardThirdStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
-        json.decode(localQuestionnaireEventData.selectedAnswers));
+        jsonDecode(localQuestionnaireEventData.selectedAnswers));
   }
 
   void dispose() {
@@ -73,22 +74,22 @@ class SignUpOnBoardThirdStepBloc {
   sendSignUpThirdStepData(
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    bool apiResponse;
+    String apiResponse;
     try {
-      var signUpFirstStepData = await _signUpOnBoardThirdStepRepository
+      var signUpThirdStepData = await _signUpOnBoardThirdStepRepository
           .signUpThirdStepInfoObjectServiceCall(
               'http://34.222.200.187:8080/mobileapi/v0/event',
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
-      if (signUpFirstStepData is AppException) {
-        print(signUpFirstStepData);
-        apiResponse = false;
+      if (signUpThirdStepData is AppException) {
+        print(signUpThirdStepData);
+        apiResponse = signUpThirdStepData.toString();
       } else {
-        print(signUpFirstStepData);
-        apiResponse = true;
+        print(signUpThirdStepData);
+        apiResponse = Constant.success;
       }
     } catch (Exception) {
-      apiResponse = false;
+      apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
   }

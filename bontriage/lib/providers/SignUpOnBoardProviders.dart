@@ -214,7 +214,7 @@ class SignUpOnBoardProviders {
       String eventType) async {
     Map<String, dynamic> map = {
       SELECTED_ANSWERS:
-          jsonEncode(signUpOnBoardSelectedAnswersModel.selectedAnswers)
+          jsonEncode(signUpOnBoardSelectedAnswersModel)
     };
     final db = await database;
     await db.update(

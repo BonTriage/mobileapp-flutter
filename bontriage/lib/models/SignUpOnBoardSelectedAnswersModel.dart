@@ -16,6 +16,12 @@ class SignUpOnBoardSelectedAnswersModel {
         selectedAnswers.add(new SelectedAnswers.fromJson(v));
       });
     }
+    if (json[SignUpOnBoardProviders.SELECTED_ANSWERS] != null) {
+      selectedAnswers = new List<SelectedAnswers>();
+      json[SignUpOnBoardProviders.SELECTED_ANSWERS].forEach((v) {
+        selectedAnswers.add(new SelectedAnswers.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -70,7 +70,7 @@ class SignUpOnBoardFirstStepRepository {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType =
-    Constant.clinicalImpressionShort1;
+        Constant.clinicalImpressionShort1;
     signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
@@ -91,12 +91,12 @@ class SignUpOnBoardFirstStepRepository {
     return jsonEncode(signUpOnBoardAnswersRequestModel);
   }
 
-  Future<String> _getPayload() async{
+  Future<String> _getPayload() async {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(<String, String>{
       "event_type": eventTypeName,
-      "mobile_user_id": userProfileInfoData.userId
+      "mobile_user_id": "4551"
     });
   }
 }

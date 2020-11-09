@@ -7,6 +7,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardFirstStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/constant.dart';
 
 class SignUpBoardFirstStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
@@ -48,7 +49,7 @@ class SignUpBoardFirstStepBloc {
   sendSignUpFirstStepData(
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    bool apiResponse;
+    String apiResponse;
     try {
       var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
           .signUpFirstStepInfoObjectServiceCall(
@@ -56,13 +57,13 @@ class SignUpBoardFirstStepBloc {
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
-        apiResponse = false;
+        apiResponse = signUpFirstStepData.toString();
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-        apiResponse = true;
+        apiResponse = Constant.success;
       }
     } catch (Exception) {
-      apiResponse = false;
+      apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
   }
@@ -85,6 +86,6 @@ class SignUpBoardFirstStepBloc {
     signUpFirstStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
-        json.decode(localQuestionnaireEventData.selectedAnswers));
+        jsonDecode(localQuestionnaireEventData.selectedAnswers));
   }
 }

@@ -60,10 +60,10 @@ class _PostPartThreeOnBoardScreenState
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.notNow,
         secondBottomButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.homeRouter);
+          Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
         },
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

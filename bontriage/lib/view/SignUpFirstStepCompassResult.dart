@@ -72,12 +72,12 @@ class _SignUpFirstStepCompassResultState
 
   ///Method to toggle volume on or off
   void _toggleVolume() async {
-    isVolumeOn = !isVolumeOn;
+    setState(() {
+      isVolumeOn = !isVolumeOn;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-    setState(() {
-      TextToSpeechRecognition.pauseSpeechToText("");
-    });
+    TextToSpeechRecognition.speechToText(Constant.profileCompleteTextView);
   }
 
   @override
@@ -110,7 +110,7 @@ class _SignUpFirstStepCompassResultState
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Utils.navigateToUserOnProfileBoard(context);
+                      Utils.navigateToExitScreen(context);
                     },
                     child: Image(
                       image: AssetImage(Constant.closeIcon),
@@ -437,9 +437,7 @@ class _SignUpFirstStepCompassResultState
 
   void moveToNextScreen() async {
     isEndOfOnBoard = true;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.onBoardCreateAccountScreenRouter);
   }

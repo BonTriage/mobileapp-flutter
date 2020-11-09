@@ -41,16 +41,14 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
         },
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );
   }
 
   void sendToNextScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.onBoardingScreenSignUpRouter);
   }

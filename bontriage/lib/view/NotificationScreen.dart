@@ -35,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Utils.navigateToUserOnProfileBoard(context);
+                        Utils.navigateToExitScreen(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
@@ -219,6 +219,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 13),
                     decoration: BoxDecoration(
@@ -243,6 +246,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 13),
                     decoration: BoxDecoration(

@@ -124,7 +124,7 @@ class _StateSignUpOnBoardBubbleTextView
           },
           isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

@@ -60,14 +60,13 @@ class _SignUpSecondStepCompassResultState
   }
 
   ///Method to toggle volume on or off
-  void _toggleVolume() {
-    setState(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-      TextToSpeechRecognition.pauseSpeechToText("");
+  void _toggleVolume() async {
+    setState(() {
       isVolumeOn = !isVolumeOn;
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+    TextToSpeechRecognition.speechToText("");
   }
 
   @override
@@ -109,7 +108,7 @@ class _SignUpSecondStepCompassResultState
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Utils.navigateToUserOnProfileBoard(context);
+                        Utils.navigateToExitScreen(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
@@ -375,7 +374,7 @@ class _SignUpSecondStepCompassResultState
                               _buttonPressedValue++;
                               isBackButtonHide = true;
                             } else {
-                             moveToNextScreen();
+                              moveToNextScreen();
                             }
                           });
                         },
@@ -513,12 +512,10 @@ class _SignUpSecondStepCompassResultState
     }
   }
 
-  void moveToNextScreen() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+  void moveToNextScreen() async {
+    TextToSpeechRecognition.speechToText("");
     isEndOfOnBoard = true;
-    Navigator.pushReplacementNamed(context,
-        Constant.partTwoOnBoardMoveOnScreenRouter);
+    Navigator.pushReplacementNamed(
+        context, Constant.partTwoOnBoardMoveOnScreenRouter);
   }
 }

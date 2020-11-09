@@ -9,6 +9,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
@@ -42,7 +43,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   List<Questions> currentQuestionListData = [];
 
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
-  SignUpOnBoardSelectedAnswersModel();
+      SignUpOnBoardSelectedAnswersModel();
 
   int currentScreenPosition = 0;
 
@@ -91,22 +92,22 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                     children: [
                       OnBoardChatBubble(
                         chatBubbleText:
-                        _pageViewWidgetList[_currentPageIndex].questions,
+                            _pageViewWidgetList[_currentPageIndex].questions,
                         isEndOfOnBoard: isEndOfOnBoard,
                         closeButtonFunction: () {
-                          Utils.navigateToUserOnProfileBoard(context);
+                          Utils.navigateToExitScreen(context);
                         },
                       ),
                       SizedBox(height: 40),
                       Expanded(
                           child: PageView.builder(
-                            controller: _pageController,
-                            itemCount: _pageViewWidgetList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return _pageViewWidgetList[index].questionsWidget;
-                            },
-                            physics: NeverScrollableScrollPhysics(),
-                          )),
+                        controller: _pageController,
+                        itemCount: _pageViewWidgetList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _pageViewWidgetList[index].questionsWidget;
+                        },
+                        physics: NeverScrollableScrollPhysics(),
+                      )),
                       SizedBox(
                         height: 20,
                       ),
@@ -116,21 +117,18 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal:
-                                Constant.chatBubbleHorizontalPadding),
+                                    Constant.chatBubbleHorizontalPadding),
                             child: Stack(
                               children: [
                                 AnimatedPositioned(
                                   left: (_currentPageIndex != 0)
                                       ? 0
-                                      : (MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width -
-                                      190),
+                                      : (MediaQuery.of(context).size.width -
+                                          190),
                                   duration: Duration(milliseconds: 250),
                                   child: AnimatedOpacity(
                                     opacity:
-                                    (_currentPageIndex != 0) ? 1.0 : 0.0,
+                                        (_currentPageIndex != 0) ? 1.0 : 0.0,
                                     duration: Duration(milliseconds: 250),
                                     child: BouncingWidget(
                                       duration: Duration(milliseconds: 100),
@@ -144,7 +142,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                             _pageController.animateToPage(
                                                 _currentPageIndex,
                                                 duration:
-                                                Duration(milliseconds: 1),
+                                                    Duration(milliseconds: 1),
                                                 curve: Curves.easeIn);
                                           } else {
                                             _progressPercent = 0;
@@ -157,14 +155,14 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                         decoration: BoxDecoration(
                                           color: Color(0xffafd794),
                                           borderRadius:
-                                          BorderRadius.circular(20),
+                                              BorderRadius.circular(20),
                                         ),
                                         child: Center(
                                           child: Text(
                                             Constant.back,
                                             style: TextStyle(
                                               color:
-                                              Constant.bubbleChatTextView,
+                                                  Constant.bubbleChatTextView,
                                               fontSize: 14,
                                               fontFamily: Constant.jostMedium,
                                             ),
@@ -185,7 +183,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                           signUpOnBoardSelectedAnswersModel
                                               .selectedAnswers,
                                           currentQuestionListData[
-                                          _currentPageIndex])) {
+                                              _currentPageIndex])) {
                                         setState(() {
                                           if (_progressPercent == 0.55) {
                                             /*     welcomeOnBoardProfileBloc
@@ -205,7 +203,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                             _pageController.animateToPage(
                                                 _currentPageIndex,
                                                 duration:
-                                                Duration(milliseconds: 1),
+                                                    Duration(milliseconds: 1),
                                                 curve: Curves.easeIn);
 
                                             getCurrentQuestionTag(
@@ -265,7 +263,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal:
-                                  Constant.chatBubbleHorizontalPadding),
+                                      Constant.chatBubbleHorizontalPadding),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -291,13 +289,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                     ],
                   );
                 } else {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: CircularProgressIndicator(
-                        backgroundColor: Constant.chatBubbleGreen,
-                      ),
-                    ),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ApiLoaderScreen(),
+                    ],
                   );
                 }
               })),
@@ -321,7 +317,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   labelText: "",
                   currentTag: element.tag,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -336,7 +332,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   tag: element.tag,
                   helpText: element.helpText,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
@@ -356,7 +352,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                   selectOptionList: valuesListData,
                   questionTag: element.tag,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
@@ -368,7 +364,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 questionsWidget: SignUpLocationServices(
                   question: element,
                   selectedAnswerListData:
-                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                      signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: selectedAnswerListData,
                 )));
             break;
@@ -388,8 +384,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData =
-    await SignUpOnBoardProviders.db
-        .getQuestionnaire(Constant.zeroEventStep);
+        await SignUpOnBoardProviders.db
+            .getQuestionnaire(Constant.zeroEventStep);
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
       signUpOnBoardSelectedAnswersModel = await welcomeOnBoardProfileBloc
           .fetchDataFromLocalDatabase(localQuestionnaireData);
@@ -400,7 +396,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   void getCurrentUserPosition() async {
     UserProgressDataModel userProgressModel =
-    await SignUpOnBoardProviders.db.getUserProgress();
+        await SignUpOnBoardProviders.db.getUserProgress();
     if (userProgressModel != null &&
         userProgressModel.step == Constant.zeroEventStep) {
       currentScreenPosition = userProgressModel.userScreenPosition;
@@ -416,11 +412,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
     if (!isDataBaseExists) {
       userProgressDataModel =
-      await welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
+          await welcomeOnBoardProfileBloc.fetchSignUpFirstStepData();
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
-          SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+              SignUpOnBoardProviders.TABLE_USER_PROGRESS);
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.zeroEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
@@ -441,7 +437,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
       selectedAnswers = signUpOnBoardSelectedAnswersModel.selectedAnswers
           .firstWhere((model) => model.questionTag == currentTag,
-          orElse: () => null);
+              orElse: () => null);
     }
     if (selectedAnswers != null) {
       selectedAnswers.answer = selectedUserAnswer;
@@ -455,7 +451,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   updateSelectedAnswerDataOnLocalDatabase() {
     var answerStringData =
-    Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
+        Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
     LocalQuestionnaire localQuestionnaire = LocalQuestionnaire();
     localQuestionnaire.selectedAnswers = answerStringData;
     SignUpOnBoardProviders.db.updateSelectedAnswers(
@@ -464,9 +460,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
   void moveToNextScreen() async {
     isEndOfOnBoard = true;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.onBoardHeadacheInfoScreenRouter);
   }

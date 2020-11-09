@@ -8,11 +8,12 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardSecondStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
   StreamController<dynamic>
-      __signUpOnBoardSecondStepRepositoryDataStreamController;
+  __signUpOnBoardSecondStepRepositoryDataStreamController;
   int count = 0;
 
   StreamSink<dynamic> get signUpOnBoardSecondStepDataSink =>
@@ -30,12 +31,9 @@ class SignUpOnBoardSecondStepBloc {
   fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
       var signUpFirstStepData =
-          await _signUpOnBoardFirstStepRepository.serviceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
-              RequestMethod.POST,
-              argumentsName);
+      await _signUpOnBoardFirstStepRepository.serviceCall('http://34.222.200.187:8080/mobileapi/v0/questionnaire',RequestMethod.POST,argumentsName);
       if (signUpFirstStepData is AppException) {
-        signUpOnBoardSecondStepDataSink.add(signUpFirstStepData.toString());
+        print("Exception");
       } else {
         var filterQuestionsListData = LinearListFilter.getQuestionSeries(
             signUpFirstStepData.questionnaires[0].initialQuestion,
@@ -44,6 +42,7 @@ class SignUpOnBoardSecondStepBloc {
         signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
       }
     } catch (Exception) {
+      print("Exception");
       //  signUpFirstStepDataSink.add("Error");
     }
   }
@@ -52,7 +51,7 @@ class SignUpOnBoardSecondStepBloc {
       List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel =
-        SignUpOnBoardSecondStepModel();
+    SignUpOnBoardSecondStepModel();
     welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
@@ -62,33 +61,32 @@ class SignUpOnBoardSecondStepBloc {
     signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
-        json.decode(localQuestionnaireEventData.selectedAnswers));
+        jsonDecode(localQuestionnaireEventData.selectedAnswers));
   }
 
   void dispose() {
     __signUpOnBoardSecondStepRepositoryDataStreamController?.close();
   }
 
-  sendSignUpSecondStepData(
-      SignUpOnBoardSelectedAnswersModel
-          signUpOnBoardSelectedAnswersModel) async {
-    bool response;
+  sendSignUpSecondStepData(SignUpOnBoardSelectedAnswersModel
+  signUpOnBoardSelectedAnswersModel) async {
+    String response;
     try {
-      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
+      var signUpSecondStepData = await _signUpOnBoardFirstStepRepository
           .signUpWelcomeOnBoardSecondStepServiceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
-      if (signUpFirstStepData is AppException) {
-        print(signUpFirstStepData);
-        response = false;
+          'http://34.222.200.187:8080/mobileapi/v0/event', RequestMethod.POST,
+          signUpOnBoardSelectedAnswersModel);
+      if (signUpSecondStepData is AppException) {
+        print(signUpSecondStepData);
+        response = signUpSecondStepData.toString();
       } else {
-        print(signUpFirstStepData);
-        response = true;
+        print(signUpSecondStepData);
+        response = Constant.success;
       }
     } catch (Exception) {
-      response = false;
+      response = Constant.somethingWentWrong;
       //  signUpFirstStepDataSink.add("Error");
     }
+    return response;
   }
 }

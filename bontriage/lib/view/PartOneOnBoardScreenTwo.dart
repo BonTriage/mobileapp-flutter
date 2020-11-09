@@ -9,6 +9,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
@@ -99,7 +100,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   chatBubbleText:
                       _pageViewWidgetList[_currentPageIndex].questions,
                   closeButtonFunction: () {
-                    Utils.navigateToUserOnProfileBoard(context);
+                    Utils.navigateToExitScreen(context);
                   },
                 ),
                 SizedBox(
@@ -150,13 +151,11 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
               ],
             );
           } else {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircularProgressIndicator(
-                  backgroundColor: Constant.chatBubbleGreen,
-                ),
-              ),
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ApiLoaderScreen(),
+              ],
             );
           }
         },
@@ -311,10 +310,8 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   }
 
   void sendToNextScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
     isEndOfOnBoard = true;
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
   }

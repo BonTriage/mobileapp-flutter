@@ -46,14 +46,13 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
-  void _toggleVolume() {
-    setState(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-      TextToSpeechRecognition.pauseSpeechToText(widget.chatText);
+  void _toggleVolume() async {
+    setState(() {
       isVolumeOn = !isVolumeOn;
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+    TextToSpeechRecognition.speechToText(widget.chatText);
   }
 
   @override
@@ -75,10 +74,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
       _animationController.reset();
       _animationController.forward();
     }
-/*    TextToSpeechRecognition.flutterTts.setStartHandler(() {
-
-    });*/
-    TextToSpeechRecognition.speechToText(widget.chatText);
+    if (isVolumeOn) TextToSpeechRecognition.speechToText(widget.chatText);
   }
 
   @override

@@ -48,16 +48,14 @@ class _PartTwoOnBoardMoveOnScreenState
               context, Constant.partTwoOnBoardScreenRouter);
         },
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );
   }
 
   void moveToNextScreen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState,true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.prePartThreeOnBoardScreenRouter);
   }

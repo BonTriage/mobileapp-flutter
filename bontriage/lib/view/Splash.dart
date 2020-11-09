@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../util/constant.dart';
 
 class Splash extends StatefulWidget {
@@ -19,8 +18,6 @@ class _SplashState extends State<Splash> {
     // TODO: implement initState
     super.initState();
    getTutorialsState();
-
-
   }
 
   @override
@@ -60,7 +57,7 @@ class _SplashState extends State<Splash> {
     bool isTutorialsHasSeen =
         sharedPreferences.getBool(Constant.tutorialsState);
     if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
-      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
         Navigator.pushReplacementNamed(
             context, Constant.welcomeStartAssessmentScreenRouter);
         timer.cancel();

@@ -35,14 +35,13 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
-  void _toggleVolume()  {
-    setState(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-      TextToSpeechRecognition.pauseSpeechToText(widget.chatBubbleText);
+  void _toggleVolume() async {
+    setState(() {
       isVolumeOn = !isVolumeOn;
-      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+    TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
 
   @override
@@ -74,8 +73,10 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
       _animationController.reset();
       _animationController.forward();
     }
-    if (!widget.isEndOfOnBoard)
-      TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    if (!widget.isEndOfOnBoard) {
+      if (isVolumeOn)
+        TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    }
   }
 
   Widget _getTextWidget() {

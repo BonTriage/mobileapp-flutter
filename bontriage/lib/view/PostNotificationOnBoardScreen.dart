@@ -11,7 +11,6 @@ class PostNotificationOnBoardScreen extends StatefulWidget {
 
 class _PostNotificationOnBoardScreenState
     extends State<PostNotificationOnBoardScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -60,7 +59,7 @@ class _PostNotificationOnBoardScreenState
         bubbleChatTextSpanList: _questionList[_currentIndex],
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
-          Utils.navigateToUserOnProfileBoard(context);
+          Utils.navigateToExitScreen(context);
         },
       ),
     );

@@ -5,6 +5,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 import 'constant.dart';
 
@@ -342,7 +343,7 @@ class Utils {
     }
   }
 
-  void navigateToExitScreen(BuildContext buildContext) async {
+  static void navigateToExitScreen(BuildContext buildContext) async {
     var isUserAlreadyLoggedIn =
         await SignUpOnBoardProviders.db.isUserAlreadyLoggedIn();
     Navigator.pushReplacementNamed(
@@ -351,4 +352,53 @@ class Utils {
   }
 
   void getUserInformation() {}
+
+  static void showApiLoaderDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: WillPopScope(
+            onWillPop: () async => false,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 120,
+              ),
+              child: Container(
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Constant.backgroundColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        backgroundColor: Constant.chatBubbleGreen,
+                      ),
+                      SizedBox(height: 10,),
+                      Text(
+                        Constant.loading,
+                        style: TextStyle(
+                            fontFamily: Constant.jostRegular,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Constant.chatBubbleGreen
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

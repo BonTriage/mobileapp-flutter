@@ -125,9 +125,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
 
   void saveHeadacheNameInLocalDataBase()async {
     isEndOfOnBoard = true;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
-    TextToSpeechRecognition.pauseSpeechToText("");
+    TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context,
         Constant

@@ -83,7 +83,7 @@ class WelcomeOnBoardProfileBloc {
     signUpFirstStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
-        json.decode(localQuestionnaireEventData.selectedAnswers));
+        jsonDecode(localQuestionnaireEventData.selectedAnswers));
   }
 
 
