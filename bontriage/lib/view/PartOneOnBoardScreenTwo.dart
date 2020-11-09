@@ -9,6 +9,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 
@@ -157,13 +158,11 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
               ],
             );
           } else {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircularProgressIndicator(
-                  backgroundColor: Constant.chatBubbleGreen,
-                ),
-              ),
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ApiLoaderScreen(),
+              ],
             );
           }
         },

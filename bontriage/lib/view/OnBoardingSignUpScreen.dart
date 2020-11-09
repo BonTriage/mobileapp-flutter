@@ -421,9 +421,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// In this method we will check if user is already registered into the application. If user already registered then we will save User basic
   /// info data in local database for further use.If not then user can SignUp from the application.
   void checkUserAlreadySignUp() async {
+    Utils.showApiLoaderDialog(context);
     var signUpResponse =
         await signUpScreenBloc.checkUserAlreadyExistsOrNot(emailValue);
     if (signUpResponse != null) {
+      Navigator.pop(context);
       if (jsonDecode(signUpResponse)[Constant.messageTextKey] != null) {
         String messageValue =
             jsonDecode(signUpResponse)[Constant.messageTextKey];
@@ -446,15 +448,18 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// This method will be use for to get User Profile data from Local database, If user didn't SignUp into the application.After We will
   /// get user Profile data from the local database then we implement SignUp Api to register user into the application.
   void getAnswerDataFromDatabase() async {
+    Utils.showApiLoaderDialog(context);
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
     var response = await signUpScreenBloc.signUpOfNewUser(
         selectedAnswerListData, emailValue, passwordValue);
-    if (response) {
-      print(selectedAnswerListData);
-
-      Navigator.pushReplacementNamed(
-          context, Constant.prePartTwoOnBoardScreenRouter);
+    if (response is String) {
+      if(response == Constant.success) {
+        Navigator.pop(context);
+        print(selectedAnswerListData);
+        Navigator.pushReplacementNamed(
+            context, Constant.prePartTwoOnBoardScreenRouter);
+      }
     }
   }
 }

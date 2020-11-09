@@ -9,6 +9,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
@@ -290,13 +291,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                     ],
                   );
                 } else {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: CircularProgressIndicator(
-                        backgroundColor: Constant.chatBubbleGreen,
-                      ),
-                    ),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ApiLoaderScreen(),
+                    ],
                   );
                 }
               })),

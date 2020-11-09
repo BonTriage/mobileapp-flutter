@@ -23,7 +23,10 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
     signUpOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
     Utils.saveUserProgress(0, Constant.prePartTwoEventStep);
-    getFirstStepUserDataFromLocalDatabase();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getFirstStepUserDataFromLocalDatabase();
+    });
   }
 
   List<List<TextSpan>> _questionList = [
@@ -85,11 +88,19 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   }
 
   void getFirstStepUserDataFromLocalDatabase() async {
+    Utils.showApiLoaderDialog(context);
     var signUpOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.firstEventStep);
     signUpOnBoardSelectedAnswersModel.selectedAnswers =
         signUpOnBoardSelectedAnswersListModel;
-    signUpBoardFirstStepBloc
+
+    var apiResponse = await signUpBoardFirstStepBloc
         .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
+
+    if(apiResponse is String) {
+      if(apiResponse == Constant.success) {
+        Navigator.pop(context);
+      }
+    }
   }
 }

@@ -11,6 +11,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 
 import 'SignUpBottomSheet.dart';
 import 'on_board_bottom_buttons.dart';
@@ -178,13 +179,11 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                 ],
               );
             } else {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CircularProgressIndicator(
-                    backgroundColor: Constant.chatBubbleGreen,
-                  ),
-                ),
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ApiLoaderScreen(),
+                ],
               );
             }
           },
@@ -276,12 +275,16 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   void sendUserDataAndMoveInToNextScreen() async {
+    Utils.showApiLoaderDialog(context);
     var response = await _signUpOnBoardThirdStepBloc
         .sendSignUpThirdStepData(_signUpOnBoardSelectedAnswersModel);
-    if (response) {
-      TextToSpeechRecognition.pauseSpeechToText(true, "");
-      Navigator.pushReplacementNamed(
-          context, Constant.postPartThreeOnBoardRouter);
+    if (response is String) {
+      if(response == Constant.success) {
+        Navigator.pop(context);
+        TextToSpeechRecognition.pauseSpeechToText(true, "");
+        Navigator.pushReplacementNamed(
+            context, Constant.postPartThreeOnBoardRouter);
+      }
     }
   }
 }

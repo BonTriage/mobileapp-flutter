@@ -7,6 +7,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/SignUpScreenRepository.dart';
+import 'package:mobile/util/constant.dart';
 
 class SignUpScreenBloc {
   SignUpScreenRepository _signUpScreenRepository;
@@ -30,22 +31,22 @@ class SignUpScreenBloc {
           emailValue +
           "&" +
           "check_user_exists=1";
-      var album =
+      var apiResponse =
           await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
-      if (album is AppException) {
-        albumDataSink.add(album.toString());
+      if (apiResponse is AppException) {
+        //albumDataSink.add(apiResponse.toString());
       } else {
-        return album;
+        return apiResponse;
       }
     } catch (Exception) {
-      albumDataSink.add("Error");
+      //albumDataSink.add("Error");
     }
   }
 
   /// This method will be use for implement API for SignUp into the app.
   Future<dynamic> signUpOfNewUser(List<SelectedAnswers> selectedAnswerListData,
       String emailValue, String passwordValue) async {
-    bool apiResponse;
+    String apiResponse;
     UserProfileInfoModel userProfileInfoModel;
     try {
       var response = await _signUpScreenRepository.signUpServiceCall(
@@ -55,9 +56,9 @@ class SignUpScreenBloc {
           emailValue,
           passwordValue);
       if (response is AppException) {
-        apiResponse = false;
+        apiResponse = response.toString();
       } else {
-        apiResponse = true;
+        apiResponse = Constant.success;
         userProfileInfoModel =
             UserProfileInfoModel.fromJson(jsonDecode(response));
         var loggedInUserInformationData = await SignUpOnBoardProviders.db
@@ -65,7 +66,7 @@ class SignUpScreenBloc {
         print(loggedInUserInformationData);
       }
     } catch (Exception) {
-      apiResponse = false;
+      apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
   }

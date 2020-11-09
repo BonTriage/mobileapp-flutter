@@ -490,6 +490,9 @@ class Constant {
       'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
   static String userNotFound = 'User Not Found';
   static String messageTextKey = 'message_text';
+  static String loading = 'Loading...';
+  static const String success = 'Success';
+  static const String somethingWentWrong = 'Something went Wrong!';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

@@ -8,6 +8,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardSecondStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
@@ -72,22 +73,18 @@ class SignUpOnBoardSecondStepBloc {
   sendSignUpSecondStepData(
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    bool response;
+    String response;
     try {
-      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
-          .signUpWelcomeOnBoardSecondStepServiceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
-      if (signUpFirstStepData is AppException) {
-        print(signUpFirstStepData);
-        response = false;
+      var signUpSecondStepData = await _signUpOnBoardFirstStepRepository.signUpWelcomeOnBoardSecondStepServiceCall('http://34.222.200.187:8080/mobileapi/v0/event', RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+      if (signUpSecondStepData is AppException) {
+        print(signUpSecondStepData);
+        response = signUpSecondStepData.toString();
       } else {
-        print(signUpFirstStepData);
-        response = true;
+        print(signUpSecondStepData);
+        response = Constant.success;
       }
     } catch (Exception) {
-      response = false;
+      response = Constant.somethingWentWrong;
       //  signUpFirstStepDataSink.add("Error");
     }
   }

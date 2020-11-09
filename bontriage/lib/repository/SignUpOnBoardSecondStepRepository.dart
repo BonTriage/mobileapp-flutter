@@ -39,17 +39,11 @@ class SignUpOnBoardFirstStepRepository {
     }
   }
 
-  Future<dynamic> signUpWelcomeOnBoardSecondStepServiceCall(
-      String url,
-      RequestMethod requestMethod,
-      SignUpOnBoardSelectedAnswersModel
-      signUpOnBoardSelectedAnswersModel) async {
+  Future<dynamic> signUpWelcomeOnBoardSecondStepServiceCall(String url, RequestMethod requestMethod, SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
     var client = http.Client();
     var album;
     try {
-      var response = await NetworkService(url, requestMethod,
-          _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel))
-          .serviceCall();
+      var response = await NetworkService(url, requestMethod, _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel)).serviceCall();
       if (response is AppException) {
         return response;
       } else {
