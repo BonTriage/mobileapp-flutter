@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
 class OnBoardHeadacheInfoScreen extends StatefulWidget {
@@ -38,9 +37,8 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         isShowNextButton: true,
         chatText: Constant.letsBeginBySeeing,
         nextButtonFunction: () {
-          TextToSpeechRecognition.pauseSpeechToText(true, "");
-          Navigator.pushReplacementNamed(
-              context, Constant.partOneOnBoardScreenTwoRouter);
+          sendToNextScreen();
+
         },
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
@@ -48,6 +46,14 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         },
       ),
     );
+  }
+
+  void sendToNextScreen()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.partOneOnBoardScreenTwoRouter);
   }
 
 

@@ -91,10 +91,12 @@ class SignUpOnBoardThirdStepRepository {
     return jsonEncode(signUpOnBoardAnswersRequestModel);
   }
 
-  String _getPayload() {
+  Future<String> _getPayload() async {
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(<String, String>{
       "event_type": eventTypeName,
-      "mobile_user_id": "4214"
+      "mobile_user_id": userProfileInfoData.userId
     });
   }
 }

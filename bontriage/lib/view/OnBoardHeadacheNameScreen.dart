@@ -1,12 +1,9 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-import 'package:mobile/models/UserProgressDataModel.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
 class OnBoardHeadacheNameScreen extends StatefulWidget {
@@ -126,9 +123,11 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
     );
   }
 
-  void saveHeadacheNameInLocalDataBase() {
+  void saveHeadacheNameInLocalDataBase()async {
     isEndOfOnBoard = true;
-    TextToSpeechRecognition.pauseSpeechToText(true, "");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
     Navigator.pushReplacementNamed(
         context,
         Constant

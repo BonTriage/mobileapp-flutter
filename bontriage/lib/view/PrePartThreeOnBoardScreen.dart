@@ -3,6 +3,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PrePartThreeOnBoardScreen extends StatefulWidget {
   @override
@@ -54,9 +55,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
         bottomButtonText: Constant.continueText,
         chatText: bubbleChatTextView[_currentIndex],
         bottomButtonFunction: () {
-          TextToSpeechRecognition.pauseSpeechToText(true, "");
-          Navigator.pushReplacementNamed(
-              context, Constant.partThreeOnBoardScreenRouter);
+         moveToNextScreen();
         },
         bubbleChatTextSpanList: _questionList[_currentIndex],
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
@@ -75,4 +74,12 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
     Constant.almostReadyToHelp,
     Constant.quickAndEasySection,
   ];
+
+  void moveToNextScreen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.partThreeOnBoardScreenRouter);
+  }
 }

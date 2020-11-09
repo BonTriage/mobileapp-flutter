@@ -331,6 +331,7 @@ class Constant {
   static String reset = 'Reset';
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
+  static String chatBubbleVolumeState = 'chatBubbleVolumeState';
   static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";

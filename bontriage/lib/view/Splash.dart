@@ -1,13 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../util/constant.dart';
-import '../util/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   @override

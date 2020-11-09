@@ -11,7 +11,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'SignUpBottomSheet.dart';
 import 'on_board_bottom_buttons.dart';
 import 'on_board_chat_bubble.dart';
@@ -279,7 +279,9 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     var response = await _signUpOnBoardThirdStepBloc
         .sendSignUpThirdStepData(_signUpOnBoardSelectedAnswersModel);
     if (response) {
-      TextToSpeechRecognition.pauseSpeechToText(true, "");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(Constant.chatBubbleVolumeState, true);
+      TextToSpeechRecognition.pauseSpeechToText("");
       Navigator.pushReplacementNamed(
           context, Constant.postPartThreeOnBoardRouter);
     }

@@ -6,7 +6,7 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
 class SignUpSecondStepCompassResult extends StatefulWidget {
@@ -61,9 +61,12 @@ class _SignUpSecondStepCompassResultState
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
-    setState(() {
-      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn, "");
+    setState(() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+      TextToSpeechRecognition.pauseSpeechToText("");
       isVolumeOn = !isVolumeOn;
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
   }
 
@@ -372,11 +375,7 @@ class _SignUpSecondStepCompassResultState
                               _buttonPressedValue++;
                               isBackButtonHide = true;
                             } else {
-                              TextToSpeechRecognition.pauseSpeechToText(
-                                  true, "");
-                              isEndOfOnBoard = true;
-                              Navigator.pushReplacementNamed(context,
-                                  Constant.partTwoOnBoardMoveOnScreenRouter);
+                             moveToNextScreen();
                             }
                           });
                         },
@@ -512,5 +511,14 @@ class _SignUpSecondStepCompassResultState
     } else {
       SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
     }
+  }
+
+  void moveToNextScreen() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    isEndOfOnBoard = true;
+    Navigator.pushReplacementNamed(context,
+        Constant.partTwoOnBoardMoveOnScreenRouter);
   }
 }

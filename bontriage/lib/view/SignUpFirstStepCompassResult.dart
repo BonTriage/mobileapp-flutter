@@ -7,7 +7,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
 class SignUpFirstStepCompassResult extends StatefulWidget {
@@ -71,10 +71,12 @@ class _SignUpFirstStepCompassResultState
   }
 
   ///Method to toggle volume on or off
-  void _toggleVolume() {
+  void _toggleVolume() async {
     isVolumeOn = !isVolumeOn;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     setState(() {
-      TextToSpeechRecognition.pauseSpeechToText(isVolumeOn, "");
+      TextToSpeechRecognition.pauseSpeechToText("");
     });
   }
 
@@ -370,10 +372,7 @@ class _SignUpFirstStepCompassResultState
                             _buttonPressedValue++;
                             isBackButtonHide = true;
                           } else {
-                            isEndOfOnBoard = true;
-                            TextToSpeechRecognition.pauseSpeechToText(true, "");
-                            Navigator.pushReplacementNamed(context,
-                                Constant.onBoardCreateAccountScreenRouter);
+                            moveToNextScreen();
                           }
                         });
                       },
@@ -418,11 +417,12 @@ class _SignUpFirstStepCompassResultState
       },
     );
   }
-  void saveUserProgressInDataBase() async{
+
+  void saveUserProgressInDataBase() async {
     UserProgressDataModel userProgressDataModel = UserProgressDataModel();
     int userProgressDataCount = await SignUpOnBoardProviders.db
         .checkUserProgressDataAvailable(
-        SignUpOnBoardProviders.TABLE_USER_PROGRESS);
+            SignUpOnBoardProviders.TABLE_USER_PROGRESS);
     userProgressDataModel.userId = Constant.userID;
     userProgressDataModel.step = Constant.firstCompassEventStep;
     userProgressDataModel.userScreenPosition = 0;
@@ -433,5 +433,14 @@ class _SignUpFirstStepCompassResultState
     } else {
       SignUpOnBoardProviders.db.updateUserProgress(userProgressDataModel);
     }
+  }
+
+  void moveToNextScreen() async {
+    isEndOfOnBoard = true;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.onBoardCreateAccountScreenRouter);
   }
 }

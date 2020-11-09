@@ -3,6 +3,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardCreateAccount extends StatefulWidget {
   @override
@@ -35,9 +36,8 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
         chatText: Constant.beforeContinuing,
         bottomButtonText: Constant.createAccount,
         bottomButtonFunction: () {
-          TextToSpeechRecognition.pauseSpeechToText(true, "");
-          Navigator.pushReplacementNamed(
-              context, Constant.onBoardingScreenSignUpRouter);
+          sendToNextScreen();
+
         },
         isShowSecondBottomButton: false,
         closeButtonFunction: () {
@@ -45,5 +45,13 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
         },
       ),
     );
+  }
+
+  void sendToNextScreen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.onBoardingScreenSignUpRouter);
   }
 }

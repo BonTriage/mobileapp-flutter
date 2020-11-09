@@ -43,12 +43,12 @@ class SignUpOnBoardFirstStepRepository {
       String url,
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
-      signUpOnBoardSelectedAnswersModel) async {
+          signUpOnBoardSelectedAnswersModel) async {
     var client = http.Client();
     var album;
     try {
       var response = await NetworkService(url, requestMethod,
-          _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel))
+              _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel))
           .serviceCall();
       if (response is AppException) {
         return response;
@@ -62,12 +62,16 @@ class SignUpOnBoardFirstStepRepository {
     }
   }
 
-  String _setUserSecondStepPayload(
-      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
+  Future<String> _setUserSecondStepPayload(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
-    SignUpOnBoardAnswersRequestModel();
-    signUpOnBoardAnswersRequestModel.eventType = Constant.clinicalImpressionShort1 ;
-    signUpOnBoardAnswersRequestModel.userId = 4214;
+        SignUpOnBoardAnswersRequestModel();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    signUpOnBoardAnswersRequestModel.eventType =
+    Constant.clinicalImpressionShort1;
+    signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
@@ -87,10 +91,12 @@ class SignUpOnBoardFirstStepRepository {
     return jsonEncode(signUpOnBoardAnswersRequestModel);
   }
 
-  String _getPayload() {
+  Future<String> _getPayload() async{
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(<String, String>{
       "event_type": eventTypeName,
-      "mobile_user_id": "4214"
+      "mobile_user_id": userProfileInfoData.userId
     });
   }
 }

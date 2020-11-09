@@ -33,9 +33,11 @@ class LogDayRepository {
     }
   }
 
-  String _getPayload() {
+  Future<String> _getPayload() async {
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(
-        <String, String>{"event_type": eventType, "mobile_user_id": "4214"});
+        <String, String>{"event_type": eventType, "mobile_user_id": userProfileInfoData.userId});
   }
 
   /*void insertLogDayData(String logDayData) async{

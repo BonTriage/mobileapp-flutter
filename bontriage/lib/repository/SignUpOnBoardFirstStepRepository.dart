@@ -64,12 +64,15 @@ class SignUpOnBoardFirstStepRepository {
     });
   }
 
-  String _setUserFirstStepSignUpPayload(
-      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
+  Future<String> _setUserFirstStepSignUpPayload(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
         SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType = "clinical_impression_short0";
-    signUpOnBoardAnswersRequestModel.userId = 4551;
+    signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];

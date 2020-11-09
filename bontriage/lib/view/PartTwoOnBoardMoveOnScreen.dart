@@ -3,6 +3,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PartTwoOnBoardMoveOnScreen extends StatefulWidget {
   @override
@@ -36,9 +37,8 @@ class _PartTwoOnBoardMoveOnScreenState
         chatText: Constant.experienceTypesOfHeadaches,
         bottomButtonText: Constant.moveOnForNow,
         bottomButtonFunction: () {
-          TextToSpeechRecognition.pauseSpeechToText(true, "");
-          Navigator.pushReplacementNamed(
-              context, Constant.prePartThreeOnBoardScreenRouter);
+          moveToNextScreen();
+
         },
         isShowSecondBottomButton: true,
         secondBottomButtonText: Constant.addAnotherHeadache,
@@ -52,5 +52,13 @@ class _PartTwoOnBoardMoveOnScreenState
         },
       ),
     );
+  }
+
+  void moveToNextScreen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState,true);
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.prePartThreeOnBoardScreenRouter);
   }
 }

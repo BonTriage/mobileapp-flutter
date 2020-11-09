@@ -9,9 +9,8 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
-import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 import 'on_board_bottom_buttons.dart';
 import 'on_board_chat_bubble.dart';
@@ -127,13 +126,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                         double stepOneProgress = 0.11;
 
                         if (_progressPercent == 1) {
-                          isEndOfOnBoard = true;
-                          TextToSpeechRecognition.pauseSpeechToText(true, "");
-                          Navigator.pushReplacementNamed(
-                              context,
-                              Constant
-                                  .signUpOnBoardPersonalizedHeadacheResultRouter);
-                          //TODO: Move to next screen
+                          sendToNextScreen();
                         } else {
                           _currentPageIndex++;
 
@@ -315,5 +308,14 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
       print(questionListData);
     }
+  }
+
+  void sendToNextScreen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    isEndOfOnBoard = true;
+    TextToSpeechRecognition.pauseSpeechToText("");
+    Navigator.pushReplacementNamed(
+        context, Constant.signUpOnBoardPersonalizedHeadacheResultRouter);
   }
 }

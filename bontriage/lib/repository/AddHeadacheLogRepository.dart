@@ -84,9 +84,11 @@ class AddHeadacheLogRepository{
     return userLogDataMap;
   }
 
-  String _getPayload(){
+  Future<String> _getPayload() async{
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(<String, String>{
-      "event_type": "headache", "mobile_user_id": "4214"
+      "event_type": "headache", "mobile_user_id": userProfileInfoData.userId
     });
   }
 }

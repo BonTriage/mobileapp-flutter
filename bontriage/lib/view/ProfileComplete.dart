@@ -3,7 +3,7 @@ import 'package:mobile/util/PhotoHero.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubbleRightPointed.dart';
 
 class ProfileComplete extends StatefulWidget {
@@ -18,10 +18,13 @@ class _ProfileCompleteState extends State<ProfileComplete>
 
   ///Method to toggle volume on or off
   void _toggleVolume() {
-    setState(() {
+    setState(() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
       TextToSpeechRecognition.pauseSpeechToText(
-          isVolumeOn, Constant.profileCompleteTextView);
+          Constant.profileCompleteTextView);
       isVolumeOn = !isVolumeOn;
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
   }
 

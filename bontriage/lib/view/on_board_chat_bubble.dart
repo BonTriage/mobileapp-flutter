@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/PhotoHero.dart';
 
 class OnBoardChatBubble extends StatefulWidget {
@@ -35,11 +35,13 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
-  void _toggleVolume() {
-    setState(() {
-      TextToSpeechRecognition.pauseSpeechToText(
-          isVolumeOn, widget.chatBubbleText);
+  void _toggleVolume()  {
+    setState(() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
+      TextToSpeechRecognition.pauseSpeechToText(widget.chatBubbleText);
       isVolumeOn = !isVolumeOn;
+      prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     });
   }
 
@@ -77,7 +79,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   }
 
   Widget _getTextWidget() {
-    if(widget.isSpannable) {
+    if (widget.isSpannable) {
       return ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
