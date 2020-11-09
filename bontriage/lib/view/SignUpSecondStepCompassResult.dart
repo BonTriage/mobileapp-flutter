@@ -25,7 +25,7 @@ class _SignUpSecondStepCompassResultState
   bool isBackButtonHide = false;
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
-  bool isVolumeOn = true;
+  bool isVolumeOn = false;
 
   @override
   void initState() {
@@ -46,6 +46,7 @@ class _SignUpSecondStepCompassResultState
           bubbleChatTextView[_buttonPressedValue]);
     //Save User Progress
     saveUserProgressInDataBase();
+    setVolumeIcon();
   }
 
   @override
@@ -517,5 +518,17 @@ class _SignUpSecondStepCompassResultState
     isEndOfOnBoard = true;
     Navigator.pushReplacementNamed(
         context, Constant.partTwoOnBoardMoveOnScreenRouter);
+  }
+
+  void setVolumeIcon() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+    setState(() {
+      if (isVolume) {
+        isVolumeOn = true;
+      } else {
+        isVolumeOn = false;
+      }
+    });
   }
 }

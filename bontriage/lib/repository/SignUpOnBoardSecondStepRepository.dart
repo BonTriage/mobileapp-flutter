@@ -96,7 +96,7 @@ class SignUpOnBoardFirstStepRepository {
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     return jsonEncode(<String, String>{
       "event_type": eventTypeName,
-      "mobile_user_id": "4551"
+      "mobile_user_id": userProfileInfoData.userId
     });
   }
 }

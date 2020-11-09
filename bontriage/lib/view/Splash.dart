@@ -17,7 +17,7 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   getTutorialsState();
+    getTutorialsState();
   }
 
   @override
@@ -63,10 +63,19 @@ class _SplashState extends State<Splash> {
         timer.cancel();
       });
     } else {
-      timer = Timer.periodic(Duration(seconds: 2), (timer) {
-        Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
-        timer.cancel();
-      });
+      var userAlreadyLoggedIn =
+          sharedPreferences.getBool(Constant.userAlreadyLoggedIn);
+      if (userAlreadyLoggedIn == null || !userAlreadyLoggedIn) {
+        timer = Timer.periodic(Duration(seconds: 2), (timer) {
+          Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
+          timer.cancel();
+        });
+      } else {
+        timer = Timer.periodic(Duration(seconds: 2), (timer) {
+          Navigator.pushReplacementNamed(context, Constant.homeRouter);
+          timer.cancel();
+        });
+      }
     }
   }
 }

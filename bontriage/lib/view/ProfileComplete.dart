@@ -13,7 +13,7 @@ class ProfileComplete extends StatefulWidget {
 
 class _ProfileCompleteState extends State<ProfileComplete>
     with TickerProviderStateMixin {
-  bool isVolumeOn = true;
+  bool isVolumeOn = false;
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
@@ -59,6 +59,7 @@ class _ProfileCompleteState extends State<ProfileComplete>
 
     _animationController.forward();
     TextToSpeechRecognition.speechToText(Constant.profileCompleteTextView);
+    setVolumeIcon();
   }
 
   @override
@@ -190,5 +191,17 @@ class _ProfileCompleteState extends State<ProfileComplete>
         ),
       ),
     );
+  }
+
+  void setVolumeIcon() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+    setState(() {
+      if (isVolume) {
+        isVolumeOn = true;
+      } else {
+        isVolumeOn = false;
+      }
+    });
   }
 }

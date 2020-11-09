@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/LoginScreenBloc.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,11 +11,34 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _isHidden = true;
 
+  String emailValue;
+  String passwordValue;
+  TextEditingController emailTextEditingController;
+  TextEditingController passwordTextEditingController;
+  LoginScreenBloc _loginScreenBloc;
+
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
     setState(() {
       _isHidden = !_isHidden;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailTextEditingController = TextEditingController();
+    passwordTextEditingController = TextEditingController();
+    _loginScreenBloc = LoginScreenBloc();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailTextEditingController.dispose();
+    passwordTextEditingController.dispose();
   }
 
   @override
@@ -59,33 +84,46 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         height: 35,
                         child: TextFormField(
+                          onEditingComplete: () {
+                            emailValue = emailTextEditingController.text;
+                          },
+                          onFieldSubmitted: (String value) {
+                            emailValue = emailTextEditingController.text;
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                          controller: emailTextEditingController,
+                          onChanged: (String value) {
+                            emailValue = emailTextEditingController.text;
+                          },
                           style: TextStyle(
                               fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 20),
                             hintStyle:
                                 TextStyle(fontSize: 15, color: Colors.black),
                             filled: true,
                             fillColor: Constant.locationServiceGreen,
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                     color: Constant.editTextBoarderColor,
-                                    width: 1)
-                            ),
+                                    width: 1)),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                     color: Constant.editTextBoarderColor,
-                                    width: 1)
-                            ),
+                                    width: 1)),
                           ),
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
@@ -103,41 +141,56 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 35,
                         child: TextFormField(
                           obscureText: _isHidden,
+                          onEditingComplete: () {
+                            passwordValue = passwordTextEditingController.text;
+                          },
+                          onFieldSubmitted: (String value) {
+                            passwordValue = passwordTextEditingController.text;
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                          controller: passwordTextEditingController,
+                          onChanged: (String value) {
+                            passwordValue = passwordTextEditingController.text;
+                          },
                           style: TextStyle(
                               fontSize: 15, fontFamily: Constant.jostMedium),
                           cursorColor: Constant.bubbleChatTextView,
                           textAlign: TextAlign.start,
                           decoration: InputDecoration(
-                            contentPadding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 20),
                             hintStyle:
-                            TextStyle(fontSize: 15, color: Colors.black),
+                                TextStyle(fontSize: 15, color: Colors.black),
                             filled: true,
                             fillColor: Constant.locationServiceGreen,
                             suffixIcon: IconButton(
                               onPressed: _togglePasswordVisibility,
-                              icon: Image.asset(_isHidden ? Constant.hidePassword : Constant.showPassword),
+                              icon: Image.asset(_isHidden
+                                  ? Constant.hidePassword
+                                  : Constant.showPassword),
                             ),
                             suffixIconConstraints: BoxConstraints(
                               minHeight: 30,
                               maxHeight: 35,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                     color: Constant.editTextBoarderColor,
-                                    width: 1)
-                            ),
+                                    width: 1)),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                     color: Constant.editTextBoarderColor,
-                                    width: 1)
-                            ),
+                                    width: 1)),
                           ),
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
@@ -152,7 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    clickedLoginButton();
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                     decoration: BoxDecoration(
@@ -161,7 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text(
                       Constant.login,
-                      style: TextStyle(color: Constant.bubbleChatTextView, fontSize: 14, fontFamily: Constant.jostMedium),
+                      style: TextStyle(
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 14,
+                          fontFamily: Constant.jostMedium),
                     ),
                   ),
                 ),
@@ -182,5 +240,28 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void clickedLoginButton() {
+    if (emailValue != "" &&
+        passwordValue != "" &&
+        Utils.validateEmail(emailValue) &&
+        Utils.validatePassword(passwordValue)) {
+      loginService();
+    } else {
+      /// TO:Do Show Error message
+    }
+  }
+
+  void loginService() async {
+    Utils.showApiLoaderDialog(context);
+    var response =
+        await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
+    if (response is String) {
+      if (response == Constant.success) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, Constant.homeRouter);
+      }
+    }
   }
 }

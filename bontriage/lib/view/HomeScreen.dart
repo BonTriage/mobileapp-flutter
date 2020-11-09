@@ -8,6 +8,7 @@ import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,6 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
     3: GlobalKey<NavigatorState>(),
   };
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   saveHomePosition();
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -217,5 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedAnswerCallback: (index) {
               setState(() {});
             }));
+  }
+
+  void saveHomePosition() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
   }
 }

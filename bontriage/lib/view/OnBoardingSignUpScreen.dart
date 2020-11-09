@@ -106,7 +106,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               },
                               onFieldSubmitted: (String value) {
                                 emailValue = emailTextEditingController.text;
-                                ;
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                               },
@@ -454,7 +453,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     var response = await signUpScreenBloc.signUpOfNewUser(
         selectedAnswerListData, emailValue, passwordValue);
     if (response is String) {
-      if(response == Constant.success) {
+      if (response == Constant.success) {
         Navigator.pop(context);
         print(selectedAnswerListData);
         Navigator.pushReplacementNamed(

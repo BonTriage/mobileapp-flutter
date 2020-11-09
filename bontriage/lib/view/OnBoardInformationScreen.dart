@@ -42,7 +42,7 @@ class OnBoardInformationScreen extends StatefulWidget {
 
 class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
     with TickerProviderStateMixin {
-  bool isVolumeOn = true;
+  bool isVolumeOn = false;
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
@@ -57,8 +57,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    setVolumeIcon();
     _animationController =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
@@ -68,7 +68,6 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
 
   @override
   void didUpdateWidget(OnBoardInformationScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (!_animationController.isAnimating) {
       _animationController.reset();
@@ -282,5 +281,17 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
         ),
       ),
     );
+  }
+
+  void setVolumeIcon() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+    setState(() {
+      if (isVolume) {
+        isVolumeOn = true;
+      } else {
+        isVolumeOn = false;
+      }
+    });
   }
 }

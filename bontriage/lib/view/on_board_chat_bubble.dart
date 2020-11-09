@@ -31,7 +31,7 @@ class OnBoardChatBubble extends StatefulWidget {
 
 class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
     with TickerProviderStateMixin {
-  bool isVolumeOn = true;
+  bool isVolumeOn = false;
   AnimationController _animationController;
 
   ///Method to toggle volume on or off
@@ -53,6 +53,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
+    setVolumeIcon();
     if (!widget.isEndOfOnBoard)
       TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
@@ -207,5 +208,17 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         ],
       ),
     );
+  }
+
+  void setVolumeIcon() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+    setState(() {
+      if (isVolume) {
+        isVolumeOn = true;
+      } else {
+        isVolumeOn = false;
+      }
+    });
   }
 }

@@ -26,7 +26,7 @@ class _SignUpFirstStepCompassResultState
   bool isBackButtonHide = false;
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
-  bool isVolumeOn = true;
+  bool isVolumeOn = false;
 
   @override
   void initState() {
@@ -50,6 +50,7 @@ class _SignUpFirstStepCompassResultState
 
     // Save user progress database
     saveUserProgressInDataBase();
+    setVolumeIcon();
   }
 
   @override
@@ -440,5 +441,17 @@ class _SignUpFirstStepCompassResultState
     TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.onBoardCreateAccountScreenRouter);
+  }
+
+  void setVolumeIcon() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+    setState(() {
+      if (isVolume) {
+        isVolumeOn = true;
+      } else {
+        isVolumeOn = false;
+      }
+    });
   }
 }

@@ -332,6 +332,7 @@ class Constant {
   static String submit = 'Submit';
   static String tutorialsState = 'tutorialsState';
   static String chatBubbleVolumeState = 'chatBubbleVolumeState';
+  static String userAlreadyLoggedIn = 'userAlreadyLoggedIn';
   static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
@@ -588,6 +589,7 @@ class Constant {
 
   static String leftArrow = 'images/left_arrow.png';
   static String downArrow2 = 'images/down_arrow_2.png';
+  static String notificationDownArrow = 'images/notification_down_arrow.png';
   static String meUnselected = 'images/me_unselected.png';
   static String meSelected = 'images/me_selected.png';
   static String recordsUnselected = 'images/records_unselected.png';
