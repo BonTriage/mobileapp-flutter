@@ -142,8 +142,13 @@ class MyApp extends StatelessWidget {
           case Constant.partTwoOnBoardScreenRouter:
             {
               String argsName = settings.arguments;
-              return SlideFromBottomPageRoute(
-                  widget: PartTwoOnBoardScreens(argumentsName: argsName));
+              if (argsName != null)
+                return SlideFromBottomPageRoute(
+                    widget: PartTwoOnBoardScreens(argumentsName: argsName));
+              else
+                return SlideFromBottomPageRoute(
+                    widget: PartTwoOnBoardScreens(argumentsName: Constant.clinicalImpressionShort1));
+              break;
             }
           case Constant.partThreeOnBoardScreenRouter:
             {

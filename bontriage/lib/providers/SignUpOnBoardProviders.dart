@@ -141,9 +141,10 @@ class SignUpOnBoardProviders {
     final db = await database;
     UserProfileInfoModel userProfileInfoModel;
     List<dynamic> userInfoListData =
-        await db.rawQuery('SELECT * FROM $TABLE_USER_PROFILE_INFO ');
-    userProfileInfoModel = UserProfileInfoModel.fromJson(
-        jsonDecode(userInfoListData[0][USER_PROFILE_INFO_MODEL]));
+        await db.rawQuery('SELECT * FROM $TABLE_USER_PROFILE_INFO');
+    if (userInfoListData.length != 0)
+      userProfileInfoModel = UserProfileInfoModel.fromJson(
+          jsonDecode(userInfoListData[0][USER_PROFILE_INFO_MODEL]));
     return userProfileInfoModel;
   }
 
@@ -213,8 +214,7 @@ class SignUpOnBoardProviders {
       SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel,
       String eventType) async {
     Map<String, dynamic> map = {
-      SELECTED_ANSWERS:
-          jsonEncode(signUpOnBoardSelectedAnswersModel)
+      SELECTED_ANSWERS: jsonEncode(signUpOnBoardSelectedAnswersModel)
     };
     final db = await database;
     await db.update(
@@ -305,9 +305,11 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_USER_PROFILE_INFO);
   }
 
-  Future<void> deleteOnBoardQuestionnaireProgress(String eventType)async {
+  Future<void> deleteOnBoardQuestionnaireProgress(String eventType) async {
     final db = await database;
-    await db.delete(TABLE_QUESTIONNAIRES,where: "$EVENT_TYPE = ?",
+    await db.delete(
+      TABLE_QUESTIONNAIRES,
+      where: "$EVENT_TYPE = ?",
       whereArgs: [eventType],
     );
   }
