@@ -524,7 +524,7 @@ class _SignUpSecondStepCompassResultState
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
     setState(() {
-      if (isVolume) {
+      if (isVolume == null || isVolume) {
         isVolumeOn = true;
       } else {
         isVolumeOn = false;

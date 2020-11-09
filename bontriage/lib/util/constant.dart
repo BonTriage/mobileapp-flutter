@@ -108,7 +108,7 @@ class Constant {
   static String welcomeMigraineMentorBubbleTextView =
       'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
   static String answeringTheNextBubbleTextView =
-      'MigraineMentor! Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
+      'MigraineMentor can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that’s what you’re looking for, and are willing to put in a little time and effort, you’ve come to the right app.';
 
   static String migraineMentorHelpTextView =
       'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
@@ -199,7 +199,7 @@ class Constant {
   static String nextWeAreGoing =
       'Next, we are going to find out what kind of headaches you have. If you have more than one type of headache, let’s focus on the one that’s most bothersome to you.';
   static String answeringTheNext =
-      'Answering the next set of 14 brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
+      'Answering the next set of new brief questions will give us a good idea of your headache type. Stick with us. It will be worth it!';
   static String continueText = 'Continue';
   static String moveOnForNow = 'Move On For Now';
   static String experienceTypesOfHeadaches =
