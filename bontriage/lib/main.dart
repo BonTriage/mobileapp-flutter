@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PartTwoOnBoardScreens(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Constant.splashRouter:
@@ -142,8 +142,13 @@ class MyApp extends StatelessWidget {
           case Constant.partTwoOnBoardScreenRouter:
             {
               String argsName = settings.arguments;
-              return SlideFromBottomPageRoute(
-                  widget: PartTwoOnBoardScreens(argumentsName: argsName));
+              if (argsName != null)
+                return SlideFromBottomPageRoute(
+                    widget: PartTwoOnBoardScreens(argumentsName: argsName));
+              else
+                return SlideFromBottomPageRoute(
+                    widget: PartTwoOnBoardScreens(argumentsName: Constant.clinicalImpressionShort1));
+              break;
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
@@ -287,7 +292,9 @@ class MyApp extends StatelessWidget {
           case Constant.onBoardExitScreenRouter:
             {
               bool isUserAlreadyLoggedIn = settings.arguments;
-              return SlideFromBottomPageRoute(widget: OnBoardExitScreen(isAlreadyLoggedIn: isUserAlreadyLoggedIn));
+              return SlideFromBottomPageRoute(
+                  widget: OnBoardExitScreen(
+                      isAlreadyLoggedIn: isUserAlreadyLoggedIn));
             }
         }
         return null;

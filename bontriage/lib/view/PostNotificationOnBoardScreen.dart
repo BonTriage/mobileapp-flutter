@@ -13,7 +13,6 @@ class _PostNotificationOnBoardScreenState
     extends State<PostNotificationOnBoardScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Utils.saveUserProgress(0, Constant.postNotificationEventStep);
   }
@@ -24,7 +23,7 @@ class _PostNotificationOnBoardScreenState
           text: Constant.almostReadyToHelp,
           style: TextStyle(
               height: 1.3,
-              fontSize: 12,
+              fontSize: 15,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ],
@@ -33,7 +32,7 @@ class _PostNotificationOnBoardScreenState
           text: Constant.quickAndEasySection,
           style: TextStyle(
               height: 1.3,
-              fontSize: 12,
+              fontSize: 15,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ]

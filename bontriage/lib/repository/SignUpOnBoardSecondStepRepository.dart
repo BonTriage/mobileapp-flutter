@@ -21,8 +21,9 @@ class SignUpOnBoardFirstStepRepository {
     var album;
     try {
       eventTypeName = argumentsName;
+      String payload = await _getPayload();
       var response =
-          await NetworkService(url, requestMethod, _getPayload()).serviceCall();
+          await NetworkService(url, requestMethod, payload).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -32,11 +33,11 @@ class SignUpOnBoardFirstStepRepository {
         localQuestionnaire.questionnaires = response;
         localQuestionnaire.selectedAnswers = "";
         SignUpOnBoardProviders.db.insertQuestionnaire(localQuestionnaire);
-        return album;
       }
-    } catch (Exception) {
-      return album;
+    } catch (e) {
+      print(e.toString());
     }
+    return album;
   }
 
   Future<dynamic> signUpWelcomeOnBoardSecondStepServiceCall(
@@ -47,9 +48,10 @@ class SignUpOnBoardFirstStepRepository {
     var client = http.Client();
     var album;
     try {
-      var response = await NetworkService(url, requestMethod,
-              _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel))
-          .serviceCall();
+      String payload =
+          await _setUserSecondStepPayload(signUpOnBoardSelectedAnswersModel);
+      var response =
+          await NetworkService(url, requestMethod, payload).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -71,18 +73,48 @@ class SignUpOnBoardFirstStepRepository {
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType =
         Constant.clinicalImpressionShort1;
-    signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
+    if (userProfileInfoData != null)
+      signUpOnBoardAnswersRequestModel.userId =
+          userProfileInfoData.userId as int;
+    else
+      signUpOnBoardAnswersRequestModel.userId = 4214;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((element) {
+        print(element.answer);
+      });
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
-        signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
-            MobileEventDetails(
-                questionTag: model.questionTag,
-                questionJson: "",
-                updatedAt: "2020-10-08T08:18:21Z",
-                value: [model.answer]));
+        try {
+          var decodedJson = jsonDecode(model.answer);
+          if (decodedJson is List<dynamic>) {
+            List<String> valuesList =
+                (json.decode(model.answer) as List<dynamic>).cast<String>();
+            signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+                MobileEventDetails(
+                    questionTag: model.questionTag,
+                    questionJson: "",
+                    updatedAt: "2020-10-08T08:18:21Z",
+                    value: valuesList));
+          } else {
+            signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+                MobileEventDetails(
+                    questionTag: model.questionTag,
+                    questionJson: "",
+                    updatedAt: "2020-10-08T08:18:21Z",
+                    value: [model.answer]));
+          }
+        } on FormatException catch (e) {
+          print(e.toString());
+          //This catch is used to enter data in mobile event details list
+          signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+              MobileEventDetails(
+                  questionTag: model.questionTag,
+                  questionJson: "",
+                  updatedAt: "2020-10-08T08:18:21Z",
+                  value: [model.answer]));
+        }
       });
     } catch (e) {
       print(e);
@@ -94,9 +126,16 @@ class SignUpOnBoardFirstStepRepository {
   Future<String> _getPayload() async {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    return jsonEncode(<String, String>{
-      "event_type": eventTypeName,
-      "mobile_user_id": "4551"
-    });
+    if (userProfileInfoData != null) {
+      return jsonEncode(<String, String>{
+        "event_type": eventTypeName,
+        "mobile_user_id": userProfileInfoData.userId
+      });
+    } else {
+      return jsonEncode(<String, String>{
+        "event_type": eventTypeName,
+        "mobile_user_id": "4214"
+      });
+    }
   }
 }

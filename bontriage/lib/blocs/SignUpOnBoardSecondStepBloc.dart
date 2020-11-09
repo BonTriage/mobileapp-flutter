@@ -30,19 +30,16 @@ class SignUpOnBoardSecondStepBloc {
 
   fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
-      var signUpFirstStepData =
-      await _signUpOnBoardFirstStepRepository.serviceCall('http://34.222.200.187:8080/mobileapi/v0/questionnaire',RequestMethod.POST,argumentsName);
+      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository.serviceCall('http://34.222.200.187:8080/mobileapi/v0/questionnaire', RequestMethod.POST, argumentsName);
       if (signUpFirstStepData is AppException) {
-        print("Exception");
+        print(signUpFirstStepData.toString());
       } else {
-        var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
+        var filterQuestionsListData = LinearListFilter.getQuestionSeries(signUpFirstStepData.questionnaires[0].initialQuestion, signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
         signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
       }
-    } catch (Exception) {
-      print("Exception");
+    } catch (e) {
+      print(e.toString());
       //  signUpFirstStepDataSink.add("Error");
     }
   }
