@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/LoginScreenRepository.dart';
-import 'package:mobile/repository/SignUpRepository.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class LoginScreenBloc {
@@ -23,7 +23,7 @@ class LoginScreenBloc {
   getLoginOfUser(String emailValue, String passwordValue) async {
     String apiResponse;
     try {
-      String url = 'https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/?' +
+      String url = WebservicePost.qaServerUrl+'user/?' +
           "email=" +
           emailValue +
           "&" +

@@ -4,6 +4,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/AddHeadacheLogRepository.dart';
 import 'package:mobile/util/AddHeadacheLinearListFilter.dart';
+import 'package:mobile/util/WebservicePost.dart';
 
 class AddHeadacheLogBloc {
   AddHeadacheLogRepository _addHeadacheLogRepository;
@@ -24,8 +25,7 @@ class AddHeadacheLogBloc {
   fetchAddHeadacheLogData() async {
     try {
       var addHeadacheLogData = await _addHeadacheLogRepository.serviceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-          RequestMethod.POST);
+          WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (addHeadacheLogData is AppException) {
         addHeadacheLogDataSink.add(addHeadacheLogData.toString());
       } else {
@@ -54,7 +54,7 @@ class AddHeadacheLogBloc {
     try {
       var signUpFirstStepData =
           await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(
-              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
+              WebservicePost.qaServerUrl + 'event',
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {

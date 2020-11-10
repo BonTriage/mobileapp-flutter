@@ -7,6 +7,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/SignUpScreenRepository.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpScreenBloc {
@@ -26,7 +27,8 @@ class SignUpScreenBloc {
   /// This method will be use for implement API for to check USer Already registered in to the application or not.
   Future<dynamic> checkUserAlreadyExistsOrNot(String emailValue) async {
     try {
-      String url = 'https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/?' +
+      String url = WebservicePost.qaServerUrl +
+          'user/?' +
           "email=" +
           emailValue +
           "&" +
@@ -50,7 +52,7 @@ class SignUpScreenBloc {
     UserProfileInfoModel userProfileInfoModel;
     try {
       var response = await _signUpScreenRepository.signUpServiceCall(
-          "https://mobileapi3.bontriage.com:8181/mobileapi/v0/user/",
+          WebservicePost.qaServerUrl + "user/",
           RequestMethod.POST,
           selectedAnswerListData,
           emailValue,

@@ -8,6 +8,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/WelcomeOnBoardProfileRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/WebservicePost.dart';
 
 class WelcomeOnBoardProfileBloc {
   WelcomeOnBoardProfileRepository _welcomeOnBoardProfileRepository;
@@ -29,8 +30,7 @@ class WelcomeOnBoardProfileBloc {
     try {
       var signUpFirstStepData =
           await _welcomeOnBoardProfileRepository.serviceCall(
-              'https://mobileapi3.bontriage.com:8181/mobileapi/v0/questionnaire',
-              RequestMethod.POST);
+              WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
         signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -45,16 +45,19 @@ class WelcomeOnBoardProfileBloc {
     }
   }
 
-  sendSignUpFirstStepData(SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async {
+  sendSignUpFirstStepData(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
     try {
-      var signUpFirstStepData =
-      await _welcomeOnBoardProfileRepository.signUpProfileInfoObjectServiceCall(
-          'https://mobileapi3.bontriage.com:8181/mobileapi/v0/event',
-          RequestMethod.POST,signUpOnBoardSelectedAnswersModel);
+      var signUpFirstStepData = await _welcomeOnBoardProfileRepository
+          .signUpProfileInfoObjectServiceCall(
+              WebservicePost.qaServerUrl + 'event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-     /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+        /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
             signUpFirstStepData.questionnaires[0].initialQuestion,
             signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
@@ -69,8 +72,8 @@ class WelcomeOnBoardProfileBloc {
     _signUpFirstStepDataStreamController?.close();
   }
 
-  fetchDataFromLocalDatabase(List<LocalQuestionnaire> localQuestionnaireData) async {
-
+  fetchDataFromLocalDatabase(
+      List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     WelcomeOnBoardProfileModel welcomeOnBoardProfileModel =
         WelcomeOnBoardProfileModel();
@@ -85,6 +88,4 @@ class WelcomeOnBoardProfileBloc {
     return SignUpOnBoardSelectedAnswersModel.fromJson(
         jsonDecode(localQuestionnaireEventData.selectedAnswers));
   }
-
-
 }

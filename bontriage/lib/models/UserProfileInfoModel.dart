@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-UserProfileInfoModel userProfileInfoModelFromJson(String str) => UserProfileInfoModel.fromJson(json.decode(str));
+UserProfileInfoModel userProfileInfoModelFromJson(String str) =>
+    UserProfileInfoModel.fromJson(json.decode(str));
 
-String userProfileInfoModelToJson(UserProfileInfoModel data) => json.encode(data.toJson());
+String userProfileInfoModelToJson(UserProfileInfoModel data) =>
+    json.encode(data.toJson());
 
 class UserProfileInfoModel {
   UserProfileInfoModel({
@@ -28,27 +29,30 @@ class UserProfileInfoModel {
   String lastName;
   String notificationKey;
 
-  factory UserProfileInfoModel.fromJson(Map<String, dynamic> json) => UserProfileInfoModel(
-    userId: json["id"].toString(),
-    email: json["email"],
-    sex: json["sex"],
-    age: json["age"].toString(),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    notificationKey: json["notificationKey"],
-  );
+  factory UserProfileInfoModel.fromJson(Map<String, dynamic> json) =>
+      UserProfileInfoModel(
+        userId: json['id'] != null
+            ? json["id"].toString()
+            : json["userId"].toString(),
+        email: json["email"],
+        sex: json["sex"],
+        age: json["age"].toString(),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt: DateTime.parse(json["createdAt"]),
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        notificationKey: json["notificationKey"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "userId": userId,
-    "email": email,
-    "sex": sex,
-    "age": age,
-    "updatedAt": updatedAt.toIso8601String(),
-    "createdAt": createdAt.toIso8601String(),
-    "firstName": firstName,
-    "lastName": lastName,
-    "notificationKey": notificationKey,
-  };
+        "userId": userId,
+        "email": email,
+        "sex": sex,
+        "age": age,
+        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt.toIso8601String(),
+        "firstName": firstName,
+        "lastName": lastName,
+        "notificationKey": notificationKey,
+      };
 }

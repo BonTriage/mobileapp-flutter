@@ -352,6 +352,7 @@ class Utils {
         arguments: isUserAlreadyLoggedIn);
   }
 
+
   void getUserInformation() {}
 
   static void showApiLoaderDialog(BuildContext context) {
@@ -385,4 +386,6 @@ class Utils {
       },
     );*/
   }
+
+
 }
