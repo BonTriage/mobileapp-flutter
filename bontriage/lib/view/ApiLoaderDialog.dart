@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
 
-class ApiLoaderScreen extends StatefulWidget {
+class ApiLoaderDialog extends StatefulWidget {
   @override
-  _ApiLoaderScreenState createState() => _ApiLoaderScreenState();
+  _ApiLoaderDialogState createState() => _ApiLoaderDialogState();
 }
 
-class _ApiLoaderScreenState extends State<ApiLoaderScreen> {
+class _ApiLoaderDialogState extends State<ApiLoaderDialog> {
 
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -124,45 +124,60 @@ class _ApiLoaderScreenState extends State<ApiLoaderScreen> {
           .toList();
     }
 
-    //TODO: Please remove scaffold from here if it is written
-    return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Container(
-                width: 70,
-                height: 70,
-                child: Center(
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        child: RadarChart.light(
-                          ticks: ticks,
-                          features: features,
-                          data: data,
-                          reverseAxis: true,
-                          isPersonalizedHeadacheData: true,
-                          axisColor: Colors.transparent,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        children: [
+          Container(
+            height: 150,
+            width: 150,
+            decoration: BoxDecoration(
+              color: Constant.backgroundColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      child: Center(
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              child:RadarChart.light(
+                                ticks: ticks,
+                                features: features,
+                                data: data,
+                                reverseAxis: true,
+                                isPersonalizedHeadacheData: true,
+                                axisColor: Colors.transparent,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Text(
+                    Constant.loading,
+                    style: TextStyle(
+                        fontFamily: Constant.jostRegular,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Constant.chatBubbleGreen
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              Constant.loading,
-              style: TextStyle(
-                fontFamily: Constant.jostRegular,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Constant.chatBubbleGreen
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

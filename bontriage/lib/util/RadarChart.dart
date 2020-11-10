@@ -50,6 +50,7 @@ class RadarChart extends StatefulWidget {
     @required List<List<int>> data,
     bool reverseAxis = false,
     bool isPersonalizedHeadacheData = false,
+    Color axisColor,
   }) {
     return RadarChart(
       ticks: ticks,
@@ -60,6 +61,7 @@ class RadarChart extends StatefulWidget {
       graphColors: isPersonalizedHeadacheData
           ? personalizedDefaultGraphColors
           : defaultGraphColors,
+      axisColor: axisColor == null ? Color(0xfff0e4945) : axisColor,
     );
   }
 
@@ -135,6 +137,12 @@ class _RadarChartState extends State<RadarChart>
           widget.graphColors,
           this.fraction),
     );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 }
 

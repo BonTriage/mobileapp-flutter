@@ -23,9 +23,8 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
-      // 5s over, navigate to a new page
-      const oneSec = const Duration(milliseconds:1200);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      const oneSec = const Duration(milliseconds: 1200);
       new Timer.periodic(oneSec, (Timer t) {
         if (startingValue == 1) {
           startingValue = 2;
@@ -44,19 +43,19 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
           sliderValue = 4;
           startingValue = 4;
           setState(() {
-          //  sliderValue = 4;
+            //  sliderValue = 4;
             // numberOfFeatures = 4;
           });
         } else if (startingValue == 4) {
           sliderValue = 5;
           startingValue = 5;
           setState(() {
-           // sliderValue = 5;
+            // sliderValue = 5;
             // numberOfFeatures = 4;
           });
         } else {
-           t.cancel();
-           Navigator.pushReplacementNamed(
+          t.cancel();
+          Navigator.pushReplacementNamed(
             context, Constant.signUpFirstStepHeadacheResultRouter);
         }
       });
@@ -64,8 +63,6 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
 
     // Save the User Progress Information
     saveUserProgressInDataBase();
-
-
   }
 
   @override

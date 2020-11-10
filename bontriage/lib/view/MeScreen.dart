@@ -8,23 +8,31 @@ import 'DateWidget.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String) navigateToOtherScreenCallback;
+  final bool isOnBoardAssessmentInComplete;
 
-  MeScreen({this.navigateToOtherScreenCallback});
+  MeScreen({this.navigateToOtherScreenCallback, this.isOnBoardAssessmentInComplete = false});
 
   @override
   _MeScreenState createState() => _MeScreenState();
 }
 
-class _MeScreenState extends State<MeScreen> {
+class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   List<Widget> currentWeekListData = [];
   List<bool> currentWeekConsData = [];
   List<TextSpan> textSpanList;
+  AnimationController _animationController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 350),
+      vsync: this
+    );
+
     _dateTime = DateTime.now();
 
     var _firstDayOfTheWeek =
@@ -104,163 +112,243 @@ class _MeScreenState extends State<MeScreen> {
             color: Constant.chatBubbleGreen),
       ),
     ];
+
+    if(widget.isOnBoardAssessmentInComplete) {
+      _animationController.forward();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Color(0xCC0E232F),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizeTransition(
+              sizeFactor: _animationController,
+              child: Container(
+                color: Constant.addCustomNotificationTextColor,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        SizedBox(height: 10,),
                         Text(
-                          'THIS WEEK:',
+                          Constant.onBoardingAssessmentIncomplete,
                           style: TextStyle(
-                              fontSize: 12,
-                              color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            widget.navigateToOtherScreenCallback(
-                                TabNavigatorRoutes.recordsRoot);
-                          },
-                          child: Text(
-                            'SEE MORE >',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Constant.chatBubbleGreen,
-                                fontFamily: Constant.jostMedium),
+                            color: Constant.bubbleChatTextView,
+                            fontFamily: Constant.jostRegular,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14
                           ),
                         ),
+                        Text(
+                          Constant.clickHereToFinish,
+                          style: TextStyle(
+                              color: Constant.bubbleChatTextView,
+                              fontFamily: Constant.jostMedium,
+                              fontSize: 14
+                          ),
+                        ),
+                        SizedBox(height: 10,),
                       ],
                     ),
+                  ),
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     SizedBox(
-                      height: 10,
+                      height: widget.isOnBoardAssessmentInComplete ? 0 : 70,
                     ),
-                    Table(
-                      defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                      children: [
-                        TableRow(children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Center(
-                              child: Text(
-                                'Su',
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Color(0xCC0E232F),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'THIS WEEK:',
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    color: Constant.locationServiceGreen,
+                                    fontSize: 12,
+                                    color: Constant.chatBubbleGreen,
                                     fontFamily: Constant.jostMedium),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.navigateToOtherScreenCallback(
+                                      TabNavigatorRoutes.recordsRoot);
+                                },
+                                child: Text(
+                                  'SEE MORE >',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Constant.chatBubbleGreen,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ),
+                            ],
                           ),
-                          Center(
-                            child: Text(
-                              'M',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
+                          SizedBox(
+                            height: 10,
                           ),
-                          Center(
-                            child: Text(
-                              'Tu',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
+                          Table(
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            children: [
+                              TableRow(children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Center(
+                                    child: Text(
+                                      'Su',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'M',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'Tu',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'W',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'Th',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'F',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'Sa',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                              ]),
+                              TableRow(children: currentWeekListData),
+                            ],
                           ),
-                          Center(
-                            child: Text(
-                              'W',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              'Th',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              'F',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              'Sa',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                          ),
-                        ]),
-                        TableRow(children: currentWeekListData),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: <Color>[
-                          Color(0xff0E4C47),
-                          Color(0x910E4C47),
-                        ]),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Constant.chatBubbleGreen,
-                      width: 2,
-                    )),
-                child: Column(
-                  children: [
-                    Text(
-                      'Good morning!\nWhat’s been\ngoing on today?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: Constant.jostMedium,
-                          color: Constant.chatBubbleGreen),
+                        ],
+                      ),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 30,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              colors: <Color>[
+                                Color(0xff0E4C47),
+                                Color(0x910E4C47),
+                              ]),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Constant.chatBubbleGreen,
+                            width: 2,
+                          )),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Good morning!\nWhat’s been\ngoing on today?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: Constant.jostMedium,
+                                color: Constant.chatBubbleGreen),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              BouncingWidget(
+                                onPressed: () {
+                                  widget.navigateToOtherScreenCallback(
+                                      Constant.logDayScreenRouter);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 22, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: Constant.chatBubbleGreen,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Log Day',
+                                      style: TextStyle(
+                                          color: Constant.bubbleChatTextView,
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 60,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -268,18 +356,18 @@ class _MeScreenState extends State<MeScreen> {
                         BouncingWidget(
                           onPressed: () {
                             widget.navigateToOtherScreenCallback(
-                                Constant.logDayScreenRouter);
+                                Constant.headacheStartedScreenRouter);
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 22, vertical: 6),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                             decoration: BoxDecoration(
                               color: Constant.chatBubbleGreen,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
                               child: Text(
-                                'Log Day',
+                                'Add a Headache',
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
@@ -293,41 +381,16 @@ class _MeScreenState extends State<MeScreen> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  BouncingWidget(
-                    onPressed: () {
-                      widget.navigateToOtherScreenCallback(
-                          Constant.headacheStartedScreenRouter);
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-                      decoration: BoxDecoration(
-                        color: Constant.chatBubbleGreen,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Add a Headache',
-                          style: TextStyle(
-                              color: Constant.bubbleChatTextView,
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }
