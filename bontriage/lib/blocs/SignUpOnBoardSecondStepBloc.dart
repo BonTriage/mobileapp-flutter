@@ -8,6 +8,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardSecondStepBloc {
@@ -71,7 +72,7 @@ class SignUpOnBoardSecondStepBloc {
     try {
       var signUpSecondStepData = await _signUpOnBoardFirstStepRepository
           .signUpWelcomeOnBoardSecondStepServiceCall(
-          'http://34.222.200.187:8080/mobileapi/v0/event', RequestMethod.POST,
+          WebservicePost.qaServerUrl+'event', RequestMethod.POST,
           signUpOnBoardSelectedAnswersModel);
       if (signUpSecondStepData is AppException) {
         print(signUpSecondStepData);

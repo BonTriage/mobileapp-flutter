@@ -7,6 +7,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardFirstStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpBoardFirstStepBloc {
@@ -30,8 +31,7 @@ class SignUpBoardFirstStepBloc {
     try {
       var signUpFirstStepData =
           await _signUpOnBoardFirstStepRepository.serviceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
-              RequestMethod.POST);
+              WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
         signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
@@ -53,7 +53,7 @@ class SignUpBoardFirstStepBloc {
     try {
       var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
           .signUpFirstStepInfoObjectServiceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/event',
+              WebservicePost.qaServerUrl + 'event',
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {

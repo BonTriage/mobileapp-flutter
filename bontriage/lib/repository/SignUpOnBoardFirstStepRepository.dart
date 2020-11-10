@@ -44,9 +44,10 @@ class SignUpOnBoardFirstStepRepository {
     var client = http.Client();
     var album;
     try {
-      var response = await NetworkService(url, requestMethod,
-              _setUserFirstStepSignUpPayload(signUpOnBoardSelectedAnswersModel))
-          .serviceCall();
+      String payload = await _setUserFirstStepSignUpPayload(
+          signUpOnBoardSelectedAnswersModel);
+      var response =
+          await NetworkService(url, requestMethod, payload).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -72,7 +73,7 @@ class SignUpOnBoardFirstStepRepository {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
         SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType = "clinical_impression_short0";
-    signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
+    signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
     signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];

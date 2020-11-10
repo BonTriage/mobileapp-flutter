@@ -73,7 +73,7 @@ class SignUpOnBoardThirdStepRepository {
     signUpOnBoardAnswersRequestModel.eventType =
         Constant.clinicalImpressionShort3;
     if(userProfileInfoData != null)
-      signUpOnBoardAnswersRequestModel.userId = userProfileInfoData.userId as int;
+      signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";

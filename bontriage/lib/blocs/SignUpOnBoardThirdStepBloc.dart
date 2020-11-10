@@ -9,6 +9,7 @@ import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/repository/SignUpOnBoardThirdStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardThirdStepBloc {
@@ -33,7 +34,7 @@ class SignUpOnBoardThirdStepBloc {
     try {
       var signUpFirstStepData =
           await _signUpOnBoardThirdStepRepository.serviceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/questionnaire',
+              WebservicePost.qaServerUrl + 'questionnaire',
               RequestMethod.POST,
               argumentsName);
       if (signUpFirstStepData is AppException) {
@@ -78,7 +79,7 @@ class SignUpOnBoardThirdStepBloc {
     try {
       var signUpThirdStepData = await _signUpOnBoardThirdStepRepository
           .signUpThirdStepInfoObjectServiceCall(
-              'http://34.222.200.187:8080/mobileapi/v0/event',
+              WebservicePost.qaServerUrl + 'event',
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpThirdStepData is AppException) {

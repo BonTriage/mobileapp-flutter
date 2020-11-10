@@ -73,7 +73,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
         bottomButtonFunction: () {
           Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardScreenRouter,
-              arguments: "clinical_impression_short2");
+              arguments: Constant.clinicalImpressionShort1);
         },
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,

@@ -5,6 +5,7 @@ import 'package:mobile/models/LogDayResponseModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LogDayRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
@@ -29,9 +30,13 @@ class LogDayBloc {
 
   Future<dynamic> fetchLogDayData() async {
     _logDayRepository.eventType = 'behaviors';
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     //try {
     var logDayData = await _logDayRepository.serviceCall(
-        'http://34.222.200.187:8080/mobileapi/v0/logday?mobile_user_id=4214',
+        WebservicePost.qaServerUrl +
+            'logday?mobile_user_id=' +
+            userProfileInfoData.userId,
         RequestMethod.GET);
     if (logDayData is AppException) {
       //logDayDataSink.add(logDayData.toString());
@@ -90,8 +95,7 @@ class LogDayBloc {
     _logDayRepository.eventType = 'triggers';
     try {
       var logDayData = await _logDayRepository.serviceCall(
-          WebservicePost.qaServerUrl+'questionnaire',
-          RequestMethod.POST);
+          WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (logDayData is AppException) {
         logDayDataSink.add(logDayData.toString());
       } else {

@@ -75,7 +75,7 @@ class SignUpOnBoardFirstStepRepository {
         Constant.clinicalImpressionShort1;
     if (userProfileInfoData != null)
       signUpOnBoardAnswersRequestModel.userId =
-          userProfileInfoData.userId as int;
+          int.parse(userProfileInfoData.userId);
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
     signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
