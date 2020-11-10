@@ -53,11 +53,6 @@ class _SignUpSecondStepCompassResultState
   void didUpdateWidget(SignUpSecondStepCompassResult oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
-    if (!_animationController.isAnimating) {
-      _animationController.reset();
-      _animationController.forward();
-    }
   }
 
   ///Method to toggle volume on or off
@@ -92,6 +87,11 @@ class _SignUpSecondStepCompassResultState
     var data = [
       [14, 15, 7, 7]
     ];
+
+    if (!_animationController.isAnimating) {
+      _animationController.reset();
+      _animationController.forward();
+    }
 
     return Scaffold(
       body: Container(

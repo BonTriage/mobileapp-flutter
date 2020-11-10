@@ -5,6 +5,7 @@ import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/CalendarScreen.dart';
 import 'package:mobile/view/CalendarSeverityScreen.dart';
 import 'package:mobile/view/CalendarTriggersScreen.dart';
@@ -142,13 +143,8 @@ class MyApp extends StatelessWidget {
           case Constant.partTwoOnBoardScreenRouter:
             {
               String argsName = settings.arguments;
-              if (argsName != null)
-                return SlideFromBottomPageRoute(
-                    widget: PartTwoOnBoardScreens(argumentsName: argsName));
-              else
-                return SlideFromBottomPageRoute(
-                    widget: PartTwoOnBoardScreens(argumentsName: Constant.clinicalImpressionShort1));
-              break;
+              return SlideFromBottomPageRoute(
+                  widget: PartTwoOnBoardScreens(argumentsName: (argsName != null) ? argsName : Constant.clinicalImpressionShort1));
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
@@ -294,7 +290,7 @@ class MyApp extends StatelessWidget {
               bool isUserAlreadyLoggedIn = settings.arguments;
               return SlideFromBottomPageRoute(
                   widget: OnBoardExitScreen(
-                      isAlreadyLoggedIn: isUserAlreadyLoggedIn));
+                      isAlreadyLoggedIn: (isUserAlreadyLoggedIn != null) ? isUserAlreadyLoggedIn : false));
             }
         }
         return null;

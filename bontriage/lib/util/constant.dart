@@ -495,6 +495,8 @@ class Constant {
   static String loading = 'Loading...';
   static const String success = 'Success';
   static const String somethingWentWrong = 'Something went Wrong!';
+  static String onBoardingAssessmentIncomplete = 'Onboarding assessment is incomplete.';
+  static String clickHereToFinish = 'Click here to finish.';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
