@@ -48,6 +48,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
 
             if (value != null)
               value.isSelected = true;
+            else
+              widget.question.values.add(Values(text: element, isSelected: true, valueNumber: (widget.question.values.length + 1).toString()));
           });
         } catch (e) {
           print(e.toString());

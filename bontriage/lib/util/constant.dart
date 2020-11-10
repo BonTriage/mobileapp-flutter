@@ -83,7 +83,7 @@ class Constant {
   static String welcomeToAurora = "Welcome to Aurora";
   static String welcomeToMigraineMentor = 'Welcome to\nMigraineMentor';
   static String developedByATeam =
-      'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, and mathematicians, Aurora is an important part of an advanced headache diagnosis and treatment system. By downloading this tool, you have already taken the first step toward better managing your headaches.';
+      'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, mathematicians, and designers, MigraineMentor is an important part of an advanced headache diagnosis and treatment system. By dowloading this tool, you have already taken the first step toward better managing your headaches.';
   static String trackRightData = 'Track the right data';
   static String mostHeadacheTracking =
       'Unlike most headache tracking apps, MigraineMentor utilizes big data — weather changes, pollen counts, sleep quality, exercise, and self-logged triggers — to build your personalized headache risk profile (HRP).';
