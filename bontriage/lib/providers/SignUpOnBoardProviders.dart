@@ -204,10 +204,14 @@ class SignUpOnBoardProviders {
     final db = await database;
     List<dynamic> selectedAnswerMapData = await db.rawQuery(
         'SELECT * FROM $TABLE_QUESTIONNAIRES WHERE $EVENT_TYPE = $eventType');
-    SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
-        SignUpOnBoardSelectedAnswersModel.fromJson(
-            jsonDecode(selectedAnswerMapData[0].row[3]));
-    return signUpOnBoardSelectedAnswersModel.selectedAnswers;
+    if(selectedAnswerMapData.length == 0){
+      return null;
+    }else{
+      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
+      SignUpOnBoardSelectedAnswersModel.fromJson(
+          jsonDecode(selectedAnswerMapData[0].row[3]));
+      return signUpOnBoardSelectedAnswersModel.selectedAnswers;
+    }
   }
 
   void updateSelectedAnswers(

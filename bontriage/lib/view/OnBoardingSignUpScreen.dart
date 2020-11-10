@@ -436,8 +436,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
           }
         }
       } else {
-        userProfileInfoModel =
-            UserProfileInfoModel.fromJson(jsonDecode(signUpResponse));
+        userProfileInfoModel =UserProfileInfoModel.fromJson(jsonDecode(signUpResponse));
         var selectedAnswerListData = await SignUpOnBoardProviders.db
             .insertUserProfileInfo(userProfileInfoModel);
         print(selectedAnswerListData);

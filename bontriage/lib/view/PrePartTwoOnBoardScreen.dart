@@ -90,22 +90,25 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   /// In this method we are sending First Step Data in to the Server. And if we get successful response from server then
   /// we will delete profile i.e zeroEventStep and FirstStep i.e firstEventStep data from Local Database.
   void getFirstStepUserDataFromLocalDatabase() async {
-    Utils.showApiLoaderDialog(context);
     var signUpOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.firstEventStep);
-    signUpOnBoardSelectedAnswersModel.selectedAnswers =
-        signUpOnBoardSelectedAnswersListModel;
+    if (signUpOnBoardSelectedAnswersListModel == null) {
+      print("Nothing will be happen");
+    } else {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers =
+          signUpOnBoardSelectedAnswersListModel;
+      Utils.showApiLoaderDialog(context);
+      var apiResponse = await signUpBoardFirstStepBloc
+          .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
 
-    var apiResponse = await signUpBoardFirstStepBloc
-        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
-
-    if (apiResponse is String) {
-      if (apiResponse == Constant.success) {
-        await SignUpOnBoardProviders.db
-            .deleteOnBoardQuestionnaireProgress(Constant.zeroEventStep);
-        await SignUpOnBoardProviders.db
-            .deleteOnBoardQuestionnaireProgress(Constant.firstEventStep);
-        Navigator.pop(context);
+      if (apiResponse is String) {
+        if (apiResponse == Constant.success) {
+          await SignUpOnBoardProviders.db
+              .deleteOnBoardQuestionnaireProgress(Constant.zeroEventStep);
+          await SignUpOnBoardProviders.db
+              .deleteOnBoardQuestionnaireProgress(Constant.firstEventStep);
+          Navigator.pop(context);
+        }
       }
     }
   }
