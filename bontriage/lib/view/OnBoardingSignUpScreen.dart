@@ -404,7 +404,9 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
   void signUpButtonClicked() {
-    if (Utils.validateEmail(emailValue) &&
+    if (emailValue != null &&
+        passwordValue != null &&
+        Utils.validateEmail(emailValue) &&
         passwordValue.length >= 8 &&
         Utils.validatePassword(passwordValue) &&
         isTermConditionCheck) {

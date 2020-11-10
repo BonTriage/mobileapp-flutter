@@ -3,10 +3,12 @@ import 'package:mobile/util/constant.dart';
 
 class DeleteHeadacheTypeActionSheet extends StatefulWidget {
   @override
-  _DeleteHeadacheTypeActionSheetState createState() => _DeleteHeadacheTypeActionSheetState();
+  _DeleteHeadacheTypeActionSheetState createState() =>
+      _DeleteHeadacheTypeActionSheetState();
 }
 
-class _DeleteHeadacheTypeActionSheetState extends State<DeleteHeadacheTypeActionSheet> {
+class _DeleteHeadacheTypeActionSheetState
+    extends State<DeleteHeadacheTypeActionSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,8 +20,7 @@ class _DeleteHeadacheTypeActionSheetState extends State<DeleteHeadacheTypeAction
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Constant.whiteColorAlpha85
-            ),
+                color: Constant.whiteColorAlpha85),
             child: Column(
               children: [
                 GestureDetector(
@@ -44,7 +45,9 @@ class _DeleteHeadacheTypeActionSheetState extends State<DeleteHeadacheTypeAction
               ],
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -52,9 +55,7 @@ class _DeleteHeadacheTypeActionSheetState extends State<DeleteHeadacheTypeAction
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
               child: Center(
                 child: Text(
                   Constant.cancel,
@@ -67,6 +68,9 @@ class _DeleteHeadacheTypeActionSheetState extends State<DeleteHeadacheTypeAction
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 12,
           ),
         ],
       ),

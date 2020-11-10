@@ -44,8 +44,8 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                         child: Row(
                           children: [
                             Image(
-                              width: 20,
-                              height: 20,
+                              width: 16,
+                              height: 16,
                               image: AssetImage(Constant.leftArrow),
                             ),
                             SizedBox(
@@ -56,7 +56,7 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
-                                  fontFamily: Constant.jostMedium),
+                                  fontFamily: Constant.jostRegular),
                             ),
                           ],
                         ),
@@ -107,7 +107,7 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                               Constant.reset,
                               style: TextStyle(
                                 fontSize: 16,
-                                fontFamily: Constant.jostMedium,
+                                fontFamily: Constant.jostRegular,
                                 color: Constant.addCustomNotificationTextColor
                               ),
                             ),

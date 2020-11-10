@@ -490,6 +490,8 @@ class Constant {
   static String more = 'MORE';
   static String signUpAlertMessage =
       'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
+  static String loginAlertMessage =
+      'EmailId or Password is invalid.';
   static String userNotFound = 'User Not Found';
   static String messageTextKey = 'message_text';
   static String loading = 'Loading...';

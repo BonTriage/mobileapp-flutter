@@ -17,6 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordTextEditingController;
   LoginScreenBloc _loginScreenBloc;
 
+  bool _isShowAlert = false;
+
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
     setState(() {
@@ -201,6 +203,34 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Constant.chatBubbleGreen),
                         ),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Visibility(
+                        visible: _isShowAlert,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 20, right: 10),
+                          child: Row(
+                            children: [
+                              Image(
+                                image: AssetImage(Constant.warningPink),
+                                width: 17,
+                                height: 17,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                Constant.loginAlertMessage,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Constant.pinkTriggerColor,
+                                    fontFamily: Constant.jostRegular),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -241,26 +271,35 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
+  /// This method will be use for to Check Validation of Email and Password value. If condition is true then we will hit the API.
+  /// or not then show alert to user into the screen.
   void clickedLoginButton() {
-    if (emailValue != "" &&
-        passwordValue != "" &&
+    if (emailValue != null && passwordValue != null &&emailValue != "" &&  passwordValue != "" &&
         Utils.validateEmail(emailValue) &&
         Utils.validatePassword(passwordValue)) {
+      _isShowAlert = false;
       loginService();
     } else {
+      setState(() {
+        _isShowAlert = true;
+      });
+
       /// TO:Do Show Error message
     }
   }
-
+/// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
+  /// or not then show alert to the user into the screen.
   void loginService() async {
     Utils.showApiLoaderDialog(context);
     var response =
         await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
     if (response is String) {
       if (response == Constant.success) {
+        _isShowAlert = false;
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, Constant.homeRouter);
+      } else {
+        _isShowAlert = true;
       }
     }
   }

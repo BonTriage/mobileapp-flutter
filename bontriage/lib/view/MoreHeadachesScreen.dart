@@ -48,8 +48,8 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                       child: Row(
                         children: [
                           Image(
-                            width: 20,
-                            height: 20,
+                            width: 16,
+                            height: 16,
                             image: AssetImage(Constant.leftArrow),
                           ),
                           SizedBox(
@@ -60,7 +60,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
-                                fontFamily: Constant.jostMedium),
+                                fontFamily: Constant.jostRegular),
                           ),
                         ],
                       ),
@@ -90,15 +90,15 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
-                                  fontFamily: Constant.jostMedium
+                                  fontFamily: Constant.jostRegular
                               ),
                             ),
                             Row(
                               children: [
                                 SizedBox(width: 10,),
                                 Image(
-                                  width: 20,
-                                  height: 20,
+                                  width: 16,
+                                  height: 16,
                                   image: AssetImage(Constant.rightArrow),
                                 ),
                               ],
@@ -122,15 +122,15 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                                 style: TextStyle(
                                     color: Constant.pinkTriggerColor,
                                     fontSize: 16,
-                                    fontFamily: Constant.jostMedium
+                                    fontFamily: Constant.jostRegular
                                 ),
                               ),
                               Row(
                                 children: [
                                   SizedBox(width: 10,),
                                   Image(
-                                    width: 20,
-                                    height: 20,
+                                    width: 16,
+                                    height: 16,
                                     image: AssetImage(Constant.rightArrow),
                                   ),
                                 ],

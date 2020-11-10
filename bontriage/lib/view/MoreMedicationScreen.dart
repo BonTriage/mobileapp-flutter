@@ -64,8 +64,8 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                       child: Row(
                         children: [
                           Image(
-                            width: 20,
-                            height: 20,
+                            width: 16,
+                            height: 16,
                             image: AssetImage(Constant.leftArrow),
                           ),
                           SizedBox(
@@ -76,7 +76,7 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
-                                fontFamily: Constant.jostMedium),
+                                fontFamily: Constant.jostRegular),
                           ),
                         ],
                       ),

@@ -105,7 +105,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontSize: 16,
-                      fontFamily: Constant.jostMedium
+                      fontFamily: Constant.jostRegular
                   ),
                 ),
                 Row(
@@ -114,14 +114,14 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                       widget.moreStatus,
                       style: TextStyle(
                           color: Constant.notificationTextColor,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontFamily: Constant.jostMedium
                       ),
                     ),
                     SizedBox(width: 10,),
                     Image(
-                      width: 20,
-                      height: 20,
+                      width: 16,
+                      height: 16,
                       image: AssetImage(Constant.rightArrow),
                     ),
                   ],
