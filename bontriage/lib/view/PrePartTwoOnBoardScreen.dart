@@ -78,7 +78,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.homeRouter);
+          Utils.navigateToHomeScreen(context, true);
         },
         closeButtonFunction: () {
           Utils.navigateToExitScreen(context);

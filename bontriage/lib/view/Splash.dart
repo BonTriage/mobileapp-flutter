@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
@@ -57,25 +56,32 @@ class _SplashState extends State<Splash> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isTutorialsHasSeen =
         sharedPreferences.getBool(Constant.tutorialsState);
-    if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
-      timer = Timer.periodic(Duration(seconds: 3), (timer) {
-        Navigator.pushReplacementNamed(
-            context, Constant.welcomeStartAssessmentScreenRouter);
+    var userAlreadyLoggedIn =
+    sharedPreferences.getBool(Constant.userAlreadyLoggedIn);
+    if(userAlreadyLoggedIn != null && userAlreadyLoggedIn) {
+      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+        Navigator.pushReplacementNamed(context, Constant.homeRouter);
         timer.cancel();
       });
     } else {
-      var userAlreadyLoggedIn =
-          sharedPreferences.getBool(Constant.userAlreadyLoggedIn);
-      if (userAlreadyLoggedIn == null || !userAlreadyLoggedIn) {
-        timer = Timer.periodic(Duration(seconds: 2), (timer) {
-          Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
+      if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
+        timer = Timer.periodic(Duration(seconds: 3), (timer) {
+          Navigator.pushReplacementNamed(
+              context, Constant.welcomeStartAssessmentScreenRouter);
           timer.cancel();
         });
       } else {
-        timer = Timer.periodic(Duration(seconds: 2), (timer) {
-          Navigator.pushReplacementNamed(context, Constant.homeRouter);
-          timer.cancel();
-        });
+        if (userAlreadyLoggedIn == null || !userAlreadyLoggedIn) {
+          timer = Timer.periodic(Duration(seconds: 2), (timer) {
+            Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
+            timer.cancel();
+          });
+        } else {
+          timer = Timer.periodic(Duration(seconds: 2), (timer) {
+            Navigator.pushReplacementNamed(context, Constant.homeRouter);
+            timer.cancel();
+          });
+        }
       }
     }
   }

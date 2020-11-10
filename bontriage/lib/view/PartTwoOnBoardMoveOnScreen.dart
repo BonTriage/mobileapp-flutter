@@ -45,7 +45,7 @@ class _PartTwoOnBoardMoveOnScreenState
         secondBottomButtonFunction: () {
           Utils.saveUserProgress(0, Constant.secondEventStep);
           Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter);
+              context, Constant.partTwoOnBoardScreenRouter, arguments: Constant.clinicalImpressionShort1);
         },
         closeButtonFunction: () {
           Utils.navigateToExitScreen(context);

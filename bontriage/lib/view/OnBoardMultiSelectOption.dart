@@ -73,6 +73,8 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
 
             if (value != null)
               value.isSelected = true;
+            else
+              widget.selectOptionList.add(OnBoardSelectOptionModel(optionText: element, optionId: (widget.selectOptionList.length + 1).toString(), isSelected: true));
           });
         } catch (e) {
           print(e.toString());

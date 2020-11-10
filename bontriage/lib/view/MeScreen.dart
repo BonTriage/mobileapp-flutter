@@ -2,15 +2,14 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ConsecutiveSelectedDateWidget.dart';
 import 'DateWidget.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String) navigateToOtherScreenCallback;
-  final bool isOnBoardAssessmentInComplete;
 
-  MeScreen({this.navigateToOtherScreenCallback, this.isOnBoardAssessmentInComplete = false});
+  MeScreen({this.navigateToOtherScreenCallback});
 
   @override
   _MeScreenState createState() => _MeScreenState();
@@ -22,6 +21,7 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
   List<bool> currentWeekConsData = [];
   List<TextSpan> textSpanList;
   AnimationController _animationController;
+  bool _isOnBoardAssessmentInComplete = false;
 
   @override
   void initState() {
@@ -113,9 +113,9 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
       ),
     ];
 
-    if(widget.isOnBoardAssessmentInComplete) {
-      _animationController.forward();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _checkForProfileIncomplete();
+    });
   }
 
   @override
@@ -132,29 +132,34 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: 10,),
-                        Text(
-                          Constant.onBoardingAssessmentIncomplete,
-                          style: TextStyle(
-                            color: Constant.bubbleChatTextView,
-                            fontFamily: Constant.jostRegular,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14
-                          ),
-                        ),
-                        Text(
-                          Constant.clickHereToFinish,
-                          style: TextStyle(
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: 10,),
+                          Text(
+                            Constant.onBoardingAssessmentIncomplete,
+                            style: TextStyle(
                               color: Constant.bubbleChatTextView,
-                              fontFamily: Constant.jostMedium,
+                              fontFamily: Constant.jostRegular,
+                              fontWeight: FontWeight.w500,
                               fontSize: 14
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10,),
-                      ],
+                          Text(
+                            Constant.clickHereToFinish,
+                            style: TextStyle(
+                                color: Constant.bubbleChatTextView,
+                                fontFamily: Constant.jostMedium,
+                                fontSize: 14
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -168,7 +173,7 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: widget.isOnBoardAssessmentInComplete ? 0 : 70,
+                      height: _isOnBoardAssessmentInComplete ? 0 : 70,
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -392,5 +397,19 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _checkForProfileIncomplete() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isProfileInComplete = sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
+
+    if(isProfileInComplete != null || isProfileInComplete) {
+      setState(() {
+        _isOnBoardAssessmentInComplete = isProfileInComplete;
+        if (_isOnBoardAssessmentInComplete) {
+          _animationController.forward();
+        }
+      });
+    }
   }
 }

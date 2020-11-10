@@ -440,7 +440,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         var selectedAnswerListData = await SignUpOnBoardProviders.db
             .insertUserProfileInfo(userProfileInfoModel);
         print(selectedAnswerListData);
-        Navigator.pushReplacementNamed(context, Constant.homeRouter);
+        Utils.navigateToHomeScreen(context, false);
       }
     }
   }

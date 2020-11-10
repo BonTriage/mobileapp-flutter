@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
@@ -38,13 +42,16 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
         bottomButtonFunction: () {
           Utils.navigateToUserOnProfileBoard(context);
         },
+        chatText: widget.isAlreadyLoggedIn
+            ? Constant.untilYouCompleteInitialAssessment
+            : Constant.untilYouComplete,
         isShowSecondBottomButton: true,
         secondBottomButtonText: widget.isAlreadyLoggedIn
-            ? Constant.exitAndLoseProgress
-            : Constant.saveAndFinishLater,
+            ? Constant.saveAndFinishLater
+            : Constant.exitAndLoseProgress,
         secondBottomButtonFunction: () {
           if (widget.isAlreadyLoggedIn) {
-            Navigator.pushReplacementNamed(context, Constant.homeRouter);
+            Utils.navigateToHomeScreen(context, true);
           } else {
             deleteUserAllWelComeBoardData();
           }
@@ -55,7 +62,10 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
   }
 
   void deleteUserAllWelComeBoardData() async {
+    TextToSpeechRecognition.speechToText("");
     await SignUpOnBoardProviders.db.deleteAllTableData();
-    Navigator.pop(context);
+    //Navigator.pop(context);
+    //SystemNavigator.pop() does not work in Apple in alternative we can use exit(0) but it feels like the app got crashed and Apple may suspend your app because it's against Apple Human Interface guidelines to exit the app programmatically.
+    SystemNavigator.pop();
   }
 }

@@ -9,7 +9,7 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen> with TickerProviderStateMixin {
   bool _locationServicesSwitchState = false;
 
   bool isTimerLayoutOpen = false;
@@ -123,10 +123,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      Visibility(
-                        visible: isTimerLayoutOpen,
-                        child: Container(
-                          child: NotificationTimer(),
+                      AnimatedSize(
+                        vsync: this,
+                        duration: Duration(milliseconds: 350),
+                        child: Visibility(
+                          visible: isTimerLayoutOpen,
+                          child: Container(
+                            child: NotificationTimer(),
+                          ),
                         ),
                       ),
                       Divider(

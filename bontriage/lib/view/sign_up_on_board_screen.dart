@@ -32,7 +32,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   double _progressPercent = 0;
   int _currentPageIndex = 0;
   WelcomeOnBoardProfileBloc welcomeOnBoardProfileBloc;
-  bool isAlreadyDataFiltered = false;
 
   PageController _pageController = PageController(
     initialPage: 0,
@@ -48,6 +47,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
   int currentScreenPosition = 0;
 
   bool isButtonClicked = false;
+  bool _isAlreadyDataFiltered = false;
 
   @override
   void initState() {
@@ -61,6 +61,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
       SignUpOnBoardFirstStepQuestionsModel(
           questions: Constant.firstBasics, questionsWidget: Container())
     ];
+
     getCurrentUserPosition();
   }
 
@@ -82,9 +83,8 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
               stream: welcomeOnBoardProfileBloc.albumDataStream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (!isButtonClicked) {
+                  if (!_isAlreadyDataFiltered) {
                     addFilteredQuestionListData(snapshot.data);
-                    isButtonClicked = false;
                   }
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -369,7 +369,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 )));
             break;
         }
-        isAlreadyDataFiltered = true;
       });
 
       _currentPageIndex = currentScreenPosition;
@@ -380,6 +379,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
       print(questionListData);
     }
+    _isAlreadyDataFiltered = true;
   }
 
   void requestService() async {
@@ -420,9 +420,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
       userProgressDataModel.userId = Constant.userID;
       userProgressDataModel.step = Constant.zeroEventStep;
       userProgressDataModel.userScreenPosition = currentPageIndex;
-      userProgressDataModel.questionTag = (currentQuestionListData.length > 0)
-          ? currentQuestionListData[currentPageIndex].tag
-          : '';
+      userProgressDataModel.questionTag = '';
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);

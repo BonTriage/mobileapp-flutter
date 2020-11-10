@@ -163,7 +163,7 @@ class _ProfileCompleteState extends State<ProfileComplete>
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushReplacementNamed(
-                              context, Constant.homeRouter);
+                              context, Constant.homeRouter, arguments: false);
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),

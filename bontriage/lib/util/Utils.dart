@@ -269,7 +269,7 @@ class Utils {
           break;
         case Constant.secondEventStep:
           Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter);
+              context, Constant.partTwoOnBoardScreenRouter, arguments: Constant.clinicalImpressionShort1);
           break;
         case Constant.thirdEventStep:
           Navigator.pushReplacementNamed(
@@ -387,5 +387,9 @@ class Utils {
     );*/
   }
 
-
+  static void navigateToHomeScreen(BuildContext context, bool isProfileInComplete) async{
+    Navigator.pushReplacementNamed(context, Constant.homeRouter);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool(Constant.isProfileInCompleteStatus, isProfileInComplete);
+  }
 }

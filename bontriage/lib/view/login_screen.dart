@@ -297,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == Constant.success) {
         _isShowAlert = false;
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, Constant.homeRouter);
+        Utils.navigateToHomeScreen(context, false);
       } else {
         _isShowAlert = true;
       }

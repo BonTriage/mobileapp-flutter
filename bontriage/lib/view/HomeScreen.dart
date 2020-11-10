@@ -205,8 +205,13 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         currentIndex = 1;
       });
-    } else
-      return await Navigator.pushNamed(context, routerName);
+    } else {
+      if(routerName == Constant.welcomeStartAssessmentScreenRouter) {
+        return await Navigator.pushReplacementNamed(context, routerName);
+      } else {
+        return await Navigator.pushNamed(context, routerName);
+      }
+    }
   }
 
   void _openTriggersMedicationActionSheet(List<Values> valuesList) {

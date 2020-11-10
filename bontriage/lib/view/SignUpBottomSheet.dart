@@ -119,51 +119,50 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    Constant.searchYourType,
-                    style: TextStyle(
-                        color: Constant.selectTextColor,
-                        fontSize: 14,
-                        fontFamily: Constant.jostMedium),
+            child: GestureDetector(
+              onTap: () {
+                showBottomSheet(
+                    elevation: 4,
+                    backgroundColor: Constant.backgroundTransparentColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                    ),
+                    context: context,
+                    builder: (context) => BottomSheetContainer(
+                        question: widget.question,
+                        selectedAnswerCallback: (index) {
+                          if(widget.question.values[index].isSelected) {
+                            _valuesSelectedList.add(widget.question.values[index].text);
+                          } else {
+                            _valuesSelectedList.remove(widget.question.values[index].text);
+                          }
+                          widget.selectAnswerCallback(widget.question, _valuesSelectedList);
+                          setState(() {});
+                        }));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      Constant.searchYourType,
+                      style: TextStyle(
+                          color: Constant.selectTextColor,
+                          fontSize: 14,
+                          fontFamily: Constant.jostMedium),
+                    ),
                   ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      showBottomSheet(
-                          elevation: 4,
-                          backgroundColor: Constant.backgroundTransparentColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                          ),
-                          context: context,
-                          builder: (context) => BottomSheetContainer(
-                              question: widget.question,
-                              selectedAnswerCallback: (index) {
-                                if(widget.question.values[index].isSelected) {
-                                  _valuesSelectedList.add(widget.question.values[index].text);
-                                } else {
-                                  _valuesSelectedList.remove(widget.question.values[index].text);
-                                }
-                                widget.selectAnswerCallback(widget.question, _valuesSelectedList);
-                                setState(() {});
-                              }));
-                      // BottomSheetContainer();
-                    },
+                  Container(
                     child: Image(
                       image: AssetImage(Constant.downArrow),
                       width: 16,
                       height: 16,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Divider(
