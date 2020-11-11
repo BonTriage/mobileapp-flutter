@@ -25,12 +25,12 @@ class _CurrentHeadacheProgressScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
+    _dateTime = DateTime.now();
     _timer = Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {
         _totalTime++;
 
-        if((_totalTime ~/ 60) > 23)
-          isShowDayBorder = true;
+        if ((_totalTime ~/ 60) > 23) isShowDayBorder = true;
       });
     });
   }

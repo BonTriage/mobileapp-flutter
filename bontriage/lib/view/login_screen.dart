@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/LoginScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
@@ -16,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailTextEditingController;
   TextEditingController passwordTextEditingController;
   LoginScreenBloc _loginScreenBloc;
-
   bool _isShowAlert = false;
 
   //Method to toggle password visibility
@@ -271,12 +272,15 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   /// This method will be use for to Check Validation of Email and Password value. If condition is true then we will hit the API.
   /// or not then show alert to user into the screen.
   void clickedLoginButton() {
-    if (emailValue != null && passwordValue != null &&emailValue != "" &&  passwordValue != "" &&
-        Utils.validateEmail(emailValue) &&
-        Utils.validatePassword(passwordValue)) {
+    if (emailValue != null &&
+        passwordValue != null &&
+        emailValue != "" &&
+        passwordValue != "" &&
+        Utils.validateEmail(emailValue)) {
       _isShowAlert = false;
       loginService();
     } else {
@@ -287,7 +291,8 @@ class _LoginScreenState extends State<LoginScreen> {
       /// TO:Do Show Error message
     }
   }
-/// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
+
+  /// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
   /// or not then show alert to the user into the screen.
   void loginService() async {
     Utils.showApiLoaderDialog(context);
@@ -297,9 +302,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == Constant.success) {
         _isShowAlert = false;
         Navigator.pop(context);
+
         Utils.navigateToHomeScreen(context, false);
       } else {
-        _isShowAlert = true;
+        Navigator.pop(context);
+        setState(() {
+          _isShowAlert = true;
+        });
       }
     }
   }

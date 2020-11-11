@@ -388,8 +388,9 @@ class Utils {
   }
 
   static void navigateToHomeScreen(BuildContext context, bool isProfileInComplete) async{
-    Navigator.pushReplacementNamed(context, Constant.homeRouter);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constant.isProfileInCompleteStatus, isProfileInComplete);
+    Navigator.pushReplacementNamed(context, Constant.homeRouter);
+
   }
 }

@@ -61,7 +61,8 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
         isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
         secondBottomButtonText: Constant.saveAndFinishLater,
         secondBottomButtonFunction: () {
-          //TODO: Save & Finish Later button implementation
+          Utils.navigateToHomeScreen(context, true);
+
         },
         closeButtonFunction: () {
           Utils.navigateToExitScreen(context);
@@ -80,4 +81,6 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
     Navigator.pushReplacementNamed(
         context, Constant.partThreeOnBoardScreenRouter);
   }
+
+
 }
