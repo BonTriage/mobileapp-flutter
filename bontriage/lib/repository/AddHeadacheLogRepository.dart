@@ -18,7 +18,8 @@ class AddHeadacheLogRepository{
     var client = http.Client();
     var album;
     try {
-      var response = await NetworkService(url,requestMethod,_getPayload()).serviceCall();
+      String payload = await _getPayload();
+      var response = await NetworkService(url,requestMethod, payload).serviceCall();
       if(response is AppException){
         return response;
       }else{

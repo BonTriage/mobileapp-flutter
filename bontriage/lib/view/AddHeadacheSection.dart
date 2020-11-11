@@ -382,17 +382,31 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void storeLogDayDataIntoDatabase() async {
-    List<Map> userLogDataMap =
-        await SignUpOnBoardProviders.db.getLogDayData('4214');
+    List<Map> userLogDataMap;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if(userProfileInfoData != null)
+      userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData(userProfileInfoData.userId);
+    else
+      userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData('4214');
 
     if (userLogDataMap == null || userLogDataMap.length == 0) {
       LogDayQuestionnaire logDayQuestionnaire = LogDayQuestionnaire();
-      logDayQuestionnaire.userId = '4214';
+      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      if(userProfileInfoData != null)
+        logDayQuestionnaire.userId = userProfileInfoData.userId;
+      else
+        logDayQuestionnaire.userId = '4214';
+
       logDayQuestionnaire.selectedAnswers = jsonEncode(widget.selectedAnswers);
       SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
     } else {
-      SignUpOnBoardProviders.db
-          .updateLogDayData(jsonEncode(widget.selectedAnswers), '4214');
+      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+      if(userProfileInfoData != null)
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.selectedAnswers), userProfileInfoData.userId);
+      else
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.selectedAnswers), '4214');
     }
   }
 

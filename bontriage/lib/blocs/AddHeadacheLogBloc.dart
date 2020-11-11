@@ -24,22 +24,17 @@ class AddHeadacheLogBloc {
 
   fetchAddHeadacheLogData() async {
     try {
-      var addHeadacheLogData = await _addHeadacheLogRepository.serviceCall(
-          WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
+      var addHeadacheLogData = await _addHeadacheLogRepository.serviceCall(WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (addHeadacheLogData is AppException) {
         addHeadacheLogDataSink.add(addHeadacheLogData.toString());
       } else {
-        var addHeadacheLogListData =
-            AddHeadacheLinearListFilter.getQuestionSeries(
-                addHeadacheLogData.questionnaires[0].initialQuestion,
-                addHeadacheLogData
-                    .questionnaires[0].questionGroups[0].questions);
+        var addHeadacheLogListData = AddHeadacheLinearListFilter.getQuestionSeries(addHeadacheLogData.questionnaires[0].initialQuestion, addHeadacheLogData.questionnaires[0].questionGroups[0].questions);
         print(addHeadacheLogListData[0].values);
         addHeadacheLogDataSink.add(addHeadacheLogListData);
       }
-    } catch (Exception) {
+    } catch (e) {
       //  signUpFirstStepDataSink.add("Error");
-      print('Error');
+      print(e.toString());
     }
   }
 
