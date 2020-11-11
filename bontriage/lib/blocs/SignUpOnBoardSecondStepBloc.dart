@@ -14,7 +14,7 @@ import 'package:mobile/util/constant.dart';
 class SignUpOnBoardSecondStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
   StreamController<dynamic>
-  __signUpOnBoardSecondStepRepositoryDataStreamController;
+      __signUpOnBoardSecondStepRepositoryDataStreamController;
   int count = 0;
 
   StreamSink<dynamic> get signUpOnBoardSecondStepDataSink =>
@@ -31,11 +31,17 @@ class SignUpOnBoardSecondStepBloc {
 
   fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
-      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository.serviceCall('http://34.222.200.187:8080/mobileapi/v0/questionnaire', RequestMethod.POST, argumentsName);
+      var signUpFirstStepData =
+          await _signUpOnBoardFirstStepRepository.serviceCall(
+              WebservicePost.qaServerUrl + 'questionnaire',
+              RequestMethod.POST,
+              argumentsName);
       if (signUpFirstStepData is AppException) {
         print(signUpFirstStepData.toString());
       } else {
-        var filterQuestionsListData = LinearListFilter.getQuestionSeries(signUpFirstStepData.questionnaires[0].initialQuestion, signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
+        var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+            signUpFirstStepData.questionnaires[0].initialQuestion,
+            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
         print(filterQuestionsListData);
         signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
       }
@@ -49,7 +55,7 @@ class SignUpOnBoardSecondStepBloc {
       List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel =
-    SignUpOnBoardSecondStepModel();
+        SignUpOnBoardSecondStepModel();
     welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
@@ -66,14 +72,16 @@ class SignUpOnBoardSecondStepBloc {
     __signUpOnBoardSecondStepRepositoryDataStreamController?.close();
   }
 
-  sendSignUpSecondStepData(SignUpOnBoardSelectedAnswersModel
-  signUpOnBoardSelectedAnswersModel) async {
+  sendSignUpSecondStepData(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
     String response;
     try {
       var signUpSecondStepData = await _signUpOnBoardFirstStepRepository
           .signUpWelcomeOnBoardSecondStepServiceCall(
-          WebservicePost.qaServerUrl+'event', RequestMethod.POST,
-          signUpOnBoardSelectedAnswersModel);
+              WebservicePost.qaServerUrl + 'event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpSecondStepData is AppException) {
         print(signUpSecondStepData);
         response = signUpSecondStepData.toString();
