@@ -19,16 +19,16 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
     SelectedTriggersColorsModel(
         triggersColorsValue: Color(0xffD85B00), isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue:  Color(0XFF00A8CD), isSelected: true),
+        triggersColorsValue: Color(0XFF00A8CD), isSelected: true),
   ];
 
   List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
     SignUpHeadacheAnswerListModel(
         answerData: 'Dehydration', isSelected: true, color: Color(0Xff7E00CB)),
     SignUpHeadacheAnswerListModel(
-        answerData: 'Poor Sleep', isSelected: true, color:Color(0xffD85B00)),
+        answerData: 'Poor Sleep', isSelected: true, color: Color(0xffD85B00)),
     SignUpHeadacheAnswerListModel(
-        answerData: 'Stress', isSelected: true, color:  Color(0XFF00A8CD)),
+        answerData: 'Stress', isSelected: true, color: Color(0XFF00A8CD)),
     SignUpHeadacheAnswerListModel(
         answerData: 'Menstruation', isSelected: false),
     SignUpHeadacheAnswerListModel(
@@ -81,7 +81,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                       width: 30,
                     ),
                     Text(
-                      'October 2020',
+                      'November 2020',
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
                           fontSize: 13,

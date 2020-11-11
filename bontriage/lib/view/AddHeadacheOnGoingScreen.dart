@@ -327,7 +327,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   moveOnWelcomeBoardSecondStepScreens() async {
     final pushToScreenResult = await Navigator.pushNamed(
         context, Constant.partTwoOnBoardScreenRouter,
-        arguments: "clinical_impression");
+        arguments: Constant.clinicalImpressionEventType);
     if (pushToScreenResult != null) {
       setState(() {
         if (_addHeadacheUserListData != null) {

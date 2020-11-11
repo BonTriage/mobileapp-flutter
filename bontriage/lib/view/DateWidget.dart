@@ -130,7 +130,7 @@ class DateWidget extends StatelessWidget {
                     width: 16,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: Constant.severeTriggerColor,
+                      color: Constant.moderateTriggerColor,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
                     ),

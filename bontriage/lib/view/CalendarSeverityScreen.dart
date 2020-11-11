@@ -69,7 +69,7 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                         width: 30,
                       ),
                       Text(
-                        'October 2020',
+                        'November 2020',
                         style: TextStyle(
                             color: Constant.chatBubbleGreen,
                             fontSize: 13,

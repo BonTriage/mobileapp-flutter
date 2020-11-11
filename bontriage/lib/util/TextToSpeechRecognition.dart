@@ -24,7 +24,7 @@ class TextToSpeechRecognition {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
     if (isVolume == null || isVolume) {
-      await flutterTts.speak(chatText);
+    //  await flutterTts.speak(chatText);
     } else {
       await flutterTts.stop();
     }
