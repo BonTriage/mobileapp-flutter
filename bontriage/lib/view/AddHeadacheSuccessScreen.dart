@@ -53,7 +53,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
                             Constant.headacheAdded,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium
                             ),
@@ -69,7 +69,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
                             Constant.logYourDayToAssess,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium
                             ),

@@ -44,16 +44,18 @@ class LoginScreenBloc {
             if (messageValue == Constant.userNotFound) {
               apiResponse = Constant.somethingWentWrong;
             } else {
-              UserProfileInfoModel userProfileInfoModel =
-                  UserProfileInfoModel();
-              userProfileInfoModel =
-                  UserProfileInfoModel.fromJson(jsonDecode(response));
-              var selectedAnswerListData = await SignUpOnBoardProviders.db
-                  .insertUserProfileInfo(userProfileInfoModel);
-              print(selectedAnswerListData);
               apiResponse = Constant.success;
             }
           }
+        }else{
+          UserProfileInfoModel userProfileInfoModel =
+          UserProfileInfoModel();
+          userProfileInfoModel =
+              UserProfileInfoModel.fromJson(jsonDecode(response));
+          var selectedAnswerListData = await SignUpOnBoardProviders.db
+              .insertUserProfileInfo(userProfileInfoModel);
+          print(selectedAnswerListData);
+          apiResponse = Constant.success;
         }
       }
     } catch (Exception) {

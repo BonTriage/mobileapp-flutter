@@ -18,7 +18,9 @@ import 'AddNoteBottomSheet.dart';
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   final bool isHeadacheEnded;
 
-  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded}) : super(key: key);
+  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded})
+      : super(key: key);
+
   @override
   _AddHeadacheOnGoingScreenState createState() =>
       _AddHeadacheOnGoingScreenState();
@@ -100,10 +102,15 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium),
                           ),
-                          Image(
-                            image: AssetImage(Constant.closeIcon),
-                            width: 22,
-                            height: 22,
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Image(
+                              image: AssetImage(Constant.closeIcon),
+                              width: 22,
+                              height: 22,
+                            ),
                           ),
                         ],
                       ),
@@ -134,7 +141,8 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                       showAddNoteBottomSheet();
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
                                       child: Text(
                                         Constant.addANote,
                                         style: TextStyle(
@@ -272,18 +280,17 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
     _addHeadacheUserListData.forEach((element) {
       listOfWidgets.add(AddHeadacheSection(
-        headerText: element.text,
-        subText: element.helpText,
-        contentType: element.tag,
-        min: element.min.toDouble(),
-        max: element.max.toDouble(),
-        valuesList: element.values,
-        updateAtValue: element.updatedAt,
-        selectedCurrentValue: element.currentValue,
-        addHeadacheDetailsData: addSelectedHeadacheDetailsData,
-        moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
-        isHeadacheEnded: widget.isHeadacheEnded
-      ));
+          headerText: element.text,
+          subText: element.helpText,
+          contentType: element.tag,
+          min: element.min.toDouble(),
+          max: element.max.toDouble(),
+          valuesList: element.values,
+          updateAtValue: element.updatedAt,
+          selectedCurrentValue: element.currentValue,
+          addHeadacheDetailsData: addSelectedHeadacheDetailsData,
+          moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
+          isHeadacheEnded: widget.isHeadacheEnded));
     });
     return listOfWidgets;
   }
@@ -346,7 +353,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     print(pushToScreenResult);
   }
 
-  void saveDataInLocalDataBaseOrSever() async{
+  void saveDataInLocalDataBaseOrSever() async {
     UserAddHeadacheLogModel userAddHeadacheLogModel = UserAddHeadacheLogModel();
     List<SelectedAnswers> selectedAnswerList =
         signUpOnBoardSelectedAnswersModel.selectedAnswers;
@@ -356,15 +363,23 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         orElse: () => null);
     if (selectedAnswer == null || selectedAnswer.answer == "Yes") {
       userAddHeadacheLogModel.selectedAnswers = json.encode(selectedAnswerList);
-      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      var userProfileInfoData =
+          await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
       if (userProfileInfoData != null)
         userAddHeadacheLogModel.userId = userProfileInfoData.userId;
       else
         userAddHeadacheLogModel.userId = "4214";
       saveAndUpdateDataInLocalDatabase(userAddHeadacheLogModel);
+      Navigator.pop(context);
     } else {
-      _addHeadacheLogBloc
+      Utils.showApiLoaderDialog(context);
+      var response = await _addHeadacheLogBloc
           .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
+      if (response == Constant.success) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(
+            context, Constant.addHeadacheSuccessScreenRouter);
+      }
     }
   }
 
@@ -387,23 +402,25 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   }
 
   void requestService() async {
-      List<Map> userHeadacheDataList;
-      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-      if(userProfileInfoData != null)
-        userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase(userProfileInfoData.userId);
-      else
-        userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
-      if (userHeadacheDataList.length > 0) {
-        userHeadacheDataList.forEach((element) {
-          List<dynamic> map = jsonDecode(element['selectedAnswers']);
-          map.forEach((element) {
-            selectedAnswers.add(SelectedAnswers(
-                questionTag: element['questionTag'],
-                answer: element['answer']));
-          });
+    List<Map> userHeadacheDataList;
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if (userProfileInfoData != null)
+      userHeadacheDataList = await _addHeadacheLogBloc
+          .fetchDataFromLocalDatabase(userProfileInfoData.userId);
+    else
+      userHeadacheDataList =
+          await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
+    if (userHeadacheDataList.length > 0) {
+      userHeadacheDataList.forEach((element) {
+        List<dynamic> map = jsonDecode(element['selectedAnswers']);
+        map.forEach((element) {
+          selectedAnswers.add(SelectedAnswers(
+              questionTag: element['questionTag'], answer: element['answer']));
         });
-        signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
-      }
+      });
+      signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
+    }
     _addHeadacheLogBloc.fetchAddHeadacheLogData();
   }
 

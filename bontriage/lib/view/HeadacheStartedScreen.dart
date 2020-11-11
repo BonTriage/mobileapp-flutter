@@ -16,15 +16,16 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
         decoration: Constant.backgroundBoxDecoration,
         child: SingleChildScrollView(
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height
-            ),
+            constraints:
+                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
             child: SafeArea(
               child: Container(
                 margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
                 decoration: BoxDecoration(
                   color: Constant.backgroundColor,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -34,7 +35,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                       Align(
                         alignment: Alignment.topRight,
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.pop(context);
                           },
                           child: Image(
@@ -44,7 +45,9 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 80,),
+                      SizedBox(
+                        height: 80,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Align(
@@ -53,14 +56,15 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                             Constant.headacheLogStarted,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
-                              color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostMedium
-                            ),
+                                fontSize: 18,
+                                color: Constant.chatBubbleGreen,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),
-                      SizedBox(height: 50,),
+                      SizedBox(
+                        height: 50,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Align(
@@ -69,19 +73,21 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                             Constant.feelFreeToComeBack,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: Constant.chatBubbleGreen,
-                                fontFamily: Constant.jostMedium
-                            ),
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                       ),
-                      SizedBox(height: 80,),
+                      SizedBox(
+                        height: 80,
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
-                            Navigator.pushNamed(context, Constant.currentHeadacheProgressScreenRouter);
+                            Navigator.pushNamed(context,
+                                Constant.currentHeadacheProgressScreenRouter);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 10),
@@ -101,12 +107,15 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
-                            Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
+                            Navigator.pushNamed(context,
+                                Constant.addHeadacheOnGoingScreenRouter);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 10),

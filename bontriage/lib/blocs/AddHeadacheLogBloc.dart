@@ -5,6 +5,7 @@ import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/AddHeadacheLogRepository.dart';
 import 'package:mobile/util/AddHeadacheLinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
+import 'package:mobile/util/constant.dart';
 
 class AddHeadacheLogBloc {
   AddHeadacheLogRepository _addHeadacheLogRepository;
@@ -46,6 +47,7 @@ class AddHeadacheLogBloc {
   sendAddHeadacheDetailsData(
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
+    String apiResponse;
     try {
       var signUpFirstStepData =
           await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(
@@ -53,17 +55,16 @@ class AddHeadacheLogBloc {
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
+        apiResponse = signUpFirstStepData.toString();
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-        /*   var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
-        print(filterQuestionsListData);
-        signUpFirstStepDataSink.add(filterQuestionsListData);*/
+        apiResponse = Constant.success;
       }
     } catch (Exception) {
+      apiResponse = Constant.somethingWentWrong;
       //  signUpFirstStepDataSink.add("Error");
     }
+    return apiResponse;
   }
 
   void dispose() {

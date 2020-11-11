@@ -3,14 +3,16 @@ import 'package:mobile/util/constant.dart';
 
 class DeleteLogOptionsBottomSheet extends StatefulWidget {
   @override
-  _DeleteLogOptionsBottomSheetState createState() => _DeleteLogOptionsBottomSheetState();
+  _DeleteLogOptionsBottomSheetState createState() =>
+      _DeleteLogOptionsBottomSheetState();
 }
 
-class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomSheet> {
+class _DeleteLogOptionsBottomSheetState
+    extends State<DeleteLogOptionsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 110,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,8 +25,7 @@ class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomShee
               height: 45,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Constant.whiteColorAlpha85
-              ),
+                  color: Constant.whiteColorAlpha85),
               child: Center(
                 child: Text(
                   'Delete Log',
@@ -38,7 +39,9 @@ class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomShee
               ),
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -46,9 +49,7 @@ class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomShee
             child: Container(
               height: 45,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
               child: Center(
                 child: Text(
                   Constant.cancel,
@@ -62,6 +63,7 @@ class _DeleteLogOptionsBottomSheetState extends State<DeleteLogOptionsBottomShee
               ),
             ),
           ),
+          SizedBox(height: 10,),
         ],
       ),
     );

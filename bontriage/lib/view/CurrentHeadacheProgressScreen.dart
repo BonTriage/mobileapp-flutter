@@ -236,7 +236,7 @@ class _CurrentHeadacheProgressScreenState
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Aug 16, 10:34 AM',
+                          'Sep 10, 10:34 AM',
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: Constant.jostRegular,

@@ -15,6 +15,8 @@ import 'package:mobile/view/AddNoteBottomSheet.dart';
 import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
+import 'ApiLoaderScreen.dart';
+
 class LogDayScreen extends StatefulWidget {
   @override
   _LogDayScreenState createState() => _LogDayScreenState();
@@ -270,8 +272,11 @@ class _LogDayScreenState extends State<LogDayScreen>
                           return Center(
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: CircularProgressIndicator(
-                                backgroundColor: Constant.chatBubbleGreen,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ApiLoaderScreen(),
+                                ],
                               ),
                             ),
                           );
