@@ -20,8 +20,8 @@ class LogDayRepository {
     var client = http.Client();
     var album;
     try {
-      var response =
-      await NetworkService(url, requestMethod, _getPayload()).serviceCall();
+      String payload = await _getPayload();
+      var response = await NetworkService(url, requestMethod, payload).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -39,20 +39,6 @@ class LogDayRepository {
     return jsonEncode(
         <String, String>{"event_type": eventType, "mobile_user_id": userProfileInfoData.userId});
   }
-
-  /*void insertLogDayData(String logDayData) async{
-    List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData('4214');
-
-    if(userLogDataMap == null) {
-      LogDayQuestionnaire logDayQuestionnaire = LogDayQuestionnaire();
-      logDayQuestionnaire.userId = '4214';
-      logDayQuestionnaire.questionnaires = logDayData;
-      SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
-    } else {
-      SignUpOnBoardProviders.db.updateLogDayData(logDayData, '4214');
-    }
-    //SignUpOnBoardProviders.db.getLogDayData('4214');
-  }*/
 
   Future<List<Map>> getAllLogDayData(String userId) async{
     List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData(userId);

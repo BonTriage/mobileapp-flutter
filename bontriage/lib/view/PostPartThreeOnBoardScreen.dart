@@ -13,6 +13,10 @@ class _PostPartThreeOnBoardScreenState
     extends State<PostPartThreeOnBoardScreen> {
 
   //TODO: Generate a separate string list for text to speech
+  List<String> _chatTextList = [
+    Constant.qualityOfOurMentorShip,
+    Constant.easyToLoseTrack,
+  ];
 
   List<List<TextSpan>> _questionList = [
     [
@@ -55,6 +59,7 @@ class _PostPartThreeOnBoardScreenState
             _currentIndex++;
           });
         },
+        chatText: _chatTextList[_currentIndex],
         bottomButtonText: Constant.setUpNotifications,
         bottomButtonFunction: () {
           Navigator.pushReplacementNamed(

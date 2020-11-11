@@ -11,6 +11,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
+import 'package:mobile/view/ApiLoaderScreen.dart';
 
 import 'AddNoteBottomSheet.dart';
 
@@ -225,8 +226,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                             return Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Constant.chatBubbleGreen,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ApiLoaderScreen(),
+                                  ],
                                 ),
                               ),
                             );
@@ -342,7 +346,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     print(pushToScreenResult);
   }
 
-  void saveDataInLocalDataBaseOrSever() {
+  void saveDataInLocalDataBaseOrSever() async{
     UserAddHeadacheLogModel userAddHeadacheLogModel = UserAddHeadacheLogModel();
     List<SelectedAnswers> selectedAnswerList =
         signUpOnBoardSelectedAnswersModel.selectedAnswers;
@@ -352,7 +356,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         orElse: () => null);
     if (selectedAnswer == null || selectedAnswer.answer == "Yes") {
       userAddHeadacheLogModel.selectedAnswers = json.encode(selectedAnswerList);
-      userAddHeadacheLogModel.userId = "4214";
+      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      if (userProfileInfoData != null)
+        userAddHeadacheLogModel.userId = userProfileInfoData.userId;
+      else
+        userAddHeadacheLogModel.userId = "4214";
       saveAndUpdateDataInLocalDatabase(userAddHeadacheLogModel);
     } else {
       _addHeadacheLogBloc
@@ -379,10 +387,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   }
 
   void requestService() async {
-    var isDataBaseExists = await SignUpOnBoardProviders.db.isDatabaseExist();
-    if (isDataBaseExists) {
-      List<Map> userHeadacheDataList =
-          await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
+      List<Map> userHeadacheDataList;
+      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      if(userProfileInfoData != null)
+        userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase(userProfileInfoData.userId);
+      else
+        userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
       if (userHeadacheDataList.length > 0) {
         userHeadacheDataList.forEach((element) {
           List<dynamic> map = jsonDecode(element['selectedAnswers']);
@@ -394,7 +404,6 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         });
         signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
       }
-    }
     _addHeadacheLogBloc.fetchAddHeadacheLogData();
   }
 
