@@ -449,10 +449,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// get user Profile data from the local database then we implement SignUp Api to register user into the application.
   void getAnswerDataFromDatabase() async {
     Utils.showApiLoaderDialog(context);
-    var selectedAnswerListData = await SignUpOnBoardProviders.db
-        .getAllSelectedAnswers(Constant.zeroEventStep);
-    var response = await signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, emailValue, passwordValue);
+    var selectedAnswerListData = await SignUpOnBoardProviders.db.getAllSelectedAnswers(Constant.zeroEventStep);
+    var response = await signUpScreenBloc.signUpOfNewUser(selectedAnswerListData, emailValue, passwordValue);
     if (response is String) {
       if (response == Constant.success) {
         Navigator.pop(context);

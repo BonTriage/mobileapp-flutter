@@ -33,15 +33,16 @@ class SignUpScreenBloc {
           emailValue +
           "&" +
           "check_user_exists=1";
-      var apiResponse =
-          await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
+      var apiResponse = await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
       if (apiResponse is AppException) {
         //albumDataSink.add(apiResponse.toString());
+        print(apiResponse.toString());
       } else {
         return apiResponse;
       }
-    } catch (Exception) {
+    } catch (e) {
       //albumDataSink.add("Error");
+      print(e.toString());
     }
   }
 
@@ -61,10 +62,8 @@ class SignUpScreenBloc {
         apiResponse = response.toString();
       } else {
         apiResponse = Constant.success;
-        userProfileInfoModel =
-            UserProfileInfoModel.fromJson(jsonDecode(response));
-        var loggedInUserInformationData = await SignUpOnBoardProviders.db
-            .insertUserProfileInfo(userProfileInfoModel);
+        userProfileInfoModel = UserProfileInfoModel.fromJson(jsonDecode(response));
+        var loggedInUserInformationData = await SignUpOnBoardProviders.db.insertUserProfileInfo(userProfileInfoModel);
         print(loggedInUserInformationData);
       }
     } catch (Exception) {

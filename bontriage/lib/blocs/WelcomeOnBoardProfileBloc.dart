@@ -40,8 +40,9 @@ class WelcomeOnBoardProfileBloc {
         print(filterQuestionsListData);
         signUpFirstStepDataSink.add(filterQuestionsListData);
       }
-    } catch (Exception) {
+    } catch (e) {
       //  signUpFirstStepDataSink.add("Error");
+      print(e.toString());
     }
   }
 

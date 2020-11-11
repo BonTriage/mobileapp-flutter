@@ -13,8 +13,7 @@ class SignUpScreenRepository {
     var client = http.Client();
     var album;
     try {
-      var response =
-          await NetworkService.getRequest(url, requestMethod).serviceCall();
+      var response = await NetworkService.getRequest(url, requestMethod).serviceCall();
       if (response is AppException) {
         return response;
       } else {

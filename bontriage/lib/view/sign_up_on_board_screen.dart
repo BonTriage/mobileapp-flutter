@@ -185,7 +185,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                           currentQuestionListData[
                                               _currentPageIndex])) {
                                         setState(() {
-                                          if (_progressPercent == 0.55) {
+                                          if (_progressPercent == 0.66) {
                                             /*     welcomeOnBoardProfileBloc
                                             .sendSignUpFirstStepData(
                                                 signUpOnBoardSelectedAnswersModel);*/
@@ -197,7 +197,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                                                 _pageViewWidgetList.length - 1)
                                               _progressPercent += 0.11;
                                             else {
-                                              _progressPercent = 0.55;
+                                              _progressPercent = 0.66;
                                             }
 
                                             _pageController.animateToPage(
