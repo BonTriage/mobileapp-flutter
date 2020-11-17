@@ -14,7 +14,7 @@ import 'package:mobile/util/constant.dart';
 class SignUpOnBoardSecondStepBloc {
   SignUpOnBoardFirstStepRepository _signUpOnBoardFirstStepRepository;
   StreamController<dynamic>
-  __signUpOnBoardSecondStepRepositoryDataStreamController;
+      __signUpOnBoardSecondStepRepositoryDataStreamController;
   int count = 0;
 
   StreamSink<dynamic> get signUpOnBoardSecondStepDataSink =>
@@ -40,7 +40,7 @@ class SignUpOnBoardSecondStepBloc {
 
   fetchSignUpOnBoardSecondStepData(String argumentsName) async {
     try {
-      var signUpSecondStepData = await _signUpOnBoardFirstStepRepository.serviceCall('http://34.222.200.187:8080/mobileapi/v0/questionnaire', RequestMethod.POST, argumentsName);
+      var signUpSecondStepData = await _signUpOnBoardFirstStepRepository.serviceCall(WebservicePost.qaServerUrl + 'questionnaire',RequestMethod.POST,argumentsName);
       if (signUpSecondStepData is AppException) {
         print(signUpSecondStepData.toString());
         signUpOnBoardSecondStepDataSink.addError(signUpSecondStepData);
@@ -71,7 +71,7 @@ class SignUpOnBoardSecondStepBloc {
       List<LocalQuestionnaire> localQuestionnaireData) async {
     LocalQuestionnaire localQuestionnaireEventData = localQuestionnaireData[0];
     SignUpOnBoardSecondStepModel welcomeOnBoardProfileModel =
-    SignUpOnBoardSecondStepModel();
+        SignUpOnBoardSecondStepModel();
     welcomeOnBoardProfileModel = SignUpOnBoardSecondStepModel.fromJson(
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
@@ -89,14 +89,16 @@ class SignUpOnBoardSecondStepBloc {
     _sendSecondStepDataStreamController?.close();
   }
 
-  sendSignUpSecondStepData(SignUpOnBoardSelectedAnswersModel
-  signUpOnBoardSelectedAnswersModel) async {
+  sendSignUpSecondStepData(
+      SignUpOnBoardSelectedAnswersModel
+          signUpOnBoardSelectedAnswersModel) async {
     String response;
     try {
       var signUpSecondStepData = await _signUpOnBoardFirstStepRepository
           .signUpWelcomeOnBoardSecondStepServiceCall(
-          WebservicePost.qaServerUrl+'event', RequestMethod.POST,
-          signUpOnBoardSelectedAnswersModel);
+              WebservicePost.qaServerUrl + 'event',
+              RequestMethod.POST,
+              signUpOnBoardSelectedAnswersModel);
       if (signUpSecondStepData is AppException) {
         print(signUpSecondStepData);
         response = signUpSecondStepData.toString();
