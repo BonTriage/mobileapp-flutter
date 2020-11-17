@@ -11,13 +11,16 @@ class SignUpBottomSheet extends StatefulWidget {
   final Function(Questions, List<String>) selectAnswerCallback;
   final List<SelectedAnswers> selectAnswerListData;
 
-  SignUpBottomSheet({Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData}) : super(key: key);
+  SignUpBottomSheet(
+      {Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData})
+      : super(key: key);
 
   @override
   _SignUpBottomSheetState createState() => _SignUpBottomSheetState();
 }
 
-class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProviderStateMixin {
+class _SignUpBottomSheetState extends State<SignUpBottomSheet>
+    with TickerProviderStateMixin {
   AnimationController _animationController;
   List<String> _valuesSelectedList = [];
 
@@ -33,10 +36,12 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
 
     _animationController.forward();
 
-    if(widget.selectAnswerListData != null) {
-      SelectedAnswers selectedAnswers = widget.selectAnswerListData.firstWhere((element) => element.questionTag == widget.question.tag, orElse: () => null);
+    if (widget.selectAnswerListData != null) {
+      SelectedAnswers selectedAnswers = widget.selectAnswerListData.firstWhere((
+          element) => element.questionTag == widget.question.tag,
+          orElse: () => null);
 
-      if(selectedAnswers != null) {
+      if (selectedAnswers != null) {
         try {
           _valuesSelectedList =
               (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
@@ -49,7 +54,9 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
             if (value != null)
               value.isSelected = true;
             else
-              widget.question.values.add(Values(text: element, isSelected: true, valueNumber: (widget.question.values.length + 1).toString()));
+              widget.question.values.add(Values(text: element,
+                  isSelected: true,
+                  valueNumber: (widget.question.values.length + 1).toString()));
           });
         } catch (e) {
           print(e.toString());
@@ -63,7 +70,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
-    if(!_animationController.isAnimating) {
+    if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
     }
@@ -107,8 +114,10 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
                                 setState(() {
                                   widget.question.values[i].isSelected = false;
                                 });
-                                _valuesSelectedList.remove(widget.question.values[i].text);
-                                widget.selectAnswerCallback(widget.question, _valuesSelectedList);
+                                _valuesSelectedList.remove(
+                                    widget.question.values[i].text);
+                                widget.selectAnswerCallback(
+                                    widget.question, _valuesSelectedList);
                               },
                             ),
                             onDeleted: () {},
@@ -124,25 +133,24 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> with TickerProvid
             child: GestureDetector(
               onTap: () {
                 showBottomSheet(
-                    elevation: 4,
-                    backgroundColor: Constant.backgroundTransparentColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10)),
-                    ),
+                    backgroundColor: Colors.transparent,
                     context: context,
-                    builder: (context) => BottomSheetContainer(
+                    builder: (context)=>
+                    BottomSheetContainer(
                         question: widget.question,
                         selectedAnswerCallback: (index) {
-                          if(widget.question.values[index].isSelected) {
-                            _valuesSelectedList.add(widget.question.values[index].text);
+                          if (widget.question.values[index].isSelected) {
+                            _valuesSelectedList.add(
+                                widget.question.values[index].text);
                           } else {
-                            _valuesSelectedList.remove(widget.question.values[index].text);
+                            _valuesSelectedList.remove(
+                                widget.question.values[index].text);
                           }
-                          widget.selectAnswerCallback(widget.question, _valuesSelectedList);
+                          widget.selectAnswerCallback(
+                              widget.question, _valuesSelectedList);
                           setState(() {});
-                        }));
+                        })
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,6 +203,7 @@ class BottomSheetContainer extends StatefulWidget {
 class _BottomSheetContainerState extends State<BottomSheetContainer> {
   String searchText = '';
   bool _isExtraDataAdded = false;
+
   Color _getOptionTextColor(int index) {
     if (widget.question.values[index].isSelected) {
       return Constant.bubbleChatTextView;
@@ -220,92 +229,157 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: TextField(
-              onChanged: (searchText) {
-                if(searchText.trim().isNotEmpty) {
-                  Values valueData = widget.question.values.firstWhere((element) => element.text.toLowerCase().contains(searchText.toLowerCase().trim()), orElse: () => null);
-
-                  if(valueData == null) {
-                    if(!_isExtraDataAdded) {
-                      widget.question.values.add(Values(text: searchText));
-                      _isExtraDataAdded = true;
-                    } else {
-                      widget.question.values.last.text = searchText;
-                    }
-                  }
-                }
-                setState(() {
-                  this.searchText = searchText;
-                });
-              },
-              style: TextStyle(
-                  color: Constant.chatBubbleGreen,
-                  fontSize: 15,
-                  fontFamily: Constant.jostMedium),
-              cursorColor: Constant.chatBubbleGreen,
-              decoration: InputDecoration(
-                hintText: Constant.searchType,
-                hintStyle: TextStyle(
-                    color: Constant.chatBubbleGreen,
-                    fontSize: 13,
-                    fontFamily: Constant.jostMedium),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Constant.chatBubbleGreen)),
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      color: Colors.transparent,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.6,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.only(top: 10),
+              width: 40,
+              height: 5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey,
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              itemCount: widget.question.values.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.question.values[index].isSelected =
-                          !widget.question.values[index].isSelected;
-                          widget.selectedAnswerCallback(index);
-                        });
+
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+                color: Constant.backgroundTransparentColor
+            ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 10, top: 10),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
                       },
-                      child: Visibility(
-                        visible: (searchText.trim().isNotEmpty) ? widget.question.values[index].text.toLowerCase().contains(searchText.trim().toLowerCase()) : true,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 2, top: 0, right: 2),
-                          color: _getOptionBackgroundColor(index),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: Text(
-                              widget.question.values[index].text,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: _getOptionTextColor(index),
-                                  fontFamily: Constant.jostMedium,
-                                  height: 1.2),
-                            ),
-                          ),
-                        ),
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 18,
+                        height: 18,
                       ),
                     ),
-                    SizedBox(
-                      height: 0,
+                  ),
+                ),
+
+                Container(
+                  height: 35,
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 0),
+                  child: TextField(
+
+                    onChanged: (searchText) {
+                      if (searchText
+                          .trim()
+                          .isNotEmpty) {
+                        Values valueData = widget.question.values.firstWhere((
+                            element) =>
+                            element.text.toLowerCase().contains(
+                                searchText.toLowerCase().trim()),
+                            orElse: () => null);
+
+                        if (valueData == null) {
+                          if (!_isExtraDataAdded) {
+                            widget.question.values.add(
+                                Values(text: searchText));
+                            _isExtraDataAdded = true;
+                          } else {
+                            widget.question.values.last.text = searchText;
+                          }
+                        }
+                      }
+                      setState(() {
+                        this.searchText = searchText;
+                      });
+                    },
+                    style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontSize: 15,
+                        fontFamily: Constant.jostMedium),
+                    cursorColor: Constant.chatBubbleGreen,
+                    decoration: InputDecoration(
+                      hintText: Constant.searchType,
+                      hintStyle: TextStyle(
+                          color: Constant.chatBubbleGreen,
+                          fontSize: 13,
+                          fontFamily: Constant.jostMedium),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Constant.chatBubbleGreen)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Constant.chatBubbleGreen)),
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                     ),
-                  ],
-                );
-              },
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    itemCount: widget.question.values.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                widget.question.values[index].isSelected =
+                                !widget.question.values[index].isSelected;
+                                widget.selectedAnswerCallback(index);
+                              });
+                            },
+                            child: Visibility(
+                              visible: (searchText
+                                  .trim()
+                                  .isNotEmpty)
+                                  ? widget.question.values[index]
+                                  .text.toLowerCase()
+                                  .contains(searchText.trim().toLowerCase())
+                                  : true,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 2, top: 0, right: 2),
+                                color: _getOptionBackgroundColor(index),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  child: Text(
+                                    widget.question.values[index].text,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: _getOptionTextColor(index),
+                                        fontFamily: Constant.jostMedium,
+                                        height: 1.2),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 0,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],

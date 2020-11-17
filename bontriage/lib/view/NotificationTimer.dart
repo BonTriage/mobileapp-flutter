@@ -8,14 +8,18 @@ class NotificationTimer extends StatefulWidget {
 }
 
 class _NotificationTimerState extends State<NotificationTimer> {
-  bool isSelected = false;
+  bool isDailySelected = false;
+  bool isWeekDaysSelected = false;
+  bool isOffSelected = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -24,23 +28,33 @@ class _NotificationTimerState extends State<NotificationTimer> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: /*widget.question.values[index].isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen*/ Constant
-                              .chatBubbleGreen,
-                          width: 1),
-                      color: isSelected
-                          ? Constant.chatBubbleGreen
+                      border:
+                          Border.all(color: Constant.chatBubbleGreen, width: 1),
+                      color: isDailySelected
+                          ? Constant.backgroundTransparentColor
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        'daily',
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: Constant.jostRegular),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isWeekDaysSelected = false;
+                            if (isDailySelected) {
+                              isDailySelected = false;
+                            } else {
+                              isDailySelected = true;
+                            }
+                          });
+                        },
+                        child: Text(
+                          'daily',
+                          style: TextStyle(
+                              color: Constant.chatBubbleGreen,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: Constant.jostRegular),
+                        ),
                       ),
                     ),
                   ),
@@ -51,23 +65,33 @@ class _NotificationTimerState extends State<NotificationTimer> {
                     margin: EdgeInsets.only(right: 8),
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: /*widget.question.values[index].isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen*/ Constant
-                              .chatBubbleGreen,
-                          width: 1),
-                      color: isSelected
-                          ? Constant.chatBubbleGreen
+                      border:
+                          Border.all(color: Constant.chatBubbleGreen, width: 1),
+                      color: isWeekDaysSelected
+                          ? Constant.backgroundTransparentColor
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        'WeekDays',
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: Constant.jostRegular),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isDailySelected = false;
+                            if (isWeekDaysSelected) {
+                              isWeekDaysSelected = false;
+                            } else {
+                              isWeekDaysSelected = true;
+                            }
+                          });
+                        },
+                        child: Text(
+                          'WeekDays',
+                          style: TextStyle(
+                              color: Constant.chatBubbleGreen,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: Constant.jostRegular),
+                        ),
                       ),
                     ),
                   ),
@@ -77,23 +101,33 @@ class _NotificationTimerState extends State<NotificationTimer> {
                 margin: EdgeInsets.only(right: 8),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: /*widget.question.values[index].isDoubleTapped ? Constant.doubleTapTextColor : Constant.chatBubbleGreen*/ Constant
-                          .chatBubbleGreen,
-                      width: 1),
-                  color: isSelected
-                      ? Constant.chatBubbleGreen
+                  border: Border.all(color: Constant.chatBubbleGreen, width: 1),
+                  color: isOffSelected
+                      ? Constant.backgroundTransparentColor
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
-                  child: Text(
-                    'off',
-                    style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: Constant.jostRegular),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isWeekDaysSelected = false;
+                        isDailySelected = false;
+                        if (isOffSelected) {
+                          isOffSelected = false;
+                        } else {
+                          isOffSelected = true;
+                        }
+                      });
+                    },
+                    child: Text(
+                      'off',
+                      style: TextStyle(
+                          color: Constant.chatBubbleGreen,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: Constant.jostRegular),
+                    ),
                   ),
                 ),
               ),
@@ -130,8 +164,12 @@ class _NotificationTimerState extends State<NotificationTimer> {
           Align(
             alignment: Alignment.topLeft,
             child: GestureDetector(
-              onTap: (){
-
+              onTap: () {
+                setState(() {
+                  isWeekDaysSelected = false;
+                  isDailySelected = false;
+                  isOffSelected = false;
+                });
               },
               child: Text(
                 Constant.delete,
