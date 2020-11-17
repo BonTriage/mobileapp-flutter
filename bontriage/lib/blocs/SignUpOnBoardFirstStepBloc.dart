@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -21,8 +22,17 @@ class SignUpBoardFirstStepBloc {
   Stream<dynamic> get albumDataStream =>
       _signUpFirstStepDataStreamController.stream;
 
+  StreamController<dynamic> _sendFirstStepDataStreamController;
+
+  StreamSink<dynamic> get sendFirstStepDataSink =>
+      _sendFirstStepDataStreamController.sink;
+
+  Stream<dynamic> get sendFirstStepDataStream =>
+      _sendFirstStepDataStreamController.stream;
+
   SignUpBoardFirstStepBloc({this.count = 0}) {
     _signUpFirstStepDataStreamController = StreamController<dynamic>();
+    _sendFirstStepDataStreamController = StreamController<dynamic>();
     _signUpOnBoardFirstStepRepository = SignUpOnBoardFirstStepRepository();
   }
 
@@ -33,17 +43,31 @@ class SignUpBoardFirstStepBloc {
           await _signUpOnBoardFirstStepRepository.serviceCall(
               WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
-        signUpFirstStepDataSink.add(signUpFirstStepData.toString());
+        signUpFirstStepDataSink.addError(signUpFirstStepData);
       } else {
-        var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
-        print(filterQuestionsListData);
-        signUpFirstStepDataSink.add(filterQuestionsListData);
+        if(signUpFirstStepData is WelcomeOnBoardProfileModel) {
+          if(signUpFirstStepData != null) {
+            var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+                signUpFirstStepData.questionnaires[0].initialQuestion,
+                signUpFirstStepData.questionnaires[0].questionGroups[0]
+                    .questions);
+            print(filterQuestionsListData);
+            signUpFirstStepDataSink.add(filterQuestionsListData);
+          } else {
+            signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+          }
+        } else {
+          signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
       }
-    } catch (Exception) {
+    } catch (e) {
+      signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       //  signUpFirstStepDataSink.add("Error");
     }
+  }
+
+  void enterSomeDummyDataToStreamController() {
+    sendFirstStepDataSink.add(Constant.loading);
   }
 
   sendSignUpFirstStepData(
@@ -57,12 +81,18 @@ class SignUpBoardFirstStepBloc {
               RequestMethod.POST,
               signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
+        sendFirstStepDataSink.addError(signUpFirstStepData);
         apiResponse = signUpFirstStepData.toString();
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
-        apiResponse = Constant.success;
+        if(signUpFirstStepData != null) {
+          apiResponse = Constant.success;
+        } else {
+          sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
       }
-    } catch (Exception) {
+    } catch (e) {
+      sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -70,6 +100,7 @@ class SignUpBoardFirstStepBloc {
 
   void dispose() {
     _signUpFirstStepDataStreamController?.close();
+    _sendFirstStepDataStreamController?.close();
   }
 
   fetchDataFromLocalDatabase(

@@ -16,6 +16,7 @@ import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
 import 'ApiLoaderScreen.dart';
+import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
   @override
@@ -32,6 +33,8 @@ class _LogDayScreenState extends State<LogDayScreen>
   List<Questions> _triggerValuesList = [];
   List<SelectedAnswers> selectedAnswers = [];
 
+  bool _isDataPopulated = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -41,7 +44,7 @@ class _LogDayScreenState extends State<LogDayScreen>
 
     requestService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showDoubleTapDialog();
+      Utils.showApiLoaderDialog(context);
     });
   }
 
@@ -130,7 +133,13 @@ class _LogDayScreenState extends State<LogDayScreen>
                       stream: _logDayBloc.logDayDataStream,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          addNewWidgets(snapshot.data);
+                          if(!_isDataPopulated) {
+                            Utils.closeApiLoaderDialog(context);
+                            Future.delayed(Duration(milliseconds: 200), () {
+                              _showDoubleTapDialog();
+                            });
+                            addNewWidgets(snapshot.data);
+                          }
                           return Column(
                             children: [
                               Padding(
@@ -231,55 +240,16 @@ class _LogDayScreenState extends State<LogDayScreen>
 
                           );
                         } else if (snapshot.hasError) {
-                          return Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-                                child: Text(
-                                  snapshot.error.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: Constant.jostMedium,
-                                    color: Constant.chatBubbleGreen
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15,),
-                              BouncingWidget(
-                                onPressed: () {
-
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Constant.chatBubbleGreen,
-                                  ),
-                                  child: Text(
-                                    'Tap to Retry',
-                                    style: TextStyle(
-                                      color: Constant.bubbleChatTextView,
-                                      fontSize: 14,
-                                      fontFamily: Constant.jostMedium
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Utils.closeApiLoaderDialog(context);
+                          return NetworkErrorScreen(
+                            errorMessage: snapshot.error.toString(),
+                            tapToRetryFunction: () {
+                              Utils.showApiLoaderDialog(context);
+                              requestService();
+                            },
                           );
                         } else {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ApiLoaderScreen(),
-                                ],
-                              ),
-                            ),
-                          );
+                          return Container();
                         }
                       },
                     ),
@@ -361,6 +331,7 @@ class _LogDayScreenState extends State<LogDayScreen>
         }
       });
     }
+    _isDataPopulated = true;
   }
 
   void _showDeleteLogOptionBottomSheet() async{

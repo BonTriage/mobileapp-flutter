@@ -1259,55 +1259,11 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               } catch(e) {
                 print(e.toString());
               }
-             /*else {
-              String medName = widget.valuesList[whichMedicationItemSelected].text;
-              Questions questions = widget.medicationExpandableWidgetList.firstWhere(
-                      (element) => element.precondition.contains(medName),
-                  orElse: () => null);
-
-              if(questions != null) {
-                List<Values> valuesList = [];
-
-                questions.values.forEach((element) {
-                  valuesList.add(Values(text: element.text,
-                      valueNumber: element.valueNumber,
-                      isSelected: element.isSelected));
-                });
-
-                Questions questions1 = Questions(
-                    tag: questions.tag,
-                    id: questions.id,
-                    questionType: questions.questionType,
-                    precondition: questions.precondition,
-                    next: questions.next,
-                    text: questions.text,
-                    helpText: questions.helpText,
-                    values: valuesList,
-                    min: questions.min,
-                    max: questions.max,
-                    updatedAt: questions.updatedAt,
-                    exclusiveValue: questions.exclusiveValue,
-                    phi: questions.phi,
-                    required: questions.required,
-                    uiHints: questions.uiHints,
-                    currentValue: questions.currentValue
-                );
-                _medicationDosageList[whichMedicationItemSelected].add(questions1);
-                try {
-                  int selectedValueIndex = int.parse(value) - 1;
-                  _medicationDosageList[whichMedicationItemSelected][index].values[selectedValueIndex].isSelected = true;
-                } catch(e) {
-                  print(e.toString());
-                }
-              } else {
-                _medicationDosageList[whichMedicationItemSelected].add(Questions());
-              }*/
             }
           );
         }
       }
     }
-    //print("asdasd: ${_medicationDosageList[whichMedicationItemSelected].length}");
   }
 
   @override

@@ -55,8 +55,7 @@ class SignUpOnBoardThirdStepRepository {
         return response;
       } else {
         //album = WelcomeOnBoardProfileModel.fromJson(json.decode(response));
-
-        return album;
+        return response;
       }
     } catch (Exception) {
       return album;

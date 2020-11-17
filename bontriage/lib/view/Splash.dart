@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
@@ -66,8 +67,7 @@ class _SplashState extends State<Splash> {
     } else {
       if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
         timer = Timer.periodic(Duration(seconds: 3), (timer) {
-          Navigator.pushReplacementNamed(
-              context, Constant.welcomeStartAssessmentScreenRouter);
+          Navigator.pushReplacementNamed(context, Constant.welcomeStartAssessmentScreenRouter);
           timer.cancel();
         });
       } else {

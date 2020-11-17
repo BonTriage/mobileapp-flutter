@@ -9,6 +9,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LogDayRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
+import 'package:mobile/util/constant.dart';
 
 class LogDayBloc {
   LogDayRepository _logDayRepository;
@@ -32,7 +33,7 @@ class LogDayBloc {
     _logDayRepository.eventType = 'behaviors';
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    //try {
+    try {
     var logDayData = await _logDayRepository.serviceCall(
         WebservicePost.qaServerUrl +
             'logday?mobile_user_id=' +
@@ -64,10 +65,10 @@ class LogDayBloc {
       //fetchLogDayData1();
       logDayDataSink.add(filterQuestionsListData);
     }
-    /*} catch (e) {
-      //  signUpFirstStepDataSink.add("Error");
+    } catch (e) {
+      logDayDataSink.addError(Exception(Constant.somethingWentWrong));
       print(e.toString());
-    }*/
+    }
   }
 
   fetchLogDayData1() async {

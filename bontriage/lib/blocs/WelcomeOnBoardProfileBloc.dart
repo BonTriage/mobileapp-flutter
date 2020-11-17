@@ -9,6 +9,7 @@ import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/WelcomeOnBoardProfileRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
+import 'package:mobile/util/constant.dart';
 
 class WelcomeOnBoardProfileBloc {
   WelcomeOnBoardProfileRepository _welcomeOnBoardProfileRepository;
@@ -32,15 +33,25 @@ class WelcomeOnBoardProfileBloc {
           await _welcomeOnBoardProfileRepository.serviceCall(
               WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
-        signUpFirstStepDataSink.add(signUpFirstStepData.toString());
+        signUpFirstStepDataSink.addError(signUpFirstStepData);
       } else {
-        var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
-        print(filterQuestionsListData);
-        signUpFirstStepDataSink.add(filterQuestionsListData);
+        if(signUpFirstStepData is WelcomeOnBoardProfileModel) {
+          if(signUpFirstStepData != null) {
+            var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+                signUpFirstStepData.questionnaires[0].initialQuestion,
+                signUpFirstStepData.questionnaires[0].questionGroups[0]
+                    .questions);
+            print(filterQuestionsListData);
+            signUpFirstStepDataSink.add(filterQuestionsListData);
+          } else {
+            signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+          }
+        } else {
+          signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
       }
     } catch (e) {
+      signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       //  signUpFirstStepDataSink.add("Error");
       print(e.toString());
     }
