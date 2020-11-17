@@ -355,7 +355,11 @@ class Utils {
 
   void getUserInformation() {}
 
-  static void showApiLoaderDialog(BuildContext context) {
+  ///This method is used to show api loader dialog
+  ///@param context: context of the screen where the dialog will be shown
+  ///@param networkStream: this variable is used to listen to the network events
+  ///@param tapToRetryFunction: this variable is used to pass the reference of the tap to retry button function functionality
+  static void showApiLoaderDialog(BuildContext context, {Stream<dynamic> networkStream, Function tapToRetryFunction}) {
     showGeneralDialog(
       context: context,
       pageBuilder: (buildContext, animation, secondaryAnimation) {
@@ -365,7 +369,10 @@ class Utils {
               color: Colors.black26,
               child: Align(
                 alignment: Alignment.center,
-                child: ApiLoaderDialog(),
+                child: ApiLoaderDialog(
+                  networkStream: networkStream,
+                  tapToRetryFunction: tapToRetryFunction,
+                ),
               ),
             );
           },
@@ -392,5 +399,11 @@ class Utils {
     sharedPreferences.setBool(Constant.isProfileInCompleteStatus, isProfileInComplete);
     Navigator.pushReplacementNamed(context, Constant.homeRouter);
 
+  }
+
+  static void closeApiLoaderDialog(BuildContext context){
+    Future.delayed(Duration(milliseconds: 200), (){
+      Navigator.pop(context);
+    });
   }
 }

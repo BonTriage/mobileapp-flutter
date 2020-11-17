@@ -500,6 +500,7 @@ class Constant {
   static String onBoardingAssessmentIncomplete = 'Onboarding assessment is incomplete.';
   static String clickHereToFinish = 'Click here to finish.';
   static String isProfileInCompleteStatus = 'isProfileInCompleteStatus';
+  static String tapToRetry = 'Tap to Retry';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

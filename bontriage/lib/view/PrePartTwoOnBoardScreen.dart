@@ -87,6 +87,12 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    signUpBoardFirstStepBloc.dispose();
+    super.dispose();
+  }
+
   /// In this method we are sending First Step Data in to the Server. And if we get successful response from server then
   /// we will delete profile i.e zeroEventStep and FirstStep i.e firstEventStep data from Local Database.
   void getFirstStepUserDataFromLocalDatabase() async {
@@ -97,18 +103,29 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     } else {
       signUpOnBoardSelectedAnswersModel.selectedAnswers =
           signUpOnBoardSelectedAnswersListModel;
-      Utils.showApiLoaderDialog(context);
-      var apiResponse = await signUpBoardFirstStepBloc
-          .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
-
-      if (apiResponse is String) {
-        if (apiResponse == Constant.success) {
-          await SignUpOnBoardProviders.db
-              .deleteOnBoardQuestionnaireProgress(Constant.zeroEventStep);
-          await SignUpOnBoardProviders.db
-              .deleteOnBoardQuestionnaireProgress(Constant.firstEventStep);
-          Navigator.pop(context);
+      Utils.showApiLoaderDialog(
+        context,
+        networkStream: signUpBoardFirstStepBloc.sendFirstStepDataStream,
+        tapToRetryFunction: () {
+          signUpBoardFirstStepBloc.enterSomeDummyDataToStreamController();
+          _callSendFirstStepDataApi();
         }
+      );
+      _callSendFirstStepDataApi();
+    }
+  }
+
+  void _callSendFirstStepDataApi() async{
+    var apiResponse = await signUpBoardFirstStepBloc
+        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
+
+    if (apiResponse is String) {
+      if (apiResponse == Constant.success) {
+        await SignUpOnBoardProviders.db
+            .deleteOnBoardQuestionnaireProgress(Constant.zeroEventStep);
+        await SignUpOnBoardProviders.db
+            .deleteOnBoardQuestionnaireProgress(Constant.firstEventStep);
+        Utils.closeApiLoaderDialog(context);
       }
     }
   }

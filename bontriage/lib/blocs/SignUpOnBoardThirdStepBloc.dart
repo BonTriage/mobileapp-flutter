@@ -6,7 +6,6 @@ import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
-import 'package:mobile/repository/SignUpOnBoardSecondStepRepository.dart';
 import 'package:mobile/repository/SignUpOnBoardThirdStepRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
@@ -24,9 +23,19 @@ class SignUpOnBoardThirdStepBloc {
   Stream<dynamic> get signUpOnBoardThirdStepDataStream =>
       __signUpOnBoardThirdStepRepositoryDataStreamController.stream;
 
+  StreamController<dynamic>
+  _sendThirdStepDataStreamController;
+
+  StreamSink<dynamic> get sendThirdStepDataSink =>
+      _sendThirdStepDataStreamController.sink;
+
+  Stream<dynamic> get sendThirdStepDataStream =>
+      _sendThirdStepDataStreamController.stream;
+
   SignUpOnBoardThirdStepBloc({this.count = 0}) {
     __signUpOnBoardThirdStepRepositoryDataStreamController =
         StreamController<dynamic>();
+    _sendThirdStepDataStreamController = StreamController<dynamic>();
     _signUpOnBoardThirdStepRepository = SignUpOnBoardThirdStepRepository();
   }
 
@@ -38,15 +47,25 @@ class SignUpOnBoardThirdStepBloc {
               RequestMethod.POST,
               argumentsName);
       if (signUpFirstStepData is AppException) {
-        signUpOnBoardThirdStepDataSink.add(signUpFirstStepData.toString());
+        signUpOnBoardThirdStepDataSink.addError(signUpFirstStepData);
       } else {
-        var filterQuestionsListData = LinearListFilter.getQuestionSeries(
-            signUpFirstStepData.questionnaires[0].initialQuestion,
-            signUpFirstStepData.questionnaires[0].questionGroups[0].questions);
-        print(filterQuestionsListData);
-        signUpOnBoardThirdStepDataSink.add(filterQuestionsListData);
+        if(signUpFirstStepData is SignUpOnBoardSecondStepModel) {
+          if(signUpFirstStepData != null) {
+            var filterQuestionsListData = LinearListFilter.getQuestionSeries(
+                signUpFirstStepData.questionnaires[0].initialQuestion,
+                signUpFirstStepData.questionnaires[0].questionGroups[0]
+                    .questions);
+            print(filterQuestionsListData);
+            signUpOnBoardThirdStepDataSink.add(filterQuestionsListData);
+          } else {
+            signUpOnBoardThirdStepDataSink.addError(Exception(Constant.somethingWentWrong));
+          }
+        } else {
+          signUpOnBoardThirdStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
       }
     } catch (e) {
+      signUpOnBoardThirdStepDataSink.addError(Exception(Constant.somethingWentWrong));
       print(e);
     }
   }
@@ -70,6 +89,7 @@ class SignUpOnBoardThirdStepBloc {
 
   void dispose() {
     __signUpOnBoardThirdStepRepositoryDataStreamController?.close();
+    _sendThirdStepDataStreamController?.close();
   }
 
   sendSignUpThirdStepData(
@@ -84,14 +104,24 @@ class SignUpOnBoardThirdStepBloc {
               signUpOnBoardSelectedAnswersModel);
       if (signUpThirdStepData is AppException) {
         print(signUpThirdStepData);
+        sendThirdStepDataSink.addError(signUpThirdStepData);
         apiResponse = signUpThirdStepData.toString();
       } else {
         print(signUpThirdStepData);
-        apiResponse = Constant.success;
+        if(signUpThirdStepData != null) {
+          apiResponse = Constant.success;
+        } else {
+          sendThirdStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
       }
-    } catch (Exception) {
+    } catch (e) {
+      sendThirdStepDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
+  }
+
+  void enterSomeDummyDataToStreamController() {
+    sendThirdStepDataSink.add(Constant.loading);
   }
 }

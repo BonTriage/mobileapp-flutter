@@ -11,6 +11,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
+import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/view/OnBoardMultiSelectOption.dart';
 import 'package:mobile/view/on_board_bottom_buttons.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
@@ -93,6 +94,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
     _pageViewWidgetList = [];
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context);
+    });
+
     getCurrentUserPosition();
   }
 
@@ -114,6 +119,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (!isAlreadyDataFiltered && !isButtonClicked) {
+                    Utils.closeApiLoaderDialog(context);
                     addFilteredQuestionListData(snapshot.data);
                     isButtonClicked = false;
                   }
@@ -178,13 +184,17 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                       )
                     ],
                   );
-                } else {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ApiLoaderScreen(),
-                    ],
+                } else if (snapshot.hasError) {
+                  Utils.closeApiLoaderDialog(context);
+                  return NetworkErrorScreen(
+                    errorMessage: snapshot.error.toString(),
+                    tapToRetryFunction: () {
+                      Utils.showApiLoaderDialog(context);
+                      requestService();
+                    },
                   );
+                } else {
+                  return Container();
                 }
               })),
     );
@@ -367,13 +377,24 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         signUpOnBoardSelectedAnswersModel, Constant.secondEventStep);
   }
 
-  void moveUserToNextScreen() async {
+  void moveUserToNextScreen() {
     isEndOfOnBoard = true;
     TextToSpeechRecognition.speechToText("");
 
-    Utils.showApiLoaderDialog(context);
-    var response = await _signUpOnBoardSecondStepBloc
-        .sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel);
+    Utils.showApiLoaderDialog(
+      context,
+      networkStream: _signUpOnBoardSecondStepBloc.sendSecondStepDataStream,
+      tapToRetryFunction: () {
+        _signUpOnBoardSecondStepBloc.enterSomeDummyDataToStreamController();
+        _callSendSecondStepDataApi();
+      }
+    );
+
+    _callSendSecondStepDataApi();
+  }
+
+  void _callSendSecondStepDataApi() async {
+    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel);
     if (response is String) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db
@@ -381,7 +402,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         Navigator.pop(context);
         if (widget.argumentsName == Constant.clinicalImpressionEventType) {
           var userHeadacheName =
-              signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere(
+          signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere(
                   (model) => model.questionTag == "nameClinicalImpression");
           Navigator.pop(context, userHeadacheName.answer);
         } else {

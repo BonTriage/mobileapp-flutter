@@ -3,13 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/NetworkErrorScreen.dart';
 
 class ApiLoaderDialog extends StatefulWidget {
+  final Stream<dynamic> networkStream;
+  final Function tapToRetryFunction;
+
+  const ApiLoaderDialog({Key key, this.networkStream, this.tapToRetryFunction}) : super(key: key);
+
   @override
   _ApiLoaderDialogState createState() => _ApiLoaderDialogState();
 }
 
-class _ApiLoaderDialogState extends State<ApiLoaderDialog> {
+class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProviderStateMixin {
 
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -70,7 +76,23 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> {
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AnimatedSize(
+        vsync: this,
+        duration: Duration(milliseconds: 350),
+        reverseDuration: Duration(milliseconds: 350),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            _getWidget(),
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget _getWidget() {
     List<int> ticks = [7, 14, 21, 28, 35];
     List<String> features = [
       "A",
@@ -124,20 +146,17 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> {
           .toList();
     }
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Wrap(
-        alignment: WrapAlignment.center,
+    if(widget.networkStream == null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: 150,
-            width: 150,
             decoration: BoxDecoration(
               color: Constant.backgroundColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -177,7 +196,136 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> {
             ),
           ),
         ],
-      ),
-    );
+      );
+    } else {
+      return StreamBuilder<dynamic>(
+        stream: widget.networkStream,
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            child: Center(
+                              child: Stack(
+                                children: <Widget>[
+                                  Container(
+                                    child:RadarChart.light(
+                                      ticks: ticks,
+                                      features: features,
+                                      data: data,
+                                      reverseAxis: true,
+                                      isPersonalizedHeadacheData: true,
+                                      axisColor: Colors.transparent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          Constant.loading,
+                          style: TextStyle(
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Constant.chatBubbleGreen
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else if(snapshot.hasError) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 25),
+              decoration: BoxDecoration(
+                color: Constant.backgroundColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: NetworkErrorScreen(
+                      errorMessage: snapshot.error.toString(),
+                      tapToRetryFunction: widget.tapToRetryFunction,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            child: Center(
+                              child: Stack(
+                                children: <Widget>[
+                                  Container(
+                                    child:RadarChart.light(
+                                      ticks: ticks,
+                                      features: features,
+                                      data: data,
+                                      reverseAxis: true,
+                                      isPersonalizedHeadacheData: true,
+                                      axisColor: Colors.transparent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          Constant.loading,
+                          style: TextStyle(
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Constant.chatBubbleGreen
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      );
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardFirstStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
@@ -11,8 +12,8 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
+import 'NetworkErrorScreen.dart';
 import 'on_board_bottom_buttons.dart';
 import 'on_board_chat_bubble.dart';
 import 'on_board_select_options.dart';
@@ -74,6 +75,11 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
     signUpOnBoardSelectedAnswersModel.eventType = Constant.firstEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context);
+    });
+
     getCurrentUserPosition();
   }
 
@@ -87,9 +93,9 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
         stream: signUpBoardFirstStepBloc.albumDataStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (!isButtonClicked) {
+            if (!isAlreadyDataFiltered) {
+              Utils.closeApiLoaderDialog(context);
               addFilteredQuestionListData(snapshot.data);
-              isButtonClicked = false;
             }
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -150,13 +156,17 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                 )
               ],
             );
-          } else {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ApiLoaderScreen(),
-              ],
+          } else if (snapshot.hasError) {
+            Utils.closeApiLoaderDialog(context);
+            return NetworkErrorScreen(
+              errorMessage: snapshot.error.toString(),
+              tapToRetryFunction: () {
+                Utils.showApiLoaderDialog(context);
+                requestService();
+              },
             );
+          }else {
+            return Container();
           }
         },
       )),

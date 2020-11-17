@@ -10,6 +10,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
+import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
@@ -62,6 +63,10 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
           questions: Constant.firstBasics, questionsWidget: Container())
     ];
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context);
+    });
+
     getCurrentUserPosition();
   }
 
@@ -84,6 +89,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (!_isAlreadyDataFiltered) {
+                    Utils.closeApiLoaderDialog(context);
                     addFilteredQuestionListData(snapshot.data);
                   }
                   return Column(
@@ -288,13 +294,23 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                       ),
                     ],
                   );
+                } else if (snapshot.hasError) {
+                  Utils.closeApiLoaderDialog(context);
+                  return NetworkErrorScreen(
+                    errorMessage: snapshot.error.toString(),
+                    tapToRetryFunction: () {
+                      Utils.showApiLoaderDialog(context);
+                      requestService();
+                    },
+                  );
                 } else {
-                  return Row(
+                  /*return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ApiLoaderScreen(),
                     ],
-                  );
+                  );*/
+                  return Container();
                 }
               })),
     );

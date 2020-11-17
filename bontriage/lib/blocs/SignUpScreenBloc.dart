@@ -19,8 +19,18 @@ class SignUpScreenBloc {
 
   Stream<String> get albumDataStream => _albumStreamController.stream;
 
+  StreamController<dynamic> _checkUserAlreadySignUpStreamController;
+  Stream<dynamic> get checkUserAlreadySignUpStream => _checkUserAlreadySignUpStreamController.stream;
+  StreamSink<dynamic> get checkUserAlreadySignUpSink => _checkUserAlreadySignUpStreamController.sink;
+
+  StreamController<dynamic> _signUpOfNewUserStreamController;
+  Stream<dynamic> get signUpOfNewUserStream => _signUpOfNewUserStreamController.stream;
+  StreamSink<dynamic> get signUpOfNewUserSink => _signUpOfNewUserStreamController.sink;
+
   SignUpScreenBloc({this.count = 0}) {
     _albumStreamController = StreamController<String>();
+    _checkUserAlreadySignUpStreamController = StreamController<dynamic>();
+    _signUpOfNewUserStreamController = StreamController<dynamic>();
     _signUpScreenRepository = SignUpScreenRepository();
   }
 
@@ -35,15 +45,21 @@ class SignUpScreenBloc {
           "check_user_exists=1";
       var apiResponse = await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);
       if (apiResponse is AppException) {
-        //albumDataSink.add(apiResponse.toString());
+        checkUserAlreadySignUpSink.addError(apiResponse);
         print(apiResponse.toString());
       } else {
         return apiResponse;
       }
     } catch (e) {
-      //albumDataSink.add("Error");
+      checkUserAlreadySignUpSink.addError(Exception(Constant.somethingWentWrong));
       print(e.toString());
     }
+    return null;
+  }
+
+  void enterSomeDummyDataToStreamController() {
+    checkUserAlreadySignUpSink.add(Constant.loading);
+    signUpOfNewUserSink.add(Constant.loading);
   }
 
   /// This method will be use for implement API for SignUp into the app.
@@ -60,13 +76,15 @@ class SignUpScreenBloc {
           passwordValue);
       if (response is AppException) {
         apiResponse = response.toString();
+        _signUpOfNewUserStreamController.addError(response);
       } else {
         apiResponse = Constant.success;
         userProfileInfoModel = UserProfileInfoModel.fromJson(jsonDecode(response));
         var loggedInUserInformationData = await SignUpOnBoardProviders.db.insertUserProfileInfo(userProfileInfoModel);
         print(loggedInUserInformationData);
       }
-    } catch (Exception) {
+    } catch (e) {
+      _signUpOfNewUserStreamController.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -74,5 +92,7 @@ class SignUpScreenBloc {
 
   void dispose() {
     _albumStreamController?.close();
+    _checkUserAlreadySignUpStreamController?.close();
+    _signUpOfNewUserStreamController?.close();
   }
 }

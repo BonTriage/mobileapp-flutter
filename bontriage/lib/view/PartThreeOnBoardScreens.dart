@@ -13,6 +13,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
+import 'NetworkErrorScreen.dart';
 import 'SignUpBottomSheet.dart';
 import 'on_board_bottom_buttons.dart';
 import 'on_board_chat_bubble.dart';
@@ -51,6 +52,10 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
     _signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _pageViewWidgetList = [];
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context);
+    });
 
     _getCurrentUserPosition();
   }
@@ -107,6 +112,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
             if (snapshot.hasData) {
               print(snapshot.hasData);
               if (!_isAlreadyDataFiltered) {
+                Utils.closeApiLoaderDialog(context);
                 _addPageViewWidgets(snapshot.data);
               }
               return Column(
@@ -178,13 +184,17 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                   )
                 ],
               );
-            } else {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ApiLoaderScreen(),
-                ],
+            } else if (snapshot.hasError) {
+              Utils.closeApiLoaderDialog(context);
+              return NetworkErrorScreen(
+                errorMessage: snapshot.error.toString(),
+                tapToRetryFunction: () {
+                  Utils.showApiLoaderDialog(context);
+                  requestService();
+                },
               );
+            } else {
+              return Container();
             }
           },
         ),
@@ -275,7 +285,18 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   void sendUserDataAndMoveInToNextScreen() async {
-    Utils.showApiLoaderDialog(context);
+    Utils.showApiLoaderDialog(
+      context,
+      networkStream: _signUpOnBoardThirdStepBloc.sendThirdStepDataStream,
+      tapToRetryFunction: () {
+        _signUpOnBoardThirdStepBloc.enterSomeDummyDataToStreamController();
+        _callSendThirdStepDataApi();
+      }
+    );
+    _callSendThirdStepDataApi();
+  }
+
+  void _callSendThirdStepDataApi() async {
     var response = await _signUpOnBoardThirdStepBloc
         .sendSignUpThirdStepData(_signUpOnBoardSelectedAnswersModel);
     if (response is String) {

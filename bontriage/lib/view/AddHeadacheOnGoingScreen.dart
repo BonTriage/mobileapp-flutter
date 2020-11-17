@@ -14,6 +14,7 @@ import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
 
 import 'AddNoteBottomSheet.dart';
+import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   final bool isHeadacheEnded;
@@ -40,6 +41,8 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   bool isUserHeadacheEnded = false;
 
+  bool _isDataPopulated = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +51,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _addHeadacheLogBloc = AddHeadacheLogBloc();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context);
+    });
+
     requestService();
   }
 
@@ -128,6 +136,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                         stream: _addHeadacheLogBloc.addHeadacheLogDataStream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            if(!_isDataPopulated) {
+                              Utils.closeApiLoaderDialog(context);
+                            }
                             return Column(
                               children: [
                                 Column(
@@ -230,18 +241,17 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                 ),
                               ],
                             );
-                          } else {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ApiLoaderScreen(),
-                                  ],
-                                ),
-                              ),
+                          } else if (snapshot.hasError){
+                            Utils.closeApiLoaderDialog(context);
+                            return NetworkErrorScreen(
+                              errorMessage: snapshot.error.toString(),
+                              tapToRetryFunction: () {
+                                Utils.showApiLoaderDialog(context);
+                                requestService();
+                              },
                             );
+                          } else {
+                            return Container();
                           }
                         },
                       ),
@@ -292,6 +302,8 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: widget.isHeadacheEnded));
     });
+
+    _isDataPopulated = true;
     return listOfWidgets;
   }
 
@@ -372,14 +384,25 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       saveAndUpdateDataInLocalDatabase(userAddHeadacheLogModel);
       Navigator.pop(context);
     } else {
-      Utils.showApiLoaderDialog(context);
-      var response = await _addHeadacheLogBloc
-          .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
-      if (response == Constant.success) {
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(
-            context, Constant.addHeadacheSuccessScreenRouter);
-      }
+      Utils.showApiLoaderDialog(
+        context,
+        networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+        tapToRetryFunction: () {
+          _addHeadacheLogBloc.enterSomeDummyData();
+          _callSendAddHeadacheLogApi();
+        }
+      );
+      _callSendAddHeadacheLogApi();
+    }
+  }
+
+  void _callSendAddHeadacheLogApi() async {
+    var response = await _addHeadacheLogBloc
+        .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
+    if (response == Constant.success) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(
+          context, Constant.addHeadacheSuccessScreenRouter);
     }
   }
 
