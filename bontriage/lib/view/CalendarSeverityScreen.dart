@@ -330,7 +330,7 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                         width: 10,
                       ),
                       Text(
-                        '0 - 30',
+                        '1 - 3',
                         style: TextStyle(
                             fontSize: 12,
                             color: Constant.locationServiceGreen,
@@ -376,7 +376,7 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                         width: 10,
                       ),
                       Text(
-                        '31 - 70',
+                        '4 - 7',
                         style: TextStyle(
                             fontSize: 12,
                             color: Constant.locationServiceGreen,
@@ -422,7 +422,7 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                         width: 10,
                       ),
                       Text(
-                        '71+',
+                        '8 to 10',
                         style: TextStyle(
                             fontSize: 12,
                             color: Constant.locationServiceGreen,
