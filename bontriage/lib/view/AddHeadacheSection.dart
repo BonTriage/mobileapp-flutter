@@ -10,6 +10,7 @@ import 'package:mobile/models/TriggerWidgetModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddNewMedicationDialog.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
 import 'package:mobile/view/DateTimePicker.dart';
 import 'package:mobile/view/LogDayChipList.dart';
@@ -78,6 +79,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   List<TriggerWidgetModel> _triggerWidgetList = [];
   String previousMedicationTag;
   List<SelectedAnswers> selectedAnswerListOfTriggers = [];
+  List<SelectedAnswers> doubleTapSelectedAnswer = [];
 
   Widget _getSectionWidget() {
     switch (widget.contentType) {
@@ -170,12 +172,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           onDoubleTapItem: _onDoubleTapItem,
+          onCircleItemSelected: _onExerciseItemSelected,
           currentTag: widget.contentType,
         ));
       case 'behavior.preexercise':
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           onDoubleTapItem: _onDoubleTapItem,
+          onCircleItemSelected: _onExerciseItemSelected,
           currentTag: widget.contentType,
         ));
       case 'medication':
@@ -200,6 +204,16 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         } catch(e) {
           print(e.toString());
         }
+
+        Values plusValue = widget.valuesList.firstWhere((element) => element.text == Constant.plusText, orElse: () => null);
+        if(plusValue == null) {
+          widget.valuesList.add(Values(text: Constant.plusText,
+              valueNumber: (widget.valuesList.length + 1).toString()));
+          _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+          _medicationDosageList.add(List.generate(1, (index) => Questions()));
+          _numberOfDosageAddedList.add(0);
+        }
+
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           onCircleItemSelected: _onMedicationItemSelected,
@@ -254,10 +268,28 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     
     if(widget.contentType == 'medication')
       _updateMedicationSelectedDataModel();
+
+    if(widget.valuesList[index].text.toLowerCase() == Constant.none) {
+      setState(() {
+        widget.valuesList.asMap().forEach((key, element) {
+          if(index != key) {
+            element
+              ..isSelected = false
+              ..isDoubleTapped = false;
+          }
+        });
+        _triggerWidgetList.clear();
+      });
+
+      widget.selectedAnswers.removeWhere((element) => element.questionTag.contains('triggers1'));
+      doubleTapSelectedAnswer.removeWhere((element) => element.questionTag.contains('triggers1'));
+    }
     
     if (isDoubleTapped) {
       if (questionType == 'multi') {
         widget.selectedAnswers.add(
+            SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        doubleTapSelectedAnswer.add(
             SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
@@ -268,6 +300,16 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
         } else {
           selectedAnswerObj.answer = selectedAnswer;
+        }
+
+        SelectedAnswers doubleTapSelectedAnswerObj = doubleTapSelectedAnswer.firstWhere(
+                (element) => element.questionTag == currentTag,
+            orElse: () => null);
+        if (doubleTapSelectedAnswerObj == null) {
+          doubleTapSelectedAnswer.add(
+              SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        } else {
+          doubleTapSelectedAnswerObj.answer = selectedAnswer;
         }
       }
     } else {
@@ -283,6 +325,18 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         selectedAnswerList.forEach((element) {
           widget.selectedAnswers.remove(element);
         });
+
+        List<SelectedAnswers> doubleTapSelectedAnswerList = [];
+        doubleTapSelectedAnswer.forEach((element) {
+          if (element.questionTag == currentTag &&
+              element.answer == selectedAnswer) {
+            doubleTapSelectedAnswerList.add(element);
+          }
+        });
+
+        doubleTapSelectedAnswerList.forEach((element) {
+          doubleTapSelectedAnswer.remove(element);
+        });
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
             (element) => element.questionTag == currentTag,
@@ -291,14 +345,22 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if (selectedAnswerObj != null) {
           widget.selectedAnswers.remove(selectedAnswerObj);
         }
+
+        SelectedAnswers doubleTapSelectedAnswerObj = doubleTapSelectedAnswer.firstWhere(
+                (element) => element.questionTag == currentTag,
+            orElse: () => null);
+
+        if (doubleTapSelectedAnswerObj != null) {
+          doubleTapSelectedAnswer.remove(doubleTapSelectedAnswerObj);
+        }
       }
     }
-    storeExpandableViewSelectedData();
+    storeExpandableViewSelectedData(isDoubleTapped);
     storeLogDayDataIntoDatabase();
     print(widget.selectedAnswers.length);
   }
 
-  void storeExpandableViewSelectedData() {
+  void storeExpandableViewSelectedData(bool isDoubleTapped) {
     switch (widget.contentType) {
       case 'behavior.presleep':
         String text = widget.valuesList[whichSleepItemSelected].text;
@@ -308,34 +370,58 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           List<Values> values = widget.sleepExpandableWidgetList[0].values;
           values.forEach((element) {
             if (element.isSelected) {
-              widget.selectedAnswers.add(SelectedAnswers(
-                  questionTag: 'behavior.sleep', answer: element.valueNumber));
+              widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+              doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
             }
           });
         } else {
           widget.selectedAnswers.removeWhere(
               (element) => element.questionTag == 'behavior.sleep');
+          doubleTapSelectedAnswer.removeWhere(
+                  (element) => element.questionTag == 'behavior.sleep');
         }
         break;
       case 'medication':
-        SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere(
-            (element) => element.questionTag == 'administered',
-            orElse: () => null);
-        if (selectedAnswers == null) {
-          widget.selectedAnswers.add(SelectedAnswers(
-              questionTag: 'administered',
-              answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+        if(isDoubleTapped) {
+          SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere(
+                  (element) => element.questionTag == 'administered',
+              orElse: () => null);
+          if (selectedAnswers == null) {
+            widget.selectedAnswers.add(SelectedAnswers(
+                questionTag: 'administered',
+                answer: medicationSelectedDataModelToJson(
+                    _medicationSelectedDataModel)));
+          } else {
+            selectedAnswers.answer =
+                medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+          }
         } else {
-          selectedAnswers.answer =
-              medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+          widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
         }
 
-        if (previousMedicationTag != null) {
+        if(isDoubleTapped) {
+          SelectedAnswers selectedAnswers = doubleTapSelectedAnswer.firstWhere(
+                  (element) => element.questionTag == 'administered',
+              orElse: () => null);
+          if (selectedAnswers == null) {
+            doubleTapSelectedAnswer.add(SelectedAnswers(
+                questionTag: 'administered',
+                answer: medicationSelectedDataModelToJson(
+                    _medicationSelectedDataModel)));
+          } else {
+            selectedAnswers.answer =
+                medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+          }
+        } else {
+          doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == 'administered');
+        }
+
+        /*if (previousMedicationTag != null) {
           widget.selectedAnswers.removeWhere(
               (element) => element.questionTag == previousMedicationTag);
-        }
+        }*/
 
-        previousMedicationTag = widget
+        /*previousMedicationTag = widget
             .medicationExpandableWidgetList[whichMedicationItemSelected].tag;
         Values selectedDosageValue = widget
             .medicationExpandableWidgetList[whichMedicationItemSelected].values
@@ -344,7 +430,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           widget.selectedAnswers.add(SelectedAnswers(
               questionTag: previousMedicationTag,
               answer: selectedDosageValue.valueNumber));
-        }
+        }*/
         break;
       case 'triggers1':
         widget.valuesList.forEach((element) {
@@ -377,6 +463,37 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             }
           }
         });
+
+        widget.valuesList.forEach((element) {
+          if (element.isDoubleTapped && element.isSelected) {
+            Questions questionTriggerData = widget.triggerExpandableWidgetList
+                .firstWhere(
+                    (element1) => element1.precondition.contains(element.text),
+                orElse: () => null);
+            if (questionTriggerData != null) {
+              SelectedAnswers selectedAnswerTriggerData =
+              selectedAnswerListOfTriggers.firstWhere(
+                      (element1) =>
+                  element1.questionTag == questionTriggerData.tag,
+                  orElse: () => null);
+              if (selectedAnswerTriggerData != null) {
+                SelectedAnswers selectedAnswerData = doubleTapSelectedAnswer
+                    .firstWhere(
+                        (element1) =>
+                    element1.questionTag ==
+                        selectedAnswerTriggerData.questionTag,
+                    orElse: () => null);
+                if (selectedAnswerData == null) {
+                  doubleTapSelectedAnswer.add(SelectedAnswers(
+                      questionTag: selectedAnswerTriggerData.questionTag,
+                      answer: selectedAnswerTriggerData.answer));
+                } else {
+                  selectedAnswerData.answer = selectedAnswerTriggerData.answer;
+                }
+              }
+            }
+          }
+        });
         break;
     }
   }
@@ -398,42 +515,62 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       else
         logDayQuestionnaire.userId = '4214';
 
-      logDayQuestionnaire.selectedAnswers = jsonEncode(widget.selectedAnswers);
+      logDayQuestionnaire.selectedAnswers = jsonEncode(doubleTapSelectedAnswer);
       SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
     } else {
       var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
       if(userProfileInfoData != null)
-        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.selectedAnswers), userProfileInfoData.userId);
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(doubleTapSelectedAnswer), userProfileInfoData.userId);
       else
-        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.selectedAnswers), '4214');
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(doubleTapSelectedAnswer), '4214');
     }
   }
 
   void _onSleepItemSelected(int index) {
     String preCondition = widget.sleepExpandableWidgetList[0].precondition;
     String text = widget.valuesList[index].text;
+    String valueNumber = widget.valuesList[index].valueNumber;
+    bool isSelected = widget.valuesList[index].isSelected;
 
     whichSleepItemSelected = index;
 
-    if (preCondition.contains(text) && widget.valuesList[index].isSelected) {
+    _updateSelectedAnswerListWhenCircleItemSelected(valueNumber, isSelected);
+
+    if (preCondition.contains(text) && isSelected) {
       _animationController.forward();
     } else {
       _animationController.reverse();
     }
   }
 
+  void _onExerciseItemSelected(int index) {
+    String valueNumber = widget.valuesList[index].valueNumber;
+    bool isSelected = widget.valuesList[index].isSelected;
+    _updateSelectedAnswerListWhenCircleItemSelected(valueNumber, isSelected);
+  }
+
   void _onMedicationItemSelected(int index) {
-    setState(() {
-      whichMedicationItemSelected = index;
-    });
-
-    _updateMedicationSelectedDataModel();
-
-    if (widget.valuesList[index].isSelected) {
-      _animationController.forward();
+    if (widget.valuesList[index].text == Constant.plusText) {
+      _openAddNewMedicationDialog();
     } else {
-      _animationController.reverse();
+      setState(() {
+        whichMedicationItemSelected = index;
+      });
+
+      _updateMedicationSelectedDataModel();
+
+      if (widget.valuesList[index].isSelected) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+        widget.selectedAnswers.removeWhere((element) =>
+        element.questionTag == 'administered');
+      }
+
+      String valueNumber = widget.valuesList[index].valueNumber;
+      bool isSelected = widget.valuesList[index].isSelected;
+      _updateSelectedAnswerListWhenCircleItemSelected(valueNumber, isSelected);
     }
   }
 
@@ -450,6 +587,43 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     } else {
       _animationController.reverse();
     }
+
+    String valueNumber = widget.valuesList[index].valueNumber;
+    String valueText = widget.valuesList[index].text ;
+    bool isSelected = widget.valuesList[index].isSelected;
+
+    if(valueText.toLowerCase() == Constant.none && isSelected) {
+      setState(() {
+        widget.valuesList.asMap().forEach((key, element) {
+          if(index != key) {
+            element
+              ..isSelected = false
+              ..isDoubleTapped = false;
+          }
+        });
+        _triggerWidgetList.clear();
+      });
+
+      widget.selectedAnswers.removeWhere((element) => element.questionTag.contains('triggers1'));
+    } else if (isSelected) {
+      Values noneValue = widget.valuesList.firstWhere((element) => element.text.toLowerCase() == Constant.none, orElse: () => null);
+      if(noneValue != null) {
+        setState(() {
+          noneValue
+              ..isSelected = false
+              ..isDoubleTapped = false;
+        });
+      }
+    }
+
+    if(!isSelected) {
+      Questions triggerExpandableQuestionObj = widget.triggerExpandableWidgetList.firstWhere((element) => element.precondition.contains(valueText), orElse: () => null);
+      if(triggerExpandableQuestionObj != null)
+        widget.selectedAnswers.removeWhere((element) => element.questionTag == triggerExpandableQuestionObj.tag);
+    }
+
+    _updateSelectedAnswerListWhenCircleItemSelected(valueNumber, isSelected);
+    _storeExpandedWidgetDataIntoLocalModel();
   }
 
   Widget _getWidget(Widget mainWidget) {
@@ -809,6 +983,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           child: TextFormField(
                             minLines: 5,
                             maxLines: 6,
+                            textInputAction: TextInputAction.done,
                             onChanged: (text) {
                               onValueChangedCallback(questionTag, text.trim());
                             },
@@ -923,6 +1098,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   void _onMedicationChipSelectedCallback(String tag, String data) {
     _updateMedicationSelectedDataModel();
+    _storeExpandedWidgetDataIntoLocalModel();
   }
 
   Widget _getAddedDosageList() {
@@ -1005,6 +1181,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       _medicationDosageList[whichMedicationItemSelected].removeAt(index + 1);
 
                       _updateMedicationSelectedDataModel();
+                      _storeExpandedWidgetDataIntoLocalModel();
                     });
                   },
                   child: Text(
@@ -1067,6 +1244,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       selectedAnswerListOfTriggers
           .add(SelectedAnswers(questionTag: currentTag, answer: value));
     }
+
+    _storeExpandedWidgetDataIntoLocalModel();
   }
 
   /// This method is used to get list of chips widget which will be shown when user taps on the options of sleep section
@@ -1083,13 +1262,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             } else {
               element.isSelected = true;
             }
-
-            /*if(element.isSelected) {
->>>>>>> feature/LogDay
-              numberOfSleepItemSelected++;
-            } else {
-              numberOfSleepItemSelected--;
-            }*/
+            _storeExpandedWidgetDataIntoLocalModel();
           });
         },
         onDoubleTap: () {
@@ -1148,6 +1321,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
     if (widget.selectedAnswers != null) {
+      doubleTapSelectedAnswer.addAll(widget.selectedAnswers);
       widget.selectedAnswers.forEach((element) {
         if (element.questionTag.contains('triggers1.')) {
           selectedAnswerListOfTriggers.add(element);
@@ -1305,6 +1479,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     });
 
     _updateMedicationSelectedDataModel();
+
+    _storeExpandedWidgetDataIntoLocalModel();
   }
 
   void _updateMedicationSelectedDataModel() {
@@ -1324,6 +1500,156 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       selectedMedicationIndex: whichMedicationItemSelected,
       selectedMedicationDateList: _medicineTimeList[whichMedicationItemSelected],
       selectedMedicationDosageList: selectedMedicationDosageList,
+    );
+  }
+
+  void _updateSelectedAnswerListWhenCircleItemSelected(String selectedAnswer, bool isSelected) {
+    if(isSelected) {
+      if (widget.questionType == 'multi') {
+        widget.selectedAnswers.add(
+            SelectedAnswers(
+                questionTag: widget.contentType, answer: selectedAnswer));
+      } else {
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
+                (element) => element.questionTag == widget.contentType,
+            orElse: () => null);
+        if (selectedAnswerObj == null) {
+          widget.selectedAnswers.add(
+              SelectedAnswers(
+                  questionTag: widget.contentType, answer: selectedAnswer));
+        } else {
+          selectedAnswerObj.answer = selectedAnswer;
+        }
+      }
+    } else {
+      if (widget.questionType == 'multi') {
+        List<SelectedAnswers> selectedAnswerList = [];
+        widget.selectedAnswers.forEach((element) {
+          if (element.questionTag == widget.contentType &&
+              element.answer == selectedAnswer) {
+            selectedAnswerList.add(element);
+          }
+        });
+
+        selectedAnswerList.forEach((element) {
+          widget.selectedAnswers.remove(element);
+        });
+      } else {
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
+                (element) => element.questionTag == widget.contentType,
+            orElse: () => null);
+
+        if (selectedAnswerObj != null) {
+          widget.selectedAnswers.remove(selectedAnswerObj);
+        }
+      }
+    }
+  }
+
+  void _storeExpandedWidgetDataIntoLocalModel() {
+    switch (widget.contentType) {
+      case 'behavior.presleep':
+        String text = widget.valuesList[whichSleepItemSelected].text;
+        String preCondition = widget.sleepExpandableWidgetList[0].precondition;
+
+        if (preCondition.contains(text)) {
+          List<Values> values = widget.sleepExpandableWidgetList[0].values;
+
+          widget.selectedAnswers.removeWhere((element) => element.questionTag == 'behavior.sleep');
+
+          values.forEach((element) {
+            if (element.isSelected) {
+              widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+            }
+          });
+        } else {
+          widget.selectedAnswers.removeWhere(
+                  (element) => element.questionTag == 'behavior.sleep');
+        }
+        break;
+      case 'medication':
+        widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
+        SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere(
+                (element) => element.questionTag == 'administered',
+            orElse: () => null);
+        if (selectedAnswers == null) {
+          widget.selectedAnswers.add(SelectedAnswers(
+              questionTag: 'administered',
+              answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+        } else {
+          selectedAnswers.answer =
+              medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+        }
+
+        if (previousMedicationTag != null) {
+          widget.selectedAnswers.removeWhere(
+                  (element) => element.questionTag == previousMedicationTag);
+        }
+
+        previousMedicationTag = widget
+            .medicationExpandableWidgetList[whichMedicationItemSelected].tag;
+        Values selectedDosageValue = widget
+            .medicationExpandableWidgetList[whichMedicationItemSelected].values
+            .firstWhere((element) => element.isSelected, orElse: () => null);
+        if (selectedDosageValue != null) {
+          widget.selectedAnswers.add(SelectedAnswers(
+              questionTag: previousMedicationTag,
+              answer: selectedDosageValue.valueNumber));
+        }
+        break;
+      case 'triggers1':
+        widget.valuesList.forEach((element) {
+          if (element.isSelected) {
+            Questions questionTriggerData = widget.triggerExpandableWidgetList
+                .firstWhere(
+                    (element1) => element1.precondition.contains(element.text),
+                orElse: () => null);
+            if (questionTriggerData != null) {
+              SelectedAnswers selectedAnswerTriggerData =
+              selectedAnswerListOfTriggers.firstWhere(
+                      (element1) =>
+                  element1.questionTag == questionTriggerData.tag,
+                  orElse: () => null);
+              if (selectedAnswerTriggerData != null) {
+                SelectedAnswers selectedAnswerData = widget.selectedAnswers
+                    .firstWhere(
+                        (element1) =>
+                    element1.questionTag ==
+                        selectedAnswerTriggerData.questionTag,
+                    orElse: () => null);
+                if (selectedAnswerData == null) {
+                  widget.selectedAnswers.add(SelectedAnswers(
+                      questionTag: selectedAnswerTriggerData.questionTag,
+                      answer: selectedAnswerTriggerData.answer));
+                } else {
+                  selectedAnswerData.answer = selectedAnswerTriggerData.answer;
+                }
+              }
+            }
+          }
+        });
+        break;
+    }
+  }
+
+  void _openAddNewMedicationDialog() {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (buildContext, animation, secondaryAnimation) {
+        return Builder(
+          builder: (context) {
+            return Material(
+              color: Colors.black26,
+              child: Align(
+                alignment: Alignment.center,
+                child: AddNewMedicationDialog(),
+              ),
+            );
+          },
+        );
+      },
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 150),
     );
   }
 }

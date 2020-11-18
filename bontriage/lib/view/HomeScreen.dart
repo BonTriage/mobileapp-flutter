@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
    saveHomePosition();
+   print(Utils.getDateTimeInUtcFormat(DateTime.now()));
   }
   @override
   Widget build(BuildContext context) {

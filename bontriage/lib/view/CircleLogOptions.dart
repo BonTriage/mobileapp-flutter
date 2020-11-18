@@ -45,52 +45,23 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (widget.questionType == 'multi') {
-                        Values value = widget.logOptions[index];
-                        if (value.isSelected) {
-                          value.isSelected = false;
-                          value.isDoubleTapped = false;
-                        } else {
-                          value.isSelected = true;
-                        }
-                      } else {
-                        widget.logOptions.asMap().forEach((key, value) {
-                          if (key == index) {
-                            if (value.isSelected) {
-                              value.isSelected = false;
-                              value.isDoubleTapped = false;
-                            } else {
-                              value.isSelected = true;
-                            }
-                          } else {
+                      if(widget.logOptions[index].text != Constant.plusText) {
+                        if (widget.questionType == 'multi') {
+                          Values value = widget.logOptions[index];
+                          if (value.isSelected) {
                             value.isSelected = false;
                             value.isDoubleTapped = false;
-                          }
-                        });
-                      }
-                      if (widget.onCircleItemSelected != null)
-                        widget.onCircleItemSelected(index);
-                      print('onTap');
-                    });
-                  },
-                  onDoubleTap: () {
-                    if (widget.onDoubleTapItem != null) {
-                      setState(() {
-                        if (widget.questionType == 'multi') {
-                          if (widget.logOptions[index].isDoubleTapped) {
-                            widget.logOptions[index].isDoubleTapped = false;
                           } else {
-                            widget.logOptions[index].isSelected = true;
-                            widget.logOptions[index].isDoubleTapped = true;
+                            value.isSelected = true;
                           }
                         } else {
                           widget.logOptions.asMap().forEach((key, value) {
                             if (key == index) {
-                              if (value.isDoubleTapped) {
+                              if (value.isSelected) {
+                                value.isSelected = false;
                                 value.isDoubleTapped = false;
                               } else {
                                 value.isSelected = true;
-                                value.isDoubleTapped = true;
                               }
                             } else {
                               value.isSelected = false;
@@ -98,17 +69,49 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                             }
                           });
                         }
-                        widget.onDoubleTapItem(
-                            widget.currentTag,
-                            widget.logOptions[index].valueNumber,
-                            widget.questionType,
-                            widget.logOptions[index].isDoubleTapped,
-                            index);
-                      });
-
+                      }
                       if (widget.onCircleItemSelected != null)
                         widget.onCircleItemSelected(index);
-                      print('onDoubleTap');
+                    });
+                  },
+                  onDoubleTap: () {
+                    if (widget.onDoubleTapItem != null) {
+                      if(widget.logOptions[index].text != Constant.plusText) {
+                        setState(() {
+                          if (widget.questionType == 'multi') {
+                            if (widget.logOptions[index].isDoubleTapped) {
+                              widget.logOptions[index].isDoubleTapped = false;
+                            } else {
+                              widget.logOptions[index].isSelected = true;
+                              widget.logOptions[index].isDoubleTapped = true;
+                            }
+                          } else {
+                            widget.logOptions.asMap().forEach((key, value) {
+                              if (key == index) {
+                                if (value.isDoubleTapped) {
+                                  value.isDoubleTapped = false;
+                                } else {
+                                  value.isSelected = true;
+                                  value.isDoubleTapped = true;
+                                }
+                              } else {
+                                value.isSelected = false;
+                                value.isDoubleTapped = false;
+                              }
+                            });
+                          }
+                          widget.onDoubleTapItem(
+                              widget.currentTag,
+                              widget.logOptions[index].valueNumber,
+                              widget.questionType,
+                              widget.logOptions[index].isDoubleTapped,
+                              index);
+                        });
+
+                        if (widget.onCircleItemSelected != null)
+                          widget.onCircleItemSelected(index);
+                        print('onDoubleTap');
+                      }
                     }
                   },
                   child: Container(

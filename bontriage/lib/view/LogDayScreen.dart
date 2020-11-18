@@ -28,6 +28,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   DateTime _dateTime;
   LogDayBloc _logDayBloc;
   List<Widget> _sectionWidgetList = [];
+  List<Questions> _questionsList = [];
   List<Questions> _sleepValuesList = [];
   List<Questions> _medicationValuesList = [];
   List<Questions> _triggerValuesList = [];
@@ -183,7 +184,9 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   BouncingWidget(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _onSubmitClicked();
+                                    },
                                     child: Container(
                                       width: 110,
                                       padding: EdgeInsets.symmetric(vertical: 8),
@@ -275,6 +278,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void addNewWidgets(List<Questions> questionList) {
+    _questionsList.addAll(questionList);
     if (_sectionWidgetList.length == 0) {
       if (selectedAnswers.length != 0) {
         selectedAnswers.forEach((element) {
@@ -362,5 +366,28 @@ class _LogDayScreenState extends State<LogDayScreen>
         );
       },
     );
+  }
+
+  void _onSubmitClicked() async {
+    Utils.showApiLoaderDialog(
+        context,
+        networkStream: _logDayBloc.sendLogDayDataStream,
+        tapToRetryFunction: () {
+          _logDayBloc.enterSomeDummyDataToStreamController();
+          _callSendLogDayDataApi();
+        }
+    );
+    _callSendLogDayDataApi();
+  }
+
+  void _callSendLogDayDataApi() async {
+    var response = await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
+    if (response is String) {
+      if (response == Constant.success) {
+        SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, Constant.logDaySuccessScreenRouter);
+      }
+    }
   }
 }

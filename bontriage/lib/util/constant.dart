@@ -501,6 +501,7 @@ class Constant {
   static String clickHereToFinish = 'Click here to finish.';
   static String isProfileInCompleteStatus = 'isProfileInCompleteStatus';
   static String tapToRetry = 'Tap to Retry';
+  static String none = 'none';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
@@ -616,4 +617,7 @@ class Constant {
   static const String clinicalImpressionShort0 = 'clinical_impression_short0';
   static const String clinicalImpressionShort1 = 'clinical_impression_short1';
   static const String profileEventType = 'profile';
+  static const String behaviorsEventType = 'behaviors';
+  static const String medicationEventType = 'medication';
+  static const String triggersEventType = 'triggers';
 }
