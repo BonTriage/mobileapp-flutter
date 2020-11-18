@@ -9,6 +9,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 
 
 class AddHeadacheLogRepository{
@@ -39,8 +40,9 @@ class AddHeadacheLogRepository{
     var client = http.Client();
     var album;
     try {
+      String payload = await _setUserAddHeadachePayload(signUpOnBoardSelectedAnswersModel);
       var response = await NetworkService(url, requestMethod,
-          _setUserAddHeadachePayload(signUpOnBoardSelectedAnswersModel))
+          payload)
           .serviceCall();
       if (response is AppException) {
         return response;
@@ -54,14 +56,20 @@ class AddHeadacheLogRepository{
     }
   }
 
-  String _setUserAddHeadachePayload(
-      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
+  Future<String> _setUserAddHeadachePayload(
+      SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) async{
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
     SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType = "headache";
-    signUpOnBoardAnswersRequestModel.userId = 4551;
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
-    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(userProfileInfoData != null) {
+      signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
+    } else {
+      signUpOnBoardAnswersRequestModel.userId = 4214;
+    }
+    DateTime dateTime = DateTime.now();
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 2));
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
@@ -69,7 +77,7 @@ class AddHeadacheLogRepository{
             MobileEventDetails(
                 questionTag: model.questionTag,
                 questionJson: "",
-                updatedAt: "2020-10-08T08:18:21Z",
+                updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
                 value: [model.answer]));
       });
     } catch (e) {

@@ -185,7 +185,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 children: [
                                   BouncingWidget(
                                     onPressed: () {
-                                      _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
+                                      _onSubmitClicked();
                                     },
                                     child: Container(
                                       width: 110,
@@ -366,5 +366,28 @@ class _LogDayScreenState extends State<LogDayScreen>
         );
       },
     );
+  }
+
+  void _onSubmitClicked() async {
+    Utils.showApiLoaderDialog(
+        context,
+        networkStream: _logDayBloc.sendLogDayDataStream,
+        tapToRetryFunction: () {
+          _logDayBloc.enterSomeDummyDataToStreamController();
+          _callSendLogDayDataApi();
+        }
+    );
+    _callSendLogDayDataApi();
+  }
+
+  void _callSendLogDayDataApi() async {
+    var response = await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
+    if (response is String) {
+      if (response == Constant.success) {
+        SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, Constant.logDaySuccessScreenRouter);
+      }
+    }
   }
 }

@@ -406,4 +406,10 @@ class Utils {
       Navigator.pop(context);
     });
   }
+
+  static String getDateTimeInUtcFormat(DateTime dateTime) {
+    String dateTimeIsoString = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second).toUtc().toIso8601String();
+    List<String> splitedString = dateTimeIsoString.split('.');
+    return '${splitedString[0]}Z';
+  }
 }

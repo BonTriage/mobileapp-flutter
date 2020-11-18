@@ -44,4 +44,18 @@ class LogDayRepository {
     List<Map> userLogDataMap = await SignUpOnBoardProviders.db.getLogDayData(userId);
     return userLogDataMap;
   }
+
+  Future<dynamic> logDaySubmissionDataServiceCall(String url, RequestMethod requestMethod, String payload) async{
+    var response;
+    try {
+      response = await NetworkService(url, requestMethod, payload).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return response;
+    }
+  }
 }

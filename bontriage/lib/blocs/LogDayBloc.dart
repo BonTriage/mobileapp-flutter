@@ -7,11 +7,13 @@ import 'package:mobile/models/MedicationSelectedDataModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardAnswersRequestModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LogDayRepository.dart';
 import 'package:mobile/util/LinearListFilter.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -19,9 +21,19 @@ class LogDayBloc {
   LogDayRepository _logDayRepository;
   StreamController<dynamic> _logDayDataStreamController;
 
+  List<SelectedAnswers> behaviorSelectedAnswerList = [];
+  List<SelectedAnswers> medicationSelectedAnswerList = [];
+  List<SelectedAnswers> triggerSelectedAnswerList = [];
+
   StreamSink<dynamic> get logDayDataSink => _logDayDataStreamController.sink;
 
   Stream<dynamic> get logDayDataStream => _logDayDataStreamController.stream;
+
+  StreamController<dynamic> _sendLogDayDataStreamController;
+
+  StreamSink<dynamic> get sendLogDayDataSink => _sendLogDayDataStreamController.sink;
+
+  Stream<dynamic> get sendLogDayDataStream => _sendLogDayDataStreamController.stream;
 
   List<String> eventTypeList = ['behaviors', 'medication', 'triggers'];
   int _currentEventTypeIndex = 0;
@@ -30,6 +42,7 @@ class LogDayBloc {
 
   LogDayBloc() {
     _logDayDataStreamController = StreamController<dynamic>();
+    _sendLogDayDataStreamController = StreamController<dynamic>();
     _logDayRepository = LogDayRepository();
   }
 
@@ -123,13 +136,38 @@ class LogDayBloc {
 
   void dispose() {
     _logDayDataStreamController?.close();
+    _sendLogDayDataStreamController?.close();
   }
 
-  void sendLogDayData(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
-    List<SelectedAnswers> behaviorSelectedAnswerList = [];
-    List<SelectedAnswers> medicationSelectedAnswerList = [];
-    List<SelectedAnswers> triggerSelectedAnswerList = [];
+  Future<String> sendLogDayData(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
+    behaviorSelectedAnswerList.clear();
+    medicationSelectedAnswerList.clear();
+    triggerSelectedAnswerList.clear();
+    String payload = await _getLogDaySubmissionPayload(selectedAnswers, questionList);
+    String response;
+    try {
+      var logDaySendData = await _logDayRepository.logDaySubmissionDataServiceCall(WebservicePost.qaServerUrl + 'logday', RequestMethod.POST, payload);
+      if (logDaySendData is AppException) {
+        print(logDaySendData);
+        response = logDaySendData.toString();
+        sendLogDayDataSink.addError(logDaySendData);
+      } else {
+        print(logDaySendData);
+        if(logDaySendData != null) {
+          response = Constant.success;
+        } else {
+          sendLogDayDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      response = Constant.somethingWentWrong;
+      sendLogDayDataSink.addError(Exception(Constant.somethingWentWrong));
+      //  signUpFirstStepDataSink.add("Error");
+    }
+    return response;
+  }
 
+  Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async{
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
       if(element.questionTag.contains('behavior')) {
@@ -178,7 +216,7 @@ class LogDayBloc {
             selectedValuesList = [];
 
             medicationSelectedDataModel.selectedMedicationDateList.forEach((dateElement) {
-              selectedValuesList.add(DateTime.parse(dateElement).toUtc().toString());
+              selectedValuesList.add(DateTime.parse(dateElement).toUtc().toIso8601String());
             });
 
             medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
@@ -285,28 +323,28 @@ class LogDayBloc {
 
     LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
 
-    logDaySendDataModel.behaviors = await _getSelectAnswerModel(behaviorSelectedAnswerList);
-    logDaySendDataModel.medication = await _getSelectAnswerModel(medicationSelectedAnswerList);
-    logDaySendDataModel.triggers = await _getSelectAnswerModel(triggerSelectedAnswerList);
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    print(jsonEncode(logDaySendDataModel.toJson()));
-    print('hello');
+    logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData);
+    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData);
+    logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData);
+
+    return jsonEncode(logDaySendDataModel.toJson());
   }
 
-  Future<SignUpOnBoardAnswersRequestModel> _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers) async{
+  SignUpOnBoardAnswersRequestModel _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers, String eventType, UserProfileInfoModel userProfileInfoData){
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
     SignUpOnBoardAnswersRequestModel();
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType =
-        Constant.clinicalImpressionShort1;
+        eventType;
     if (userProfileInfoData != null)
       signUpOnBoardAnswersRequestModel.userId =
           int.parse(userProfileInfoData.userId);
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
-    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    DateTime dateTime = DateTime.now();
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 2));
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
 
     selectedAnswers.forEach((element) {
@@ -316,10 +354,14 @@ class LogDayBloc {
           MobileEventDetails(
               questionTag: element.questionTag,
               questionJson: "",
-              updatedAt: "2020-10-08T08:18:21Z",
+              updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
               value: valuesList));
     });
 
     return signUpOnBoardAnswersRequestModel;
+  }
+
+  void enterSomeDummyDataToStreamController() {
+    logDayDataSink.add(Constant.loading);
   }
 }

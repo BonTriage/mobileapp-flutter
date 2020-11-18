@@ -617,4 +617,7 @@ class Constant {
   static const String clinicalImpressionShort0 = 'clinical_impression_short0';
   static const String clinicalImpressionShort1 = 'clinical_impression_short1';
   static const String profileEventType = 'profile';
+  static const String behaviorsEventType = 'behaviors';
+  static const String medicationEventType = 'medication';
+  static const String triggersEventType = 'triggers';
 }
