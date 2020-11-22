@@ -85,6 +85,7 @@ class TabNavigator extends StatelessWidget {
             openActionSheetCallback: (actionSheetType) {
               openActionSheetCallback(actionSheetType);
             },
+            navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
 

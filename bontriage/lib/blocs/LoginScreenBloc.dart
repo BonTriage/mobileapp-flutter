@@ -11,15 +11,15 @@ import 'package:mobile/util/constant.dart';
 
 class LoginScreenBloc {
   LoginScreenRepository _loginScreenRepository;
-  StreamController<String> _albumStreamController;
+  StreamController<dynamic> _loginStreamController;
   int count = 0;
 
-  StreamSink<String> get albumDataSink => _albumStreamController.sink;
+  StreamSink<dynamic> get loginDataSink => _loginStreamController.sink;
 
-  Stream<String> get albumDataStream => _albumStreamController.stream;
+  Stream<dynamic> get loginDataStream => _loginStreamController.stream;
 
   LoginScreenBloc({this.count = 0}) {
-    _albumStreamController = StreamController<String>();
+    _loginStreamController = StreamController<dynamic>();
     _loginScreenRepository = LoginScreenRepository();
   }
 
@@ -36,35 +36,45 @@ class LoginScreenBloc {
       var response =
           await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
+        loginDataSink.addError(response);
         apiResponse = response.toString();
       } else {
-        if (jsonDecode(response)[Constant.messageTextKey] != null) {
-          String messageValue = jsonDecode(response)[Constant.messageTextKey];
-          if (messageValue != null) {
-            if (messageValue == Constant.userNotFound) {
-              apiResponse = Constant.somethingWentWrong;
-            } else {
-              apiResponse = Constant.success;
+        if(response != null) {
+          if (jsonDecode(response)[Constant.messageTextKey] != null) {
+            String messageValue = jsonDecode(response)[Constant.messageTextKey];
+            if (messageValue != null) {
+              if (messageValue == Constant.userNotFound) {
+                apiResponse = Constant.userNotFound;
+              } else {
+                apiResponse = Constant.success;
+              }
             }
+          } else {
+            UserProfileInfoModel userProfileInfoModel =
+            UserProfileInfoModel();
+            userProfileInfoModel =
+                UserProfileInfoModel.fromJson(jsonDecode(response));
+            var selectedAnswerListData = await SignUpOnBoardProviders.db
+                .insertUserProfileInfo(userProfileInfoModel);
+            print(selectedAnswerListData);
+            apiResponse = Constant.success;
           }
-        }else{
-          UserProfileInfoModel userProfileInfoModel =
-          UserProfileInfoModel();
-          userProfileInfoModel =
-              UserProfileInfoModel.fromJson(jsonDecode(response));
-          var selectedAnswerListData = await SignUpOnBoardProviders.db
-              .insertUserProfileInfo(userProfileInfoModel);
-          print(selectedAnswerListData);
-          apiResponse = Constant.success;
+        } else {
+          loginDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
-    } catch (Exception) {
+    } catch (e) {
+      loginDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
   }
 
+  void enterSomeDummyDataToStream() {
+    loginDataSink.add(Constant.loading);
+  }
+
   void dispose() {
-    _albumStreamController?.close();
+    _loginStreamController?.close();
   }
 }

@@ -15,7 +15,6 @@ import 'package:mobile/view/AddNoteBottomSheet.dart';
 import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 
-import 'ApiLoaderScreen.dart';
 import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
@@ -266,8 +265,8 @@ class _LogDayScreenState extends State<LogDayScreen>
     );
   }
 
-  void showAddNoteBottomSheet() {
-    showModalBottomSheet(
+  void showAddNoteBottomSheet() async {
+    var note = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -275,6 +274,14 @@ class _LogDayScreenState extends State<LogDayScreen>
         ),
         context: context,
         builder: (context) => AddNoteBottomSheet());
+
+    if(note != null) {
+      if(note is String) {
+        if(note.trim() != '') {
+          selectedAnswers.add(SelectedAnswers(questionTag: 'note', answer: note));
+        }
+      }
+    }
   }
 
   void addNewWidgets(List<Questions> questionList) {

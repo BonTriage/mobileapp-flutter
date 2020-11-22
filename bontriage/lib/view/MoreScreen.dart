@@ -1,15 +1,17 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
+  final Future<dynamic> Function(String) navigateToOtherScreenCallback;
   final Function(String) openActionSheetCallback;
 
-  const MoreScreen({Key key, this.onPush, this.openActionSheetCallback})
+  const MoreScreen({Key key, this.onPush, this.openActionSheetCallback, this.navigateToOtherScreenCallback})
       : super(key: key);
 
   @override
@@ -83,7 +85,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   BouncingWidget(
-                    onPressed: () {},
+                    onPressed: () {
+                      _logOutFromApp();
+                    },
                     child: Container(
                       padding:
                       EdgeInsets.symmetric(horizontal: 40, vertical: 8),
@@ -142,5 +146,17 @@ class _MoreScreenState extends State<MoreScreen> {
   void _navigateToOtherScreen(String routeName) {
     widget.onPush(
         context, routeName);
+  }
+
+  ///This method is used to log out from the app and redirecting to the welcome start assessment screen
+  void _logOutFromApp() async{
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
+      await SignUpOnBoardProviders.db.deleteAllTableData();
+      widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter);
+    } catch(e) {
+      print(e);
+    }
   }
 }

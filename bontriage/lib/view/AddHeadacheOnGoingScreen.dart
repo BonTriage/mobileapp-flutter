@@ -112,6 +112,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                           ),
                           GestureDetector(
                             onTap: (){
+                              //Navigator.popUntil(context, ModalRoute.withName(Constant.headacheStartedScreenRouter));
                               Navigator.pop(context);
                             },
                             child: Image(

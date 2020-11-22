@@ -7,6 +7,21 @@ class AddNoteBottomSheet extends StatefulWidget {
 }
 
 class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
+
+  TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,20 +31,25 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: Container(
-              margin: EdgeInsets.only(top: 10, right: 10),
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Constant.chatBubbleGreen,
-              ),
-              child: Text(
-                Constant.save,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Constant.bubbleChatTextView,
-                  fontFamily: Constant.jostRegular,
-                  fontWeight: FontWeight.w500
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context, _textEditingController.text);
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 10, right: 10),
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Constant.chatBubbleGreen,
+                ),
+                child: Text(
+                  Constant.save,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Constant.bubbleChatTextView,
+                    fontFamily: Constant.jostRegular,
+                    fontWeight: FontWeight.w500
+                  ),
                 ),
               ),
             ),
@@ -45,6 +65,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
               children: [
                 Container(
                   child: TextFormField(
+                    controller: _textEditingController,
                     minLines: 5,
                     maxLines: 6,
                     onTap: () {
@@ -53,6 +74,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                     onEditingComplete: () {
                       print('onEditingComplete');
                     },
+                    textInputAction: TextInputAction.done,
                     style: TextStyle(
                         fontSize: 15,
                         fontFamily: Constant.jostMedium,

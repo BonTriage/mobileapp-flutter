@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/LoginScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
@@ -282,6 +280,14 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordValue != "" &&
         Utils.validateEmail(emailValue)) {
       _isShowAlert = false;
+      Utils.showApiLoaderDialog(
+        context,
+        networkStream: _loginScreenBloc.loginDataStream,
+        tapToRetryFunction: () {
+          _loginScreenBloc.enterSomeDummyDataToStream();
+          loginService();
+        }
+      );
       loginService();
     } else {
       setState(() {
@@ -295,7 +301,6 @@ class _LoginScreenState extends State<LoginScreen> {
   /// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
   /// or not then show alert to the user into the screen.
   void loginService() async {
-    Utils.showApiLoaderDialog(context);
     var response =
         await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
     if (response is String) {
@@ -304,7 +309,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pop(context);
 
         Utils.navigateToHomeScreen(context, false);
-      } else {
+      } else if(response == Constant.userNotFound){
         Navigator.pop(context);
         setState(() {
           _isShowAlert = true;

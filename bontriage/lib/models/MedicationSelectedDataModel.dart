@@ -9,21 +9,29 @@ class MedicationSelectedDataModel {
     this.selectedMedicationIndex,
     this.selectedMedicationDateList,
     this.selectedMedicationDosageList,
+    this.isNewlyAdded = false,
+    this.newlyAddedMedicationName,
   });
 
   int selectedMedicationIndex;
   List<String> selectedMedicationDateList;
   List<String> selectedMedicationDosageList;
+  bool isNewlyAdded;
+  String newlyAddedMedicationName;
 
   factory MedicationSelectedDataModel.fromJson(Map<String, dynamic> json) => MedicationSelectedDataModel(
     selectedMedicationIndex: json["selectedMedicationIndex"],
     selectedMedicationDateList: List<String>.from(json["selectedMedicationDateList"].map((x) => x)),
     selectedMedicationDosageList: List<String>.from(json["selectedMedicationDosageList"].map((x) => x)),
+    isNewlyAdded: json['isNewlyAdded'],
+    newlyAddedMedicationName: json['newlyAddedMedicationName'],
   );
 
   Map<String, dynamic> toJson() => {
     "selectedMedicationIndex": selectedMedicationIndex,
     "selectedMedicationDateList": List<dynamic>.from(selectedMedicationDateList.map((x) => x)),
     "selectedMedicationDosageList": List<dynamic>.from(selectedMedicationDosageList.map((x) => x)),
+    'isNewlyAdded': isNewlyAdded,
+    'newlyAddedMedicationName': newlyAddedMedicationName
   };
 }

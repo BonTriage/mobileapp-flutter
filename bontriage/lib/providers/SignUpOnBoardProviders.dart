@@ -1,8 +1,7 @@
 import 'dart:convert';
 
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
-import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 import 'package:mobile/models/LogDayQuestionnaire.dart';
@@ -22,6 +21,7 @@ class SignUpOnBoardProviders {
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
   static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
+  static const String TABLE_USER_CURRENT_HEADACHE = 'userCurrentHeadache';
 
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
@@ -34,6 +34,7 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_NOTE = "headacheNote";
   static const String HEADACHE_ONGOING = "headacheOnGoing";
   static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
+  static const String SELECTED_DATE = "selectedDate";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -87,6 +88,10 @@ class SignUpOnBoardProviders {
       batch.execute("CREATE TABLE $TABLE_LOG_DAY ("
           "$USER_ID TEXT PRIMARY KEY,"
           "$SELECTED_ANSWERS TEXT"
+          ")");
+      batch.execute("CREATE TABLE $TABLE_USER_CURRENT_HEADACHE ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$SELECTED_DATE TEXT"
           ")");
       await batch.commit();
     });
@@ -307,6 +312,8 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_QUESTIONNAIRES);
     await db.delete(TABLE_USER_PROGRESS);
     await db.delete(TABLE_USER_PROFILE_INFO);
+    await db.delete(TABLE_LOG_DAY);
+    await db.delete(TABLE_ADD_HEADACHE);
   }
 
   Future<void> deleteOnBoardQuestionnaireProgress(String eventType) async {
@@ -316,5 +323,31 @@ class SignUpOnBoardProviders {
       where: "$EVENT_TYPE = ?",
       whereArgs: [eventType],
     );
+  }
+
+  Future<void> insertUserCurrentHeadacheData(CurrentUserHeadacheModel currentUserHeadacheModel) async{
+    final db = await database;
+    List<Map> currentHeadacheData = [];
+    try {
+      currentHeadacheData = await db.rawQuery(
+          "SELECT * FROM $TABLE_USER_CURRENT_HEADACHE WHERE $USER_ID = ${currentUserHeadacheModel.userId}");
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if(currentHeadacheData.length == 0)
+      await db.insert(TABLE_USER_CURRENT_HEADACHE, currentUserHeadacheModel.toJson());
+  }
+
+  Future<CurrentUserHeadacheModel> getUserCurrentHeadacheData(String userId) async {
+    final db = await database;
+    CurrentUserHeadacheModel currentUserHeadacheModel;
+
+    List<Map> userCurrentHeadacheDataMap = await db.rawQuery("SELECT * FROM $TABLE_USER_CURRENT_HEADACHE WHERE $USER_ID = $userId");
+
+    if(userCurrentHeadacheDataMap.length != 0)
+      currentUserHeadacheModel = CurrentUserHeadacheModel.fromJson(userCurrentHeadacheDataMap[0]);
+
+    return currentUserHeadacheModel;
   }
 }

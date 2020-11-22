@@ -5,6 +5,8 @@ import 'dart:ui' as ui;
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mobile/blocs/CurrentHeadacheProgressBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -20,12 +22,19 @@ class _CurrentHeadacheProgressScreenState
   int _totalTime = 0; //in minutes
   Timer _timer;
   bool isShowDayBorder = false;
+  bool _isAlreadyDataFetched = false;
+  CurrentHeadacheProgressBloc _currentHeadacheProgressBloc;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _dateTime = DateTime.now();
+    _dateTime = DateTime.now().toUtc();
+
+    _currentHeadacheProgressBloc = CurrentHeadacheProgressBloc();
+
+    _currentHeadacheProgressBloc.fetchDataFromLocalDatabase();
+
     _timer = Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {
         _totalTime++;
@@ -74,9 +83,9 @@ class _CurrentHeadacheProgressScreenState
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     _timer.cancel();
+    _currentHeadacheProgressBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -132,182 +141,198 @@ class _CurrentHeadacheProgressScreenState
                       SizedBox(
                         height: 50,
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          Constant.yourCurrentHeadache,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Container(
-                        width: 190,
-                        height: 190,
-                        child: Stack(
-                          children: [
-                            Visibility(
-                              visible: isShowDayBorder,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Constant.chatBubbleGreen,
-                                      width: 3),
+                      StreamBuilder(
+                        stream: _currentHeadacheProgressBloc.stream,
+                        builder: (context, snapshot) {
+                          if(snapshot.hasData) {
+                            if(snapshot.data != null && snapshot.data is CurrentUserHeadacheModel && !_isAlreadyDataFetched) {
+                              _resetTimeSeconds(snapshot.data);
+                            }
+                            return Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    Constant.yourCurrentHeadache,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Constant.chatBubbleGreen,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Align(
-                                alignment: Alignment.center,
-                                child: ClipPath(
-                                  clipper: ProgressClipper(
-                                      percent: /*((_totalTime)/(24 * 60)) * 100)*/ _getCurrentHeadacheProgressPercent()),
-                                  child: Container(
-                                    width: 170,
-                                    height: 170,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Constant.chatBubbleGreen
-                                        /*gradient: LinearGradient(
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Container(
+                                  width: 190,
+                                  height: 190,
+                                  child: Stack(
+                                    children: [
+                                      Visibility(
+                                        visible: isShowDayBorder,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Constant.chatBubbleGreen,
+                                                width: 3),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                          alignment: Alignment.center,
+                                          child: ClipPath(
+                                            clipper: ProgressClipper(
+                                                percent: /*((_totalTime)/(24 * 60)) * 100)*/ _getCurrentHeadacheProgressPercent()),
+                                            child: Container(
+                                              width: 170,
+                                              height: 170,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Constant.chatBubbleGreen
+                                                /*gradient: LinearGradient(
                                         begin: Alignment.bottomLeft,
                                         end: Alignment.topRight,
                                         colors: <Color>[
                                           Color(0xff0E4C47),
                                           Constant.chatBubbleGreen,
                                         ]),*/
-                                        ),
-                                  ),
-                                )),
-                            /*Container(
+                                              ),
+                                            ),
+                                          )),
+                                      /*Container(
                               child: GradientProgressBar(
                                 painter: GradientProgressBarPainter(),
                               ),
                             ),*/
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: <Color>[
-                                        Color(0xff0E4C47),
-                                        Color(0xff0E232F),
-                                      ]),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: <Color>[
+                                                  Color(0xff0E4C47),
+                                                  Color(0xff0E232F),
+                                                ]),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              _getDisplayTime(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: Constant.jostMedium,
+                                                  color: Constant.chatBubbleGreen),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Center(
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
                                   child: Text(
-                                    _getDisplayTime(),
-                                    textAlign: TextAlign.center,
+                                    Constant.started,
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 12,
                                         fontFamily: Constant.jostMedium,
                                         color: Constant.chatBubbleGreen),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          Constant.started,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: Constant.jostMedium,
-                              color: Constant.chatBubbleGreen),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Sep 10, 10:34 AM',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: Constant.jostRegular,
-                              color: Constant.chatBubbleGreen),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          BouncingWidget(
-                            onPressed: () {
-                              Navigator.pushNamed(context,
-                                  Constant.addHeadacheOnGoingScreenRouter);
-                            },
-                            child: Container(
-                              width: 130,
-                              padding: EdgeInsets.symmetric(vertical: 7),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1.3,
-                                    color: Constant.chatBubbleGreen),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  Constant.addEditDetails,
-                                  style: TextStyle(
-                                      color: Constant.chatBubbleGreen,
-                                      fontSize: 13,
-                                      fontFamily: Constant.jostMedium),
+                                SizedBox(
+                                  height: 5,
                                 ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          BouncingWidget(
-                            onPressed: () {
-                              Navigator.pushNamed(context,
-                                  Constant.addHeadacheOnGoingScreenRouter,
-                                  arguments: true);
-                            },
-                            child: Container(
-                              width: 130,
-                              padding: EdgeInsets.symmetric(vertical: 7),
-                              decoration: BoxDecoration(
-                                color: Constant.chatBubbleGreen,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  Constant.endHeadache,
-                                  style: TextStyle(
-                                      color: Constant.bubbleChatTextView,
-                                      fontSize: 13,
-                                      fontFamily: Constant.jostMedium),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Sep 10, 10:34 AM',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: Constant.jostRegular,
+                                        color: Constant.chatBubbleGreen),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    BouncingWidget(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context,
+                                            Constant.addHeadacheOnGoingScreenRouter);
+                                      },
+                                      child: Container(
+                                        width: 130,
+                                        padding: EdgeInsets.symmetric(vertical: 7),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 1.3,
+                                              color: Constant.chatBubbleGreen),
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            Constant.addEditDetails,
+                                            style: TextStyle(
+                                                color: Constant.chatBubbleGreen,
+                                                fontSize: 13,
+                                                fontFamily: Constant.jostMedium),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    BouncingWidget(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context,
+                                            Constant.addHeadacheOnGoingScreenRouter,
+                                            arguments: true);
+                                      },
+                                      child: Container(
+                                        width: 130,
+                                        padding: EdgeInsets.symmetric(vertical: 7),
+                                        decoration: BoxDecoration(
+                                          color: Constant.chatBubbleGreen,
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            Constant.endHeadache,
+                                            style: TextStyle(
+                                                color: Constant.bubbleChatTextView,
+                                                fontSize: 13,
+                                                fontFamily: Constant.jostMedium),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -317,6 +342,16 @@ class _CurrentHeadacheProgressScreenState
         ),
       ),
     );
+  }
+
+  void _resetTimeSeconds(CurrentUserHeadacheModel currentUserHeadacheModel) {
+    try {
+      DateTime dateTime = DateTime.parse(currentUserHeadacheModel.selectedDate);
+      _totalTime = _dateTime.difference(dateTime).inMinutes;
+      _isAlreadyDataFetched = true;
+    } catch(e) {
+      print(e);
+    }
   }
 }
 

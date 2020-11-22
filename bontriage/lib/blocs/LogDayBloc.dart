@@ -35,9 +35,6 @@ class LogDayBloc {
 
   Stream<dynamic> get sendLogDayDataStream => _sendLogDayDataStreamController.stream;
 
-  List<String> eventTypeList = ['behaviors', 'medication', 'triggers'];
-  int _currentEventTypeIndex = 0;
-
   List<Questions> filterQuestionsListData = [];
 
   LogDayBloc() {
@@ -168,6 +165,7 @@ class LogDayBloc {
   }
 
   Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async{
+    LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
       if(element.questionTag.contains('behavior')) {
@@ -211,6 +209,11 @@ class LogDayBloc {
                   selectedValuesList.add(selectedDosageQuestion.values[selectedDosageIndex].text);
                 });
                 medicationSelectedAnswerList.add(SelectedAnswers(questionTag: selectedDosageQuestion.tag, answer: jsonEncode(selectedValuesList)));
+              } else {
+                medicationSelectedDataModel.selectedMedicationDosageList.forEach((dosageElement) {
+                  selectedValuesList.add(dosageElement);
+                });
+                medicationSelectedAnswerList.add(SelectedAnswers(questionTag: '${selectedMedicationValue}_custom.dosage', answer: jsonEncode(selectedValuesList)));
               }
             }
             selectedValuesList = [];
@@ -224,33 +227,37 @@ class LogDayBloc {
             print(e);
           }
         } else {
-          SelectedAnswers medicationSelectedAnswer = medicationSelectedAnswerList.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
-          if(medicationSelectedAnswer == null) {
-            try {
-              int selectedIndex = int.parse(element.answer.toString()) - 1;
-              Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-              if(questions != null) {
-                selectedValuesList.add(questions.values[selectedIndex].text);
-                medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
-              }
-            } catch(e) {
-              print(e);
-            }
+          if(element.questionTag.contains('custom')) {
+            medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: element.answer));
           } else {
-            try {
-              selectedValuesList = (json.decode(medicationSelectedAnswer.answer) as List<dynamic>).cast<String>();
-              int selectedIndex = int.parse(element.answer.toString()) - 1;
-              Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-              if(questions != null) {
-                selectedValuesList.add(questions.values[selectedIndex].text);
-                medicationSelectedAnswer.answer = jsonEncode(selectedValuesList);
+            SelectedAnswers medicationSelectedAnswer = medicationSelectedAnswerList.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
+            if(medicationSelectedAnswer == null) {
+              try {
+                int selectedIndex = int.parse(element.answer.toString()) - 1;
+                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
+                if(questions != null) {
+                  selectedValuesList.add(questions.values[selectedIndex].text);
+                  medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
+                }
+              } catch(e) {
+                print(e);
               }
-            } catch(e) {
-              print(e);
+            } else {
+              try {
+                selectedValuesList = (json.decode(medicationSelectedAnswer.answer) as List<dynamic>).cast<String>();
+                int selectedIndex = int.parse(element.answer.toString()) - 1;
+                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
+                if(questions != null) {
+                  selectedValuesList.add(questions.values[selectedIndex].text);
+                  medicationSelectedAnswer.answer = jsonEncode(selectedValuesList);
+                }
+              } catch(e) {
+                print(e);
+              }
             }
           }
         }
-      } else {
+      } else if(element.questionTag.contains('triggers1')) {
         if (element.questionTag != 'triggers1.travel' && element.questionTag != 'triggers1') {
           SelectedAnswers triggersSelectedAnswer = triggerSelectedAnswerList
               .firstWhere((element1) =>
@@ -318,16 +325,18 @@ class LogDayBloc {
               questionTag: element.questionTag,
               answer: jsonEncode(selectedValuesList)));
         }
+      } else if (element.questionTag == 'note') {
+        logDaySendDataModel.note = element.answer;
       }
     });
 
-    LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData);
     logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData);
     logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData);
+
 
     return jsonEncode(logDaySendDataModel.toJson());
   }
@@ -343,7 +352,7 @@ class LogDayBloc {
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
     DateTime dateTime = DateTime.now();
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 2));
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 3));
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
 

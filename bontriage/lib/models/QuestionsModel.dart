@@ -100,8 +100,9 @@ class Values {
   String text;
   bool isSelected = false;
   bool isDoubleTapped = false;
+  bool isNewlyAdded = false;
 
-  Values({this.valueNumber, this.text, this.isSelected = false, this.isDoubleTapped = false});
+  Values({this.valueNumber, this.text, this.isSelected = false, this.isDoubleTapped = false, this.isNewlyAdded = false});
 
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];

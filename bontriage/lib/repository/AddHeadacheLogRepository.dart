@@ -68,7 +68,7 @@ class AddHeadacheLogRepository{
       signUpOnBoardAnswersRequestModel.userId = 4214;
     }
     DateTime dateTime = DateTime.now();
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 2));
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 1));
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
