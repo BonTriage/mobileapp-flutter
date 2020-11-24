@@ -81,7 +81,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
-                            Navigator.pushNamed(context, Constant.logDayScreenRouter);
+                            Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 10),

@@ -24,6 +24,7 @@ class LogDayBloc {
   List<SelectedAnswers> behaviorSelectedAnswerList = [];
   List<SelectedAnswers> medicationSelectedAnswerList = [];
   List<SelectedAnswers> triggerSelectedAnswerList = [];
+  List<SelectedAnswers> noteSelectedAnswer = [];
 
   StreamSink<dynamic> get logDayDataSink => _logDayDataStreamController.sink;
 
@@ -325,18 +326,18 @@ class LogDayBloc {
               questionTag: element.questionTag,
               answer: jsonEncode(selectedValuesList)));
         }
-      } else if (element.questionTag == 'note') {
-        logDaySendDataModel.note = element.answer;
+      } else if (element.questionTag == 'logday.note') {
+        selectedValuesList.add(element.answer);
+        noteSelectedAnswer.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
       }
     });
-
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData);
     logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData);
     logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData);
-
+    logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData);
 
     return jsonEncode(logDaySendDataModel.toJson());
   }

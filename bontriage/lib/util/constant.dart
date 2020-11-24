@@ -620,4 +620,5 @@ class Constant {
   static const String behaviorsEventType = 'behaviors';
   static const String medicationEventType = 'medication';
   static const String triggersEventType = 'triggers';
+  static const String noteEventType = 'note';
 }

@@ -132,7 +132,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                         chatBubbleText:
                             _pageViewWidgetList[_currentPageIndex].questions,
                         closeButtonFunction: () {
-                          Utils.navigateToExitScreen(context);
+                          if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                            Utils.navigateToExitScreen(context);
+                          else
+                            Navigator.pop(context);
                         },
                       ),
                       SizedBox(
@@ -176,7 +179,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                     duration: Duration(milliseconds: 1),
                                     curve: Curves.easeIn);
                               }
-                              getCurrentQuestionTag(_currentPageIndex);
+                              if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                                getCurrentQuestionTag(_currentPageIndex);
                             });
                           }
                         },
@@ -290,15 +294,17 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// This method will be use for to get current position of the user. When he last time quit the application or click the close
   /// icon. We will fetch last position from Local database.
   void getCurrentUserPosition() async {
-    UserProgressDataModel userProgressModel =
-        await SignUpOnBoardProviders.db.getUserProgress();
-    if (userProgressModel != null &&
-        userProgressModel.step == Constant.secondEventStep) {
-      currentScreenPosition = userProgressModel.userScreenPosition;
-      print(userProgressModel);
-    }
+    if(widget.argumentsName == Constant.clinicalImpressionShort1) {
+      UserProgressDataModel userProgressModel =
+      await SignUpOnBoardProviders.db.getUserProgress();
+      if (userProgressModel != null &&
+          userProgressModel.step == Constant.secondEventStep) {
+        currentScreenPosition = userProgressModel.userScreenPosition;
+        print(userProgressModel);
+      }
 
-    getCurrentQuestionTag(currentScreenPosition);
+      getCurrentQuestionTag(currentScreenPosition);
+    }
 
     requestService();
   }
@@ -364,7 +370,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           SelectedAnswers(questionTag: currentTag, answer: selectedUserAnswer));
       print(signUpOnBoardSelectedAnswersModel.selectedAnswers);
     }
-    updateSelectedAnswerDataOnLocalDatabase();
+
+    if(widget.argumentsName == Constant.clinicalImpressionShort1)
+      updateSelectedAnswerDataOnLocalDatabase();
   }
 
   /// This method will be use for update the answer in to the database on the basis of event type.

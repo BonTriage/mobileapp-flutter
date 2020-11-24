@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
 class AddNoteBottomSheet extends StatefulWidget {
+  final Function(String) addNoteCallback;
+
+  const AddNoteBottomSheet({Key key, this.addNoteCallback}): super(key: key);
+
   @override
   _AddNoteBottomSheetState createState() => _AddNoteBottomSheetState();
 }
@@ -33,6 +37,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
             alignment: Alignment.topRight,
             child: GestureDetector(
               onTap: () {
+                widget.addNoteCallback(_textEditingController.text);
                 Navigator.pop(context, _textEditingController.text);
               },
               child: Container(

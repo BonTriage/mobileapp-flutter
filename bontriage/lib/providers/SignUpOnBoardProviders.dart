@@ -314,6 +314,7 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_USER_PROFILE_INFO);
     await db.delete(TABLE_LOG_DAY);
     await db.delete(TABLE_ADD_HEADACHE);
+    await db.delete(TABLE_USER_CURRENT_HEADACHE);
   }
 
   Future<void> deleteOnBoardQuestionnaireProgress(String eventType) async {

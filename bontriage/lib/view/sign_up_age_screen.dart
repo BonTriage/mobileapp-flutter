@@ -71,7 +71,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         }
       }
     }
-    if (widget.selectedAnswerCallBack != null)
+    if (widget.selectedAnswerCallBack != null && widget.isAnimate)
       widget.selectedAnswerCallBack(
           widget.currentTag, widget.sliderValue.toInt().toString());
   }

@@ -25,7 +25,7 @@ class CurrentHeadacheProgressBloc {
       await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(CurrentUserHeadacheModel(userId: userProfileInfoData.userId, selectedDate: DateTime.now().toUtc().toIso8601String()));
     }
 
-    sink.add(currentUserHeadacheModel);
+    sink.add(currentUserHeadacheModel ?? CurrentUserHeadacheModel());
   }
 
   void dispose() {

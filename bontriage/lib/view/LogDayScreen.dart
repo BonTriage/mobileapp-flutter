@@ -24,6 +24,7 @@ class LogDayScreen extends StatefulWidget {
 
 class _LogDayScreenState extends State<LogDayScreen>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _dateTime;
   LogDayBloc _logDayBloc;
   List<Widget> _sectionWidgetList = [];
@@ -77,6 +78,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: Container(
         decoration: Constant.backgroundBoxDecoration,
         child: SingleChildScrollView(
@@ -266,22 +268,23 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void showAddNoteBottomSheet() async {
-    var note = await showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+    scaffoldKey.currentState.showBottomSheet(
+            (context) => AddNoteBottomSheet(
+          addNoteCallback: (note) {
+            if(note != null) {
+              if(note is String) {
+                if(note.trim() != '') {
+                  SelectedAnswers noteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == 'logday.note', orElse: () => null);
+                  if (noteSelectedAnswer == null)
+                    selectedAnswers.add(SelectedAnswers(questionTag: 'logday.note', answer: note));
+                  else
+                    noteSelectedAnswer.answer = note;
+                }
+              }
+            }
+          },
         ),
-        context: context,
-        builder: (context) => AddNoteBottomSheet());
-
-    if(note != null) {
-      if(note is String) {
-        if(note.trim() != '') {
-          selectedAnswers.add(SelectedAnswers(questionTag: 'note', answer: note));
-        }
-      }
-    }
+    backgroundColor: Colors.transparent);
   }
 
   void addNewWidgets(List<Questions> questionList) {

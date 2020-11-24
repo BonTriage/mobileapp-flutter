@@ -34,6 +34,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   String headacheType = '';
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
       SignUpOnBoardSelectedAnswersModel();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Questions> _addHeadacheUserListData;
 
@@ -80,6 +81,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: Container(
         decoration: Constant.backgroundBoxDecoration,
         child: SingleChildScrollView(
@@ -281,6 +283,13 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           answerValuesData.isSelected = true;
           break;
         case Constant.numberTypeTag:
+          /*if(element.answer == null) {
+            SelectedAnswers numberTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
+            if(numberTypeSelectedAnswer == null)
+              signUpOnBoardSelectedAnswersModel.selectedAnswers.add(SelectedAnswers(questionTag: element.questionTag, answer: '0'));
+            else
+              numberTypeSelectedAnswer.answer = '0';
+          }*/
           questionsTag.currentValue = element.answer;
           break;
         case Constant.dateTimeTypeTag:
@@ -449,13 +458,22 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   }
 
   void showAddNoteBottomSheet() {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+    scaffoldKey.currentState.showBottomSheet(
+            (context) => AddNoteBottomSheet(
+          addNoteCallback: (note) {
+            if(note != null) {
+              if(note is String) {
+                if(note.trim() != '') {
+                  SelectedAnswers noteSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == 'headache.note', orElse: () => null);
+                  if (noteSelectedAnswer == null)
+                    signUpOnBoardSelectedAnswersModel.selectedAnswers.add(SelectedAnswers(questionTag: 'headache.note', answer: note));
+                  else
+                    noteSelectedAnswer.answer = note;
+                }
+              }
+            }
+          },
         ),
-        context: context,
-        builder: (context) => AddNoteBottomSheet());
+        backgroundColor: Colors.transparent);
   }
 }

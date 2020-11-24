@@ -74,6 +74,11 @@ class LoginScreenBloc {
     loginDataSink.add(Constant.loading);
   }
 
+  void init() {
+    _loginStreamController?.close();
+    _loginStreamController = StreamController<dynamic>();
+  }
+
   void dispose() {
     _loginStreamController?.close();
   }

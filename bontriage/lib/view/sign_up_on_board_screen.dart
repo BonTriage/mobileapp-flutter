@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobile/blocs/WelcomeOnBoardProfileBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
@@ -9,25 +10,21 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
+import 'package:mobile/view/PartOneOnBoardBottomView.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'sign_up_name_screen.dart';
-import 'package:bouncing_widget/bouncing_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class SignUpOnBoardScreen extends StatefulWidget {
   @override
   _SignUpOnBoardScreenState createState() => _SignUpOnBoardScreenState();
 }
 
-class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
-    with SingleTickerProviderStateMixin {
+class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
   bool isVolumeOn = true;
   bool isEndOfOnBoard = false;
   double _progressPercent = 0;
@@ -68,6 +65,12 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
     });
 
     getCurrentUserPosition();
+  }
+
+  @override
+  void didUpdateWidget(SignUpOnBoardScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -117,180 +120,60 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                       SizedBox(
                         height: 20,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    Constant.chatBubbleHorizontalPadding),
-                            child: Stack(
-                              children: [
-                                AnimatedPositioned(
-                                  left: (_currentPageIndex != 0)
-                                      ? 0
-                                      : (MediaQuery.of(context).size.width -
-                                          190),
-                                  duration: Duration(milliseconds: 250),
-                                  child: AnimatedOpacity(
-                                    opacity:
-                                        (_currentPageIndex != 0) ? 1.0 : 0.0,
-                                    duration: Duration(milliseconds: 250),
-                                    child: BouncingWidget(
-                                      duration: Duration(milliseconds: 100),
-                                      scaleFactor: 1.5,
-                                      onPressed: () {
-                                        isButtonClicked = true;
-                                        setState(() {
-                                          if (_currentPageIndex != 0) {
-                                            _progressPercent -= 0.11;
-                                            _currentPageIndex--;
-                                            _pageController.animateToPage(
-                                                _currentPageIndex,
-                                                duration:
-                                                    Duration(milliseconds: 1),
-                                                curve: Curves.easeIn);
-                                          } else {
-                                            _progressPercent = 0;
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 130,
-                                        height: 34,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffafd794),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            Constant.back,
-                                            style: TextStyle(
-                                              color:
-                                                  Constant.bubbleChatTextView,
-                                              fontSize: 14,
-                                              fontFamily: Constant.jostMedium,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: BouncingWidget(
-                                    duration: Duration(milliseconds: 100),
-                                    scaleFactor: 1.5,
-                                    onPressed: () {
-                                      isButtonClicked = true;
-                                      if (Utils.validationForOnBoard(
-                                          signUpOnBoardSelectedAnswersModel
-                                              .selectedAnswers,
-                                          currentQuestionListData[
-                                              _currentPageIndex])) {
-                                        setState(() {
-                                          if (_progressPercent == 0.66) {
-                                            /*     welcomeOnBoardProfileBloc
+                      PartOneOnBoardBottomView(
+                        currentPageIndex: _currentPageIndex,
+                        progressPercent: _progressPercent,
+                        backButtonFunction: () {
+                          isButtonClicked = true;
+                          setState(() {
+                            if (_currentPageIndex != 0) {
+                              _progressPercent -= 0.11;
+                              _currentPageIndex--;
+                              _pageController.animateToPage(
+                                  _currentPageIndex,
+                                  duration:
+                                  Duration(milliseconds: 1),
+                                  curve: Curves.easeIn);
+                            } else {
+                              _progressPercent = 0;
+                            }
+                          });
+                        },
+                        nextButtonFunction: () {
+                          isButtonClicked = true;
+                          if (Utils.validationForOnBoard(
+                              signUpOnBoardSelectedAnswersModel
+                                  .selectedAnswers,
+                              currentQuestionListData[
+                              _currentPageIndex])) {
+                            setState(() {
+                              if (_progressPercent == 0.66) {
+                                /*     welcomeOnBoardProfileBloc
                                             .sendSignUpFirstStepData(
                                                 signUpOnBoardSelectedAnswersModel);*/
-                                            moveToNextScreen();
-                                          } else {
-                                            _currentPageIndex++;
+                                moveToNextScreen();
+                              } else {
+                                _currentPageIndex++;
 
-                                            if (_currentPageIndex !=
-                                                _pageViewWidgetList.length - 1)
-                                              _progressPercent += 0.11;
-                                            else {
-                                              _progressPercent = 0.66;
-                                            }
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
+                                  _progressPercent += 0.11;
+                                else {
+                                  _progressPercent = 0.66;
+                                }
 
-                                            _pageController.animateToPage(
-                                                _currentPageIndex,
-                                                duration:
-                                                    Duration(milliseconds: 1),
-                                                curve: Curves.easeIn);
+                                _pageController.animateToPage(
+                                    _currentPageIndex,
+                                    duration:
+                                    Duration(milliseconds: 1),
+                                    curve: Curves.easeIn);
 
-                                            getCurrentQuestionTag(
-                                                _currentPageIndex);
-                                          }
-                                        });
-                                      }
-                                    },
-                                    child: Container(
-                                      width: 130,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffafd794),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          Constant.next,
-                                          style: TextStyle(
-                                            color: Constant.bubbleChatTextView,
-                                            fontSize: 14,
-                                            fontFamily: Constant.jostMedium,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 36,
-                          ),
-                          if (_currentPageIndex != 0)
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 23),
-                              child: LinearPercentIndicator(
-                                animation: true,
-                                lineHeight: 8.0,
-                                animationDuration: 200,
-                                animateFromLastPercent: true,
-                                percent: _progressPercent,
-                                backgroundColor: Constant.chatBubbleGreenBlue,
-                                linearStrokeCap: LinearStrokeCap.roundAll,
-                                progressColor: Constant.chatBubbleGreen,
-                              ),
-                            )
-                          else
-                            SizedBox(
-                              height: 12.5,
-                            ),
-                          SizedBox(
-                            height: 10.5,
-                          ),
-                          if (_currentPageIndex != 0)
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      Constant.chatBubbleHorizontalPadding),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'PART 1 OF 3',
-                                    style: TextStyle(
-                                        color: Constant.chatBubbleGreen,
-                                        fontSize: 13,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ],
-                              ),
-                            )
-                          else
-                            SizedBox(
-                              height: 14,
-                            ),
-                          SizedBox(
-                            height: 46,
-                          )
-                        ],
+                                getCurrentQuestionTag(
+                                    _currentPageIndex);
+                              }
+                            });
+                          }
+                        },
                       ),
                     ],
                   );
@@ -385,6 +268,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
                 )));
             break;
         }
+        _isAlreadyDataFiltered = true;
       });
 
       _currentPageIndex = currentScreenPosition;
@@ -395,7 +279,6 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen>
 
       print(questionListData);
     }
-    _isAlreadyDataFiltered = true;
   }
 
   void requestService() async {

@@ -5,7 +5,6 @@ import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
-import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/CalendarScreen.dart';
 import 'package:mobile/view/CalendarSeverityScreen.dart';
 import 'package:mobile/view/CalendarTriggersScreen.dart';
