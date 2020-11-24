@@ -18,10 +18,9 @@ import 'AddNoteBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
-  final bool isHeadacheEnded;
   final CurrentUserHeadacheModel currentUserHeadacheModel;
 
-  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded, this.currentUserHeadacheModel})
+  const AddHeadacheOnGoingScreen({Key key, this.currentUserHeadacheModel})
       : super(key: key);
 
   @override
@@ -312,7 +311,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           selectedCurrentValue: element.currentValue,
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
-          isHeadacheEnded: widget.isHeadacheEnded,
+          isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
         currentUserHeadacheModel: widget.currentUserHeadacheModel,
       ));
     });
@@ -415,6 +414,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
     if (response == Constant.success) {
       Navigator.pop(context);
+      await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
       Navigator.pushReplacementNamed(
           context, Constant.addHeadacheSuccessScreenRouter);
     }

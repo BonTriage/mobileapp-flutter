@@ -43,7 +43,7 @@ class _TimeSectionState extends State<TimeSection>
     super.initState();
 
     widget.addHeadacheDateTimeDetailsData(
-        "onset", DateTime.now().toUtc().toString());
+        "onset", DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toUtc().toIso8601String());
 
     _animationController = AnimationController(
       duration: Duration(milliseconds: 350),
@@ -53,9 +53,9 @@ class _TimeSectionState extends State<TimeSection>
 
     _dateTime = DateTime.now();
 
-    if (widget.updatedDateValue != null) {
+    if (widget.currentUserHeadacheModel != null) {
       try {
-        _selectedStartDate = DateTime.parse(widget.updatedDateValue).toLocal();
+        _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
         print(_selectedStartDate);
         _selectedStartTime = _selectedStartDate;
       } catch (e) {
@@ -68,11 +68,23 @@ class _TimeSectionState extends State<TimeSection>
     if(widget.isHeadacheEnded != null && widget.isHeadacheEnded) {
       _isEndTimeExpanded = true;
       if(_selectedEndDate == null) {
-        widget.addHeadacheDateTimeDetailsData(
-            "endtime", DateTime.now().toUtc().toString());
+        Duration duration = _selectedStartDate.difference(DateTime.now());
+        if(duration.inSeconds.abs() <= (72*60*60)) {
+          widget.addHeadacheDateTimeDetailsData(
+              "endtime", DateTime.now().toUtc().toIso8601String());
+        }
+        else {
+          DateTime dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
+          dateTime = dateTime.add(Duration(days: 3));
+          _selectedEndDate = dateTime;
+          _selectedEndTime = dateTime;
+          _selectedEndDateAndTime = dateTime;
+          widget.addHeadacheDateTimeDetailsData(
+              "endtime", dateTime.toUtc().toIso8601String());
+        }
       } else {
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndDate.toUtc().toString());
+            "endtime", _selectedEndDate.toUtc().toIso8601String());
       }
       Future.delayed(Duration(milliseconds: 500), () {
         widget.addHeadacheDateTimeDetailsData("ongoing", "No");
@@ -106,7 +118,7 @@ class _TimeSectionState extends State<TimeSection>
               _selectedStartTime.second);
         }
         widget.addHeadacheDateTimeDetailsData(
-            "onset", _selectedStartDate.toUtc().toString());
+            "onset", _selectedStartDate.toUtc().toIso8601String());
       });
     }
   }
@@ -117,9 +129,22 @@ class _TimeSectionState extends State<TimeSection>
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
         if (_selectedEndTime == null) {
-          _selectedEndDate = dateTime;
+          Duration duration = _selectedStartDate.difference(dateTime);
+          if(duration.inSeconds.abs() <= (72*60*60))
+            _selectedEndDate = dateTime;
         } else {
-          _selectedEndDate = DateTime(
+          DateTime selectedEndDate = DateTime(
+              dateTime.year,
+              dateTime.month,
+              dateTime.day,
+              _selectedEndTime.hour,
+              _selectedEndTime.minute,
+              _selectedEndTime.second);
+
+          Duration duration = _selectedStartDate.difference(selectedEndDate);
+
+          if(duration.inSeconds.abs() <= (72*60*60))
+            _selectedEndDate = DateTime(
               dateTime.year,
               dateTime.month,
               dateTime.day,
@@ -131,7 +156,7 @@ class _TimeSectionState extends State<TimeSection>
         _selectedEndDateAndTime = _selectedEndDate;
 
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndDate.toUtc().toString());
+            "endtime", _selectedEndDate.toUtc().toIso8601String());
       });
     }
     print(dateTime);
@@ -154,7 +179,7 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.second);
         }
         widget.addHeadacheDateTimeDetailsData(
-            "onset", _selectedStartTime.toUtc().toString());
+            "onset", _selectedStartTime.toUtc().toIso8601String());
       });
     }
     print(dateTime);
@@ -166,9 +191,22 @@ class _TimeSectionState extends State<TimeSection>
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
         if (_selectedEndDate == null) {
-          _selectedEndTime = dateTime;
+          Duration duration = _selectedStartDate.difference(dateTime);
+          if(duration.inSeconds.abs() <= (72*60*60))
+            _selectedEndTime = dateTime;
         } else {
-          _selectedEndTime = DateTime(
+          DateTime startEndTime = DateTime(
+              _selectedEndDate.year,
+              _selectedEndDate.month,
+              _selectedEndDate.day,
+              dateTime.hour,
+              dateTime.minute,
+              dateTime.second);
+
+          Duration duration = _selectedStartDate.difference(startEndTime);
+
+          if(duration.inSeconds.abs() <= (72*60*60))
+            _selectedEndTime = DateTime(
               _selectedEndDate.year,
               _selectedEndDate.month,
               _selectedEndDate.day,
@@ -178,7 +216,7 @@ class _TimeSectionState extends State<TimeSection>
         }
         _selectedEndDateAndTime = _selectedEndTime;
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndTime.toUtc().toString());
+            "endtime", _selectedEndTime.toUtc().toIso8601String());
       });
     }
     print(dateTime);
@@ -393,10 +431,16 @@ class _TimeSectionState extends State<TimeSection>
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedEndDate = DateTime.now();
-                        _selectedEndTime = _selectedEndDate;
+                        Duration duration = DateTime.now().difference(_selectedStartDate);
+
+                        if(duration.inSeconds.abs() <= (72*60*60)) {
+                          _selectedEndDate = DateTime.now();
+                          _selectedEndTime = _selectedEndDate;
+                        }
                       });
-                      widget.addHeadacheDateTimeDetailsData("endtime", _selectedEndDate.toUtc().toString());
+
+                      _selectedEndDateAndTime = _selectedEndDate;
+                      widget.addHeadacheDateTimeDetailsData("endtime", _selectedEndDate.toUtc().toIso8601String());
                     },
                     child: Text(
                       Constant.reset,
@@ -431,11 +475,17 @@ class _TimeSectionState extends State<TimeSection>
                 if (_isEndTimeExpanded) {
                   widget.addHeadacheDateTimeDetailsData("ongoing", "No");
                   if (_selectedEndDateAndTime == null) {
-                    widget.addHeadacheDateTimeDetailsData(
-                        "endtime", DateTime.now().toUtc().toString());
+                    Duration duration = _selectedEndDateAndTime.difference(DateTime.now());
+                    if(duration.inSeconds <= (72*60*60)) {
+                      widget.addHeadacheDateTimeDetailsData(
+                          "endtime", DateTime.now().toUtc().toIso8601String());
+                    } else {
+                      widget.addHeadacheDateTimeDetailsData(
+                          "endtime", DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal().add(Duration(days: 3)).toUtc().toIso8601String());
+                    }
                   } else
                     widget.addHeadacheDateTimeDetailsData(
-                        "endtime", _selectedEndDateAndTime.toUtc().toString());
+                        "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
                 } else {
                   widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
                   widget.addHeadacheDateTimeDetailsData("endtime", "");

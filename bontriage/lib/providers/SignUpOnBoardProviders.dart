@@ -356,4 +356,9 @@ class SignUpOnBoardProviders {
 
     return currentUserHeadacheModel;
   }
+
+  Future<void> deleteUserCurrentHeadacheData() async{
+    final db = await database;
+    await db.delete(TABLE_USER_CURRENT_HEADACHE);
+  }
 }

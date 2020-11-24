@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/HeadacheLogStartedBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class HeadacheStartedScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class HeadacheStartedScreen extends StatefulWidget {
 
 class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
   HeadacheLogStartedBloc _headacheLogStartedBloc;
+  CurrentUserHeadacheModel _currentUserHeadacheModel;
 
   @override
   void initState() {
@@ -18,7 +20,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
     super.initState();
     _headacheLogStartedBloc = HeadacheLogStartedBloc();
 
-    _headacheLogStartedBloc.storeHeadacheDetailsIntoLocalDatabase();
+    _storeHeadacheDataIntoDB();
   }
 
 
@@ -128,7 +130,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                         child: BouncingWidget(
                           onPressed: () {
                             Navigator.pushReplacementNamed(context,
-                                Constant.addHeadacheOnGoingScreenRouter);
+                                Constant.addHeadacheOnGoingScreenRouter, arguments: _currentUserHeadacheModel);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 10),
@@ -158,5 +160,9 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
         ),
       ),
     );
+  }
+
+  void _storeHeadacheDataIntoDB() async{
+    _currentUserHeadacheModel = await _headacheLogStartedBloc.storeHeadacheDetailsIntoLocalDatabase();
   }
 }

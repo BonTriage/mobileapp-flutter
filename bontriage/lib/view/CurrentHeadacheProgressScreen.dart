@@ -24,6 +24,7 @@ class _CurrentHeadacheProgressScreenState
   bool isShowDayBorder = false;
   bool _isAlreadyDataFetched = false;
   CurrentHeadacheProgressBloc _currentHeadacheProgressBloc;
+  CurrentUserHeadacheModel _currentUserHeadacheModel;
 
   bool _isShowErrorMessage = false;
 
@@ -323,9 +324,10 @@ class _CurrentHeadacheProgressScreenState
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
+                                        _currentUserHeadacheModel.isOnGoing = false;
                                         Navigator.pushReplacementNamed(context,
                                             Constant.addHeadacheOnGoingScreenRouter,
-                                            arguments: true);
+                                            arguments: _currentUserHeadacheModel);
                                       },
                                       child: Container(
                                         width: 130,
@@ -367,11 +369,12 @@ class _CurrentHeadacheProgressScreenState
 
   void _resetTimeSeconds(CurrentUserHeadacheModel currentUserHeadacheModel) {
     try {
+      _currentUserHeadacheModel = currentUserHeadacheModel;
       DateTime dateTime = DateTime.parse(currentUserHeadacheModel.selectedDate);
       _storedDateTime = dateTime.toLocal();
       Duration duration = _dateTime.difference(dateTime);
 
-      if(duration.inDays < 3)
+      if(duration.inDays.abs() < 3)
         _totalTime = duration.inMinutes + 1;
       else {
         _isShowErrorMessage = true;

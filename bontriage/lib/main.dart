@@ -246,7 +246,7 @@ class MyApp extends StatelessWidget {
             {
               return SlideFromBottomPageRoute(
                   widget: AddHeadacheOnGoingScreen(
-                isHeadacheEnded: settings.arguments,
+                currentUserHeadacheModel: settings.arguments,
               ));
             }
 
