@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/DateTimePicker.dart';
@@ -13,13 +14,15 @@ class TimeSection extends StatefulWidget {
   final String currentTag;
   final String updatedDateValue;
   final bool isHeadacheEnded;
+  final CurrentUserHeadacheModel currentUserHeadacheModel;
 
   const TimeSection(
       {Key key,
       this.currentTag,
       this.updatedDateValue,
       this.addHeadacheDateTimeDetailsData,
-      this.isHeadacheEnded})
+      this.isHeadacheEnded,
+      this.currentUserHeadacheModel})
       : super(key: key);
 }
 
@@ -76,6 +79,8 @@ class _TimeSectionState extends State<TimeSection>
       });
       _animationController.forward();
     }
+
+    print((_selectedStartDate == null) ? _getDateTime(DateTime.now(), 0) : _getDateTime(_selectedStartDate, 0));
   }
 
   @override
@@ -213,8 +218,8 @@ class _TimeSectionState extends State<TimeSection>
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          _openDatePickerBottomSheet(
-                              CupertinoDatePickerMode.date, 0);
+                          /*_openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.date, 0);*/
                         },
                         child: Padding(
                           padding:
@@ -257,8 +262,8 @@ class _TimeSectionState extends State<TimeSection>
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          _openDatePickerBottomSheet(
-                              CupertinoDatePickerMode.time, 1);
+                          /*_openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.time, 1);*/
                         },
                         child: Padding(
                           padding:

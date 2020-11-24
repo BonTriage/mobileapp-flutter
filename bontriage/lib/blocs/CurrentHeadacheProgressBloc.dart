@@ -21,9 +21,9 @@ class CurrentHeadacheProgressBloc {
     if(userProfileInfoData != null)
       currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
-    if(currentUserHeadacheModel == null && userProfileInfoData != null) {
+    /*if(currentUserHeadacheModel == null && userProfileInfoData != null) {
       await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(CurrentUserHeadacheModel(userId: userProfileInfoData.userId, selectedDate: DateTime.now().toUtc().toIso8601String()));
-    }
+    }*/
 
     sink.add(currentUserHeadacheModel ?? CurrentUserHeadacheModel());
   }

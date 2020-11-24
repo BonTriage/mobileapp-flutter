@@ -502,6 +502,7 @@ class Constant {
   static String isProfileInCompleteStatus = 'isProfileInCompleteStatus';
   static String tapToRetry = 'Tap to Retry';
   static String none = 'none';
+  static String logHeadacheError = 'Headache duration cannot be more than 3 days.';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

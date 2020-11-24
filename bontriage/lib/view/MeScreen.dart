@@ -1,5 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -360,8 +362,7 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            widget.navigateToOtherScreenCallback(
-                                Constant.headacheStartedScreenRouter);
+                            _navigateUserToHeadacheLogScreen();
                           },
                           child: Container(
                             padding:
@@ -411,5 +412,19 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
         }
       });
     }
+  }
+
+  void _navigateUserToHeadacheLogScreen() async{
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    CurrentUserHeadacheModel currentUserHeadacheModel;
+
+    if(userProfileInfoData != null)
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    if(currentUserHeadacheModel == null)
+      widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter);
+    else
+      widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter);
   }
 }

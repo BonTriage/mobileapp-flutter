@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/HeadacheLogStartedBloc.dart';
 import 'package:mobile/util/constant.dart';
 
 class HeadacheStartedScreen extends StatefulWidget {
@@ -9,6 +10,18 @@ class HeadacheStartedScreen extends StatefulWidget {
 }
 
 class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
+  HeadacheLogStartedBloc _headacheLogStartedBloc;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _headacheLogStartedBloc = HeadacheLogStartedBloc();
+
+    _headacheLogStartedBloc.storeHeadacheDetailsIntoLocalDatabase();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

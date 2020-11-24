@@ -4,6 +4,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/AddHeadacheLogBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
@@ -18,8 +19,9 @@ import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   final bool isHeadacheEnded;
+  final CurrentUserHeadacheModel currentUserHeadacheModel;
 
-  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded})
+  const AddHeadacheOnGoingScreen({Key key, this.isHeadacheEnded, this.currentUserHeadacheModel})
       : super(key: key);
 
   @override
@@ -306,11 +308,13 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           min: element.min.toDouble(),
           max: element.max.toDouble(),
           valuesList: element.values,
-          updateAtValue: element.updatedAt,
+          updateAtValue: null,
           selectedCurrentValue: element.currentValue,
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
-          isHeadacheEnded: widget.isHeadacheEnded));
+          isHeadacheEnded: widget.isHeadacheEnded,
+        currentUserHeadacheModel: widget.currentUserHeadacheModel,
+      ));
     });
 
     _isDataPopulated = true;

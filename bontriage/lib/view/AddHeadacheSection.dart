@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/LogDayQuestionnaire.dart';
 import 'package:mobile/models/MedicationSelectedDataModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
@@ -37,6 +38,7 @@ class AddHeadacheSection extends StatefulWidget {
   final String updateAtValue;
   final List<SelectedAnswers> selectedAnswers;
   final bool isHeadacheEnded;
+  final CurrentUserHeadacheModel currentUserHeadacheModel;
 
   const AddHeadacheSection(
       {Key key,
@@ -57,7 +59,8 @@ class AddHeadacheSection extends StatefulWidget {
       this.questionType,
       this.allQuestionsList,
       this.selectedAnswers,
-      this.isHeadacheEnded})
+      this.isHeadacheEnded,
+      this.currentUserHeadacheModel})
       : super(key: key);
 
   @override
@@ -104,7 +107,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             currentTag: widget.contentType,
             updatedDateValue: widget.updateAtValue,
             addHeadacheDateTimeDetailsData: _onHeadacheDateTimeSelected,
-            isHeadacheEnded: widget.isHeadacheEnded,));
+            isHeadacheEnded: widget.isHeadacheEnded,
+            currentUserHeadacheModel: widget.currentUserHeadacheModel,
+        ));
       case 'severity':
         return _getWidget(SignUpAgeScreen(
           sliderValue: (widget.selectedCurrentValue == null ||

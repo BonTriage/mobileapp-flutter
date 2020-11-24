@@ -34,7 +34,7 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_NOTE = "headacheNote";
   static const String HEADACHE_ONGOING = "headacheOnGoing";
   static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
-  static const String SELECTED_DATE = "selectedDate";
+  static const String USER_CURRENT_HEADACHE_JSON = "userCurrentHeadacheJson";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -91,7 +91,7 @@ class SignUpOnBoardProviders {
           ")");
       batch.execute("CREATE TABLE $TABLE_USER_CURRENT_HEADACHE ("
           "$USER_ID TEXT PRIMARY KEY,"
-          "$SELECTED_DATE TEXT"
+          "$USER_CURRENT_HEADACHE_JSON TEXT"
           ")");
       await batch.commit();
     });
@@ -336,8 +336,13 @@ class SignUpOnBoardProviders {
       print(e.toString());
     }
 
+    Map<String, String> map = {
+      USER_ID: currentUserHeadacheModel.userId,
+      USER_CURRENT_HEADACHE_JSON: jsonEncode(currentUserHeadacheModel.toJson())
+    };
+
     if(currentHeadacheData.length == 0)
-      await db.insert(TABLE_USER_CURRENT_HEADACHE, currentUserHeadacheModel.toJson());
+      await db.insert(TABLE_USER_CURRENT_HEADACHE, map);
   }
 
   Future<CurrentUserHeadacheModel> getUserCurrentHeadacheData(String userId) async {
@@ -347,7 +352,7 @@ class SignUpOnBoardProviders {
     List<Map> userCurrentHeadacheDataMap = await db.rawQuery("SELECT * FROM $TABLE_USER_CURRENT_HEADACHE WHERE $USER_ID = $userId");
 
     if(userCurrentHeadacheDataMap.length != 0)
-      currentUserHeadacheModel = CurrentUserHeadacheModel.fromJson(userCurrentHeadacheDataMap[0]);
+      currentUserHeadacheModel = CurrentUserHeadacheModel.fromJson(jsonDecode(userCurrentHeadacheDataMap[0][USER_CURRENT_HEADACHE_JSON]));
 
     return currentUserHeadacheModel;
   }

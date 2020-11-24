@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +18,14 @@ class CurrentHeadacheProgressScreen extends StatefulWidget {
 class _CurrentHeadacheProgressScreenState
     extends State<CurrentHeadacheProgressScreen> {
   DateTime _dateTime;
+  DateTime _storedDateTime;
   int _totalTime = 0; //in minutes
   Timer _timer;
   bool isShowDayBorder = false;
   bool _isAlreadyDataFetched = false;
   CurrentHeadacheProgressBloc _currentHeadacheProgressBloc;
+
+  bool _isShowErrorMessage = false;
 
   @override
   void initState() {
@@ -83,7 +85,11 @@ class _CurrentHeadacheProgressScreenState
 
   @override
   void dispose() {
-    _timer.cancel();
+    try {
+      _timer.cancel();
+    } catch(e) {
+      print(e);
+    }
     _currentHeadacheProgressBloc.dispose();
     super.dispose();
   }
@@ -191,21 +197,10 @@ class _CurrentHeadacheProgressScreenState
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Constant.chatBubbleGreen
-                                                /*gradient: LinearGradient(
-                                        begin: Alignment.bottomLeft,
-                                        end: Alignment.topRight,
-                                        colors: <Color>[
-                                          Color(0xff0E4C47),
-                                          Constant.chatBubbleGreen,
-                                        ]),*/
                                               ),
                                             ),
-                                          )),
-                                      /*Container(
-                              child: GradientProgressBar(
-                                painter: GradientProgressBarPainter(),
-                              ),
-                            ),*/
+                                          ),
+                                      ),
                                       Align(
                                         alignment: Alignment.center,
                                         child: Container(
@@ -254,11 +249,37 @@ class _CurrentHeadacheProgressScreenState
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    'Sep 10, 10:34 AM',
+                                    (_storedDateTime != null) ? '${Utils.getShortMonthName(_storedDateTime.month)} ${_storedDateTime.day}, ${Utils.getTimeInAmPmFormat(_storedDateTime.hour, _storedDateTime.minute)}' : '${Utils.getShortMonthName(DateTime.now().month)} ${DateTime.now().day}, ${Utils.getTimeInAmPmFormat(DateTime.now().hour, DateTime.now().minute)}',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: Constant.jostRegular,
                                         color: Constant.chatBubbleGreen),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Visibility(
+                                  visible: _isShowErrorMessage,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        image: AssetImage(Constant.warningPink),
+                                        width: 22,
+                                        height: 22,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        Constant.logHeadacheError,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Constant.pinkTriggerColor,
+                                            fontFamily: Constant.jostRegular),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 SizedBox(
@@ -347,7 +368,17 @@ class _CurrentHeadacheProgressScreenState
   void _resetTimeSeconds(CurrentUserHeadacheModel currentUserHeadacheModel) {
     try {
       DateTime dateTime = DateTime.parse(currentUserHeadacheModel.selectedDate);
-      _totalTime = _dateTime.difference(dateTime).inMinutes;
+      _storedDateTime = dateTime.toLocal();
+      Duration duration = _dateTime.difference(dateTime);
+
+      if(duration.inDays < 3)
+        _totalTime = duration.inMinutes + 1;
+      else {
+        _isShowErrorMessage = true;
+        _totalTime = 72 * 60;
+        _timer.cancel();
+      }
+      isShowDayBorder = duration.inDays >= 1;
       _isAlreadyDataFetched = true;
     } catch(e) {
       print(e);

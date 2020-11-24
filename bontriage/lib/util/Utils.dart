@@ -82,7 +82,7 @@ class Utils {
         month = "Aug";
         break;
       case 9:
-        month = "Sept";
+        month = "Sep";
         break;
       case 10:
         month = "Oct";
