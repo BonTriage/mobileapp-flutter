@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/CalendarScreenBloc.dart';
+import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/SelectedTriggersColorsModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
+import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+
+import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
   @override
@@ -12,40 +18,32 @@ class CalendarTriggersScreen extends StatefulWidget {
 class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
   List<Widget> currentMonthData = [];
   Color lastDeselectedColor;
+  CalendarScreenBloc _calendarScreenBloc;
+  DateTime _dateTime;
+  int currentMonth;
+  int currentYear;
+
+  List<SignUpHeadacheAnswerListModel> userMonthTriggersListModel = [];
 
   List<SelectedTriggersColorsModel> triggersColorsListData = [
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0Xff7E00CB), isSelected: true),
+        triggersColorsValue: Constant.calendarRedTriggerColor, isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0xffD85B00), isSelected: true),
+        triggersColorsValue: Constant.calendarPurpleTriggersColor, isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0XFF00A8CD), isSelected: true),
+        triggersColorsValue: Constant.calendarBlueTriggersColor, isSelected: true),
   ];
 
-  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dehydration', isSelected: true, color: Color(0Xff7E00CB)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Poor Sleep', isSelected: true, color: Color(0xffD85B00)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Stress', isSelected: true, color: Color(0XFF00A8CD)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Menstruation', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Humidity', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Caffeine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: '2+ Glasses of Red Wine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Screen Time', isSelected: false),
-  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    var calendarUtil = CalendarUtil(calenderType: 1);
-    currentMonthData = calendarUtil.drawMonthCalendar(yy: 2020, mm: 11);
+    _calendarScreenBloc = CalendarScreenBloc();
+    _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    requestService();
   }
 
   @override
@@ -175,13 +173,38 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                 ),
                 Container(
                   height: 290,
-                  child: GridView.count(
-                      crossAxisCount: 7,
-                      padding: EdgeInsets.all(4.0),
-                      childAspectRatio: 8.0 / 9.0,
-                      children: currentMonthData.map((e) {
-                        return e;
-                      }).toList()),
+                  child: StreamBuilder<dynamic>(
+                      stream: _calendarScreenBloc.albumDataStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          setCurrentMonthData(
+                              snapshot.data, currentMonth, currentYear);
+                          return GridView.count(
+                              crossAxisCount: 7,
+                              padding: EdgeInsets.all(4.0),
+                              childAspectRatio: 8.0 / 9.0,
+                              children: currentMonthData.map((e) {
+                                return e;
+                              }).toList());
+                        } else if (snapshot.hasError) {
+                          Utils.closeApiLoaderDialog(context);
+                          return NetworkErrorScreen(
+                            errorMessage: snapshot.error.toString(),
+                            tapToRetryFunction: () {
+                              Utils.showApiLoaderDialog(context);
+                              requestService();
+                            },
+                          );
+                        } else {
+                          /*return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ApiLoaderScreen(),
+                    ],
+                  );*/
+                          return Container();
+                        }
+                      }),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 10),
@@ -256,111 +279,139 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
             child: Container(
               margin: EdgeInsets.only(left: 20, right: 15),
               child: SingleChildScrollView(
-                child: Wrap(
-                  children: <Widget>[
-                    for (var i = 0;
-                        i < signUpHeadacheAnswerListModel.length;
-                        i++)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            var foundElements = signUpHeadacheAnswerListModel
-                                .where((e) => e.isSelected);
-                            if (!signUpHeadacheAnswerListModel[i].isSelected) {
-                              if (foundElements.length < 3) {
-                                var unSelectedColor =
-                                    triggersColorsListData.firstWhere(
-                                        (element) => !element.isSelected,
-                                        orElse: () => null);
-                                if (unSelectedColor != null) {
-                                  signUpHeadacheAnswerListModel[i].color =
-                                      unSelectedColor.triggersColorsValue;
-                                  signUpHeadacheAnswerListModel[i].isSelected =
-                                      true;
-                                  unSelectedColor.isSelected = true;
-                                }
-                                signUpHeadacheAnswerListModel[i].isSelected =
-                                    true;
-                              } else {
-                                print(
-                                    "PopUp will be show for more then 3 selected color");
-                              }
-                            } else {
-                              var selectedColor =
-                                  triggersColorsListData.firstWhere(
-                                      (element) =>
-                                          element.triggersColorsValue ==
-                                          signUpHeadacheAnswerListModel[i]
-                                              .color,
-                                      orElse: () => null);
-                              if (selectedColor != null) {
-                                selectedColor.isSelected = false;
-                                signUpHeadacheAnswerListModel[i].isSelected =
-                                    false;
-                              }
-                            }
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            right: 10,
-                            bottom: 10,
-                          ),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Constant.chatBubbleGreen, width: 1),
-                              borderRadius: BorderRadius.circular(20),
-                              color: signUpHeadacheAnswerListModel[i].isSelected
-                                  ? Constant.chatBubbleGreen
-                                  : Colors.transparent),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(minHeight: 10),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Visibility(
-                                    visible: signUpHeadacheAnswerListModel[i]
-                                        .isSelected,
-                                    child: Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color:
-                                                  Constant.bubbleChatTextView,
-                                              width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color:
-                                              signUpHeadacheAnswerListModel[i]
-                                                  .color),
+                child: StreamBuilder<dynamic>(
+                    stream: _calendarScreenBloc.triggersDataStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if(userMonthTriggersListModel.length == 0)
+                        userMonthTriggersListModel.addAll(snapshot.data);
+                        return Wrap(
+                          children: <Widget>[
+                            for (var i = 0;
+                                i < userMonthTriggersListModel.length;
+                                i++)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    var foundElements =
+                                        userMonthTriggersListModel
+                                            .where((e) => e.isSelected);
+                                    if (!userMonthTriggersListModel[i]
+                                        .isSelected) {
+                                      if (foundElements.length < 3) {
+                                        var unSelectedColor =
+                                            triggersColorsListData.firstWhere(
+                                                (element) =>
+                                                    !element.isSelected,
+                                                orElse: () => null);
+                                        if (unSelectedColor != null) {
+                                          userMonthTriggersListModel[i]
+                                                  .color =
+                                              unSelectedColor
+                                                  .triggersColorsValue;
+                                          userMonthTriggersListModel[i]
+                                              .isSelected = true;
+                                          unSelectedColor.isSelected = true;
+                                        }
+                                        userMonthTriggersListModel[i]
+                                            .isSelected = true;
+                                      } else {
+                                        print(
+                                            "PopUp will be show for more then 3 selected color");
+                                      }
+                                    } else {
+                                      var selectedColor =
+                                          triggersColorsListData.firstWhere(
+                                              (element) =>
+                                                  element.triggersColorsValue ==
+                                                  userMonthTriggersListModel[
+                                                          i]
+                                                      .color,
+                                              orElse: () => null);
+                                      if (selectedColor != null) {
+                                        selectedColor.isSelected = false;
+                                        userMonthTriggersListModel[i]
+                                            .isSelected = false;
+                                      }
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    right: 10,
+                                    bottom: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Constant.chatBubbleGreen,
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: userMonthTriggersListModel[i]
+                                              .isSelected
+                                          ? Constant.chatBubbleGreen
+                                          : Colors.transparent),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          BoxConstraints(minHeight: 10),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          Visibility(
+                                            visible:
+                                                userMonthTriggersListModel[i]
+                                                    .isSelected,
+                                            child: Container(
+                                              width: 10,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Constant
+                                                          .bubbleChatTextView,
+                                                      width: 1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color:
+                                                      userMonthTriggersListModel[
+                                                              i]
+                                                          .color),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            userMonthTriggersListModel[i]
+                                                .answerData,
+                                            style: TextStyle(
+                                                color:
+                                                    userMonthTriggersListModel[
+                                                                i]
+                                                            .isSelected
+                                                        ? Constant
+                                                            .bubbleChatTextView
+                                                        : Constant
+                                                            .locationServiceGreen,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    signUpHeadacheAnswerListModel[i].answerData,
-                                    style: TextStyle(
-                                        color: signUpHeadacheAnswerListModel[i]
-                                                .isSelected
-                                            ? Constant.bubbleChatTextView
-                                            : Constant.locationServiceGreen,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                          ],
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
               ),
             ),
           ),
@@ -387,5 +438,15 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
       }
     }
     return unselectedColor;
+  }
+
+  void requestService() async {
+    await _calendarScreenBloc.fetchCalendarTriggersData(
+        "2020-11-01T18:30:00Z", "2020-11-30T18:30:00Z");
+  }
+
+  void setCurrentMonthData(UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,int currentMonth,int currentYear) {
+    var calendarUtil = CalendarUtil(calenderType: 1,userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,userMonthTriggersListData: userMonthTriggersListModel);
+    currentMonthData = calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
 }

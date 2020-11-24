@@ -15,7 +15,8 @@ class MeScreen extends StatefulWidget {
   _MeScreenState createState() => _MeScreenState();
 }
 
-class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin {
+class _MeScreenState extends State<MeScreen>
+    with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   List<Widget> currentWeekListData = [];
   List<bool> currentWeekConsData = [];
@@ -28,10 +29,8 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
     // TODO: implement initState
     super.initState();
 
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: 350),
-      vsync: this
-    );
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 350), vsync: this);
 
     _dateTime = DateTime.now();
 
@@ -51,14 +50,26 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
         var j = i + 1;
         if (j < 7 && currentWeekConsData[i] == currentWeekConsData[j]) {
           currentWeekListData.add(ConsecutiveSelectedDateWidget(
-              _firstDayOfTheWeek.day.toString(), 0));
+              weekDateData: _firstDayOfTheWeek.day.toString(),
+              calendarType: 0,
+              calendarDateViewType: 0,
+              triggersListData: [],
+              userMonthTriggersListData: []));
         } else {
-          currentWeekListData
-              .add(DateWidget(_firstDayOfTheWeek.day.toString(), 0));
+          currentWeekListData.add(DateWidget(
+              weekDateData: _firstDayOfTheWeek.day.toString(),
+              calendarType: 0,
+              calendarDateViewType: 0,
+              triggersListData: [],
+              userMonthTriggersListData: []));
         }
       } else {
-        currentWeekListData
-            .add(DateWidget(_firstDayOfTheWeek.day.toString(), 0));
+        currentWeekListData.add(DateWidget(
+            weekDateData: _firstDayOfTheWeek.day.toString(),
+            calendarType: 0,
+            calendarDateViewType: 0,
+            triggersListData: [],
+            userMonthTriggersListData: []));
       }
 
       _firstDayOfTheWeek = DateTime(_firstDayOfTheWeek.year,
@@ -134,30 +145,33 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       onTap: () {
-                        widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter);
+                        widget.navigateToOtherScreenCallback(
+                            Constant.welcomeStartAssessmentScreenRouter);
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             Constant.onBoardingAssessmentIncomplete,
                             style: TextStyle(
-                              color: Constant.bubbleChatTextView,
-                              fontFamily: Constant.jostRegular,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14
-                            ),
+                                color: Constant.bubbleChatTextView,
+                                fontFamily: Constant.jostRegular,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14),
                           ),
                           Text(
                             Constant.clickHereToFinish,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontFamily: Constant.jostMedium,
-                                fontSize: 14
-                            ),
+                                fontSize: 14),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
                     ),
@@ -176,7 +190,8 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                       height: _isOnBoardAssessmentInComplete ? 0 : 70,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       decoration: BoxDecoration(
                         color: Color(0xCC0E232F),
                         borderRadius: BorderRadius.circular(20),
@@ -294,7 +309,8 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                       height: 30,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 40),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.bottomLeft,
@@ -364,8 +380,8 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
                                 Constant.headacheStartedScreenRouter);
                           },
                           child: Container(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 7),
                             decoration: BoxDecoration(
                               color: Constant.chatBubbleGreen,
                               borderRadius: BorderRadius.circular(20),
@@ -399,11 +415,12 @@ class _MeScreenState extends State<MeScreen> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
-  void _checkForProfileIncomplete() async{
+  void _checkForProfileIncomplete() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool isProfileInComplete = sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
+    bool isProfileInComplete =
+        sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
 
-    if(isProfileInComplete != null || isProfileInComplete) {
+    if (isProfileInComplete != null || isProfileInComplete) {
       setState(() {
         _isOnBoardAssessmentInComplete = isProfileInComplete;
         if (_isOnBoardAssessmentInComplete) {

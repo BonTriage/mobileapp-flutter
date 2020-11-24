@@ -59,7 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   width: 60,
                 ),
                 Text(
-                  currentIndex == 0 ? 'Triggers' : 'Severity',
+                  currentIndex == 0 ? 'Triggers' : 'Intensity',
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontSize: 18,

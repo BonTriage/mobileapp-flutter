@@ -39,6 +39,7 @@ class HorizontalLinePainter extends CustomPainter {
       ..strokeWidth = 2.8;
 
     canvas.drawLine(Offset(size.width / 2, size.height / 2), Offset(size.width + size.width/2, size.height/2), paint);
+    print("Circle Height??????${size.height}");
 
   }
 

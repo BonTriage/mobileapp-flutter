@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/CalendarScreenBloc.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
+import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+
+import 'NetworkErrorScreen.dart';
 
 class CalendarSeverityScreen extends StatefulWidget {
   @override
@@ -11,28 +16,22 @@ class CalendarSeverityScreen extends StatefulWidget {
 class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
   List<Widget> currentMonthData = [];
   List<Widget> _pageViewWidgetList;
+  CalendarScreenBloc _calendarScreenBloc;
+  DateTime _dateTime;
+  int currentMonth;
+  int currentYear;
 
-  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
-    SignUpHeadacheAnswerListModel(answerData: 'Dehydration', isSelected: true),
-    SignUpHeadacheAnswerListModel(answerData: 'Poor Sleep', isSelected: true),
-    SignUpHeadacheAnswerListModel(answerData: 'Stress', isSelected: true),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Menstruation', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Humidity', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Caffeine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: '2+ Glasses of Red Wine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Screen Time', isSelected: false),
-  ];
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    var calendarUtil = CalendarUtil(calenderType: 2);
-    currentMonthData = calendarUtil.drawMonthCalendar(yy: 2020, mm: 11);
+    _calendarScreenBloc = CalendarScreenBloc();
+    _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    requestService();
   }
 
   @override
@@ -161,16 +160,41 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                       ]),
                     ],
                   ),
-                  Container(
-                    height: 290,
-                    child: GridView.count(
-                        crossAxisCount: 7,
-                        padding: EdgeInsets.all(4.0),
-                        childAspectRatio: 8.0 / 9.0,
-                        children: currentMonthData.map((e) {
-                          return e;
-                        }).toList()),
-                  ),
+              Container(
+                height: 290,
+                child: StreamBuilder<dynamic>(
+                    stream: _calendarScreenBloc.albumDataStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        setCurrentMonthData(
+                            snapshot.data, currentMonth, currentYear);
+                        return GridView.count(
+                            crossAxisCount: 7,
+                            padding: EdgeInsets.all(4.0),
+                            childAspectRatio: 8.0 / 9.0,
+                            children: currentMonthData.map((e) {
+                              return e;
+                            }).toList());
+                      } else if (snapshot.hasError) {
+                        Utils.closeApiLoaderDialog(context);
+                        return NetworkErrorScreen(
+                          errorMessage: snapshot.error.toString(),
+                          tapToRetryFunction: () {
+                            Utils.showApiLoaderDialog(context);
+                            requestService();
+                          },
+                        );
+                      } else {
+                        /*return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ApiLoaderScreen(),
+                    ],
+                  );*/
+                        return Container();
+                      }
+                    }),
+              ),
                   SizedBox(
                     height: 5,
                   ),
@@ -440,5 +464,15 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
         ),
       ),
     );
+  }
+
+  void requestService() async {
+    await _calendarScreenBloc.fetchCalendarTriggersData(
+        "2020-11-01T18:30:00Z", "2020-11-30T18:30:00Z");
+  }
+
+  void setCurrentMonthData(UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,int currentMonth,int currentYear) {
+    var calendarUtil = CalendarUtil(calenderType: 2,userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,userMonthTriggersListData: []);
+    currentMonthData = calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
 }
