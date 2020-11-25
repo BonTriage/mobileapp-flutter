@@ -475,13 +475,16 @@ class _TimeSectionState extends State<TimeSection>
                 if (_isEndTimeExpanded) {
                   widget.addHeadacheDateTimeDetailsData("ongoing", "No");
                   if (_selectedEndDateAndTime == null) {
-                    Duration duration = _selectedEndDateAndTime.difference(DateTime.now());
-                    if(duration.inSeconds <= (72*60*60)) {
+                    Duration duration = _selectedStartDate.difference(DateTime.now());
+                    if(duration.inSeconds.abs() <= (72*60*60)) {
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", DateTime.now().toUtc().toIso8601String());
                     } else {
+                      _selectedEndDate = _selectedStartDate.add(Duration(days: 3));
+                      _selectedEndTime = _selectedEndDate;
+                      _selectedEndDateAndTime = _selectedEndDate;
                       widget.addHeadacheDateTimeDetailsData(
-                          "endtime", DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal().add(Duration(days: 3)).toUtc().toIso8601String());
+                          "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
                     }
                   } else
                     widget.addHeadacheDateTimeDetailsData(

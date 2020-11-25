@@ -291,8 +291,7 @@ class _CurrentHeadacheProgressScreenState
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        Navigator.pushReplacementNamed(context,
-                                            Constant.addHeadacheOnGoingScreenRouter);
+                                        Navigator.pushReplacementNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: _currentUserHeadacheModel);
                                       },
                                       child: Container(
                                         width: 130,
