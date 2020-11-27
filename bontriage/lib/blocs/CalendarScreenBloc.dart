@@ -156,6 +156,7 @@ class CalendarScreenBloc {
                  userSelectedHeadacheDayTriggersData.userTriggersListData.add(signUpHeadacheAnswerListModel);
                });
                setAllMonthTriggersData(formattedValues);
+               userLogHeadacheDataCalendarModel.addLogDayListData.add(_selectedHeadacheLogDate);
                //  userSelectedHeadacheDayTriggersData.userTriggersListData.addAll(_selectedHeadacheLogDate);
              }
         }else{
@@ -175,6 +176,7 @@ class CalendarScreenBloc {
             });
             setAllMonthTriggersData(formattedValues);
             userLogHeadacheDataCalendarModel.addTriggersListData.add(_selectedHeadacheLogDate);
+            userLogHeadacheDataCalendarModel.addLogDayListData.add(_selectedHeadacheLogDate);
           }
         }
 

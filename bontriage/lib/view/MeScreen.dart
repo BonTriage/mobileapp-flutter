@@ -465,7 +465,7 @@ class _MeScreenState extends State<MeScreen>
   void requestService(
       String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
     await _calendarScreenBloc.fetchCalendarTriggersData(
-        "2020-11-15T18:30:00Z", "2020-11-21T18:30:00Z");
+        firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
   }
 
   void setUserWeekData(
@@ -531,8 +531,7 @@ class _MeScreenState extends State<MeScreen>
         return false;
       }, orElse: () => null);
       if (userCalendarData == null) {
-        userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere(
-            (element) {
+        userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere((element) {
           if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
             currentWeekConsData.add(1);
             return true;

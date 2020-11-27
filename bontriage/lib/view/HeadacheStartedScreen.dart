@@ -16,7 +16,6 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _headacheLogStartedBloc = HeadacheLogStartedBloc();
 
