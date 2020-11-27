@@ -54,15 +54,23 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
 
   @override
   void didUpdateWidget(CalendarIntensityScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
     _calendarScreenBloc.initNetworkStreamController();
-    Utils.showApiLoaderDialog(context,
+   /* Utils.showApiLoaderDialog(context,
         networkStream: _calendarScreenBloc.networkDataStream,
         tapToRetryFunction: () {
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });
+    });*/
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
@@ -131,7 +139,6 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         onTap: () {
                           DateTime dateTime =
                           DateTime(_dateTime.year, _dateTime.month + 1);
-
                           Duration duration = dateTime.difference(DateTime.now());
                           _dateTime = dateTime;
                           if (duration.inSeconds < 0) {
@@ -588,6 +595,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
           dateTime.month, dateTime.year, totalDaysInCurrentMonth);
       monthName = Utils.getMonthName(dateTime.month);
       currentYear = dateTime.year;
+      currentMonth = dateTime.month;
       _calendarScreenBloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,

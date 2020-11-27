@@ -65,6 +65,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     _calendarScreenBloc.initNetworkStreamController();
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
     getCurrentPositionOfTabBar();
     super.didUpdateWidget(oldWidget);
   }
@@ -374,6 +381,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                         userMonthTriggersListModel[i]
                                             .isSelected = true;
                                       } else {
+                                        Utils.showTriggerSelectionDialog(context);
                                         print(
                                             "PopUp will be show for more then 3 selected color");
                                       }

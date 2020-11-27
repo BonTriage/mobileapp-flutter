@@ -5,7 +5,7 @@ import 'package:mobile/util/DrawHorizontalLine.dart';
 import 'package:mobile/view/DateWidget.dart';
 
 class ConsecutiveSelectedDateWidget extends StatelessWidget {
-  final String weekDateData;
+  final DateTime weekDateData;
   final int calendarType;
   final int calendarDateViewType;
   final  List<SignUpHeadacheAnswerListModel> triggersListData;

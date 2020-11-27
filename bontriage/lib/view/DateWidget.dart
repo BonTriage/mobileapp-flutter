@@ -4,7 +4,7 @@ import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class DateWidget extends StatelessWidget {
-  final String weekDateData;
+  final DateTime weekDateData;
   final int calendarType;
   final int calendarDateViewType;
   final List<SignUpHeadacheAnswerListModel> triggersListData;
@@ -32,7 +32,7 @@ class DateWidget extends StatelessWidget {
               padding: EdgeInsets.all(2),
               child: Center(
                 child: Text(
-                  weekDateData,
+                  weekDateData.day.toString(),
                   style: setTextViewStyle(calendarDateViewType),
                 ),
               ),
@@ -48,8 +48,7 @@ class DateWidget extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 1,right: 3
-                    ),
+                    margin: EdgeInsets.only(bottom: 1, right: 3),
                     width: 16,
                     height: 8,
                     decoration: BoxDecoration(
@@ -69,7 +68,9 @@ class DateWidget extends StatelessWidget {
 
   bool isCurrentDate() {
     DateTime now = new DateTime.now();
-    return now.day.toString() == weekDateData;
+    return weekDateData.month == now.month &&
+        weekDateData.year == now.year &&
+        now.day.toString() == weekDateData.day.toString();
   }
 
   BoxDecoration setDateViewWidget(int calendarDateViewType) {
@@ -191,11 +192,11 @@ class DateWidget extends StatelessWidget {
           child: Container(),
         );
       }
-    }else{
+    } else {
       return Visibility(
-      visible: false,
-      child: Container(),
-    );
+        visible: false,
+        child: Container(),
+      );
     }
   }
 

@@ -60,7 +60,7 @@ class _MeScreenState extends State<MeScreen>
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
-            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
       });
     });
@@ -176,53 +176,52 @@ class _MeScreenState extends State<MeScreen>
                     SizedBox(
                       height: _isOnBoardAssessmentInComplete ? 0 : 70,
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Color(0xCC0E232F),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'THIS WEEK:',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Constant.chatBubbleGreen,
-                                    fontFamily: Constant.jostMedium),
+                    StreamBuilder<dynamic>(
+                        stream: _calendarScreenBloc.calendarDataStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            userLogHeadacheDataCalendarModel = snapshot.data;
+                            setUserWeekData(userLogHeadacheDataCalendarModel);
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Color(0xCC0E232F),
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  widget.navigateToOtherScreenCallback(
-                                      TabNavigatorRoutes.recordsRoot);
-                                },
-                                child: Text(
-                                  'SEE MORE >',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Constant.chatBubbleGreen,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          StreamBuilder<Object>(
-                              stream: _calendarScreenBloc.calendarDataStream,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  userLogHeadacheDataCalendarModel =
-                                      snapshot.data;
-                                  setUserWeekData(
-                                      userLogHeadacheDataCalendarModel);
-                                  return Table(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'THIS WEEK:',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Constant.chatBubbleGreen,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          widget.navigateToOtherScreenCallback(
+                                              TabNavigatorRoutes.recordsRoot);
+                                        },
+                                        child: Text(
+                                          'SEE MORE >',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Constant.chatBubbleGreen,
+                                              fontFamily: Constant.jostMedium),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Table(
                                     defaultVerticalAlignment:
                                         TableCellVerticalAlignment.middle,
                                     children: [
@@ -311,25 +310,16 @@ class _MeScreenState extends State<MeScreen>
                                       ]),
                                       TableRow(children: currentWeekListData),
                                     ],
-                                  );
-                                } else if (snapshot.hasError) {
-                                  Utils.closeApiLoaderDialog(context);
-                                  return NetworkErrorScreen(
-                                    errorMessage: snapshot.error.toString(),
-                                    tapToRetryFunction: () {
-                                      Utils.showApiLoaderDialog(context);
-                                      _calendarScreenBloc.enterSomeDummyDataToStreamController();
-                                        requestService(firstDayOfTheCurrentWeek,
-                                            lastDayOfTheCurrentWeek);
-                                    },
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                        ],
-                      ),
-                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              height: 100,
+                            );
+                          }
+                        }),
                     SizedBox(
                       height: 30,
                     ),
@@ -454,25 +444,24 @@ class _MeScreenState extends State<MeScreen>
     }
   }
 
-
   void _navigateUserToHeadacheLogScreen() async {
-    var userProfileInfoData = await SignUpOnBoardProviders.db
-        .getLoggedInUserAllInformation();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     CurrentUserHeadacheModel currentUserHeadacheModel;
 
     if (userProfileInfoData != null)
-      currentUserHeadacheModel =
-      await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(
-          userProfileInfoData.userId);
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db
+          .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     if (currentUserHeadacheModel == null)
-      widget.navigateToOtherScreenCallback(
-          Constant.headacheStartedScreenRouter);
+      widget
+          .navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter);
     else
       widget.navigateToOtherScreenCallback(
           Constant.currentHeadacheProgressScreenRouter);
   }
+
   void requestService(
       String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
     await _calendarScreenBloc.fetchCalendarTriggersData(
@@ -495,14 +484,14 @@ class _MeScreenState extends State<MeScreen>
             (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
             (currentWeekConsData[j] == 0 || currentWeekConsData[j] == 1)) {
           currentWeekListData.add(ConsecutiveSelectedDateWidget(
-              weekDateData: _firstDayOfTheWeek.day.toString(),
+              weekDateData: _firstDayOfTheWeek,
               calendarType: 0,
               calendarDateViewType: currentWeekConsData[i],
               triggersListData: [],
               userMonthTriggersListData: []));
         } else {
           currentWeekListData.add(DateWidget(
-              weekDateData: _firstDayOfTheWeek.day.toString(),
+              weekDateData: _firstDayOfTheWeek,
               calendarType: 0,
               calendarDateViewType: currentWeekConsData[i],
               triggersListData: [],
@@ -510,7 +499,7 @@ class _MeScreenState extends State<MeScreen>
         }
       } else {
         currentWeekListData.add(DateWidget(
-            weekDateData: _firstDayOfTheWeek.day.toString(),
+            weekDateData: _firstDayOfTheWeek,
             calendarType: 0,
             calendarDateViewType: currentWeekConsData[i],
             triggersListData: [],

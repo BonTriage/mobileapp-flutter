@@ -69,17 +69,17 @@ class CalendarUtil {
               (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
               (currentWeekConsData[j] == 0 || currentWeekConsData[j] == 1)) {
             monthData.add(ConsecutiveSelectedDateWidget(
-                weekDateData:_firstDateOfMonth.day.toString(),
+                weekDateData:_firstDateOfMonth,
                 calendarType:calenderType,
                 calendarDateViewType:currentWeekConsData[i],
                 triggersListData:triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
           } else {
-            monthData.add(DateWidget(weekDateData:_firstDateOfMonth.day.toString(),
+            monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
                 calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
           }
           i++;
         } else {
-          monthData.add(DateWidget(weekDateData:_firstDateOfMonth.day.toString(),
+          monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
               calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
 
           i++;

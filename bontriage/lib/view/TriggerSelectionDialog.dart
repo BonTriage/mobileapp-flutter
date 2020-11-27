@@ -10,7 +10,6 @@ class TriggerSelectionDialog extends StatefulWidget {
 }
 
 class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
-
   List<TriggerDialogModel> _triggerList = [];
   Timer _timer;
   double _totalTime;
@@ -22,17 +21,23 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
 
     _totalTime = 0;
 
-    _triggerList.add(TriggerDialogModel(triggerName: 'Dehydration', color: Colors.blue, isSelected: true));
-    _triggerList.add(TriggerDialogModel(triggerName: 'Poor Sleep', color: Colors.red, isSelected: true));
-    _triggerList.add(TriggerDialogModel(triggerName: 'Stress', color: Colors.purple, isSelected: true));
-    _triggerList.add(TriggerDialogModel(triggerName: 'Menstruation', color: Colors.blue, isSelected: false));
-    _triggerList.add(TriggerDialogModel(triggerName: 'High Humidity', color: Colors.red, isSelected: false));
-    _triggerList.add(TriggerDialogModel(triggerName: 'Caffeine', color: Colors.blue, isSelected: false));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'Dehydration', color: Colors.blue, isSelected: true));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'Poor Sleep', color: Colors.red, isSelected: true));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'Stress', color: Colors.purple, isSelected: true));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'Menstruation', color: Colors.blue, isSelected: false));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'High Humidity', color: Colors.red, isSelected: false));
+    _triggerList.add(TriggerDialogModel(
+        triggerName: 'Caffeine', color: Colors.blue, isSelected: false));
 
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      _totalTime += 5;
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      _totalTime += 2;
       setState(() {
-        if(_totalTime % 10 == 0) {
+        if (_totalTime % 4 == 0) {
           _triggerList[4].isSelected = false;
           _triggerList[1].isSelected = true;
         } else {
@@ -82,19 +87,22 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Text(
                       Constant.multipleTriggers,
                       style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontSize: 16,
-                        fontFamily: Constant.jostRegular
-                      ),
+                          color: Constant.chatBubbleGreen,
+                          fontSize: 16,
+                          fontFamily: Constant.jostRegular),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Text(
@@ -102,11 +110,12 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,
-                          fontFamily: Constant.jostRegular
-                      ),
+                          fontFamily: Constant.jostRegular),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 0),
                     child: Wrap(
@@ -131,12 +140,8 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
           margin: EdgeInsets.only(right: 8, bottom: 8),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                  color: Constant.chatBubbleGreen,
-                  width: 1
-              ),
-              color: Constant.chatBubbleGreen
-          ),
+              border: Border.all(color: Constant.chatBubbleGreen, width: 1),
+              color: Constant.chatBubbleGreen),
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -145,22 +150,19 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 1,
-                        color: Colors.black
-                    ),
+                    border: Border.all(width: 1, color: Colors.black),
                     borderRadius: BorderRadius.circular(10),
-                    color: element.color
-                ),
+                    color: element.color),
               ),
-              SizedBox(width: 3,),
+              SizedBox(
+                width: 3,
+              ),
               Text(
                 element.triggerName,
                 style: TextStyle(
                     fontSize: 10,
                     color: Constant.bubbleChatTextView,
-                    fontFamily: Constant.jostRegular
-                ),
+                    fontFamily: Constant.jostRegular),
               ),
             ],
           ),
@@ -169,10 +171,7 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
           margin: EdgeInsets.only(right: 10, bottom: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: Constant.chatBubbleGreen,
-                width: 1
-            ),
+            border: Border.all(color: Constant.chatBubbleGreen, width: 1),
           ),
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Text(
@@ -180,11 +179,12 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
             style: TextStyle(
                 fontSize: 10,
                 color: Constant.locationServiceGreen,
-                fontFamily: Constant.jostRegular
-            ),
+                fontFamily: Constant.jostRegular),
           ),
         ),
-        crossFadeState: element.isSelected ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        crossFadeState: element.isSelected
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
       ));
       /*if(element.isSelected) {
         widgetList.add(Container(
