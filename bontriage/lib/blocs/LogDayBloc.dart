@@ -353,7 +353,7 @@ class LogDayBloc {
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
     DateTime dateTime = DateTime.now();
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 3));
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime(dateTime.year, dateTime.month, dateTime.day - 3))/*Utils.getDateTimeInUtcFormat(DateTime.parse('2020-11-16T07:25:22.853Z'))*/;
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
 

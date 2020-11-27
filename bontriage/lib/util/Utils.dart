@@ -5,6 +5,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -360,7 +361,7 @@ class Utils {
   ///@param networkStream: this variable is used to listen to the network events
   ///@param tapToRetryFunction: this variable is used to pass the reference of the tap to retry button function functionality
   static void showApiLoaderDialog(BuildContext context, {Stream<dynamic> networkStream, Function tapToRetryFunction}) {
-    var show = showGeneralDialog(
+    showGeneralDialog(
       context: context,
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         return Builder(
@@ -381,17 +382,6 @@ class Utils {
       barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 150),
     );
-    /*showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          content: ApiLoaderDialog(),
-        );
-      },
-    );*/
   }
 
   static void navigateToHomeScreen(BuildContext context, bool isProfileInComplete) async{
@@ -411,5 +401,26 @@ class Utils {
     String dateTimeIsoString = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second).toUtc().toIso8601String();
     List<String> splitedString = dateTimeIsoString.split('.');
     return '${splitedString[0]}Z';
+  }
+
+  static void showTriggerSelectionDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (buildContext, animation, secondaryAnimation) {
+        return Builder(
+          builder: (context) {
+            return Material(
+              color: Colors.black26,
+              child: Align(
+                alignment: Alignment.center,
+                child: TriggerSelectionDialog(),
+              ),
+            );
+          },
+        );
+      },
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 150),
+    );
   }
 }

@@ -504,6 +504,8 @@ class Constant {
   static String none = 'none';
   static String logHeadacheError = 'Headache duration cannot be more than 3 days.';
   static String viewEditNote = 'View/Edit Note';
+  static String multipleTriggers = 'Selecting multiple triggers at a time';
+  static String selectUpTo3Triggers = 'You can only select up to 3 triggers at a time. In order to look at different triggers, please unselect one or more of the active triggers before selecting new ones.';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
