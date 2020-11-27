@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/CalendarSeverityScreen.dart';
+import 'package:mobile/view/CalendarIntensityScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarTriggersScreen.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -17,10 +17,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: 0, keepPage: true);
-    pageViewWidgetList = [CalendarTriggersScreen(), CalendarSeverityScreen()];
+    pageViewWidgetList = [Container()];
+  }
+
+  @override
+  void didUpdateWidget(CalendarScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    getCurrentPositionOfTabBar();
   }
 
   @override
@@ -120,5 +126,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
       ),
     );
+  }
+
+  void getCurrentPositionOfTabBar() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar =
+    sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if (currentPositionOfTabBar == 1) {
+     setState(() {
+       pageViewWidgetList = [CalendarTriggersScreen(), CalendarIntensityScreen()];
+     });
+    }
   }
 }

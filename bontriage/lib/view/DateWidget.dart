@@ -48,7 +48,7 @@ class DateWidget extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 1,right: 2
+                    margin: EdgeInsets.only(bottom: 1,right: 3
                     ),
                     width: 16,
                     height: 8,

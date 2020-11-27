@@ -1,49 +1,25 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/view/ConsecutiveSelectedDateWidget.dart';
 import 'package:mobile/view/DateWidget.dart';
 
+import 'Utils.dart';
+
 class CalendarUtil {
   int calenderType;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   List<String> userLogHeadacheDataList = [];
   List<SignUpHeadacheAnswerListModel> userMonthTriggersListData = [];
-  DateTime _dateTime;
+
 
   // calenderType
   // 0- Me Screen
   // 1- Triggers Screen
   // 2- Severity Screen
-  CalendarUtil({this.calenderType, this.userLogHeadacheDataCalendarModel,this.userMonthTriggersListData}) {
-    _dateTime = DateTime.now();
-  }
+  CalendarUtil({this.calenderType, this.userLogHeadacheDataCalendarModel,this.userMonthTriggersListData}) ;
 
-  /// Method to get total no of days in the month
-  daysInMonth(int monthNum, int year) {
-    List<int> monthLength = new List(12);
 
-    monthLength[0] = 31;
-    monthLength[2] = 31;
-    monthLength[4] = 31;
-    monthLength[6] = 31;
-    monthLength[7] = 31;
-    monthLength[9] = 31;
-    monthLength[11] = 31;
-    monthLength[3] = 30;
-    monthLength[8] = 30;
-    monthLength[5] = 30;
-    monthLength[10] = 30;
-
-    if (leapYear(year) == true)
-      monthLength[1] = 29;
-    else
-      monthLength[1] = 28;
-
-    return monthLength[monthNum - 1];
-  }
 
   ///method to draw the month calendar for the month and year passed as arguments.
   ///and it returns the list of widgets which contain the calendar items to draw over screen.
@@ -52,10 +28,10 @@ class CalendarUtil {
     List<Widget> monthData = [];
     List<int> currentWeekConsData = [];
     var _firstDateOfMonth = DateTime.utc(yy, mm, dd);
-    var daysInMonth = this.daysInMonth(mm, yy);
+    var daysInMonth = Utils.daysInCurrentMonth(mm, yy);
     var weekDay =
         _firstDateOfMonth.weekday != 7 ? _firstDateOfMonth.weekday : 0;
-    filterSelectedLogDayList(daysInMonth, currentWeekConsData);
+    filterSelectedLogAndHeadacheDayList(daysInMonth, currentWeekConsData);
 
     for (int n = 0, i = 0; n < 37 && i < daysInMonth; n++) {
       List<SignUpHeadacheAnswerListModel> triggersListData = [];
@@ -115,21 +91,11 @@ class CalendarUtil {
     return monthData;
   }
 
-  ///method to find, the given year is a leap year or not
-  leapYear(int year) {
-    bool leapYear = false;
 
-    bool leap = ((year % 100 == 0) && (year % 400 != 0));
-    if (leap == true)
-      leapYear = false;
-    else if (year % 4 == 0) leapYear = true;
-
-    return leapYear;
-  }
 // 0- Headache Data
   // 1- LogDay Data
   // 2- No Headache and No Log
-  void filterSelectedLogDayList(daysInMonth, List<int> currentWeekConsData) {
+  void filterSelectedLogAndHeadacheDayList(daysInMonth, List<int> currentWeekConsData) {
       for (int i = 0; i < daysInMonth; i++) {
         var userCalendarData = userLogHeadacheDataCalendarModel
             .addHeadacheListData

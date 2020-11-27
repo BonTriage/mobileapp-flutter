@@ -1,10 +1,14 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/CalendarScreenBloc.dart';
+import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ConsecutiveSelectedDateWidget.dart';
 import 'DateWidget.dart';
+import 'NetworkErrorScreen.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String) navigateToOtherScreenCallback;
@@ -19,65 +23,45 @@ class _MeScreenState extends State<MeScreen>
     with SingleTickerProviderStateMixin {
   DateTime _dateTime;
   List<Widget> currentWeekListData = [];
-  List<bool> currentWeekConsData = [];
   List<TextSpan> textSpanList;
   AnimationController _animationController;
   bool _isOnBoardAssessmentInComplete = false;
+  int currentMonth;
+  int currentYear;
+  String monthName;
+  String firstDayOfTheCurrentWeek;
+  String lastDayOfTheCurrentWeek;
+  CalendarScreenBloc _calendarScreenBloc;
+  UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
+    _calendarScreenBloc = CalendarScreenBloc();
+    userLogHeadacheDataCalendarModel = UserLogHeadacheDataCalendarModel();
     _animationController =
         AnimationController(duration: Duration(milliseconds: 350), vsync: this);
 
     _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
 
-    var _firstDayOfTheWeek =
+    var currentWeekDate =
         _dateTime.subtract(new Duration(days: _dateTime.weekday));
-
-    currentWeekConsData.add(true);
-    currentWeekConsData.add(false);
-    currentWeekConsData.add(true);
-    currentWeekConsData.add(true);
-    currentWeekConsData.add(true);
-    currentWeekConsData.add(false);
-    currentWeekConsData.add(true);
-
-    for (int i = 0; i < 7; i++) {
-      if (currentWeekConsData[i]) {
-        var j = i + 1;
-        if (j < 7 && currentWeekConsData[i] == currentWeekConsData[j]) {
-          currentWeekListData.add(ConsecutiveSelectedDateWidget(
-              weekDateData: _firstDayOfTheWeek.day.toString(),
-              calendarType: 0,
-              calendarDateViewType: 0,
-              triggersListData: [],
-              userMonthTriggersListData: []));
-        } else {
-          currentWeekListData.add(DateWidget(
-              weekDateData: _firstDayOfTheWeek.day.toString(),
-              calendarType: 0,
-              calendarDateViewType: 0,
-              triggersListData: [],
-              userMonthTriggersListData: []));
-        }
-      } else {
-        currentWeekListData.add(DateWidget(
-            weekDateData: _firstDayOfTheWeek.day.toString(),
-            calendarType: 0,
-            calendarDateViewType: 0,
-            triggersListData: [],
-            userMonthTriggersListData: []));
-      }
-
-      _firstDayOfTheWeek = DateTime(_firstDayOfTheWeek.year,
-          _firstDayOfTheWeek.month, _firstDayOfTheWeek.day + 1);
-    }
-
-    print(currentWeekListData);
-    print(currentWeekConsData);
+    firstDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, currentWeekDate.day);
+    lastDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, currentWeekDate.day + 6);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
+      });
+    });
+    requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
 
     textSpanList = [
       TextSpan(
@@ -227,81 +211,119 @@ class _MeScreenState extends State<MeScreen>
                           SizedBox(
                             height: 10,
                           ),
-                          Table(
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            children: [
-                              TableRow(children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Center(
-                                    child: Text(
-                                      'Su',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Constant.locationServiceGreen,
-                                          fontFamily: Constant.jostMedium),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'M',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'Tu',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'W',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'Th',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'F',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'Sa',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constant.locationServiceGreen,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                              ]),
-                              TableRow(children: currentWeekListData),
-                            ],
-                          ),
+                          StreamBuilder<Object>(
+                              stream: _calendarScreenBloc.calendarDataStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  userLogHeadacheDataCalendarModel =
+                                      snapshot.data;
+                                  setUserWeekData(
+                                      userLogHeadacheDataCalendarModel);
+                                  return Table(
+                                    defaultVerticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    children: [
+                                      TableRow(children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
+                                          child: Center(
+                                            child: Text(
+                                              'Su',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'M',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Tu',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'W',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Th',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'F',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Sa',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ),
+                                      ]),
+                                      TableRow(children: currentWeekListData),
+                                    ],
+                                  );
+                                } else if (snapshot.hasError) {
+                                  Utils.closeApiLoaderDialog(context);
+                                  return NetworkErrorScreen(
+                                    errorMessage: snapshot.error.toString(),
+                                    tapToRetryFunction: () {
+                                      Utils.showApiLoaderDialog(context);
+                                      _calendarScreenBloc.enterSomeDummyDataToStreamController();
+                                        requestService(firstDayOfTheCurrentWeek,
+                                            lastDayOfTheCurrentWeek);
+                                    },
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
                         ],
                       ),
                     ),
@@ -428,5 +450,93 @@ class _MeScreenState extends State<MeScreen>
         }
       });
     }
+  }
+
+  void requestService(
+      String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
+    await _calendarScreenBloc.fetchCalendarTriggersData(
+        "2020-11-15T18:30:00Z", "2020-11-21T18:30:00Z");
+  }
+
+  void setUserWeekData(
+      UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel) {
+    List<int> currentWeekConsData = [];
+    currentWeekListData = [];
+    var _firstDayOfTheWeek =
+        _dateTime.subtract(new Duration(days: _dateTime.weekday));
+    filterSelectedLogAndHeadacheDayList(currentWeekConsData,
+        userLogHeadacheDataCalendarModel, _firstDayOfTheWeek);
+
+    for (int i = 0; i < 7; i++) {
+      if (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) {
+        var j = i + 1;
+        if (j < 7 &&
+            (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
+            (currentWeekConsData[j] == 0 || currentWeekConsData[j] == 1)) {
+          currentWeekListData.add(ConsecutiveSelectedDateWidget(
+              weekDateData: _firstDayOfTheWeek.day.toString(),
+              calendarType: 0,
+              calendarDateViewType: currentWeekConsData[i],
+              triggersListData: [],
+              userMonthTriggersListData: []));
+        } else {
+          currentWeekListData.add(DateWidget(
+              weekDateData: _firstDayOfTheWeek.day.toString(),
+              calendarType: 0,
+              calendarDateViewType: currentWeekConsData[i],
+              triggersListData: [],
+              userMonthTriggersListData: []));
+        }
+      } else {
+        currentWeekListData.add(DateWidget(
+            weekDateData: _firstDayOfTheWeek.day.toString(),
+            calendarType: 0,
+            calendarDateViewType: currentWeekConsData[i],
+            triggersListData: [],
+            userMonthTriggersListData: []));
+      }
+
+      _firstDayOfTheWeek = DateTime(_firstDayOfTheWeek.year,
+          _firstDayOfTheWeek.month, _firstDayOfTheWeek.day + 1);
+    }
+
+    print(currentWeekListData);
+  }
+
+  // 0- Headache Data
+  // 1- LogDay Data
+  // 2- No Headache and No Log
+  void filterSelectedLogAndHeadacheDayList(
+      List<int> currentWeekConsData,
+      UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,
+      DateTime firstDayOfTheWeek) {
+    for (int i = 0; i < 7; i++) {
+      var userCalendarData = userLogHeadacheDataCalendarModel
+          .addHeadacheListData
+          .firstWhere((element) {
+        if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
+          currentWeekConsData.add(0);
+          return true;
+        }
+        return false;
+      }, orElse: () => null);
+      if (userCalendarData == null) {
+        userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere(
+            (element) {
+          if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
+            currentWeekConsData.add(1);
+            return true;
+          }
+          return false;
+        }, orElse: () {
+          currentWeekConsData.add(2);
+          return null;
+        });
+      }
+      // currentWeekConsData.add(a);
+      firstDayOfTheWeek = DateTime(firstDayOfTheWeek.year,
+          firstDayOfTheWeek.month, firstDayOfTheWeek.day + 1);
+    }
+    print(currentWeekConsData);
   }
 }

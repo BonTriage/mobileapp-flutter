@@ -26,11 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-   saveHomePosition();
-   print(Utils.getDateTimeInUtcFormat(DateTime.now()));
+    saveHomePosition();
+    saveCurrentIndexOfTabBar(0);
+    print(Utils.getDateTimeInUtcFormat(DateTime.now()));
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -131,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (index) {
             setState(() {
               currentIndex = index;
+              saveCurrentIndexOfTabBar(currentIndex);
             });
           },
         ),
@@ -159,7 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
         root: _getRootRoute(index),
         navigateToOtherScreenCallback: navigateToOtherScreen,
         openActionSheetCallback: _openActionSheet,
-        openTriggerMedicationActionSheetCallback: _openTriggersMedicationActionSheet,
+        openTriggerMedicationActionSheetCallback:
+            _openTriggersMedicationActionSheet,
       ),
     );
   }
@@ -194,8 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             context: context,
-            builder: (context) => DeleteHeadacheTypeActionSheet()
-        );
+            builder: (context) => DeleteHeadacheTypeActionSheet());
         break;
     }
   }
@@ -207,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex = 1;
       });
     } else {
-      if(routerName == Constant.welcomeStartAssessmentScreenRouter) {
+      if (routerName == Constant.welcomeStartAssessmentScreenRouter) {
         return await Navigator.pushReplacementNamed(context, routerName);
       } else {
         return await Navigator.pushNamed(context, routerName);
@@ -221,8 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Constant.backgroundTransparentColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10)),
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
         builder: (context) => BottomSheetContainer(
@@ -232,8 +233,13 @@ class _HomeScreenState extends State<HomeScreen> {
             }));
   }
 
-  void saveHomePosition() async{
+  void saveHomePosition() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
+  }
+
+  void saveCurrentIndexOfTabBar(int currentIndex) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
   }
 }

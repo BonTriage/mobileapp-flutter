@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart ';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
-import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/SelectedTriggersColorsModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
@@ -15,39 +16,62 @@ class CalendarTriggersScreen extends StatefulWidget {
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
 }
 
-class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
+class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
+    with AutomaticKeepAliveClientMixin {
   List<Widget> currentMonthData = [];
   Color lastDeselectedColor;
   CalendarScreenBloc _calendarScreenBloc;
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
+  String monthName;
+  int totalDaysInCurrentMonth;
+  String firstDayOfTheCurrentMonth;
+  String lastDayOfTheCurrentMonth;
 
   List<SignUpHeadacheAnswerListModel> userMonthTriggersListModel = [];
 
   List<SelectedTriggersColorsModel> triggersColorsListData = [
     SelectedTriggersColorsModel(
-        triggersColorsValue: Constant.calendarRedTriggerColor, isSelected: true),
+        triggersColorsValue: Constant.calendarRedTriggerColor,
+        isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Constant.calendarPurpleTriggersColor, isSelected: true),
+        triggersColorsValue: Constant.calendarPurpleTriggersColor,
+        isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Constant.calendarBlueTriggersColor, isSelected: true),
+        triggersColorsValue: Constant.calendarBlueTriggersColor,
+        isSelected: true),
   ];
-
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _calendarScreenBloc = CalendarScreenBloc();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
-    requestService();
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
+    callAPIService();
+  }
+
+  @override
+  void didUpdateWidget(CalendarTriggersScreen oldWidget) {
+    _calendarScreenBloc.initNetworkStreamController();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    getCurrentPositionOfTabBar();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,28 +94,63 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(
-                      image: AssetImage(Constant.backArrow),
-                      width: 10,
-                      height: 10,
+                    GestureDetector(
+                      onTap: () {
+                        DateTime dateTime =
+                            DateTime(_dateTime.year, _dateTime.month - 1);
+                        _dateTime = dateTime;
+                        _onStartDateSelected(dateTime);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(Constant.backArrow),
+                          width: 13,
+                          height: 13,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: 30,
                     ),
-                    Text(
-                      'November 2020',
-                      style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 13,
-                          fontFamily: Constant.jostRegular),
+                    GestureDetector(
+                      onTap: () {
+                        _openDatePickerBottomSheet(
+                            CupertinoDatePickerMode.date);
+                      },
+                      child: Text(
+                        monthName + " " + currentYear.toString(),
+                        style: TextStyle(
+                            color: Constant.chatBubbleGreen,
+                            fontSize: 13,
+                            fontFamily: Constant.jostRegular),
+                      ),
                     ),
                     SizedBox(
                       width: 30,
                     ),
-                    Image(
-                      image: AssetImage(Constant.nextArrow),
-                      width: 10,
-                      height: 10,
+                    GestureDetector(
+                      onTap: () {
+                        DateTime dateTime =
+                            DateTime(_dateTime.year, _dateTime.month + 1);
+
+                        Duration duration = dateTime.difference(DateTime.now());
+                        _dateTime = dateTime;
+                        if (duration.inSeconds < 0) {
+                          _onStartDateSelected(dateTime);
+                        } else {
+                          ///To:Do
+                          print("Not Allowed");
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(Constant.nextArrow),
+                          width: 13,
+                          height: 13,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -174,7 +233,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                 Container(
                   height: 290,
                   child: StreamBuilder<dynamic>(
-                      stream: _calendarScreenBloc.albumDataStream,
+                      stream: _calendarScreenBloc.calendarDataStream,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           setCurrentMonthData(
@@ -191,17 +250,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                           return NetworkErrorScreen(
                             errorMessage: snapshot.error.toString(),
                             tapToRetryFunction: () {
-                              Utils.showApiLoaderDialog(context);
-                              requestService();
+                              _calendarScreenBloc
+                                  .enterSomeDummyDataToStreamController();
+                              requestService(firstDayOfTheCurrentMonth,
+                                  lastDayOfTheCurrentMonth);
                             },
                           );
                         } else {
-                          /*return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ApiLoaderScreen(),
-                    ],
-                  );*/
                           return Container();
                         }
                       }),
@@ -283,8 +338,12 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                     stream: _calendarScreenBloc.triggersDataStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if(userMonthTriggersListModel.length == 0)
-                        userMonthTriggersListModel.addAll(snapshot.data);
+                        if (snapshot.data.length == 0) {
+                          userMonthTriggersListModel.clear();
+                        }
+                        if (userMonthTriggersListModel.length == 0) {
+                          userMonthTriggersListModel.addAll(snapshot.data);
+                        }
                         return Wrap(
                           children: <Widget>[
                             for (var i = 0;
@@ -305,8 +364,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                                                     !element.isSelected,
                                                 orElse: () => null);
                                         if (unSelectedColor != null) {
-                                          userMonthTriggersListModel[i]
-                                                  .color =
+                                          userMonthTriggersListModel[i].color =
                                               unSelectedColor
                                                   .triggersColorsValue;
                                           userMonthTriggersListModel[i]
@@ -324,8 +382,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                                           triggersColorsListData.firstWhere(
                                               (element) =>
                                                   element.triggersColorsValue ==
-                                                  userMonthTriggersListModel[
-                                                          i]
+                                                  userMonthTriggersListModel[i]
                                                       .color,
                                               orElse: () => null);
                                       if (selectedColor != null) {
@@ -387,14 +444,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                                             userMonthTriggersListModel[i]
                                                 .answerData,
                                             style: TextStyle(
-                                                color:
-                                                    userMonthTriggersListModel[
-                                                                i]
-                                                            .isSelected
-                                                        ? Constant
-                                                            .bubbleChatTextView
-                                                        : Constant
-                                                            .locationServiceGreen,
+                                                color: userMonthTriggersListModel[
+                                                            i]
+                                                        .isSelected
+                                                    ? Constant
+                                                        .bubbleChatTextView
+                                                    : Constant
+                                                        .locationServiceGreen,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500,
                                                 fontFamily:
@@ -440,13 +496,104 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
     return unselectedColor;
   }
 
-  void requestService() async {
+  void requestService(
+      String firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth) async {
     await _calendarScreenBloc.fetchCalendarTriggersData(
-        "2020-11-01T18:30:00Z", "2020-11-30T18:30:00Z");
+        firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
-  void setCurrentMonthData(UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,int currentMonth,int currentYear) {
-    var calendarUtil = CalendarUtil(calenderType: 1,userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,userMonthTriggersListData: userMonthTriggersListModel);
-    currentMonthData = calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
+  void setCurrentMonthData(
+      UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,
+      int currentMonth,
+      int currentYear) {
+    var calendarUtil = CalendarUtil(
+        calenderType: 1,
+        userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
+        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData);
+    currentMonthData =  calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
+  }
+
+  /// @param cupertinoDatePickerMode: for time and date mode selection
+  void _openDatePickerBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DateTimePicker(
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
+  }
+
+  Function _getDateTimeCallbackFunction(int whichPickerClicked) {
+    switch (whichPickerClicked) {
+      case 0:
+        return _onStartDateSelected;
+      default:
+        return null;
+    }
+  }
+
+  void _onStartDateSelected(DateTime dateTime) {
+    setState(() {
+      userMonthTriggersListModel = [];
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+      monthName = Utils.getMonthName(dateTime.month);
+      currentYear = dateTime.year;
+      currentMonth = dateTime.month;
+      _calendarScreenBloc.initNetworkStreamController();
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  void getCurrentPositionOfTabBar() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar =
+        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if (currentPositionOfTabBar == 1) {
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
+  }
+
+  void callAPIService() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar =
+        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if (currentPositionOfTabBar == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Utils.showApiLoaderDialog(context,
+            networkStream: _calendarScreenBloc.networkDataStream,
+            tapToRetryFunction: () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        });
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
   }
 }

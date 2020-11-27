@@ -1,41 +1,74 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
-import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
 
-class CalendarSeverityScreen extends StatefulWidget {
+class CalendarIntensityScreen extends StatefulWidget {
   @override
-  _CalendarSeverityScreenState createState() => _CalendarSeverityScreenState();
+  _CalendarIntensityScreenState createState() =>
+      _CalendarIntensityScreenState();
 }
 
-class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
+class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
+    with AutomaticKeepAliveClientMixin {
   List<Widget> currentMonthData = [];
-  List<Widget> _pageViewWidgetList;
   CalendarScreenBloc _calendarScreenBloc;
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
-
-
+  String monthName;
+  int totalDaysInCurrentMonth;
+  String firstDayOfTheCurrentMonth;
+  String lastDayOfTheCurrentMonth;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _calendarScreenBloc = CalendarScreenBloc();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
-    requestService();
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+    });
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+  }
+
+  @override
+  void didUpdateWidget(CalendarIntensityScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    _calendarScreenBloc.initNetworkStreamController();
+    Utils.showApiLoaderDialog(context,
+        networkStream: _calendarScreenBloc.networkDataStream,
+        tapToRetryFunction: () {
+      _calendarScreenBloc.enterSomeDummyDataToStreamController();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       child: SingleChildScrollView(
         child: Column(
@@ -59,28 +92,63 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image(
-                        image: AssetImage(Constant.backArrow),
-                        width: 10,
-                        height: 10,
+                      GestureDetector(
+                        onTap: () {
+                          DateTime dateTime =
+                          DateTime(_dateTime.year, _dateTime.month - 1);
+                          _dateTime = dateTime;
+                          _onStartDateSelected(dateTime);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image(
+                            image: AssetImage(Constant.backArrow),
+                            width: 13,
+                            height: 13,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 30,
                       ),
-                      Text(
-                        'November 2020',
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 13,
-                            fontFamily: Constant.jostRegular),
+                      GestureDetector(
+                        onTap: () {
+                          _openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.date);
+                        },
+                        child: Text(
+                          monthName + " " + currentYear.toString(),
+                          style: TextStyle(
+                              color: Constant.chatBubbleGreen,
+                              fontSize: 13,
+                              fontFamily: Constant.jostRegular),
+                        ),
                       ),
                       SizedBox(
                         width: 30,
                       ),
-                      Image(
-                        image: AssetImage(Constant.nextArrow),
-                        width: 10,
-                        height: 10,
+                      GestureDetector(
+                        onTap: () {
+                          DateTime dateTime =
+                          DateTime(_dateTime.year, _dateTime.month + 1);
+
+                          Duration duration = dateTime.difference(DateTime.now());
+                          _dateTime = dateTime;
+                          if (duration.inSeconds < 0) {
+                            _onStartDateSelected(dateTime);
+                          } else {
+                            ///To:Do
+                            print("Not Allowed");
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image(
+                            image: AssetImage(Constant.nextArrow),
+                            width: 13,
+                            height: 13,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -160,41 +228,42 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
                       ]),
                     ],
                   ),
-              Container(
-                height: 290,
-                child: StreamBuilder<dynamic>(
-                    stream: _calendarScreenBloc.albumDataStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        setCurrentMonthData(
-                            snapshot.data, currentMonth, currentYear);
-                        return GridView.count(
-                            crossAxisCount: 7,
-                            padding: EdgeInsets.all(4.0),
-                            childAspectRatio: 8.0 / 9.0,
-                            children: currentMonthData.map((e) {
-                              return e;
-                            }).toList());
-                      } else if (snapshot.hasError) {
-                        Utils.closeApiLoaderDialog(context);
-                        return NetworkErrorScreen(
-                          errorMessage: snapshot.error.toString(),
-                          tapToRetryFunction: () {
-                            Utils.showApiLoaderDialog(context);
-                            requestService();
-                          },
-                        );
-                      } else {
-                        /*return Row(
+                  Container(
+                    height: 290,
+                    child: StreamBuilder<dynamic>(
+                        stream: _calendarScreenBloc.calendarDataStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            setCurrentMonthData(
+                                snapshot.data, currentMonth, currentYear);
+                            return GridView.count(
+                                crossAxisCount: 7,
+                                padding: EdgeInsets.all(4.0),
+                                childAspectRatio: 8.0 / 9.0,
+                                children: currentMonthData.map((e) {
+                                  return e;
+                                }).toList());
+                          } else if (snapshot.hasError) {
+                            Utils.closeApiLoaderDialog(context);
+                            return NetworkErrorScreen(
+                              errorMessage: snapshot.error.toString(),
+                              tapToRetryFunction: () {
+                                Utils.showApiLoaderDialog(context);
+                                requestService(firstDayOfTheCurrentMonth,
+                                    lastDayOfTheCurrentMonth);
+                              },
+                            );
+                          } else {
+                            /*return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ApiLoaderScreen(),
                     ],
                   );*/
-                        return Container();
-                      }
-                    }),
-              ),
+                            return Container();
+                          }
+                        }),
+                  ),
                   SizedBox(
                     height: 5,
                   ),
@@ -466,13 +535,70 @@ class _CalendarSeverityScreenState extends State<CalendarSeverityScreen> {
     );
   }
 
-  void requestService() async {
+  void requestService(
+      String firstDayOfTheCurrentMonth, String lastDayOfTheCurrentMonth) async {
     await _calendarScreenBloc.fetchCalendarTriggersData(
-        "2020-11-01T18:30:00Z", "2020-11-30T18:30:00Z");
+        firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
-  void setCurrentMonthData(UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,int currentMonth,int currentYear) {
-    var calendarUtil = CalendarUtil(calenderType: 2,userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,userMonthTriggersListData: []);
-    currentMonthData = calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
+  void setCurrentMonthData(
+      UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,
+      int currentMonth,
+      int currentYear) {
+    var calendarUtil = CalendarUtil(
+        calenderType: 2,
+        userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
+        userMonthTriggersListData: []);
+    currentMonthData =
+        calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
+
+  /// @param cupertinoDatePickerMode: for time and date mode selection
+  void _openDatePickerBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DateTimePicker(
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
+  }
+
+  Function _getDateTimeCallbackFunction(int whichPickerClicked) {
+    switch (whichPickerClicked) {
+      case 0:
+        return _onStartDateSelected;
+      default:
+        return null;
+    }
+  }
+
+  void _onStartDateSelected(DateTime dateTime) {
+    setState(() {
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+      monthName = Utils.getMonthName(dateTime.month);
+      currentYear = dateTime.year;
+      _calendarScreenBloc.initNetworkStreamController();
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

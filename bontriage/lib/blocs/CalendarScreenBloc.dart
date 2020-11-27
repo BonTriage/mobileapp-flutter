@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -15,24 +14,30 @@ import 'package:mobile/util/constant.dart';
 
 class CalendarScreenBloc {
   CalendarRepository _calendarRepository;
-  StreamController<dynamic> _albumStreamController;
+  StreamController<dynamic> _calendarStreamController;
   StreamController<dynamic> _triggersStreamController;
+  StreamController<dynamic> _networkStreamController;
   UserLogHeadacheDataCalendarModel _userLogHeadacheDataCalendarModel;
   int count = 0;
 
-  StreamSink<dynamic> get albumDataSink => _albumStreamController.sink;
+  StreamSink<dynamic> get calendarDataSink => _calendarStreamController.sink;
 
-  Stream<dynamic> get albumDataStream => _albumStreamController.stream;
+  Stream<dynamic> get calendarDataStream => _calendarStreamController.stream;
 
   StreamSink<dynamic> get triggersDataSink => _triggersStreamController.sink;
 
   Stream<dynamic> get triggersDataStream => _triggersStreamController.stream;
 
+  Stream<dynamic> get networkDataStream => _networkStreamController.stream;
+
+  StreamSink<dynamic> get networkDataSink => _networkStreamController.sink;
+
   List<SignUpHeadacheAnswerListModel> userMonthTriggersData = [];
 
   CalendarScreenBloc({this.count = 0}) {
-    _albumStreamController = StreamController<dynamic>();
+    _calendarStreamController = StreamController<dynamic>();
     _triggersStreamController = StreamController<dynamic>();
+    _networkStreamController = StreamController<dynamic>();
     _calendarRepository = CalendarRepository();
   }
 
@@ -55,25 +60,36 @@ class CalendarScreenBloc {
           url, RequestMethod.GET);
       if (response is AppException) {
         apiResponse = response.toString();
+        networkDataSink.addError(response);
       } else {
-        if (response is CalendarInfoDataModel) {
+        if (response != null && response is CalendarInfoDataModel) {
           print(response);
           UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel =
               setAllCalendarDataInToModel(response, userProfileInfoData.userId);
-          albumDataSink.add(userLogHeadacheDataCalendarModel);
-
-          // apiResponse = response.toString();
+          triggersDataSink.add(userMonthTriggersData);
+          calendarDataSink.add(userLogHeadacheDataCalendarModel);
+          networkDataSink.add(Constant.success);
         }
       }
-    } catch (Exception) {
+    } catch (e) {
       apiResponse = Constant.somethingWentWrong;
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
     }
     return apiResponse;
   }
 
+  void enterSomeDummyDataToStreamController() {
+    networkDataSink.add(Constant.loading);
+  }
+  void initNetworkStreamController() {
+    _networkStreamController?.close();
+    _networkStreamController = StreamController<dynamic>();
+  }
+
   void dispose() {
-    _albumStreamController?.close();
+    _calendarStreamController?.close();
     _triggersStreamController?.close();
+    _networkStreamController?.close();
   }
 
   UserLogHeadacheDataCalendarModel setAllCalendarDataInToModel(
@@ -116,34 +132,57 @@ class CalendarScreenBloc {
 
   void setCalendarLogTriggersData(List<Headache> triggers,
       UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel) {
-    triggers.forEach((element) {
-      SelectedHeadacheLogDate _selectedHeadacheLogDate =
-          SelectedHeadacheLogDate();
-      _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
-      DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
-      _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
-      if (element.mobileEventDetails.length == 0) {
-        userLogHeadacheDataCalendarModel.addLogDayListData
-            .add(_selectedHeadacheLogDate);
-      } else {
-        var triggersElement = element.mobileEventDetails
-            .firstWhere((element) => element.questionTag == "triggers1");
-        String triggersValues = triggersElement.value;
-        List<String> formattedValues = triggersValues.split("%@");
-        formattedValues.asMap().forEach((index, element) {
-          SignUpHeadacheAnswerListModel signUpHeadacheAnswerListModel =
-              SignUpHeadacheAnswerListModel();
-          signUpHeadacheAnswerListModel.answerData = element;
+    if(triggers.length == 0){
+      userMonthTriggersData = [];
+      triggersDataSink.add(userMonthTriggersData);
+    }else{
+      triggers.forEach((element) {
+        SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
+        _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
+        DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
+        var userSelectedHeadacheDayTriggersData =  userLogHeadacheDataCalendarModel.addTriggersListData.firstWhere((triggersElementData) => triggersElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
+           if(userSelectedHeadacheDayTriggersData != null){
+             _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
+             if (element.mobileEventDetails.length == 0) {
+               userLogHeadacheDataCalendarModel.addLogDayListData.add(_selectedHeadacheLogDate);
+             }else {
+               var triggersElement = element.mobileEventDetails.firstWhere((
+                   element) => element.questionTag == "triggers1");
+               String triggersValues = triggersElement.value;
+               List<String> formattedValues = triggersValues.split("%@");
+               formattedValues.asMap().forEach((index, element) {
+                 SignUpHeadacheAnswerListModel signUpHeadacheAnswerListModel = SignUpHeadacheAnswerListModel();
+                 signUpHeadacheAnswerListModel.answerData = element;
+                 userSelectedHeadacheDayTriggersData.userTriggersListData.add(signUpHeadacheAnswerListModel);
+               });
+               setAllMonthTriggersData(formattedValues);
+               //  userSelectedHeadacheDayTriggersData.userTriggersListData.addAll(_selectedHeadacheLogDate);
+             }
+        }else{
+          _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
+          if (element.mobileEventDetails.length == 0) {
+            userLogHeadacheDataCalendarModel.addLogDayListData.add(_selectedHeadacheLogDate);
+          } else {
+            var triggersElement = element.mobileEventDetails.firstWhere((element) => element.questionTag == "triggers1");
+            String triggersValues = triggersElement.value;
+            List<String> formattedValues = triggersValues.split("%@");
+            formattedValues.asMap().forEach((index, element) {
+              SignUpHeadacheAnswerListModel signUpHeadacheAnswerListModel = SignUpHeadacheAnswerListModel();
+              signUpHeadacheAnswerListModel.answerData = element;
 
-          setInitialTriggers(index, signUpHeadacheAnswerListModel);
-          _selectedHeadacheLogDate.userTriggersListData
-              .add(signUpHeadacheAnswerListModel);
-        });
-        setAllMonthTriggersData(formattedValues);
-        userLogHeadacheDataCalendarModel.addTriggersListData
-            .add(_selectedHeadacheLogDate);
-      }
-    });
+              setInitialTriggers(index, signUpHeadacheAnswerListModel);
+              _selectedHeadacheLogDate.userTriggersListData.add(signUpHeadacheAnswerListModel);
+            });
+            setAllMonthTriggersData(formattedValues);
+            userLogHeadacheDataCalendarModel.addTriggersListData.add(_selectedHeadacheLogDate);
+          }
+        }
+
+
+
+      });
+    }
+
   }
 
   void setAllMonthTriggersData(List<String> formattedValues) {
@@ -163,7 +202,7 @@ class CalendarScreenBloc {
       }
     });
 
-    triggersDataSink.add(userMonthTriggersData);
+
     print(userMonthTriggersData);
   }
 
