@@ -360,7 +360,7 @@ class Utils {
   ///@param networkStream: this variable is used to listen to the network events
   ///@param tapToRetryFunction: this variable is used to pass the reference of the tap to retry button function functionality
   static void showApiLoaderDialog(BuildContext context, {Stream<dynamic> networkStream, Function tapToRetryFunction}) {
-    showGeneralDialog(
+    var show = showGeneralDialog(
       context: context,
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         return Builder(

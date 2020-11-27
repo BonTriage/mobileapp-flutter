@@ -244,10 +244,11 @@ class MyApp extends StatelessWidget {
             }
           case Constant.addHeadacheOnGoingScreenRouter:
             {
-              return SlideFromBottomPageRoute(
-                  widget: AddHeadacheOnGoingScreen(
+              final Widget widget = AddHeadacheOnGoingScreen(
                 currentUserHeadacheModel: settings.arguments,
-              ));
+              );
+              return SlideFromBottomPageRoute(
+                  widget: widget);
             }
 
           case Constant.logDayScreenRouter:

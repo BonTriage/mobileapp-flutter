@@ -503,6 +503,7 @@ class Constant {
   static String tapToRetry = 'Tap to Retry';
   static String none = 'none';
   static String logHeadacheError = 'Headache duration cannot be more than 3 days.';
+  static String viewEditNote = 'View/Edit Note';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

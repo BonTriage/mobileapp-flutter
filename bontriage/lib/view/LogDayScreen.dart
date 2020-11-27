@@ -10,6 +10,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
 import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
@@ -158,7 +159,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 height: 20,
                               ),
                               Column(children: _sectionWidgetList),
-                              Align(
+                              /*Align(
                                 alignment: Alignment.centerLeft,
                                 child: GestureDetector(
                                   onTap: () {
@@ -177,6 +178,11 @@ class _LogDayScreenState extends State<LogDayScreen>
                                     ),
                                   ),
                                 ),
+                              ),*/
+                              AddANoteWidget(
+                                scaffoldKey: scaffoldKey,
+                                selectedAnswerList: selectedAnswers,
+                                noteTag: 'logday.note',
                               ),
                               SizedBox(
                                 height: 20,

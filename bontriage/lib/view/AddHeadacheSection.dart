@@ -40,7 +40,7 @@ class AddHeadacheSection extends StatefulWidget {
   final bool isHeadacheEnded;
   final CurrentUserHeadacheModel currentUserHeadacheModel;
 
-  const AddHeadacheSection(
+  AddHeadacheSection(
       {Key key,
       this.headerText,
       this.subText,
@@ -111,11 +111,21 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             currentUserHeadacheModel: widget.currentUserHeadacheModel,
         ));
       case 'severity':
+        String selectedCurrentValue;
+        if(widget.selectedAnswers != null) {
+          SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'severity', orElse: () => null);
+          if (intensitySelectedAnswer != null) {
+            selectedCurrentValue = intensitySelectedAnswer.answer;
+          }
+        }
+
+        if(selectedCurrentValue == null)
+          selectedCurrentValue = widget.selectedCurrentValue;
         return _getWidget(SignUpAgeScreen(
-          sliderValue: (widget.selectedCurrentValue == null ||
-                  widget.selectedCurrentValue.isEmpty)
+          sliderValue: (selectedCurrentValue == null ||
+                  selectedCurrentValue.isEmpty)
               ? widget.min
-              : double.parse(widget.selectedCurrentValue),
+              : double.parse(selectedCurrentValue),
           minText: Constant.one,
           maxText: Constant.ten,
           currentTag: widget.contentType,
@@ -129,11 +139,21 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           isAnimate: false,
         ));
       case 'disability':
+        String selectedCurrentValue;
+        if(widget.selectedAnswers != null) {
+          SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'disability', orElse: () => null);
+          if (intensitySelectedAnswer != null) {
+            selectedCurrentValue = intensitySelectedAnswer.answer;
+          }
+        }
+
+        if(selectedCurrentValue == null)
+          selectedCurrentValue = widget.selectedCurrentValue;
         return _getWidget(SignUpAgeScreen(
-          sliderValue: (widget.selectedCurrentValue == null ||
-                  widget.selectedCurrentValue.isEmpty)
+          sliderValue: (selectedCurrentValue == null ||
+                  selectedCurrentValue.isEmpty)
               ? widget.min
-              : double.parse(widget.selectedCurrentValue),
+              : double.parse(selectedCurrentValue),
           minText: Constant.one,
           maxText: Constant.ten,
           currentTag: widget.contentType,

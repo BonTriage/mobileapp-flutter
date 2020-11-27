@@ -3,8 +3,9 @@ import 'package:mobile/util/constant.dart';
 
 class AddNoteBottomSheet extends StatefulWidget {
   final Function(String) addNoteCallback;
+  final String text;
 
-  const AddNoteBottomSheet({Key key, this.addNoteCallback}): super(key: key);
+  const AddNoteBottomSheet({Key key, this.addNoteCallback, this.text}): super(key: key);
 
   @override
   _AddNoteBottomSheetState createState() => _AddNoteBottomSheetState();
@@ -17,7 +18,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController();
+    _textEditingController = TextEditingController(text: widget.text);
   }
 
   @override

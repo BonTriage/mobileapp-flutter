@@ -11,6 +11,7 @@ import 'package:mobile/models/UserAddHeadacheLogModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/ApiLoaderScreen.dart';
 
@@ -149,27 +150,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                   children:
                                       _getAddHeadacheSection(snapshot.data),
                                 ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showAddNoteBottomSheet();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Text(
-                                        Constant.addANote,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Constant
-                                              .addCustomNotificationTextColor,
-                                          fontFamily: Constant.jostRegular,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                AddANoteWidget(
+                                  selectedAnswerList: signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                                  scaffoldKey: scaffoldKey,
+                                  noteTag: 'headache.note',
                                 ),
                                 SizedBox(
                                   height: 20,
@@ -309,6 +293,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           valuesList: element.values,
           updateAtValue: null,
           selectedCurrentValue: element.currentValue,
+          selectedAnswers: signUpOnBoardSelectedAnswersModel.selectedAnswers,
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
@@ -459,25 +444,5 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
     }
     _addHeadacheLogBloc.fetchAddHeadacheLogData();
-  }
-
-  void showAddNoteBottomSheet() {
-    scaffoldKey.currentState.showBottomSheet(
-            (context) => AddNoteBottomSheet(
-          addNoteCallback: (note) {
-            if(note != null) {
-              if(note is String) {
-                if(note.trim() != '') {
-                  SelectedAnswers noteSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == 'headache.note', orElse: () => null);
-                  if (noteSelectedAnswer == null)
-                    signUpOnBoardSelectedAnswersModel.selectedAnswers.add(SelectedAnswers(questionTag: 'headache.note', answer: note));
-                  else
-                    noteSelectedAnswer.answer = note;
-                }
-              }
-            }
-          },
-        ),
-        backgroundColor: Colors.transparent);
   }
 }

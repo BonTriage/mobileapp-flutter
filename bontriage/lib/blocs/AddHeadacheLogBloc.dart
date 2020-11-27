@@ -11,6 +11,7 @@ import 'package:mobile/util/constant.dart';
 class AddHeadacheLogBloc {
   AddHeadacheLogRepository _addHeadacheLogRepository;
   StreamController<dynamic> _addHeadacheLogStreamController;
+  StreamController<dynamic> _addNoteStreamController;
   int count = 0;
 
   StreamSink<dynamic> get addHeadacheLogDataSink =>
@@ -27,9 +28,16 @@ class AddHeadacheLogBloc {
   Stream<dynamic> get sendAddHeadacheLogDataStream =>
       _sendAddHeadacheLogStreamController.stream;
 
+  StreamSink<dynamic> get addNoteSink =>
+      _addNoteStreamController.sink;
+
+  Stream<dynamic> get addNoteStream =>
+      _addNoteStreamController.stream;
+
   AddHeadacheLogBloc({this.count = 0}) {
     _addHeadacheLogStreamController = StreamController<dynamic>();
     _sendAddHeadacheLogStreamController = StreamController<dynamic>();
+    _addNoteStreamController = StreamController<dynamic>();
     _addHeadacheLogRepository = AddHeadacheLogRepository();
   }
 
@@ -99,6 +107,11 @@ class AddHeadacheLogBloc {
   void dispose() {
     _addHeadacheLogStreamController?.close();
     _sendAddHeadacheLogStreamController?.close();
+    _addNoteStreamController?.close();
+  }
+
+  void addDataToNoteStream() {
+    addNoteSink.add(Constant.loading);
   }
 
   void enterSomeDummyData() {
