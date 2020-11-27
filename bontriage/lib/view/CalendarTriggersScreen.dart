@@ -1,55 +1,77 @@
+import 'package:flutter/cupertino.dart ';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/CalendarScreenBloc.dart';
 import 'package:mobile/models/SelectedTriggersColorsModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
+import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'DateTimePicker.dart';
+import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
   @override
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
 }
 
-class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
+class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
+    with AutomaticKeepAliveClientMixin {
   List<Widget> currentMonthData = [];
   Color lastDeselectedColor;
+  CalendarScreenBloc _calendarScreenBloc;
+  DateTime _dateTime;
+  int currentMonth;
+  int currentYear;
+  String monthName;
+  int totalDaysInCurrentMonth;
+  String firstDayOfTheCurrentMonth;
+  String lastDayOfTheCurrentMonth;
+
+  List<SignUpHeadacheAnswerListModel> userMonthTriggersListModel = [];
 
   List<SelectedTriggersColorsModel> triggersColorsListData = [
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0Xff7E00CB), isSelected: true),
+        triggersColorsValue: Constant.calendarRedTriggerColor,
+        isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0xffD85B00), isSelected: true),
+        triggersColorsValue: Constant.calendarPurpleTriggersColor,
+        isSelected: true),
     SelectedTriggersColorsModel(
-        triggersColorsValue: Color(0XFF00A8CD), isSelected: true),
-  ];
-
-  List<SignUpHeadacheAnswerListModel> signUpHeadacheAnswerListModel = [
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Dehydration', isSelected: true, color: Color(0Xff7E00CB)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Poor Sleep', isSelected: true, color: Color(0xffD85B00)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Stress', isSelected: true, color: Color(0XFF00A8CD)),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'Menstruation', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Humidity', isSelected: false),
-    SignUpHeadacheAnswerListModel(answerData: 'Caffeine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: '2+ Glasses of Red Wine', isSelected: false),
-    SignUpHeadacheAnswerListModel(
-        answerData: 'High Screen Time', isSelected: false),
+        triggersColorsValue: Constant.calendarBlueTriggersColor,
+        isSelected: true),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    var calendarUtil = CalendarUtil(calenderType: 1);
-    currentMonthData = calendarUtil.drawMonthCalendar(yy: 2020, mm: 11);
+    _calendarScreenBloc = CalendarScreenBloc();
+    _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
+    callAPIService();
+  }
+
+  @override
+  void didUpdateWidget(CalendarTriggersScreen oldWidget) {
+    _calendarScreenBloc.initNetworkStreamController();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    getCurrentPositionOfTabBar();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,28 +94,63 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(
-                      image: AssetImage(Constant.backArrow),
-                      width: 10,
-                      height: 10,
+                    GestureDetector(
+                      onTap: () {
+                        DateTime dateTime =
+                            DateTime(_dateTime.year, _dateTime.month - 1);
+                        _dateTime = dateTime;
+                        _onStartDateSelected(dateTime);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(Constant.backArrow),
+                          width: 13,
+                          height: 13,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: 30,
                     ),
-                    Text(
-                      'November 2020',
-                      style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 13,
-                          fontFamily: Constant.jostRegular),
+                    GestureDetector(
+                      onTap: () {
+                        _openDatePickerBottomSheet(
+                            CupertinoDatePickerMode.date);
+                      },
+                      child: Text(
+                        monthName + " " + currentYear.toString(),
+                        style: TextStyle(
+                            color: Constant.chatBubbleGreen,
+                            fontSize: 13,
+                            fontFamily: Constant.jostRegular),
+                      ),
                     ),
                     SizedBox(
                       width: 30,
                     ),
-                    Image(
-                      image: AssetImage(Constant.nextArrow),
-                      width: 10,
-                      height: 10,
+                    GestureDetector(
+                      onTap: () {
+                        DateTime dateTime =
+                            DateTime(_dateTime.year, _dateTime.month + 1);
+
+                        Duration duration = dateTime.difference(DateTime.now());
+                        _dateTime = dateTime;
+                        if (duration.inSeconds < 0) {
+                          _onStartDateSelected(dateTime);
+                        } else {
+                          ///To:Do
+                          print("Not Allowed");
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(Constant.nextArrow),
+                          width: 13,
+                          height: 13,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -175,13 +232,34 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
                 ),
                 Container(
                   height: 290,
-                  child: GridView.count(
-                      crossAxisCount: 7,
-                      padding: EdgeInsets.all(4.0),
-                      childAspectRatio: 8.0 / 9.0,
-                      children: currentMonthData.map((e) {
-                        return e;
-                      }).toList()),
+                  child: StreamBuilder<dynamic>(
+                      stream: _calendarScreenBloc.calendarDataStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          setCurrentMonthData(
+                              snapshot.data, currentMonth, currentYear);
+                          return GridView.count(
+                              crossAxisCount: 7,
+                              padding: EdgeInsets.all(4.0),
+                              childAspectRatio: 8.0 / 9.0,
+                              children: currentMonthData.map((e) {
+                                return e;
+                              }).toList());
+                        } else if (snapshot.hasError) {
+                          Utils.closeApiLoaderDialog(context);
+                          return NetworkErrorScreen(
+                            errorMessage: snapshot.error.toString(),
+                            tapToRetryFunction: () {
+                              _calendarScreenBloc
+                                  .enterSomeDummyDataToStreamController();
+                              requestService(firstDayOfTheCurrentMonth,
+                                  lastDayOfTheCurrentMonth);
+                            },
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 10),
@@ -256,111 +334,140 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
             child: Container(
               margin: EdgeInsets.only(left: 20, right: 15),
               child: SingleChildScrollView(
-                child: Wrap(
-                  children: <Widget>[
-                    for (var i = 0;
-                        i < signUpHeadacheAnswerListModel.length;
-                        i++)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            var foundElements = signUpHeadacheAnswerListModel
-                                .where((e) => e.isSelected);
-                            if (!signUpHeadacheAnswerListModel[i].isSelected) {
-                              if (foundElements.length < 3) {
-                                var unSelectedColor =
-                                    triggersColorsListData.firstWhere(
-                                        (element) => !element.isSelected,
-                                        orElse: () => null);
-                                if (unSelectedColor != null) {
-                                  signUpHeadacheAnswerListModel[i].color =
-                                      unSelectedColor.triggersColorsValue;
-                                  signUpHeadacheAnswerListModel[i].isSelected =
-                                      true;
-                                  unSelectedColor.isSelected = true;
-                                }
-                                signUpHeadacheAnswerListModel[i].isSelected =
-                                    true;
-                              } else {
-                                print(
-                                    "PopUp will be show for more then 3 selected color");
-                              }
-                            } else {
-                              var selectedColor =
-                                  triggersColorsListData.firstWhere(
-                                      (element) =>
-                                          element.triggersColorsValue ==
-                                          signUpHeadacheAnswerListModel[i]
-                                              .color,
-                                      orElse: () => null);
-                              if (selectedColor != null) {
-                                selectedColor.isSelected = false;
-                                signUpHeadacheAnswerListModel[i].isSelected =
-                                    false;
-                              }
-                            }
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            right: 10,
-                            bottom: 10,
-                          ),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Constant.chatBubbleGreen, width: 1),
-                              borderRadius: BorderRadius.circular(20),
-                              color: signUpHeadacheAnswerListModel[i].isSelected
-                                  ? Constant.chatBubbleGreen
-                                  : Colors.transparent),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(minHeight: 10),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Visibility(
-                                    visible: signUpHeadacheAnswerListModel[i]
-                                        .isSelected,
-                                    child: Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color:
-                                                  Constant.bubbleChatTextView,
-                                              width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color:
-                                              signUpHeadacheAnswerListModel[i]
-                                                  .color),
+                child: StreamBuilder<dynamic>(
+                    stream: _calendarScreenBloc.triggersDataStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data.length == 0) {
+                          userMonthTriggersListModel.clear();
+                        }
+                        if (userMonthTriggersListModel.length == 0) {
+                          userMonthTriggersListModel.addAll(snapshot.data);
+                        }
+                        return Wrap(
+                          children: <Widget>[
+                            for (var i = 0;
+                                i < userMonthTriggersListModel.length;
+                                i++)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    var foundElements =
+                                        userMonthTriggersListModel
+                                            .where((e) => e.isSelected);
+                                    if (!userMonthTriggersListModel[i]
+                                        .isSelected) {
+                                      if (foundElements.length < 3) {
+                                        var unSelectedColor =
+                                            triggersColorsListData.firstWhere(
+                                                (element) =>
+                                                    !element.isSelected,
+                                                orElse: () => null);
+                                        if (unSelectedColor != null) {
+                                          userMonthTriggersListModel[i].color =
+                                              unSelectedColor
+                                                  .triggersColorsValue;
+                                          userMonthTriggersListModel[i]
+                                              .isSelected = true;
+                                          unSelectedColor.isSelected = true;
+                                        }
+                                        userMonthTriggersListModel[i]
+                                            .isSelected = true;
+                                      } else {
+                                        print(
+                                            "PopUp will be show for more then 3 selected color");
+                                      }
+                                    } else {
+                                      var selectedColor =
+                                          triggersColorsListData.firstWhere(
+                                              (element) =>
+                                                  element.triggersColorsValue ==
+                                                  userMonthTriggersListModel[i]
+                                                      .color,
+                                              orElse: () => null);
+                                      if (selectedColor != null) {
+                                        selectedColor.isSelected = false;
+                                        userMonthTriggersListModel[i]
+                                            .isSelected = false;
+                                      }
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    right: 10,
+                                    bottom: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Constant.chatBubbleGreen,
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: userMonthTriggersListModel[i]
+                                              .isSelected
+                                          ? Constant.chatBubbleGreen
+                                          : Colors.transparent),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          BoxConstraints(minHeight: 10),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          Visibility(
+                                            visible:
+                                                userMonthTriggersListModel[i]
+                                                    .isSelected,
+                                            child: Container(
+                                              width: 10,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Constant
+                                                          .bubbleChatTextView,
+                                                      width: 1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color:
+                                                      userMonthTriggersListModel[
+                                                              i]
+                                                          .color),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            userMonthTriggersListModel[i]
+                                                .answerData,
+                                            style: TextStyle(
+                                                color: userMonthTriggersListModel[
+                                                            i]
+                                                        .isSelected
+                                                    ? Constant
+                                                        .bubbleChatTextView
+                                                    : Constant
+                                                        .locationServiceGreen,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily:
+                                                    Constant.jostMedium),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    signUpHeadacheAnswerListModel[i].answerData,
-                                    style: TextStyle(
-                                        color: signUpHeadacheAnswerListModel[i]
-                                                .isSelected
-                                            ? Constant.bubbleChatTextView
-                                            : Constant.locationServiceGreen,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                          ],
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
               ),
             ),
           ),
@@ -387,5 +494,106 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen> {
       }
     }
     return unselectedColor;
+  }
+
+  void requestService(
+      String firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth) async {
+    await _calendarScreenBloc.fetchCalendarTriggersData(
+        firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+  }
+
+  void setCurrentMonthData(
+      UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,
+      int currentMonth,
+      int currentYear) {
+    var calendarUtil = CalendarUtil(
+        calenderType: 1,
+        userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
+        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData);
+    currentMonthData =  calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
+  }
+
+  /// @param cupertinoDatePickerMode: for time and date mode selection
+  void _openDatePickerBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DateTimePicker(
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
+  }
+
+  Function _getDateTimeCallbackFunction(int whichPickerClicked) {
+    switch (whichPickerClicked) {
+      case 0:
+        return _onStartDateSelected;
+      default:
+        return null;
+    }
+  }
+
+  void _onStartDateSelected(DateTime dateTime) {
+    setState(() {
+      userMonthTriggersListModel = [];
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+      monthName = Utils.getMonthName(dateTime.month);
+      currentYear = dateTime.year;
+      currentMonth = dateTime.month;
+      _calendarScreenBloc.initNetworkStreamController();
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  void getCurrentPositionOfTabBar() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar =
+        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if (currentPositionOfTabBar == 1) {
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
+  }
+
+  void callAPIService() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar =
+        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if (currentPositionOfTabBar == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Utils.showApiLoaderDialog(context,
+            networkStream: _calendarScreenBloc.networkDataStream,
+            tapToRetryFunction: () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        });
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
   }
 }

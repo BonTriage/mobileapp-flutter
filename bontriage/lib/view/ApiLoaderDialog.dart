@@ -9,14 +9,15 @@ class ApiLoaderDialog extends StatefulWidget {
   final Stream<dynamic> networkStream;
   final Function tapToRetryFunction;
 
-  const ApiLoaderDialog({Key key, this.networkStream, this.tapToRetryFunction}) : super(key: key);
+  const ApiLoaderDialog({Key key, this.networkStream, this.tapToRetryFunction})
+      : super(key: key);
 
   @override
   _ApiLoaderDialogState createState() => _ApiLoaderDialogState();
 }
 
-class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProviderStateMixin {
-
+class _ApiLoaderDialogState extends State<ApiLoaderDialog>
+    with TickerProviderStateMixin {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -146,7 +147,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
           .toList();
     }
 
-    if(widget.networkStream == null) {
+    if (widget.networkStream == null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -168,7 +169,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
                         child: Stack(
                           children: <Widget>[
                             Container(
-                              child:RadarChart.light(
+                              child: RadarChart.light(
                                 ticks: ticks,
                                 features: features,
                                 data: data,
@@ -188,8 +189,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
                         fontFamily: Constant.jostRegular,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Constant.chatBubbleGreen
-                    ),
+                        color: Constant.chatBubbleGreen),
                   ),
                 ],
               ),
@@ -201,58 +201,67 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
       return StreamBuilder<dynamic>(
         stream: widget.networkStream,
         builder: (context, snapshot) {
-          if(snapshot.hasData) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Container(
-                            width: 70,
-                            height: 70,
-                            child: Center(
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    child:RadarChart.light(
-                                      ticks: ticks,
-                                      features: features,
-                                      data: data,
-                                      reverseAxis: true,
-                                      isPersonalizedHeadacheData: true,
-                                      axisColor: Colors.transparent,
+          if (snapshot.hasData) {
+            if (snapshot.data == Constant.success) {
+              Future.delayed(Duration(milliseconds: 200), () {
+                try {
+                  Navigator.pop(context);
+                } catch (e) {}
+              });
+              return Container();
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.backgroundColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 70,
+                              height: 70,
+                              child: Center(
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      child: RadarChart.light(
+                                        ticks: ticks,
+                                        features: features,
+                                        data: data,
+                                        reverseAxis: true,
+                                        isPersonalizedHeadacheData: true,
+                                        axisColor: Colors.transparent,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Text(
-                          Constant.loading,
-                          style: TextStyle(
-                              fontFamily: Constant.jostRegular,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Constant.chatBubbleGreen
+                          Text(
+                            Constant.loading,
+                            style: TextStyle(
+                                fontFamily: Constant.jostRegular,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Constant.chatBubbleGreen),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          } else if(snapshot.hasError) {
+                ],
+              );
+            }
+          } else if (snapshot.hasError) {
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 25),
               decoration: BoxDecoration(
@@ -282,7 +291,8 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -294,7 +304,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
                               child: Stack(
                                 children: <Widget>[
                                   Container(
-                                    child:RadarChart.light(
+                                    child: RadarChart.light(
                                       ticks: ticks,
                                       features: features,
                                       data: data,
@@ -314,8 +324,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog> with SingleTickerProv
                               fontFamily: Constant.jostRegular,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Constant.chatBubbleGreen
-                          ),
+                              color: Constant.chatBubbleGreen),
                         ),
                       ],
                     ),

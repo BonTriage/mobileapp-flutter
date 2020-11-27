@@ -1,14 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:mobile/models/LocalQuestionnaire.dart';
-import 'package:mobile/models/LogDayQuestionnaire.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobile/models/LogDayResponseModel.dart';
-import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
-import 'package:http/http.dart' as http;
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 
 

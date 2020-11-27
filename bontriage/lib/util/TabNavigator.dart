@@ -60,11 +60,7 @@ class TabNavigator extends StatelessWidget {
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
-      TabNavigatorRoutes.root: (context) => MeScreen(navigateToOtherScreenCallback: navigateToOtherScreenCallback,
-          /*onPush: (context, routeName) {
-            _push(context, routeName);
-          }*/
-          ),
+      TabNavigatorRoutes.root: (context) => Container(),
       TabNavigatorRoutes.meRoot: (context) => MeScreen(navigateToOtherScreenCallback: navigateToOtherScreenCallback
           /*onPush: (context, routeName) {
             _push(context, routeName);

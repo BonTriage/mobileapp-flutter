@@ -333,6 +333,7 @@ class Constant {
   static String tutorialsState = 'tutorialsState';
   static String chatBubbleVolumeState = 'chatBubbleVolumeState';
   static String userAlreadyLoggedIn = 'userAlreadyLoggedIn';
+  static String currentIndexOfTabBar = 'currentIndexOfTabBar';
   static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
@@ -565,6 +566,10 @@ class Constant {
   static Color greyColor = Color(0xff8C8C8C);
   static Color actionSheetDividerColor = Color(0xffCDCED2);
   static Color selectedNotificationColor = Color(0xff145C56);
+  static Color currentDateColor = Color(0xff68906e);
+  static Color calendarRedTriggerColor = Color(0xffD85B00);
+  static Color calendarPurpleTriggersColor = Color(0XFF7E00CB);
+  static Color calendarBlueTriggersColor = Color(0XFF00A8CD);
 
   //images
   static String userAvatar = 'images/user_avatar.png';

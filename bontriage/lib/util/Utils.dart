@@ -98,6 +98,30 @@ class Utils {
     return month;
   }
 
+  /// Method to get total no of days in the month
+  static daysInCurrentMonth(int monthNum, int year) {
+    List<int> monthLength = new List(12);
+
+    monthLength[0] = 31;
+    monthLength[2] = 31;
+    monthLength[4] = 31;
+    monthLength[6] = 31;
+    monthLength[7] = 31;
+    monthLength[9] = 31;
+    monthLength[11] = 31;
+    monthLength[3] = 30;
+    monthLength[8] = 30;
+    monthLength[5] = 30;
+    monthLength[10] = 30;
+
+    if (leapYear(year) == true)
+      monthLength[1] = 29;
+    else
+      monthLength[1] = 28;
+
+    return monthLength[monthNum - 1];
+  }
+
   static String getTimeInAmPmFormat(int hours, int minutes) {
     String time = '';
     int hrs = hours;
@@ -270,7 +294,8 @@ class Utils {
           break;
         case Constant.secondEventStep:
           Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter, arguments: Constant.clinicalImpressionShort1);
+              context, Constant.partTwoOnBoardScreenRouter,
+              arguments: Constant.clinicalImpressionShort1);
           break;
         case Constant.thirdEventStep:
           Navigator.pushReplacementNamed(
@@ -353,14 +378,14 @@ class Utils {
         arguments: isUserAlreadyLoggedIn);
   }
 
-
   void getUserInformation() {}
 
   ///This method is used to show api loader dialog
   ///@param context: context of the screen where the dialog will be shown
   ///@param networkStream: this variable is used to listen to the network events
   ///@param tapToRetryFunction: this variable is used to pass the reference of the tap to retry button function functionality
-  static void showApiLoaderDialog(BuildContext context, {Stream<dynamic> networkStream, Function tapToRetryFunction}) {
+  static void showApiLoaderDialog(BuildContext context,
+      {Stream<dynamic> networkStream, Function tapToRetryFunction}) {
     showGeneralDialog(
       context: context,
       pageBuilder: (buildContext, animation, secondaryAnimation) {
@@ -384,21 +409,25 @@ class Utils {
     );
   }
 
-  static void navigateToHomeScreen(BuildContext context, bool isProfileInComplete) async{
+  static void navigateToHomeScreen(
+      BuildContext context, bool isProfileInComplete) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(Constant.isProfileInCompleteStatus, isProfileInComplete);
+    sharedPreferences.setBool(
+        Constant.isProfileInCompleteStatus, isProfileInComplete);
     Navigator.pushReplacementNamed(context, Constant.homeRouter);
-
   }
 
-  static void closeApiLoaderDialog(BuildContext context){
-    Future.delayed(Duration(milliseconds: 200), (){
+  static void closeApiLoaderDialog(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 200), () {
       Navigator.pop(context);
     });
   }
 
   static String getDateTimeInUtcFormat(DateTime dateTime) {
-    String dateTimeIsoString = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, dateTime.second).toUtc().toIso8601String();
+    String dateTimeIsoString = DateTime(dateTime.year, dateTime.month,
+            dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)
+        .toUtc()
+        .toIso8601String();
     List<String> splitedString = dateTimeIsoString.split('.');
     return '${splitedString[0]}Z';
   }
@@ -422,5 +451,53 @@ class Utils {
       barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 150),
     );
+  }
+
+  ///method to find, the given year is a leap year or not
+  static leapYear(int year) {
+    bool leapYear = false;
+
+    bool leap = ((year % 100 == 0) && (year % 400 != 0));
+    if (leap == true)
+      leapYear = false;
+    else if (year % 4 == 0) leapYear = true;
+
+    return leapYear;
+  }
+
+  /// Current Date with Time
+  static firstDateWithCurrentMonthAndTimeInUTC(
+      int currentMonth, int currentYear, int totalDaysInCurrentMonth) {
+    String currentDate;
+    DateTime _dateTime = DateTime.now();
+    DateTime firstDayDateTime = DateTime(
+        currentYear,
+        currentMonth,
+        totalDaysInCurrentMonth,
+        _dateTime.hour,
+        _dateTime.minute,
+        _dateTime.second);
+
+    currentDate = firstDayDateTime.toUtc().toIso8601String();
+    List<String> splitString = currentDate.split('.');
+    return '${splitString[0]}Z';
+  }
+
+  /// Current Date with Time
+  static lastDateWithCurrentMonthAndTimeInUTC(
+      int currentMonth, int currentYear, int totalDaysInCurrentMonth) {
+    String currentDate;
+    DateTime _dateTime = DateTime.now();
+    DateTime firstDayDateTime = DateTime(
+        currentYear,
+        currentMonth,
+        totalDaysInCurrentMonth,
+        _dateTime.hour,
+        _dateTime.minute,
+        _dateTime.second);
+
+    currentDate = firstDayDateTime.toUtc().toIso8601String();
+    List<String> splitString = currentDate.split('.');
+    return '${splitString[0]}Z';
   }
 }

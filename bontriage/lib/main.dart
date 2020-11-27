@@ -6,7 +6,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
 import 'package:mobile/view/CalendarScreen.dart';
-import 'package:mobile/view/CalendarSeverityScreen.dart';
+import 'package:mobile/view/CalendarIntensityScreen.dart';
 import 'package:mobile/view/CalendarTriggersScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
@@ -278,7 +278,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.calendarSeverityScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CalendarSeverityScreen());
+              return SlideFromBottomPageRoute(widget: CalendarIntensityScreen());
             }
           case Constant.logDayNoHeadacheScreenRouter:
             {
