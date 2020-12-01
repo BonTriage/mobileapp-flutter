@@ -140,10 +140,9 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       onTap: () {
                         DateTime dateTime =
                             DateTime(_dateTime.year, _dateTime.month + 1);
-
                         Duration duration = dateTime.difference(DateTime.now());
-                        _dateTime = dateTime;
                         if (duration.inSeconds < 0) {
+                          _dateTime = dateTime;
                           _onStartDateSelected(dateTime);
                         } else {
                           ///To:Do
@@ -381,7 +380,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                         userMonthTriggersListModel[i]
                                             .isSelected = true;
                                       } else {
-                                        Utils.showTriggerSelectionDialog(context);
+                                        Utils.showTriggerSelectionDialog(
+                                            context);
                                         print(
                                             "PopUp will be show for more then 3 selected color");
                                       }
@@ -518,7 +518,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         calenderType: 1,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
         userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData);
-    currentMonthData =  calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
+    currentMonthData =
+        calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
@@ -558,6 +559,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
       monthName = Utils.getMonthName(dateTime.month);
       currentYear = dateTime.year;
       currentMonth = dateTime.month;
+      _dateTime = dateTime;
       _calendarScreenBloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,

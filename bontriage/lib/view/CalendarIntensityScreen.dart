@@ -140,8 +140,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           DateTime dateTime =
                           DateTime(_dateTime.year, _dateTime.month + 1);
                           Duration duration = dateTime.difference(DateTime.now());
-                          _dateTime = dateTime;
                           if (duration.inSeconds < 0) {
+                            _dateTime = dateTime;
                             _onStartDateSelected(dateTime);
                           } else {
                             ///To:Do
@@ -596,6 +596,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       monthName = Utils.getMonthName(dateTime.month);
       currentYear = dateTime.year;
       currentMonth = dateTime.month;
+      _dateTime = dateTime;
       _calendarScreenBloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,

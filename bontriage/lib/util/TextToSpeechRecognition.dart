@@ -12,9 +12,8 @@ class TextToSpeechRecognition {
     if (Platform.isAndroid) {
       // Android-specific code
       await flutterTts.setSpeechRate(1.0);
-      await flutterTts.setVolume(1.0);
-      await flutterTts.setPitch(1.0);
 
+      await flutterTts.setPitch(1.0);
     } else if (Platform.isIOS) {
       // iOS-specific code
       await flutterTts.setSpeechRate(0.5);
@@ -34,7 +33,11 @@ class TextToSpeechRecognition {
     if (isVolume == null || isVolume) {
       await flutterTts.speak(chatText);
     } else {
-      await flutterTts.stop();
+      if (Platform.isIOS) {
+        await flutterTts.pause();
+      } else if (Platform.isAndroid) {
+        await flutterTts.stop();
+      }
     }
   }
 }
