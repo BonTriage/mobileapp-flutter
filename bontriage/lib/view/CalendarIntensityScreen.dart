@@ -10,6 +10,10 @@ import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
 
 class CalendarIntensityScreen extends StatefulWidget {
+  final Function(Stream, Function) showApiLoaderCallback;
+
+  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback}): super(key: key);
+
   @override
   _CalendarIntensityScreenState createState() =>
       _CalendarIntensityScreenState();
@@ -42,9 +46,13 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Utils.showApiLoaderDialog(context,
+      /*Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });*/
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       });
@@ -71,6 +79,14 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     });*/
+
+    /*_calendarScreenBloc.initNetworkStreamController();
+
+    widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+      _calendarScreenBloc.enterSomeDummyDataToStreamController();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });*/
+
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 

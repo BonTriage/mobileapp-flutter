@@ -25,12 +25,13 @@ class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final String root;
   final Function(String) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
   final Future<dynamic> Function(String) navigateToOtherScreenCallback;
 
   final Function(List<Values>) openTriggerMedicationActionSheetCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback});
 
 
   void _push(BuildContext context, String routeName) {
@@ -61,15 +62,17 @@ class TabNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
       TabNavigatorRoutes.root: (context) => Container(),
-      TabNavigatorRoutes.meRoot: (context) => MeScreen(navigateToOtherScreenCallback: navigateToOtherScreenCallback
-          /*onPush: (context, routeName) {
-            _push(context, routeName);
-          }*/
-          ),
+      TabNavigatorRoutes.meRoot: (context) => MeScreen(
+          navigateToOtherScreenCallback: navigateToOtherScreenCallback,
+        showApiLoaderCallback: showApiLoaderCallback,
+      ),
       TabNavigatorRoutes.recordsRoot: (context) =>
-          RecordScreen(onPush: (context, routeName) {
-            _push(context, routeName);
-          }),
+          RecordScreen(
+              onPush: (context, routeName) {
+                _push(context, routeName);
+              },
+            showApiLoaderCallback: showApiLoaderCallback,
+          ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {
             _push(context, routeName);

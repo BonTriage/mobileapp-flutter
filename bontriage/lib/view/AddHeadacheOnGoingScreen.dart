@@ -50,6 +50,13 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   void initState() {
     super.initState();
     _dateTime = DateTime.now();
+
+    try {
+       _dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
+    } catch(e) {
+      print(e.toString());
+    }
+
     signUpOnBoardSelectedAnswersModel.eventType = "Headache";
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 

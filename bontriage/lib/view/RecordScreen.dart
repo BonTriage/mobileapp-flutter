@@ -8,8 +8,9 @@ import 'CalendarTriggersScreen.dart';
 
 class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const RecordScreen({Key key, this.onPush}) : super(key: key);
+  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback}) : super(key: key);
 
   @override
   _RecordScreenState createState() => _RecordScreenState();
@@ -111,7 +112,9 @@ class _RecordScreenState extends State<RecordScreen> {
   setWidget(int index) {
     switch (index) {
       case 0:
-        return CalendarScreen();
+        return CalendarScreen(
+          showApiLoaderCallback: widget.showApiLoaderCallback,
+        );
       case 0:
         return Container();
       default:

@@ -24,6 +24,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   TextEditingController passwordTextEditingController;
   SignUpScreenBloc signUpScreenBloc;
   UserProfileInfoModel userProfileInfoModel;
+  String _errorMsg;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
@@ -41,6 +42,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     signUpScreenBloc = SignUpScreenBloc();
     userProfileInfoModel = UserProfileInfoModel();
     Utils.saveUserProgress(0, Constant.signUpEventStep);
+    _errorMsg = Constant.signUpAlertMessage;
   }
 
   @override
@@ -249,7 +251,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               width: 10,
                             ),
                             Text(
-                              Constant.signUpAlertMessage,
+                              _errorMsg,
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Constant.pinkTriggerColor,
@@ -375,6 +377,40 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                         ),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            Constant.or,
+                            style: TextStyle(
+                              color: Constant.chatBubbleGreen,
+                              fontFamily: Constant.jostRegular,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, Constant.loginScreenRouter);
+                            },
+                            child: Text(
+                              Constant.signIn,
+                              style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostBold,
+                                  fontSize: 15,
+                                  decoration: TextDecoration.underline,
+                                  decorationThickness: 1),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -414,6 +450,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
       checkUserAlreadySignUp();
     } else {
       setState(() {
+        _errorMsg = Constant.signUpAlertMessage;
         _isShowAlert = true;
       });
     }
@@ -446,11 +483,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
           }
         }
       } else {
-        userProfileInfoModel =
-            UserProfileInfoModel.fromJson(jsonDecode(signUpResponse));
-        var selectedAnswerListData = await SignUpOnBoardProviders.db
-            .insertUserProfileInfo(userProfileInfoModel);
-        print(selectedAnswerListData);
+        _errorMsg = 'Email Already Exists!';
+        setState(() {
+          _isShowAlert = true;
+        });
       }
     }
   }

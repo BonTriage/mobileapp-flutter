@@ -12,6 +12,10 @@ import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
+  final Function(Stream, Function) showApiLoaderCallback;
+
+  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback}): super(key: key);
+
   @override
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
 }
@@ -579,9 +583,15 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1) {
-      Utils.showApiLoaderDialog(context,
+      /*Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });*/
+      _calendarScreenBloc.initNetworkStreamController();
+
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       });
@@ -596,9 +606,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Utils.showApiLoaderDialog(context,
+        /*Utils.showApiLoaderDialog(context,
             networkStream: _calendarScreenBloc.networkDataStream,
             tapToRetryFunction: () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        });*/
+        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
           _calendarScreenBloc.enterSomeDummyDataToStreamController();
           requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
         });
