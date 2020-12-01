@@ -22,7 +22,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0, keepPage: true);
+    _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
   }
 
