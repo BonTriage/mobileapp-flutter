@@ -52,9 +52,11 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void requestService() async {
     List<Map> logDayDataList;
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    if(userProfileInfoData != null)
-      logDayDataList = await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if (userProfileInfoData != null)
+      logDayDataList =
+          await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
     else
       logDayDataList = await _logDayBloc.getAllLogDayData('4214');
     if (logDayDataList.length > 0) {
@@ -111,7 +113,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 fontFamily: Constant.jostMedium),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               _showDeleteLogOptionBottomSheet();
                               //Navigator.pop(context);
                             },
@@ -136,7 +138,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                       stream: _logDayBloc.logDayDataStream,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          if(!_isDataPopulated) {
+                          if (!_isDataPopulated) {
                             Utils.closeApiLoaderDialog(context);
                             Future.delayed(Duration(milliseconds: 200), () {
                               _showDoubleTapDialog();
@@ -146,7 +148,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                           return Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
                                   Constant.doubleTapAnItem,
                                   style: TextStyle(
@@ -196,7 +199,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                     },
                                     child: Container(
                                       width: 110,
-                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
                                       decoration: BoxDecoration(
                                         color: Constant.chatBubbleGreen,
                                         borderRadius: BorderRadius.circular(30),
@@ -205,7 +209,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                         child: Text(
                                           Constant.submit,
                                           style: TextStyle(
-                                              color: Constant.bubbleChatTextView,
+                                              color:
+                                                  Constant.bubbleChatTextView,
                                               fontSize: 15,
                                               fontFamily: Constant.jostMedium),
                                         ),
@@ -221,13 +226,17 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   BouncingWidget(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _showDeleteLogOptionBottomSheet();
+                                    },
                                     child: Container(
                                       width: 110,
-                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                            width: 1.3, color: Constant.chatBubbleGreen),
+                                            width: 1.3,
+                                            color: Constant.chatBubbleGreen),
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       child: Center(
@@ -247,7 +256,6 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 height: 20,
                               ),
                             ],
-
                           );
                         } else if (snapshot.hasError) {
                           Utils.closeApiLoaderDialog(context);
@@ -275,22 +283,26 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void showAddNoteBottomSheet() async {
     scaffoldKey.currentState.showBottomSheet(
-            (context) => AddNoteBottomSheet(
-          addNoteCallback: (note) {
-            if(note != null) {
-              if(note is String) {
-                if(note.trim() != '') {
-                  SelectedAnswers noteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == 'logday.note', orElse: () => null);
-                  if (noteSelectedAnswer == null)
-                    selectedAnswers.add(SelectedAnswers(questionTag: 'logday.note', answer: note));
-                  else
-                    noteSelectedAnswer.answer = note;
+        (context) => AddNoteBottomSheet(
+              addNoteCallback: (note) {
+                if (note != null) {
+                  if (note is String) {
+                    if (note.trim() != '') {
+                      SelectedAnswers noteSelectedAnswer =
+                          selectedAnswers.firstWhere(
+                              (element) => element.questionTag == 'logday.note',
+                              orElse: () => null);
+                      if (noteSelectedAnswer == null)
+                        selectedAnswers.add(SelectedAnswers(
+                            questionTag: 'logday.note', answer: note));
+                      else
+                        noteSelectedAnswer.answer = note;
+                    }
+                  }
                 }
-              }
-            }
-          },
-        ),
-    backgroundColor: Colors.transparent);
+              },
+            ),
+        backgroundColor: Colors.transparent);
   }
 
   void addNewWidgets(List<Questions> questionList) {
@@ -354,7 +366,7 @@ class _LogDayScreenState extends State<LogDayScreen>
     _isDataPopulated = true;
   }
 
-  void _showDeleteLogOptionBottomSheet() async{
+  void _showDeleteLogOptionBottomSheet() async {
     var resultOfDeleteBottomSheet = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -362,8 +374,7 @@ class _LogDayScreenState extends State<LogDayScreen>
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => DeleteLogOptionsBottomSheet()
-    );
+        builder: (context) => DeleteLogOptionsBottomSheet());
     if (resultOfDeleteBottomSheet == Constant.deleteLog) {
       SignUpOnBoardProviders.db.deleteAllUserLogDayData();
       Navigator.pop(context);
@@ -385,24 +396,24 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void _onSubmitClicked() async {
-    Utils.showApiLoaderDialog(
-        context,
+    Utils.showApiLoaderDialog(context,
         networkStream: _logDayBloc.sendLogDayDataStream,
         tapToRetryFunction: () {
-          _logDayBloc.enterSomeDummyDataToStreamController();
-          _callSendLogDayDataApi();
-        }
-    );
+      _logDayBloc.enterSomeDummyDataToStreamController();
+      _callSendLogDayDataApi();
+    });
     _callSendLogDayDataApi();
   }
 
   void _callSendLogDayDataApi() async {
-    var response = await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
+    var response =
+        await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
     if (response is String) {
       if (response == Constant.success) {
         SignUpOnBoardProviders.db.deleteAllUserLogDayData();
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, Constant.logDaySuccessScreenRouter);
+        Navigator.pushReplacementNamed(
+            context, Constant.logDaySuccessScreenRouter);
       }
     }
   }

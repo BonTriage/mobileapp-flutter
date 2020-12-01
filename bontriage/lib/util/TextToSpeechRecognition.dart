@@ -10,13 +10,14 @@ class TextToSpeechRecognition {
     await flutterTts.setLanguage("en-US");
 
     if (Platform.isAndroid) {
+      // Android-specific code
       await flutterTts.setSpeechRate(1.0);
       await flutterTts.setVolume(1.0);
       await flutterTts.setPitch(1.0);
-      // Android-specific code
+
     } else if (Platform.isIOS) {
       // iOS-specific code
-      await flutterTts.setSpeechRate(0.4);
+      await flutterTts.setSpeechRate(0.5);
       await flutterTts.setVolume(1.0);
       await flutterTts.setPitch(1.0);
       await flutterTts.setSharedInstance(true);
@@ -24,13 +25,14 @@ class TextToSpeechRecognition {
           .setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
         IosTextToSpeechAudioCategoryOptions.allowBluetooth,
         IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+        IosTextToSpeechAudioCategoryOptions.defaultToSpeaker,
       ]);
     }
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
     if (isVolume == null || isVolume) {
-        await flutterTts.speak(chatText);
+      await flutterTts.speak(chatText);
     } else {
       await flutterTts.stop();
     }

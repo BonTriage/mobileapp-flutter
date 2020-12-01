@@ -205,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<dynamic> navigateToOtherScreen(String routerName) async {
     if (routerName == TabNavigatorRoutes.recordsRoot) {
       await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
+      await saveCurrentIndexOfTabBar(1);
       setState(() {
         currentIndex = 1;
       });
@@ -238,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
   }
 
-  void saveCurrentIndexOfTabBar(int currentIndex) async {
+  Future<void> saveCurrentIndexOfTabBar(int currentIndex) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
   }

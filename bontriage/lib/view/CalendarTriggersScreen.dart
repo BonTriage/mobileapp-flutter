@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart ';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
 import 'package:mobile/models/SelectedTriggersColorsModel.dart';
@@ -112,8 +112,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Image(
                           image: AssetImage(Constant.backArrow),
-                          width: 13,
-                          height: 13,
+                          width: 15,
+                          height: 15,
                         ),
                       ),
                     ),
@@ -129,7 +129,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         monthName + " " + currentYear.toString(),
                         style: TextStyle(
                             color: Constant.chatBubbleGreen,
-                            fontSize: 13,
+                            fontSize: 14,
                             fontFamily: Constant.jostRegular),
                       ),
                     ),
@@ -154,8 +154,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Image(
                           image: AssetImage(Constant.nextArrow),
-                          width: 13,
-                          height: 13,
+                          width: 15,
+                          height: 15,
                         ),
                       ),
                     ),

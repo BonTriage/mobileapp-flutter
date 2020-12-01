@@ -40,20 +40,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Constant.backgroundColor.withOpacity(0.85),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (currentIndex == 1) {
-                        setState(() {
-                          currentIndex = currentIndex - 1;
-                          _pageController.animateToPage(currentIndex,
-                              duration: Duration(microseconds: 300),
-                              curve: Curves.easeIn);
-                        });
-                      }
-                    },
+                GestureDetector(
+                  onTap: () {
+                    if (currentIndex == 1) {
+                      setState(() {
+                        currentIndex = currentIndex - 1;
+                        _pageController.animateToPage(currentIndex,
+                            duration: Duration(microseconds: 300),
+                            curve: Curves.easeIn);
+                      });
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Constant.backgroundColor.withOpacity(0.85),
                     child: Image(
                       image: AssetImage(Constant.calenderBackArrow),
                       width: 14,
@@ -75,20 +75,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 SizedBox(
                   width: 60,
                 ),
-                CircleAvatar(
-                  radius: 15,
-                  backgroundColor: Constant.backgroundColor.withOpacity(0.85),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (currentIndex == 0) {
-                        setState(() {
-                          currentIndex = currentIndex + 1;
-                          _pageController.animateToPage(currentIndex,
-                              duration: Duration(microseconds: 300),
-                              curve: Curves.easeIn);
-                        });
-                      }
-                    },
+                GestureDetector(
+                  onTap: () {
+                    if (currentIndex == 0) {
+                      setState(() {
+                        currentIndex = currentIndex + 1;
+                        _pageController.animateToPage(currentIndex,
+                            duration: Duration(microseconds: 300),
+                            curve: Curves.easeIn);
+                      });
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Constant.backgroundColor.withOpacity(0.85),
                     child: Image(
                       image: AssetImage(Constant.calenderNextArrow),
                       width: 14,
