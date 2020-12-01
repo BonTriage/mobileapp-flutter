@@ -163,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
         openActionSheetCallback: _openActionSheet,
         openTriggerMedicationActionSheetCallback:
             _openTriggersMedicationActionSheet,
+        showApiLoaderCallback: showApiLoader,
       ),
     );
   }
@@ -242,5 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> saveCurrentIndexOfTabBar(int currentIndex) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
+  }
+
+  void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
+    Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
   }
 }

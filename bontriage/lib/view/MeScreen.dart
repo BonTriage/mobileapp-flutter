@@ -15,8 +15,9 @@ import 'NetworkErrorScreen.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String) navigateToOtherScreenCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  MeScreen({this.navigateToOtherScreenCallback});
+  const MeScreen({Key key, this.navigateToOtherScreenCallback, this.showApiLoaderCallback}) : super(key: key);
 
   @override
   _MeScreenState createState() => _MeScreenState();
@@ -56,10 +57,19 @@ class _MeScreenState extends State<MeScreen>
         currentMonth, currentYear, currentWeekDate.day);
     lastDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, currentWeekDate.day + 6);
+
+    /*widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+      _calendarScreenBloc.enterSomeDummyDataToStreamController();
+      requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
+    });*/
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Utils.showApiLoaderDialog(context,
+      /*Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
+      });*/
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
       });

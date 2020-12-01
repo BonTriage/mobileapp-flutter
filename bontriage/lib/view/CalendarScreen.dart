@@ -6,6 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarTriggersScreen.dart';
 
 class CalendarScreen extends StatefulWidget {
+  final Function(Stream, Function) showApiLoaderCallback;
+
+  const CalendarScreen({Key key, this.showApiLoaderCallback}) : super(key: key);
+
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
@@ -134,7 +138,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1) {
      setState(() {
-       pageViewWidgetList = [CalendarTriggersScreen(), CalendarIntensityScreen()];
+       pageViewWidgetList = [
+         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,),
+         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,),
+       ];
      });
     }
   }
