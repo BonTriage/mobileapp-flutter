@@ -221,7 +221,9 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   BouncingWidget(
-                                    onPressed: () {},
+                                    onPressed: () {
+
+                                    },
                                     child: Container(
                                       width: 110,
                                       padding: EdgeInsets.symmetric(vertical: 8),
