@@ -42,25 +42,39 @@ class _PostNotificationOnBoardScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        isShowNextButton: true,
-        nextButtonFunction: () {
-          if (_currentIndex == _questionList.length - 1) {
-            Utils.navigateToHomeScreen(context, false);
-            print('Move to Next Screen');
-          } else {
-            setState(() {
-              _currentIndex++;
-            });
-          }
-        },
-        bubbleChatTextSpanList: _questionList[_currentIndex],
-        isShowSecondBottomButton: false,
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          isShowNextButton: true,
+          nextButtonFunction: () {
+            if (_currentIndex == _questionList.length - 1) {
+              Utils.navigateToHomeScreen(context, false);
+              print('Move to Next Screen');
+            } else {
+              setState(() {
+                _currentIndex++;
+              });
+            }
+          },
+          bubbleChatTextSpanList: _questionList[_currentIndex],
+          isShowSecondBottomButton: false,
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    if(_currentIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        _currentIndex--;
+      });
+      return false;
+    }
   }
 }

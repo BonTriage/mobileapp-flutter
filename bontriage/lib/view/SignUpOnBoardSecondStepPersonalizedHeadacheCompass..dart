@@ -118,54 +118,57 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
           .map((graph) => graph.sublist(0, numberOfFeatures.floor()))
           .toList();
     }
-    return Scaffold(
-      body: Container(
-        decoration: Constant.backgroundBoxDecoration,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 120),
-                child: Text(
-                  Constant.personalizedHeadacheCompass,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Constant.chatBubbleGreen,
-                      fontSize: 16,
-                      fontFamily: Constant.jostMedium),
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 120),
+                  child: Text(
+                    Constant.personalizedHeadacheCompass,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontSize: 16,
+                        fontFamily: Constant.jostMedium),
+                  ),
                 ),
-              ),
-              SizedBox(height: 50),
-              Center(
-                child: Container(
-                  width: 250,
-                  height: 250,
-                  child: Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          child: darkMode
-                              ? RadarChart.dark(
-                                  ticks: ticks,
-                                  features: features,
-                                  data: data,
-                                  reverseAxis: true,
-                                  isPersonalizedHeadacheData: true,
-                                )
-                              : RadarChart.light(
-                                  ticks: ticks,
-                                  features: features,
-                                  data: data,
-                                  reverseAxis: true,
-                                  isPersonalizedHeadacheData: true,
-                                ),
-                        ),
-                      ],
+                SizedBox(height: 50),
+                Center(
+                  child: Container(
+                    width: 250,
+                    height: 250,
+                    child: Center(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            child: darkMode
+                                ? RadarChart.dark(
+                                    ticks: ticks,
+                                    features: features,
+                                    data: data,
+                                    reverseAxis: true,
+                                    isPersonalizedHeadacheData: true,
+                                  )
+                                : RadarChart.light(
+                                    ticks: ticks,
+                                    features: features,
+                                    data: data,
+                                    reverseAxis: true,
+                                    isPersonalizedHeadacheData: true,
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

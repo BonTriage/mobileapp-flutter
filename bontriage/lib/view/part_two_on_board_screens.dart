@@ -10,7 +10,6 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/view/OnBoardMultiSelectOption.dart';
 import 'package:mobile/view/on_board_bottom_buttons.dart';
@@ -18,7 +17,6 @@ import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PartTwoOnBoardScreens extends StatefulWidget {
   final String argumentsName;
@@ -50,34 +48,33 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
   List<Questions> currentQuestionListData = [];
 
-  void _onBackPressed() {
+  Future<bool> _onBackPressed() async {
     if (widget.argumentsName == Constant.clinicalImpressionEventType) {
       var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
           .firstWhere((model) => model.questionTag == "nameClinicalImpression");
       Navigator.pop(context, userHeadacheName.answer);
+      return false;
     } else {
-      setState(() {
-        double stepOneProgress = 1 / _pageViewWidgetList.length;
+      if(_currentPageIndex == 0) {
+        return true;
+      } else {
+        setState(() {
+          double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-        if (_currentPageIndex != 0) {
-          _progressPercent -= stepOneProgress;
-          _currentPageIndex--;
-          _pageController.animateToPage(_currentPageIndex,
-              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-        }
-      });
+          if (_currentPageIndex != 0) {
+            _progressPercent -= stepOneProgress;
+            _currentPageIndex--;
+            _pageController.animateToPage(_currentPageIndex,
+                duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+          }
+        });
+        return false;
+      }
     }
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
-    // TODO: implement dispose
     _pageController.dispose();
     _signUpOnBoardSecondStepBloc.dispose();
     super.dispose();
@@ -85,7 +82,6 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _signUpOnBoardSecondStepBloc = SignUpOnBoardSecondStepBloc();
@@ -102,105 +98,102 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   @override
-  void didUpdateWidget(PartTwoOnBoardScreens oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.backgroundColor,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: StreamBuilder<dynamic>(
-              stream: _signUpOnBoardSecondStepBloc
-                  .signUpOnBoardSecondStepDataStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (!isAlreadyDataFiltered && !isButtonClicked) {
-                    Utils.closeApiLoaderDialog(context);
-                    addFilteredQuestionListData(snapshot.data);
-                    isButtonClicked = false;
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      OnBoardChatBubble(
-                        isEndOfOnBoard: isEndOfOnBoard,
-                        chatBubbleText:
-                            _pageViewWidgetList[_currentPageIndex].questions,
-                        closeButtonFunction: () {
-                          if(widget.argumentsName == Constant.clinicalImpressionShort1)
-                            Utils.navigateToExitScreen(context);
-                          else
-                            Navigator.pop(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Expanded(
-                          child: PageView.builder(
-                        controller: _pageController,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _pageViewWidgetList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return _pageViewWidgetList[index].questionsWidget;
-                        },
-                      )),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      OnBoardBottomButtons(
-                        progressPercent: _progressPercent,
-                        backButtonFunction: _onBackPressed,
-                        nextButtonFunction: () {
-                          if (Utils.validationForOnBoard(
-                              signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                              currentQuestionListData[_currentPageIndex])) {
-                            setState(() {
-                              double stepOneProgress =
-                                  1 / _pageViewWidgetList.length;
-                              if (_progressPercent == 1) {
-                                moveUserToNextScreen();
-                              } else {
-                                _currentPageIndex++;
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Constant.backgroundColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: StreamBuilder<dynamic>(
+                stream: _signUpOnBoardSecondStepBloc
+                    .signUpOnBoardSecondStepDataStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (!isAlreadyDataFiltered && !isButtonClicked) {
+                      Utils.closeApiLoaderDialog(context);
+                      addFilteredQuestionListData(snapshot.data);
+                      isButtonClicked = false;
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        OnBoardChatBubble(
+                          isEndOfOnBoard: isEndOfOnBoard,
+                          chatBubbleText:
+                              _pageViewWidgetList[_currentPageIndex].questions,
+                          closeButtonFunction: () {
+                            if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                              Utils.navigateToExitScreen(context);
+                            else
+                              Navigator.pop(context);
+                          },
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Expanded(
+                            child: PageView.builder(
+                          controller: _pageController,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: _pageViewWidgetList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _pageViewWidgetList[index].questionsWidget;
+                          },
+                        )),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        OnBoardBottomButtons(
+                          progressPercent: _progressPercent,
+                          backButtonFunction: _onBackPressed,
+                          nextButtonFunction: () {
+                            if (Utils.validationForOnBoard(
+                                signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                                currentQuestionListData[_currentPageIndex])) {
+                              setState(() {
+                                double stepOneProgress =
+                                    1 / _pageViewWidgetList.length;
+                                if (_progressPercent == 1) {
+                                  moveUserToNextScreen();
+                                } else {
+                                  _currentPageIndex++;
 
-                                if (_currentPageIndex !=
-                                    _pageViewWidgetList.length - 1)
-                                  _progressPercent += stepOneProgress;
-                                else {
-                                  _progressPercent = 1;
+                                  if (_currentPageIndex !=
+                                      _pageViewWidgetList.length - 1)
+                                    _progressPercent += stepOneProgress;
+                                  else {
+                                    _progressPercent = 1;
+                                  }
+
+                                  _pageController.animateToPage(_currentPageIndex,
+                                      duration: Duration(milliseconds: 1),
+                                      curve: Curves.easeIn);
                                 }
-
-                                _pageController.animateToPage(_currentPageIndex,
-                                    duration: Duration(milliseconds: 1),
-                                    curve: Curves.easeIn);
-                              }
-                              if(widget.argumentsName == Constant.clinicalImpressionShort1)
-                                getCurrentQuestionTag(_currentPageIndex);
-                            });
-                          }
-                        },
-                        onBoardPart: 2,
-                      )
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  Utils.closeApiLoaderDialog(context);
-                  return NetworkErrorScreen(
-                    errorMessage: snapshot.error.toString(),
-                    tapToRetryFunction: () {
-                      Utils.showApiLoaderDialog(context);
-                      requestService();
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              })),
+                                if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                                  getCurrentQuestionTag(_currentPageIndex);
+                              });
+                            }
+                          },
+                          onBoardPart: 2,
+                        )
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    Utils.closeApiLoaderDialog(context);
+                    return NetworkErrorScreen(
+                      errorMessage: snapshot.error.toString(),
+                      tapToRetryFunction: () {
+                        Utils.showApiLoaderDialog(context);
+                        requestService();
+                      },
+                    );
+                  } else {
+                    return Container();
+                  }
+                })),
+      ),
     );
   }
 

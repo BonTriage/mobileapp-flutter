@@ -83,119 +83,109 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.backgroundColor,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: StreamBuilder<dynamic>(
-              stream: welcomeOnBoardProfileBloc.albumDataStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (!_isAlreadyDataFiltered) {
-                    Utils.closeApiLoaderDialog(context);
-                    addFilteredQuestionListData(snapshot.data);
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      OnBoardChatBubble(
-                        chatBubbleText:
-                            _pageViewWidgetList[_currentPageIndex].questions,
-                        isEndOfOnBoard: isEndOfOnBoard,
-                        closeButtonFunction: () {
-                          Utils.navigateToExitScreen(context);
-                        },
-                      ),
-                      SizedBox(height: 40),
-                      Expanded(
-                          child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _pageViewWidgetList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return _pageViewWidgetList[index].questionsWidget;
-                        },
-                        physics: NeverScrollableScrollPhysics(),
-                      )),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      PartOneOnBoardBottomView(
-                        currentPageIndex: _currentPageIndex,
-                        progressPercent: _progressPercent,
-                        backButtonFunction: () {
-                          isButtonClicked = true;
-                          setState(() {
-                            if (_currentPageIndex != 0) {
-                              _progressPercent -= 0.11;
-                              _currentPageIndex--;
-                              _pageController.animateToPage(
-                                  _currentPageIndex,
-                                  duration:
-                                  Duration(milliseconds: 1),
-                                  curve: Curves.easeIn);
-                            } else {
-                              _progressPercent = 0;
-                            }
-                          });
-                        },
-                        nextButtonFunction: () {
-                          isButtonClicked = true;
-                          if (Utils.validationForOnBoard(
-                              signUpOnBoardSelectedAnswersModel
-                                  .selectedAnswers,
-                              currentQuestionListData[
-                              _currentPageIndex])) {
-                            setState(() {
-                              if (_progressPercent == 0.66) {
-                                /*     welcomeOnBoardProfileBloc
-                                            .sendSignUpFirstStepData(
-                                                signUpOnBoardSelectedAnswersModel);*/
-                                moveToNextScreen();
-                              } else {
-                                _currentPageIndex++;
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Constant.backgroundColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: StreamBuilder<dynamic>(
+                stream: welcomeOnBoardProfileBloc.albumDataStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (!_isAlreadyDataFiltered) {
+                      Utils.closeApiLoaderDialog(context);
+                      addFilteredQuestionListData(snapshot.data);
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        OnBoardChatBubble(
+                          chatBubbleText:
+                              _pageViewWidgetList[_currentPageIndex].questions,
+                          isEndOfOnBoard: isEndOfOnBoard,
+                          closeButtonFunction: () {
+                            Utils.navigateToExitScreen(context);
+                          },
+                        ),
+                        SizedBox(height: 40),
+                        Expanded(
+                            child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: _pageViewWidgetList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _pageViewWidgetList[index].questionsWidget;
+                          },
+                          physics: NeverScrollableScrollPhysics(),
+                        )),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        PartOneOnBoardBottomView(
+                          currentPageIndex: _currentPageIndex,
+                          progressPercent: _progressPercent,
+                          backButtonFunction: () {
+                            _onBackPressed();
+                          },
+                          nextButtonFunction: () {
+                            isButtonClicked = true;
+                            if (Utils.validationForOnBoard(
+                                signUpOnBoardSelectedAnswersModel
+                                    .selectedAnswers,
+                                currentQuestionListData[
+                                _currentPageIndex])) {
+                              setState(() {
+                                if (_progressPercent == 0.66) {
+                                  /*     welcomeOnBoardProfileBloc
+                                              .sendSignUpFirstStepData(
+                                                  signUpOnBoardSelectedAnswersModel);*/
+                                  moveToNextScreen();
+                                } else {
+                                  _currentPageIndex++;
 
-                                if (_currentPageIndex !=
-                                    _pageViewWidgetList.length - 1)
-                                  _progressPercent += 0.11;
-                                else {
-                                  _progressPercent = 0.66;
+                                  if (_currentPageIndex !=
+                                      _pageViewWidgetList.length - 1)
+                                    _progressPercent += 0.11;
+                                  else {
+                                    _progressPercent = 0.66;
+                                  }
+
+                                  _pageController.animateToPage(
+                                      _currentPageIndex,
+                                      duration:
+                                      Duration(milliseconds: 1),
+                                      curve: Curves.easeIn);
+
+                                  getCurrentQuestionTag(
+                                      _currentPageIndex);
                                 }
-
-                                _pageController.animateToPage(
-                                    _currentPageIndex,
-                                    duration:
-                                    Duration(milliseconds: 1),
-                                    curve: Curves.easeIn);
-
-                                getCurrentQuestionTag(
-                                    _currentPageIndex);
-                              }
-                            });
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  Utils.closeApiLoaderDialog(context);
-                  return NetworkErrorScreen(
-                    errorMessage: snapshot.error.toString(),
-                    tapToRetryFunction: () {
-                      Utils.showApiLoaderDialog(context);
-                      requestService();
-                    },
-                  );
-                } else {
-                  /*return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ApiLoaderScreen(),
-                    ],
-                  );*/
-                  return Container();
-                }
-              })),
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    Utils.closeApiLoaderDialog(context);
+                    return NetworkErrorScreen(
+                      errorMessage: snapshot.error.toString(),
+                      tapToRetryFunction: () {
+                        Utils.showApiLoaderDialog(context);
+                        requestService();
+                      },
+                    );
+                  } else {
+                    /*return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ApiLoaderScreen(),
+                      ],
+                    );*/
+                    return Container();
+                  }
+                })),
+      ),
     );
   }
 
@@ -360,5 +350,27 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     TextToSpeechRecognition.speechToText("");
     Navigator.pushReplacementNamed(
         context, Constant.onBoardHeadacheInfoScreenRouter);
+  }
+
+  Future<bool> _onBackPressed() async {
+    isButtonClicked = true;
+    if(_currentPageIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        if (_currentPageIndex != 0) {
+          _progressPercent -= 0.11;
+          _currentPageIndex--;
+          _pageController.animateToPage(
+              _currentPageIndex,
+              duration:
+              Duration(milliseconds: 1),
+              curve: Curves.easeIn);
+        } else {
+          _progressPercent = 0;
+        }
+      });
+      return false;
+    }
   }
 }

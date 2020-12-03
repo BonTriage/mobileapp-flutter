@@ -96,36 +96,42 @@ class _StateSignUpOnBoardBubbleTextView
 
   int _currentIndex = 0;
 
-  void _onBackPressed() {
-    setState(() {
-      if (_currentIndex != 0) {
+  Future<bool> _onBackPressed() async {
+    if(_currentIndex == 0) {
+      return true;
+    } else {
+      setState(() {
         _currentIndex--;
-      }
-    });
+      });
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-          isSpannable: true,
-          chatText: bubbleChatTextView[_currentIndex],
-          bubbleChatTextSpanList: _questionList[_currentIndex],
-          isShowNextButton: _currentIndex != (_questionList.length - 1),
-          nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+            isSpannable: true,
+            chatText: bubbleChatTextView[_currentIndex],
+            bubbleChatTextSpanList: _questionList[_currentIndex],
+            isShowNextButton: _currentIndex != (_questionList.length - 1),
+            nextButtonFunction: () {
+              setState(() {
+                _currentIndex++;
+              });
+            },
+            bottomButtonText: Constant.startAssessment,
+            bottomButtonFunction: () {
+              Navigator.pushReplacementNamed(
+                  context, Constant.signUpOnBoardProfileQuestionRouter);
+            },
+            isShowSecondBottomButton: false,
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
           },
-          bottomButtonText: Constant.startAssessment,
-          bottomButtonFunction: () {
-            Navigator.pushReplacementNamed(
-                context, Constant.signUpOnBoardProfileQuestionRouter);
-          },
-          isShowSecondBottomButton: false,
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+        ),
       ),
     );
   }

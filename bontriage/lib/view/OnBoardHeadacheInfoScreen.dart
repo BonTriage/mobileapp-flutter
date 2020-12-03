@@ -23,27 +23,30 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        bubbleChatTextSpanList: [
-          TextSpan(
-              text: Constant.letsBeginBySeeing,
-              style: TextStyle(
-                  height: 1.3,
-                  fontSize: 15,
-                  fontFamily: Constant.jostRegular,
-                  color: Constant.bubbleChatTextView))
-        ],
-        isShowNextButton: true,
-        chatText: Constant.letsBeginBySeeing,
-        nextButtonFunction: () {
-          sendToNextScreen();
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          bubbleChatTextSpanList: [
+            TextSpan(
+                text: Constant.letsBeginBySeeing,
+                style: TextStyle(
+                    height: 1.3,
+                    fontSize: 15,
+                    fontFamily: Constant.jostRegular,
+                    color: Constant.bubbleChatTextView))
+          ],
+          isShowNextButton: true,
+          chatText: Constant.letsBeginBySeeing,
+          nextButtonFunction: () {
+            sendToNextScreen();
 
-        },
-        isShowSecondBottomButton: false,
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+          },
+          isShowSecondBottomButton: false,
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
   }
@@ -54,5 +57,7 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
         context, Constant.partOneOnBoardScreenTwoRouter);
   }
 
-
+  Future<bool> _onBackPressed() async{
+    return true;
+  }
 }

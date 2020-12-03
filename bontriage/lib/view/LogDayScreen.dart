@@ -162,26 +162,6 @@ class _LogDayScreenState extends State<LogDayScreen>
                                 height: 20,
                               ),
                               Column(children: _sectionWidgetList),
-                              /*Align(
-                                alignment: Alignment.centerLeft,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showAddNoteBottomSheet();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    child: Text(
-                                      Constant.addANote,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Constant.addCustomNotificationTextColor,
-                                        fontFamily: Constant.jostRegular,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),*/
                               AddANoteWidget(
                                 scaffoldKey: scaffoldKey,
                                 selectedAnswerList: selectedAnswers,
