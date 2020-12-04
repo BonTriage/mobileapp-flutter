@@ -424,8 +424,7 @@ class Utils {
   }
 
   static String getDateTimeInUtcFormat(DateTime dateTime) {
-    String dateTimeIsoString = DateTime(dateTime.year, dateTime.month,
-            dateTime.day, dateTime.hour, dateTime.minute, dateTime.second)
+    String dateTimeIsoString = dateTime
         .toUtc()
         .toIso8601String();
     List<String> splitedString = dateTimeIsoString.split('.');

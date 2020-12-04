@@ -80,178 +80,184 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: Container(
-        decoration: Constant.backgroundBoxDecoration,
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: SafeArea(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                decoration: BoxDecoration(
-                  color: Constant.backgroundColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Constant.chatBubbleGreen,
-                                fontFamily: Constant.jostMedium),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              _showDeleteLogOptionBottomSheet();
-                              //Navigator.pop(context);
-                            },
-                            child: Image(
-                              image: AssetImage(Constant.closeIcon),
-                              width: 22,
-                              height: 22,
+    return WillPopScope(
+      onWillPop: () async {
+        _showDeleteLogOptionBottomSheet();
+        return false;
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: SafeArea(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () {
+                                _showDeleteLogOptionBottomSheet();
+                                //Navigator.pop(context);
+                              },
+                              child: Image(
+                                image: AssetImage(Constant.closeIcon),
+                                width: 22,
+                                height: 22,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Divider(
-                        thickness: 1,
-                        color: Constant.chatBubbleGreen,
-                        height: 30,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Divider(
+                          thickness: 1,
+                          color: Constant.chatBubbleGreen,
+                          height: 30,
+                        ),
                       ),
-                    ),
-                    StreamBuilder<dynamic>(
-                      stream: _logDayBloc.logDayDataStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (!_isDataPopulated) {
-                            Utils.closeApiLoaderDialog(context);
-                            Future.delayed(Duration(milliseconds: 200), () {
-                              _showDoubleTapDialog();
-                            });
-                            addNewWidgets(snapshot.data);
-                          }
-                          return Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Text(
-                                  Constant.doubleTapAnItem,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Constant.doubleTapTextColor,
-                                      fontFamily: Constant.jostRegular),
+                      StreamBuilder<dynamic>(
+                        stream: _logDayBloc.logDayDataStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (!_isDataPopulated) {
+                              Utils.closeApiLoaderDialog(context);
+                              Future.delayed(Duration(milliseconds: 200), () {
+                                _showDoubleTapDialog();
+                              });
+                              addNewWidgets(snapshot.data);
+                            }
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  child: Text(
+                                    Constant.doubleTapAnItem,
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: Constant.doubleTapTextColor,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(children: _sectionWidgetList),
-                              AddANoteWidget(
-                                scaffoldKey: scaffoldKey,
-                                selectedAnswerList: selectedAnswers,
-                                noteTag: 'logday.note',
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  BouncingWidget(
-                                    onPressed: () {
-                                      _onSubmitClicked();
-                                    },
-                                    child: Container(
-                                      width: 110,
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: Constant.chatBubbleGreen,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          Constant.submit,
-                                          style: TextStyle(
-                                              color:
-                                                  Constant.bubbleChatTextView,
-                                              fontSize: 15,
-                                              fontFamily: Constant.jostMedium),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Column(children: _sectionWidgetList),
+                                AddANoteWidget(
+                                  scaffoldKey: scaffoldKey,
+                                  selectedAnswerList: selectedAnswers,
+                                  noteTag: 'logday.note',
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    BouncingWidget(
+                                      onPressed: () {
+                                        _onSubmitClicked();
+                                      },
+                                      child: Container(
+                                        width: 110,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: Constant.chatBubbleGreen,
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            Constant.submit,
+                                            style: TextStyle(
+                                                color:
+                                                    Constant.bubbleChatTextView,
+                                                fontSize: 15,
+                                                fontFamily: Constant.jostMedium),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  BouncingWidget(
-                                    onPressed: () {
-                                      _showDeleteLogOptionBottomSheet();
-                                    },
-                                    child: Container(
-                                      width: 110,
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 1.3,
-                                            color: Constant.chatBubbleGreen),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          Constant.cancel,
-                                          style: TextStyle(
-                                              color: Constant.chatBubbleGreen,
-                                              fontSize: 15,
-                                              fontFamily: Constant.jostMedium),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    BouncingWidget(
+                                      onPressed: () {
+                                        _showDeleteLogOptionBottomSheet();
+                                      },
+                                      child: Container(
+                                        width: 110,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 1.3,
+                                              color: Constant.chatBubbleGreen),
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            Constant.cancel,
+                                            style: TextStyle(
+                                                color: Constant.chatBubbleGreen,
+                                                fontSize: 15,
+                                                fontFamily: Constant.jostMedium),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          );
-                        } else if (snapshot.hasError) {
-                          Utils.closeApiLoaderDialog(context);
-                          return NetworkErrorScreen(
-                            errorMessage: snapshot.error.toString(),
-                            tapToRetryFunction: () {
-                              Utils.showApiLoaderDialog(context);
-                              requestService();
-                            },
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
-                  ],
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            Utils.closeApiLoaderDialog(context);
+                            return NetworkErrorScreen(
+                              errorMessage: snapshot.error.toString(),
+                              tapToRetryFunction: () {
+                                Utils.showApiLoaderDialog(context);
+                                requestService();
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

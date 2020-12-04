@@ -49,27 +49,31 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   List<Questions> currentQuestionListData = [];
 
   Future<bool> _onBackPressed() async {
-    if (widget.argumentsName == Constant.clinicalImpressionEventType) {
-      var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
-          .firstWhere((model) => model.questionTag == "nameClinicalImpression");
-      Navigator.pop(context, userHeadacheName.answer);
-      return false;
-    } else {
-      if(_currentPageIndex == 0) {
-        return true;
-      } else {
-        setState(() {
-          double stepOneProgress = 1 / _pageViewWidgetList.length;
+    if(_currentPageIndex == 0) {
+      if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+        var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
+            .firstWhere((model) => model.questionTag == "nameClinicalImpression", orElse: () => null);
 
-          if (_currentPageIndex != 0) {
-            _progressPercent -= stepOneProgress;
-            _currentPageIndex--;
-            _pageController.animateToPage(_currentPageIndex,
-                duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-          }
-        });
+        if(userHeadacheName != null)
+          Navigator.pop(context, userHeadacheName.answer);
+        else
+          Navigator.pop(context);
+
         return false;
       }
+      return true;
+    } else {
+      setState(() {
+        double stepOneProgress = 1 / _pageViewWidgetList.length;
+
+        if (_currentPageIndex != 0) {
+          _progressPercent -= stepOneProgress;
+          _currentPageIndex--;
+          _pageController.animateToPage(_currentPageIndex,
+              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+        }
+      });
+      return false;
     }
   }
 

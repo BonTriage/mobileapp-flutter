@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/animations/ScaleInPageRoute.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/constant.dart';
@@ -131,12 +132,12 @@ class MyApp extends StatelessWidget {
             }
           case Constant.signUpFirstStepHeadacheResultRouter:
             {
-              return SlideFromRightPageRoute(
+              return ScaleInPageRoute(
                   widget: SignUpFirstStepCompassResult());
             }
           case Constant.signUpOnBoardPersonalizedHeadacheResultRouter:
             {
-              return SlideFromBottomPageRoute(
+              return ScaleInPageRoute(
                   widget: SignUpOnBoardPersonalizedHeadacheCompass());
             }
           case Constant.partTwoOnBoardScreenRouter:
@@ -163,12 +164,12 @@ class MyApp extends StatelessWidget {
             }
           case Constant.signUpSecondStepHeadacheResultRouter:
             {
-              return SlideFromBottomPageRoute(
+              return ScaleInPageRoute(
                   widget: SignUpSecondStepCompassResult());
             }
           case Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter:
             {
-              return SlideFromBottomPageRoute(
+              return ScaleInPageRoute(
                   widget: SignUpOnBoardSecondStepPersonalizedHeadacheCompass());
             }
           case Constant.welcomeScreenRouter:
