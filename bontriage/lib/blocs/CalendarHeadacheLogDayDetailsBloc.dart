@@ -37,7 +37,6 @@ class CalendarHeadacheLogDayDetailsBloc {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
-      //http://34.222.200.187:8080/mobileapi/v0/common/?user_id=4496&date=2020-11-17T18:30:00Z
       String url = WebservicePost.qaServerUrl +
           'common/?' +
           "date=" +
@@ -82,7 +81,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   UserHeadacheLogDayDetailsModel getHeadacheLogDayData(
       CalendarInfoDataModel response) {
     RecordWidgetData headacheWidgetData = RecordWidgetData();
-    if (response.headache.length > 0) {
+    if (response.headache.length > 0 || response.behaviours.length > 0 || response.triggers.length > 0 || response.medication.length > 0) {
       userHeadacheLogDayDetailsModel.headacheLogDayListData = [];
       headacheWidgetData.headacheListData = [];
       headacheWidgetData.imagePath = Constant.migraineIcon;
@@ -146,8 +145,9 @@ class CalendarHeadacheLogDayDetailsBloc {
       headacheData.headacheInfo = headacheInfo;
       headacheWidgetData.headacheListData.add(headacheData);
     });
-    userHeadacheLogDayDetailsModel.headacheLogDayListData
-        .add(headacheWidgetData);
+
+    if(userHeadacheLogDayDetailsModel.headacheLogDayListData != null)
+      userHeadacheLogDayDetailsModel.headacheLogDayListData.add(headacheWidgetData);
 
     response.behaviours.forEach((element) {
       RecordWidgetData logDaySleepWidgetData = RecordWidgetData();

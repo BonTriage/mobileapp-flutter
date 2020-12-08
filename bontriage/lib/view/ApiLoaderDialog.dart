@@ -205,7 +205,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
             if (snapshot.data == Constant.success) {
               Future.delayed(Duration(milliseconds: 200), () {
                 try {
-                  Navigator.pop(context);
+                  _popDialog();
                 } catch (e) {}
               });
               return Container();
@@ -335,6 +335,14 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
           }
         },
       );
+    }
+  }
+
+  void _popDialog() async{
+    bool mayBePop = await Navigator.maybePop(context);
+
+    if(mayBePop) {
+      Navigator.pop(context);
     }
   }
 }
