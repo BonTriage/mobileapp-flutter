@@ -81,8 +81,13 @@ class CalendarHeadacheLogDayDetailsBloc {
   UserHeadacheLogDayDetailsModel getHeadacheLogDayData(
       CalendarInfoDataModel response) {
     RecordWidgetData headacheWidgetData = RecordWidgetData();
-    if (response.headache.length > 0 || response.behaviours.length > 0 || response.triggers.length > 0 || response.medication.length > 0) {
+    if (response.headache.length > 0 ||
+        response.behaviours.length > 0 ||
+        response.triggers.length > 0 ||
+        response.medication.length > 0) {
       userHeadacheLogDayDetailsModel.headacheLogDayListData = [];
+      userHeadacheLogDayDetailsModel.isDayLogged = false;
+      userHeadacheLogDayDetailsModel.isHeadacheLogged = false;
       headacheWidgetData.headacheListData = [];
       headacheWidgetData.imagePath = Constant.migraineIcon;
     }
@@ -144,10 +149,12 @@ class CalendarHeadacheLogDayDetailsBloc {
       }
       headacheData.headacheInfo = headacheInfo;
       headacheWidgetData.headacheListData.add(headacheData);
+      userHeadacheLogDayDetailsModel.isHeadacheLogged = true;
     });
 
-    if(userHeadacheLogDayDetailsModel.headacheLogDayListData != null)
-      userHeadacheLogDayDetailsModel.headacheLogDayListData.add(headacheWidgetData);
+    if (userHeadacheLogDayDetailsModel.headacheLogDayListData != null)
+      userHeadacheLogDayDetailsModel.headacheLogDayListData
+          .add(headacheWidgetData);
 
     response.behaviours.forEach((element) {
       RecordWidgetData logDaySleepWidgetData = RecordWidgetData();
@@ -202,6 +209,7 @@ class CalendarHeadacheLogDayDetailsBloc {
 
       userHeadacheLogDayDetailsModel.headacheLogDayListData
           .add(logDayMealWidgetData);
+      userHeadacheLogDayDetailsModel.isDayLogged = true;
     });
 
     response.medication.forEach((element) {
@@ -241,6 +249,12 @@ class CalendarHeadacheLogDayDetailsBloc {
       logDayMedicationWidgetData.imagePath = Constant.pillIcon;
       userHeadacheLogDayDetailsModel.headacheLogDayListData
           .add(logDayMedicationWidgetData);
+      userHeadacheLogDayDetailsModel.isDayLogged = true;
+    });
+
+    ///To:Do : Need to Show triggers Data
+    response.triggers.forEach((element) {
+      userHeadacheLogDayDetailsModel.isDayLogged = true;
     });
 
     return userHeadacheLogDayDetailsModel;

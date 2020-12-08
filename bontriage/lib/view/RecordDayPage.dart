@@ -27,7 +27,80 @@ class _RecordDayPageState extends State<RecordDayPage>
 
   List<Widget> _getSections() {
     if (widget.hasData) {
-      return [
+      List<Widget> listWidget = [];
+      if (userLogDayDetails.headacheLogDayListData != null) {
+        userLogDayDetails.headacheLogDayListData.forEach((element) {
+          if (element.imagePath != Constant.migraineIcon) {
+            listWidget.add(_getSectionWidget(
+                element.imagePath,
+                element.logDayListData.titleName,
+                element.logDayListData.titleInfo,
+                "",
+                ""));
+          }
+        });
+      }
+      listWidget.add(Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Visibility(
+            visible: !userLogDayDetails.isDayLogged,
+            child: FlatButton.icon(
+              padding: EdgeInsets.all(0),
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, Constant.logDayScreenRouter);
+              },
+              icon: Image.asset(
+                Constant.addCircleIcon,
+                width: 20,
+                height: 20,
+              ),
+              label: Text(
+                'Add Info',
+                style: TextStyle(
+                    color: Constant.chatBubbleGreen,
+                    fontFamily: Constant.jostRegular,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Visibility(
+            visible: !userLogDayDetails.isHeadacheLogged,
+            child: FlatButton.icon(
+              padding: EdgeInsets.all(0),
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                    context, Constant.headacheStartedScreenRouter);
+              },
+              icon: Image.asset(
+                Constant.addCircleIcon,
+                width: 20,
+                height: 20,
+              ),
+              label: Text(
+                'Add Headache',
+                style: TextStyle(
+                    color: Constant.chatBubbleGreen,
+                    fontFamily: Constant.jostRegular,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          )
+        ],
+      ));
+      return listWidget;
+
+      /*return [
         Visibility(
           visible: false,
           child: _getSectionWidget(
@@ -93,14 +166,17 @@ class _RecordDayPageState extends State<RecordDayPage>
           visible: false,
           child: FlatButton.icon(
             padding: EdgeInsets.all(0),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter)
+
+            },
             icon: Image.asset(
               Constant.addCircleIcon,
               width: 20,
               height: 20,
             ),
             label: Text(
-              'Add/Edit Info',
+              'Add Info',
               style: TextStyle(
                   color: Constant.chatBubbleGreen,
                   fontFamily: Constant.jostRegular,
@@ -124,7 +200,7 @@ class _RecordDayPageState extends State<RecordDayPage>
               height: 20,
             ),
             label: Text(
-              'Add/Edit Headache',
+              'Add Headache',
               style: TextStyle(
                   color: Constant.chatBubbleGreen,
                   fontFamily: Constant.jostRegular,
@@ -134,7 +210,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ),
-      ];
+      ];*/
     } else {
       return [
         Text(
@@ -163,14 +239,17 @@ class _RecordDayPageState extends State<RecordDayPage>
         ),
         FlatButton.icon(
           padding: EdgeInsets.all(0),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacementNamed(
+                context, Constant.logDayScreenRouter);
+          },
           icon: Image.asset(
             Constant.addCircleIcon,
             width: 20,
             height: 20,
           ),
           label: Text(
-            'Add/Edit Info',
+            'Add Info',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -184,14 +263,17 @@ class _RecordDayPageState extends State<RecordDayPage>
         ),
         FlatButton.icon(
           padding: EdgeInsets.all(0),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacementNamed(
+                context, Constant.headacheStartedScreenRouter);
+          },
           icon: Image.asset(
             Constant.addCircleIcon,
             width: 20,
             height: 20,
           ),
           label: Text(
-            'Add/Edit Headache',
+            'Add Headache',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -247,7 +329,7 @@ class _RecordDayPageState extends State<RecordDayPage>
       opacity: _animationController,
       child: Padding(
         key: _globalKey,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: _getSections(),
@@ -325,13 +407,16 @@ class _RecordDayPageState extends State<RecordDayPage>
                         SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          warningText,
-                          style: TextStyle(
-                            color: Constant.pinkTriggerColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: Constant.jostRegular,
+                        Visibility(
+                          visible: false,
+                          child: Text(
+                            warningText,
+                            style: TextStyle(
+                              color: Constant.pinkTriggerColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: Constant.jostRegular,
+                            ),
                           ),
                         ),
                       ],
@@ -343,10 +428,12 @@ class _RecordDayPageState extends State<RecordDayPage>
           ],
         ),
         Divider(
-          height: 30,
           thickness: 0.5,
           color: Constant.chatBubbleGreen,
         ),
+        SizedBox(
+          height: 10,
+        )
       ],
     );
   }

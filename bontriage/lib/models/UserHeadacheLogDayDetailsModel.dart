@@ -1,9 +1,11 @@
 class UserHeadacheLogDayDetailsModel {
   List<RecordWidgetData> headacheLogDayListData;
   String logDayNote;
+  bool isHeadacheLogged = false;
+  bool isDayLogged = false;
 
   UserHeadacheLogDayDetailsModel(
-      {this.headacheLogDayListData, this.logDayNote});
+      {this.headacheLogDayListData, this.logDayNote,this.isDayLogged,this.isHeadacheLogged});
 }
 
 class RecordWidgetData {

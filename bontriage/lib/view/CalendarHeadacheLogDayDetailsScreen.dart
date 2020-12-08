@@ -86,8 +86,8 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                   },
                                   child: Image(
                                     image: AssetImage(Constant.closeIcon),
-                                    width: 26,
-                                    height: 26,
+                                    width: 22,
+                                    height: 22,
                                   ),
                                 ),
                               ),
@@ -103,7 +103,6 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                 if (snapshot.hasData) {
                                   userHeadacheLogDayDetailsModel =
                                       snapshot.data;
-
                                   return Column(
                                     children: [
                                       RecordCalendarHeadacheSection(
