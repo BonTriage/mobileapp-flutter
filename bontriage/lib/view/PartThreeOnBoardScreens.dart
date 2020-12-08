@@ -101,100 +101,95 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.backgroundColor,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: StreamBuilder<dynamic>(
-          stream: _signUpOnBoardThirdStepBloc.signUpOnBoardThirdStepDataStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.hasData);
-              if (!_isAlreadyDataFiltered) {
-                Utils.closeApiLoaderDialog(context);
-                _addPageViewWidgets(snapshot.data);
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  OnBoardChatBubble(
-                    chatBubbleText:
-                        _pageViewWidgetList[_currentPageIndex].questions,
-                    closeButtonFunction: () {
-                      Utils.navigateToExitScreen(context);
-                    },
-                  ),
-                  Expanded(
-                      child: PageView.builder(
-                    controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _pageViewWidgetList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _pageViewWidgetList[index].questionsWidget;
-                    },
-                  )),
-                  OnBoardBottomButtons(
-                    progressPercent: _progressPercent,
-                    backButtonFunction: () {
-                      setState(() {
-                        double stepOneProgress = 1 / _pageViewWidgetList.length;
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Constant.backgroundColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: StreamBuilder<dynamic>(
+            stream: _signUpOnBoardThirdStepBloc.signUpOnBoardThirdStepDataStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.hasData);
+                if (!_isAlreadyDataFiltered) {
+                  Utils.closeApiLoaderDialog(context);
+                  _addPageViewWidgets(snapshot.data);
+                }
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OnBoardChatBubble(
+                      chatBubbleText:
+                          _pageViewWidgetList[_currentPageIndex].questions,
+                      closeButtonFunction: () {
+                        Utils.navigateToExitScreen(context);
+                      },
+                    ),
+                    Expanded(
+                        child: PageView.builder(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _pageViewWidgetList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _pageViewWidgetList[index].questionsWidget;
+                      },
+                    )),
+                    OnBoardBottomButtons(
+                      progressPercent: _progressPercent,
+                      backButtonFunction: () {
+                        _onBackPressed();
+                      },
+                      nextButtonFunction: () {
+                        if (Utils.validationForOnBoard(
+                            _signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                            _currentQuestionLists[_currentPageIndex])) {
+                          setState(() {
+                            double stepOneProgress =
+                                1 / _pageViewWidgetList.length;
 
-                        if (_currentPageIndex != 0) {
-                          _progressPercent -= stepOneProgress;
-                          _currentPageIndex--;
-                          _pageController.animateToPage(_currentPageIndex,
-                              duration: Duration(milliseconds: 1),
-                              curve: Curves.easeIn);
-                        }
-                      });
-                    },
-                    nextButtonFunction: () {
-                      if (Utils.validationForOnBoard(
-                          _signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                          _currentQuestionLists[_currentPageIndex])) {
-                        setState(() {
-                          double stepOneProgress =
-                              1 / _pageViewWidgetList.length;
+                            if (_progressPercent == 1) {
+                              sendUserDataAndMoveInToNextScreen();
+                              //TODO: Move to next screen
+                            } else {
+                              _currentPageIndex++;
 
-                          if (_progressPercent == 1) {
-                            sendUserDataAndMoveInToNextScreen();
-                          } else {
-                            _currentPageIndex++;
+                              if (_currentPageIndex !=
+                                  _pageViewWidgetList.length - 1)
+                                _progressPercent += stepOneProgress;
+                              else {
+                                _progressPercent = 1;
+                              }
 
-                            if (_currentPageIndex !=
-                                _pageViewWidgetList.length - 1)
-                              _progressPercent += stepOneProgress;
-                            else {
-                              _progressPercent = 1;
+                              _pageController.animateToPage(_currentPageIndex,
+                                  duration: Duration(milliseconds: 1),
+                                  curve: Curves.easeInOutCubic);
+
+                              _getCurrentQuestionTag(_currentPageIndex);
                             }
+                          });
+                        }
+                      },
+                      onBoardPart: 3,
+                    )
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                Utils.closeApiLoaderDialog(context);
+                return NetworkErrorScreen(
+                  errorMessage: snapshot.error.toString(),
+                  tapToRetryFunction: () {
+                    Utils.showApiLoaderDialog(context);
+                    requestService();
+                  },
+                );
+              } else {
+                return Container();
+              }
 
-                            _pageController.animateToPage(_currentPageIndex,
-                                duration: Duration(milliseconds: 1),
-                                curve: Curves.easeInOutCubic);
-
-                            _getCurrentQuestionTag(_currentPageIndex);
-                          }
-                        });
-                      }
-                    },
-                    onBoardPart: 3,
-                  )
-                ],
-              );
-            } else if (snapshot.hasError) {
-              Utils.closeApiLoaderDialog(context);
-              return NetworkErrorScreen(
-                errorMessage: snapshot.error.toString(),
-                tapToRetryFunction: () {
-                  Utils.showApiLoaderDialog(context);
-                  requestService();
-                },
-              );
-            } else {
-              return Container();
-            }
-          },
+            },
+          ),
         ),
       ),
     );
@@ -304,6 +299,25 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
         Navigator.pushReplacementNamed(
             context, Constant.postPartThreeOnBoardRouter);
       }
+    }
+  }
+
+  Future<bool> _onBackPressed() async {
+    if(_currentPageIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        double stepOneProgress = 1 / _pageViewWidgetList.length;
+
+        if (_currentPageIndex != 0) {
+          _progressPercent -= stepOneProgress;
+          _currentPageIndex--;
+          _pageController.animateToPage(_currentPageIndex,
+              duration: Duration(milliseconds: 1),
+              curve: Curves.easeIn);
+        }
+      });
+      return false;
     }
   }
 }

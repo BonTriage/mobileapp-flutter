@@ -31,86 +31,139 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.backgroundColor,
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 10, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context,
-                            Constant.postNotificationOnBoardRouter);
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        backgroundColor: Constant.backgroundColor,
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 20, 10, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Utils.navigateToExitScreen(context);
+                        },
+                        child: Image(
+                          image: AssetImage(Constant.closeIcon),
+                          width: 26,
+                          height: 26,
+                        ),
+                        ),
+                      ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      Constant.notifications,
+                      style: TextStyle(
+                          color: Constant.locationServiceGreen,
+                          fontSize: 16,
+                          fontFamily: Constant.jostMedium),
+                    ),
+                    Switch(
+                      value: _locationServicesSwitchState,
+                      onChanged: (bool state) {
+                        setState(() {
+                          _locationServicesSwitchState = state;
+                          print(state);
+                        });
                       },
-                      child: Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 26,
-                        height: 26,
-                      ),
+                      activeColor: Constant.chatBubbleGreen,
+                      inactiveThumbColor: Constant.chatBubbleGreen,
+                      inactiveTrackColor: Constant.chatBubbleGreenBlue,
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    Constant.notifications,
-                    style: TextStyle(
-                        color: Constant.locationServiceGreen,
-                        fontSize: 16,
-                        fontFamily: Constant.jostMedium),
-                  ),
-                  Switch(
-                    value: _locationServicesSwitchState,
-                    onChanged: (bool state) {
-                      setState(() {
-                        _locationServicesSwitchState = state;
-                        print(state);
-                      });
-                    },
-                    activeColor: Constant.chatBubbleGreen,
-                    inactiveThumbColor: Constant.chatBubbleGreen,
-                    inactiveTrackColor: Constant.chatBubbleGreenBlue,
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              Visibility(
-                visible: _locationServicesSwitchState,
-                child: Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              Constant.dailyLog,
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                SizedBox(height: 30),
+                Visibility(
+                  visible: _locationServicesSwitchState,
+                  child: Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                Constant.dailyLog,
+                                style: TextStyle(
+                                    color: Constant.locationServiceGreen,
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  openTimerLayout();
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Daily, 8:00 PM',
+                                      style: TextStyle(
+                                          color: Constant.notificationTextColor,
+                                          fontSize: 16,
+                                          fontFamily: Constant.jostRegular),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Image(
+                                      image: AssetImage(isTimerLayoutOpen
+                                          ? Constant.notificationDownArrow
+                                          : Constant.rightArrow),
+                                      width: 16,
+                                      height: 16,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          AnimatedSize(
+                            vsync: this,
+                            duration: Duration(milliseconds: 350),
+                            child: Visibility(
+                              visible: isTimerLayoutOpen,
+                              child: Container(
+                                child: NotificationTimer(),
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                openTimerLayout();
-                              },
-                              child: Row(
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Constant.locationServiceGreen,
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                Constant.medication,
+                                style: TextStyle(
+                                    color: Constant.locationServiceGreen,
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                              Row(
                                 children: <Widget>[
                                   Text(
-                                    'Daily, 8:00 PM',
+                                    'Daily, 2:30 PM',
                                     style: TextStyle(
                                         color: Constant.notificationTextColor,
                                         fontSize: 16,
@@ -120,265 +173,214 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     width: 10,
                                   ),
                                   Image(
-                                    image: AssetImage(isTimerLayoutOpen
-                                        ? Constant.notificationDownArrow
-                                        : Constant.rightArrow),
+                                    image: AssetImage(Constant.rightArrow),
                                     width: 16,
                                     height: 16,
                                   )
                                 ],
                               ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Constant.locationServiceGreen,
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                Constant.exercise,
+                                style: TextStyle(
+                                    color: Constant.locationServiceGreen,
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    'off',
+                                    style: TextStyle(
+                                        color: Constant.notificationTextColor,
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Image(
+                                    image: AssetImage(Constant.rightArrow),
+                                    width: 16,
+                                    height: 16,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Constant.locationServiceGreen,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Visibility(
+                            visible: !isAddedCustomNotification,
+                            child: GestureDetector(
+                              onTap: () {
+                                openCustomNotificationDialog(context);
+                              },
+                              child: Text(
+                                Constant.addCustomNotification,
+                                style: TextStyle(
+                                    color:
+                                        Constant.addCustomNotificationTextColor,
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostRegular),
+                              ),
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        AnimatedSize(
-                          vsync: this,
-                          duration: Duration(milliseconds: 350),
-                          child: Visibility(
-                            visible: isTimerLayoutOpen,
+                          ),
+                          Visibility(
+                            visible: isAddedCustomNotification,
                             child: Container(
-                              child: NotificationTimer(),
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 1,
-                          color: Constant.locationServiceGreen,
-                        ),
-                        SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              Constant.medication,
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  'Daily, 2:30 PM',
-                                  style: TextStyle(
-                                      color: Constant.notificationTextColor,
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostRegular),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Image(
-                                  image: AssetImage(Constant.rightArrow),
-                                  width: 16,
-                                  height: 16,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          color: Constant.locationServiceGreen,
-                        ),
-                        SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              Constant.exercise,
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  'off',
-                                  style: TextStyle(
-                                      color: Constant.notificationTextColor,
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostRegular),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Image(
-                                  image: AssetImage(Constant.rightArrow),
-                                  width: 16,
-                                  height: 16,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          color: Constant.locationServiceGreen,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Visibility(
-                          visible: !isAddedCustomNotification,
-                          child: GestureDetector(
-                            onTap: () {
-                              openCustomNotificationDialog(context);
-                            },
-                            child: Text(
-                              Constant.addCustomNotification,
-                              style: TextStyle(
-                                  color:
-                                      Constant.addCustomNotificationTextColor,
-                                  fontSize: 16,
-                                  fontFamily: Constant.jostRegular),
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: isAddedCustomNotification,
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      customNotificationValue,
-                                      style: TextStyle(
-                                          color: Constant.locationServiceGreen,
-                                          fontSize: 14,
-                                          fontFamily: Constant.jostMedium),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        openTimerLayout();
-                                      },
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            'Daily, 8:00 PM',
-                                            style: TextStyle(
-                                                color: Constant
-                                                    .notificationTextColor,
-                                                fontSize: 16,
-                                                fontFamily:
-                                                    Constant.jostRegular),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Image(
-                                            image: AssetImage(isTimerLayoutOpen
-                                                ? Constant.notificationDownArrow
-                                                : Constant.rightArrow),
-                                            width: 16,
-                                            height: 16,
-                                          )
-                                        ],
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        customNotificationValue,
+                                        style: TextStyle(
+                                            color: Constant.locationServiceGreen,
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          openTimerLayout();
+                                        },
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
+                                              'Daily, 8:00 PM',
+                                              style: TextStyle(
+                                                  color: Constant
+                                                      .notificationTextColor,
+                                                  fontSize: 16,
+                                                  fontFamily:
+                                                      Constant.jostRegular),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Image(
+                                              image: AssetImage(isTimerLayoutOpen
+                                                  ? Constant.notificationDownArrow
+                                                  : Constant.rightArrow),
+                                              width: 16,
+                                              height: 16,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  AnimatedSize(
+                                    vsync: this,
+                                    duration: Duration(milliseconds: 350),
+                                    child: Visibility(
+                                      visible: isTimerLayoutOpen,
+                                      child: Container(
+                                        child: NotificationTimer(),
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                  Divider(
+                                    thickness: 1,
+                                    color: Constant.locationServiceGreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 30),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacementNamed(context,
+                                    Constant.postNotificationOnBoardRouter);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 13),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffafd794),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                AnimatedSize(
-                                  vsync: this,
-                                  duration: Duration(milliseconds: 350),
-                                  child: Visibility(
-                                    visible: isTimerLayoutOpen,
-                                    child: Container(
-                                      child: NotificationTimer(),
-                                    ),
+                                child: Center(
+                                  child: Text(
+                                    Constant.save,
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostMedium),
                                   ),
                                 ),
-                                Divider(
-                                  thickness: 1,
-                                  color: Constant.locationServiceGreen,
-                                ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacementNamed(context,
-                                  Constant.postNotificationOnBoardRouter);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 13),
-                              decoration: BoxDecoration(
-                                color: Color(0xffafd794),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  Constant.save,
-                                  style: TextStyle(
-                                      color: Constant.bubbleChatTextView,
-                                      fontSize: 15,
-                                      fontFamily: Constant.jostMedium),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 30),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacementNamed(context,
+                                    Constant.postNotificationOnBoardRouter);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 13),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                      width: 1, color: Constant.chatBubbleGreen),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Skip',
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacementNamed(context,
-                                  Constant.postNotificationOnBoardRouter);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 13),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                border: Border.all(
-                                    width: 1, color: Constant.chatBubbleGreen),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Skip',
-                                  style: TextStyle(
-                                      color: Constant.chatBubbleGreen,
-                                      fontSize: 15,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                            ),
+                          SizedBox(
+                            height: 30,
                           ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

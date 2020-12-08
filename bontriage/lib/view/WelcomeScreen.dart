@@ -1,6 +1,5 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 import 'slide_dots.dart';
 import 'WelcomePage.dart';
@@ -13,6 +12,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   int currentPageIndex = 0;
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
 
   PageController _pageController = PageController(initialPage: 0);
 
@@ -62,74 +62,78 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: Constant.backgroundBoxDecoration,
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  itemCount: _pageViewWidgets.length,
-                  controller: _pageController,
-                  onPageChanged: (currentPage) {
-                    setState(() {
-                      currentPageIndex = currentPage;
-                    });
-                    print(currentPage);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return _pageViewWidgets[index];
-                  },
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        key: scaffoldState,
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    itemCount: _pageViewWidgets.length,
+                    controller: _pageController,
+                    onPageChanged: (currentPage) {
+                      setState(() {
+                        currentPageIndex = currentPage;
+                      });
+                      print(currentPage);
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return _pageViewWidgets[index];
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    _getThreeDotsWidget(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    BouncingWidget(
-                      onPressed: () {
-                        if (currentPageIndex != 2) {
-                          currentPageIndex++;
-                          _pageController.animateToPage(currentPageIndex,
-                              duration: Duration(milliseconds: 250),
-                              curve: Curves.easeIn);
-                        } else {
-                          saveTutorialsState();
-                          Navigator.pushReplacementNamed(
-                              context, Constant.welcomeStartAssessmentScreenRouter);
-                        }
-                      },
-                      child: Container(
-                        width: 140,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: Color(0xffafd794),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: Text(
-                            _getButtonText(),
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      _getThreeDotsWidget(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      BouncingWidget(
+                        onPressed: () {
+                          if (currentPageIndex != 2) {
+                            currentPageIndex++;
+                            _pageController.animateToPage(currentPageIndex,
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.easeIn);
+                          } else {
+                            saveTutorialsState();
+                            Navigator.pushReplacementNamed(
+                                context, Constant.welcomeStartAssessmentScreenRouter);
+                          }
+                        },
+                        child: Container(
+                          width: 140,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xffafd794),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _getButtonText(),
+                              style: TextStyle(
+                                  color: Constant.bubbleChatTextView,
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
-              )
-            ],
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -139,5 +143,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void saveTutorialsState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constant.tutorialsState, true);
+  }
+
+  Future<bool> _onBackPressed() async{
+    if(currentPageIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        currentPageIndex--;
+        _pageController.animateToPage(currentPageIndex, duration: Duration(milliseconds: 250), curve: Curves.easeIn);
+      });
+      return false;
+    }
   }
 }

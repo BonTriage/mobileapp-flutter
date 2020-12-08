@@ -50,30 +50,44 @@ class _PostPartThreeOnBoardScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        isShowNextButton: _currentIndex != (_questionList.length - 1),
-        bubbleChatTextSpanList: _questionList[_currentIndex],
-        nextButtonFunction: () {
-          setState(() {
-            _currentIndex++;
-          });
-        },
-        chatText: _chatTextList[_currentIndex],
-        bottomButtonText: Constant.setUpNotifications,
-        bottomButtonFunction: () {
-          Navigator.pushReplacementNamed(
-              context, Constant.notificationScreenRouter);
-        },
-        isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
-        secondBottomButtonText: Constant.notNow,
-        secondBottomButtonFunction: () {
-          Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
-        },
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          isShowNextButton: _currentIndex != (_questionList.length - 1),
+          bubbleChatTextSpanList: _questionList[_currentIndex],
+          nextButtonFunction: () {
+            setState(() {
+              _currentIndex++;
+            });
+          },
+          chatText: _chatTextList[_currentIndex],
+          bottomButtonText: Constant.setUpNotifications,
+          bottomButtonFunction: () {
+            Navigator.pushReplacementNamed(
+                context, Constant.notificationScreenRouter);
+          },
+          isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
+          secondBottomButtonText: Constant.notNow,
+          secondBottomButtonFunction: () {
+            Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
+          },
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
+  }
+
+  Future<bool> _onBackPressed() async {
+    if(_currentIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        _currentIndex--;
+      });
+      return false;
+    }
   }
 }

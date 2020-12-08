@@ -44,29 +44,32 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        isShowNextButton: _currentIndex != (_questionList.length - 1),
-        nextButtonFunction: () {
-          setState(() {
-            _currentIndex++;
-          });
-        },
-        bottomButtonText: Constant.continueText,
-        chatText: bubbleChatTextView[_currentIndex],
-        bottomButtonFunction: () {
-         moveToNextScreen();
-        },
-        bubbleChatTextSpanList: _questionList[_currentIndex],
-        isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
-        secondBottomButtonText: Constant.saveAndFinishLater,
-        secondBottomButtonFunction: () {
-          Utils.navigateToHomeScreen(context, true);
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          isShowNextButton: _currentIndex != (_questionList.length - 1),
+          nextButtonFunction: () {
+            setState(() {
+              _currentIndex++;
+            });
+          },
+          bottomButtonText: Constant.continueText,
+          chatText: bubbleChatTextView[_currentIndex],
+          bottomButtonFunction: () {
+           moveToNextScreen();
+          },
+          bubbleChatTextSpanList: _questionList[_currentIndex],
+          isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
+          secondBottomButtonText: Constant.saveAndFinishLater,
+          secondBottomButtonFunction: () {
+            Utils.navigateToHomeScreen(context, true);
 
-        },
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+          },
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
   }
@@ -82,5 +85,14 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
         context, Constant.partThreeOnBoardScreenRouter);
   }
 
-
+  Future<bool> _onBackPressed() async {
+    if(_currentIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        _currentIndex--;
+      });
+      return false;
+    }
+  }
 }

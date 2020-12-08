@@ -337,6 +337,7 @@ class Constant {
   static String chatBubbleVolumeState = 'chatBubbleVolumeState';
   static String userAlreadyLoggedIn = 'userAlreadyLoggedIn';
   static String currentIndexOfTabBar = 'currentIndexOfTabBar';
+  static String currentIndexOfCalenderTabBar = 'currentIndexOfCalenderTabBar';
   static String tabNavigatorState = '0';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";

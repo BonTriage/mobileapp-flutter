@@ -22,34 +22,37 @@ class _PartTwoOnBoardMoveOnScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        bubbleChatTextSpanList: [
-          TextSpan(
-              text: Constant.experienceTypesOfHeadaches,
-              style: TextStyle(
-                  height: 1.3,
-                  fontSize: 16,
-                  fontFamily: Constant.jostRegular,
-                  color: Constant.bubbleChatTextView))
-        ],
-        isShowNextButton: false,
-        chatText: Constant.experienceTypesOfHeadaches,
-        bottomButtonText: Constant.moveOnForNow,
-        bottomButtonFunction: () {
-          moveToNextScreen();
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          bubbleChatTextSpanList: [
+            TextSpan(
+                text: Constant.experienceTypesOfHeadaches,
+                style: TextStyle(
+                    height: 1.3,
+                    fontSize: 16,
+                    fontFamily: Constant.jostRegular,
+                    color: Constant.bubbleChatTextView))
+          ],
+          isShowNextButton: false,
+          chatText: Constant.experienceTypesOfHeadaches,
+          bottomButtonText: Constant.moveOnForNow,
+          bottomButtonFunction: () {
+            moveToNextScreen();
 
-        },
-        isShowSecondBottomButton: true,
-        secondBottomButtonText: Constant.addAnotherHeadache,
-        secondBottomButtonFunction: () {
-          Utils.saveUserProgress(0, Constant.secondEventStep);
-          Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter, arguments: Constant.clinicalImpressionShort1);
-        },
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+          },
+          isShowSecondBottomButton: true,
+          secondBottomButtonText: Constant.addAnotherHeadache,
+          secondBottomButtonFunction: () {
+            Utils.saveUserProgress(0, Constant.secondEventStep);
+            Navigator.pushReplacementNamed(
+                context, Constant.partTwoOnBoardScreenRouter, arguments: Constant.clinicalImpressionShort1);
+          },
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
   }

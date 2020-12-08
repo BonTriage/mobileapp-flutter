@@ -59,30 +59,33 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnBoardInformationScreen(
-        isShowNextButton: _currentIndex != (_questionList.length - 1),
-        bubbleChatTextSpanList: _questionList[_currentIndex],
-        chatText: bubbleChatTextView[_currentIndex],
-        nextButtonFunction: () {
-          setState(() {
-            _currentIndex++;
-          });
-        },
-        bottomButtonText: Constant.continueText,
-        bottomButtonFunction: () {
-          Navigator.pushReplacementNamed(
-              context, Constant.partTwoOnBoardScreenRouter,
-              arguments: Constant.clinicalImpressionShort1);
-        },
-        isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
-        secondBottomButtonText: Constant.saveAndFinishLater,
-        secondBottomButtonFunction: () {
-          Utils.navigateToHomeScreen(context, true);
-        },
-        closeButtonFunction: () {
-          Utils.navigateToExitScreen(context);
-        },
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: OnBoardInformationScreen(
+          isShowNextButton: _currentIndex != (_questionList.length - 1),
+          bubbleChatTextSpanList: _questionList[_currentIndex],
+          chatText: bubbleChatTextView[_currentIndex],
+          nextButtonFunction: () {
+            setState(() {
+              _currentIndex++;
+            });
+          },
+          bottomButtonText: Constant.continueText,
+          bottomButtonFunction: () {
+            Navigator.pushReplacementNamed(
+                context, Constant.partTwoOnBoardScreenRouter,
+                arguments: Constant.clinicalImpressionShort1);
+          },
+          isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
+          secondBottomButtonText: Constant.saveAndFinishLater,
+          secondBottomButtonFunction: () {
+            Utils.navigateToHomeScreen(context, true);
+          },
+          closeButtonFunction: () {
+            Utils.navigateToExitScreen(context);
+          },
+        ),
       ),
     );
   }
@@ -127,6 +130,17 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
             .deleteOnBoardQuestionnaireProgress(Constant.firstEventStep);
         Utils.closeApiLoaderDialog(context);
       }
+    }
+  }
+
+  Future<bool> _onBackPressed() async {
+    if(_currentIndex == 0) {
+      return true;
+    } else {
+      setState(() {
+        _currentIndex--;
+      });
+      return false;
     }
   }
 }

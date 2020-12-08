@@ -46,18 +46,23 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   bool isAlreadyDataFiltered = false;
 
-  void _onBackPressed() {
-    isButtonClicked = true;
-    setState(() {
-      double stepOneProgress = 0.14;
+  Future<bool> _onBackPressed() async{
+    if(_currentPageIndex == 0) {
+      return true;
+    } else {
+      isButtonClicked = true;
+      setState(() {
+        double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-      if (_currentPageIndex != 0) {
-        _progressPercent -= stepOneProgress;
-        _currentPageIndex--;
-        _pageController.animateToPage(_currentPageIndex,
-            duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-      }
-    });
+        if (_currentPageIndex != 0) {
+          _progressPercent -= stepOneProgress;
+          _currentPageIndex--;
+          _pageController.animateToPage(_currentPageIndex,
+              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+        }
+      });
+      return false;
+    }
   }
 
   @override
@@ -85,91 +90,94 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constant.backgroundColor,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: StreamBuilder<dynamic>(
-        stream: signUpBoardFirstStepBloc.albumDataStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (!isAlreadyDataFiltered) {
-              Utils.closeApiLoaderDialog(context);
-              addFilteredQuestionListData(snapshot.data);
-            }
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                OnBoardChatBubble(
-                  isEndOfOnBoard: isEndOfOnBoard,
-                  chatBubbleText:
-                      _pageViewWidgetList[_currentPageIndex].questions,
-                  closeButtonFunction: () {
-                    Utils.navigateToExitScreen(context);
-                  },
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Expanded(
-                    child: PageView.builder(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _pageViewWidgetList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _pageViewWidgetList[index].questionsWidget;
-                  },
-                )),
-                OnBoardBottomButtons(
-                  progressPercent: _progressPercent,
-                  backButtonFunction: _onBackPressed,
-                  nextButtonFunction: () {
-                    isButtonClicked = true;
-                    if (Utils.validationForOnBoard(
-                        signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                        currentQuestionListData[_currentPageIndex])) {
-                      setState(() {
-                        double stepOneProgress = 0.11;
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Constant.backgroundColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: StreamBuilder<dynamic>(
+          stream: signUpBoardFirstStepBloc.albumDataStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (!isAlreadyDataFiltered) {
+                Utils.closeApiLoaderDialog(context);
+                addFilteredQuestionListData(snapshot.data);
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  OnBoardChatBubble(
+                    isEndOfOnBoard: isEndOfOnBoard,
+                    chatBubbleText:
+                        _pageViewWidgetList[_currentPageIndex].questions,
+                    closeButtonFunction: () {
+                      Utils.navigateToExitScreen(context);
+                    },
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Expanded(
+                      child: PageView.builder(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _pageViewWidgetList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _pageViewWidgetList[index].questionsWidget;
+                    },
+                  )),
+                  OnBoardBottomButtons(
+                    progressPercent: _progressPercent,
+                    backButtonFunction: _onBackPressed,
+                    nextButtonFunction: () {
+                      isButtonClicked = true;
+                      if (Utils.validationForOnBoard(
+                          signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                          currentQuestionListData[_currentPageIndex])) {
+                        setState(() {
+                          double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-                        if (_progressPercent == 1) {
-                          sendToNextScreen();
-                        } else {
-                          _currentPageIndex++;
+                          if (_progressPercent == 1) {
+                            sendToNextScreen();
+                          } else {
+                            _currentPageIndex++;
 
-                          if (_currentPageIndex !=
-                              _pageViewWidgetList.length - 1)
-                            _progressPercent += stepOneProgress;
-                          else {
-                            _progressPercent = 1;
+                            if (_currentPageIndex !=
+                                _pageViewWidgetList.length - 1)
+                              _progressPercent += stepOneProgress;
+                            else {
+                              _progressPercent = 1;
+                            }
+
+                            _pageController.animateToPage(_currentPageIndex,
+                                duration: Duration(milliseconds: 1),
+                                curve: Curves.easeIn);
                           }
-
-                          _pageController.animateToPage(_currentPageIndex,
-                              duration: Duration(milliseconds: 1),
-                              curve: Curves.easeIn);
-                        }
-                        getCurrentQuestionTag(_currentPageIndex);
-                      });
-                    }
-                  },
-                  onBoardPart: 1,
-                )
-              ],
-            );
-          } else if (snapshot.hasError) {
-            Utils.closeApiLoaderDialog(context);
-            return NetworkErrorScreen(
-              errorMessage: snapshot.error.toString(),
-              tapToRetryFunction: () {
-                Utils.showApiLoaderDialog(context);
-                requestService();
-              },
-            );
-          }else {
-            return Container();
-          }
-        },
-      )),
+                          getCurrentQuestionTag(_currentPageIndex);
+                        });
+                      }
+                    },
+                    onBoardPart: 1,
+                  )
+                ],
+              );
+            } else if (snapshot.hasError) {
+              Utils.closeApiLoaderDialog(context);
+              return NetworkErrorScreen(
+                errorMessage: snapshot.error.toString(),
+                tapToRetryFunction: () {
+                  Utils.showApiLoaderDialog(context);
+                  requestService();
+                },
+              );
+            }else {
+              return Container();
+            }
+          },
+        )),
+      ),
     );
   }
 
@@ -312,7 +320,8 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
       });
 
       _currentPageIndex = currentScreenPosition;
-      _progressPercent = (_currentPageIndex + 1) * 0.11;
+      double stepOneProgress = 1 / _pageViewWidgetList.length;
+      _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
       _pageController = PageController(initialPage: currentScreenPosition);
 
       print(questionListData);
