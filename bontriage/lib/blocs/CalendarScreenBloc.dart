@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ui';
-
 import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
@@ -106,27 +103,38 @@ class CalendarScreenBloc {
   void setCalendarHeadacheData(List<Headache> headache,
       UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel) {
     headache.forEach((element) {
-      SelectedHeadacheLogDate _selectedHeadacheLogDate =
-          SelectedHeadacheLogDate();
+      SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
       _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
       DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
       _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
-
-      SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity =
-          SelectedDayHeadacheIntensity();
-      _selectedDayHeadacheIntensity.selectedDay = _dateTime.day.toString();
-      var severityValue = element.mobileEventDetails.firstWhere(
-          (element) => element.questionTag == Constant.severityTag,
-          orElse: () => null);
-      if (severityValue != null) {
-        _selectedDayHeadacheIntensity.intensityValue = severityValue.value;
-      } else {
-        _selectedDayHeadacheIntensity.intensityValue = "0";
+      var userSelectedHeadacheDayIntensityData =  userLogHeadacheDataCalendarModel.addHeadacheIntensityListData.firstWhere((intensityElementData) => intensityElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
+      if(userSelectedHeadacheDayIntensityData != null){
+        SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity = SelectedDayHeadacheIntensity();
+        _selectedDayHeadacheIntensity.selectedDay = _dateTime.day.toString();
+        var severityValue = element.mobileEventDetails.firstWhere(
+                (element) => element.questionTag == Constant.severityTag,
+            orElse: () => null);
+        if (severityValue != null) {
+          if(int.tryParse(userSelectedHeadacheDayIntensityData.intensityValue) < int.tryParse(severityValue.value)){
+            userSelectedHeadacheDayIntensityData.intensityValue = severityValue.value;
+          }
+        }
+      }else{
+        SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity = SelectedDayHeadacheIntensity();
+        _selectedDayHeadacheIntensity.selectedDay = _dateTime.day.toString();
+        var severityValue = element.mobileEventDetails.firstWhere(
+                (element) => element.questionTag == Constant.severityTag,
+            orElse: () => null);
+        if (severityValue != null) {
+          _selectedDayHeadacheIntensity.intensityValue = severityValue.value;
+        } else {
+          _selectedDayHeadacheIntensity.intensityValue = "0";
+        }
+        userLogHeadacheDataCalendarModel.addHeadacheIntensityListData.add(_selectedDayHeadacheIntensity);
+        userLogHeadacheDataCalendarModel.addHeadacheListData.add(_selectedHeadacheLogDate);
       }
-      userLogHeadacheDataCalendarModel.addHeadacheIntensityListData
-          .add(_selectedDayHeadacheIntensity);
-      userLogHeadacheDataCalendarModel.addHeadacheListData
-          .add(_selectedHeadacheLogDate);
+
+
     });
   }
 

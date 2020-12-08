@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<dynamic> navigateToOtherScreen(String routerName) async {
+  Future<dynamic> navigateToOtherScreen(String routerName,dynamic argument) async {
     if (routerName == TabNavigatorRoutes.recordsRoot) {
       await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
       await saveCurrentIndexOfTabBar(1);
@@ -212,9 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } else {
       if (routerName == Constant.welcomeStartAssessmentScreenRouter) {
-        return await Navigator.pushReplacementNamed(context, routerName);
+        return await Navigator.pushReplacementNamed(context, routerName,arguments: argument);
       } else {
-        return await Navigator.pushNamed(context, routerName);
+        return await Navigator.pushNamed(context, routerName,arguments: argument);
       }
     }
   }

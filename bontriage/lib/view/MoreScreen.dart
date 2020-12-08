@@ -8,7 +8,7 @@ import 'package:mobile/view/MoreSection.dart';
 
 class MoreScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
-  final Future<dynamic> Function(String) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
   final Function(String) openActionSheetCallback;
 
   const MoreScreen({Key key, this.onPush, this.openActionSheetCallback, this.navigateToOtherScreenCallback})
@@ -154,7 +154,7 @@ class _MoreScreenState extends State<MoreScreen> {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
       await SignUpOnBoardProviders.db.deleteAllTableData();
-      widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter);
+      widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter,null);
     } catch(e) {
       print(e);
     }

@@ -13,8 +13,9 @@ import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
-  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback}): super(key: key);
+  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}): super(key: key);
 
   @override
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
@@ -353,6 +354,9 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         }
                         if (userMonthTriggersListModel.length == 0) {
                           userMonthTriggersListModel.addAll(snapshot.data);
+                        }else {
+                          userMonthTriggersListModel.clear();
+                          userMonthTriggersListModel.addAll(snapshot.data);
                         }
                         return Wrap(
                           children: <Widget>[
@@ -521,7 +525,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     var calendarUtil = CalendarUtil(
         calenderType: 1,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
-        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData);
+        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback);
     currentMonthData =
         calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }

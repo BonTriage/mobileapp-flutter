@@ -255,13 +255,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  Constant.register,
-                  style: TextStyle(
-                      color: Constant.chatBubbleGreen,
-                      fontSize: 14,
-                      fontFamily: Constant.jostMedium,
-                      decoration: TextDecoration.underline),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(
+                        context, Constant.welcomeStartAssessmentScreenRouter);
+                  },
+                  child: Text(
+                    Constant.register,
+                    style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontSize: 14,
+                        fontFamily: Constant.jostMedium,
+                        decoration: TextDecoration.underline),
+                  ),
                 )
               ],
             ),
@@ -280,14 +286,12 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordValue != "" &&
         Utils.validateEmail(emailValue)) {
       _isShowAlert = false;
-      Utils.showApiLoaderDialog(
-        context,
-        networkStream: _loginScreenBloc.loginDataStream,
-        tapToRetryFunction: () {
-          _loginScreenBloc.enterSomeDummyDataToStream();
-          loginService();
-        }
-      );
+      Utils.showApiLoaderDialog(context,
+          networkStream: _loginScreenBloc.loginDataStream,
+          tapToRetryFunction: () {
+        _loginScreenBloc.enterSomeDummyDataToStream();
+        loginService();
+      });
       loginService();
     } else {
       setState(() {
@@ -309,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pop(context);
 
         Utils.navigateToHomeScreen(context, false);
-      } else if(response == Constant.userNotFound){
+      } else if (response == Constant.userNotFound) {
         _loginScreenBloc.init();
         Navigator.pop(context);
         setState(() {

@@ -95,7 +95,6 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _pageController.dispose();
     super.dispose();
   }
@@ -160,7 +159,6 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
 
                           if (_progressPercent == 1) {
                             sendUserDataAndMoveInToNextScreen();
-                            //TODO: Move to next screen
                           } else {
                             _currentPageIndex++;
 

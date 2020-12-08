@@ -414,7 +414,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
+                   /* GestureDetector(
                       onTap: () {
                         Utils.navigateToExitScreen(context);
                       },
@@ -426,7 +426,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             fontFamily: Constant.jostRegular,
                             decoration: TextDecoration.underline),
                       ),
-                    )
+                    )*/
                   ],
                 ),
               ),

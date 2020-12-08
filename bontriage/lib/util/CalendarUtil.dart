@@ -11,13 +11,13 @@ class CalendarUtil {
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   List<String> userLogHeadacheDataList = [];
   List<SignUpHeadacheAnswerListModel> userMonthTriggersListData = [];
-
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   // calenderType
   // 0- Me Screen
   // 1- Triggers Screen
   // 2- Severity Screen
-  CalendarUtil({this.calenderType, this.userLogHeadacheDataCalendarModel,this.userMonthTriggersListData}) ;
+  CalendarUtil({this.calenderType, this.userLogHeadacheDataCalendarModel,this.userMonthTriggersListData,this.navigateToOtherScreenCallback}) ;
 
 
 
@@ -72,15 +72,15 @@ class CalendarUtil {
                 weekDateData:_firstDateOfMonth,
                 calendarType:calenderType,
                 calendarDateViewType:currentWeekConsData[i],
-                triggersListData:triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
+                triggersListData:triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
           } else {
             monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
-                calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
+                calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
           }
           i++;
         } else {
           monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
-              calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
+              calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
 
           i++;
         }

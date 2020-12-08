@@ -10,6 +10,7 @@ class DateWidget extends StatelessWidget {
   final List<SignUpHeadacheAnswerListModel> triggersListData;
   final List<SignUpHeadacheAnswerListModel> userMonthTriggersListData;
   final SelectedDayHeadacheIntensity selectedDayHeadacheIntensity;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   DateWidget(
       {this.weekDateData,
@@ -17,7 +18,7 @@ class DateWidget extends StatelessWidget {
       this.calendarDateViewType,
       this.triggersListData,
       this.userMonthTriggersListData,
-      this.selectedDayHeadacheIntensity});
+      this.selectedDayHeadacheIntensity,this.navigateToOtherScreenCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +26,20 @@ class DateWidget extends StatelessWidget {
       child: Center(
         child: Stack(
           children: [
-            Container(
-              height: 28,
-              width: 28,
-              decoration: setDateViewWidget(calendarDateViewType),
-              padding: EdgeInsets.all(2),
-              child: Center(
-                child: Text(
-                  weekDateData.day.toString(),
-                  style: setTextViewStyle(calendarDateViewType),
+            GestureDetector(
+              onTap: (){
+               navigateToOtherScreenCallback(Constant.onCalendarHeadacheLogDayDetailsScreenRouter,weekDateData);
+              },
+              child: Container(
+                height: 28,
+                width: 28,
+                decoration: setDateViewWidget(calendarDateViewType),
+                padding: EdgeInsets.all(2),
+                child: Center(
+                  child: Text(
+                    weekDateData.day.toString(),
+                    style: setTextViewStyle(calendarDateViewType),
+                  ),
                 ),
               ),
             ),

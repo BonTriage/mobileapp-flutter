@@ -7,8 +7,9 @@ import 'CalendarTriggersScreen.dart';
 
 class CalendarScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
-  const CalendarScreen({Key key, this.showApiLoaderCallback}) : super(key: key);
+  const CalendarScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}) : super(key: key);
 
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
@@ -139,8 +140,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     if (currentPositionOfTabBar == 1) {
      setState(() {
        pageViewWidgetList = [
-         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,),
-         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,),
+         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback),
+         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback),
        ];
      });
     }

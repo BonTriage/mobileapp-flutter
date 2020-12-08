@@ -14,10 +14,12 @@ import 'DateWidget.dart';
 import 'NetworkErrorScreen.dart';
 
 class MeScreen extends StatefulWidget {
-  final Future<dynamic> Function(String) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
   final Function(Stream, Function) showApiLoaderCallback;
 
-  const MeScreen({Key key, this.navigateToOtherScreenCallback, this.showApiLoaderCallback}) : super(key: key);
+  const MeScreen(
+      {Key key, this.navigateToOtherScreenCallback, this.showApiLoaderCallback})
+      : super(key: key);
 
   @override
   _MeScreenState createState() => _MeScreenState();
@@ -38,9 +40,14 @@ class _MeScreenState extends State<MeScreen>
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
 
+  String userName = "";
+
   @override
   void initState() {
     super.initState();
+
+    getUserProfileDetails();
+
     _calendarScreenBloc = CalendarScreenBloc();
     userLogHeadacheDataCalendarModel = UserLogHeadacheDataCalendarModel();
     _animationController =
@@ -143,7 +150,7 @@ class _MeScreenState extends State<MeScreen>
                     child: GestureDetector(
                       onTap: () {
                         widget.navigateToOtherScreenCallback(
-                            Constant.welcomeStartAssessmentScreenRouter);
+                            Constant.welcomeStartAssessmentScreenRouter, null);
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -216,7 +223,8 @@ class _MeScreenState extends State<MeScreen>
                                       GestureDetector(
                                         onTap: () {
                                           widget.navigateToOtherScreenCallback(
-                                              TabNavigatorRoutes.recordsRoot);
+                                              TabNavigatorRoutes.recordsRoot,
+                                              null);
                                         },
                                         child: Text(
                                           'SEE MORE >',
@@ -352,7 +360,7 @@ class _MeScreenState extends State<MeScreen>
                       child: Column(
                         children: [
                           Text(
-                            'Good morning!\nWhat’s been\ngoing on today?',
+                            'Hey ''$userName''\nWhat’s been\ngoing on today?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 18,
@@ -368,7 +376,7 @@ class _MeScreenState extends State<MeScreen>
                               BouncingWidget(
                                 onPressed: () {
                                   widget.navigateToOtherScreenCallback(
-                                      Constant.logDayScreenRouter);
+                                      Constant.logDayScreenRouter, null);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -465,11 +473,11 @@ class _MeScreenState extends State<MeScreen>
           .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     if (currentUserHeadacheModel == null)
-      widget
-          .navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter);
+      widget.navigateToOtherScreenCallback(
+          Constant.headacheStartedScreenRouter, null);
     else
       widget.navigateToOtherScreenCallback(
-          Constant.currentHeadacheProgressScreenRouter);
+          Constant.currentHeadacheProgressScreenRouter, null);
   }
 
   void requestService(
@@ -541,7 +549,8 @@ class _MeScreenState extends State<MeScreen>
         return false;
       }, orElse: () => null);
       if (userCalendarData == null) {
-        userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere((element) {
+        userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere(
+            (element) {
           if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
             currentWeekConsData.add(1);
             return true;
@@ -558,4 +567,13 @@ class _MeScreenState extends State<MeScreen>
     }
     print(currentWeekConsData);
   }
+
+  void getUserProfileDetails() async {
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    setState(() {
+      userName = userProfileInfoData.firstName;
+    });
+
+}
 }

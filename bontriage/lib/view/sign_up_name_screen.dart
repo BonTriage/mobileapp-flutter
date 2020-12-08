@@ -11,7 +11,7 @@ class SignUpNameScreen extends StatefulWidget {
   const SignUpNameScreen(
       {Key key,
       this.tag,
-        this.helpText,
+      this.helpText,
       this.selectedAnswerListData,
       this.selectedAnswerCallBack})
       : super(key: key);
@@ -84,7 +84,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
           child: TextField(
-
+            textCapitalization: TextCapitalization.sentences,
             onEditingComplete: () {
               widget.selectedAnswerCallBack(
                   widget.tag, textEditingController.text);
@@ -95,8 +95,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             },
             controller: textEditingController,
             onChanged: (String value) {
-              widget.selectedAnswerCallBack(
-                  widget.tag, value);
+              widget.selectedAnswerCallBack(widget.tag, value);
               //print(value);
             },
             style: TextStyle(

@@ -5,6 +5,8 @@ class UserLogHeadacheDataCalendarModel {
   List<SelectedHeadacheLogDate> addHeadacheListData = [];
   List<SelectedHeadacheLogDate> addTriggersListData = [];
   List<SelectedHeadacheLogDate> addLogDayListData = [];
+  List<SelectedHeadacheLogDate> behavioursListData = [];
+  List<SelectedHeadacheLogDate> medicationsListData = [];
   List<SelectedDayHeadacheIntensity> addHeadacheIntensityListData = [];
   String userId = "";
 }
@@ -12,6 +14,7 @@ class UserLogHeadacheDataCalendarModel {
 class SelectedHeadacheLogDate {
   String formattedDate;
   String selectedDay;
+  List<Headache> headacheListData;
   List<SignUpHeadacheAnswerListModel> userTriggersListData = [];
 }
 

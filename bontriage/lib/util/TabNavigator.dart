@@ -27,7 +27,7 @@ class TabNavigator extends StatelessWidget {
   final Function(String) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
 
-  final Future<dynamic> Function(String) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   final Function(List<Values>) openTriggerMedicationActionSheetCallback;
 
@@ -71,6 +71,7 @@ class TabNavigator extends StatelessWidget {
               onPush: (context, routeName) {
                 _push(context, routeName);
               },
+            navigateToOtherScreenCallback: navigateToOtherScreenCallback,
             showApiLoaderCallback: showApiLoaderCallback,
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>

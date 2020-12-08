@@ -11,12 +11,13 @@ class ConsecutiveSelectedDateWidget extends StatelessWidget {
   final  List<SignUpHeadacheAnswerListModel> triggersListData;
   final List<SignUpHeadacheAnswerListModel> userMonthTriggersListData ;
   final SelectedDayHeadacheIntensity selectedDayHeadacheIntensity;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
-  ConsecutiveSelectedDateWidget({this.weekDateData,this.calendarType, this.calendarDateViewType,this.triggersListData,this.userMonthTriggersListData,this.selectedDayHeadacheIntensity});
+  ConsecutiveSelectedDateWidget({this.weekDateData,this.calendarType, this.calendarDateViewType,this.triggersListData,this.userMonthTriggersListData,this.selectedDayHeadacheIntensity,this.navigateToOtherScreenCallback});
 
   @override
   Widget build(BuildContext context) {
     return DrawHorizontalLine(
-        painter: HorizontalLinePainter(), child: DateWidget(weekDateData: weekDateData,calendarType: calendarType,calendarDateViewType: calendarDateViewType,triggersListData: triggersListData,userMonthTriggersListData: userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity));
+        painter: HorizontalLinePainter(), child: DateWidget(weekDateData: weekDateData,calendarType: calendarType,calendarDateViewType: calendarDateViewType,triggersListData: triggersListData,userMonthTriggersListData: userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
   }
 }

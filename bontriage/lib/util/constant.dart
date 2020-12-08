@@ -78,6 +78,7 @@ class Constant {
   static const String calenderScreenRouter = 'calenderScreenRouter';
 
   static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter';
+  static const String onCalendarHeadacheLogDayDetailsScreenRouter = '/onCalendarHeadacheLogDayDetailsScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -310,6 +311,8 @@ class Constant {
   static const String QuestionSingleType = 'single';
   static const String QuestionMultiType = 'multi';
   static const String QuestionLocationType = 'location';
+  static const String HeadacheTypeTag = 'headacheType';
+  static const String logDayMedicationTag = 'medication';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =
@@ -365,6 +368,11 @@ class Constant {
   static const String singleTypeTag = "single";
   static const String numberTypeTag = "number";
   static const String dateTimeTypeTag = "datetime";
+  static const String headacheNoteTag = "headache.note";
+  static const String behaviourPreSleepTag = 'behavior.presleep';
+  static const String behaviourSleepTag = 'behavior.sleep';
+  static const String behaviourPreExerciseTag = 'behavior.preexercise';
+  static const String behaviourPreMealTag = 'behavior.premeal';
 
   static String whenYouAreLoggingYourDay =
       'When you’re logging your day, you can double tap any items you experience frequently to keep them pre-selected for every time you come back. For example, if you drink coffee every morning, you could double tap “Caffeine.”';
@@ -490,7 +498,7 @@ class Constant {
   static String discover = 'DISCOVER';
   static String more = 'MORE';
   static String signUpAlertMessage =
-      'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
+      'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS\n PLEASE CHECK TERM AND CONDITION';
   static String loginAlertMessage =
       'EmailId or Password is invalid.';
   static String userNotFound = 'User Not Found';

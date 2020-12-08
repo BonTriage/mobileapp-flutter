@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
@@ -70,8 +71,8 @@ class _WelcomeStartAssessmentScreenState
                   ),
                 ),
                 SizedBox(height: 100),
-                GestureDetector(
-                  onTap: () {
+                BouncingWidget(
+                  onPressed:() {
                     Utils.navigateToUserOnProfileBoard(context);
                   },
                   child: Container(

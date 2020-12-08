@@ -46,7 +46,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Utils.navigateToExitScreen(context);
+                        Navigator.pushReplacementNamed(context,
+                            Constant.postNotificationOnBoardRouter);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),

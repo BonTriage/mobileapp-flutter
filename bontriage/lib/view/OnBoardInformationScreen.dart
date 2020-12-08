@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
@@ -190,8 +191,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    GestureDetector(
-                      onTap: widget.nextButtonFunction,
+                    BouncingWidget(
+                      onPressed: widget.nextButtonFunction,
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 5),
@@ -220,8 +221,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: GestureDetector(
-                        onTap: widget.bottomButtonFunction,
+                      child: BouncingWidget(
+                        onPressed: widget.bottomButtonFunction,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
@@ -250,8 +251,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: GestureDetector(
-                        onTap: widget.secondBottomButtonFunction,
+                      child: BouncingWidget(
+                        onPressed: widget.secondBottomButtonFunction,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(

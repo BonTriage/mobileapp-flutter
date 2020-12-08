@@ -87,7 +87,7 @@ class _SecondStepCompassResultTutorialsState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 330,
+      height: 280,
       decoration: BoxDecoration(
         color: Constant.backgroundColor,
         borderRadius: BorderRadius.circular(20),

@@ -11,8 +11,8 @@ import 'NetworkErrorScreen.dart';
 
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
-
-  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback}): super(key: key);
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
+  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}): super(key: key);
 
   @override
   _CalendarIntensityScreenState createState() =>
@@ -428,7 +428,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Mild',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),
@@ -438,7 +438,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Headache score between',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -448,7 +448,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         '1 - 3',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),
@@ -474,7 +474,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Moderate',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),
@@ -484,7 +484,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Headache score between',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -494,7 +494,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         '4 - 7',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),
@@ -520,7 +520,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Severe',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),
@@ -530,7 +530,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         'Headache score',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -540,7 +540,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                       Text(
                         '8 to 10',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostMedium),
                       ),

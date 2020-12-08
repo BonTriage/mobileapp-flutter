@@ -31,7 +31,11 @@ class TextToSpeechRecognition {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
     if (isVolume == null || isVolume) {
-      await flutterTts.speak(chatText);
+      Future.delayed(Duration(milliseconds: 500), () {
+        startSpeech(chatText);
+
+      });
+
     } else {
       if (Platform.isIOS) {
         await flutterTts.pause();
@@ -39,5 +43,9 @@ class TextToSpeechRecognition {
         await flutterTts.stop();
       }
     }
+  }
+
+  static void startSpeech(String chatText) async{
+    await flutterTts.speak(chatText);
   }
 }

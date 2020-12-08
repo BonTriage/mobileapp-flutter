@@ -67,7 +67,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
 
   @override
   void didUpdateWidget(SignUpBottomSheet oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (!_animationController.isAnimating) {
@@ -78,7 +77,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
@@ -131,6 +129,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () {
                 showBottomSheet(
                     backgroundColor: Colors.transparent,
@@ -267,10 +266,13 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                       onTap: (){
                         Navigator.pop(context);
                       },
-                      child: Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 18,
-                        height: 18,
+                      child: Text(
+                        "Done",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: Constant.jostRegular,
+                          color: Constant.chatBubbleGreen,
+                        ),
                       ),
                     ),
                   ),

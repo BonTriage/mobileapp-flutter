@@ -9,8 +9,9 @@ import 'CalendarTriggersScreen.dart';
 class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(Stream, Function) showApiLoaderCallback;
+  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
-  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback}) : super(key: key);
+  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}) : super(key: key);
 
   @override
   _RecordScreenState createState() => _RecordScreenState();
@@ -114,6 +115,7 @@ class _RecordScreenState extends State<RecordScreen> {
       case 0:
         return CalendarScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
+          navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
         );
       case 0:
         return Container();
