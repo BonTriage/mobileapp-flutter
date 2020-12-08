@@ -390,7 +390,7 @@ class Constant {
   static String dayLogged = ' Day Logged!';
 
   static String loggedDaysInARow =
-      'You’ve logged 6 days in a row! Keep logging to increase accuracy and uncover more trends.';
+      'You’ve logged the day! Keep logging to increase accuracy and uncover more trends.';
   static String profileCompleteThatNow = 'That\'s it for now! Thanks for using';
 
   static String profileCompleteCommentsSignedInfo =
