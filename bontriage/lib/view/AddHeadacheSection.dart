@@ -601,8 +601,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       whichTriggerItemSelected = index;
     });
 
-    Values value = widget.valuesList
-        .firstWhere((element) => element.isSelected, orElse: () => null);
+    Values value = widget.valuesList.firstWhere((element) => element.isSelected, orElse: () => null);
 
     if (value != null) {
       _animationController.forward();
@@ -636,6 +635,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               ..isDoubleTapped = false;
         });
       }
+
+      //'1' for none option
+      widget.selectedAnswers.removeWhere((element) => element.questionTag == 'triggers1' && element.answer == '1');
     }
 
     if(!isSelected) {
