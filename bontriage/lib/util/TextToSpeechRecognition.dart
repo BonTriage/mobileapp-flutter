@@ -38,7 +38,7 @@ class TextToSpeechRecognition {
 
     } else {
       if (Platform.isIOS) {
-        await flutterTts.pause();
+        await flutterTts.stop();
       } else if (Platform.isAndroid) {
         await flutterTts.stop();
       }
