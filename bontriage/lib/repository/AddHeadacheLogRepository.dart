@@ -15,6 +15,7 @@ import 'package:mobile/util/Utils.dart';
 
 class AddHeadacheLogRepository{
   String url;
+  CurrentUserHeadacheModel currentUserHeadacheModel;
 
   Future<dynamic> serviceCall(String url, RequestMethod requestMethod) async{
     var client = http.Client();
@@ -68,11 +69,6 @@ class AddHeadacheLogRepository{
     } else {
       signUpOnBoardAnswersRequestModel.userId = 4214;
     }
-
-    CurrentUserHeadacheModel currentUserHeadacheModel;
-
-    if(userProfileInfoData != null)
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     if(currentUserHeadacheModel != null)
       signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.tryParse(currentUserHeadacheModel.selectedDate));
