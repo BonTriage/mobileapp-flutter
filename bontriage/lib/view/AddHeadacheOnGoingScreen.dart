@@ -13,9 +13,6 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
-import 'package:mobile/view/ApiLoaderScreen.dart';
-
-import 'AddNoteBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
@@ -61,6 +58,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _addHeadacheLogBloc = AddHeadacheLogBloc();
+    _addHeadacheLogBloc.currentUserHeadacheModel = widget.currentUserHeadacheModel;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Utils.showApiLoaderDialog(context);

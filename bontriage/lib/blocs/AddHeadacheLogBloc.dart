@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -12,6 +13,7 @@ class AddHeadacheLogBloc {
   AddHeadacheLogRepository _addHeadacheLogRepository;
   StreamController<dynamic> _addHeadacheLogStreamController;
   StreamController<dynamic> _addNoteStreamController;
+  CurrentUserHeadacheModel currentUserHeadacheModel;
   int count = 0;
 
   StreamSink<dynamic> get addHeadacheLogDataSink =>
@@ -80,6 +82,7 @@ class AddHeadacheLogBloc {
           signUpOnBoardSelectedAnswersModel) async {
     String apiResponse;
     try {
+      _addHeadacheLogRepository.currentUserHeadacheModel = currentUserHeadacheModel;
       var signUpFirstStepData =
           await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(
               WebservicePost.qaServerUrl + 'event',

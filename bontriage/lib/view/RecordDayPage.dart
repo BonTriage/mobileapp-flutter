@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class RecordDayPage extends StatefulWidget {
@@ -77,8 +79,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             child: FlatButton.icon(
               padding: EdgeInsets.all(0),
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, Constant.headacheStartedScreenRouter);
+                _openAddHeadacheScreen();
               },
               icon: Image.asset(
                 Constant.addCircleIcon,
@@ -91,7 +92,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                     color: Constant.chatBubbleGreen,
                     fontFamily: Constant.jostRegular,
                     fontWeight: FontWeight.w500,
-                    fontSize: 18),
+                    fontSize: 18
+                ),
               ),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
@@ -99,118 +101,6 @@ class _RecordDayPageState extends State<RecordDayPage>
         ],
       ));
       return listWidget;
-
-      /*return [
-        Visibility(
-          visible: false,
-          child: _getSectionWidget(
-            Constant.migraineIcon,
-            'Migrane',
-            '3:21 hours, Intensity: 4, Disability: 3',
-            '“Lorem ipsum dolor sit amet, consectetur adipiscing elit”',
-            '',
-          ),
-        ),
-        Visibility(
-          visible: userLogDayDetails.headacheLogDayListData.length > 1? true :false,
-          child: _getSectionWidget(
-              Constant.sleepIcon,
-              'Sleep',
-              userLogDayDetails.headacheLogDayListData.length > 1? userLogDayDetails.headacheLogDayListData[1].logDayListData.titleInfo: "",
-              '',
-              ''),
-        ),
-        Visibility(
-          visible: false,
-          child: _getSectionWidget(Constant.waterDropIcon, 'Water', '4 cups',
-              '', 'This is less than recommended'),
-        ),
-        Visibility(
-        visible: userLogDayDetails.headacheLogDayListData.length > 2? true :false,
-          child: _getSectionWidget(
-              Constant.mealIcon,
-              'Meals',
-              userLogDayDetails.headacheLogDayListData.length > 2? userLogDayDetails.headacheLogDayListData[2].logDayListData.titleInfo: "",
-              '',
-              ''),
-        ),
-        Visibility(
-          visible: false,
-          child: _getSectionWidget(Constant.weatherIcon, 'Weather',
-              '90% humidity', '', 'This is higher than usual'),
-        ),
-        Visibility(
-          visible: userLogDayDetails.headacheLogDayListData.length > 3? true :false,
-          child: _getSectionWidget(
-              Constant.pillIcon,
-              'Medication',
-              userLogDayDetails.headacheLogDayListData.length > 3? userLogDayDetails.headacheLogDayListData[3].logDayListData.titleInfo: "",
-              '',
-              ''),
-        ),
-        Visibility(
-          visible: false,
-          child: Text(
-            'Note:\n“Lorem ipsum dolor sit amet, consectetur adipiscing elit”',
-            style: TextStyle(
-                color: Constant.chatBubbleGreen60Alpha,
-                fontFamily: Constant.jostRegular,
-                fontWeight: FontWeight.w500,
-                fontSize: 14),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Visibility(
-          visible: false,
-          child: FlatButton.icon(
-            padding: EdgeInsets.all(0),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter)
-
-            },
-            icon: Image.asset(
-              Constant.addCircleIcon,
-              width: 20,
-              height: 20,
-            ),
-            label: Text(
-              'Add Info',
-              style: TextStyle(
-                  color: Constant.chatBubbleGreen,
-                  fontFamily: Constant.jostRegular,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18),
-            ),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Visibility(
-          visible: false,
-          child: FlatButton.icon(
-            padding: EdgeInsets.all(0),
-            onPressed: () {},
-            icon: Image.asset(
-              Constant.addCircleIcon,
-              width: 20,
-              height: 20,
-            ),
-            label: Text(
-              'Add Headache',
-              style: TextStyle(
-                  color: Constant.chatBubbleGreen,
-                  fontFamily: Constant.jostRegular,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18),
-            ),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-        ),
-      ];*/
     } else {
       return [
         Text(
@@ -264,8 +154,7 @@ class _RecordDayPageState extends State<RecordDayPage>
         FlatButton.icon(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushReplacementNamed(
-                context, Constant.headacheStartedScreenRouter);
+            _openAddHeadacheScreen();
           },
           icon: Image.asset(
             Constant.addCircleIcon,
@@ -436,5 +325,16 @@ class _RecordDayPageState extends State<RecordDayPage>
         )
       ],
     );
+  }
+
+  void _openAddHeadacheScreen() async{
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if(userProfileInfoData != null) {
+      DateTime dateTime = DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second);
+      CurrentUserHeadacheModel currentUserHeadacheModel = CurrentUserHeadacheModel(userId: userProfileInfoData.userId, isOnGoing: true, selectedDate: dateTime.toUtc().toIso8601String());
+      Navigator.pushReplacementNamed(
+          context, Constant.addHeadacheOnGoingScreenRouter, arguments: currentUserHeadacheModel);
+    }
   }
 }
