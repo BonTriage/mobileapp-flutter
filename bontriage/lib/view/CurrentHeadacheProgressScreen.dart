@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobile/blocs/CurrentHeadacheProgressBloc.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -322,10 +323,7 @@ class _CurrentHeadacheProgressScreenState
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _currentUserHeadacheModel.isOnGoing = false;
-                                        Navigator.pushReplacementNamed(context,
-                                            Constant.addHeadacheOnGoingScreenRouter,
-                                            arguments: _currentUserHeadacheModel);
+                                        _navigateToAddHeadacheScreen();
                                       },
                                       child: Container(
                                         width: 130,
@@ -372,11 +370,26 @@ class _CurrentHeadacheProgressScreenState
       _storedDateTime = dateTime.toLocal();
       Duration duration = _dateTime.difference(dateTime);
 
-      if(duration.inDays.abs() < 3)
-        _totalTime = duration.inMinutes + 1;
+      if(duration.inDays.abs() < 3) {
+        _totalTime = duration.inMinutes;
+
+        if(!_currentUserHeadacheModel.isOnGoing)  {
+          _timer.cancel();
+        }
+      }
       else {
         _isShowErrorMessage = true;
         _totalTime = 72 * 60;
+        _currentUserHeadacheModel.isOnGoing = false;
+        DateTime endHeadacheDateTime = DateTime.now();
+        DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
+        Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);
+        if(duration.inSeconds.abs() <= (72*60*60)) {
+          _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+        } else {
+          _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
+        }
+        SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
         _timer.cancel();
       }
       isShowDayBorder = duration.inDays >= 1;
@@ -384,6 +397,26 @@ class _CurrentHeadacheProgressScreenState
     } catch(e) {
       print(e);
     }
+  }
+
+  void _navigateToAddHeadacheScreen() async{
+    if(_currentUserHeadacheModel.isOnGoing)
+    _currentUserHeadacheModel.isOnGoing = false;
+
+    DateTime endHeadacheDateTime = DateTime.now();
+    DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
+    Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);
+    if(duration.inSeconds.abs() <= (72*60*60)) {
+      _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    } else {
+      _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
+    }
+
+    await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
+
+    Navigator.pushReplacementNamed(context,
+        Constant.addHeadacheOnGoingScreenRouter,
+        arguments: _currentUserHeadacheModel);
   }
 }
 

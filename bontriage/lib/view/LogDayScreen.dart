@@ -15,6 +15,7 @@ import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
 import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'NetworkErrorScreen.dart';
 
@@ -39,7 +40,6 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
     _logDayBloc = LogDayBloc();
@@ -73,7 +73,6 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     print('dispose');
   }
@@ -368,17 +367,23 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   Future<void> _showDoubleTapDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          content: LogDayDoubleTapDialog(),
-        );
-      },
-    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isDialogDisplayed = sharedPreferences.getBool(Constant.logDayDoubleTapDialog) ?? false;
+
+    if(!isDialogDisplayed) {
+      sharedPreferences.setBool(Constant.logDayDoubleTapDialog, true);
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            backgroundColor: Colors.transparent,
+            content: LogDayDoubleTapDialog(),
+          );
+        },
+      );
+    }
   }
 
   void _onSubmitClicked() async {
