@@ -255,7 +255,7 @@ class MyApp extends StatelessWidget {
 
           case Constant.logDayScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: LogDayScreen());
+              return SlideFromBottomPageRoute(widget: LogDayScreen(selectedDateTime: settings.arguments));
             }
           case Constant.addHeadacheSuccessScreenRouter:
             {

@@ -43,59 +43,66 @@ class _RecordDayPageState extends State<RecordDayPage>
         });
       }
       listWidget.add(Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 20,
+            height: 10,
           ),
-          Visibility(
-            visible: !userLogDayDetails.isDayLogged,
-            child: FlatButton.icon(
-              padding: EdgeInsets.all(0),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, Constant.logDayScreenRouter);
-              },
-              icon: Image.asset(
-                Constant.addCircleIcon,
-                width: 20,
-                height: 20,
+          Container(
+            alignment: Alignment.topLeft,
+            child: Visibility(
+              visible: !userLogDayDetails.isDayLogged,
+              child: FlatButton.icon(
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                      context, Constant.logDayScreenRouter,
+                      arguments: widget.dateTime);
+                },
+                icon: Image.asset(
+                  Constant.addCircleIcon,
+                  width: 20,
+                  height: 20,
+                ),
+                label: Text(
+                  'Add Info',
+                  style: TextStyle(
+                      color: Constant.chatBubbleGreen,
+                      fontFamily: Constant.jostRegular,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18),
+                ),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              label: Text(
-                'Add Info',
-                style: TextStyle(
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18),
-              ),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
           SizedBox(
             height: 10,
           ),
-          Visibility(
-            visible: !userLogDayDetails.isHeadacheLogged,
-            child: FlatButton.icon(
-              padding: EdgeInsets.all(0),
-              onPressed: () {
-                _openAddHeadacheScreen();
-              },
-              icon: Image.asset(
-                Constant.addCircleIcon,
-                width: 20,
-                height: 20,
-              ),
-              label: Text(
-                'Add Headache',
-                style: TextStyle(
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18
+          Container(
+            alignment: Alignment.topLeft,
+            child: Visibility(
+              visible: !userLogDayDetails.isHeadacheLogged,
+              child: FlatButton.icon(
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  _openAddHeadacheScreen();
+                },
+                icon: Image.asset(
+                  Constant.addCircleIcon,
+                  width: 20,
+                  height: 20,
                 ),
+                label: Text(
+                  'Add Headache',
+                  style: TextStyle(
+                      color: Constant.chatBubbleGreen,
+                      fontFamily: Constant.jostRegular,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18),
+                ),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           )
         ],
@@ -130,8 +137,8 @@ class _RecordDayPageState extends State<RecordDayPage>
         FlatButton.icon(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushReplacementNamed(
-                context, Constant.logDayScreenRouter);
+            Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter,
+                arguments: widget.dateTime);
           },
           icon: Image.asset(
             Constant.addCircleIcon,
@@ -327,14 +334,26 @@ class _RecordDayPageState extends State<RecordDayPage>
     );
   }
 
-  void _openAddHeadacheScreen() async{
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+  void _openAddHeadacheScreen() async {
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    if(userProfileInfoData != null) {
-      DateTime dateTime = DateTime(widget.dateTime.year, widget.dateTime.month, widget.dateTime.day, DateTime.now().hour, DateTime.now().minute, DateTime.now().second);
-      CurrentUserHeadacheModel currentUserHeadacheModel = CurrentUserHeadacheModel(userId: userProfileInfoData.userId, isOnGoing: true, selectedDate: dateTime.toUtc().toIso8601String());
+    if (userProfileInfoData != null) {
+      DateTime dateTime = DateTime(
+          widget.dateTime.year,
+          widget.dateTime.month,
+          widget.dateTime.day,
+          DateTime.now().hour,
+          DateTime.now().minute,
+          DateTime.now().second);
+      CurrentUserHeadacheModel currentUserHeadacheModel =
+          CurrentUserHeadacheModel(
+              userId: userProfileInfoData.userId,
+              isOnGoing: true,
+              selectedDate: dateTime.toUtc().toIso8601String());
       Navigator.pushReplacementNamed(
-          context, Constant.addHeadacheOnGoingScreenRouter, arguments: currentUserHeadacheModel);
+          context, Constant.addHeadacheOnGoingScreenRouter,
+          arguments: currentUserHeadacheModel);
     }
   }
 }

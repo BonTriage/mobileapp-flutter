@@ -40,7 +40,6 @@ class _TimeSectionState extends State<TimeSection>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     widget.addHeadacheDateTimeDetailsData(

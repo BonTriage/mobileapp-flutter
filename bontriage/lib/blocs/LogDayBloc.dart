@@ -38,10 +38,13 @@ class LogDayBloc {
 
   List<Questions> filterQuestionsListData = [];
 
-  LogDayBloc() {
+  DateTime selectedDateTime;
+
+  LogDayBloc(DateTime selectedDateTime) {
     _logDayDataStreamController = StreamController<dynamic>();
     _sendLogDayDataStreamController = StreamController<dynamic>();
     _logDayRepository = LogDayRepository();
+    this.selectedDateTime = selectedDateTime;
   }
 
   Future<dynamic> fetchLogDayData() async {
@@ -353,7 +356,12 @@ class LogDayBloc {
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
     DateTime dateTime = DateTime.now();
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+    if(selectedDateTime == null){
+      signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+    }else{
+      signUpOnBoardAnswersRequestModel.calendarEntryAt = '${selectedDateTime.year}-${selectedDateTime.month}-${selectedDateTime.day}T00:00:00Z';
+    }
+
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
 

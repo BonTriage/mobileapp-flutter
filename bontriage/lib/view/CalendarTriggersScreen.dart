@@ -588,12 +588,6 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1) {
-      /*Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      });*/
       _calendarScreenBloc.initNetworkStreamController();
 
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
@@ -611,12 +605,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        /*Utils.showApiLoaderDialog(context,
-            networkStream: _calendarScreenBloc.networkDataStream,
-            tapToRetryFunction: () {
-          _calendarScreenBloc.enterSomeDummyDataToStreamController();
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-        });*/
+
         widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
           _calendarScreenBloc.enterSomeDummyDataToStreamController();
           requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);

@@ -7,6 +7,7 @@ import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LoginScreenRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
 
 class LoginScreenBloc {
@@ -39,7 +40,7 @@ class LoginScreenBloc {
         loginDataSink.addError(response);
         apiResponse = response.toString();
       } else {
-        if(response != null) {
+        if (response != null) {
           if (jsonDecode(response)[Constant.messageTextKey] != null) {
             String messageValue = jsonDecode(response)[Constant.messageTextKey];
             if (messageValue != null) {
@@ -50,10 +51,10 @@ class LoginScreenBloc {
               }
             }
           } else {
-            UserProfileInfoModel userProfileInfoModel =
-            UserProfileInfoModel();
+            UserProfileInfoModel userProfileInfoModel = UserProfileInfoModel();
             userProfileInfoModel =
                 UserProfileInfoModel.fromJson(jsonDecode(response));
+            await _deleteAllUserData();
             var selectedAnswerListData = await SignUpOnBoardProviders.db
                 .insertUserProfileInfo(userProfileInfoModel);
             print(selectedAnswerListData);
@@ -81,5 +82,18 @@ class LoginScreenBloc {
 
   void dispose() {
     _loginStreamController?.close();
+  }
+
+  ///This method is used to log out from the app and redirecting to the welcome start assessment screen
+  Future<void> _deleteAllUserData() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
+      sharedPreferences.setBool(Constant.logDayDoubleTapDialog, false);
+      await SignUpOnBoardProviders.db.deleteAllTableData();
+    } catch (e) {
+      print(e);
+    }
   }
 }

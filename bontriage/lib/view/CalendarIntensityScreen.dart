@@ -46,12 +46,6 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      /*Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      });*/
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
@@ -572,7 +566,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     var calendarUtil = CalendarUtil(
         calenderType: 2,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
-        userMonthTriggersListData: []);
+        userMonthTriggersListData: [],navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback);
     currentMonthData =
         calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }

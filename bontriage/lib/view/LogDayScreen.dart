@@ -20,6 +20,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
+  final DateTime selectedDateTime;
+
+  const LogDayScreen({Key key, this.selectedDateTime}) : super(key: key);
+
   @override
   _LogDayScreenState createState() => _LogDayScreenState();
 }
@@ -41,8 +45,12 @@ class _LogDayScreenState extends State<LogDayScreen>
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
-    _logDayBloc = LogDayBloc();
+    if(widget.selectedDateTime == null) {
+      _dateTime = DateTime.now();
+    }else{
+      _dateTime = widget.selectedDateTime;
+    }
+    _logDayBloc = LogDayBloc(widget.selectedDateTime);
 
     requestService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -152,8 +160,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                             return Column(
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
                                   child: Text(
                                     Constant.doubleTapAnItem,
                                     style: TextStyle(
@@ -187,7 +195,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                             EdgeInsets.symmetric(vertical: 8),
                                         decoration: BoxDecoration(
                                           color: Constant.chatBubbleGreen,
-                                          borderRadius: BorderRadius.circular(30),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
                                         ),
                                         child: Center(
                                           child: Text(
@@ -196,7 +205,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                                 color:
                                                     Constant.bubbleChatTextView,
                                                 fontSize: 15,
-                                                fontFamily: Constant.jostMedium),
+                                                fontFamily:
+                                                    Constant.jostMedium),
                                           ),
                                         ),
                                       ),
@@ -221,7 +231,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                           border: Border.all(
                                               width: 1.3,
                                               color: Constant.chatBubbleGreen),
-                                          borderRadius: BorderRadius.circular(30),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
                                         ),
                                         child: Center(
                                           child: Text(
@@ -229,7 +240,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                             style: TextStyle(
                                                 color: Constant.chatBubbleGreen,
                                                 fontSize: 15,
-                                                fontFamily: Constant.jostMedium),
+                                                fontFamily:
+                                                    Constant.jostMedium),
                                           ),
                                         ),
                                       ),
@@ -368,9 +380,10 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   Future<void> _showDoubleTapDialog() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool isDialogDisplayed = sharedPreferences.getBool(Constant.logDayDoubleTapDialog) ?? false;
+    bool isDialogDisplayed =
+        sharedPreferences.getBool(Constant.logDayDoubleTapDialog) ?? false;
 
-    if(!isDialogDisplayed) {
+    if (!isDialogDisplayed) {
       sharedPreferences.setBool(Constant.logDayDoubleTapDialog, true);
       showDialog<void>(
         context: context,
