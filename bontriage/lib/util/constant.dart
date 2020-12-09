@@ -78,13 +78,14 @@ class Constant {
   static const String calenderScreenRouter = 'calenderScreenRouter';
 
   static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter';
-  static const String onCalendarHeadacheLogDayDetailsScreenRouter = '/onCalendarHeadacheLogDayDetailsScreenRouter';
+  static const String onCalendarHeadacheLogDayDetailsScreenRouter =
+      '/onCalendarHeadacheLogDayDetailsScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
   static String welcomeToMigraineMentor = 'Welcome to\nMigraineMentor';
   static String developedByATeam =
-      'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, mathematicians, and designers, MigraineMentor is an important part of an advanced headache diagnosis and treatment system. By dowloading this tool, you have already taken the first step toward better managing your headaches.';
+      'Developed by a team of board-certified migraine and headache specialists, computer scientists, engineers, mathematicians, and designers, MigraineMentor is an important part of an advanced headache diagnosis and treatment system. By downloading this tool, you have already taken the first step toward better managing your headaches.';
   static String trackRightData = 'Track the right data';
   static String mostHeadacheTracking =
       'Unlike most headache tracking apps, MigraineMentor utilizes big data — weather changes, pollen counts, sleep quality, exercise, and self-logged triggers — to build your personalized headache risk profile (HRP).';
@@ -112,7 +113,7 @@ class Constant {
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that’s what you’re looking for, and are willing to put in a little time and effort, you’ve come to the right app.';
 
   static String migraineMentorHelpTextView =
-      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
+      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
@@ -120,13 +121,13 @@ class Constant {
       'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better';
 
   static String welcomePersonalizedHeadacheSecondStepFirstTextView =
-      'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app.';
+      'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app.';
 
   static String welcomePersonalizedHeadacheSecondTextView =
       'Throughout your journey with MigraineMentor, you will work on shrinking the size and changing the shape of your compass to lower your Headache Score.';
 
   static String welcomePersonalizedHeadacheThirdTextView =
-      'Your Compass is generated based on Intensity, duration, disability, frequency-the four main parameters that headache specialists evaluate when diagnosing migraines and headache .';
+      'Your Compass is generated based on Intensity, duration, disability, frequency - the four main parameters that headache specialists evaluate when diagnosing migraines and headache.';
 
   static String welcomePersonalizedHeadacheFourthTextView =
       'As you get better at managing your headache, you will learn to use the compass to see the impact of different measures like exposure to a possible trigger or starting a new medications.';
@@ -269,9 +270,10 @@ class Constant {
   static String whatBiologicalSex =
       'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
 
- static String greatFromHere = 'Great! From here on it is easy. Every day, you can log in to answer a few questions and report headaches as they arise. We need data from headache days as well as non-headache days – that’s how our deep learning system predicts how to improve your headaches.';
-  static String finallyNotification = 'Finally, the next two screens will give you a brief introduction to some of the buttons you can use to log your headaches and behaviors.';
-
+  static String greatFromHere =
+      'Great! From here on it is easy. Every day, you can log in to answer a few questions and report headaches as they arise. We need data from headache days as well as non-headache days – that’s how our deep learning system predicts how to improve your headaches.';
+  static String finallyNotification =
+      'Finally, the next two screens will give you a brief introduction to some of the buttons you can use to log your headaches and behaviors.';
 
   static String woman = 'Woman';
   static String man = 'Man';
@@ -400,10 +402,10 @@ class Constant {
   static String profileCompleteThatNow = 'That\'s it for now! Thanks for using';
 
   static String profileCompleteCommentsSignedInfo =
-      'We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+      'We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
 
   static String profileCompleteTextView =
-      'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this  experience and help other headache-sufferers. Please send comments to info@bontriage.com.  Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+      'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
 
   static String thankYouProfile = ' Thank you!\nYour profile is complete.';
   static String daily = ' Daily';
@@ -506,25 +508,27 @@ class Constant {
   static String more = 'MORE';
   static String signUpAlertMessage =
       'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
-  static String signUpCheckboxAlertMessage ='PLEASE CHECK TERM AND CONDITION';
-  static String signUpEmilFieldAlertMessage ='PLEASE ENTER VALID EMAIL';
+  static String signUpCheckboxAlertMessage = 'PLEASE CHECK TERM AND CONDITION';
+  static String signUpEmilFieldAlertMessage = 'PLEASE ENTER VALID EMAIL';
 
-  static String loginAlertMessage =
-      'EmailId or Password is invalid.';
+  static String loginAlertMessage = 'EmailId or Password is invalid.';
   static String userNotFound = 'User Not Found';
   static String messageTextKey = 'message_text';
   static String loading = 'Loading...';
   static const String success = 'Success';
   static const String somethingWentWrong = 'Something went Wrong!';
-  static String onBoardingAssessmentIncomplete = 'Onboarding assessment is incomplete.';
+  static String onBoardingAssessmentIncomplete =
+      'Onboarding assessment is incomplete.';
   static String clickHereToFinish = 'Click here to finish.';
   static String isProfileInCompleteStatus = 'isProfileInCompleteStatus';
   static String tapToRetry = 'Tap to Retry';
   static String none = 'none';
-  static String logHeadacheError = 'Headache duration cannot be more than 3 days.';
+  static String logHeadacheError =
+      'Headache duration cannot be more than 3 days.';
   static String viewEditNote = 'View/Edit Note';
   static String multipleTriggers = 'Selecting multiple triggers at a time';
-  static String selectUpTo3Triggers = 'You can only select up to 3 triggers at a time. In order to look at different triggers, please unselect one or more of the active triggers before selecting new ones.';
+  static String selectUpTo3Triggers =
+      'You can only select up to 3 triggers at a time. In order to look at different triggers, please unselect one or more of the active triggers before selecting new ones.';
   static String logDayDoubleTapDialog = 'logDayDoubleTapDialog';
   static String noneOfTheAbove = 'None of the above';
 
