@@ -131,6 +131,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   OnBoardBottomButtons(
                     progressPercent: _progressPercent,
                     backButtonFunction: _onBackPressed,
+                    currentIndex: _currentPageIndex,
                     nextButtonFunction: () {
                       isButtonClicked = true;
                       if (Utils.validationForOnBoard(

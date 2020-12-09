@@ -8,13 +8,15 @@ class OnBoardBottomButtons extends StatefulWidget {
   Function nextButtonFunction;
   double progressPercent;
   int onBoardPart;
+  int currentIndex;
 
   OnBoardBottomButtons({
     Key key,
     this.backButtonFunction,
     this.nextButtonFunction,
     this.progressPercent,
-    this.onBoardPart
+    this.onBoardPart,
+    this.currentIndex
   }) : super(key: key);
 
   @override
@@ -30,27 +32,30 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
-          child: Row(
+          child: /*Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-                BouncingWidget(
-                  duration: Duration(milliseconds: 100),
-                  scaleFactor: 1.5,
-                  onPressed: widget.backButtonFunction,
-                  child: Container(
-                    width: 130,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: Color(0xffafd794),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: Text(
-                        Constant.back,
-                        style: TextStyle(
-                            color: Constant.bubbleChatTextView,
-                            fontSize: 15,
-                            fontFamily: Constant.jostMedium),
+                Visibility(
+                  visible: widget.currentIndex != 0,
+                  child: BouncingWidget(
+                    duration: Duration(milliseconds: 100),
+                    scaleFactor: 1.5,
+                    onPressed: widget.backButtonFunction,
+                    child: Container(
+                      width: 130,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: Color(0xffafd794),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          Constant.back,
+                          style: TextStyle(
+                              color: Constant.bubbleChatTextView,
+                              fontSize: 15,
+                              fontFamily: Constant.jostMedium),
+                        ),
                       ),
                     ),
                   ),
@@ -78,7 +83,78 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                 ),
               ),
             ],
-          ),
+          ),*/
+          Stack(
+            children: [
+              AnimatedPositioned(
+                left: (widget.currentIndex != 0)
+                    ? 0
+                    : (MediaQuery.of(context).size.width -
+                    190),
+                duration: Duration(milliseconds: 250),
+                child: AnimatedOpacity(
+                  opacity:
+                  (widget.currentIndex != 0) ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 250),
+                  child: BouncingWidget(
+                    duration: Duration(milliseconds: 100),
+                    scaleFactor: 1.5,
+                    onPressed: () {
+                      widget.backButtonFunction();
+                    },
+                    child: Container(
+                      width: 130,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: Color(0xffafd794),
+                        borderRadius:
+                        BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          Constant.back,
+                          style: TextStyle(
+                            color:
+                            Constant.bubbleChatTextView,
+                            fontSize: 14,
+                            fontFamily: Constant.jostMedium,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: BouncingWidget(
+                  duration: Duration(milliseconds: 100),
+                  scaleFactor: 1.5,
+                  onPressed: () {
+                    widget.nextButtonFunction();
+                  },
+                  child: Container(
+                    width: 130,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: Color(0xffafd794),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        Constant.next,
+                        style: TextStyle(
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 14,
+                          fontFamily: Constant.jostMedium,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
         ),
         SizedBox(
           height: 36,
