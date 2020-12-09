@@ -143,13 +143,29 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            /*selectedValue =
-                                widget.selectOptionList[index].optionText;*/
-                            _onOptionSelected(index);
-                            if(widget.selectOptionList[index].isSelected) {
-                              _valuesSelectedList.add(widget.selectOptionList[index].optionText);
+                            bool isSelected = widget.selectOptionList[index].isSelected;
+                            String valueText = widget.selectOptionList[index].optionText;
+                            if(valueText.toLowerCase() == Constant.noneOfTheAbove.toLowerCase() && !isSelected) {
+                              widget.selectOptionList.forEach((element) {
+                                element.isSelected = false;
+                              });
+                              widget.selectOptionList[index].isSelected = true;
+                              _valuesSelectedList.clear();
                             } else {
-                              _valuesSelectedList.remove(widget.selectOptionList[index].optionText);
+                              OnBoardSelectOptionModel noneOfTheAboveOption = widget.selectOptionList.firstWhere((element) => element.optionText == Constant.noneOfTheAbove, orElse: () => null);
+                              if(noneOfTheAboveOption != null)
+                                noneOfTheAboveOption.isSelected = false;
+
+                              _valuesSelectedList.removeWhere((element) => element == Constant.noneOfTheAbove);
+                              _onOptionSelected(index);
+                            }
+
+                            if (widget.selectOptionList[index].isSelected) {
+                              _valuesSelectedList.add(
+                                  widget.selectOptionList[index].optionText);
+                            } else {
+                              _valuesSelectedList.remove(
+                                  widget.selectOptionList[index].optionText);
                             }
 
                             widget.selectedAnswerCallBack(widget.questionTag, jsonEncode(_valuesSelectedList));

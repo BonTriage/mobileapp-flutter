@@ -138,6 +138,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                     )),
                     OnBoardBottomButtons(
                       progressPercent: _progressPercent,
+                      currentIndex: _currentPageIndex,
                       backButtonFunction: () {
                         _onBackPressed();
                       },

@@ -152,6 +152,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                         OnBoardBottomButtons(
                           progressPercent: _progressPercent,
                           backButtonFunction: _onBackPressed,
+                          currentIndex: _currentPageIndex,
                           nextButtonFunction: () {
                             if (Utils.validationForOnBoard(
                                 signUpOnBoardSelectedAnswersModel.selectedAnswers,

@@ -265,14 +265,15 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     _addHeadacheUserListData = addHeadacheListData;
     selectedAnswers.forEach((element) {
       Questions questionsTag = _addHeadacheUserListData
-          .firstWhere((element1) => element1.tag == element.questionTag);
-      switch (questionsTag.questionType) {
-        case Constant.singleTypeTag:
-          Values answerValuesData = questionsTag.values
-              .firstWhere((element1) => element1.text == element.answer);
-          answerValuesData.isSelected = true;
-          break;
-        case Constant.numberTypeTag:
+          .firstWhere((element1) => element1.tag == element.questionTag, orElse: () => null);
+      if(questionsTag != null) {
+        switch (questionsTag.questionType) {
+          case Constant.singleTypeTag:
+            Values answerValuesData = questionsTag.values
+                .firstWhere((element1) => element1.text == element.answer);
+            answerValuesData.isSelected = true;
+            break;
+          case Constant.numberTypeTag:
           /*if(element.answer == null) {
             SelectedAnswers numberTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
             if(numberTypeSelectedAnswer == null)
@@ -280,11 +281,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
             else
               numberTypeSelectedAnswer.answer = '0';
           }*/
-          questionsTag.currentValue = element.answer;
-          break;
-        case Constant.dateTimeTypeTag:
-          questionsTag.updatedAt = element.answer;
-          break;
+            questionsTag.currentValue = element.answer;
+            break;
+          case Constant.dateTimeTypeTag:
+            questionsTag.updatedAt = element.answer;
+            break;
+        }
       }
     });
 

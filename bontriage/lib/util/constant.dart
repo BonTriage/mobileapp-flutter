@@ -521,6 +521,7 @@ class Constant {
   static String multipleTriggers = 'Selecting multiple triggers at a time';
   static String selectUpTo3Triggers = 'You can only select up to 3 triggers at a time. In order to look at different triggers, please unselect one or more of the active triggers before selecting new ones.';
   static String logDayDoubleTapDialog = 'logDayDoubleTapDialog';
+  static String noneOfTheAbove = 'None of the above';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
