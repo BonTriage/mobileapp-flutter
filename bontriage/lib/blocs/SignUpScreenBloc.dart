@@ -95,4 +95,11 @@ class SignUpScreenBloc {
     _checkUserAlreadySignUpStreamController?.close();
     _signUpOfNewUserStreamController?.close();
   }
+
+  void inItNetworkStream(){
+    _checkUserAlreadySignUpStreamController?.close();
+    _signUpOfNewUserStreamController?.close();
+    _checkUserAlreadySignUpStreamController = StreamController<dynamic>();
+    _signUpOfNewUserStreamController= StreamController<dynamic>();
+  }
 }

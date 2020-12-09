@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
@@ -67,6 +68,7 @@ class _PostPartThreeOnBoardScreenState
           isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
           secondBottomButtonText: Constant.notNow,
           secondBottomButtonFunction: () {
+            TextToSpeechRecognition.speechToText("");
             Navigator.pushReplacementNamed(context, Constant.postNotificationOnBoardRouter);
           },
           closeButtonFunction: () {

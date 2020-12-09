@@ -70,7 +70,7 @@ class _DeleteHeadacheTypeActionSheetState
             ),
           ),
           SizedBox(
-            height: 12,
+            height: 14,
           ),
         ],
       ),

@@ -475,6 +475,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// In this method we will check if user is already registered into the application. If user already registered then we will save User basic
   /// info data in local database for further use.If not then user can SignUp from the application.
   void checkUserAlreadySignUp() {
+    signUpScreenBloc.inItNetworkStream();
     Utils.showApiLoaderDialog(context,
         networkStream: signUpScreenBloc.checkUserAlreadySignUpStream,
         tapToRetryFunction: () {

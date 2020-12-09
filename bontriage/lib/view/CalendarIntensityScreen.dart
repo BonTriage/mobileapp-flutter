@@ -306,7 +306,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             Text(
                               'Headache-free day',
                               style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Constant.locationServiceGreen,
                                   fontFamily: Constant.jostRegular),
                             ),
@@ -328,7 +328,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             Text(
                               'Headache day',
                               style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Constant.locationServiceGreen,
                                   fontFamily: Constant.jostRegular),
                             ),
@@ -353,7 +353,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             Text(
                               'Migraine day',
                               style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Constant.locationServiceGreen,
                                   fontFamily: Constant.jostRegular),
                             ),
@@ -393,7 +393,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                 Constant.calculatedSeverityCalendarTextView,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     color: Constant.locationServiceGreen,
                     fontFamily: Constant.jostRegular),
               ),

@@ -291,7 +291,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       Text(
                         'Headache-free day',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -313,7 +313,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       Text(
                         'Headache day',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -332,7 +332,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
               Constant.sortedCalenderTextView,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Constant.locationServiceGreen,
                   fontFamily: Constant.jostRegular),
             ),

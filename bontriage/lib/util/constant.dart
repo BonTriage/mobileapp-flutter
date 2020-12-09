@@ -112,7 +112,7 @@ class Constant {
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that’s what you’re looking for, and are willing to put in a little time and effort, you’ve come to the right app.';
 
   static String migraineMentorHelpTextView =
-      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort,you\'ve come to the right app.';
+      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
@@ -268,6 +268,11 @@ class Constant {
   static String withWhatGender = 'With what gender do you identify?';
   static String whatBiologicalSex =
       'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
+
+ static String greatFromHere = 'Great! From here on it is easy. Every day, you can log in to answer a few questions and report headaches as they arise. We need data from headache days as well as non-headache days – that’s how our deep learning system predicts how to improve your headaches.';
+  static String finallyNotification = 'Finally, the next two screens will give you a brief introduction to some of the buttons you can use to log your headaches and behaviors.';
+
+
   static String woman = 'Woman';
   static String man = 'Man';
   static String genderNonConforming = 'Gender non-conforming';
