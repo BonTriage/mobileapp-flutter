@@ -345,6 +345,22 @@ class SignUpOnBoardProviders {
       await db.insert(TABLE_USER_CURRENT_HEADACHE, map);
   }
 
+  Future<void> updateUserCurrentHeadacheData(CurrentUserHeadacheModel currentUserHeadacheModel) async {
+    final db = await database;
+
+    Map<String, String> map = {
+      USER_ID: currentUserHeadacheModel.userId,
+      USER_CURRENT_HEADACHE_JSON: jsonEncode(currentUserHeadacheModel.toJson())
+    };
+
+    await db.update(
+      TABLE_USER_CURRENT_HEADACHE,
+      map,
+      where: "$USER_ID = ?",
+      whereArgs: [currentUserHeadacheModel.userId],
+    );
+  }
+
   Future<CurrentUserHeadacheModel> getUserCurrentHeadacheData(String userId) async {
     final db = await database;
     CurrentUserHeadacheModel currentUserHeadacheModel;

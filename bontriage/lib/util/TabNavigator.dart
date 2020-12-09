@@ -61,7 +61,10 @@ class TabNavigator extends StatelessWidget {
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
-      TabNavigatorRoutes.root: (context) => Container(),
+      TabNavigatorRoutes.root: (context) {
+        print(root);
+       return Container();
+      },
       TabNavigatorRoutes.meRoot: (context) => MeScreen(
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         showApiLoaderCallback: showApiLoaderCallback,

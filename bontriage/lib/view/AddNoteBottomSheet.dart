@@ -14,11 +14,16 @@ class AddNoteBottomSheet extends StatefulWidget {
 class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
 
   TextEditingController _textEditingController;
+  FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController(text: widget.text);
+    _focusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
   }
 
   @override
@@ -71,6 +76,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
               children: [
                 Container(
                   child: TextFormField(
+                    focusNode: _focusNode,
                     controller: _textEditingController,
                     minLines: 5,
                     maxLines: 6,

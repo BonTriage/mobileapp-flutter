@@ -514,6 +514,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
   void requestService(
       String firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth) async {
+    print('call calender trigger service');
     await _calendarScreenBloc.fetchCalendarTriggersData(
         firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }

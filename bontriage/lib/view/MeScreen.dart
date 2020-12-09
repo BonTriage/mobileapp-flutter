@@ -78,9 +78,11 @@ class _MeScreenState extends State<MeScreen>
       });*/
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        print('called service 2');
         requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
       });
     });
+    print('called service 1');
     requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
 
     textSpanList = [
@@ -475,9 +477,13 @@ class _MeScreenState extends State<MeScreen>
     if (currentUserHeadacheModel == null)
       widget.navigateToOtherScreenCallback(
           Constant.headacheStartedScreenRouter, null);
-    else
-      widget.navigateToOtherScreenCallback(
-          Constant.currentHeadacheProgressScreenRouter, null);
+    else {
+      if(currentUserHeadacheModel.isOnGoing) {
+        widget.navigateToOtherScreenCallback(
+            Constant.currentHeadacheProgressScreenRouter, null);
+      } else
+        widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    }
   }
 
   void requestService(

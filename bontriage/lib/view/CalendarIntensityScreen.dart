@@ -560,6 +560,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
 
   void requestService(
       String firstDayOfTheCurrentMonth, String lastDayOfTheCurrentMonth) async {
+    print('call calender intensity service');
     await _calendarScreenBloc.fetchCalendarTriggersData(
         firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/DateTimePicker.dart';
@@ -56,6 +57,12 @@ class _TimeSectionState extends State<TimeSection>
     if (widget.currentUserHeadacheModel != null) {
       try {
         _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
+
+        if(!widget.currentUserHeadacheModel.isOnGoing) {
+          _selectedEndDate = DateTime.tryParse(widget.currentUserHeadacheModel.selectedEndDate).toLocal();
+          _selectedEndTime = _selectedEndDate;
+          _selectedEndDateAndTime = _selectedEndDate;
+        }
         print(_selectedStartDate);
         _selectedStartTime = _selectedStartDate;
       } catch (e) {
@@ -489,7 +496,16 @@ class _TimeSectionState extends State<TimeSection>
                   } else
                     widget.addHeadacheDateTimeDetailsData(
                         "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+                  widget.currentUserHeadacheModel
+                    ..isOnGoing = false
+                    ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
+
+                  SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
                 } else {
+                  widget.currentUserHeadacheModel.isOnGoing = true;
+
+                  SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+
                   widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
                   widget.addHeadacheDateTimeDetailsData("endtime", "");
                 }

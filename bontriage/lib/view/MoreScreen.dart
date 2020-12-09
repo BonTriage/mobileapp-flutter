@@ -153,6 +153,7 @@ class _MoreScreenState extends State<MoreScreen> {
     try {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
+      sharedPreferences.setBool(Constant.logDayDoubleTapDialog, false);
       await SignUpOnBoardProviders.db.deleteAllTableData();
       widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter,null);
     } catch(e) {

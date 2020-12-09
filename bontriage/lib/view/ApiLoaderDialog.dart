@@ -24,6 +24,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
   int startingValue = 1;
 
   Timer _timer;
+  bool isPopped = false;
 
   @override
   void initState() {
@@ -339,10 +340,14 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
   }
 
   void _popDialog() async{
-    bool mayBePop = await Navigator.maybePop(context);
+    if(!isPopped) {
+      bool mayBePop = await Navigator.maybePop(context);
+      isPopped = true;
 
-    if(mayBePop) {
-      Navigator.pop(context);
+      print("may be pop $mayBePop");
+      if(mayBePop) {
+        Navigator.pop(context);
+      }
     }
   }
 }
