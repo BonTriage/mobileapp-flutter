@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpNameScreen extends StatefulWidget {
   final String tag;
@@ -38,6 +39,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
           orElse: () => null);
       if (selectedAnswers != null) {
         textEditingController.text = selectedAnswers.answer;
+
       }
     }
     _animationController = AnimationController(
@@ -67,11 +69,13 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     widget.selectedAnswerCallBack(widget.tag, textEditingController.text);
-    //  setAnswerValueInLocalDatabase(widget.tag);
+    if (widget.tag == "nameClinicalImpression") {
+      setHeadacheName(textEditingController.text);
+    }
     _animationController.dispose();
     textEditingController.dispose();
+
     super.dispose();
   }
 
@@ -119,5 +123,10 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
         ),
       ),
     );
+  }
+
+  void setHeadacheName(String text) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(Constant.userHeadacheName, text);
   }
 }

@@ -30,7 +30,6 @@ class _SignUpFirstStepCompassResultState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
@@ -73,7 +72,7 @@ class _SignUpFirstStepCompassResultState
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-    TextToSpeechRecognition.speechToText(Constant.profileCompleteTextView);
+    TextToSpeechRecognition.speechToText(Constant.welcomePersonalizedHeadacheFirstTextView);
   }
 
   @override
@@ -212,7 +211,7 @@ class _SignUpFirstStepCompassResultState
                           quarterTurns: 3,
                           child: GestureDetector(
                             onTap: () {
-                              _showTutorialDialog(3);
+                            //  _showTutorialDialog(3);
                             },
                             child: Text(
                               "Frequency",
@@ -228,7 +227,7 @@ class _SignUpFirstStepCompassResultState
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                _showTutorialDialog(1);
+                              //  _showTutorialDialog(1);
                               },
                               child: Text(
                                 "Intensity",
@@ -292,7 +291,7 @@ class _SignUpFirstStepCompassResultState
                             ),
                             GestureDetector(
                               onTap: () {
-                                _showTutorialDialog(2);
+                             //   _showTutorialDialog(2);
                               },
                               child: Text(
                                 "Disability",
@@ -308,7 +307,7 @@ class _SignUpFirstStepCompassResultState
                           quarterTurns: 1,
                           child: GestureDetector(
                             onTap: () {
-                              _showTutorialDialog(4);
+                            //  _showTutorialDialog(4);
                             },
                             child: Text(
                               "Duration",

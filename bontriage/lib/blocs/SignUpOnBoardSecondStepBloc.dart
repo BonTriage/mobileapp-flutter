@@ -49,8 +49,7 @@ class SignUpOnBoardSecondStepBloc {
           if(signUpSecondStepData != null) {
             var filterQuestionsListData = LinearListFilter.getQuestionSeries(
                 signUpSecondStepData.questionnaires[0].initialQuestion,
-                signUpSecondStepData.questionnaires[0].questionGroups[0]
-                    .questions);
+                signUpSecondStepData.questionnaires[0].questionGroups[0].questions);
             print(filterQuestionsListData);
             signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
           } else {

@@ -27,10 +27,14 @@ class _SignUpSecondStepCompassResultState
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
 
+  String userHeadacheName = "";
+
+  static String userHeadacheTextView;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    getUserHeadacheName();
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
       Constant.accurateClinicalImpression,
@@ -102,7 +106,8 @@ class _SignUpSecondStepCompassResultState
           child: SafeArea(
             child: Container(
               padding: EdgeInsets.symmetric(
-                  vertical: 20, horizontal: Constant.chatBubbleHorizontalPadding),
+                  vertical: 20,
+                  horizontal: Constant.chatBubbleHorizontalPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -176,7 +181,8 @@ class _SignUpSecondStepCompassResultState
                                       opacity: _animationController,
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight: Constant.chatBubbleMaxHeight,
+                                          maxHeight:
+                                              Constant.chatBubbleMaxHeight,
                                         ),
                                         child: SingleChildScrollView(
                                           physics: BouncingScrollPhysics(),
@@ -316,7 +322,7 @@ class _SignUpSecondStepCompassResultState
                           width: 7,
                         ),
                         Text(
-                          'Red Wine Headache',
+                          userHeadacheName,
                           style: TextStyle(
                               color: Constant.locationServiceGreen,
                               fontSize: 11,
@@ -441,14 +447,14 @@ class _SignUpSecondStepCompassResultState
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
-          text: 'Red Wine Headache ',
+          text: userHeadacheName,
           style: TextStyle(
               height: 1.3,
               fontSize: 13,
               fontFamily: Constant.jostBold,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
-          text: 'could potentially be considered by doctors to be a ',
+          text: ' could potentially be considered by doctors to be a ',
           style: TextStyle(
               height: 1.3,
               fontSize: 15,
@@ -484,7 +490,7 @@ class _SignUpSecondStepCompassResultState
   }
 
   static List<String> bubbleChatTextView = [
-    Constant.welcomePersonalizedHeadacheSecondStepFirstTextView,
+    userHeadacheTextView,
     Constant.accurateClinicalImpression,
     Constant.moreDetailedHistory,
   ];
@@ -526,12 +532,11 @@ class _SignUpSecondStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if(_buttonPressedValue == 0) {
+    if (_buttonPressedValue == 0) {
       return true;
     } else {
       setState(() {
-        if (_buttonPressedValue <= 2 &&
-            _buttonPressedValue > 1) {
+        if (_buttonPressedValue <= 2 && _buttonPressedValue > 1) {
           _buttonPressedValue--;
         } else {
           isBackButtonHide = false;
@@ -540,5 +545,12 @@ class _SignUpSecondStepCompassResultState
       });
       return false;
     }
+  }
+
+  void getUserHeadacheName() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    userHeadacheName = sharedPreferences.get(Constant.userHeadacheName);
+    userHeadacheTextView =
+        'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app';
   }
 }

@@ -26,7 +26,7 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
       // 5s over, navigate to a new page
-      const oneSec = const Duration(milliseconds: 1200);
+      const oneSec = const Duration(milliseconds: 800);
       new Timer.periodic(oneSec, (Timer t) {
         if (startingValue == 1) {
           startingValue = 2;

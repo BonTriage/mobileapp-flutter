@@ -333,6 +333,7 @@ class Constant {
       'Tap here if headache is still in progress.';
   static String reset = 'Reset';
   static String submit = 'Submit';
+  static String userHeadacheName = "userHeadacheName";
   static String tutorialsState = 'tutorialsState';
   static String chatBubbleVolumeState = 'chatBubbleVolumeState';
   static String userAlreadyLoggedIn = 'userAlreadyLoggedIn';
@@ -499,7 +500,10 @@ class Constant {
   static String discover = 'DISCOVER';
   static String more = 'MORE';
   static String signUpAlertMessage =
-      'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS\n PLEASE CHECK TERM AND CONDITION';
+      'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
+  static String signUpCheckboxAlertMessage ='PLEASE CHECK TERM AND CONDITION';
+  static String signUpEmilFieldAlertMessage ='PLEASE ENTER VALID EMAIL';
+
   static String loginAlertMessage =
       'EmailId or Password is invalid.';
   static String userNotFound = 'User Not Found';
@@ -634,6 +638,7 @@ class Constant {
   static const String clinicalImpressionShort3 = 'clinical_impression_short3';
   static const String clinicalImpressionShort0 = 'clinical_impression_short0';
   static const String clinicalImpressionShort1 = 'clinical_impression_short1';
+  static const String clinicalImpression = 'clinical_impression';
   static const String profileEventType = 'profile';
   static const String behaviorsEventType = 'behaviors';
   static const String medicationEventType = 'medication';

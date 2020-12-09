@@ -140,9 +140,9 @@ class _CalendarHeadacheLogDayDetailsScreenState
         tapToRetryFunction: () {
       calendarHeadacheLogDayDetailsBloc.enterSomeDummyDataToStream();
     });
-    String currentDate = _dateTime.toUtc().toIso8601String();
-    List<String> splitString = currentDate.split('.');
-    String selectedDate = splitString[0].toString() + 'Z';
+   // 2020-12-08T18:30:00Z
+    //2020-12-09 00:00:00.000
+    String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
     calendarHeadacheLogDayDetailsBloc
         .fetchCalendarHeadacheLogDayData(selectedDate);
   }

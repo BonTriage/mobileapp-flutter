@@ -24,7 +24,7 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      const oneSec = const Duration(milliseconds: 1200);
+      const oneSec = const Duration(milliseconds: 800);
       new Timer.periodic(oneSec, (Timer t) {
         if (startingValue == 1) {
           startingValue = 2;

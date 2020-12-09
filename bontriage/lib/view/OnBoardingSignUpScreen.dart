@@ -150,7 +150,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               height: 5,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 Constant.email,
                                 style: TextStyle(
@@ -225,7 +226,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               height: 5,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 Constant.password,
                                 style: TextStyle(
@@ -364,8 +366,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           signUpButtonClicked();
                         },
                         child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 40),
                           decoration: BoxDecoration(
                             color: Constant.chatBubbleGreen,
                             borderRadius: BorderRadius.circular(24),
@@ -393,7 +395,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               ),
                             ),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: GestureDetector(
@@ -452,9 +453,20 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         isTermConditionCheck) {
       _isShowAlert = false;
       checkUserAlreadySignUp();
-    } else {
+    } else if (!Utils.validateEmail(emailValue)) {
+      setState(() {
+        _errorMsg = Constant.signUpEmilFieldAlertMessage;
+        _isShowAlert = true;
+      });
+    } else if (passwordValue.length < 8 &&
+        !Utils.validatePassword(passwordValue)) {
       setState(() {
         _errorMsg = Constant.signUpAlertMessage;
+        _isShowAlert = true;
+      });
+    } else {
+      setState(() {
+        _errorMsg = Constant.signUpCheckboxAlertMessage;
         _isShowAlert = true;
       });
     }
