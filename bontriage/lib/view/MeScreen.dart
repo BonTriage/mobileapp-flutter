@@ -11,7 +11,6 @@ import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ConsecutiveSelectedDateWidget.dart';
 import 'DateWidget.dart';
-import 'NetworkErrorScreen.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
@@ -392,7 +391,7 @@ class _MeScreenState extends State<MeScreen>
                                       'Log Day',
                                       style: TextStyle(
                                           color: Constant.bubbleChatTextView,
-                                          fontSize: 14,
+                                          fontSize: 15,
                                           fontFamily: Constant.jostMedium),
                                     ),
                                   ),
@@ -425,7 +424,7 @@ class _MeScreenState extends State<MeScreen>
                                 'Add a Headache',
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
-                                    fontSize: 14,
+                                    fontSize: 15,
                                     fontFamily: Constant.jostMedium),
                               ),
                             ),

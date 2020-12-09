@@ -118,7 +118,7 @@ class DateWidget extends StatelessWidget {
   TextStyle setTextViewStyle(int calendarDateViewType) {
     if (calendarDateViewType == 0) {
       return TextStyle(
-          fontSize: 13,
+          fontSize: 14,
           color: isCurrentDate() ? Colors.white : Colors.black,
           fontFamily: Constant.jostRegular);
     } else if (calendarDateViewType == 1) {

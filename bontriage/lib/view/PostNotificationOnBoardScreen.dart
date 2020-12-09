@@ -20,22 +20,26 @@ class _PostNotificationOnBoardScreenState
   List<List<TextSpan>> _questionList = [
     [
       TextSpan(
-          text: Constant.almostReadyToHelp,
+          text: Constant.greatFromHere,
           style: TextStyle(
               height: 1.3,
-              fontSize: 15,
+              fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ],
     [
       TextSpan(
-          text: Constant.quickAndEasySection,
+          text: Constant.finallyNotification,
           style: TextStyle(
               height: 1.3,
-              fontSize: 15,
+              fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView))
     ]
+  ];
+
+  List<String> bubbleChatList = [
+    Constant.greatFromHere,Constant.finallyNotification
   ];
 
   int _currentIndex = 0;
@@ -47,6 +51,7 @@ class _PostNotificationOnBoardScreenState
       child: Scaffold(
         body: OnBoardInformationScreen(
           isShowNextButton: true,
+          chatText: bubbleChatList[_currentIndex],
           nextButtonFunction: () {
             if (_currentIndex == _questionList.length - 1) {
               Utils.navigateToHomeScreen(context, false);
@@ -77,4 +82,7 @@ class _PostNotificationOnBoardScreenState
       return false;
     }
   }
+
+
+
 }

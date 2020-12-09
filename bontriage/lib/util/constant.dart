@@ -269,6 +269,12 @@ class Constant {
   static String withWhatGender = 'With what gender do you identify?';
   static String whatBiologicalSex =
       'What biological sex were you assigned at birth (note: answering this question helps to provide diagnostic information about your headaches)? ';
+
+  static String greatFromHere =
+      'Great! From here on it is easy. Every day, you can log in to answer a few questions and report headaches as they arise. We need data from headache days as well as non-headache days – that’s how our deep learning system predicts how to improve your headaches.';
+  static String finallyNotification =
+      'Finally, the next two screens will give you a brief introduction to some of the buttons you can use to log your headaches and behaviors.';
+
   static String woman = 'Woman';
   static String man = 'Man';
   static String genderNonConforming = 'Gender non-conforming';
