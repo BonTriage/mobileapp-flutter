@@ -20,6 +20,7 @@ class TextToSpeechRecognition {
       await flutterTts.setVolume(1.0);
       await flutterTts.setPitch(1.0);
       await flutterTts.setSharedInstance(true);
+
       await flutterTts
           .setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
         IosTextToSpeechAudioCategoryOptions.allowBluetooth,
@@ -42,5 +43,9 @@ class TextToSpeechRecognition {
 
   static void startSpeech(String chatText) async{
     await flutterTts.speak(chatText);
+  }
+
+  static void stopSpeech() async{
+    await flutterTts.speak("");
   }
 }

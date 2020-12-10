@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
 
-class SignUpOnBoardBubbleTextView extends StatefulWidget {
+class SignUpOnBoardBubbleTextView extends StatefulWidget  {
   @override
   _StateSignUpOnBoardBubbleTextView createState() =>
       _StateSignUpOnBoardBubbleTextView();
 }
 
 class _StateSignUpOnBoardBubbleTextView
-    extends State<SignUpOnBoardBubbleTextView> {
+    extends State<SignUpOnBoardBubbleTextView> with WidgetsBindingObserver {
   List<List<TextSpan>> _questionList = [
     [
       TextSpan(
@@ -86,18 +87,16 @@ class _StateSignUpOnBoardBubbleTextView
             color: Constant.bubbleChatTextView))
   ];
 
- static List<String> bubbleChatTextView = [
-
-   Constant.welcomeMigraineMentorBubbleTextView,
-   Constant.answeringTheNextBubbleTextView,
-   Constant.letsStarted
-
+  static List<String> bubbleChatTextView = [
+    Constant.welcomeMigraineMentorBubbleTextView,
+    Constant.answeringTheNextBubbleTextView,
+    Constant.letsStarted
   ];
 
   int _currentIndex = 0;
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
+    if (_currentIndex == 0) {
       return true;
     } else {
       setState(() {
@@ -108,26 +107,47 @@ class _StateSignUpOnBoardBubbleTextView
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+        super.initState();
+        WidgetsBinding.instance.addObserver(this);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+   if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+     TextToSpeechRecognition.stopSpeech();
+   }else if(state == AppLifecycleState.resumed){
+     TextToSpeechRecognition.speechToText(bubbleChatTextView[_currentIndex]);
+   }
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         body: OnBoardInformationScreen(
-            isSpannable: true,
-            chatText: bubbleChatTextView[_currentIndex],
-            bubbleChatTextSpanList: _questionList[_currentIndex],
-            isShowNextButton: _currentIndex != (_questionList.length - 1),
-            nextButtonFunction: () {
-              setState(() {
-                _currentIndex++;
-              });
-            },
-            bottomButtonText: Constant.startAssessment,
-            bottomButtonFunction: () {
-              Navigator.pushReplacementNamed(
-                  context, Constant.signUpOnBoardProfileQuestionRouter);
-            },
-            isShowSecondBottomButton: false,
+          isSpannable: true,
+          chatText: bubbleChatTextView[_currentIndex],
+          bubbleChatTextSpanList: _questionList[_currentIndex],
+          isShowNextButton: _currentIndex != (_questionList.length - 1),
+          nextButtonFunction: () {
+            setState(() {
+              _currentIndex++;
+            });
+          },
+          bottomButtonText: Constant.startAssessment,
+          bottomButtonFunction: () {
+            Navigator.pushReplacementNamed(
+                context, Constant.signUpOnBoardProfileQuestionRouter);
+          },
+          isShowSecondBottomButton: false,
           closeButtonFunction: () {
             Utils.navigateToExitScreen(context);
           },

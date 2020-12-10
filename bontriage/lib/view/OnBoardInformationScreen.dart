@@ -192,7 +192,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     BouncingWidget(
-                      onPressed: widget.nextButtonFunction,
+                      onPressed: (){
+                        widget.nextButtonFunction();
+                        TextToSpeechRecognition.stopSpeech();
+                      },
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 5),
