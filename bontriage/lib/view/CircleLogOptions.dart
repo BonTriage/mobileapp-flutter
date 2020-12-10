@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class CircleLogOptions extends StatefulWidget {
   final List<Values> logOptions;
   final bool isForMedication;
+  final bool isAnySleepItemSelected;
   final String preCondition;
   final int overlayNumber;
   final Function(int) onCircleItemSelected;
@@ -22,7 +24,8 @@ class CircleLogOptions extends StatefulWidget {
       this.onCircleItemSelected,
       this.questionType = '',
       this.currentTag,
-      this.onDoubleTapItem})
+      this.onDoubleTapItem,
+      this.isAnySleepItemSelected = false})
       : super(key: key);
 
   @override
@@ -37,6 +40,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
       child: ListView.builder(
         itemCount: widget.logOptions.length,
         scrollDirection: Axis.horizontal,
+        physics: Utils.getScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(left: (index == 0) ? 15 : 0),
@@ -131,6 +135,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                             : Colors.transparent),
                     child: Center(
                       child: SingleChildScrollView(
+                        physics: Utils.getScrollPhysics(),
                         child: Text(
                           widget.logOptions[index].text,
                           textAlign: TextAlign.center,
@@ -155,7 +160,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                     child: Visibility(
                       visible: ((widget.isForMedication && widget.logOptions[index].isSelected) || (widget.logOptions[index].isSelected &&
                           (widget.preCondition
-                              .contains(widget.logOptions[index].text)))),
+                              .contains(widget.logOptions[index].text)) && widget.isAnySleepItemSelected)),
                       child: Container(
                         width: 20,
                         height: 20,
