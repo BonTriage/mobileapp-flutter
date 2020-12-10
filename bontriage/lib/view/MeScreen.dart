@@ -361,7 +361,7 @@ class _MeScreenState extends State<MeScreen>
                       child: Column(
                         children: [
                           Text(
-                            'Hey ''$userName''\nWhat’s been\ngoing on today?',
+                            'Hey ''$userName''!''\nWhat’s been\ngoing on today?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 18,

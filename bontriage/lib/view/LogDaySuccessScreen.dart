@@ -83,20 +83,23 @@ class _LogDaySuccessScreenState extends State<LogDaySuccessScreen> {
                           onPressed: () {
                             //Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
                           },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1.3, color: Constant.chatBubbleGreen),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                Constant.viewTrends,
-                                style: TextStyle(
-                                    color: Constant.chatBubbleGreen,
-                                    fontSize: 15,
-                                    fontFamily: Constant.jostMedium),
+                          child: Visibility(
+                            visible: false,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1.3, color: Constant.chatBubbleGreen),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  Constant.viewTrends,
+                                  style: TextStyle(
+                                      color: Constant.chatBubbleGreen,
+                                      fontSize: 15,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ),
                           ),
