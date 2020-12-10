@@ -188,12 +188,15 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             numberOfSleepItemSelected++;
           }
         });
+
+        Values selectedExpandedSleepItemValue = widget.sleepExpandableWidgetList[0].values.firstWhere((element) => element.isSelected, orElse: () => null);
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
           preCondition: widget.sleepExpandableWidgetList[0].precondition,
           overlayNumber: numberOfSleepItemSelected,
           onCircleItemSelected: _onSleepItemSelected,
           onDoubleTapItem: _onDoubleTapItem,
+          isAnySleepItemSelected: selectedExpandedSleepItemValue != null,
           currentTag: widget.contentType,
         ));
       case 'behavior.premeal':
@@ -735,6 +738,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: SingleChildScrollView(
+                  physics: Utils.getScrollPhysics(),
                   child: Wrap(children: _getChipsWidget()),
                 ),
               ),

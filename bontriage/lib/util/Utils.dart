@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -498,5 +499,10 @@ class Utils {
     currentDate = firstDayDateTime.toUtc().toIso8601String();
     List<String> splitString = currentDate.split('.');
     return '${splitString[0]}Z';
+  }
+
+  ///This method is used to return scroll physics based on the platform
+  static ScrollPhysics getScrollPhysics() {
+    return Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics();
   }
 }

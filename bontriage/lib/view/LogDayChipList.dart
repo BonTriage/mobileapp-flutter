@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class LogDayChipList extends StatefulWidget {
@@ -21,6 +22,7 @@ class _LogDayChipListState extends State<LogDayChipList> {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.question.values.length,
+      physics: Utils.getScrollPhysics(),
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(left: (index == 0) ? 15 : 0),
