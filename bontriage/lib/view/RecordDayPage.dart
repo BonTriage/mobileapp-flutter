@@ -299,7 +299,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                     height: 2,
                   ),
                   Text(
-                    subText,
+                    subText??"",
                     style: TextStyle(
                         color: Constant.chatBubbleGreen60Alpha,
                         fontFamily: Constant.jostRegular,
