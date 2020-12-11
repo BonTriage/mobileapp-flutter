@@ -36,7 +36,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 78,
+      height: 82,
       child: ListView.builder(
         itemCount: widget.logOptions.length,
         scrollDirection: Axis.horizontal,
@@ -121,8 +121,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   child: Container(
                     margin: EdgeInsets.only(right: 10),
                     padding: EdgeInsets.all(10),
-                    width: 68,
-                    height: 68,
+                    width: 72,
+                    height: 72,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -153,8 +153,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   ),
                 ),
                 Container(
-                  width: 67,
-                  height: 67,
+                  width: 71,
+                  height: 71,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Visibility(

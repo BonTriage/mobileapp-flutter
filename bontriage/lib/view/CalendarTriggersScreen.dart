@@ -326,167 +326,180 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
           SizedBox(
             height: 20,
           ),
-          Container(
-            margin: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              Constant.sortedCalenderTextView,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 13,
-                  color: Constant.locationServiceGreen,
-                  fontFamily: Constant.jostRegular),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: 150),
-            child: Container(
-              margin: EdgeInsets.only(left: 20, right: 15),
-              child: SingleChildScrollView(
-                child: StreamBuilder<dynamic>(
-                    stream: _calendarScreenBloc.triggersDataStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data.length == 0) {
-                          userMonthTriggersListModel.clear();
-                        }
-                        if (userMonthTriggersListModel.length == 0) {
-                          userMonthTriggersListModel.addAll(snapshot.data);
-                        }else {
-                          userMonthTriggersListModel.clear();
-                          userMonthTriggersListModel.addAll(snapshot.data);
-                        }
-                        return Wrap(
-                          children: <Widget>[
-                            for (var i = 0;
-                                i < userMonthTriggersListModel.length;
-                                i++)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    var foundElements =
-                                        userMonthTriggersListModel
-                                            .where((e) => e.isSelected);
-                                    if (!userMonthTriggersListModel[i]
-                                        .isSelected) {
-                                      if (foundElements.length < 3) {
-                                        var unSelectedColor =
-                                            triggersColorsListData.firstWhere(
-                                                (element) =>
-                                                    !element.isSelected,
-                                                orElse: () => null);
-                                        if (unSelectedColor != null) {
-                                          userMonthTriggersListModel[i].color =
-                                              unSelectedColor
-                                                  .triggersColorsValue;
-                                          userMonthTriggersListModel[i]
-                                              .isSelected = true;
-                                          unSelectedColor.isSelected = true;
-                                        }
-                                        userMonthTriggersListModel[i]
-                                            .isSelected = true;
-                                      } else {
-                                        Utils.showTriggerSelectionDialog(
-                                            context);
-                                        print(
-                                            "PopUp will be show for more then 3 selected color");
-                                      }
-                                    } else {
-                                      var selectedColor =
-                                          triggersColorsListData.firstWhere(
-                                              (element) =>
-                                                  element.triggersColorsValue ==
-                                                  userMonthTriggersListModel[i]
-                                                      .color,
-                                              orElse: () => null);
-                                      if (selectedColor != null) {
-                                        selectedColor.isSelected = false;
-                                        userMonthTriggersListModel[i]
-                                            .isSelected = false;
-                                      }
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                    right: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Constant.chatBubbleGreen,
-                                          width: 1),
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: userMonthTriggersListModel[i]
-                                              .isSelected
-                                          ? Constant.chatBubbleGreen
-                                          : Colors.transparent),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    child: ConstrainedBox(
-                                      constraints:
-                                          BoxConstraints(minHeight: 10),
-                                      child: Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          Visibility(
-                                            visible:
-                                                userMonthTriggersListModel[i]
-                                                    .isSelected,
-                                            child: Container(
-                                              width: 10,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Constant
-                                                          .bubbleChatTextView,
-                                                      width: 1),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color:
-                                                      userMonthTriggersListModel[
-                                                              i]
-                                                          .color),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 3,
-                                          ),
-                                          Text(
+
+
+
+          StreamBuilder<dynamic>(
+              stream: _calendarScreenBloc.triggersDataStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length == 0) {
+                    userMonthTriggersListModel.clear();
+                  }
+                  if (userMonthTriggersListModel.length == 0) {
+                    userMonthTriggersListModel.addAll(snapshot.data);
+                  }else {
+                    userMonthTriggersListModel.clear();
+                    userMonthTriggersListModel.addAll(snapshot.data);
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Visibility(
+                        visible: userMonthTriggersListModel.length > 0,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 15, right: 15),
+                          child: Text(
+                            Constant.sortedCalenderTextView,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Constant.locationServiceGreen,
+                                fontFamily: Constant.jostRegular),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 150),
+                        child: Container(
+                          margin: EdgeInsets.only(left: 20, right: 15),
+                          child: SingleChildScrollView(
+                            physics: Utils.getScrollPhysics(),
+                            child: Wrap(
+                              children: <Widget>[
+                                for (var i = 0;
+                                    i < userMonthTriggersListModel.length;
+                                    i++)
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        var foundElements =
+                                            userMonthTriggersListModel
+                                                .where((e) => e.isSelected);
+                                        if (!userMonthTriggersListModel[i]
+                                            .isSelected) {
+                                          if (foundElements.length < 3) {
+                                            var unSelectedColor =
+                                                triggersColorsListData.firstWhere(
+                                                    (element) =>
+                                                        !element.isSelected,
+                                                    orElse: () => null);
+                                            if (unSelectedColor != null) {
+                                              userMonthTriggersListModel[i].color =
+                                                  unSelectedColor
+                                                      .triggersColorsValue;
+                                              userMonthTriggersListModel[i]
+                                                  .isSelected = true;
+                                              unSelectedColor.isSelected = true;
+                                            }
                                             userMonthTriggersListModel[i]
-                                                .answerData,
-                                            style: TextStyle(
-                                                color: userMonthTriggersListModel[
-                                                            i]
-                                                        .isSelected
-                                                    ? Constant
-                                                        .bubbleChatTextView
-                                                    : Constant
-                                                        .locationServiceGreen,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                                .isSelected = true;
+                                          } else {
+                                            Utils.showTriggerSelectionDialog(
+                                                context);
+                                            print(
+                                                "PopUp will be show for more then 3 selected color");
+                                          }
+                                        } else {
+                                          var selectedColor =
+                                              triggersColorsListData.firstWhere(
+                                                  (element) =>
+                                                      element.triggersColorsValue ==
+                                                      userMonthTriggersListModel[i]
+                                                          .color,
+                                                  orElse: () => null);
+                                          if (selectedColor != null) {
+                                            selectedColor.isSelected = false;
+                                            userMonthTriggersListModel[i]
+                                                .isSelected = false;
+                                          }
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        right: 10,
+                                        bottom: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Constant.chatBubbleGreen,
+                                              width: 1),
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: userMonthTriggersListModel[i]
+                                                  .isSelected
+                                              ? Constant.chatBubbleGreen
+                                              : Colors.transparent),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        child: ConstrainedBox(
+                                          constraints:
+                                              BoxConstraints(minHeight: 10),
+                                          child: Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            children: [
+                                              Visibility(
+                                                visible:
+                                                    userMonthTriggersListModel[i]
+                                                        .isSelected,
+                                                child: Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Constant
+                                                              .bubbleChatTextView,
+                                                          width: 1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(20),
+                                                      color:
+                                                          userMonthTriggersListModel[
+                                                                  i]
+                                                              .color),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 3,
+                                              ),
+                                              Text(
+                                                userMonthTriggersListModel[i]
+                                                    .answerData,
+                                                style: TextStyle(
+                                                    color: userMonthTriggersListModel[
+                                                                i]
+                                                            .isSelected
+                                                        ? Constant
+                                                            .bubbleChatTextView
+                                                        : Constant
+                                                            .locationServiceGreen,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily:
+                                                        Constant.jostMedium),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                          ],
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
-              ),
-            ),
-          ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              }),
         ],
       ),
     );
