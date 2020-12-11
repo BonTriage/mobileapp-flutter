@@ -235,7 +235,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   children: [
                     Expanded(
                       child: BouncingWidget(
-                        onPressed: widget.bottomButtonFunction,
+                        onPressed: () {
+                          TextToSpeechRecognition.stopSpeech();
+                          widget.bottomButtonFunction();
+                        },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
@@ -265,7 +268,10 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   children: [
                     Expanded(
                       child: BouncingWidget(
-                        onPressed: widget.secondBottomButtonFunction,
+                        onPressed: () {
+                          TextToSpeechRecognition.stopSpeech();
+                          widget.secondBottomButtonFunction();
+                        },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(

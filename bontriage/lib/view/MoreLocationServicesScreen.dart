@@ -30,6 +30,7 @@ class _MoreLocationServicesScreenState
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },

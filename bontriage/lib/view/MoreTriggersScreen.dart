@@ -51,6 +51,7 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },

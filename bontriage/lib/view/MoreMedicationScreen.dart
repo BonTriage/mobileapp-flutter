@@ -51,6 +51,7 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },
@@ -139,6 +140,7 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                         ),
                         Container(
                           child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: () {
                               widget.openTriggerMedicationActionSheetCallback(_valuesList);
                             },

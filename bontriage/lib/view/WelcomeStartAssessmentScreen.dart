@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
 class WelcomeStartAssessmentScreen extends StatefulWidget {
@@ -14,6 +14,15 @@ class WelcomeStartAssessmentScreen extends StatefulWidget {
 
 class _WelcomeStartAssessmentScreenState
     extends State<WelcomeStartAssessmentScreen> {
+  bool _isUserAlreadyLoggedIn = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkUserAlreadyLoggedIn();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -95,55 +104,78 @@ class _WelcomeStartAssessmentScreenState
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Constant.or,
+                  Visibility(
+                    visible: _isUserAlreadyLoggedIn,
+                    child: GestureDetector(
+                      onTap: () {
+                        _moveToHomeScreen();
+                      },
+                      child: Text(
+                        Constant.cancelAssessment,
                         style: TextStyle(
-                          wordSpacing: 1,
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostRegular,
-                          fontSize: 15,
-                        ),
+                            color: Constant.chatBubbleGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: 15,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 1),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, Constant.loginScreenRouter);
-                        },
-                        child: Text(
-                          Constant.signIn,
+                    ),
+                  ),
+                  Visibility(
+                    visible: !_isUserAlreadyLoggedIn,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          Constant.or,
                           style: TextStyle(
-                              color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostBold,
-                              wordSpacing: 1,
-                              fontSize: 15,
-                              decoration: TextDecoration.underline,
-                              decorationThickness: 1),
+                            wordSpacing: 1,
+                            color: Constant.chatBubbleGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: 15,
+                          ),
                         ),
-                      ),
-                      Text(
-                        Constant.toAn,
-                        style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostRegular,
-                          fontSize: 15,
-                          wordSpacing: 1,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, Constant.loginScreenRouter);
+                          },
+                          child: Text(
+                            Constant.signIn,
+                            style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontFamily: Constant.jostBold,
+                                wordSpacing: 1,
+                                fontSize: 15,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1),
+                          ),
                         ),
-                      ),
-                    ],
+                        Text(
+                          Constant.toAn,
+                          style: TextStyle(
+                            color: Constant.chatBubbleGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: 15,
+                            wordSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    Constant.existingAccount,
-                    style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontFamily: Constant.jostRegular,
-                        fontSize: 15,
-                        wordSpacing: 1),
+                  Visibility(
+                    visible: !_isUserAlreadyLoggedIn,
+                    child: Text(
+                      Constant.existingAccount,
+                      style: TextStyle(
+                          color: Constant.chatBubbleGreen,
+                          fontFamily: Constant.jostRegular,
+                          fontSize: 15,
+                          wordSpacing: 1),
+                    ),
                   ),
                 ],
               ),
@@ -156,5 +188,19 @@ class _WelcomeStartAssessmentScreenState
 
   Future<bool> _onBackPressed() async{
     return true;
+  }
+
+  void _checkUserAlreadyLoggedIn() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    setState(() {
+      _isUserAlreadyLoggedIn = sharedPreferences.getBool(Constant.userAlreadyLoggedIn) ?? false;
+    });
+  }
+
+  void _moveToHomeScreen() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isProfileInComplete = sharedPreferences.getBool(Constant.isProfileInCompleteStatus) ?? false;
+    Utils.navigateToHomeScreen(context, isProfileInComplete);
   }
 }

@@ -334,15 +334,61 @@ class _SignUpSecondStepCompassResultState
                     height: 20,
                   ),
                   Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
                       children: [
-                        BouncingWidget(
-                          duration: Duration(milliseconds: 100),
-                          scaleFactor: 1.5,
-                          onPressed: _onBackPressed,
-                          child: Visibility(
-                            visible: isBackButtonHide,
+                        AnimatedPositioned(
+                          left: (isBackButtonHide)
+                              ? 0
+                              : (MediaQuery.of(context).size.width -
+                              190),
+                          duration: Duration(milliseconds: 250),
+                          child: AnimatedOpacity(
+                            opacity:
+                            (isBackButtonHide) ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 250),
+                            child: BouncingWidget(
+                              duration: Duration(milliseconds: 100),
+                              scaleFactor: 1.5,
+                              onPressed: _onBackPressed,
+                              child: Container(
+                                width: 130,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffafd794),
+                                  borderRadius:
+                                  BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    Constant.back,
+                                    style: TextStyle(
+                                      color:
+                                      Constant.bubbleChatTextView,
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: BouncingWidget(
+                            duration: Duration(milliseconds: 100),
+                            scaleFactor: 1.5,
+                            onPressed: () {
+                              setState(() {
+                                if (_buttonPressedValue >= 0 &&
+                                    _buttonPressedValue < 2) {
+                                  _buttonPressedValue++;
+                                  isBackButtonHide = true;
+                                } else {
+                                  moveToNextScreen();
+                                }
+                              });
+                            },
                             child: Container(
                               width: 130,
                               height: 34,
@@ -352,44 +398,13 @@ class _SignUpSecondStepCompassResultState
                               ),
                               child: Center(
                                 child: Text(
-                                  Constant.back,
+                                  Constant.next,
                                   style: TextStyle(
-                                      color: Constant.bubbleChatTextView,
-                                      fontSize: 15,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        BouncingWidget(
-                          duration: Duration(milliseconds: 100),
-                          scaleFactor: 1.5,
-                          onPressed: () {
-                            setState(() {
-                              if (_buttonPressedValue >= 0 &&
-                                  _buttonPressedValue < 2) {
-                                _buttonPressedValue++;
-                                isBackButtonHide = true;
-                              } else {
-                                moveToNextScreen();
-                              }
-                            });
-                          },
-                          child: Container(
-                            width: 130,
-                            height: 34,
-                            decoration: BoxDecoration(
-                              color: Color(0xffafd794),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(
-                                Constant.next,
-                                style: TextStyle(
                                     color: Constant.bubbleChatTextView,
-                                    fontSize: 15,
-                                    fontFamily: Constant.jostMedium),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

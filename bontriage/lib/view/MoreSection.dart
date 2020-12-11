@@ -37,6 +37,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
       child: Column(
         children: [
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
               if(widget.currentTag != null) {
                 switch(widget.currentTag) {

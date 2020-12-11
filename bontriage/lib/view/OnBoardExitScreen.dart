@@ -40,6 +40,7 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
         isShowNextButton: false,
         bottomButtonText: Constant.continueAssessment,
         bottomButtonFunction: () {
+          TextToSpeechRecognition.stopSpeech();
           Utils.navigateToUserOnProfileBoard(context);
         },
         chatText: widget.isAlreadyLoggedIn
@@ -50,7 +51,9 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
             ? Constant.saveAndFinishLater
             : Constant.exitAndLoseProgress,
         secondBottomButtonFunction: () {
+
           if (widget.isAlreadyLoggedIn) {
+            TextToSpeechRecognition.stopSpeech();
             Utils.navigateToHomeScreen(context, true);
           } else {
             deleteUserAllWelComeBoardData();
@@ -62,7 +65,7 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
   }
 
   void deleteUserAllWelComeBoardData() async {
-    TextToSpeechRecognition.speechToText("");
+    TextToSpeechRecognition.stopSpeech();
     await SignUpOnBoardProviders.db.deleteAllTableData();
     //Navigator.pop(context);
     //SystemNavigator.pop() does not work in Apple in alternative we can use exit(0) but it feels like the app got crashed and Apple may suspend your app because it's against Apple Human Interface guidelines to exit the app programmatically.

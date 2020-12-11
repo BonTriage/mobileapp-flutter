@@ -33,6 +33,7 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },
