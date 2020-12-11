@@ -1,5 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -71,6 +72,7 @@ class _PartOneOnBoardBottomViewState extends State<PartOneOnBoardBottomView> {
                   duration: Duration(milliseconds: 100),
                   scaleFactor: 1.5,
                   onPressed: () {
+                    TextToSpeechRecognition.stopSpeech();
                     widget.nextButtonFunction();
                   },
                   child: Container(

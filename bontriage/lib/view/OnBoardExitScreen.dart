@@ -7,6 +7,7 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OnBoardInformationScreen.dart';
+import 'dart:io' show Platform;
 
 class OnBoardExitScreen extends StatefulWidget {
   final bool isAlreadyLoggedIn;
@@ -19,7 +20,6 @@ class OnBoardExitScreen extends StatefulWidget {
 }
 
 class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
-
   //TODO: Generate a separate list for text to speech
 
   @override
@@ -51,7 +51,6 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
             ? Constant.saveAndFinishLater
             : Constant.exitAndLoseProgress,
         secondBottomButtonFunction: () {
-
           if (widget.isAlreadyLoggedIn) {
             TextToSpeechRecognition.stopSpeech();
             Utils.navigateToHomeScreen(context, true);
@@ -69,6 +68,10 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
     await SignUpOnBoardProviders.db.deleteAllTableData();
     //Navigator.pop(context);
     //SystemNavigator.pop() does not work in Apple in alternative we can use exit(0) but it feels like the app got crashed and Apple may suspend your app because it's against Apple Human Interface guidelines to exit the app programmatically.
-    SystemNavigator.pop();
+    if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else {
+      exit(0);
+    }
   }
 }

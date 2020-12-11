@@ -11,8 +11,7 @@ class TextToSpeechRecognition {
 
     if (Platform.isAndroid) {
       // Android-specific code
-      await flutterTts.setSpeechRate(1.0);
-
+      await flutterTts.setSpeechRate(0.95);
       await flutterTts.setPitch(1.0);
     } else if (Platform.isIOS) {
       // iOS-specific code
@@ -46,8 +45,6 @@ class TextToSpeechRecognition {
   }
 
   static void stopSpeech() async{
-    await flutterTts.speak("");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, true);
+    await flutterTts.stop();
   }
 }

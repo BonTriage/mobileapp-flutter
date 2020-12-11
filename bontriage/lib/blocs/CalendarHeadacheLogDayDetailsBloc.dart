@@ -84,7 +84,7 @@ class CalendarHeadacheLogDayDetailsBloc {
     if (response.headache.length > 0 ||
         response.behaviours.length > 0 ||
         response.triggers.length > 0 ||
-        response.medication.length > 0) {
+        response.medication.length > 0 || response.logDayNote.length > 0) {
       userHeadacheLogDayDetailsModel.headacheLogDayListData = [];
       userHeadacheLogDayDetailsModel.isDayLogged = false;
       userHeadacheLogDayDetailsModel.isHeadacheLogged = false;
@@ -255,6 +255,14 @@ class CalendarHeadacheLogDayDetailsBloc {
     ///To:Do : Need to Show triggers Data
     response.triggers.forEach((element) {
       userHeadacheLogDayDetailsModel.isDayLogged = true;
+    });
+    response.logDayNote.forEach((element) {
+      var logDayNoteData = element.mobileEventDetails.firstWhere(
+              (mobileEventElement) =>
+          mobileEventElement.questionTag == Constant.logDayNoteTag,
+          orElse: () => null);
+      if(logDayNoteData != null)
+      userHeadacheLogDayDetailsModel.logDayNote = logDayNoteData.value;
     });
 
     return userHeadacheLogDayDetailsModel;

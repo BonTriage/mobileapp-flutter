@@ -140,7 +140,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                           widget.logOptions[index].text,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: (widget.logOptions[index].isSelected)
                                 ? Constant.bubbleChatTextView
                                 : Constant.locationServiceGreen,

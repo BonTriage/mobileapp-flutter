@@ -48,6 +48,40 @@ class _RecordDayPageState extends State<RecordDayPage>
           SizedBox(
             height: 10,
           ),
+          Row(
+            children: [
+              Visibility(
+                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                child: Text(
+                  'Note:',
+                  style: TextStyle(
+                      color: Constant
+                          .chatBubbleGreen60Alpha,
+                      fontFamily: Constant.jostRegular,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Visibility(
+                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                child: Text(
+                  widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                  style: TextStyle(
+                      color: Constant
+                          .addCustomNotificationTextColor,
+                      fontFamily: Constant.jostRegular,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(

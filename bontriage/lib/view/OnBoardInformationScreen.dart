@@ -180,16 +180,6 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           ),
                         )
 
-                        /*Text(
-                        widget.chatText,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Constant.bubbleChatTextView,
-                          fontFamily: Constant.jostBold,
-                          height: 1.2,
-                        ),
-                      ),*/
-
                         ),
                   ),
                 ),
@@ -203,7 +193,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   children: [
                     BouncingWidget(
                       onPressed: (){
-                        stopCurrentSpeech();
+                        TextToSpeechRecognition.stopSpeech();
                         widget.nextButtonFunction();
                       },
                       child: Container(
@@ -315,9 +305,5 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
     });
   }
 
-  void stopCurrentSpeech() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Constant.chatBubbleVolumeState, !isVolumeOn);
-    TextToSpeechRecognition.stopSpeech();
-  }
+
 }

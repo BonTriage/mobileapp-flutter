@@ -379,6 +379,7 @@ class _SignUpSecondStepCompassResultState
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
                             onPressed: () {
+                              TextToSpeechRecognition.stopSpeech();
                               setState(() {
                                 if (_buttonPressedValue >= 0 &&
                                     _buttonPressedValue < 2) {

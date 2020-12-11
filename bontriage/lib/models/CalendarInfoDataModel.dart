@@ -5,8 +5,9 @@ class CalendarInfoDataModel {
   List<Headache> triggers;
   List<Headache> medication;
   List<Headache> behaviours;
+  List<Headache> logDayNote;
 
-  CalendarInfoDataModel({this.headache, this.triggers,this.medication,this.behaviours});
+  CalendarInfoDataModel({this.headache, this.triggers,this.medication,this.behaviours,this.logDayNote});
 
   CalendarInfoDataModel.fromJson(Map<String, dynamic> json) {
     if (json['headache'] != null) {
@@ -34,6 +35,13 @@ class CalendarInfoDataModel {
         behaviours.add(new Headache.fromJson(v));
       });
     }
+
+    if (json['note'] != null) {
+      logDayNote = new List<Headache>();
+      json['note'].forEach((v) {
+        logDayNote.add(new Headache.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -49,6 +57,9 @@ class CalendarInfoDataModel {
     }
     if (this.behaviours != null) {
       data['behaviors'] = this.behaviours.map((v) => v.toJson()).toList();
+    }
+    if (this.logDayNote != null) {
+      data['note'] = this.logDayNote.map((v) => v.toJson()).toList();
     }
     return data;
   }

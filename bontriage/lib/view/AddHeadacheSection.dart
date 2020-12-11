@@ -18,6 +18,7 @@ import 'package:mobile/view/DateTimePicker.dart';
 import 'package:mobile/view/LogDayChipList.dart';
 import 'package:mobile/view/TimeSection.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
+import 'dart:io' show Platform;
 
 class AddHeadacheSection extends StatefulWidget {
   final String headerText;
@@ -663,7 +664,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             child: Text(
               widget.headerText,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: Platform.isAndroid ? 16 : 17,
                   color: Constant.chatBubbleGreen,
                   fontFamily: Constant.jostMedium),
             ),
@@ -679,7 +680,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             child: Text(
               widget.subText,
               style: TextStyle(
-                  fontSize: 14,
+                  fontSize: Platform.isAndroid ? 14 : 15,
                   color: Constant.locationServiceGreen,
                   fontFamily: Constant.jostRegular),
             ),
@@ -727,7 +728,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     color: Constant.locationServiceGreen,
                     fontFamily: Constant.jostRegular,
                     fontWeight: FontWeight.w500,
-                    fontSize: 14),
+                    fontSize: Platform.isAndroid ? 14 : 15),
               ),
             ),
             SizedBox(
@@ -769,7 +770,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontFamily: Constant.jostRegular,
-                    fontSize: 14,
+                    fontSize: Platform.isAndroid ? 14 : 15,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -801,7 +802,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           style: TextStyle(
                               color: Constant.splashColor,
                               fontFamily: Constant.jostRegular,
-                              fontSize: 14),
+                              fontSize: Platform.isAndroid ? 14 : 15),
                         ),
                       ),
                     ),
@@ -821,7 +822,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontFamily: Constant.jostRegular,
-                    fontSize: 14,
+                    fontSize: Platform.isAndroid ? 14 : 15,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -893,7 +894,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                 style: TextStyle(
                                     color: Constant.splashColor,
                                     fontFamily: Constant.jostRegular,
-                                    fontSize: 14),
+                                    fontSize: Platform.isAndroid ? 14 : 15),
                                 cursorColor: Constant.chatBubbleGreen,
                                 buildCounter: (BuildContext context, { int currentLength, int maxLength, bool isFocused }) => null,
                                 decoration: InputDecoration(
@@ -901,7 +902,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                   hintStyle: TextStyle(
                                       color: Constant.splashColor,
                                       fontFamily: Constant.jostRegular,
-                                      fontSize: 14),
+                                      fontSize: Platform.isAndroid ? 14 : 15),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.circular(3)),
                                     borderSide: BorderSide(
@@ -932,7 +933,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                               style: TextStyle(
                                   color: Constant.splashColor,
                                   fontFamily: Constant.jostRegular,
-                                  fontSize: 14),
+                                  fontSize: Platform.isAndroid ? 14 : 15),
                             ),
                           ),
                         ),
@@ -1003,7 +1004,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     Text(
                       '+ ',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: Platform.isAndroid ? 14 : 15,
                         color: Constant.addCustomNotificationTextColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: Constant.jostRegular,
@@ -1013,7 +1014,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       child: Text(
                         'Add another dosage time for $medName',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Platform.isAndroid ? 14 : 15,
                           color: Constant.addCustomNotificationTextColor,
                           fontWeight: FontWeight.w500,
                           fontFamily: Constant.jostRegular,
@@ -1069,7 +1070,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontFamily: Constant.jostRegular,
-                                fontSize: 14,
+                                fontSize: Platform.isAndroid ? 14 : 15,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -1106,7 +1107,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontFamily: Constant.jostRegular,
-                                fontSize: 14,
+                                fontSize: Platform.isAndroid ? 14 : 15,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -1126,7 +1127,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                 ? selectedTriggerValue
                                 : '',
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: Platform.isAndroid ? 14 : 15,
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.unselectedTextColor),
                             cursorColor: Constant.unselectedTextColor,
@@ -1136,7 +1137,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                   vertical: 5, horizontal: 10),
                               hintText: Constant.tapToType,
                               hintStyle: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: Platform.isAndroid ? 14 : 15,
                                   color: Constant.unselectedTextColor,
                                   fontFamily: Constant.jostRegular),
                               filled: true,
@@ -1190,7 +1191,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontFamily: Constant.jostRegular,
-                                fontSize: 14,
+                                fontSize: Platform.isAndroid ? 14 : 15,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -1263,7 +1264,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontFamily: Constant.jostRegular,
-                      fontSize: 14,
+                      fontSize: Platform.isAndroid ? 14 : 15,
                       fontWeight: FontWeight.w500),
                 ),
               ),
@@ -1295,7 +1296,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             style: TextStyle(
                                 color: Constant.splashColor,
                                 fontFamily: Constant.jostRegular,
-                                fontSize: 14),
+                                fontSize: Platform.isAndroid ? 14 : 15),
                           ),
                         ),
                       ),
@@ -1322,7 +1323,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   child: Text(
                     'Tap here to remove this dose',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: Platform.isAndroid ? 14 : 15,
                       color: Constant.addCustomNotificationTextColor,
                       fontWeight: FontWeight.w500,
                       fontFamily: Constant.jostRegular,
@@ -1340,7 +1341,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontFamily: Constant.jostRegular,
-                      fontSize: 14,
+                      fontSize: Platform.isAndroid ? 14 : 15,
                       fontWeight: FontWeight.w500),
                 ),
               ),
@@ -1418,7 +1419,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                   style: TextStyle(
                                       color: Constant.splashColor,
                                       fontFamily: Constant.jostRegular,
-                                      fontSize: 14),
+                                      fontSize: Platform.isAndroid ? 14 : 15),
                                   cursorColor: Constant.chatBubbleGreen,
                                   buildCounter: (BuildContext context, { int currentLength, int maxLength, bool isFocused }) => null,
                                   decoration: InputDecoration(
@@ -1426,7 +1427,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                       hintStyle: TextStyle(
                                           color: Constant.splashColor,
                                           fontFamily: Constant.jostRegular,
-                                          fontSize: 14),
+                                          fontSize: Platform.isAndroid ? 14 : 15),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(3)),
                                         borderSide: BorderSide(
@@ -1457,7 +1458,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                 style: TextStyle(
                                     color: Constant.splashColor,
                                     fontFamily: Constant.jostRegular,
-                                    fontSize: 14),
+                                    fontSize: Platform.isAndroid ? 14 : 15),
                               ),
                             ),
                           ),
@@ -1545,7 +1546,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   color: element.isSelected
                       ? Constant.bubbleChatTextView
                       : Constant.locationServiceGreen,
-                  fontSize: 12,
+                  fontSize: Platform.isAndroid ? 12 : 13,
                   fontWeight: FontWeight.w500,
                   fontFamily: Constant.jostRegular),
             ),

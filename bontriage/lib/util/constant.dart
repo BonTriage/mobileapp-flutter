@@ -320,6 +320,7 @@ class Constant {
   static const String QuestionLocationType = 'location';
   static const String HeadacheTypeTag = 'headacheType';
   static const String logDayMedicationTag = 'medication';
+  static const String logDayNoteTag = 'logday.note';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =

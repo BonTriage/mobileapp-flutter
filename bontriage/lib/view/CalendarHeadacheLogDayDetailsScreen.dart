@@ -112,7 +112,8 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                           hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
                                           dateTime: _dateTime,
                                           userHeadacheLogDayDetailsModel:
-                                              userHeadacheLogDayDetailsModel)
+                                              userHeadacheLogDayDetailsModel),
+
                                     ],
                                   );
                                 } else {

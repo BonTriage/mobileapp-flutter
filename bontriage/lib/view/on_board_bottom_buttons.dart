@@ -1,5 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -32,58 +33,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: Constant.chatBubbleHorizontalPadding),
-          child: /*Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-                Visibility(
-                  visible: widget.currentIndex != 0,
-                  child: BouncingWidget(
-                    duration: Duration(milliseconds: 100),
-                    scaleFactor: 1.5,
-                    onPressed: widget.backButtonFunction,
-                    child: Container(
-                      width: 130,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: Color(0xffafd794),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          Constant.back,
-                          style: TextStyle(
-                              color: Constant.bubbleChatTextView,
-                              fontSize: 15,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              BouncingWidget(
-                duration: Duration(milliseconds: 100),
-                scaleFactor: 1.5,
-                onPressed: widget.nextButtonFunction,
-                child: Container(
-                  width: 130,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: Color(0xffafd794),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      Constant.next,
-                      style: TextStyle(
-                          color: Constant.bubbleChatTextView,
-                          fontSize: 15,
-                          fontFamily: Constant.jostMedium),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),*/
+          child:
           Stack(
             children: [
               AnimatedPositioned(
@@ -131,6 +81,7 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                   duration: Duration(milliseconds: 100),
                   scaleFactor: 1.5,
                   onPressed: () {
+                    TextToSpeechRecognition.stopSpeech();
                     widget.nextButtonFunction();
                   },
                   child: Container(

@@ -16,7 +16,7 @@ import 'package:mobile/view/AddNoteBottomSheet.dart';
 import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:io' show Platform;
 import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
@@ -45,9 +45,9 @@ class _LogDayScreenState extends State<LogDayScreen>
   @override
   void initState() {
     super.initState();
-    if(widget.selectedDateTime == null) {
+    if (widget.selectedDateTime == null) {
       _dateTime = DateTime.now();
-    }else{
+    } else {
       _dateTime = widget.selectedDateTime;
     }
     _logDayBloc = LogDayBloc(widget.selectedDateTime);
@@ -165,7 +165,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   child: Text(
                                     Constant.doubleTapAnItem,
                                     style: TextStyle(
-                                        fontSize: 13,
+                                        fontSize: Platform.isAndroid ? 13 : 14,
                                         color: Constant.doubleTapTextColor,
                                         fontFamily: Constant.jostRegular),
                                   ),
