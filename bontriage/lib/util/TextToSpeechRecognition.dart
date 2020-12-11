@@ -35,7 +35,7 @@ class TextToSpeechRecognition {
         startSpeech(chatText);
       });
     } else {
-        await flutterTts.speak("");
+        await flutterTts.stop();
 
     }
   }

@@ -53,7 +53,10 @@ class CalendarHeadacheLogDayDetailsBloc {
         if (response != null && response is CalendarInfoDataModel) {
           print(response);
           getHeadacheLogDayData(response);
-          userHeadacheLogDayDetailsModel.headacheLogDayListData.removeWhere((element) => element.imagePath == null);
+          if(userHeadacheLogDayDetailsModel.headacheLogDayListData != null) {
+            userHeadacheLogDayDetailsModel.headacheLogDayListData.removeWhere((
+                element) => element.imagePath == null);
+          }
           calendarLogDayDataSink.add(userHeadacheLogDayDetailsModel);
           networkDataSink.add(Constant.success);
         }
