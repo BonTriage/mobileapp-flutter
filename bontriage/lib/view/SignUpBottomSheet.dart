@@ -296,7 +296,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                         if (valueData == null) {
                           if (!_isExtraDataAdded) {
                             widget.question.values.add(
-                                Values(text: searchText));
+                                Values(text: searchText, isNewlyAdded: true));
                             _isExtraDataAdded = true;
                           } else {
                             widget.question.values.last.text = searchText;
@@ -341,6 +341,8 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
+                                if(!widget.question.values[index].isSelected && widget.question.values[index].isNewlyAdded)
+                                  _isExtraDataAdded = false;
                                 widget.question.values[index].isSelected =
                                 !widget.question.values[index].isSelected;
                                 widget.selectedAnswerCallback(index);

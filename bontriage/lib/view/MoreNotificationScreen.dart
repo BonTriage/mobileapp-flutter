@@ -52,6 +52,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen> with Si
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },

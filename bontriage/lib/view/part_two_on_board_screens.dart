@@ -17,6 +17,7 @@ import 'package:mobile/view/on_board_chat_bubble.dart';
 import 'package:mobile/view/on_board_select_options.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PartTwoOnBoardScreens extends StatefulWidget {
   final String argumentsName;
@@ -412,6 +413,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                   (model) => model.questionTag == "nameClinicalImpression");
           Navigator.pop(context, userHeadacheName.answer);
         } else {
+          SelectedAnswers nameClinicalImpressionSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == "nameClinicalImpression", orElse: () => null);
+          if(nameClinicalImpressionSelectedAnswer != null) {
+            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            sharedPreferences.setString(Constant.userHeadacheName, nameClinicalImpressionSelectedAnswer.answer);
+          }
           Navigator.pushReplacementNamed(context,
               Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
         }

@@ -35,6 +35,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                     height: 40,
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       Navigator.of(context).pop();
                     },

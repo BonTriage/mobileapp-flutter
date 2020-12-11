@@ -68,6 +68,7 @@ class _MoreSexScreenState
                 height: 40,
               ),
               GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () {
                   Navigator.of(context).pop();
                 },

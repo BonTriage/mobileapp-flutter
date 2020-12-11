@@ -43,6 +43,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                           height: 40,
                         ),
                         GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             Navigator.of(context).pop();
                           },

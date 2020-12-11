@@ -149,6 +149,7 @@ class _MeScreenState extends State<MeScreen>
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         widget.navigateToOtherScreenCallback(
                             Constant.welcomeStartAssessmentScreenRouter, null);

@@ -31,6 +31,7 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                       height: 40,
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context).pop();
                       },
