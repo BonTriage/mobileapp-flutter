@@ -421,7 +421,7 @@ class Constant {
   static String calculatedSeverityCalendarTextView =
       ' Calculated from your Headache Score, see the most severe headache on a particular day';
 
-  static String LogDayNoHeadacheTextView =
+  static String logDayNoHeadacheTextView =
       'We noticed you didn’t log a headache today. Can you confirm what happened?';
 
   static String deleteLog = ' Delete Log';

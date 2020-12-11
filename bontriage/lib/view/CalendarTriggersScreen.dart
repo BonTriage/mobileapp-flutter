@@ -117,8 +117,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Image(
                           image: AssetImage(Constant.backArrow),
-                          width: 15,
-                          height: 15,
+                          width: 17,
+                          height: 17,
                         ),
                       ),
                     ),
@@ -134,7 +134,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         monthName + " " + currentYear.toString(),
                         style: TextStyle(
                             color: Constant.chatBubbleGreen,
-                            fontSize: 14,
+                            fontSize: 15,
                             fontFamily: Constant.jostRegular),
                       ),
                     ),
@@ -158,8 +158,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Image(
                           image: AssetImage(Constant.nextArrow),
-                          width: 15,
-                          height: 15,
+                          width: 17,
+                          height: 17,
                         ),
                       ),
                     ),
@@ -291,7 +291,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       Text(
                         'Headache-free day',
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 14,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -313,7 +313,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       Text(
                         'Headache day',
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 14,
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular),
                       ),
@@ -332,7 +332,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
               Constant.sortedCalenderTextView,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   color: Constant.locationServiceGreen,
                   fontFamily: Constant.jostRegular),
             ),
@@ -467,7 +467,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                                         .bubbleChatTextView
                                                     : Constant
                                                         .locationServiceGreen,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w500,
                                                 fontFamily:
                                                     Constant.jostMedium),

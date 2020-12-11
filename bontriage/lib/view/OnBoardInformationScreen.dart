@@ -42,7 +42,7 @@ class OnBoardInformationScreen extends StatefulWidget {
 }
 
 class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin , WidgetsBindingObserver {
   bool isVolumeOn = false;
   AnimationController _animationController;
 
@@ -59,12 +59,22 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     setVolumeIcon();
     _animationController =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animationController.forward();
     TextToSpeechRecognition.speechToText(widget.chatText);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      TextToSpeechRecognition.speechToText(widget.chatText);
+    }
   }
 
   @override
@@ -79,8 +89,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -193,8 +203,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                   children: [
                     BouncingWidget(
                       onPressed: (){
+                        stopCurrentSpeech();
                         widget.nextButtonFunction();
-                        TextToSpeechRecognition.stopSpeech();
                       },
                       child: Container(
                         padding:
@@ -297,5 +307,11 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
         isVolumeOn = false;
       }
     });
+  }
+
+  void stopCurrentSpeech() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, !isVolumeOn);
+    TextToSpeechRecognition.stopSpeech();
   }
 }

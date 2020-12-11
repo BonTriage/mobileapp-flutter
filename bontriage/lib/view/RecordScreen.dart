@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'CalendarScreen.dart';
-import 'CalendarTriggersScreen.dart';
 
 class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
@@ -22,15 +19,11 @@ class _RecordScreenState extends State<RecordScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    print('Record Screen');
   }
 
   @override
   void didUpdateWidget(RecordScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     getTabPosition();
   }
@@ -60,10 +53,10 @@ class _RecordScreenState extends State<RecordScreen> {
                       });
                     },
                     labelStyle: TextStyle(
-                        fontSize: 13.0, fontWeight: FontWeight.bold),
+                        fontSize: 15, fontFamily: Constant.jostMedium),
                     //For Selected tab
                     unselectedLabelStyle: TextStyle(
-                        fontSize: 13.0, fontWeight: FontWeight.normal),
+                        fontSize: 15, fontFamily: Constant.jostRegular),
                     //For Un-selected Tabs
                     labelColor: Color(0xff0E232F),
                     unselectedLabelColor: Color(0xffafd794),

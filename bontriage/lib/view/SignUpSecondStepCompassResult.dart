@@ -55,7 +55,6 @@ class _SignUpSecondStepCompassResultState
 
   @override
   void didUpdateWidget(SignUpSecondStepCompassResult oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 

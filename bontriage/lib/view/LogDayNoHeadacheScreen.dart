@@ -174,7 +174,7 @@ class _LogDayNoHeadacheScreenState extends State<LogDayNoHeadacheScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              Constant.LogDayNoHeadacheTextView,
+              Constant.logDayNoHeadacheTextView,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.locationServiceGreen,
