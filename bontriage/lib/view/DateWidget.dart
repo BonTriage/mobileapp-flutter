@@ -118,17 +118,17 @@ class DateWidget extends StatelessWidget {
   TextStyle setTextViewStyle(int calendarDateViewType) {
     if (calendarDateViewType == 0) {
       return TextStyle(
-          fontSize: 14,
+          fontSize: 15,
           color: isCurrentDate() ? Colors.white : Colors.black,
           fontFamily: Constant.jostRegular);
     } else if (calendarDateViewType == 1) {
       return TextStyle(
-          fontSize: 13,
+          fontSize: 15,
           color: isCurrentDate() ? Colors.white : Constant.locationServiceGreen,
           fontFamily: Constant.jostRegular);
     } else {
       return TextStyle(
-          fontSize: 13,
+          fontSize: 15,
           color: isCurrentDate() ? Colors.white : Constant.locationServiceGreen,
           fontFamily: Constant.jostRegular);
     }

@@ -35,7 +35,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     emailTextEditingController = TextEditingController();
     passwordTextEditingController = TextEditingController();
@@ -47,7 +46,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     emailTextEditingController.dispose();
     passwordTextEditingController.dispose();
@@ -458,8 +456,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         _errorMsg = Constant.signUpEmilFieldAlertMessage;
         _isShowAlert = true;
       });
-    } else if (passwordValue.length < 8 &&
-        !Utils.validatePassword(passwordValue)) {
+    } else if (passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
       setState(() {
         _errorMsg = Constant.signUpAlertMessage;
         _isShowAlert = true;

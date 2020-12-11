@@ -29,7 +29,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void didUpdateWidget(CalendarScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     getCurrentPositionOfTabBar();
   }
@@ -57,12 +56,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     }
                   },
                   child: CircleAvatar(
-                    radius: 15,
+                    radius: 16,
                     backgroundColor: Constant.backgroundColor.withOpacity(0.85),
                     child: Image(
                       image: AssetImage(Constant.calenderBackArrow),
-                      width: 14,
-                      height: 14,
+                      width: 15,
+                      height: 15,
                     ),
                   ),
                 ),
@@ -73,7 +72,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   currentIndex == 0 ? 'Triggers' : 'Intensity',
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
-                      fontSize: 18,
+                      fontSize: 19,
                       fontWeight: FontWeight.w500,
                       fontFamily: Constant.jostMedium),
                 ),
@@ -92,12 +91,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     }
                   },
                   child: CircleAvatar(
-                    radius: 15,
+                    radius: 16,
                     backgroundColor: Constant.backgroundColor.withOpacity(0.85),
                     child: Image(
                       image: AssetImage(Constant.calenderNextArrow),
-                      width: 14,
-                      height: 14,
+                      width: 15,
+                      height: 15,
                     ),
                   ),
                 ),

@@ -30,7 +30,7 @@ class OnBoardChatBubble extends StatefulWidget {
 }
 
 class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   bool isVolumeOn = false;
   AnimationController _animationController;
 
@@ -46,8 +46,8 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     _animationController =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
@@ -59,17 +59,24 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    }
+  }
+
+  @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didUpdateWidget(OnBoardChatBubble oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
     if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
@@ -210,7 +217,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
     );
   }
 
-  void setVolumeIcon() async{
+  void setVolumeIcon() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
     setState(() {

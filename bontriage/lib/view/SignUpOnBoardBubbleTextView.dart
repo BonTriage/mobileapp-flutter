@@ -11,7 +11,7 @@ class SignUpOnBoardBubbleTextView extends StatefulWidget  {
 }
 
 class _StateSignUpOnBoardBubbleTextView
-    extends State<SignUpOnBoardBubbleTextView> with WidgetsBindingObserver {
+    extends State<SignUpOnBoardBubbleTextView> {
   List<List<TextSpan>> _questionList = [
     [
       TextSpan(
@@ -108,18 +108,9 @@ class _StateSignUpOnBoardBubbleTextView
 
   @override
   void initState() {
-    // TODO: implement initState
         super.initState();
-        WidgetsBinding.instance.addObserver(this);
   }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-   if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
-     TextToSpeechRecognition.stopSpeech();
-   }else if(state == AppLifecycleState.resumed){
-     TextToSpeechRecognition.speechToText(bubbleChatTextView[_currentIndex]);
-   }
-  }
+
 
 
   @override

@@ -36,7 +36,7 @@ class TextToSpeechRecognition {
         startSpeech(chatText);
       });
     } else {
-        await flutterTts.stop();
+        await flutterTts.speak("");
 
     }
   }
@@ -47,5 +47,7 @@ class TextToSpeechRecognition {
 
   static void stopSpeech() async{
     await flutterTts.speak("");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constant.chatBubbleVolumeState, true);
   }
 }
