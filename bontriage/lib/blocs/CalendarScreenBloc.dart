@@ -61,6 +61,7 @@ class CalendarScreenBloc {
       } else {
         if (response != null && response is CalendarInfoDataModel) {
           print(response);
+          userMonthTriggersData.clear();
           UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel =
               setAllCalendarDataInToModel(response, userProfileInfoData.userId);
           triggersDataSink.add(userMonthTriggersData);

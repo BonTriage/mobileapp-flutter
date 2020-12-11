@@ -50,7 +50,7 @@ class DateWidget extends StatelessWidget {
             ),
             setTriggersViewOne(calendarType, triggersListData.length),
             setTriggersViewTwo(calendarType, triggersListData.length),
-            setTriggersViewThree(calendarType, triggersListData.length),
+            setTriggersViewThree(calendarType,triggersListData.length),
             Visibility(
               visible: calendarType == 0 ? false : calendarType == 2,
               child: Container(
@@ -176,7 +176,7 @@ class DateWidget extends StatelessWidget {
 
   Visibility setTriggersViewTwo(int calendarType, int triggersCount) {
     if (calendarType == 1) {
-      if (triggersCount == 2 || triggersCount >= 3) {
+      if (triggersCount == 1 || triggersCount == 2 || triggersCount >= 3) {
         return Visibility(
           visible: checkVisibilityForDateTriggers(1),
           child: Container(
@@ -213,7 +213,7 @@ class DateWidget extends StatelessWidget {
 
   Visibility setTriggersViewThree(int calendarType, int triggersCount) {
     if (calendarType == 1) {
-      if (triggersCount >= 3) {
+      if (triggersCount == 1 || triggersCount == 2 || triggersCount >= 3) {
         return Visibility(
           visible: checkVisibilityForDateTriggers(2),
           child: Container(

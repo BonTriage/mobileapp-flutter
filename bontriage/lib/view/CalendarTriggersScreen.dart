@@ -107,6 +107,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         DateTime dateTime =
                             DateTime(_dateTime.year, _dateTime.month - 1);
@@ -126,6 +127,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       width: 30,
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         _openDatePickerBottomSheet(
                             CupertinoDatePickerMode.date);
@@ -326,9 +328,6 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
           SizedBox(
             height: 20,
           ),
-
-
-
           StreamBuilder<dynamic>(
               stream: _calendarScreenBloc.triggersDataStream,
               builder: (context, snapshot) {
