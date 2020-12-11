@@ -62,7 +62,7 @@ class TabNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
       TabNavigatorRoutes.root: (context) {
-        print(root);
+        print('Root name: $root');
        return Container();
       },
       TabNavigatorRoutes.meRoot: (context) => MeScreen(
@@ -139,6 +139,7 @@ class TabNavigator extends StatelessWidget {
         key: navigatorKey,
         initialRoute: root,
         onGenerateRoute: (routeSettings) {
+          print('Route name ${routeSettings.name}');
           return MaterialPageRoute(
               builder: (context) => routeBuilders[routeSettings.name](context));
         });
