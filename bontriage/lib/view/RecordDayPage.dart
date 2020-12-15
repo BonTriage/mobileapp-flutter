@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/LogDayScreenArgumentModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
@@ -8,12 +9,14 @@ class RecordDayPage extends StatefulWidget {
   final bool hasData;
   final DateTime dateTime;
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
+  final Function(bool, dynamic) openHeadacheLogDayScreenCallback;
 
   const RecordDayPage(
       {Key key,
       this.hasData = false,
       this.dateTime,
-      this.userHeadacheLogDayDetailsModel})
+      this.userHeadacheLogDayDetailsModel,
+      this.openHeadacheLogDayScreenCallback})
       : super(key: key);
 
   @override
@@ -85,13 +88,14 @@ class _RecordDayPageState extends State<RecordDayPage>
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(
-              visible: !userLogDayDetails.isDayLogged,
+              visible: !userLogDayDetails.isDayLogged ?? true,
               child: FlatButton.icon(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
+                  /*Navigator.pushNamed(
                       context, Constant.logDayScreenRouter,
-                      arguments: widget.dateTime);
+                      arguments: widget.dateTime);*/
+                  widget.openHeadacheLogDayScreenCallback(false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
                 },
                 icon: Image.asset(
                   Constant.addCircleIcon,
@@ -171,8 +175,9 @@ class _RecordDayPageState extends State<RecordDayPage>
         FlatButton.icon(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter,
-                arguments: widget.dateTime);
+            /*Navigator.pushNamed(context, Constant.logDayScreenRouter,
+                arguments: widget.dateTime);*/
+            widget.openHeadacheLogDayScreenCallback(false, widget.openHeadacheLogDayScreenCallback(false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true)));
           },
           icon: Image.asset(
             Constant.addCircleIcon,
@@ -251,6 +256,11 @@ class _RecordDayPageState extends State<RecordDayPage>
       _animationController.reverse();
       _animationController.forward();
     }
+
+    print("IN DID UPDATE WIDGET???");
+
+    setState(() {
+    });
   }
 
   @override
@@ -384,10 +394,14 @@ class _RecordDayPageState extends State<RecordDayPage>
           CurrentUserHeadacheModel(
               userId: userProfileInfoData.userId,
               isOnGoing: true,
-              selectedDate: dateTime.toUtc().toIso8601String());
-      Navigator.pushReplacementNamed(
+              selectedDate: dateTime.toUtc().toIso8601String(),
+          isFromRecordScreen: true
+          );
+
+      widget.openHeadacheLogDayScreenCallback(true, currentUserHeadacheModel);
+      /*Navigator.pushNamed(
           context, Constant.addHeadacheOnGoingScreenRouter,
-          arguments: currentUserHeadacheModel);
+          arguments: currentUserHeadacheModel);*/
     }
   }
 }

@@ -36,6 +36,8 @@ class AddHeadacheLogBloc {
   Stream<dynamic> get addNoteStream =>
       _addNoteStreamController.stream;
 
+  bool isHeadacheLogged = false;
+
   AddHeadacheLogBloc({this.count = 0}) {
     _addHeadacheLogStreamController = StreamController<dynamic>();
     _sendAddHeadacheLogStreamController = StreamController<dynamic>();
@@ -94,6 +96,7 @@ class AddHeadacheLogBloc {
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
         if(signUpFirstStepData != null) {
+          isHeadacheLogged = true;
           apiResponse = Constant.success;
         } else {
           sendAddHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));

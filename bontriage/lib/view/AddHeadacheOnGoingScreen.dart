@@ -42,11 +42,14 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   bool isUserHeadacheEnded = false;
 
   bool _isDataPopulated = false;
+  bool _isFromRecordScreen = false;
 
   @override
   void initState() {
     super.initState();
     _dateTime = DateTime.now();
+
+    _isFromRecordScreen = widget.currentUserHeadacheModel.isFromRecordScreen ?? false;
 
     try {
        _dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
@@ -120,9 +123,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                 fontFamily: Constant.jostMedium),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               //Navigator.popUntil(context, ModalRoute.withName(Constant.headacheStartedScreenRouter));
-                              Navigator.pop(context);
+                              Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
                             },
                             child: Image(
                               image: AssetImage(Constant.closeIcon),
@@ -407,8 +410,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     if (response == Constant.success) {
       Navigator.pop(context);
       await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
-      Navigator.pushReplacementNamed(
-          context, Constant.addHeadacheSuccessScreenRouter);
+      if(!_isFromRecordScreen) {
+        Navigator.pushReplacementNamed(
+            context, Constant.addHeadacheSuccessScreenRouter);
+      } else {
+        Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+      }
     }
   }
 

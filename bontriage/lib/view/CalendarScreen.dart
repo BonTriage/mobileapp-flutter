@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CalendarIntensityScreen.dart';
@@ -20,17 +22,32 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List<Widget> pageViewWidgetList;
   int currentIndex = 0;
 
+  StreamController<dynamic> _refreshCalendarDataStreamController;
+
+  StreamSink<dynamic> get refreshCalendarDataSink =>
+      _refreshCalendarDataStreamController.sink;
+
+  Stream<dynamic> get refreshCalendarDataStream =>
+      _refreshCalendarDataStreamController.stream;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
+    _refreshCalendarDataStreamController = StreamController<dynamic>.broadcast();
   }
 
   @override
   void didUpdateWidget(CalendarScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     getCurrentPositionOfTabBar();
+  }
+
+  @override
+  void dispose() {
+    _refreshCalendarDataStreamController?.close();
+    super.dispose();
   }
 
   @override
@@ -139,8 +156,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     if (currentPositionOfTabBar == 1) {
      setState(() {
        pageViewWidgetList = [
-         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback),
-         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback),
+         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
+         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
        ];
      });
     }

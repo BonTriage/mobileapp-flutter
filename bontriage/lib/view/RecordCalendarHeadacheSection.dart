@@ -179,4 +179,19 @@ class _RecordCalendarHeadacheSectionState
 
     );
   }
+
+  @override
+  void didUpdateWidget(RecordCalendarHeadacheSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null) {
+      userHeadacheListData = [];
+    } else
+      userHeadacheListData = widget.userHeadacheLogDayDetailsModel
+          .headacheLogDayListData[0].headacheListData;
+
+    setState(() {
+
+    });
+  }
 }

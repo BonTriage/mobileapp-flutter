@@ -483,6 +483,9 @@ class _TimeSectionState extends State<TimeSection>
                   if (_selectedEndDateAndTime == null) {
                     Duration duration = _selectedStartDate.difference(DateTime.now());
                     if(duration.inSeconds.abs() <= (72*60*60)) {
+                      _selectedEndDate = DateTime.now();
+                      _selectedEndTime = _selectedEndDate;
+                      _selectedEndDateAndTime = _selectedEndDate;
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", DateTime.now().toUtc().toIso8601String());
                     } else {

@@ -33,9 +33,10 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   fetchCalendarHeadacheLogDayData(String selectedDate) async {
+    if(userHeadacheLogDayDetailsModel.headacheLogDayListData != null)
+      userHeadacheLogDayDetailsModel.headacheLogDayListData.clear();
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
       String url = WebservicePost.qaServerUrl +
           'common/?' +
@@ -44,8 +45,7 @@ class CalendarHeadacheLogDayDetailsBloc {
           "&" +
           "user_id=" +
           userProfileInfoData.userId;
-      var response = await _calendarRepository.calendarTriggersServiceCall(
-          url, RequestMethod.GET);
+      var response = await _calendarRepository.calendarTriggersServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         apiResponse = response.toString();
         networkDataSink.addError(response);

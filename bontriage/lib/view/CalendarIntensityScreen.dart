@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
@@ -12,7 +14,10 @@ import 'NetworkErrorScreen.dart';
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
-  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}): super(key: key);
+  final StreamSink<dynamic> refreshCalendarDataSink;
+  final Stream<dynamic> refreshCalendarDataStream;
+
+  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.refreshCalendarDataStream, this.refreshCalendarDataSink}): super(key: key);
 
   @override
   _CalendarIntensityScreenState createState() =>
@@ -52,6 +57,23 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       });
     });
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+
+    widget.refreshCalendarDataStream.listen((event) {
+      if(event is bool && event) {
+        currentMonth = _dateTime.month;
+        currentYear = _dateTime.year;
+        monthName = Utils.getMonthName(currentMonth);
+        totalDaysInCurrentMonth =
+            Utils.daysInCurrentMonth(currentMonth, currentYear);
+        firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, 1);
+        lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, totalDaysInCurrentMonth);
+        _calendarScreenBloc.initNetworkStreamController();
+
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+    });
   }
 
   @override
@@ -566,7 +588,14 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     var calendarUtil = CalendarUtil(
         calenderType: 2,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
-        userMonthTriggersListData: [],navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback);
+        userMonthTriggersListData: [],
+        navigateToOtherScreenCallback: (routeName, data) async{
+          dynamic isDataUpdated = await widget.navigateToOtherScreenCallback(routeName, data);
+          if(isDataUpdated != null && isDataUpdated is bool && isDataUpdated) {
+            widget.refreshCalendarDataSink.add(true);
+          }
+          return isDataUpdated;
+        });
     currentMonthData =
         calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }

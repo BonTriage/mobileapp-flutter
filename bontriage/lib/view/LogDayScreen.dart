@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:mobile/blocs/LogDayBloc.dart';
+import 'package:mobile/models/LogDayScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -20,9 +21,9 @@ import 'dart:io' show Platform;
 import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
-  final DateTime selectedDateTime;
+  final LogDayScreenArgumentModel logDayScreenArgumentModel;
 
-  const LogDayScreen({Key key, this.selectedDateTime}) : super(key: key);
+  const LogDayScreen({Key key, this.logDayScreenArgumentModel}) : super(key: key);
 
   @override
   _LogDayScreenState createState() => _LogDayScreenState();
@@ -45,12 +46,16 @@ class _LogDayScreenState extends State<LogDayScreen>
   @override
   void initState() {
     super.initState();
-    if (widget.selectedDateTime == null) {
+    if (widget.logDayScreenArgumentModel == null) {
       _dateTime = DateTime.now();
     } else {
-      _dateTime = widget.selectedDateTime;
+      _dateTime = widget.logDayScreenArgumentModel.selectedDateTime;
     }
-    _logDayBloc = LogDayBloc(widget.selectedDateTime);
+    if(widget.logDayScreenArgumentModel != null) {
+      _logDayBloc = LogDayBloc(widget.logDayScreenArgumentModel.selectedDateTime);
+    } else {
+      _logDayBloc = LogDayBloc(null);
+    }
 
     requestService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -81,8 +86,8 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   @override
   void dispose() {
+    _logDayBloc.dispose();
     super.dispose();
-    print('dispose');
   }
 
   @override
@@ -374,7 +379,7 @@ class _LogDayScreenState extends State<LogDayScreen>
         builder: (context) => DeleteLogOptionsBottomSheet());
     if (resultOfDeleteBottomSheet == Constant.deleteLog) {
       SignUpOnBoardProviders.db.deleteAllUserLogDayData();
-      Navigator.pop(context);
+      Navigator.pop(context, false);
     }
   }
 
@@ -416,8 +421,17 @@ class _LogDayScreenState extends State<LogDayScreen>
       if (response == Constant.success) {
         SignUpOnBoardProviders.db.deleteAllUserLogDayData();
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(
-            context, Constant.logDaySuccessScreenRouter);
+        if(widget.logDayScreenArgumentModel == null) {
+          Navigator.pushReplacementNamed(
+              context, Constant.logDaySuccessScreenRouter);
+        } else {
+          if(widget.logDayScreenArgumentModel.isFromRecordScreen) {
+            Navigator.pop(context, true);
+          } else {
+            Navigator.pushReplacementNamed(
+                context, Constant.logDaySuccessScreenRouter);
+          }
+        }
       }
     }
   }
