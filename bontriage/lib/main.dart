@@ -10,6 +10,7 @@ import 'package:mobile/view/CalendarHeadacheLogDayDetailsScreen.dart';
 import 'package:mobile/view/CalendarScreen.dart';
 import 'package:mobile/view/CalendarIntensityScreen.dart';
 import 'package:mobile/view/CalendarTriggersScreen.dart';
+import 'package:mobile/view/CompassScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
 import 'package:mobile/view/HomeScreen.dart';
@@ -133,8 +134,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.signUpFirstStepHeadacheResultRouter:
             {
-              return ScaleInPageRoute(
-                  widget: SignUpFirstStepCompassResult());
+              return ScaleInPageRoute(widget: SignUpFirstStepCompassResult());
             }
           case Constant.signUpOnBoardPersonalizedHeadacheResultRouter:
             {
@@ -152,8 +152,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
-              return SlideFromRightPageRoute(
-                  widget: PartThreeOnBoardScreens());
+              return SlideFromRightPageRoute(widget: PartThreeOnBoardScreens());
             }
           case Constant.loginScreenRouter:
             {
@@ -165,8 +164,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.signUpSecondStepHeadacheResultRouter:
             {
-              return ScaleInPageRoute(
-                  widget: SignUpSecondStepCompassResult());
+              return ScaleInPageRoute(widget: SignUpSecondStepCompassResult());
             }
           case Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter:
             {
@@ -189,8 +187,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.partOneOnBoardScreenTwoRouter:
             {
-              return SlideFromRightPageRoute(
-                  widget: PartOneOnBoardScreenTwo());
+              return SlideFromRightPageRoute(widget: PartOneOnBoardScreenTwo());
             }
           case Constant.onBoardCreateAccountScreenRouter:
             {
@@ -198,8 +195,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.prePartTwoOnBoardScreenRouter:
             {
-              return SlideFromRightPageRoute(
-                  widget: PrePartTwoOnBoardScreen());
+              return SlideFromRightPageRoute(widget: PrePartTwoOnBoardScreen());
             }
           case Constant.onBoardHeadacheNameScreenRouter:
             {
@@ -249,13 +245,13 @@ class MyApp extends StatelessWidget {
               final Widget widget = AddHeadacheOnGoingScreen(
                 currentUserHeadacheModel: settings.arguments,
               );
-              return SlideFromBottomPageRoute(
-                  widget: widget);
+              return SlideFromBottomPageRoute(widget: widget);
             }
 
           case Constant.logDayScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: LogDayScreen(selectedDateTime: settings.arguments));
+              return SlideFromBottomPageRoute(
+                  widget: LogDayScreen(selectedDateTime: settings.arguments));
             }
           case Constant.addHeadacheSuccessScreenRouter:
             {
@@ -280,7 +276,8 @@ class MyApp extends StatelessWidget {
             }
           case Constant.calendarSeverityScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CalendarIntensityScreen());
+              return SlideFromBottomPageRoute(
+                  widget: CalendarIntensityScreen());
             }
           case Constant.logDayNoHeadacheScreenRouter:
             {
@@ -292,7 +289,10 @@ class MyApp extends StatelessWidget {
             }
           case Constant.onCalendarHeadacheLogDayDetailsScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CalendarHeadacheLogDayDetailsScreen(dateTime: settings.arguments,));
+              return SlideFromBottomPageRoute(
+                  widget: CalendarHeadacheLogDayDetailsScreen(
+                dateTime: settings.arguments,
+              ));
             }
 
           case Constant.onBoardExitScreenRouter:
@@ -303,6 +303,10 @@ class MyApp extends StatelessWidget {
                       isAlreadyLoggedIn: (isUserAlreadyLoggedIn != null)
                           ? isUserAlreadyLoggedIn
                           : false));
+            }
+          case Constant.compassScreenRouter:
+            {
+              return SlideFromBottomPageRoute(widget: CompassScreen());
             }
         }
         return null;

@@ -143,7 +143,7 @@ class _ApiLoaderScreenState extends State<ApiLoaderScreen> {
                           features: features,
                           data: data,
                           reverseAxis: true,
-                          isPersonalizedHeadacheData: true,
+                          compassValue: 0,
                           axisColor: Colors.transparent,
                         ),
                       ),

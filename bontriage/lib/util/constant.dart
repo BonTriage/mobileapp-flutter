@@ -81,6 +81,8 @@ class Constant {
   static const String onCalendarHeadacheLogDayDetailsScreenRouter =
       '/onCalendarHeadacheLogDayDetailsScreenRouter';
 
+  static const String compassScreenRouter = 'compassScreenRouter';
+
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
   static String welcomeToMigraineMentor = 'Welcome to\nMigraineMentor';
@@ -596,6 +598,12 @@ class Constant {
   static Color calendarRedTriggerColor = Color(0xffD85B00);
   static Color calendarPurpleTriggersColor = Color(0XFF7E00CB);
   static Color calendarBlueTriggersColor = Color(0XFF00A8CD);
+  static Color compassMyHeadacheTextColor = Color(0XFF0E4C47);
+  static Color compareCompassHeadacheValueColor = Color(0xff7E00CB);
+  static Color compareCompassMonthSelectedColor = Color(0xffB8FFFF);
+  static const Color compareCompassChartValueColor = Color(0x597E00CB);
+  static const Color compareCompassChartFirstLoggedValueColor = Color(0x007E00CB);
+
 
   //images
   static String userAvatar = 'images/user_avatar.png';

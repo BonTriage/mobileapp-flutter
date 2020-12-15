@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CompassScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarScreen.dart';
 
@@ -110,8 +111,11 @@ class _RecordScreenState extends State<RecordScreen> {
           showApiLoaderCallback: widget.showApiLoaderCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
         );
-      case 0:
-        return Container();
+      case 1:
+        return CompassScreen(
+          showApiLoaderCallback: widget.showApiLoaderCallback,
+          navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+        );
       default:
         return Container();
     }
