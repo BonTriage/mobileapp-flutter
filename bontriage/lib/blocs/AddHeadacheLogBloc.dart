@@ -77,10 +77,8 @@ class AddHeadacheLogBloc {
               });
             }
           });*/
-          await fetchAddHeadacheLogData();
-        } else {
-          addHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));
         }
+        await fetchAddHeadacheLogData();
       }
     } catch (e) {
       apiResponse = Constant.somethingWentWrong;
