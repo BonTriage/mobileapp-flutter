@@ -274,7 +274,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   void enterSomeDummyDataToStream() {
-    calendarLogDayDataSink.add(Constant.loading);
+    networkDataSink.add(Constant.loading);
   }
 
   String _getDisplayTime(int totalTime) {

@@ -103,7 +103,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
                               stream: calendarHeadacheLogDayDetailsBloc
                                   .calendarLogDayDetailsDataStream,
                               builder: (context, snapshot) {
-                                if (snapshot.hasData) {
+                                if (snapshot.hasData && snapshot.data is UserHeadacheLogDayDetailsModel) {
                                   userHeadacheLogDayDetailsModel = snapshot.data;
                                   return Column(
                                     children: [
@@ -148,10 +148,14 @@ class _CalendarHeadacheLogDayDetailsScreenState
         networkStream: calendarHeadacheLogDayDetailsBloc.networkDataStream,
         tapToRetryFunction: () {
       calendarHeadacheLogDayDetailsBloc.enterSomeDummyDataToStream();
+      _requestService();
     });
+    _requestService();
+  }
+
+  void _requestService() {
     String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
-    calendarHeadacheLogDayDetailsBloc
-        .fetchCalendarHeadacheLogDayData(selectedDate);
+    calendarHeadacheLogDayDetailsBloc.fetchCalendarHeadacheLogDayData(selectedDate);
   }
 
   ///Method to open headache or log day screen
