@@ -46,6 +46,11 @@ class LogDayBloc {
 
   DateTime selectedDateTime;
 
+  int behaviorEventId;
+  int medicationEventId;
+  int triggerEventId;
+  int noteEventId;
+
   LogDayBloc(DateTime selectedDateTime) {
     _logDayDataStreamController = StreamController<dynamic>();
     _sendLogDayDataStreamController = StreamController<dynamic>();
@@ -107,6 +112,16 @@ class LogDayBloc {
       } else {
         if (response != null && response is CalendarInfoDataModel) {
           calendarInfoModel = response;
+          if(calendarInfoModel.behaviours.length >= 1)
+            behaviorEventId = calendarInfoModel.behaviours[0].id;
+          if(calendarInfoModel.medication.length >= 1)
+            medicationEventId = calendarInfoModel.medication[0].id;
+          if(calendarInfoModel.triggers.length >= 1)
+            triggerEventId = calendarInfoModel.triggers[0].id;
+          if(calendarInfoModel.logDayNote.length >= 1)
+            noteEventId = calendarInfoModel.logDayNote[0].id;
+
+          print('id');
           /*response.headache.forEach((headacheElement) {
             headacheElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
               selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
@@ -330,15 +345,15 @@ class LogDayBloc {
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData);
-    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData);
-    logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData);
-    logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData);
+    logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData, 570);
+    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData, 571);
+    logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData, 572);
+    logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData, 573);
 
     return jsonEncode(logDaySendDataModel.toJson());
   }
 
-  SignUpOnBoardAnswersRequestModel _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers, String eventType, UserProfileInfoModel userProfileInfoData){
+  SignUpOnBoardAnswersRequestModel _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers, String eventType, UserProfileInfoModel userProfileInfoData, int eventId){
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
     SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType =
@@ -364,6 +379,7 @@ class LogDayBloc {
       signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
           MobileEventDetails(
               questionTag: element.questionTag,
+              eventId: eventId,
               questionJson: "",
               updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
               value: valuesList));

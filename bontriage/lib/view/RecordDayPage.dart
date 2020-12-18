@@ -9,7 +9,7 @@ class RecordDayPage extends StatefulWidget {
   final bool hasData;
   final DateTime dateTime;
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
-  final Function(bool, dynamic) openHeadacheLogDayScreenCallback;
+  final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
 
   const RecordDayPage(
       {Key key,
@@ -95,7 +95,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                   /*Navigator.pushNamed(
                       context, Constant.logDayScreenRouter,
                       arguments: widget.dateTime);*/
-                  widget.openHeadacheLogDayScreenCallback(false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
+                  widget.openHeadacheLogDayScreenCallback(false, true, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
                 },
                 icon: Image.asset(
                   Constant.addCircleIcon,
@@ -177,7 +177,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           onPressed: () {
             /*Navigator.pushNamed(context, Constant.logDayScreenRouter,
                 arguments: widget.dateTime);*/
-            widget.openHeadacheLogDayScreenCallback(false, widget.openHeadacheLogDayScreenCallback(false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true)));
+            widget.openHeadacheLogDayScreenCallback(false, false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
           },
           icon: Image.asset(
             Constant.addCircleIcon,
@@ -388,8 +388,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           widget.dateTime.month,
           widget.dateTime.day,
           DateTime.now().hour,
-          DateTime.now().minute,
-          DateTime.now().second);
+          DateTime.now().minute,0, 0);
       CurrentUserHeadacheModel currentUserHeadacheModel =
           CurrentUserHeadacheModel(
               userId: userProfileInfoData.userId,
@@ -398,7 +397,7 @@ class _RecordDayPageState extends State<RecordDayPage>
               isFromRecordScreen: true
           );
 
-      widget.openHeadacheLogDayScreenCallback(true, currentUserHeadacheModel);
+      widget.openHeadacheLogDayScreenCallback(true, false, currentUserHeadacheModel);
       /*Navigator.pushNamed(
           context, Constant.addHeadacheOnGoingScreenRouter,
           arguments: currentUserHeadacheModel);*/

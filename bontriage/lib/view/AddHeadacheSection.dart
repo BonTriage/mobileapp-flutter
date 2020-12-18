@@ -330,8 +330,11 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     
     if (isDoubleTapped) {
       if (questionType == 'multi') {
-        widget.selectedAnswers.add(
-            SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element) => (element.questionTag == currentTag || element.answer == selectedAnswer), orElse: () => null);
+        if(selectedAnswer == null) {
+          widget.selectedAnswers.add(
+              SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        }
         widget.doubleTapSelectedAnswer.add(
             SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
@@ -1564,7 +1567,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);

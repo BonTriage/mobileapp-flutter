@@ -108,10 +108,12 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                   return Column(
                                     children: [
                                       RecordCalendarHeadacheSection(
+                                        dateTime: _dateTime,
                                           userHeadacheLogDayDetailsModel: userHeadacheLogDayDetailsModel,
                                           onHeadacheTypeSelectedCallback: (headacheIdSelected) {
                                             _headacheIdSelected = headacheIdSelected;
                                           },
+                                        openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
                                       ),
                                       RecordDayPage(
                                           hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
@@ -161,11 +163,11 @@ class _CalendarHeadacheLogDayDetailsScreenState
   ///Method to open headache or log day screen
   ///@param isForHeadache: to identify which screen should open (Add Headache or Log Day screen)
   ///@param arguments: arguments needed to be send to other screen
-  void _openHeadacheLogDayScreen(bool isForHeadache, dynamic arguments) async{
+  void _openHeadacheLogDayScreen(bool isForHeadache, bool isEditing, dynamic arguments) async{
       dynamic dataReceived;
 
       if(isForHeadache) {
-        if(arguments is CurrentUserHeadacheModel && arguments != null) {
+        if(arguments is CurrentUserHeadacheModel && arguments != null && isEditing) {
           arguments.headacheId = _headacheIdSelected;
         }
         dataReceived = await Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: arguments);

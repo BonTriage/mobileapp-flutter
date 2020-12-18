@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class RecordCalendarHeadacheSection extends StatefulWidget {
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
   final Function(int) onHeadacheTypeSelectedCallback;
+  final DateTime dateTime;
+  final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
 
-  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback})
+  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback, this.dateTime, this.openHeadacheLogDayScreenCallback})
       : super(key: key);
 
   @override
@@ -67,6 +71,7 @@ class _RecordCalendarHeadacheSectionState
                       height: 10,
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (int i = 0; i < userHeadacheListData.length; i++)
                           Padding(
@@ -164,6 +169,21 @@ class _RecordCalendarHeadacheSectionState
                               ],
                             ),
                           ),
+                        SizedBox(height: 10,),
+                        GestureDetector(
+                          onTap: () {
+                            _openAddHeadacheScreen();
+                          },
+                          child: Text(
+                            'Edit Headache',
+                            style: TextStyle(
+                                color: Constant
+                                    .addCustomNotificationTextColor,
+                                fontFamily: Constant.jostRegular,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -198,5 +218,31 @@ class _RecordCalendarHeadacheSectionState
     setState(() {
 
     });
+  }
+
+  void _openAddHeadacheScreen() async {
+    var userProfileInfoData =
+    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if (userProfileInfoData != null) {
+      DateTime dateTime = DateTime(
+          widget.dateTime.year,
+          widget.dateTime.month,
+          widget.dateTime.day,
+          DateTime.now().hour,
+          DateTime.now().minute,0, 0);
+      CurrentUserHeadacheModel currentUserHeadacheModel =
+      CurrentUserHeadacheModel(
+          userId: userProfileInfoData.userId,
+          isOnGoing: true,
+          selectedDate: dateTime.toUtc().toIso8601String(),
+          isFromRecordScreen: true
+      );
+
+      widget.openHeadacheLogDayScreenCallback(true, true, currentUserHeadacheModel);
+      /*Navigator.pushNamed(
+          context, Constant.addHeadacheOnGoingScreenRouter,
+          arguments: currentUserHeadacheModel);*/
+    }
   }
 }

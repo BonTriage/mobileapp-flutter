@@ -43,16 +43,18 @@ class MobileEventDetails {
   String questionJson;
   String questionTag;
   String updatedAt;
+  int eventId;
   List<String> value;
 
   MobileEventDetails(
-      {this.questionJson, this.questionTag, this.updatedAt, this.value});
+      {this.questionJson, this.questionTag, this.updatedAt, this.value, this.eventId});
 
   MobileEventDetails.fromJson(Map<String, dynamic> json) {
     questionJson = json['question_json'];
     questionTag = json['question_tag'];
     updatedAt = json['updated_at'];
     value = json['value'].cast<String>();
+    eventId = json['event_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +63,8 @@ class MobileEventDetails {
     data['question_tag'] = this.questionTag;
     data['updated_at'] = this.updatedAt;
     data['value'] = this.value;
+    if(this.eventId != null)
+      data['event_id'] = this.eventId;
     return data;
   }
 }
