@@ -136,6 +136,8 @@ class Utils {
 
     if (hrs < 10) {
       hrsString = '0$hrs';
+    } else {
+      hrsString = hrs.toString();
     }
 
     if (minutes < 10) {

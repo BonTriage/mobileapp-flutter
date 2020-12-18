@@ -64,7 +64,7 @@ class _RecordScreenState extends State<RecordScreen> {
                         borderRadius: BorderRadius.circular(20),
                         color: Color(0xffafd794)),
                     tabs: <Widget>[
-                      Tab(text: 'Calender'),
+                      Tab(text: 'Calendar'),
                       Tab(
                         text: 'Compass',
                       ),

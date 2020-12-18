@@ -5,8 +5,9 @@ import 'package:mobile/util/constant.dart';
 
 class RecordCalendarHeadacheSection extends StatefulWidget {
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
+  final Function(int) onHeadacheTypeSelectedCallback;
 
-  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel})
+  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback})
       : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class RecordCalendarHeadacheSection extends StatefulWidget {
 
 class _RecordCalendarHeadacheSectionState
     extends State<RecordCalendarHeadacheSection> {
-  int _value = 1;
+  int _value = 0;
   List<HeadacheData> userHeadacheListData;
 
   @override
@@ -24,9 +25,11 @@ class _RecordCalendarHeadacheSectionState
     super.initState();
     if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null) {
       userHeadacheListData = [];
-    } else
-      userHeadacheListData = widget.userHeadacheLogDayDetailsModel
-          .headacheLogDayListData[0].headacheListData;
+    } else {
+      userHeadacheListData = widget.userHeadacheLogDayDetailsModel.headacheLogDayListData[0].headacheListData;
+      if(userHeadacheListData != null && userHeadacheListData.length >= 1)
+        widget.onHeadacheTypeSelectedCallback(userHeadacheListData[0].headacheId);
+    }
   }
 
   @override
@@ -79,7 +82,7 @@ class _RecordCalendarHeadacheSectionState
                                         unselectedWidgetColor:
                                             Constant.chatBubbleGreen),
                                     child: Radio(
-                                      value: 1,
+                                      value: i,
                                       activeColor: Constant.chatBubbleGreen,
                                       hoverColor: Constant.chatBubbleGreen,
                                       focusColor: Constant.chatBubbleGreen,
@@ -88,6 +91,8 @@ class _RecordCalendarHeadacheSectionState
                                           ? null
                                           : (int value) {
                                               setState(() {
+                                                print("HeadacheType???${userHeadacheListData[i].headacheName}");
+                                                widget.onHeadacheTypeSelectedCallback(userHeadacheListData[i].headacheId);
                                                 _value = value;
                                               });
                                             },

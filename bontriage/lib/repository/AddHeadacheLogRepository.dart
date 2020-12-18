@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/HeadacheLogDataModel.dart';
 import 'package:mobile/models/SignUpOnBoardAnswersRequestModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -31,6 +33,23 @@ class AddHeadacheLogRepository{
       }
     }catch(Exception){
       return album;
+    }
+  }
+
+  Future<dynamic> calendarTriggersServiceCall(String url, RequestMethod requestMethod) async {
+    var client = http.Client();
+    var calendarData;
+    try {
+      var response =
+      await NetworkService.getRequest(url, requestMethod).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        calendarData = headacheLogDataModelFromJson(response);
+        return calendarData;
+      }
+    } catch (Exception) {
+      return calendarData;
     }
   }
 

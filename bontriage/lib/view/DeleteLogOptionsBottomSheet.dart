@@ -12,20 +12,22 @@ class _DeleteLogOptionsBottomSheetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pop(context, Constant.deleteLog);
             },
             child: Container(
               height: 45,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Constant.whiteColorAlpha85),
+                  color: Colors.white),
               child: Center(
                 child: Text(
                   'Delete Log',
@@ -44,6 +46,7 @@ class _DeleteLogOptionsBottomSheetState
           ),
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pop(context);
             },
             child: Container(

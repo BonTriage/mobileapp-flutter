@@ -1,5 +1,4 @@
 
-
 class CalendarInfoDataModel {
   List<Headache> headache;
   List<Headache> triggers;
@@ -72,7 +71,7 @@ class Headache {
   String updatedAt;
   String calendarEntryAt;
   String eventType;
-  List<MobileEventDetails> mobileEventDetails;
+  List<MobileEventDetails1> mobileEventDetails;
 
   Headache(
       {this.id,
@@ -91,9 +90,9 @@ class Headache {
     calendarEntryAt = json['calendar_entry_at'];
     eventType = json['event_type'];
     if (json['mobile_event_details'] != null) {
-      mobileEventDetails = new List<MobileEventDetails>();
+      mobileEventDetails = new List<MobileEventDetails1>();
       json['mobile_event_details'].forEach((v) {
-        mobileEventDetails.add(new MobileEventDetails.fromJson(v));
+        mobileEventDetails.add(new MobileEventDetails1.fromJson(v));
       });
     }
   }
@@ -114,7 +113,7 @@ class Headache {
   }
 }
 
-class MobileEventDetails {
+class MobileEventDetails1 {
   int id;
   int eventId;
   String value;
@@ -123,7 +122,7 @@ class MobileEventDetails {
   String uploadedAt;
   String updatedAt;
 
-  MobileEventDetails(
+  MobileEventDetails1(
       {this.id,
       this.eventId,
       this.value,
@@ -132,7 +131,7 @@ class MobileEventDetails {
       this.uploadedAt,
       this.updatedAt});
 
-  MobileEventDetails.fromJson(Map<String, dynamic> json) {
+  MobileEventDetails1.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     eventId = json['event_id'];
     value = json['value'];

@@ -88,7 +88,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(
-              visible: !userLogDayDetails.isDayLogged ?? true,
+              visible: /*!userLogDayDetails.isDayLogged ?? true*/true,
               child: FlatButton.icon(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
@@ -120,7 +120,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(
-              visible: !userLogDayDetails.isHeadacheLogged,
+              visible: /*!userLogDayDetails.isHeadacheLogged*/true,
               child: FlatButton.icon(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
@@ -395,7 +395,7 @@ class _RecordDayPageState extends State<RecordDayPage>
               userId: userProfileInfoData.userId,
               isOnGoing: true,
               selectedDate: dateTime.toUtc().toIso8601String(),
-          isFromRecordScreen: true
+              isFromRecordScreen: true
           );
 
       widget.openHeadacheLogDayScreenCallback(true, currentUserHeadacheModel);

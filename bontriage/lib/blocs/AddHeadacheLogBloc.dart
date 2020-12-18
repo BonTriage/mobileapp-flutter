@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
+import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/HeadacheLogDataModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/AddHeadacheLogRepository.dart';
 import 'package:mobile/util/AddHeadacheLinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
@@ -15,6 +18,8 @@ class AddHeadacheLogBloc {
   StreamController<dynamic> _addNoteStreamController;
   CurrentUserHeadacheModel currentUserHeadacheModel;
   int count = 0;
+
+  List<SelectedAnswers> selectedAnswersList = [];
 
   StreamSink<dynamic> get addHeadacheLogDataSink =>
       _addHeadacheLogStreamController.sink;
@@ -38,11 +43,50 @@ class AddHeadacheLogBloc {
 
   bool isHeadacheLogged = false;
 
+
   AddHeadacheLogBloc({this.count = 0}) {
     _addHeadacheLogStreamController = StreamController<dynamic>();
     _sendAddHeadacheLogStreamController = StreamController<dynamic>();
     _addNoteStreamController = StreamController<dynamic>();
     _addHeadacheLogRepository = AddHeadacheLogRepository();
+  }
+
+  fetchCalendarHeadacheLogDayData(int headacheId) async {
+    String apiResponse;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    try {
+      String url = '${WebservicePost.qaServerUrl}calender/$headacheId';
+      var response = await _addHeadacheLogRepository.calendarTriggersServiceCall(url, RequestMethod.GET);
+      if (response is AppException) {
+        apiResponse = response.toString();
+        addHeadacheLogDataSink.addError(response.toString());
+      } else {
+        if (response != null && response is List<HeadacheLogDataModel>) {
+          List<HeadacheLogDataModel> headacheLogDataModelList = response;
+
+          headacheLogDataModelList.forEach((headacheLogDataModelElement) {
+            headacheLogDataModelElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
+              selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
+            });
+          });
+          /*response.headache.forEach((headacheElement) {
+            MobileEventDetails1 mobileEventDetails = headacheElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.HeadacheTypeTag, orElse: () => null);
+            if(mobileEventDetails != null &&  mobileEventDetails.value == headacheType) {
+              headacheElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
+                selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
+              });
+            }
+          });*/
+          await fetchAddHeadacheLogData();
+        } else {
+          addHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      apiResponse = Constant.somethingWentWrong;
+      addHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));
+    }
+    return apiResponse;
   }
 
   fetchAddHeadacheLogData() async {

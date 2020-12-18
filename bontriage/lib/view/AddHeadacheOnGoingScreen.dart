@@ -43,11 +43,14 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   bool _isDataPopulated = false;
   bool _isFromRecordScreen = false;
+  CurrentUserHeadacheModel _currentUserHeadacheModel;
 
   @override
   void initState() {
     super.initState();
     _dateTime = DateTime.now();
+
+    _currentUserHeadacheModel = widget.currentUserHeadacheModel;
 
     _isFromRecordScreen = widget.currentUserHeadacheModel.isFromRecordScreen ?? false;
 
@@ -307,7 +310,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
-        currentUserHeadacheModel: widget.currentUserHeadacheModel,
+        currentUserHeadacheModel: _currentUserHeadacheModel,
       ));
     });
 
@@ -457,6 +460,30 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       });
       signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
     }
-    _addHeadacheLogBloc.fetchAddHeadacheLogData();
+
+    if(_isFromRecordScreen) {
+      await _addHeadacheLogBloc.fetchCalendarHeadacheLogDayData(widget.currentUserHeadacheModel.headacheId);
+      signUpOnBoardSelectedAnswersModel.selectedAnswers = _addHeadacheLogBloc.selectedAnswersList;
+
+      SelectedAnswers startTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
+      SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+      SelectedAnswers onGoingSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onGoingTag, orElse: () => null);
+
+      if(startTimeSelectedAnswer != null) {
+        _currentUserHeadacheModel.selectedDate = startTimeSelectedAnswer.answer;
+      }
+
+      if(endTimeSelectedAnswer != null) {
+        _currentUserHeadacheModel.selectedEndDate = endTimeSelectedAnswer.answer;
+      }
+
+      if(onGoingSelectedAnswer != null) {
+        _currentUserHeadacheModel.isOnGoing = onGoingSelectedAnswer.answer.toLowerCase() != 'no';
+      }
+
+      print(_currentUserHeadacheModel);
+    } else {
+      _addHeadacheLogBloc.fetchAddHeadacheLogData();
+    }
   }
 }

@@ -321,6 +321,8 @@ class Constant {
   static const String HeadacheTypeTag = 'headacheType';
   static const String logDayMedicationTag = 'medication';
   static const String logDayNoteTag = 'logday.note';
+  static const String administeredTag = 'administered';
+  static const String triggersTag = 'triggers1';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =

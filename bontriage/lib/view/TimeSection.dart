@@ -130,9 +130,9 @@ class _TimeSectionState extends State<TimeSection>
   }
 
   void _onEndDateSelected(DateTime dateTime) {
-    DateTime currentDateTime = DateTime.now();
-    if (currentDateTime.isAfter(dateTime) ||
-        currentDateTime.isAtSameMomentAs(dateTime)) {
+    //DateTime currentDateTime = DateTime.now();
+    if (dateTime.isAfter(_selectedStartDate) ||
+        dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
         if (_selectedEndTime == null) {
           Duration duration = _selectedStartDate.difference(dateTime);
@@ -192,9 +192,9 @@ class _TimeSectionState extends State<TimeSection>
   }
 
   void _onEndTimeSelected(DateTime dateTime) {
-    DateTime currentDateTime = DateTime.now();
-    if (currentDateTime.isAfter(dateTime) ||
-        currentDateTime.isAtSameMomentAs(dateTime)) {
+    //DateTime currentDateTime = DateTime.now();
+    if (dateTime.isAfter(_selectedStartDate) ||
+        dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
         if (_selectedEndDate == null) {
           Duration duration = _selectedStartDate.difference(dateTime);
@@ -502,11 +502,14 @@ class _TimeSectionState extends State<TimeSection>
                     ..isOnGoing = false
                     ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
 
-                  SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                  //this condition is put because we don't want to update headache data in db when user comes from record screen
+                  if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                    SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
                 } else {
                   widget.currentUserHeadacheModel.isOnGoing = true;
 
-                  SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                  if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                    SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
 
                   widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
                   widget.addHeadacheDateTimeDetailsData("endtime", "");

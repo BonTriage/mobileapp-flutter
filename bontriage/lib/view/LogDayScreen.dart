@@ -76,12 +76,21 @@ class _LogDayScreenState extends State<LogDayScreen>
       logDayDataList.forEach((element) {
         List<dynamic> map = jsonDecode(element['selectedAnswers']);
         map.forEach((element) {
-          selectedAnswers.add(SelectedAnswers(
-              questionTag: element['questionTag'], answer: element['answer']));
+          selectedAnswers.add(SelectedAnswers(questionTag: element['questionTag'], answer: element['answer'], isDoubleTapped: true));
         });
       });
     }
-    _logDayBloc.fetchLogDayData();
+
+    List<SelectedAnswers> doubleTappedSelectedAnswerList = [];
+    doubleTappedSelectedAnswerList.addAll(selectedAnswers);
+
+    if(widget.logDayScreenArgumentModel != null && widget.logDayScreenArgumentModel.isFromRecordScreen) {
+      String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
+      await _logDayBloc.fetchCalendarHeadacheLogDayData(selectedDate);
+      selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
+    } else {
+      _logDayBloc.fetchLogDayData();
+    }
   }
 
   @override
@@ -94,6 +103,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
         _showDeleteLogOptionBottomSheet();
         return false;
       },
@@ -321,7 +331,7 @@ class _LogDayScreenState extends State<LogDayScreen>
             try {
               int index = int.parse(element.answer) - 1;
               questions.values[index].isSelected = true;
-              questions.values[index].isDoubleTapped = true;
+              questions.values[index].isDoubleTapped = element.isDoubleTapped ?? true;
             } catch (e) {
               print(e.toString());
             }
@@ -347,6 +357,10 @@ class _LogDayScreenState extends State<LogDayScreen>
       questionList
           .removeWhere((element) => _triggerValuesList.contains(element));
 
+      List<SelectedAnswers> doubleTapSelectedAnswerList = [];
+
+      doubleTapSelectedAnswerList.addAll(selectedAnswers);
+
       questionList.forEach((element) {
         if (element.precondition == null || element.precondition.isEmpty) {
           _sectionWidgetList.add(
@@ -360,7 +374,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                 valuesList: element.values,
                 questionType: element.questionType,
                 allQuestionsList: allQuestionList,
-                selectedAnswers: selectedAnswers),
+                selectedAnswers: selectedAnswers,
+            doubleTapSelectedAnswer: doubleTapSelectedAnswerList,),
           );
         }
       });
@@ -419,7 +434,7 @@ class _LogDayScreenState extends State<LogDayScreen>
         await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
     if (response is String) {
       if (response == Constant.success) {
-        SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
         Navigator.pop(context);
         if(widget.logDayScreenArgumentModel == null) {
           Navigator.pushReplacementNamed(

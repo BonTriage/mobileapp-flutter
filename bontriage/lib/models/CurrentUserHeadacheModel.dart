@@ -1,18 +1,23 @@
+import 'package:http/http.dart';
+
 class CurrentUserHeadacheModel {
   String userId;
   String selectedDate;
   String selectedEndDate;
   bool isOnGoing;
   bool isFromRecordScreen;
+  int headacheId;
 
-  CurrentUserHeadacheModel({this.userId, this.selectedDate, this.selectedEndDate, this.isOnGoing, this.isFromRecordScreen});
+  CurrentUserHeadacheModel({this.userId, this.selectedDate, this.selectedEndDate, this.isOnGoing, this.isFromRecordScreen = false, this.headacheId});
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{
       'userId': userId,
       'selectedDate': selectedDate,
       'selectedEndDate': selectedEndDate,
-      'isOnGoing': isOnGoing
+      'isOnGoing': isOnGoing,
+      'isFromRecordScreen': isFromRecordScreen,
+      'headacheId': headacheId,
     };
     return map;
   }
@@ -22,5 +27,7 @@ class CurrentUserHeadacheModel {
     selectedDate = map['selectedDate'];
     selectedEndDate = map['selectedEndDate'];
     isOnGoing = map['isOnGoing'];
+    isFromRecordScreen = map['isFromRecordScreen'];
+    headacheId = map['headacheId'];
   }
 }

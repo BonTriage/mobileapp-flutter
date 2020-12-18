@@ -122,6 +122,7 @@ class CalendarHeadacheLogDayDetailsBloc {
           orElse: () => null);
 
       HeadacheData headacheData = HeadacheData();
+      headacheData.headacheId = element.id;
       String headacheInfo = "";
       if (headacheTypeData != null) {
         headacheData.headacheName = headacheTypeData.value;

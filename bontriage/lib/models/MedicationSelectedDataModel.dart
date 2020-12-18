@@ -11,6 +11,7 @@ class MedicationSelectedDataModel {
     this.selectedMedicationDosageList,
     this.isNewlyAdded = false,
     this.newlyAddedMedicationName,
+    this.isDoubleTapped
   });
 
   int selectedMedicationIndex;
@@ -18,6 +19,7 @@ class MedicationSelectedDataModel {
   List<String> selectedMedicationDosageList;
   bool isNewlyAdded;
   String newlyAddedMedicationName;
+  bool isDoubleTapped;
 
   factory MedicationSelectedDataModel.fromJson(Map<String, dynamic> json) => MedicationSelectedDataModel(
     selectedMedicationIndex: json["selectedMedicationIndex"],
@@ -25,6 +27,7 @@ class MedicationSelectedDataModel {
     selectedMedicationDosageList: List<String>.from(json["selectedMedicationDosageList"].map((x) => x)),
     isNewlyAdded: json['isNewlyAdded'],
     newlyAddedMedicationName: json['newlyAddedMedicationName'],
+    isDoubleTapped: json['isDoubleTapped'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -32,6 +35,7 @@ class MedicationSelectedDataModel {
     "selectedMedicationDateList": List<dynamic>.from(selectedMedicationDateList.map((x) => x)),
     "selectedMedicationDosageList": List<dynamic>.from(selectedMedicationDosageList.map((x) => x)),
     'isNewlyAdded': isNewlyAdded,
-    'newlyAddedMedicationName': newlyAddedMedicationName
+    'newlyAddedMedicationName': newlyAddedMedicationName,
+    'isDoubleTapped': isDoubleTapped,
   };
 }

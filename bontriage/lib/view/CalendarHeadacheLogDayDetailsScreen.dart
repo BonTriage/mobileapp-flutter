@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarHeadacheLogDayDetailsBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -25,6 +26,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
   CalendarHeadacheLogDayDetailsBloc calendarHeadacheLogDayDetailsBloc;
   UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel =
       UserHeadacheLogDayDetailsModel();
+  int _headacheIdSelected;
 
   @override
   void initState() {
@@ -106,8 +108,11 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                   return Column(
                                     children: [
                                       RecordCalendarHeadacheSection(
-                                          userHeadacheLogDayDetailsModel:
-                                              userHeadacheLogDayDetailsModel),
+                                          userHeadacheLogDayDetailsModel: userHeadacheLogDayDetailsModel,
+                                          onHeadacheTypeSelectedCallback: (headacheIdSelected) {
+                                            _headacheIdSelected = headacheIdSelected;
+                                          },
+                                      ),
                                       RecordDayPage(
                                           hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
                                           dateTime: _dateTime,
@@ -156,9 +161,10 @@ class _CalendarHeadacheLogDayDetailsScreenState
       dynamic dataReceived;
 
       if(isForHeadache) {
-        dataReceived = await Navigator.pushNamed(
-            context, Constant.addHeadacheOnGoingScreenRouter,
-            arguments: arguments);
+        if(arguments is CurrentUserHeadacheModel && arguments != null) {
+          arguments.headacheId = _headacheIdSelected;
+        }
+        dataReceived = await Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: arguments);
       } else {
         dataReceived = await Navigator.pushNamed(context, Constant.logDayScreenRouter,
             arguments: arguments);
