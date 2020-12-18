@@ -52,6 +52,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             height: 10,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
                 visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
@@ -68,16 +69,18 @@ class _RecordDayPageState extends State<RecordDayPage>
               SizedBox(
                 width: 10,
               ),
-              Visibility(
-                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
-                child: Text(
-                  widget.userHeadacheLogDayDetailsModel.logDayNote??"",
-                  style: TextStyle(
-                      color: Constant
-                          .addCustomNotificationTextColor,
-                      fontFamily: Constant.jostRegular,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14),
+              Flexible(
+                child: Visibility(
+                  visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                  child: Text(
+                    widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                    style: TextStyle(
+                        color: Constant
+                            .addCustomNotificationTextColor,
+                        fontFamily: Constant.jostRegular,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
+                  ),
                 ),
               )
             ],
@@ -103,7 +106,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                   height: 20,
                 ),
                 label: Text(
-                  'Add Info',
+                  'Add/Edit Info',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -185,7 +188,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             height: 20,
           ),
           label: Text(
-            'Add Info',
+            'Add/Edit Info',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -208,7 +211,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             height: 20,
           ),
           label: Text(
-            'Add Headache',
+            'Add/Edit Headache',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -323,6 +326,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                     visible: noteText.isNotEmpty,
                     child: Text(
                       'Note:\n$noteText',
+                      maxLines: 3,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen60Alpha,
                           fontFamily: Constant.jostRegular,

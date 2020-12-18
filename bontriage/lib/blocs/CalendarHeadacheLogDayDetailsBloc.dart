@@ -218,49 +218,71 @@ class CalendarHeadacheLogDayDetailsBloc {
     });
 
     response.medication.forEach((element) {
-      RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
-      logDayMedicationWidgetData.logDayListData = LogDayData();
+      if(element.mobileEventDetails.length >0){
+        RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
+        logDayMedicationWidgetData.logDayListData = LogDayData();
 
-      var medicationData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag == Constant.logDayMedicationTag,
-          orElse: () => null);
-      var medicationDosageData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag.contains('.dosage'),
-          orElse: () => null);
+        var medicationData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.logDayMedicationTag,
+            orElse: () => null);
+        var medicationDosageData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+                mobileEventElement.questionTag.contains('.dosage'),
+            orElse: () => null);
 
-      if (medicationData != null) {
-        String titleInfo = medicationData.value;
-        if (medicationDosageData != null) {
-          List<String> formattedValues =
-              medicationDosageData.value?.split("%@");
-          if (formattedValues != null) {
-            String medicationDosage = '';
-            formattedValues.forEach((medicationElement) {
-              if (medicationDosage.isEmpty) {
-                medicationDosage = medicationElement;
-              } else {
-                medicationDosage = '$medicationDosage, $medicationElement';
-              }
-            });
-            titleInfo = '$titleInfo ($medicationDosage)';
+        if (medicationData != null) {
+          String titleInfo = medicationData.value;
+          if (medicationDosageData != null) {
+            List<String> formattedValues =
+            medicationDosageData.value?.split("%@");
+            if (formattedValues != null) {
+              String medicationDosage = '';
+              formattedValues.forEach((medicationElement) {
+                if (medicationDosage.isEmpty) {
+                  medicationDosage = medicationElement;
+                } else {
+                  medicationDosage = '$medicationDosage, $medicationElement';
+                }
+              });
+              if(medicationDosage.isEmpty){
+                titleInfo = '$titleInfo';
+              }else titleInfo = '$titleInfo ($medicationDosage)';
+            }
           }
+          logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
         }
-        logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+
+        logDayMedicationWidgetData.logDayListData.titleName = Constant.medication;
+        logDayMedicationWidgetData.imagePath = Constant.pillIcon;
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayMedicationWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
       }
-
-      logDayMedicationWidgetData.logDayListData.titleName = Constant.medication;
-      logDayMedicationWidgetData.imagePath = Constant.pillIcon;
-      userHeadacheLogDayDetailsModel.headacheLogDayListData
-          .add(logDayMedicationWidgetData);
-      userHeadacheLogDayDetailsModel.isDayLogged = true;
     });
 
-    ///To:Do : Need to Show triggers Data
     response.triggers.forEach((element) {
-      userHeadacheLogDayDetailsModel.isDayLogged = true;
+      if(element.mobileEventDetails.length >0) {
+        RecordWidgetData logDayTriggersWidgetData = RecordWidgetData();
+        logDayTriggersWidgetData.logDayListData = LogDayData();
+        var triggersElement = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.triggersTag,
+            orElse: () => null);
+        String triggersValues = triggersElement.value;
+        List<String> formattedValues = triggersValues.split("%@");
+        logDayTriggersWidgetData.logDayListData.titleInfo =
+            formattedValues.toString();
+        logDayTriggersWidgetData.logDayListData.titleName = 'Triggers';
+
+        logDayTriggersWidgetData.imagePath = Constant.pillIcon;
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayTriggersWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
+      }
     });
+
+
     response.logDayNote.forEach((element) {
       var logDayNoteData = element.mobileEventDetails.firstWhere(
               (mobileEventElement) =>
