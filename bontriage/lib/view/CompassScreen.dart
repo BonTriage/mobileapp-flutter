@@ -145,7 +145,7 @@ class _CompassScreenState extends State<CompassScreen> {
       setState(() {
         pageViewWidgetList = [
           OverTimeCompassScreen(),
-          Container(),
+          CompareCompassScreen(),
         ];
       });
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 import 'DateTimePicker.dart';
@@ -13,6 +14,29 @@ class OverTimeCompassScreen extends StatefulWidget {
 class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
   bool darkMode = false;
   double numberOfFeatures = 4;
+  DateTime _dateTime;
+  int currentMonth;
+  int currentYear;
+  String monthName;
+  int totalDaysInCurrentMonth;
+  String firstDayOfTheCurrentMonth;
+  String lastDayOfTheCurrentMonth;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -234,10 +258,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    /* DateTime dateTime =
+                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
                         _dateTime = dateTime;
-                        _onStartDateSelected(dateTime);*/
+                        _onStartDateSelected(dateTime);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -257,8 +281,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                         CupertinoDatePickerMode.date);
                   },
                   child: Text(
-                    //  monthName + " " + currentYear.toString(),
-                    'December 2020',
+                    '$monthName $currentYear',
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 15,
@@ -270,7 +293,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    /* DateTime dateTime =
+                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
                         Duration duration = dateTime.difference(DateTime.now());
                         if (duration.inSeconds < 0) {
@@ -279,7 +302,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                         } else {
                           ///To:Do
                           print("Not Allowed");
-                        }*/
+                        }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -331,7 +354,38 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
         context: context,
         builder: (context) => DateTimePicker(
           cupertinoDatePickerMode: cupertinoDatePickerMode,
-         // onDateTimeSelected: _getDateTimeCallbackFunction(0),
+          onDateTimeSelected: _getDateTimeCallbackFunction(0),
         ));
+  }
+  Function _getDateTimeCallbackFunction(int whichPickerClicked) {
+    switch (whichPickerClicked) {
+      case 0:
+        return _onStartDateSelected;
+      default:
+        return null;
+    }
+  }
+
+  void _onStartDateSelected(DateTime dateTime) {
+    setState(() {
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+      monthName = Utils.getMonthName(dateTime.month);
+      currentYear = dateTime.year;
+      currentMonth = dateTime.month;
+      _dateTime = dateTime;
+/*      _calendarScreenBloc.initNetworkStreamController();
+      Utils.showApiLoaderDialog(context,
+          networkStream: _calendarScreenBloc.networkDataStream,
+          tapToRetryFunction: () {
+            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+          });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
+    });
   }
 }
