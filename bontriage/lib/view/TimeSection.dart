@@ -57,8 +57,11 @@ class _TimeSectionState extends State<TimeSection>
       try {
         _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
 
+        _selectedStartDate = DateTime(_selectedStartDate.year, _selectedStartDate.month, _selectedStartDate.day, _selectedStartDate.hour, _selectedStartDate.minute, 0, 0);
+
         if(!widget.currentUserHeadacheModel.isOnGoing) {
           _selectedEndDate = DateTime.tryParse(widget.currentUserHeadacheModel.selectedEndDate).toLocal();
+          _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0);
           _selectedEndTime = _selectedEndDate;
           _selectedEndDateAndTime = _selectedEndDate;
         }
@@ -121,7 +124,8 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.day,
               _selectedStartTime.hour,
               _selectedStartTime.minute,
-              _selectedStartTime.second);
+              0,
+          0);
         }
         widget.addHeadacheDateTimeDetailsData(
             "onset", _selectedStartDate.toUtc().toIso8601String());
@@ -131,6 +135,9 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onEndDateSelected(DateTime dateTime) {
     //DateTime currentDateTime = DateTime.now();
+    print(dateTime);
+    dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _selectedEndDateAndTime.hour, _selectedEndDateAndTime.minute, 0, 0);
+    print('$dateTime????$_selectedStartDate');
     if (dateTime.isAfter(_selectedStartDate) ||
         dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
@@ -145,7 +152,7 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.day,
               _selectedEndTime.hour,
               _selectedEndTime.minute,
-              _selectedEndTime.second);
+              0, 0);
 
           Duration duration = _selectedStartDate.difference(selectedEndDate);
 
@@ -156,7 +163,7 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.day,
               _selectedEndTime.hour,
               _selectedEndTime.minute,
-              _selectedEndTime.second);
+              0, 0);
         }
 
         _selectedEndDateAndTime = _selectedEndDate;
@@ -182,7 +189,7 @@ class _TimeSectionState extends State<TimeSection>
               _selectedStartDate.day,
               dateTime.hour,
               dateTime.minute,
-              dateTime.second);
+              0, 0);
         }
         widget.addHeadacheDateTimeDetailsData(
             "onset", _selectedStartTime.toUtc().toIso8601String());
@@ -193,6 +200,7 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onEndTimeSelected(DateTime dateTime) {
     //DateTime currentDateTime = DateTime.now();
+    dateTime = DateTime(_selectedEndDateAndTime.year, _selectedEndDateAndTime.month, _selectedEndDateAndTime.day, dateTime.hour, dateTime.minute, 0, 0);
     if (dateTime.isAfter(_selectedStartDate) ||
         dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
@@ -207,7 +215,7 @@ class _TimeSectionState extends State<TimeSection>
               _selectedEndDate.day,
               dateTime.hour,
               dateTime.minute,
-              dateTime.second);
+              0, 0);
 
           Duration duration = _selectedStartDate.difference(startEndTime);
 
@@ -218,7 +226,7 @@ class _TimeSectionState extends State<TimeSection>
               _selectedEndDate.day,
               dateTime.hour,
               dateTime.minute,
-              dateTime.second);
+              0, 0);
         }
         _selectedEndDateAndTime = _selectedEndTime;
         widget.addHeadacheDateTimeDetailsData(

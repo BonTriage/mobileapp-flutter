@@ -69,14 +69,6 @@ class AddHeadacheLogBloc {
               selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
             });
           });
-          /*response.headache.forEach((headacheElement) {
-            MobileEventDetails1 mobileEventDetails = headacheElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.HeadacheTypeTag, orElse: () => null);
-            if(mobileEventDetails != null &&  mobileEventDetails.value == headacheType) {
-              headacheElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
-                selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
-              });
-            }
-          });*/
         }
         await fetchAddHeadacheLogData();
       }
