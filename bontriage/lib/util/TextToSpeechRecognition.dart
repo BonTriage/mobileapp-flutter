@@ -36,7 +36,6 @@ class TextToSpeechRecognition {
       });
     } else {
         await flutterTts.stop();
-
     }
   }
 

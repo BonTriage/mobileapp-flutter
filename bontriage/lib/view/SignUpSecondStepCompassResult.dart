@@ -239,16 +239,14 @@ class _SignUpSecondStepCompassResultState
                                                   features: features,
                                                   data: data,
                                                   reverseAxis: true,
-                                                  isPersonalizedHeadacheData:
-                                                      false,
+                                                  compassValue: 0,
                                                 )
                                               : RadarChart.light(
                                                   ticks: ticks,
                                                   features: features,
                                                   data: data,
                                                   reverseAxis: true,
-                                                  isPersonalizedHeadacheData:
-                                                      false,
+                                                  compassValue: 0,
                                                 ),
                                         ),
                                         Center(
@@ -339,12 +337,10 @@ class _SignUpSecondStepCompassResultState
                         AnimatedPositioned(
                           left: (isBackButtonHide)
                               ? 0
-                              : (MediaQuery.of(context).size.width -
-                              190),
+                              : (MediaQuery.of(context).size.width - 190),
                           duration: Duration(milliseconds: 250),
                           child: AnimatedOpacity(
-                            opacity:
-                            (isBackButtonHide) ? 1.0 : 0.0,
+                            opacity: (isBackButtonHide) ? 1.0 : 0.0,
                             duration: Duration(milliseconds: 250),
                             child: BouncingWidget(
                               duration: Duration(milliseconds: 100),
@@ -355,15 +351,13 @@ class _SignUpSecondStepCompassResultState
                                 height: 34,
                                 decoration: BoxDecoration(
                                   color: Color(0xffafd794),
-                                  borderRadius:
-                                  BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Center(
                                   child: Text(
                                     Constant.back,
                                     style: TextStyle(
-                                      color:
-                                      Constant.bubbleChatTextView,
+                                      color: Constant.bubbleChatTextView,
                                       fontSize: 14,
                                       fontFamily: Constant.jostMedium,
                                     ),

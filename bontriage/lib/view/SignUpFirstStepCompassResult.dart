@@ -259,14 +259,14 @@ class _SignUpFirstStepCompassResultState
                                                 features: features,
                                                 data: data,
                                                 reverseAxis: true,
-                                                isPersonalizedHeadacheData: false,
+                                                compassValue: 0,
                                               )
                                             : RadarChart.light(
                                                 ticks: ticks,
                                                 features: features,
                                                 data: data,
                                                 reverseAxis: true,
-                                                isPersonalizedHeadacheData: false,
+                                                compassValue: 0,
                                               ),
                                       ),
                                       Center(

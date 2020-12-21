@@ -3,12 +3,29 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:math' show pi, cos, sin;
 
+import 'constant.dart';
+
 const defaultGraphColors = [
   Color(0xffB8FFFF),
   Color(0xffB8FFFF),
   Color(0x80B8FFFF),
   Color(0xffB8FFFF),
 ];
+
+const compareCompassGraphColors = [
+  Color(0xffB8FFFF),
+  Constant.compareCompassChartValueColor,
+  Color(0x80B8FFFF),
+  Color(0xffB8FFFF),
+];
+const compareCompassFirstLoggedGraphColors = [
+  Color(0xffB8FFFF),
+  Constant.compareCompassChartFirstLoggedValueColor,
+  Color(0x80B8FFFF),
+  Color(0xffB8FFFF),
+];
+
+
 
 const personalizedDefaultGraphColors = [
   Color(0xff97c289),
@@ -17,12 +34,27 @@ const personalizedDefaultGraphColors = [
   Color(0xffafd794),
 ];
 
+List<Color> setRadarChartColor(compassValue) {
+  switch (compassValue) {
+    case 0:
+      return defaultGraphColors;
+    case 1:
+      return personalizedDefaultGraphColors;
+    case 2:
+      return compareCompassGraphColors;
+    case 3:
+      return compareCompassFirstLoggedGraphColors;
+    default:
+      return defaultGraphColors;
+  }
+}
+
 class RadarChart extends StatefulWidget {
   final List<int> ticks;
   final List<String> features;
   final List<List<int>> data;
   final bool reverseAxis;
-  final bool isPersonalizedHeadacheData;
+  final int compassValue;
   final TextStyle ticksTextStyle;
   final TextStyle featuresTextStyle;
   final Color outlineColor;
@@ -35,7 +67,7 @@ class RadarChart extends StatefulWidget {
       @required this.features,
       @required this.data,
       this.reverseAxis = false,
-      this.isPersonalizedHeadacheData = false,
+      this.compassValue = 0,
       this.ticksTextStyle = const TextStyle(color: Colors.grey, fontSize: 0),
       this.featuresTextStyle =
           const TextStyle(color: Color(0xffafd794), fontSize: 12),
@@ -49,20 +81,19 @@ class RadarChart extends StatefulWidget {
     @required List<String> features,
     @required List<List<int>> data,
     bool reverseAxis = false,
-    bool isPersonalizedHeadacheData = false,
+    int compassValue = 0,
     Color axisColor,
+    Color outlineColor,
   }) {
     return RadarChart(
-      ticks: ticks,
-      features: features,
-      data: data,
-      reverseAxis: reverseAxis,
-      isPersonalizedHeadacheData: isPersonalizedHeadacheData,
-      graphColors: isPersonalizedHeadacheData
-          ? personalizedDefaultGraphColors
-          : defaultGraphColors,
-      axisColor: axisColor == null ? Color(0xfff0e4945) : axisColor,
-    );
+        ticks: ticks,
+        features: features,
+        data: data,
+        reverseAxis: reverseAxis,
+        compassValue: compassValue,
+        graphColors: setRadarChartColor(compassValue),
+        axisColor: axisColor == null ? Color(0xfff0e4945) : axisColor,
+        outlineColor: outlineColor == null ? Color(0xff0e232f) : outlineColor);
   }
 
   factory RadarChart.dark(
@@ -70,16 +101,16 @@ class RadarChart extends StatefulWidget {
       @required List<String> features,
       @required List<List<int>> data,
       bool reverseAxis = false,
-      bool isPersonalizedHeadacheData = false}) {
+      int compassValue = 0}) {
     return RadarChart(
       ticks: ticks,
       features: features,
       data: data,
       featuresTextStyle: const TextStyle(color: Colors.white, fontSize: 16),
-      outlineColor: Colors.white,
+      outlineColor: Color(0xff0e232f),
       axisColor: Colors.grey,
       reverseAxis: reverseAxis,
-      isPersonalizedHeadacheData: isPersonalizedHeadacheData,
+      compassValue: compassValue,
     );
   }
 
@@ -115,7 +146,7 @@ class _RadarChartState extends State<RadarChart>
   @override
   void didUpdateWidget(RadarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isPersonalizedHeadacheData) {
+    if (widget.compassValue == 1) {
       animationController.reset();
       animationController.forward();
     }
