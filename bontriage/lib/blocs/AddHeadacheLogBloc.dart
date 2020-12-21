@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:http/http.dart';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
 import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
@@ -20,6 +21,8 @@ class AddHeadacheLogBloc {
   int count = 0;
 
   List<SelectedAnswers> selectedAnswersList = [];
+
+  int headacheId;
 
   StreamSink<dynamic> get addHeadacheLogDataSink =>
       _addHeadacheLogStreamController.sink;
@@ -52,6 +55,7 @@ class AddHeadacheLogBloc {
   }
 
   fetchCalendarHeadacheLogDayData(int headacheId) async {
+    this.headacheId = headacheId;
     String apiResponse;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
@@ -119,11 +123,12 @@ class AddHeadacheLogBloc {
     String apiResponse;
     try {
       _addHeadacheLogRepository.currentUserHeadacheModel = currentUserHeadacheModel;
-      var signUpFirstStepData =
-          await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(
-              WebservicePost.qaServerUrl + 'event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
+      var signUpFirstStepData;
+      if(headacheId == null)
+        signUpFirstStepData = await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(WebservicePost.qaServerUrl + 'event', RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+      else
+        signUpFirstStepData = await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(WebservicePost.qaServerUrl + 'event/$headacheId', RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+
       if (signUpFirstStepData is AppException) {
         sendAddHeadacheLogDataSink.addError(signUpFirstStepData);
         apiResponse = signUpFirstStepData.toString();

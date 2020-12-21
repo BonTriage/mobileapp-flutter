@@ -33,6 +33,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool isVolumeOn = false;
   AnimationController _animationController;
+  ScrollController _scrollController;
 
   ///Method to toggle volume on or off
   void _toggleVolume() async {
@@ -47,6 +48,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addObserver(this);
 
     _animationController =
@@ -85,6 +87,10 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
       if (isVolumeOn)
         TextToSpeechRecognition.speechToText(widget.chatBubbleText);
     }
+
+    try {
+      _scrollController.jumpTo(0);
+    } catch(e) {}
   }
 
   Widget _getTextWidget() {
@@ -94,6 +100,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
         child: SingleChildScrollView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
           child: RichText(
             text: TextSpan(

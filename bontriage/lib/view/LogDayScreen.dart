@@ -212,7 +212,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _onSubmitClicked();
+                                        if(selectedAnswers.length > 0)
+                                          _onSubmitClicked();
                                       },
                                       child: Container(
                                         width: 110,

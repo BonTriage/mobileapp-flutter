@@ -196,18 +196,21 @@ class _RecordCalendarHeadacheSectionState
                             ),
                           ),
                         SizedBox(height: 10,),
-                        GestureDetector(
-                          onTap: () {
-                            _openAddHeadacheScreen();
-                          },
-                          child: Text(
-                            'Edit Headache',
-                            style: TextStyle(
-                                color: Constant
-                                    .addCustomNotificationTextColor,
-                                fontFamily: Constant.jostRegular,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14),
+                        Visibility(
+                          visible: userHeadacheListData.length > 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              _openAddHeadacheScreen();
+                            },
+                            child: Text(
+                              'Edit Headache',
+                              style: TextStyle(
+                                  color: Constant
+                                      .addCustomNotificationTextColor,
+                                  fontFamily: Constant.jostRegular,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                            ),
                           ),
                         ),
                       ],

@@ -27,6 +27,7 @@ class _SignUpFirstStepCompassResultState
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
+  ScrollController _scrollController;
 
   @override
   void initState() {
@@ -50,6 +51,8 @@ class _SignUpFirstStepCompassResultState
     // Save user progress database
     saveUserProgressInDataBase();
     setVolumeIcon();
+
+    _scrollController = ScrollController();
   }
 
   @override
@@ -95,6 +98,10 @@ class _SignUpFirstStepCompassResultState
       _animationController.reset();
       _animationController.forward();
     }
+
+    try {
+      _scrollController.jumpTo(0);
+    } catch(e) {}
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -179,6 +186,7 @@ class _SignUpFirstStepCompassResultState
                                       maxHeight: Constant.chatBubbleMaxHeight,
                                     ),
                                     child: SingleChildScrollView(
+                                      controller: _scrollController,
                                       physics: BouncingScrollPhysics(),
                                       child: Text(
                                         _bubbleTextViewList[_buttonPressedValue],

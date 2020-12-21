@@ -330,13 +330,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     
     if (isDoubleTapped) {
       if (questionType == 'multi') {
-        SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element) => (element.questionTag == currentTag || element.answer == selectedAnswer), orElse: () => null);
-        if(selectedAnswer == null) {
-          widget.selectedAnswers.add(
-              SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        SelectedAnswers selectedAnswerValue = widget.selectedAnswers.firstWhere((element) => (element.questionTag == currentTag && element.answer == selectedAnswer), orElse: () => null);
+        if(selectedAnswerValue == null) {
+          widget.selectedAnswers.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
         }
-        widget.doubleTapSelectedAnswer.add(
-            SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+
+        SelectedAnswers doubleTapSelectedAnswer = widget.doubleTapSelectedAnswer.firstWhere((element) => (element.questionTag == currentTag && element.answer == selectedAnswer), orElse: () => null);
+        if(doubleTapSelectedAnswer == null)
+          widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
         if (selectedAnswerObj == null) {
@@ -348,8 +349,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
         SelectedAnswers doubleTapSelectedAnswerObj = widget.doubleTapSelectedAnswer.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
         if (doubleTapSelectedAnswerObj == null) {
-          widget.doubleTapSelectedAnswer.add(
-              SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+          widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
         } else {
           doubleTapSelectedAnswerObj.answer = selectedAnswer;
         }
@@ -510,9 +510,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                         selectedAnswerTriggerData.questionTag,
                     orElse: () => null);
                 if (selectedAnswerData == null) {
-                  widget.doubleTapSelectedAnswer.add(SelectedAnswers(
-                      questionTag: selectedAnswerTriggerData.questionTag,
-                      answer: selectedAnswerTriggerData.answer));
+                  widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: selectedAnswerTriggerData.questionTag, answer: selectedAnswerTriggerData.answer));
                 } else {
                   selectedAnswerData.answer = selectedAnswerTriggerData.answer;
                 }
@@ -525,6 +523,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void storeLogDayDataIntoDatabase() async {
+    print(widget.doubleTapSelectedAnswer);
     List<Map> userLogDataMap;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
@@ -567,6 +566,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       _animationController.forward();
     } else {
       _animationController.reverse();
+      widget.selectedAnswers.removeWhere((element) => element.questionTag == widget.sleepExpandableWidgetList[0].tag);
+      widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == widget.sleepExpandableWidgetList[0].tag);
     }
   }
 
@@ -1777,9 +1778,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   void _updateSelectedAnswerListWhenCircleItemSelected(String selectedAnswer, bool isSelected) {
     if(isSelected) {
       if (widget.questionType == 'multi') {
-        widget.selectedAnswers.add(
-            SelectedAnswers(
-                questionTag: widget.contentType, answer: selectedAnswer));
+        SelectedAnswers selectedAnswersValue = widget.selectedAnswers.firstWhere((element) => element.questionTag == widget.contentType && element.answer == selectedAnswer, orElse: () => null);
+        if(selectedAnswersValue == null)
+          widget.selectedAnswers.add(SelectedAnswers(questionTag: widget.contentType, answer: selectedAnswer));
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
                 (element) => element.questionTag == widget.contentType,

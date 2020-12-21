@@ -345,7 +345,7 @@ class _MeScreenState extends State<MeScreen>
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                          EdgeInsets.symmetric(horizontal: 65, vertical: 40),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.bottomLeft,

@@ -428,7 +428,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               fontFamily: Constant.jostRegular,
                               decoration: TextDecoration.underline),
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                     ],
                   ),
                 ),
@@ -456,7 +459,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         _errorMsg = Constant.signUpEmilFieldAlertMessage;
         _isShowAlert = true;
       });
-    } else if (passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
+    } else if (passwordValue == null || passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
       setState(() {
         _errorMsg = Constant.signUpAlertMessage;
         _isShowAlert = true;

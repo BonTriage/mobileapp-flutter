@@ -4,13 +4,15 @@ class SignUpOnBoardAnswersRequestModel {
   List<MobileEventDetails> mobileEventDetails;
   String updatedAt;
   int userId;
+  int eventId;
 
   SignUpOnBoardAnswersRequestModel(
       {this.calendarEntryAt,
         this.eventType,
         this.mobileEventDetails,
         this.updatedAt,
-        this.userId});
+        this.userId,
+      this.eventId});
 
   SignUpOnBoardAnswersRequestModel.fromJson(Map<String, dynamic> json) {
     calendarEntryAt = json['calendar_entry_at'];
@@ -23,6 +25,7 @@ class SignUpOnBoardAnswersRequestModel {
     }
     updatedAt = json['updated_at'];
     userId = json['user_id'];
+    eventId = json['eventId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,8 @@ class SignUpOnBoardAnswersRequestModel {
     }
     data['updated_at'] = this.updatedAt;
     data['user_id'] = this.userId;
+    if(this.eventId != null)
+      data['event_id'] = this.eventId;
     return data;
   }
 }

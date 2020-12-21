@@ -121,7 +121,7 @@ class LogDayBloc {
           if(calendarInfoModel.logDayNote.length >= 1)
             noteEventId = calendarInfoModel.logDayNote[0].id;
 
-          print('id');
+          print('id???$behaviorEventId???$medicationEventId???$triggerEventId???$noteEventId');
           /*response.headache.forEach((headacheElement) {
             headacheElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
               selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
@@ -311,9 +311,7 @@ class LogDayBloc {
             }
           } else {
             try {
-              selectedValuesList =
-                  (json.decode(triggersSelectedAnswer.answer) as List<dynamic>)
-                      .cast<String>();
+              selectedValuesList = (json.decode(triggersSelectedAnswer.answer) as List<dynamic>).cast<String>();
               int selectedIndex = int.parse(element.answer.toString()) - 1;
               Questions questions = questionList.firstWhere((
                   quesElement) => quesElement.tag == element.questionTag,
@@ -345,19 +343,17 @@ class LogDayBloc {
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData, 570);
-    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData, 571);
-    logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData, 572);
-    logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData, 573);
+    logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData, behaviorEventId);
+    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData, medicationEventId);
+    logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData, triggerEventId);
+    logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData, noteEventId);
 
     return jsonEncode(logDaySendDataModel.toJson());
   }
 
   SignUpOnBoardAnswersRequestModel _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers, String eventType, UserProfileInfoModel userProfileInfoData, int eventId){
-    SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
-    SignUpOnBoardAnswersRequestModel();
-    signUpOnBoardAnswersRequestModel.eventType =
-        eventType;
+    SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
+    signUpOnBoardAnswersRequestModel.eventType = eventType;
     if (userProfileInfoData != null)
       signUpOnBoardAnswersRequestModel.userId =
           int.parse(userProfileInfoData.userId);
@@ -371,6 +367,7 @@ class LogDayBloc {
     }
 
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+    signUpOnBoardAnswersRequestModel.eventId = eventId;
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
 
     selectedAnswers.forEach((element) {
@@ -379,7 +376,7 @@ class LogDayBloc {
       signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
           MobileEventDetails(
               questionTag: element.questionTag,
-              eventId: eventId,
+              /*eventId: eventId,*/
               questionJson: "",
               updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
               value: valuesList));
@@ -487,7 +484,7 @@ class LogDayBloc {
         selectedAnswerElement.questionTag == Constant.behaviourPreMealTag ||
         selectedAnswerElement.questionTag == Constant.administeredTag ||
         selectedAnswerElement.questionTag == Constant.triggersTag) {
-        SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag, orElse: () => null);
+        SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag && doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer, orElse: () => null);
         if(doubleTappedSelectedAnswer != null) {
           if(doubleTappedSelectedAnswer.questionTag != Constant.administeredTag) {
             if(doubleTappedSelectedAnswer.answer == selectedAnswerElement.answer) {
