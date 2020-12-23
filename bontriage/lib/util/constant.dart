@@ -537,6 +537,8 @@ class Constant {
   static String logDayDoubleTapDialog = 'logDayDoubleTapDialog';
   static String noneOfTheAbove = 'None of the above';
   static String cancelAssessment = 'Cancel Assessment';
+  static String migraineDaysVsHeadacheDaysDialogText = 'In this Intensity view of your calendar, you can see a distinction between Headache days and Migraine days. When you complete an assessment for a new headache type, we classify it internally as either a Headache or a Migraine. In most cases throughout the app, your migraines are included generally as a headache, but you can view the distinction between the two in this Intensity view, depending on which headache types you select when logging.';
+  static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
@@ -548,6 +550,7 @@ class Constant {
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
   static const double chatBubbleMaxHeight = 78;
+  static const double chatBubbleCompassResultMaxHeight = 80;
 
   //decorations
   static BoxDecoration backgroundBoxDecoration = BoxDecoration(

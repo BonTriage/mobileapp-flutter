@@ -89,7 +89,10 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
     }
 
     try {
-      _scrollController.jumpTo(0);
+      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      Future.delayed(Duration(milliseconds: 150), () {
+        _scrollController.jumpTo(0);
+      });
     } catch(e) {}
   }
 
@@ -99,12 +102,16 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: SingleChildScrollView(
+        child: Scrollbar(
           controller: _scrollController,
-          physics: BouncingScrollPhysics(),
-          child: RichText(
-            text: TextSpan(
-              children: widget.textSpanList,
+          isAlwaysShown: false,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            child: RichText(
+              text: TextSpan(
+                children: widget.textSpanList,
+              ),
             ),
           ),
         ),
@@ -114,17 +121,22 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Text(
-            widget.chatBubbleText,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: Constant.jostRegular,
-              height: 1.3,
-              color: (widget.chatBubbleColor == null)
-                  ? Constant.chatBubbleGreen
-                  : Constant.bubbleChatTextView,
+        child: Scrollbar(
+          controller: _scrollController,
+          isAlwaysShown: false,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            child: Text(
+              widget.chatBubbleText,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: Constant.jostRegular,
+                height: 1.3,
+                color: (widget.chatBubbleColor == null)
+                    ? Constant.chatBubbleGreen
+                    : Constant.bubbleChatTextView,
+              ),
             ),
           ),
         ),

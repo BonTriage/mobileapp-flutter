@@ -97,6 +97,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                     });
                   },
                   activeColor: Constant.chatBubbleGreen,
+                  activeTrackColor: Constant.chatBubbleGreen.withOpacity(0.6),
                   inactiveThumbColor: Constant.chatBubbleGreen,
                   inactiveTrackColor: Constant.chatBubbleGreenBlue,
                 ),
