@@ -246,19 +246,15 @@ class _MeScreenState extends State<MeScreen>
                                         TableCellVerticalAlignment.middle,
                                     children: [
                                       TableRow(children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: Center(
-                                            child: Text(
-                                              'Su',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Constant
-                                                      .locationServiceGreen,
-                                                  fontFamily:
-                                                      Constant.jostMedium),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            'Su',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Constant
+                                                    .locationServiceGreen,
+                                                fontFamily:
+                                                    Constant.jostMedium),
                                           ),
                                         ),
                                         Center(
