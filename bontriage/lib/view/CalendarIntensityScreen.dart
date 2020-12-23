@@ -7,6 +7,7 @@ import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
 
 import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
@@ -379,22 +380,28 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             SizedBox(
                               width: 5,
                             ),
-                            Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  color: Constant.backgroundTransparentColor,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Constant.chatBubbleGreen,
-                                      width: 1.3)),
-                              child: Center(
-                                child: Text(
-                                  'i',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Constant.locationServiceGreen,
-                                      fontFamily: Constant.jostRegular),
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                _showMigraineDaysVsHeadacheDaysDialog();
+                              },
+                              child: Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                    color: Constant.backgroundTransparentColor,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Constant.chatBubbleGreen,
+                                        width: 1.3)),
+                                child: Center(
+                                  child: Text(
+                                    'i',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
                                 ),
                               ),
                             ),
@@ -647,4 +654,18 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
 
   @override
   bool get wantKeepAlive => true;
+
+  void _showMigraineDaysVsHeadacheDaysDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: MigraineDaysVsHeadacheDaysDialog(),
+        );
+      },
+    );
+  }
 }

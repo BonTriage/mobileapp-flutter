@@ -46,11 +46,13 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
   AnimationController _animationController;
 
   SelectedAnswers selectedAnswers;
+  double sliderValue;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    sliderValue = widget.sliderValue;
 
     _animationController = AnimationController(
         duration: Duration(milliseconds: widget.isAnimate ? 800 : 0),
@@ -66,6 +68,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         String selectedValue = selectedAnswers.answer;
         try {
           widget.sliderValue = double.parse(selectedValue);
+          sliderValue = widget.sliderValue;
         } catch (e) {
           e.toString();
         }
@@ -132,16 +135,19 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                             max: widget.sliderMaxValue,
                             onChangeEnd: (age) {
                               //   if(!widget.isAnimate)
+                              widget.sliderValue = age;
+                              sliderValue = age.roundToDouble();
                               if(widget.selectedAnswerCallBack != null)
-                                widget.selectedAnswerCallBack(widget.currentTag, widget.sliderValue.toInt().toString());
+                                widget.selectedAnswerCallBack(widget.currentTag, sliderValue.ceil().toInt().toString());
                             },
                             onChanged: (double age) {
                               setState(() {
                                 widget.sliderValue = age;
+                                sliderValue = widget.sliderValue.roundToDouble();
                                 if (widget.onValueChangeCallback != null)
                                   widget.onValueChangeCallback(
                                       widget.currentTag,
-                                      age.toInt().toString());
+                                      sliderValue.toInt().toString());
                               });
                             },
                           ),
@@ -228,7 +234,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         color: Constant.chatBubbleGreenBlue),
                                     child: Center(
                                       child: Text(
-                                        widget.sliderValue.toInt().toString(),
+                                        sliderValue.toInt().toString(),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,

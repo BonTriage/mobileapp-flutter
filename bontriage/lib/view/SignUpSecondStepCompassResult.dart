@@ -31,9 +31,12 @@ class _SignUpSecondStepCompassResultState
 
   static String userHeadacheTextView;
 
+  ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     getUserHeadacheName();
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
@@ -95,6 +98,10 @@ class _SignUpSecondStepCompassResultState
       _animationController.reset();
       _animationController.forward();
     }
+
+    try{
+      _scrollController.jumpTo(0);
+    } catch(e) {}
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -183,11 +190,19 @@ class _SignUpSecondStepCompassResultState
                                           maxHeight:
                                               Constant.chatBubbleMaxHeight,
                                         ),
-                                        child: SingleChildScrollView(
-                                          physics: BouncingScrollPhysics(),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              children: _getBubbleTextSpans(),
+                                        child: Scrollbar(
+                                          controller: _scrollController,
+                                          isAlwaysShown: true,
+                                          child: SingleChildScrollView(
+                                            controller: _scrollController,
+                                            physics: BouncingScrollPhysics(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 10),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: _getBubbleTextSpans(),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
