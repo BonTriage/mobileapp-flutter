@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -86,7 +87,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                     fontFamily: Constant.jostMedium,
                   ),
                 ),
-                Switch(
+                CupertinoSwitch(
                   value: _locationServicesSwitchState,
                   onChanged: (bool state) {
                     setState(() {
@@ -96,10 +97,11 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                       print(state);
                     });
                   },
-                  activeColor: Constant.chatBubbleGreen,
-                  activeTrackColor: Constant.chatBubbleGreen.withOpacity(0.6),
+                  activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
+                  trackColor: Constant.chatBubbleGreen.withOpacity(0.2),
+                  /*activeTrackColor: Constant.chatBubbleGreen.withOpacity(0.6),
                   inactiveThumbColor: Constant.chatBubbleGreen,
-                  inactiveTrackColor: Constant.chatBubbleGreenBlue,
+                  inactiveTrackColor: Constant.chatBubbleGreenBlue,*/
                 ),
               ],
             ),
