@@ -39,6 +39,7 @@ import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/SignUpSecondStepCompassResult.dart';
 import 'package:mobile/view/Splash.dart';
+import 'package:mobile/view/WebViewScreen.dart';
 import 'package:mobile/view/WelcomeStartAssessmentScreen.dart';
 import 'package:mobile/view/WelcomeScreen.dart';
 import 'package:mobile/view/login_screen.dart';
@@ -307,6 +308,10 @@ class MyApp extends StatelessWidget {
           case Constant.compassScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: CompassScreen());
+            }
+          case Constant.webViewScreenRouter:
+            {
+              return SlideFromRightPageRoute(widget: WebViewScreen(url: settings.arguments,));
             }
         }
         return null;

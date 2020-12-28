@@ -6,6 +6,7 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
@@ -26,6 +27,7 @@ class _SignUpSecondStepCompassResultState
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
+  bool _isButtonClicked = false;
 
   String userHeadacheName = "";
 
@@ -99,8 +101,11 @@ class _SignUpSecondStepCompassResultState
       _animationController.forward();
     }
 
-    try{
-      _scrollController.jumpTo(0);
+    try {
+      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      Future.delayed(Duration(milliseconds: 150), () {
+        _scrollController.jumpTo(0);
+      });
     } catch(e) {}
 
     return WillPopScope(
@@ -190,9 +195,9 @@ class _SignUpSecondStepCompassResultState
                                           maxHeight:
                                               Constant.chatBubbleMaxHeight,
                                         ),
-                                        child: Scrollbar(
+                                        child: CustomScrollBar(
                                           controller: _scrollController,
-                                          isAlwaysShown: true,
+                                          isAlwaysShown: false,
                                           child: SingleChildScrollView(
                                             controller: _scrollController,
                                             physics: BouncingScrollPhysics(),
@@ -388,16 +393,22 @@ class _SignUpSecondStepCompassResultState
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
                             onPressed: () {
-                              TextToSpeechRecognition.stopSpeech();
-                              setState(() {
-                                if (_buttonPressedValue >= 0 &&
-                                    _buttonPressedValue < 2) {
-                                  _buttonPressedValue++;
-                                  isBackButtonHide = true;
-                                } else {
-                                  moveToNextScreen();
-                                }
-                              });
+                              if(!_isButtonClicked) {
+                                _isButtonClicked = true;
+                                TextToSpeechRecognition.stopSpeech();
+                                setState(() {
+                                  if (_buttonPressedValue >= 0 &&
+                                      _buttonPressedValue < 2) {
+                                    _buttonPressedValue++;
+                                    isBackButtonHide = true;
+                                  } else {
+                                    moveToNextScreen();
+                                  }
+                                });
+                                Future.delayed(Duration(milliseconds: 350), () {
+                                  _isButtonClicked = false;
+                                });
+                              }
                             },
                             child: Container(
                               width: 130,
@@ -556,17 +567,28 @@ class _SignUpSecondStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if (_buttonPressedValue == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_buttonPressedValue == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          if (_buttonPressedValue <= 2 && _buttonPressedValue > 1) {
+            _buttonPressedValue--;
+          } else {
+            isBackButtonHide = false;
+            _buttonPressedValue = 0;
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        if (_buttonPressedValue <= 2 && _buttonPressedValue > 1) {
-          _buttonPressedValue--;
-        } else {
-          isBackButtonHide = false;
-          _buttonPressedValue = 0;
-        }
-      });
       return false;
     }
   }

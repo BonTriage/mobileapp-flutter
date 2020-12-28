@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/PhotoHero.dart';
 
@@ -102,7 +103,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: Scrollbar(
+        child: CustomScrollBar(
           controller: _scrollController,
           isAlwaysShown: false,
           child: SingleChildScrollView(
@@ -121,7 +122,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: Scrollbar(
+        child: CustomScrollBar(
           controller: _scrollController,
           isAlwaysShown: false,
           child: SingleChildScrollView(

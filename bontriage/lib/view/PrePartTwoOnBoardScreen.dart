@@ -15,10 +15,10 @@ class PrePartTwoOnBoardScreen extends StatefulWidget {
 class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   SignUpBoardFirstStepBloc signUpBoardFirstStepBloc;
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
     signUpOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
@@ -67,9 +67,15 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
           bubbleChatTextSpanList: _questionList[_currentIndex],
           chatText: bubbleChatTextView[_currentIndex],
           nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+            if(!_isButtonClicked) {
+              _isButtonClicked = true;
+              setState(() {
+                _currentIndex++;
+              });
+              Future.delayed(Duration(milliseconds: 350), () {
+                _isButtonClicked = false;
+              });
+            }
           },
           bottomButtonText: Constant.continueText,
           bottomButtonFunction: () {
@@ -134,12 +140,23 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }

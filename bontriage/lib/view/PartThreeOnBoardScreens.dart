@@ -31,6 +31,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   int _currentPageIndex = 0;
   double _progressPercent = 0;
   bool _isAlreadyDataFiltered = false;
+  bool _isButtonClicked = false;
 
   List<SignUpOnBoardFirstStepQuestionsModel> _pageViewWidgetList;
 
@@ -143,32 +144,38 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                         _onBackPressed();
                       },
                       nextButtonFunction: () {
-                        if (Utils.validationForOnBoard(
-                            _signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                            _currentQuestionLists[_currentPageIndex])) {
-                          setState(() {
-                            double stepOneProgress =
-                                1 / _pageViewWidgetList.length;
+                        if(!_isButtonClicked) {
+                          _isButtonClicked = true;
+                          if (Utils.validationForOnBoard(
+                              _signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                              _currentQuestionLists[_currentPageIndex])) {
+                            setState(() {
+                              double stepOneProgress =
+                                  1 / _pageViewWidgetList.length;
 
-                            if (_progressPercent == 1) {
-                              sendUserDataAndMoveInToNextScreen();
-                              //TODO: Move to next screen
-                            } else {
-                              _currentPageIndex++;
+                              if (_progressPercent == 1) {
+                                sendUserDataAndMoveInToNextScreen();
+                                //TODO: Move to next screen
+                              } else {
+                                _currentPageIndex++;
 
-                              if (_currentPageIndex !=
-                                  _pageViewWidgetList.length - 1)
-                                _progressPercent += stepOneProgress;
-                              else {
-                                _progressPercent = 1;
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
+                                  _progressPercent += stepOneProgress;
+                                else {
+                                  _progressPercent = 1;
+                                }
+
+                                _pageController.animateToPage(_currentPageIndex,
+                                    duration: Duration(milliseconds: 1),
+                                    curve: Curves.easeInOutCubic);
+
+                                _getCurrentQuestionTag(_currentPageIndex);
                               }
-
-                              _pageController.animateToPage(_currentPageIndex,
-                                  duration: Duration(milliseconds: 1),
-                                  curve: Curves.easeInOutCubic);
-
-                              _getCurrentQuestionTag(_currentPageIndex);
-                            }
+                            });
+                          }
+                          Future.delayed(Duration(milliseconds: 350), () {
+                            _isButtonClicked = false;
                           });
                         }
                       },
@@ -304,20 +311,31 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentPageIndex == 0) {
-      return true;
-    } else {
-      setState(() {
-        double stepOneProgress = 1 / _pageViewWidgetList.length;
+    if(_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentPageIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-        if (_currentPageIndex != 0) {
-          _progressPercent -= stepOneProgress;
-          _currentPageIndex--;
-          _pageController.animateToPage(_currentPageIndex,
-              duration: Duration(milliseconds: 1),
-              curve: Curves.easeIn);
-        }
-      });
+          if (_currentPageIndex != 0) {
+            _progressPercent -= stepOneProgress;
+            _currentPageIndex--;
+            _pageController.animateToPage(_currentPageIndex,
+                duration: Duration(milliseconds: 1),
+                curve: Curves.easeIn);
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
+    } else {
       return false;
     }
   }

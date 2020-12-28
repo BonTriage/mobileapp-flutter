@@ -82,6 +82,7 @@ class Constant {
       '/onCalendarHeadacheLogDayDetailsScreenRouter';
 
   static const String compassScreenRouter = 'compassScreenRouter';
+  static const String webViewScreenRouter = 'webViewScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -670,4 +671,8 @@ class Constant {
   static const String medicationEventType = 'medication';
   static const String triggersEventType = 'triggers';
   static const String noteEventType = 'note';
+
+  //urls
+  static const String termsAndConditionUrl = 'https://www.bontriage.com/terms-of-service.html';
+  static const String privacyPolicyUrl = 'https://www.bontriage.com/privacy.html';
 }

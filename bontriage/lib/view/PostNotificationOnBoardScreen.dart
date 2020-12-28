@@ -43,6 +43,7 @@ class _PostNotificationOnBoardScreenState
   ];
 
   int _currentIndex = 0;
+  bool _isButtonClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +74,23 @@ class _PostNotificationOnBoardScreenState
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }

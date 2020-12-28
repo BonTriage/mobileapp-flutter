@@ -40,7 +40,6 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
           chatText: Constant.letsBeginBySeeing,
           nextButtonFunction: () {
             sendToNextScreen();
-
           },
           isShowSecondBottomButton: false,
           closeButtonFunction: () {

@@ -9,6 +9,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
+import 'CustomScrollBar.dart';
 
 class SignUpFirstStepCompassResult extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class _SignUpFirstStepCompassResultState
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
   ScrollController _scrollController;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
@@ -191,7 +193,7 @@ class _SignUpFirstStepCompassResultState
                                       ),
                                       child: Theme(
                                         data: ThemeData(highlightColor: Colors.black),
-                                        child: Scrollbar(
+                                        child: CustomScrollBar(
                                           isAlwaysShown: false,
                                           controller: _scrollController,
                                           child: SingleChildScrollView(
@@ -393,16 +395,22 @@ class _SignUpFirstStepCompassResultState
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
                             onPressed: () {
-                              TextToSpeechRecognition.stopSpeech();
-                              setState(() {
-                                if (_buttonPressedValue >= 0 &&
-                                    _buttonPressedValue < 4) {
-                                  _buttonPressedValue++;
-                                  isBackButtonHide = true;
-                                } else {
-                                  moveToNextScreen();
-                                }
-                              });
+                              if(!_isButtonClicked) {
+                                _isButtonClicked = true;
+                                TextToSpeechRecognition.stopSpeech();
+                                setState(() {
+                                  if (_buttonPressedValue >= 0 &&
+                                      _buttonPressedValue < 4) {
+                                    _buttonPressedValue++;
+                                    isBackButtonHide = true;
+                                  } else {
+                                    moveToNextScreen();
+                                  }
+                                });
+                                Future.delayed(Duration(milliseconds: 350), () {
+                                  _isButtonClicked = false;
+                                });
+                              }
                             },
                             child: Container(
                               width: 130,
@@ -487,18 +495,29 @@ class _SignUpFirstStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if (_buttonPressedValue == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_buttonPressedValue == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          if (_buttonPressedValue <= 4 &&
+              _buttonPressedValue > 1) {
+            _buttonPressedValue--;
+          } else {
+            isBackButtonHide = false;
+            _buttonPressedValue = 0;
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        if (_buttonPressedValue <= 4 &&
-            _buttonPressedValue > 1) {
-          _buttonPressedValue--;
-        } else {
-          isBackButtonHide = false;
-          _buttonPressedValue = 0;
-        }
-      });
       return false;
     }
   }
