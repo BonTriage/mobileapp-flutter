@@ -10,13 +10,15 @@ class RecordDayPage extends StatefulWidget {
   final DateTime dateTime;
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
   final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
+  final int onGoingHeadacheId;
 
   const RecordDayPage(
       {Key key,
       this.hasData = false,
       this.dateTime,
       this.userHeadacheLogDayDetailsModel,
-      this.openHeadacheLogDayScreenCallback})
+      this.openHeadacheLogDayScreenCallback,
+      this.onGoingHeadacheId})
       : super(key: key);
 
   @override
@@ -48,42 +50,48 @@ class _RecordDayPageState extends State<RecordDayPage>
       listWidget.add(Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 10,
+          Visibility(
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            child: SizedBox(
+              height: 10,
+            ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Visibility(
-                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
-                child: Text(
-                  'Note:',
-                  style: TextStyle(
-                      color: Constant
-                          .chatBubbleGreen60Alpha,
-                      fontFamily: Constant.jostRegular,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: Visibility(
+          Visibility(
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Visibility(
                   visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
                   child: Text(
-                    widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                    'Note:',
                     style: TextStyle(
                         color: Constant
-                            .addCustomNotificationTextColor,
+                            .chatBubbleGreen60Alpha,
                         fontFamily: Constant.jostRegular,
                         fontWeight: FontWeight.w500,
-                        fontSize: 14),
+                        fontSize: 16),
                   ),
                 ),
-              )
-            ],
+                SizedBox(
+                  width: 10,
+                ),
+                Flexible(
+                  child: Visibility(
+                    visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                    child: Text(
+                      widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                      style: TextStyle(
+                          color: Constant
+                              .addCustomNotificationTextColor,
+                          fontFamily: Constant.jostRegular,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(
             height: 10,
@@ -135,7 +143,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                   height: 20,
                 ),
                 label: Text(
-                  'Add Headache',
+                  widget.onGoingHeadacheId == null ? 'Add Headache' : 'Edit On-Going Headache',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -393,12 +401,18 @@ class _RecordDayPageState extends State<RecordDayPage>
           widget.dateTime.day,
           DateTime.now().hour,
           DateTime.now().minute,0, 0);
+
+      DateTime currentDateTime = DateTime.now();
+      DateTime endDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+
       CurrentUserHeadacheModel currentUserHeadacheModel =
           CurrentUserHeadacheModel(
               userId: userProfileInfoData.userId,
-              isOnGoing: true,
+              isOnGoing: false,
               selectedDate: dateTime.toUtc().toIso8601String(),
-              isFromRecordScreen: true
+              isFromRecordScreen: true,
+              selectedEndDate: endDateTime.toUtc().toIso8601String(),
+              headacheId: widget.onGoingHeadacheId
           );
 
       widget.openHeadacheLogDayScreenCallback(true, false, currentUserHeadacheModel);

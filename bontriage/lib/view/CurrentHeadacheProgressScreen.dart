@@ -11,6 +11,10 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class CurrentHeadacheProgressScreen extends StatefulWidget {
+  final CurrentUserHeadacheModel currentUserHeadacheModel;
+
+  const CurrentHeadacheProgressScreen({Key key, this.currentUserHeadacheModel}) : super(key: key);
+
   @override
   _CurrentHeadacheProgressScreenState createState() =>
       _CurrentHeadacheProgressScreenState();
@@ -22,11 +26,10 @@ class _CurrentHeadacheProgressScreenState
   DateTime _storedDateTime;
   int _totalTime = 0; //in minutes
   Timer _timer;
-  bool isShowDayBorder = false;
+  bool _isShowDayBorder = false;
   bool _isAlreadyDataFetched = false;
   CurrentHeadacheProgressBloc _currentHeadacheProgressBloc;
   CurrentUserHeadacheModel _currentUserHeadacheModel;
-
   bool _isShowErrorMessage = false;
 
   @override
@@ -36,17 +39,18 @@ class _CurrentHeadacheProgressScreenState
 
     _currentHeadacheProgressBloc = CurrentHeadacheProgressBloc();
 
-    _currentHeadacheProgressBloc.fetchDataFromLocalDatabase();
+    _currentHeadacheProgressBloc.fetchDataFromLocalDatabase(widget.currentUserHeadacheModel);
 
     _timer = Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {
         _totalTime++;
 
-        if ((_totalTime ~/ 60) > 23) isShowDayBorder = true;
+        if ((_totalTime ~/ 60) > 23) _isShowDayBorder = true;
       });
     });
   }
 
+  ///This method is used to return the display time format for the headache time
   String _getDisplayTime() {
     int hours = _totalTime ~/ 60;
     int minute = _totalTime % 60;
@@ -67,9 +71,15 @@ class _CurrentHeadacheProgressScreenState
       int days = (hours == 24) ? 1 : hours ~/ 24;
       hours = hours % 24;
       if (minute < 10) {
-        return '$days day,\n$hours:0$minute h';
+        if(days > 1)
+          return '$days days,\n$hours:0$minute h';
+        else
+          return '$days day,\n$hours:0$minute h';
       } else {
-        return '$days day,\n$hours:$minute h';
+        if(days > 1)
+          return '$days days,\n$hours:0$minute h';
+        else
+          return '$days day,\n$hours:0$minute h';
       }
     }
   }
@@ -177,7 +187,7 @@ class _CurrentHeadacheProgressScreenState
                                   child: Stack(
                                     children: [
                                       Visibility(
-                                        visible: isShowDayBorder,
+                                        visible: _isShowDayBorder,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -370,14 +380,13 @@ class _CurrentHeadacheProgressScreenState
       _storedDateTime = dateTime.toLocal();
       Duration duration = _dateTime.difference(dateTime);
 
-      if(duration.inDays.abs() < 3) {
+      /*if(duration.inDays.abs() < 3) {
         _totalTime = duration.inMinutes;
 
         if(!_currentUserHeadacheModel.isOnGoing)  {
           _timer.cancel();
         }
-      }
-      else {
+      } else {
         _isShowErrorMessage = true;
         _totalTime = 72 * 60;
         _currentUserHeadacheModel.isOnGoing = false;
@@ -391,8 +400,15 @@ class _CurrentHeadacheProgressScreenState
         }
         SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
         _timer.cancel();
+      }*/
+
+      _totalTime = duration.inMinutes;
+
+      if(!_currentUserHeadacheModel.isOnGoing)  {
+        _timer.cancel();
       }
-      isShowDayBorder = duration.inDays >= 1;
+
+      _isShowDayBorder = duration.inDays >= 1;
       _isAlreadyDataFetched = true;
     } catch(e) {
       print(e);
@@ -400,18 +416,19 @@ class _CurrentHeadacheProgressScreenState
   }
 
   void _navigateToAddHeadacheScreen() async{
-    if(_currentUserHeadacheModel.isOnGoing)
     _currentUserHeadacheModel.isOnGoing = false;
 
-    DateTime endHeadacheDateTime = DateTime.now();
-    DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
-    Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);
-    if(duration.inSeconds.abs() <= (72*60*60)) {
+    DateTime currentDateTime = DateTime.now();
+    DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+    /*DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
+    Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);*/
+    /*if(duration.inSeconds.abs() <= (72*60*60)) {
       _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
     } else {
       _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
-    }
+    }*/
 
+    _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
     await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
 
     Navigator.pushReplacementNamed(context,

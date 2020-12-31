@@ -38,6 +38,7 @@ class _MeScreenState extends State<MeScreen>
   String lastDayOfTheCurrentWeek;
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
+  CurrentUserHeadacheModel currentUserHeadacheModel;
 
   String userName = "";
 
@@ -135,6 +136,18 @@ class _MeScreenState extends State<MeScreen>
   }
 
   @override
+  void didUpdateWidget(covariant MeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _getUserCurrentHeadacheData();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('Applifecyclestate????$state');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: SingleChildScrollView(
@@ -151,8 +164,7 @@ class _MeScreenState extends State<MeScreen>
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        widget.navigateToOtherScreenCallback(
-                            Constant.welcomeStartAssessmentScreenRouter, null);
+                        _navigateToOtherScreen();
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -161,7 +173,7 @@ class _MeScreenState extends State<MeScreen>
                             height: 10,
                           ),
                           Text(
-                            Constant.onBoardingAssessmentIncomplete,
+                            _getNotificationText(),
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontFamily: Constant.jostRegular,
@@ -169,7 +181,7 @@ class _MeScreenState extends State<MeScreen>
                                 fontSize: 14),
                           ),
                           Text(
-                            Constant.clickHereToFinish,
+                            _getNotificationBottomText(),
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontFamily: Constant.jostMedium,
@@ -407,7 +419,11 @@ class _MeScreenState extends State<MeScreen>
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            _navigateUserToHeadacheLogScreen();
+                            if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+                              _navigateToAddHeadacheScreen();
+                            } else {
+                              _navigateUserToHeadacheLogScreen();
+                            }
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -418,7 +434,7 @@ class _MeScreenState extends State<MeScreen>
                             ),
                             child: Center(
                               child: Text(
-                                'Add a Headache',
+                                _getHeadacheButtonText(),
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 15,
@@ -450,7 +466,9 @@ class _MeScreenState extends State<MeScreen>
     bool isProfileInComplete =
         sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
 
-    if (isProfileInComplete != null || isProfileInComplete) {
+    await _getUserCurrentHeadacheData();
+
+    if (!_isOnBoardAssessmentInComplete && (isProfileInComplete != null || isProfileInComplete)) {
       setState(() {
         _isOnBoardAssessmentInComplete = isProfileInComplete;
         if (_isOnBoardAssessmentInComplete) {
@@ -470,16 +488,16 @@ class _MeScreenState extends State<MeScreen>
       currentUserHeadacheModel = await SignUpOnBoardProviders.db
           .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
-    if (currentUserHeadacheModel == null)
-      widget.navigateToOtherScreenCallback(
-          Constant.headacheStartedScreenRouter, null);
+    if (currentUserHeadacheModel == null) {
+      await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+    }
     else {
       if(currentUserHeadacheModel.isOnGoing) {
-        widget.navigateToOtherScreenCallback(
-            Constant.currentHeadacheProgressScreenRouter, null);
+        await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
       } else
-        widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+        await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     }
+    _getUserCurrentHeadacheData();
   }
 
   void requestService(
@@ -578,4 +596,78 @@ class _MeScreenState extends State<MeScreen>
     });
 
 }
+
+  Future<void> _getUserCurrentHeadacheData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(currentPositionOfTabBar == 0 && userProfileInfoData != null) {
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+      if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+        setState(() {
+          _isOnBoardAssessmentInComplete = true;
+          _animationController.forward();
+        });
+      } else {
+        setState(() {
+          _isOnBoardAssessmentInComplete = false;
+          _animationController.reverse();
+        });
+      }
+    }
+  }
+
+  ///This method is used to get text of notification banner
+  String _getNotificationText() {
+    if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+      return 'Headache log currently in progress.';
+    }
+    return Constant.onBoardingAssessmentIncomplete;
+  }
+
+  ///This method is used to get bottom text of notification banner
+  String _getNotificationBottomText() {
+    if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+      return 'Click here to view.';
+    }
+    return Constant.clickHereToFinish;
+  }
+
+  void _navigateToAddHeadacheScreen() async{
+    currentUserHeadacheModel.isOnGoing = false;
+
+    DateTime currentDateTime = DateTime.now();
+    DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+    /*DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
+    Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);*/
+    /*if(duration.inSeconds.abs() <= (72*60*60)) {
+      _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    } else {
+      _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
+    }*/
+
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(currentUserHeadacheModel);
+
+    await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    _getUserCurrentHeadacheData();
+  }
+
+  String _getHeadacheButtonText() {
+    if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+      return Constant.endHeadache;
+    }
+    return 'Add a Headache';
+  }
+
+  void _navigateToOtherScreen() async{
+    if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+      //_navigateToAddHeadacheScreen();
+      await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
+    } else {
+      await widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter, null);
+    }
+    _getUserCurrentHeadacheData();
+  }
 }

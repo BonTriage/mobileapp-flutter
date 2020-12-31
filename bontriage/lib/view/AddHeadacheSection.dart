@@ -128,6 +128,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'severity', orElse: () => null);
           if (intensitySelectedAnswer != null) {
             selectedCurrentValue = intensitySelectedAnswer.answer;
+          } else {
+            widget.selectedAnswers.add(SelectedAnswers(questionTag: 'severity', answer: widget.min.toInt().toString()));
           }
         }
 
@@ -156,6 +158,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'disability', orElse: () => null);
           if (intensitySelectedAnswer != null) {
             selectedCurrentValue = intensitySelectedAnswer.answer;
+          } else {
+            widget.selectedAnswers.add(SelectedAnswers(questionTag: 'disability', answer: widget.min.toInt().toString()));
           }
         }
 

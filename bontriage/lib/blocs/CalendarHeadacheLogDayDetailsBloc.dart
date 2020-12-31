@@ -5,6 +5,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/CalendarRepository.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -15,6 +16,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel =
       UserHeadacheLogDayDetailsModel();
   int count = 0;
+  int onGoingHeadacheId;
 
   StreamSink<dynamic> get calendarLogDayDataSink =>
       _calendarLogDayStreamController.sink;
@@ -116,6 +118,10 @@ class CalendarHeadacheLogDayDetailsBloc {
           (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.disabilityTag,
           orElse: () => null);
+      var headacheOnGoingData = element.mobileEventDetails.firstWhere(
+              (mobileEventElement) =>
+          mobileEventElement.questionTag == Constant.onGoingTag,
+          orElse: () => null);
       var headacheNoteData = element.mobileEventDetails.firstWhere(
           (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.headacheNoteTag,
@@ -134,17 +140,29 @@ class CalendarHeadacheLogDayDetailsBloc {
       } else {
         headacheData.headacheNote = "";
       }
-      if (headacheEndTimeData != null && headacheStartTimeData != null) {
-        DateTime startDataTime = DateTime.parse(headacheStartTimeData.value);
-        DateTime endDataTime = DateTime.parse(headacheEndTimeData.value);
-        Duration headacheTimeDuration = endDataTime.difference(startDataTime);
-        headacheInfo = _getDisplayTime(headacheTimeDuration.inMinutes.abs());
+      if(headacheOnGoingData != null) {
+        if(headacheOnGoingData.value.toLowerCase() == 'yes') {
+          onGoingHeadacheId = element.id;
+          headacheInfo = 'Headache On-Going: Yes';
+          if(headacheStartTimeData != null) {
+            DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
+            if(startDataTime != null) {
+              headacheInfo = '$headacheInfo\nStart Time: ${Utils.getTimeInAmPmFormat(startDataTime.hour, startDataTime.minute)}';
+            }
+          }
+        } else if (headacheEndTimeData != null && headacheStartTimeData != null) {
+          onGoingHeadacheId = null;
+          DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
+          DateTime endDataTime = DateTime.tryParse(headacheEndTimeData.value);
+          Duration headacheTimeDuration = endDataTime.difference(startDataTime);
+          headacheInfo = 'Duration: ${_getDisplayTime(headacheTimeDuration.inMinutes.abs())}';
+        }
       }
       if (headacheIntensityData != null) {
         headacheInfo =
-            '$headacheInfo, Intensity: ${headacheIntensityData.value}';
+            '$headacheInfo\nIntensity: ${headacheIntensityData.value}';
       } else {
-        headacheInfo = '$headacheInfo, Intensity: 0';
+        headacheInfo = '$headacheInfo\nIntensity: 0';
       }
       if (headacheDisabilityData != null) {
         headacheInfo =

@@ -15,17 +15,17 @@ class NetworkService{
   NetworkService(this.url,this.requestMethod,this.requestBody);
   NetworkService.getRequest(this.url,this.requestMethod);
 
-  Future<dynamic> serviceCall() async{
+  Future<dynamic> serviceCall() async {
     var client = http.Client();
     http.Response response;
     try{
-      if(requestMethod == RequestMethod.GET){
-        response = await client.get(url,headers: RequestHeader().createRequestHeaders());
-      }else if(requestMethod == RequestMethod.POST){
-        response = await client.post(url,headers: RequestHeader().createRequestHeaders(),body: requestBody,);
+      if (requestMethod == RequestMethod.GET) {
+        response = await client.get(url, headers: RequestHeader().createRequestHeaders());
+      } else if (requestMethod == RequestMethod.POST) {
+        response = await client.post(url, headers: RequestHeader().createRequestHeaders(), body: requestBody,);
       }
       return  getApiResponse(response);
-    }on SocketException{
+    } on SocketException {
       return NoInternetConnection("Please connect to internet");
     }
   }

@@ -42,6 +42,8 @@ class _TimeSectionState extends State<TimeSection>
   void initState() {
     super.initState();
 
+    //widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
+
     widget.addHeadacheDateTimeDetailsData(
         "onset", DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toUtc().toIso8601String());
 
@@ -56,9 +58,7 @@ class _TimeSectionState extends State<TimeSection>
     if (widget.currentUserHeadacheModel != null) {
       try {
         _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
-
         _selectedStartDate = DateTime(_selectedStartDate.year, _selectedStartDate.month, _selectedStartDate.day, _selectedStartDate.hour, _selectedStartDate.minute, 0, 0);
-
         if(!widget.currentUserHeadacheModel.isOnGoing) {
           _selectedEndDate = DateTime.tryParse(widget.currentUserHeadacheModel.selectedEndDate).toLocal();
           _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0);
@@ -77,7 +77,7 @@ class _TimeSectionState extends State<TimeSection>
     if(widget.isHeadacheEnded != null && widget.isHeadacheEnded) {
       _isEndTimeExpanded = true;
       if(_selectedEndDate == null) {
-        Duration duration = _selectedStartDate.difference(DateTime.now());
+        /*Duration duration = _selectedStartDate.difference(DateTime.now());
         if(duration.inSeconds.abs() <= (72*60*60)) {
           widget.addHeadacheDateTimeDetailsData(
               "endtime", DateTime.now().toUtc().toIso8601String());
@@ -90,7 +90,13 @@ class _TimeSectionState extends State<TimeSection>
           _selectedEndDateAndTime = dateTime;
           widget.addHeadacheDateTimeDetailsData(
               "endtime", dateTime.toUtc().toIso8601String());
-        }
+        }*/
+
+        _selectedEndDate = DateTime.now();
+        _selectedEndTime = _selectedEndDate;
+        _selectedEndDateAndTime = _selectedEndDate;
+        widget.addHeadacheDateTimeDetailsData(
+            "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
       } else {
         widget.addHeadacheDateTimeDetailsData(
             "endtime", _selectedEndDate.toUtc().toIso8601String());
@@ -99,6 +105,10 @@ class _TimeSectionState extends State<TimeSection>
         widget.addHeadacheDateTimeDetailsData("ongoing", "No");
       });
       _animationController.forward();
+    } else {
+      Future.delayed(Duration(milliseconds: 500), () {
+        widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
+      });
     }
 
     print((_selectedStartDate == null) ? _getDateTime(DateTime.now(), 0) : _getDateTime(_selectedStartDate, 0));
@@ -137,16 +147,16 @@ class _TimeSectionState extends State<TimeSection>
     //DateTime currentDateTime = DateTime.now();
     print(dateTime);
     dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _selectedEndDateAndTime.hour, _selectedEndDateAndTime.minute, 0, 0);
-    print('$dateTime????$_selectedStartDate');
     if (dateTime.isAfter(_selectedStartDate) ||
         dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
         if (_selectedEndTime == null) {
-          Duration duration = _selectedStartDate.difference(dateTime);
+          /*Duration duration = _selectedStartDate.difference(dateTime);
           if(duration.inSeconds.abs() <= (72*60*60))
-            _selectedEndDate = dateTime;
+            _selectedEndDate = dateTime;*/
+          _selectedEndDate = dateTime;
         } else {
-          DateTime selectedEndDate = DateTime(
+          /*DateTime selectedEndDate = DateTime(
               dateTime.year,
               dateTime.month,
               dateTime.day,
@@ -163,9 +173,17 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.day,
               _selectedEndTime.hour,
               _selectedEndTime.minute,
+              0, 0);*/
+          _selectedEndDate = DateTime(
+              dateTime.year,
+              dateTime.month,
+              dateTime.day,
+              _selectedEndTime.hour,
+              _selectedEndTime.minute,
               0, 0);
         }
 
+        _selectedEndTime = _selectedEndDate;
         _selectedEndDateAndTime = _selectedEndDate;
 
         widget.addHeadacheDateTimeDetailsData(
@@ -177,6 +195,7 @@ class _TimeSectionState extends State<TimeSection>
 
   void _onStartTimeSelected(DateTime dateTime) {
     DateTime currentDateTime = DateTime.now();
+    dateTime = DateTime(_selectedStartDate.year, _selectedStartDate.month, _selectedStartDate.day, dateTime.hour, dateTime.minute, 0, 0);
     if (currentDateTime.isAfter(dateTime) ||
         currentDateTime.isAtSameMomentAs(dateTime)) {
       setState(() {
@@ -199,17 +218,18 @@ class _TimeSectionState extends State<TimeSection>
   }
 
   void _onEndTimeSelected(DateTime dateTime) {
-    //DateTime currentDateTime = DateTime.now();
+    DateTime currentDateTime = DateTime.now();
     dateTime = DateTime(_selectedEndDateAndTime.year, _selectedEndDateAndTime.month, _selectedEndDateAndTime.day, dateTime.hour, dateTime.minute, 0, 0);
-    if (dateTime.isAfter(_selectedStartDate) ||
-        dateTime.isAtSameMomentAs(_selectedStartDate)) {
+    if (currentDateTime.isAfter(_selectedStartDate) ||
+        currentDateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
         if (_selectedEndDate == null) {
-          Duration duration = _selectedStartDate.difference(dateTime);
+          /*Duration duration = _selectedStartDate.difference(dateTime);
           if(duration.inSeconds.abs() <= (72*60*60))
-            _selectedEndTime = dateTime;
+            _selectedEndTime = dateTime;*/
+          _selectedEndTime = dateTime;
         } else {
-          DateTime startEndTime = DateTime(
+          /*DateTime startEndTime = DateTime(
               _selectedEndDate.year,
               _selectedEndDate.month,
               _selectedEndDate.day,
@@ -226,8 +246,17 @@ class _TimeSectionState extends State<TimeSection>
               _selectedEndDate.day,
               dateTime.hour,
               dateTime.minute,
+              0, 0);*/
+          _selectedEndTime = DateTime(
+              _selectedEndDate.year,
+              _selectedEndDate.month,
+              _selectedEndDate.day,
+              dateTime.hour,
+              dateTime.minute,
               0, 0);
         }
+
+        _selectedEndDate = _selectedEndTime;
         _selectedEndDateAndTime = _selectedEndTime;
         widget.addHeadacheDateTimeDetailsData(
             "endtime", _selectedEndTime.toUtc().toIso8601String());
@@ -314,8 +343,8 @@ class _TimeSectionState extends State<TimeSection>
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          /*_openDatePickerBottomSheet(
-                              CupertinoDatePickerMode.time, 1);*/
+                          _openDatePickerBottomSheet(
+                              CupertinoDatePickerMode.time, 1);
                         },
                         child: Padding(
                           padding:
@@ -445,12 +474,14 @@ class _TimeSectionState extends State<TimeSection>
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        Duration duration = DateTime.now().difference(_selectedStartDate);
+                        /*Duration duration = DateTime.now().difference(_selectedStartDate);
 
                         if(duration.inSeconds.abs() <= (72*60*60)) {
                           _selectedEndDate = DateTime.now();
                           _selectedEndTime = _selectedEndDate;
-                        }
+                        }*/
+                        _selectedEndDate = DateTime.now();
+                        _selectedEndTime = _selectedEndDate;
                       });
 
                       _selectedEndDateAndTime = _selectedEndDate;
@@ -473,67 +504,75 @@ class _TimeSectionState extends State<TimeSection>
         SizedBox(
           height: 10,
         ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _isEndTimeExpanded = !_isEndTimeExpanded;
+        Visibility(
+          visible: !(widget.currentUserHeadacheModel.isFromRecordScreen ?? false),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isEndTimeExpanded = !_isEndTimeExpanded;
 
-                if (_isEndTimeExpanded) {
-                  _dateTime = DateTime.now();
-                  _animationController.forward();
-                } else {
-                  _animationController.reverse();
-                }
-                if (_isEndTimeExpanded) {
-                  widget.addHeadacheDateTimeDetailsData("ongoing", "No");
-                  if (_selectedEndDateAndTime == null) {
-                    Duration duration = _selectedStartDate.difference(DateTime.now());
-                    if(duration.inSeconds.abs() <= (72*60*60)) {
+                  if (_isEndTimeExpanded) {
+                    _dateTime = DateTime.now();
+                    _animationController.forward();
+                  } else {
+                    _animationController.reverse();
+                  }
+                  if (_isEndTimeExpanded) {
+                    widget.addHeadacheDateTimeDetailsData("ongoing", "No");
+                    if (_selectedEndDateAndTime == null) {
+                      /*Duration duration = _selectedStartDate.difference(DateTime.now());
+                      if(duration.inSeconds.abs() <= (72*60*60)) {
+                        _selectedEndDate = DateTime.now();
+                        _selectedEndTime = _selectedEndDate;
+                        _selectedEndDateAndTime = _selectedEndDate;
+                        widget.addHeadacheDateTimeDetailsData(
+                            "endtime", DateTime.now().toUtc().toIso8601String());
+                      } else {
+                        _selectedEndDate = _selectedStartDate.add(Duration(days: 3));
+                        _selectedEndTime = _selectedEndDate;
+                        _selectedEndDateAndTime = _selectedEndDate;
+                        widget.addHeadacheDateTimeDetailsData(
+                            "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+                      }*/
                       _selectedEndDate = DateTime.now();
                       _selectedEndTime = _selectedEndDate;
                       _selectedEndDateAndTime = _selectedEndDate;
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", DateTime.now().toUtc().toIso8601String());
-                    } else {
-                      _selectedEndDate = _selectedStartDate.add(Duration(days: 3));
-                      _selectedEndTime = _selectedEndDate;
-                      _selectedEndDateAndTime = _selectedEndDate;
+                    } else
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
-                    }
-                  } else
-                    widget.addHeadacheDateTimeDetailsData(
-                        "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
-                  widget.currentUserHeadacheModel
-                    ..isOnGoing = false
-                    ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
+                    widget.currentUserHeadacheModel
+                      ..isOnGoing = false
+                      ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
 
-                  //this condition is put because we don't want to update headache data in db when user comes from record screen
-                  if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
-                    SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
-                } else {
-                  widget.currentUserHeadacheModel.isOnGoing = true;
+                    //this condition is put because we don't want to update headache data in db when user comes from record screen
+                    if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                  } else {
+                    widget.currentUserHeadacheModel.isOnGoing = true;
 
-                  if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
-                    SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                    if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
 
-                  widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
-                  widget.addHeadacheDateTimeDetailsData("endtime", "");
-                }
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                (_isEndTimeExpanded)
-                    ? Constant.tapHereIfInProgress
-                    : Constant.tapHereToEnd,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Constant.addCustomNotificationTextColor,
-                    fontFamily: Constant.jostRegular),
+                    widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
+                    widget.addHeadacheDateTimeDetailsData("endtime", "");
+                  }
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  (_isEndTimeExpanded)
+                      ? Constant.tapHereIfInProgress
+                      : Constant.tapHereToEnd,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Constant.addCustomNotificationTextColor,
+                      fontFamily: Constant.jostRegular),
+                ),
               ),
             ),
           ),

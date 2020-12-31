@@ -10,9 +10,9 @@ class RecordCalendarHeadacheSection extends StatefulWidget {
   final Function(int) onHeadacheTypeSelectedCallback;
   final DateTime dateTime;
   final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
+  final int onGoingHeadacheId;
 
-
-  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback, this.dateTime, this.openHeadacheLogDayScreenCallback})
+  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback, this.dateTime, this.openHeadacheLogDayScreenCallback, this.onGoingHeadacheId})
       : super(key: key);
 
   @override
@@ -100,9 +100,7 @@ class _RecordCalendarHeadacheSectionState
                                       hoverColor: Constant.chatBubbleGreen,
                                       focusColor: Constant.chatBubbleGreen,
                                       groupValue: _value,
-                                      onChanged: i == 5
-                                          ? null
-                                          : (int value) {
+                                      onChanged: (int value) {
                                               setState(() {
                                                 print(
                                                     "HeadacheType???${userHeadacheListData[i].headacheName}");
@@ -197,7 +195,7 @@ class _RecordCalendarHeadacheSectionState
                           ),
                         SizedBox(height: 10,),
                         Visibility(
-                          visible: userHeadacheListData.length > 0,
+                          visible: userHeadacheListData.length > 0 && widget.onGoingHeadacheId == null,
                           child: GestureDetector(
                             onTap: () {
                               _openAddHeadacheScreen();
@@ -241,6 +239,10 @@ class _RecordCalendarHeadacheSectionState
     } else
       userHeadacheListData = widget.userHeadacheLogDayDetailsModel
           .headacheLogDayListData[0].headacheListData;
+
+    if(userHeadacheListData.length > 0) {
+      widget.onHeadacheTypeSelectedCallback(userHeadacheListData[_value].headacheId);
+    }
 
     setState(() {});
   }

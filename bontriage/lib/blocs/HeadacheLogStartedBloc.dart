@@ -14,9 +14,11 @@ class HeadacheLogStartedBloc {
           .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     if (currentUserHeadacheModel == null && userProfileInfoData != null) {
+      DateTime currentDateTime = DateTime.now();
+      DateTime dateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
       currentUserHeadacheModel = CurrentUserHeadacheModel(
           userId: userProfileInfoData.userId,
-          selectedDate: DateTime.now().toUtc().toIso8601String(),
+          selectedDate: dateTime.toUtc().toIso8601String(),
           isOnGoing: true);
       await SignUpOnBoardProviders.db
           .insertUserCurrentHeadacheData(currentUserHeadacheModel);

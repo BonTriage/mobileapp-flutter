@@ -114,6 +114,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                             _headacheIdSelected = headacheIdSelected;
                                           },
                                         openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                        onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
                                       ),
                                       RecordDayPage(
                                           hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
@@ -121,6 +122,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                           userHeadacheLogDayDetailsModel:
                                               userHeadacheLogDayDetailsModel,
                                         openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                        onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
                                       ),
 
                                     ],

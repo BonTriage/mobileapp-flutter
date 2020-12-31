@@ -39,7 +39,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   List<SelectedAnswers> selectedAnswers = [];
 
-  bool isUserHeadacheEnded = false;
+  bool _isUserHeadacheEnded = false;
 
   bool _isDataPopulated = false;
   bool _isFromRecordScreen = false;
@@ -49,6 +49,8 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   void initState() {
     super.initState();
     _dateTime = DateTime.now();
+
+    signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
 
     _currentUserHeadacheModel = widget.currentUserHeadacheModel;
 
@@ -75,13 +77,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   @override
   void didUpdateWidget(AddHeadacheOnGoingScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -127,7 +127,6 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                           ),
                           GestureDetector(
                             onTap: () {
-                              //Navigator.popUntil(context, ModalRoute.withName(Constant.headacheStartedScreenRouter));
                               Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
                             },
                             child: Image(
@@ -153,6 +152,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(!_isDataPopulated) {
+                              /*if(widget.currentUserHeadacheModel.isFromRecordScreen ?? false) {
+                                addSelectedHeadacheDetailsData(Constant.onGoingTag, 'No');
+                                addSelectedHeadacheDetailsData(Constant.endTimeTag, widget.currentUserHeadacheModel.selectedEndDate);
+                              }*/
                               Utils.closeApiLoaderDialog(context);
                             }
                             return Column(
@@ -174,7 +177,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        saveDataInLocalDataBaseOrSever();
+                                        saveDataInLocalDataBaseOrServer();
                                       },
                                       child: Container(
                                         width: 110,
@@ -187,7 +190,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                         ),
                                         child: Center(
                                           child: Text(
-                                            isUserHeadacheEnded
+                                            _isUserHeadacheEnded
                                                 ? Constant.submit
                                                 : Constant.save,
                                             style: TextStyle(
@@ -336,9 +339,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
     if (currentTag == "ongoing") {
       if (selectedValue == "Yes") {
-        isUserHeadacheEnded = false;
+        _isUserHeadacheEnded = false;
       } else {
-        isUserHeadacheEnded = true;
+        _isUserHeadacheEnded = true;
       }
       setState(() {});
     }
@@ -346,7 +349,6 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   /// This method will be use for if user click Headache Plus Icon and he want to add another headache name of Add headache Screen.
   /// So we will move to the user  2nd Step of welcome OnBoard Screen in which he will add all information related to his headache.
-
   moveOnWelcomeBoardSecondStepScreens() async {
     final pushToScreenResult = await Navigator.pushNamed(
         context, Constant.partTwoOnBoardScreenRouter,
@@ -376,8 +378,8 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     print(pushToScreenResult);
   }
 
-  void saveDataInLocalDataBaseOrSever() async {
-    UserAddHeadacheLogModel userAddHeadacheLogModel = UserAddHeadacheLogModel();
+  void saveDataInLocalDataBaseOrServer() async {
+    /*UserAddHeadacheLogModel userAddHeadacheLogModel = UserAddHeadacheLogModel();
     List<SelectedAnswers> selectedAnswerList =
         signUpOnBoardSelectedAnswersModel.selectedAnswers;
 
@@ -404,6 +406,50 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         }
       );
       _callSendAddHeadacheLogApi();
+    }*/
+
+    SelectedAnswers headacheTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.headacheTypeTag, orElse: () => null);
+    SelectedAnswers startTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
+    SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+    SelectedAnswers onGoingSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onGoingTag, orElse: () => null);
+
+    if(headacheTypeSelectedAnswer != null) {
+      if (onGoingSelectedAnswer != null) {
+        if (onGoingSelectedAnswer.answer.toLowerCase() == 'no') {
+          if (startTimeSelectedAnswer != null && endTimeSelectedAnswer != null) {
+            DateTime startTime = DateTime.tryParse(startTimeSelectedAnswer.answer);
+            DateTime endTime = DateTime.tryParse(endTimeSelectedAnswer.answer);
+            if (endTime.isAfter(startTime) || endTime.isAtSameMomentAs(startTime)) {
+              Utils.showApiLoaderDialog(
+                  context,
+                  networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+                  tapToRetryFunction: () {
+                    _addHeadacheLogBloc.enterSomeDummyData();
+                    _callSendAddHeadacheLogApi();
+                  }
+              );
+              _callSendAddHeadacheLogApi();
+            } else {
+              print('endtime error');
+              //show endtime error
+            }
+          }
+        } else {
+          signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == Constant.endTimeTag);
+          Utils.showApiLoaderDialog(
+              context,
+              networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+              tapToRetryFunction: () {
+                _addHeadacheLogBloc.enterSomeDummyData();
+                _callSendAddHeadacheLogApi();
+              }
+          );
+          _callSendAddHeadacheLogApi();
+        }
+      }
+    } else {
+      //show headacheType selection error
+      print('headache type error');
     }
   }
 
@@ -412,10 +458,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
     if (response == Constant.success) {
       Navigator.pop(context);
-      await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
       if(!_isFromRecordScreen) {
-        Navigator.pushReplacementNamed(
-            context, Constant.addHeadacheSuccessScreenRouter);
+        if(_isUserHeadacheEnded)
+          await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
+        Navigator.pushReplacementNamed(context, Constant.addHeadacheSuccessScreenRouter);
       } else {
         Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
       }
@@ -454,15 +500,14 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       userHeadacheDataList.forEach((element) {
         List<dynamic> map = jsonDecode(element['selectedAnswers']);
         map.forEach((element) {
-          selectedAnswers.add(SelectedAnswers(
-              questionTag: element['questionTag'], answer: element['answer']));
+          selectedAnswers.add(SelectedAnswers(questionTag: element['questionTag'], answer: element['answer']));
         });
       });
       signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswers;
     }
 
     if(_isFromRecordScreen) {
-      await _addHeadacheLogBloc.fetchCalendarHeadacheLogDayData(widget.currentUserHeadacheModel.headacheId);
+      await _addHeadacheLogBloc.fetchCalendarHeadacheLogDayData(widget.currentUserHeadacheModel);
       signUpOnBoardSelectedAnswersModel.selectedAnswers = _addHeadacheLogBloc.selectedAnswersList;
 
       SelectedAnswers startTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
@@ -483,7 +528,13 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
       print(_currentUserHeadacheModel);
     } else {
-      _addHeadacheLogBloc.fetchAddHeadacheLogData();
+      if(_currentUserHeadacheModel.headacheId != null) {
+        await _addHeadacheLogBloc.fetchCalendarHeadacheLogDayData(widget.currentUserHeadacheModel);
+        signUpOnBoardSelectedAnswersModel.selectedAnswers = _addHeadacheLogBloc.selectedAnswersList;
+      } else {
+        //put condition for the headache id to fetch the current on going headache data
+        _addHeadacheLogBloc.fetchAddHeadacheLogData();
+      }
     }
   }
 }

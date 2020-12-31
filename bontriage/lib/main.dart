@@ -239,7 +239,7 @@ class MyApp extends StatelessWidget {
           case Constant.currentHeadacheProgressScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: CurrentHeadacheProgressScreen());
+                  widget: CurrentHeadacheProgressScreen(currentUserHeadacheModel: settings.arguments,));
             }
           case Constant.addHeadacheOnGoingScreenRouter:
             {

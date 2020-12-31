@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'package:http/http.dart';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
-import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/HeadacheLogDataModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/AddHeadacheLogRepository.dart';
 import 'package:mobile/util/AddHeadacheLinearListFilter.dart';
 import 'package:mobile/util/WebservicePost.dart';
@@ -54,12 +51,11 @@ class AddHeadacheLogBloc {
     _addHeadacheLogRepository = AddHeadacheLogRepository();
   }
 
-  fetchCalendarHeadacheLogDayData(int headacheId) async {
-    this.headacheId = headacheId;
+  fetchCalendarHeadacheLogDayData(CurrentUserHeadacheModel currentUserHeadacheModel) async {
+    this.headacheId = currentUserHeadacheModel.headacheId;
     String apiResponse;
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
-      String url = '${WebservicePost.qaServerUrl}calender/$headacheId';
+      String url = '${WebservicePost.qaServerUrl}calender/${currentUserHeadacheModel.headacheId}';
       var response = await _addHeadacheLogRepository.calendarTriggersServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         apiResponse = response.toString();
@@ -73,6 +69,27 @@ class AddHeadacheLogBloc {
               selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
             });
           });
+        }
+
+        SelectedAnswers endTimeSelectedAnswer = selectedAnswersList.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+        SelectedAnswers onGoingSelectedAnswer = selectedAnswersList.firstWhere((element) => element.questionTag == Constant.onGoingTag, orElse: () => null);
+
+        if(onGoingSelectedAnswer != null) {
+          if(onGoingSelectedAnswer.answer.toLowerCase() == 'yes') {
+            onGoingSelectedAnswer.answer = 'No';
+
+            if(endTimeSelectedAnswer != null) {
+              endTimeSelectedAnswer.answer = currentUserHeadacheModel.selectedEndDate;
+            } else {
+              selectedAnswersList.add(SelectedAnswers(questionTag: Constant.endTimeTag, answer: currentUserHeadacheModel.selectedEndDate));
+            }
+          }
+        } else {
+          selectedAnswersList.add(SelectedAnswers(questionTag: Constant.onGoingTag, answer: 'No'));
+
+          if(endTimeSelectedAnswer == null) {
+            selectedAnswersList.add(SelectedAnswers(questionTag: Constant.endTimeTag, answer: currentUserHeadacheModel.selectedEndDate));
+          }
         }
         await fetchAddHeadacheLogData();
       }
