@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
@@ -22,6 +24,8 @@ class SignUpOnBoardProviders {
   static const String USER_SCREEN_POSITION = "userScreenPosition";
   static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
   static const String TABLE_USER_CURRENT_HEADACHE = 'userCurrentHeadache';
+  static const String NOTIFICATION_JSON = 'notificationJson';
+
 
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
@@ -35,6 +39,7 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_ONGOING = "headacheOnGoing";
   static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
   static const String USER_CURRENT_HEADACHE_JSON = "userCurrentHeadacheJson";
+  static const String USER_NOTIFICATION = "userNotification";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -93,8 +98,45 @@ class SignUpOnBoardProviders {
           "$USER_ID TEXT PRIMARY KEY,"
           "$USER_CURRENT_HEADACHE_JSON TEXT"
           ")");
+      batch.execute("CREATE TABLE $USER_NOTIFICATION ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$NOTIFICATION_JSON TEXT"
+          ")");
       await batch.commit();
     });
+  }
+
+  Future<void> insertUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+    final db = await database;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    if(notificationListData == null || notificationListData.length == 0){
+      Map<String,dynamic> localNotificationMap = {USER_ID:'4451',NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+      await db.insert(USER_NOTIFICATION,localNotificationMap);
+    }else{
+      updateUserNotifications(localNotificationListData);
+    }
+  }
+
+  void updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+    final db = await database;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    Map<String,dynamic> localNotificationMap = {USER_ID:'4451',NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+    await db.update(
+      USER_NOTIFICATION,
+      localNotificationMap,
+      where: "$USER_ID = ?",
+      whereArgs: ['4451'],
+    );
+  }
+
+  Future<List<LocalNotificationModel>> getAllLocalNotificationsData() async {
+    final db = await database;
+    List<LocalNotificationModel> localNotificationListData;
+    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION');
+    if (userInfoListData.length != 0)
+     localNotificationListData =  List<LocalNotificationModel>.from(jsonDecode(userInfoListData[0][NOTIFICATION_JSON]).map((x) => LocalNotificationModel.fromJson(x)));
+    return localNotificationListData;
   }
 
   Future<UserProgressDataModel> insertUserProgress(
