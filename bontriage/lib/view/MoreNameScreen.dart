@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreNameScreen extends StatefulWidget {
+  final String name;
+  const MoreNameScreen({Key key, @required this.name}): super(key: key);
   @override
   _MoreNameScreenState createState() =>
       _MoreNameScreenState();
@@ -9,6 +11,17 @@ class MoreNameScreen extends StatefulWidget {
 
 class _MoreNameScreenState
     extends State<MoreNameScreen> {
+
+  TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    print(widget.name);
+
+    _textEditingController = TextEditingController(text: widget.name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +81,7 @@ class _MoreNameScreenState
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextField(
+                      controller: _textEditingController,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 15,

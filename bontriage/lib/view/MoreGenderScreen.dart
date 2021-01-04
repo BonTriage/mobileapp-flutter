@@ -3,6 +3,9 @@ import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreGenderScreen extends StatefulWidget {
+  final String gender;
+
+  const MoreGenderScreen({Key key, this.gender}) : super(key: key);
   @override
   _MoreGenderScreenState createState() =>
       _MoreGenderScreenState();
@@ -15,7 +18,6 @@ class _MoreGenderScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _valuesList = [
@@ -24,6 +26,27 @@ class _MoreGenderScreenState
       Values(isSelected: false, text: Constant.genderNonConforming),
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
+
+
+    if(widget.gender != null && widget.gender.isNotEmpty) {
+      _valuesList[0].isSelected = false;
+      if (widget.gender.toLowerCase() == 'male') {
+        Values genderValue = _valuesList.firstWhere((element) => element.text == Constant.man, orElse: () => null);
+        if(genderValue != null) {
+          genderValue.isSelected = true;
+        }
+      } else if (widget.gender.toLowerCase() == 'female') {
+        Values genderValue = _valuesList.firstWhere((element) => element.text == Constant.woman, orElse: () => null);
+        if(genderValue != null) {
+          genderValue.isSelected = true;
+        }
+      } else {
+        Values genderValue = _valuesList.firstWhere((element) => element.text == widget.gender, orElse: () => null);
+        if(genderValue != null) {
+          genderValue.isSelected = true;
+        }
+      }
+    }
   }
 
   BoxDecoration _getBoxDecoration(int index) {

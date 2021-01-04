@@ -8,7 +8,7 @@ class MoreSection extends StatefulWidget {
   final String moreStatus;
   final bool isShowDivider;
   final String currentTag;
-  final Function(String) navigateToOtherScreenCallback;
+  final Function(String, dynamic) navigateToOtherScreenCallback;
 
   const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback}) : super(key: key);
   @override
@@ -42,46 +42,46 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
               if(widget.currentTag != null) {
                 switch(widget.currentTag) {
                   case Constant.settings:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSettingRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSettingRoute, null);
                     break;
                   case Constant.generateReport:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenerateReportRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenerateReportRoute, null);
                     break;
                   case Constant.support:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSupportRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSupportRoute, null);
                     break;
                   case Constant.myProfile:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyProfileScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyProfileScreenRoute, null);
                     break;
                   case Constant.notifications:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNotificationScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNotificationScreenRoute, null);
                     break;
                   case Constant.faq:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute, null);
                     break;
                   case Constant.headacheType:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, null);
                     break;
                   case Constant.locationServices:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute, null);
                     break;
                   case Constant.name:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute, widget.moreStatus);
                     break;
                   case Constant.age:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute, widget.moreStatus);
                     break;
                   case Constant.gender:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute, widget.moreStatus);
                     break;
                   case Constant.sex:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute, widget.moreStatus);
                     break;
                   case Constant.myTriggers:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute, null);
                     break;
                   case Constant.myMedications:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute, null);
                     break;
                   case Constant.dailyLog:
                   case Constant.medication:

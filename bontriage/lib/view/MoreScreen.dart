@@ -7,11 +7,12 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Function(BuildContext, String, dynamic) onPush;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
   final Function(String) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const MoreScreen({Key key, this.onPush, this.openActionSheetCallback, this.navigateToOtherScreenCallback})
+  const MoreScreen({Key key, this.onPush, this.openActionSheetCallback, this.navigateToOtherScreenCallback, this.showApiLoaderCallback})
       : super(key: key);
 
   @override
@@ -21,7 +22,6 @@ class MoreScreen extends StatefulWidget {
 class _MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print('More Screen');
   }
@@ -143,9 +143,9 @@ class _MoreScreenState extends State<MoreScreen> {
     );
   }
 
-  void _navigateToOtherScreen(String routeName) {
+  void _navigateToOtherScreen(String routeName, dynamic arguments) {
     widget.onPush(
-        context, routeName);
+        context, routeName, arguments);
   }
 
   ///This method is used to log out from the app and redirecting to the welcome start assessment screen

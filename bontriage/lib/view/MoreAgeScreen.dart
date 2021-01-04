@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreAgeScreen extends StatefulWidget {
+  final String age;
+
+  const MoreAgeScreen({Key key, @required this.age}): super(key: key);
   @override
   _MoreAgeScreenState createState() =>
       _MoreAgeScreenState();
@@ -11,6 +14,17 @@ class _MoreAgeScreenState
     extends State<MoreAgeScreen> {
 
   double _currentAgeValue = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.age != null) {
+      double ageValue = double.tryParse(widget.age);
+
+      if(ageValue != null)
+        _currentAgeValue = ageValue;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

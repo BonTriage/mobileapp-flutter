@@ -3,6 +3,11 @@ import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreSexScreen extends StatefulWidget {
+
+  final String sex;
+
+  const MoreSexScreen({Key key, this.sex}) : super(key: key);
+
   @override
   _MoreSexScreenState createState() =>
       _MoreSexScreenState();
@@ -15,7 +20,6 @@ class _MoreSexScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _valuesList = [
@@ -24,6 +28,13 @@ class _MoreSexScreenState
       Values(isSelected: false, text: Constant.interSex),
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
+
+    if(widget.sex != null && widget.sex.isNotEmpty) {
+      _valuesList[0].isSelected = false;
+      Values value = _valuesList.firstWhere((element) => element.text == widget.sex, orElse: () => null);
+      if(value != null)
+        value.isSelected = true;
+    }
   }
 
   BoxDecoration _getBoxDecoration(int index) {
