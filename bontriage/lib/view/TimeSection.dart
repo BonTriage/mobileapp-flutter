@@ -209,6 +209,19 @@ class _TimeSectionState extends State<TimeSection>
               dateTime.hour,
               dateTime.minute,
               0, 0);
+
+        }
+        _selectedStartDate = _selectedStartTime;
+
+        if(_selectedEndDateAndTime.isBefore(_selectedStartTime)) {
+          _selectedEndDate = _selectedStartTime;
+          _selectedEndTime = _selectedEndDate;
+          _selectedEndDateAndTime = _selectedEndDate;
+
+          Future.delayed(Duration(milliseconds: 500), () {
+            widget.addHeadacheDateTimeDetailsData(
+                "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+          });
         }
         widget.addHeadacheDateTimeDetailsData(
             "onset", _selectedStartTime.toUtc().toIso8601String());
@@ -218,10 +231,10 @@ class _TimeSectionState extends State<TimeSection>
   }
 
   void _onEndTimeSelected(DateTime dateTime) {
-    DateTime currentDateTime = DateTime.now();
+    //DateTime currentDateTime = DateTime.now();
     dateTime = DateTime(_selectedEndDateAndTime.year, _selectedEndDateAndTime.month, _selectedEndDateAndTime.day, dateTime.hour, dateTime.minute, 0, 0);
-    if (currentDateTime.isAfter(_selectedStartDate) ||
-        currentDateTime.isAtSameMomentAs(_selectedStartDate)) {
+    if (dateTime.isAfter(_selectedStartDate) ||
+        dateTime.isAtSameMomentAs(_selectedStartDate)) {
       setState(() {
         if (_selectedEndDate == null) {
           /*Duration duration = _selectedStartDate.difference(dateTime);

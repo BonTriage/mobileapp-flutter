@@ -655,6 +655,7 @@ class Constant {
   static String discoverSelected = 'images/discover_selected.png';
   static String moreUnselected = 'images/more_unselected.png';
   static String moreSelected = 'images/more_selected.png';
+  static String errorGreen = 'images/error_green.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

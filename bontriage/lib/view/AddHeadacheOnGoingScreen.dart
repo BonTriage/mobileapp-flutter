@@ -409,47 +409,21 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     }*/
 
     SelectedAnswers headacheTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.headacheTypeTag, orElse: () => null);
-    SelectedAnswers startTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
-    SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
-    SelectedAnswers onGoingSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onGoingTag, orElse: () => null);
 
     if(headacheTypeSelectedAnswer != null) {
-      if (onGoingSelectedAnswer != null) {
-        if (onGoingSelectedAnswer.answer.toLowerCase() == 'no') {
-          if (startTimeSelectedAnswer != null && endTimeSelectedAnswer != null) {
-            DateTime startTime = DateTime.tryParse(startTimeSelectedAnswer.answer);
-            DateTime endTime = DateTime.tryParse(endTimeSelectedAnswer.answer);
-            if (endTime.isAfter(startTime) || endTime.isAtSameMomentAs(startTime)) {
-              Utils.showApiLoaderDialog(
-                  context,
-                  networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
-                  tapToRetryFunction: () {
-                    _addHeadacheLogBloc.enterSomeDummyData();
-                    _callSendAddHeadacheLogApi();
-                  }
-              );
-              _callSendAddHeadacheLogApi();
-            } else {
-              print('endtime error');
-              //show endtime error
-            }
+      Utils.showApiLoaderDialog(
+          context,
+          networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+          tapToRetryFunction: () {
+            _addHeadacheLogBloc.enterSomeDummyData();
+            _callSendAddHeadacheLogApi();
           }
-        } else {
-          signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == Constant.endTimeTag);
-          Utils.showApiLoaderDialog(
-              context,
-              networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
-              tapToRetryFunction: () {
-                _addHeadacheLogBloc.enterSomeDummyData();
-                _callSendAddHeadacheLogApi();
-              }
-          );
-          _callSendAddHeadacheLogApi();
-        }
-      }
+      );
+      _callSendAddHeadacheLogApi();
     } else {
       //show headacheType selection error
       print('headache type error');
+      Utils.showValidationErrorDialog(context, 'Please select a headache type.');
     }
   }
 
@@ -468,8 +442,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     }
   }
 
-  void saveAndUpdateDataInLocalDatabase(
-      UserAddHeadacheLogModel userAddHeadacheLogModel) async {
+  void saveAndUpdateDataInLocalDatabase(UserAddHeadacheLogModel userAddHeadacheLogModel) async {
     try {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
@@ -488,14 +461,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   void requestService() async {
     List<Map> userHeadacheDataList;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if (userProfileInfoData != null)
-      userHeadacheDataList = await _addHeadacheLogBloc
-          .fetchDataFromLocalDatabase(userProfileInfoData.userId);
+      userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase(userProfileInfoData.userId);
     else
-      userHeadacheDataList =
-          await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
+      userHeadacheDataList = await _addHeadacheLogBloc.fetchDataFromLocalDatabase("4214");
     if (userHeadacheDataList.length > 0) {
       userHeadacheDataList.forEach((element) {
         List<dynamic> map = jsonDecode(element['selectedAnswers']);

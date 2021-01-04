@@ -51,6 +51,9 @@ class _CurrentHeadacheProgressScreenState
   }
 
   ///This method is used to return the display time format for the headache time
+  /// Short Time
+  /// Medium Time
+  /// Long Time
   String _getDisplayTime() {
     int hours = _totalTime ~/ 60;
     int minute = _totalTime % 60;
@@ -77,9 +80,9 @@ class _CurrentHeadacheProgressScreenState
           return '$days day,\n$hours:0$minute h';
       } else {
         if(days > 1)
-          return '$days days,\n$hours:0$minute h';
+          return '$days days,\n$hours:$minute h';
         else
-          return '$days day,\n$hours:0$minute h';
+          return '$days day,\n$hours:$minute h';
       }
     }
   }

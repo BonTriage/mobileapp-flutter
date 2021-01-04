@@ -449,8 +449,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             padding: const EdgeInsets.only(top: 5),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(
-                                    context, Constant.loginScreenRouter);
+                                Navigator.pushNamed(context, Constant.loginScreenRouter);
                               },
                               child: Text(
                                 Constant.signIn,

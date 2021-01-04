@@ -7,6 +7,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
+import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -506,5 +507,19 @@ class Utils {
   ///This method is used to return scroll physics based on the platform
   static ScrollPhysics getScrollPhysics() {
     return Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics();
+  }
+
+  static void showValidationErrorDialog(BuildContext context, String errorMessage) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ValidationErrorDialog(errorMessage: errorMessage,),
+        );
+      },
+    );
   }
 }

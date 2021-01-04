@@ -244,6 +244,12 @@ class CalendarHeadacheLogDayDetailsBloc {
                 (mobileEventElement) =>
             mobileEventElement.questionTag == Constant.logDayMedicationTag,
             orElse: () => null);
+
+        var medicationTimeData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.administeredTag,
+            orElse: () => null);
+
         var medicationDosageData = element.mobileEventDetails.firstWhere(
                 (mobileEventElement) =>
                 mobileEventElement.questionTag.contains('.dosage'),
@@ -251,19 +257,43 @@ class CalendarHeadacheLogDayDetailsBloc {
 
         if (medicationData != null) {
           String titleInfo = medicationData.value;
-          if (medicationDosageData != null) {
-            List<String> formattedValues =
-            medicationDosageData.value?.split("%@");
-            if (formattedValues != null) {
+          if (medicationDosageData != null && medicationTimeData != null) {
+            List<String> formattedValues = medicationDosageData.value?.split("%@");
+            List<String> medicationTimeValues = medicationTimeData.value?.split("%@");
+            if (formattedValues != null && medicationTimeValues != null) {
               String medicationDosage = '';
-              formattedValues.forEach((medicationElement) {
+              formattedValues.asMap().forEach((index, medicationElement) {
                 if (medicationDosage.isEmpty) {
-                  medicationDosage = medicationElement;
+                  DateTime medDateTime;
+
+                  try {
+                    medDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if(medDateTime != null) {
+                    medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                  } else {
+                    medicationDosage = '$medicationElement';
+                  }
                 } else {
-                  medicationDosage = '$medicationDosage, $medicationElement';
+                  DateTime medDateTime;
+
+                  try {
+                    medDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if(medDateTime != null) {
+                    medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                  } else {
+                    medicationDosage = '$medicationDosage, $medicationElement';
+                  }
                 }
               });
-              if(medicationDosage.isEmpty){
+              if(medicationDosage.isEmpty) {
                 titleInfo = '$titleInfo';
               }else titleInfo = '$titleInfo ($medicationDosage)';
             }
