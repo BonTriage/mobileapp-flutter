@@ -44,6 +44,13 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 
   @override
+  void dispose() {
+    _localNotificationStreamController?.close();
+    super.dispose();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => true,
@@ -361,8 +368,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 isAddedCustomNotification = true;
                                 LocalNotificationModel localNotificationModel =
                                     LocalNotificationModel();
-                                localNotificationModel.notificationType =
-                                    'Custom';
+                                localNotificationModel.isCustomNotificationAdded = true;
                                 localNotificationModel.notificationName =
                                     customNotificationValue;
 
@@ -426,7 +432,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  void openTimerLayout() {
+ /* void openTimerLayout() {
     setState(() {
       if (isCustomTimerLayoutOpen) {
         isCustomTimerLayoutOpen = false;
@@ -434,13 +440,13 @@ class _NotificationScreenState extends State<NotificationScreen>
         isCustomTimerLayoutOpen = true;
       }
     });
-  }
+  }*/
 
   /// this Method will be use for to get all notification data from the DB. If user has set any Local notifications from
   /// this screen.
   void getNotificationListData() async {
     var notificationListData =
-        await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
     if (notificationListData != null) {
       setState(() {
         _locationServicesSwitchState = true;

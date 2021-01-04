@@ -300,15 +300,25 @@ class _NotificationTimerState extends State<NotificationTimer> {
       } else {
         dailyNotificationLogTime = 'Off';
       }
-
-      localNotificationModel.notificationName = 'DailyLog';
-      localNotificationModel.notificationType = dailyNotificationLogTime;
-      if (dailyNotificationLogTime == 'Off') {
-        localNotificationModel.notificationTime = "";
-      } else {
-        localNotificationModel.notificationTime = _dateTime.toIso8601String();
+      var dailyLogNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'DailyLog',orElse: ()=> null);
+      if(dailyLogNotificationData != null){
+        dailyLogNotificationData.notificationName = 'DailyLog';
+        dailyLogNotificationData.notificationType = dailyNotificationLogTime;
+        if (customNotificationLogTime == 'Off') {
+          dailyLogNotificationData.notificationTime = "";
+        } else {
+          dailyLogNotificationData.notificationTime = _dateTime.toIso8601String();
+        }
+      }else{
+        localNotificationModel.notificationName = 'DailyLog';
+        localNotificationModel.notificationType = dailyNotificationLogTime;
+        if (dailyNotificationLogTime == 'Off') {
+          localNotificationModel.notificationTime = "";
+        } else {
+          localNotificationModel.notificationTime = _dateTime.toIso8601String();
+        }
+        widget.allNotificationListData.add(localNotificationModel);
       }
-      widget.allNotificationListData.add(localNotificationModel);
     } else if (widget.selectedNotification == 1) {
       if (isDailySelected) {
         medicationNotificationLogTime = 'Daily';
@@ -332,15 +342,25 @@ class _NotificationTimerState extends State<NotificationTimer> {
       } else {
         medicationNotificationLogTime = 'Off';
       }
-
-      localNotificationModel.notificationName = 'Medication';
-      localNotificationModel.notificationType = medicationNotificationLogTime;
-      if (medicationNotificationLogTime == 'Off') {
-        localNotificationModel.notificationTime = "";
-      } else {
-        localNotificationModel.notificationTime = _dateTime.toIso8601String();
+      var medicationNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Medication',orElse: ()=> null);
+      if(medicationNotificationData != null){
+        medicationNotificationData.notificationName = 'Medication';
+        medicationNotificationData.notificationType = medicationNotificationLogTime;
+        if (medicationNotificationLogTime == 'Off') {
+          medicationNotificationData.notificationTime = "";
+        } else {
+          medicationNotificationData.notificationTime = _dateTime.toIso8601String();
+        }
+      }else{
+        localNotificationModel.notificationName = 'Medication';
+        localNotificationModel.notificationType = medicationNotificationLogTime;
+        if (medicationNotificationLogTime == 'Off') {
+          localNotificationModel.notificationTime = "";
+        } else {
+          localNotificationModel.notificationTime = _dateTime.toIso8601String();
+        }
+        widget.allNotificationListData.add(localNotificationModel);
       }
-      widget.allNotificationListData.add(localNotificationModel);
     } else if (widget.selectedNotification == 2) {
       if (isDailySelected) {
         exerciseNotificationLogTime = 'Daily';
@@ -365,14 +385,26 @@ class _NotificationTimerState extends State<NotificationTimer> {
         exerciseNotificationLogTime = 'Off';
       }
 
-      localNotificationModel.notificationName = 'Exercise';
-      localNotificationModel.notificationType = exerciseNotificationLogTime;
-      if (exerciseNotificationLogTime == 'Off') {
-        localNotificationModel.notificationTime = "";
-      } else {
-        localNotificationModel.notificationTime = _dateTime.toIso8601String();
+
+      var exerciseNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Exercise',orElse: ()=> null);
+      if(exerciseNotificationData != null){
+        exerciseNotificationData.notificationName = 'Exercise';
+        exerciseNotificationData.notificationType = exerciseNotificationLogTime;
+        if (exerciseNotificationLogTime == 'Off') {
+          exerciseNotificationData.notificationTime = "";
+        } else {
+          exerciseNotificationData.notificationTime = _dateTime.toIso8601String();
+        }
+      }else{
+        localNotificationModel.notificationName = 'Exercise';
+        localNotificationModel.notificationType = exerciseNotificationLogTime;
+        if (exerciseNotificationLogTime == 'Off') {
+          localNotificationModel.notificationTime = "";
+        } else {
+          localNotificationModel.notificationTime = _dateTime.toIso8601String();
+        }
+        widget.allNotificationListData.add(localNotificationModel);
       }
-      widget.allNotificationListData.add(localNotificationModel);
     } else {
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
@@ -396,7 +428,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       } else {
         customNotificationLogTime = 'Off';
       }
-     var customNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationType == 'Custom',orElse: ()=> null);
+     var customNotificationData =  widget.allNotificationListData.firstWhere((element) => element.isCustomNotificationAdded,orElse: ()=> null);
       if(customNotificationData != null){
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {

@@ -51,7 +51,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +
+          selectedTimerValue = localNotificationNameModel.notificationType +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -66,7 +66,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +
+          selectedTimerValue = localNotificationNameModel.notificationType +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -81,7 +81,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +
+          selectedTimerValue = localNotificationNameModel.notificationType +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -90,13 +90,85 @@ class _NotificationSectionState extends State<NotificationSection>
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-          (element) => element.notificationName == 'Custom Notification',
+              (element) => element.isCustomNotificationAdded,
           orElse: () => null);
       if (localNotificationNameModel != null) {
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +
+          selectedTimerValue = localNotificationNameModel.notificationType +','
+              ' ' +
+              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+        } else {
+          selectedTimerValue = 'Off';
+        }
+      }
+    }
+  }
+
+  @override
+  void didUpdateWidget(NotificationSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(widget.isNotificationTimerOpen != null) {
+      isDailyLogTimerLayoutOpen = widget.isNotificationTimerOpen;
+    }else{
+      isDailyLogTimerLayoutOpen = false;
+    }
+    DateTime dateTime;
+    if (widget.notificationId == 0) {
+      localNotificationNameModel = widget.allNotificationListData.firstWhere(
+              (element) => element.notificationName == 'DailyLog',
+          orElse: () => null);
+      if (localNotificationNameModel != null) {
+        dateTime =
+            DateTime.tryParse(localNotificationNameModel.notificationTime);
+        if (dateTime != null) {
+          selectedTimerValue = localNotificationNameModel.notificationType +','
+              ' ' +
+              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+        } else {
+          selectedTimerValue = 'Off';
+        }
+      }
+    } else if (widget.notificationId == 1) {
+      localNotificationNameModel = widget.allNotificationListData.firstWhere(
+              (element) => element.notificationName == 'Medication',
+          orElse: () => null);
+      if (localNotificationNameModel != null) {
+        dateTime =
+            DateTime.tryParse(localNotificationNameModel.notificationTime);
+        if (dateTime != null) {
+          selectedTimerValue = localNotificationNameModel.notificationType +','
+              ' ' +
+              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+        } else {
+          selectedTimerValue = 'Off';
+        }
+      }
+    } else if (widget.notificationId == 2) {
+      localNotificationNameModel = widget.allNotificationListData.firstWhere(
+              (element) => element.notificationName == 'Exercise',
+          orElse: () => null);
+      if (localNotificationNameModel != null) {
+        dateTime =
+            DateTime.tryParse(localNotificationNameModel.notificationTime);
+        if (dateTime != null) {
+          selectedTimerValue = localNotificationNameModel.notificationType +','
+              ' ' +
+              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+        } else {
+          selectedTimerValue = 'Off';
+        }
+      }
+    } else {
+      localNotificationNameModel = widget.allNotificationListData.firstWhere(
+              (element) => element.isCustomNotificationAdded,
+          orElse: () => null);
+      if (localNotificationNameModel != null) {
+        dateTime =
+            DateTime.tryParse(localNotificationNameModel.notificationTime);
+        if (dateTime != null) {
+          selectedTimerValue = localNotificationNameModel.notificationType +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
