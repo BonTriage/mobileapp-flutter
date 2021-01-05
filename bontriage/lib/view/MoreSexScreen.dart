@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreSexScreen extends StatefulWidget {
 
-  final String sex;
+  final List<SelectedAnswers> selectedAnswerList;
 
-  const MoreSexScreen({Key key, this.sex}) : super(key: key);
+  const MoreSexScreen({Key key, this.selectedAnswerList}) : super(key: key);
 
   @override
   _MoreSexScreenState createState() =>
@@ -17,6 +18,7 @@ class _MoreSexScreenState
     extends State<MoreSexScreen> {
 
   List<Values> _valuesList;
+  SelectedAnswers _selectedAnswers;
 
   @override
   void initState() {
@@ -29,11 +31,14 @@ class _MoreSexScreenState
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
 
-    if(widget.sex != null && widget.sex.isNotEmpty) {
-      _valuesList[0].isSelected = false;
-      Values value = _valuesList.firstWhere((element) => element.text == widget.sex, orElse: () => null);
-      if(value != null)
-        value.isSelected = true;
+    if(widget.selectedAnswerList != null) {
+      _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
+      if(_selectedAnswers != null) {
+        _valuesList[0].isSelected = false;
+        Values value = _valuesList.firstWhere((element) => element.text == _selectedAnswers.answer, orElse: () => null);
+        if (value != null)
+          value.isSelected = true;
+      }
     }
   }
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreGenderScreen extends StatefulWidget {
-  final String gender;
+  final List<SelectedAnswers> selectedAnswerList;
 
-  const MoreGenderScreen({Key key, this.gender}) : super(key: key);
+  const MoreGenderScreen({Key key, this.selectedAnswerList}) : super(key: key);
   @override
   _MoreGenderScreenState createState() =>
       _MoreGenderScreenState();
@@ -15,6 +16,7 @@ class _MoreGenderScreenState
     extends State<MoreGenderScreen> {
 
   List<Values> _valuesList;
+  SelectedAnswers _selectedAnswers;
 
   @override
   void initState() {
@@ -28,21 +30,12 @@ class _MoreGenderScreenState
     ];
 
 
-    if(widget.gender != null && widget.gender.isNotEmpty) {
-      _valuesList[0].isSelected = false;
-      if (widget.gender.toLowerCase() == 'male') {
-        Values genderValue = _valuesList.firstWhere((element) => element.text == Constant.man, orElse: () => null);
-        if(genderValue != null) {
-          genderValue.isSelected = true;
-        }
-      } else if (widget.gender.toLowerCase() == 'female') {
-        Values genderValue = _valuesList.firstWhere((element) => element.text == Constant.woman, orElse: () => null);
-        if(genderValue != null) {
-          genderValue.isSelected = true;
-        }
-      } else {
-        Values genderValue = _valuesList.firstWhere((element) => element.text == widget.gender, orElse: () => null);
-        if(genderValue != null) {
+    if(widget.selectedAnswerList != null) {
+      _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);
+      if(_selectedAnswers != null) {
+        _valuesList[0].isSelected = false;
+        Values genderValue = _valuesList.firstWhere((element) => element.text == _selectedAnswers.answer, orElse: () => null);
+        if (genderValue != null) {
           genderValue.isSelected = true;
         }
       }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreAgeScreen extends StatefulWidget {
-  final String age;
+  final List<SelectedAnswers> selectedAnswerList;
 
-  const MoreAgeScreen({Key key, @required this.age}): super(key: key);
+  const MoreAgeScreen({Key key, @required this.selectedAnswerList}): super(key: key);
   @override
   _MoreAgeScreenState createState() =>
       _MoreAgeScreenState();
@@ -14,15 +15,19 @@ class _MoreAgeScreenState
     extends State<MoreAgeScreen> {
 
   double _currentAgeValue = 3;
+  SelectedAnswers _selectedAnswers;
 
   @override
   void initState() {
     super.initState();
-    if(widget.age != null) {
-      double ageValue = double.tryParse(widget.age);
+    if(widget.selectedAnswerList != null) {
+      _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
+      if(_selectedAnswers != null) {
+        double ageValue = double.tryParse(_selectedAnswers.answer);
 
-      if(ageValue != null)
-        _currentAgeValue = ageValue;
+        if (ageValue != null)
+          _currentAgeValue = ageValue;
+      }
     }
   }
 

@@ -295,7 +295,7 @@ class CalendarHeadacheLogDayDetailsBloc {
               });
               if(medicationDosage.isEmpty) {
                 titleInfo = '$titleInfo';
-              }else titleInfo = '$titleInfo ($medicationDosage)';
+              }else titleInfo = '$titleInfo\n($medicationDosage)';
             }
           }
           logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;

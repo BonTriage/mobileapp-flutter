@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -9,8 +10,9 @@ class MoreSection extends StatefulWidget {
   final bool isShowDivider;
   final String currentTag;
   final Function(String, dynamic) navigateToOtherScreenCallback;
+  final List<SelectedAnswers> selectedAnswerList;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -65,17 +67,17 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                   case Constant.locationServices:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute, null);
                     break;
-                  case Constant.name:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute, widget.moreStatus);
+                  case Constant.profileFirstNameTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.age:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute, widget.moreStatus);
+                  case Constant.profileAgeTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.gender:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute, widget.moreStatus);
+                  case Constant.profileGenderTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.sex:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute, widget.moreStatus);
+                  case Constant.profileSexTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute, widget.selectedAnswerList);
                     break;
                   case Constant.myTriggers:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute, null);

@@ -1,3 +1,5 @@
+import 'package:http/http.dart';
+import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
@@ -12,7 +14,11 @@ class MoreMyProfileRepository {
       if (response is AppException) {
         return response;
       } else {
-        return userProfileInfoModelFromJson(response);
+        List<ResponseModel> responseModelList = responseModelFromJson(response);
+        if(responseModelList != null && responseModelList.length > 0)
+          return responseModelList[0];
+        else
+          return null;
       }
     } catch (e) {
       return null;

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreNameScreen extends StatefulWidget {
-  final String name;
-  const MoreNameScreen({Key key, @required this.name}): super(key: key);
+  final List<SelectedAnswers> selectedAnswerList;
+  const MoreNameScreen({Key key, @required this.selectedAnswerList}): super(key: key);
   @override
   _MoreNameScreenState createState() =>
       _MoreNameScreenState();
@@ -13,14 +14,17 @@ class _MoreNameScreenState
     extends State<MoreNameScreen> {
 
   TextEditingController _textEditingController;
+  SelectedAnswers _selectedAnswers;
 
   @override
   void initState() {
     super.initState();
+    _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
 
-    print(widget.name);
+    _textEditingController = TextEditingController();
 
-    _textEditingController = TextEditingController(text: widget.name);
+    if(_selectedAnswers != null)
+      _textEditingController.text = _selectedAnswers.answer;
   }
 
   @override

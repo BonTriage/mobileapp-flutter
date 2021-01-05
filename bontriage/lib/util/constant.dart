@@ -326,6 +326,10 @@ class Constant {
   static const String logDayNoteTag = 'logday.note';
   static const String administeredTag = 'administered';
   static const String triggersTag = 'triggers1';
+  static const String profileFirstNameTag = 'profile.firstname';
+  static const String profileAgeTag = 'profile.age';
+  static const String profileSexTag = 'profile.sex';
+  static const String profileGenderTag = 'profile.gender';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =

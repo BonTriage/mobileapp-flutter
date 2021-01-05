@@ -624,8 +624,12 @@ class _MeScreenState extends State<MeScreen>
       DateTime startDateTime = DateTime.tryParse(currentUserHeadacheModel.selectedDate);
       if(startDateTime == null) {
         return 'Headache log currently in progress.';
-      } else
-        return 'Headache log currently in progress. Started on ${startDateTime.day} ${Utils.getShortMonthName(startDateTime.month)} at ${Utils.getTimeInAmPmFormat(startDateTime.hour, startDateTime.minute)}.';
+      } else {
+        startDateTime = startDateTime.toLocal();
+        return 'Headache log currently in progress. Started on ${startDateTime
+            .day} ${Utils.getShortMonthName(startDateTime.month)} at ${Utils
+            .getTimeInAmPmFormat(startDateTime.hour, startDateTime.minute)}.';
+      }
     }
     return Constant.onBoardingAssessmentIncomplete;
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreMyProfileBloc.dart';
+import 'package:mobile/models/ResponseModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -22,6 +24,7 @@ class MoreMyProfileScreen extends StatefulWidget {
 class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
 
   MoreMyProfileBloc _moreMyProfileBloc;
+  //List<SelectedAnswers> _profileSelectedAnswerList;
 
   @override
   void initState() {
@@ -96,8 +99,17 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                   StreamBuilder(
                     stream: _moreMyProfileBloc.myProfileStream,
                     builder: (context, snapshot) {
-                      if(snapshot.hasData && snapshot.data is UserProfileInfoModel && snapshot.data != null) {
-                        UserProfileInfoModel userProfileInfoModel = snapshot.data;
+                      if(snapshot.hasData && snapshot.data is ResponseModel && snapshot.data != null) {
+                        /*ResponseModel responseModel = snapshot.data;
+                        MobileEventDetails firstNameMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
+                        MobileEventDetails ageMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
+                        MobileEventDetails sexMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
+                        MobileEventDetails genderMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);*/
+                        SelectedAnswers firstNameSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
+                        SelectedAnswers ageSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
+                        SelectedAnswers sexSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
+                        SelectedAnswers genderSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);
+                        //_initSelectedAnswer(firstNameMobileEventDetails, ageMobileEventDetails, sexMobileEventDetails, genderMobileEventDetails);
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -111,32 +123,36 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MoreSection(
-                                    currentTag: Constant.name,
+                                    currentTag: Constant.profileFirstNameTag,
                                     text: Constant.name,
-                                    moreStatus: userProfileInfoModel.firstName,
+                                    moreStatus: firstNameSelectedAnswer?.answer ?? '',
                                     isShowDivider: true,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
                                   ),
                                   MoreSection(
-                                    currentTag: Constant.age,
+                                    currentTag: Constant.profileAgeTag,
                                     text: Constant.age,
-                                    moreStatus: userProfileInfoModel.age,
+                                    moreStatus: ageSelectedAnswer?.answer ?? '',
                                     isShowDivider: true,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
                                   ),
                                   MoreSection(
-                                    currentTag: Constant.gender,
+                                    currentTag: Constant.profileGenderTag,
                                     text: Constant.gender,
-                                    moreStatus: userProfileInfoModel.sex,
+                                    moreStatus: genderSelectedAnswer?.answer ?? '',
                                     isShowDivider: true,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
                                   ),
                                   MoreSection(
-                                    currentTag: Constant.sex,
+                                    currentTag: Constant.profileSexTag,
                                     text: Constant.sex,
-                                    moreStatus: userProfileInfoModel.sex,
+                                    moreStatus: sexSelectedAnswer?.answer ?? '',
                                     isShowDivider: true,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,6 +172,22 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                       ),
                                     ],
                                   ),
+                                  Divider(
+                                    color: Constant.locationServiceGreen,
+                                    thickness: 1,
+                                    height: 30,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      Constant.save,
+                                      style: TextStyle(
+                                          color: Constant.locationServiceGreen,
+                                          fontSize: 16,
+                                          fontFamily: Constant.jostMedium
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -255,6 +287,19 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
       ),
     );
   }
+
+  /*void _initSelectedAnswer(MobileEventDetails firstNameMobileEventDetails, MobileEventDetails ageMobileEventDetails, MobileEventDetails sexMobileEventDetails, MobileEventDetails genderMobileEventDetails) {
+    if(_profileSelectedAnswerList == null && firstNameMobileEventDetails != null && ageMobileEventDetails != null && sexMobileEventDetails != null) {
+      _profileSelectedAnswerList = [];
+
+      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: firstNameMobileEventDetails.questionTag, answer: firstNameMobileEventDetails.value));
+      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: ageMobileEventDetails.questionTag, answer: ageMobileEventDetails.value));
+      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: sexMobileEventDetails.questionTag, answer: sexMobileEventDetails.value));
+
+      if(genderMobileEventDetails != null)
+        _profileSelectedAnswerList.add(SelectedAnswers(questionTag: genderMobileEventDetails.questionTag, answer: genderMobileEventDetails.value));
+    }
+  }*/
 
   void _navigateToOtherScreen(String routeName, dynamic arguments) {
     widget.onPush(
