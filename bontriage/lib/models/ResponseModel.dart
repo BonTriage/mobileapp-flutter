@@ -25,7 +25,7 @@ class ResponseModel {
   DateTime updatedAt;
   DateTime calendarEntryAt;
   String eventType;
-  List<MobileEventDetails> mobileEventDetails;
+  List<ResponseMobileEventDetails> mobileEventDetails;
 
   factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
     id: json["id"],
@@ -34,7 +34,7 @@ class ResponseModel {
     updatedAt: DateTime.parse(json["updated_at"]),
     calendarEntryAt: DateTime.parse(json["calendar_entry_at"]),
     eventType: json["event_type"],
-    mobileEventDetails: List<MobileEventDetails>.from(json["mobile_event_details"].map((x) => MobileEventDetails.fromJson(x))),
+    mobileEventDetails: List<ResponseMobileEventDetails>.from(json["mobile_event_details"].map((x) => ResponseMobileEventDetails.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -48,8 +48,8 @@ class ResponseModel {
   };
 }
 
-class MobileEventDetails {
-  MobileEventDetails({
+class ResponseMobileEventDetails {
+  ResponseMobileEventDetails({
     this.id,
     this.eventId,
     this.value,
@@ -67,7 +67,7 @@ class MobileEventDetails {
   DateTime uploadedAt;
   DateTime updatedAt;
 
-  factory MobileEventDetails.fromJson(Map<String, dynamic> json) => MobileEventDetails(
+  factory ResponseMobileEventDetails.fromJson(Map<String, dynamic> json) => ResponseMobileEventDetails(
     id: json["id"],
     eventId: json["event_id"],
     value: json["value"],

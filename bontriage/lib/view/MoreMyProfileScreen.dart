@@ -10,7 +10,7 @@ import 'package:mobile/view/MoreSection.dart';
 import 'NetworkErrorScreen.dart';
 
 class MoreMyProfileScreen extends StatefulWidget {
-  final Function(BuildContext, String, dynamic) onPush;
+  final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
   final Function(String) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
 
@@ -22,7 +22,6 @@ class MoreMyProfileScreen extends StatefulWidget {
 }
 
 class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
-
   MoreMyProfileBloc _moreMyProfileBloc;
   //List<SelectedAnswers> _profileSelectedAnswerList;
 
@@ -30,6 +29,8 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
   void initState() {
     super.initState();
     _moreMyProfileBloc = MoreMyProfileBloc();
+
+    print('InitState');
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _moreMyProfileBloc.initNetworkStreamController();
@@ -179,12 +180,22 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                   ),
                                   Align(
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      Constant.save,
-                                      style: TextStyle(
-                                          color: Constant.locationServiceGreen,
-                                          fontSize: 16,
-                                          fontFamily: Constant.jostMedium
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _moreMyProfileBloc.initNetworkStreamController();
+                                        widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
+                                          _moreMyProfileBloc.enterSomeDummyData();
+                                          _moreMyProfileBloc.editMyProfileServiceCall();
+                                        });
+                                        _moreMyProfileBloc.editMyProfileServiceCall();
+                                      },
+                                      child: Text(
+                                        Constant.save,
+                                        style: TextStyle(
+                                            color: Constant.locationServiceGreen,
+                                            fontSize: 16,
+                                            fontFamily: Constant.jostMedium
+                                        ),
                                       ),
                                     ),
                                   )
@@ -288,22 +299,9 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
     );
   }
 
-  /*void _initSelectedAnswer(MobileEventDetails firstNameMobileEventDetails, MobileEventDetails ageMobileEventDetails, MobileEventDetails sexMobileEventDetails, MobileEventDetails genderMobileEventDetails) {
-    if(_profileSelectedAnswerList == null && firstNameMobileEventDetails != null && ageMobileEventDetails != null && sexMobileEventDetails != null) {
-      _profileSelectedAnswerList = [];
-
-      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: firstNameMobileEventDetails.questionTag, answer: firstNameMobileEventDetails.value));
-      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: ageMobileEventDetails.questionTag, answer: ageMobileEventDetails.value));
-      _profileSelectedAnswerList.add(SelectedAnswers(questionTag: sexMobileEventDetails.questionTag, answer: sexMobileEventDetails.value));
-
-      if(genderMobileEventDetails != null)
-        _profileSelectedAnswerList.add(SelectedAnswers(questionTag: genderMobileEventDetails.questionTag, answer: genderMobileEventDetails.value));
-    }
-  }*/
-
-  void _navigateToOtherScreen(String routeName, dynamic arguments) {
-    widget.onPush(
-        context, routeName, arguments);
+  void _navigateToOtherScreen(String routeName, dynamic arguments) async {
+    await widget.onPush(context, routeName, arguments);
+    setState(() {});
   }
 
   @override

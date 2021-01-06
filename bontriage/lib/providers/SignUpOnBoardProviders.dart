@@ -153,6 +153,20 @@ class SignUpOnBoardProviders {
     return userProfileInfoModel;
   }
 
+  Future<void> updateUserProfileInfoModel(UserProfileInfoModel userProfileInfoModel) async {
+    Map<String, dynamic> map = {
+      USER_ID: userProfileInfoModel.userId,
+      USER_PROFILE_INFO_MODEL: jsonEncode(userProfileInfoModel)
+    };
+    final db = await database;
+    await db.update(
+      TABLE_USER_PROFILE_INFO,
+      map,
+      where: "$USER_ID = ?",
+      whereArgs: [userProfileInfoModel.userId],
+    );
+  }
+
   Future<int> checkUserProgressDataAvailable(String tableName) async {
     final db = await database;
     var count = Sqflite.firstIntValue(

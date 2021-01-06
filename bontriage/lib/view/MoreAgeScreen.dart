@@ -101,6 +101,7 @@ class _MoreAgeScreenState
                       onChanged: (double age) {
                         setState(() {
                           _currentAgeValue = age;
+                          _selectedAnswers.answer = _currentAgeValue.toInt().toString();
                         });
                       },
                     ),

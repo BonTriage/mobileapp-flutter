@@ -145,14 +145,14 @@ class _MoreSexScreenState
                           GestureDetector(
                             onTap: () {
                               setState(() {
+                                _selectedAnswers.answer = _valuesList[index].text;
                                 _onOptionSelected(index);
                               });
                             },
                             child: Container(
                               decoration: _getBoxDecoration(index),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 child: Text(
                                   _valuesList[index].text,
                                   style: TextStyle(

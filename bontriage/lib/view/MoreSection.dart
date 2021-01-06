@@ -37,6 +37,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -111,23 +112,33 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                       fontFamily: Constant.jostRegular
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      widget.moreStatus,
-                      style: TextStyle(
-                          color: Constant.notificationTextColor,
-                          fontSize: 15,
-                          fontFamily: Constant.jostMedium
+                SizedBox(width: 10,),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          child: Text(
+                            widget.moreStatus,
+                            style: TextStyle(
+                                color: Constant.notificationTextColor,
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium
+                            ),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          alignment: Alignment.topRight,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10,),
-                    Image(
-                      width: 16,
-                      height: 16,
-                      image: AssetImage(Constant.rightArrow),
-                    ),
-                  ],
+                      SizedBox(width: 10,),
+                      Image(
+                        width: 16,
+                        height: 16,
+                        image: AssetImage(Constant.rightArrow),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

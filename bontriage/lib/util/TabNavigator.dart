@@ -34,10 +34,10 @@ class TabNavigator extends StatelessWidget {
   TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback});
 
 
-  void _push(BuildContext context, String routeName, dynamic argument) {
+  Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
     var routeBuilders = _routeBuilders(context, argument);
 
-    Navigator.push(
+    return await Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>

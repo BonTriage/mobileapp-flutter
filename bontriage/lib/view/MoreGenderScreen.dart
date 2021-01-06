@@ -145,6 +145,7 @@ class _MoreGenderScreenState
                           GestureDetector(
                             onTap: () {
                               setState(() {
+                                _selectedAnswers.answer = _valuesList[index].text;
                                 _onOptionSelected(index);
                               });
                             },

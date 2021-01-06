@@ -15,16 +15,20 @@ class _MoreNameScreenState
 
   TextEditingController _textEditingController;
   SelectedAnswers _selectedAnswers;
+  String _initialNameValue;
 
   @override
   void initState() {
     super.initState();
+    _initialNameValue = '';
     _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
 
     _textEditingController = TextEditingController();
 
-    if(_selectedAnswers != null)
-      _textEditingController.text = _selectedAnswers.answer;
+    if(_selectedAnswers != null) {
+      _initialNameValue = _selectedAnswers.answer;
+      _textEditingController.text = _initialNameValue;
+    }
   }
 
   @override
@@ -86,6 +90,14 @@ class _MoreNameScreenState
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextField(
                       controller: _textEditingController,
+                      onChanged: (value) {
+                        if(value.isNotEmpty) {
+                          _selectedAnswers.answer = value;
+                        } else {
+                          _textEditingController.text = _initialNameValue;
+                          _selectedAnswers.answer = _initialNameValue;
+                        }
+                      },
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 15,

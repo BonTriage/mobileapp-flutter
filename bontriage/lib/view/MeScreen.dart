@@ -139,12 +139,7 @@ class _MeScreenState extends State<MeScreen>
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     _getUserCurrentHeadacheData();
-  }
-
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('Applifecyclestate????$state');
+    getUserProfileDetails();
   }
 
   @override
