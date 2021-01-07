@@ -6,6 +6,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
+import 'package:mobile/view/MeScreenTutorial.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+  GlobalKey _logDayGlobalKey;
+  GlobalKey _addHeadacheGlobalKey;
+  GlobalKey _recordsGlobalKey;
+
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
     1: GlobalKey<NavigatorState>(),
@@ -164,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
         openTriggerMedicationActionSheetCallback:
             _openTriggersMedicationActionSheet,
         showApiLoaderCallback: showApiLoader,
+        getButtonsGlobalKeyCallback: getButtonsGlobalKey,
       ),
     );
   }
@@ -247,5 +253,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
     Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
+  }
+
+  void getButtonsGlobalKey(GlobalKey logDayGlobalKey, GlobalKey addHeadacheGlobalKey) {
+    _logDayGlobalKey = logDayGlobalKey;
+    _addHeadacheGlobalKey = addHeadacheGlobalKey;
+
+    Future.delayed(Duration(milliseconds: 450), () {
+      showGeneralDialog(
+          context: context,
+          barrierColor: Colors.transparent,
+          pageBuilder: (buildContext, animation, secondaryAnimation) {
+            return MeScreenTutorial(
+              logDayGlobalKey: _logDayGlobalKey,
+              recordsGlobalKey: _recordsGlobalKey,
+              addHeadacheGlobalKey: _addHeadacheGlobalKey,
+            );
+          }
+      );
+    });
   }
 }
