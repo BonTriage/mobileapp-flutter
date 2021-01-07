@@ -467,6 +467,7 @@ class Constant {
   static String findALocalDoctor = 'Find a local doctor (non-urgent)';
   static String openYourProviderApp = 'Open your provider’s app';
   static String lindaJonesPdf = 'Linda_Jones_4_29_20.pdf';
+  static String saveAndExit = 'Save & Exit';
   static String text = 'Text';
   static String print = 'Print';
   static const String name = 'Name';
@@ -551,6 +552,7 @@ class Constant {
   static const String generateReportActionSheet = 'generateReportActionSheet';
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
+  static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;

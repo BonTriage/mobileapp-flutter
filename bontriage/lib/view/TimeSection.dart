@@ -45,7 +45,7 @@ class _TimeSectionState extends State<TimeSection>
     //widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
 
     widget.addHeadacheDateTimeDetailsData(
-        "onset", DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toUtc().toIso8601String());
+        "onset", Utils.getDateTimeInUtcFormat(DateTime.parse(widget.currentUserHeadacheModel.selectedDate)));
 
     _animationController = AnimationController(
       duration: Duration(milliseconds: 350),
@@ -96,10 +96,10 @@ class _TimeSectionState extends State<TimeSection>
         _selectedEndTime = _selectedEndDate;
         _selectedEndDateAndTime = _selectedEndDate;
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+            "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
       } else {
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndDate.toUtc().toIso8601String());
+            "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDate));
       }
       Future.delayed(Duration(milliseconds: 500), () {
         widget.addHeadacheDateTimeDetailsData("ongoing", "No");
@@ -138,7 +138,7 @@ class _TimeSectionState extends State<TimeSection>
           0);
         }
         widget.addHeadacheDateTimeDetailsData(
-            "onset", _selectedStartDate.toUtc().toIso8601String());
+            "onset", Utils.getDateTimeInUtcFormat(_selectedStartDate));
       });
     }
   }
@@ -187,7 +187,7 @@ class _TimeSectionState extends State<TimeSection>
         _selectedEndDateAndTime = _selectedEndDate;
 
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndDate.toUtc().toIso8601String());
+            "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDate));
       });
     }
     print(dateTime);
@@ -220,11 +220,11 @@ class _TimeSectionState extends State<TimeSection>
 
           Future.delayed(Duration(milliseconds: 500), () {
             widget.addHeadacheDateTimeDetailsData(
-                "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+                "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
           });
         }
         widget.addHeadacheDateTimeDetailsData(
-            "onset", _selectedStartTime.toUtc().toIso8601String());
+            "onset", Utils.getDateTimeInUtcFormat(_selectedStartTime));
       });
     }
     print(dateTime);
@@ -272,7 +272,7 @@ class _TimeSectionState extends State<TimeSection>
         _selectedEndDate = _selectedEndTime;
         _selectedEndDateAndTime = _selectedEndTime;
         widget.addHeadacheDateTimeDetailsData(
-            "endtime", _selectedEndTime.toUtc().toIso8601String());
+            "endtime", Utils.getDateTimeInUtcFormat(_selectedEndTime));
       });
     }
     print(dateTime);
@@ -498,7 +498,7 @@ class _TimeSectionState extends State<TimeSection>
                       });
 
                       _selectedEndDateAndTime = _selectedEndDate;
-                      widget.addHeadacheDateTimeDetailsData("endtime", _selectedEndDate.toUtc().toIso8601String());
+                      widget.addHeadacheDateTimeDetailsData("endtime", Utils.getDateTimeInUtcFormat(_selectedEndDate));
                     },
                     child: Text(
                       Constant.reset,
@@ -553,10 +553,10 @@ class _TimeSectionState extends State<TimeSection>
                       _selectedEndTime = _selectedEndDate;
                       _selectedEndDateAndTime = _selectedEndDate;
                       widget.addHeadacheDateTimeDetailsData(
-                          "endtime", DateTime.now().toUtc().toIso8601String());
+                          "endtime", Utils.getDateTimeInUtcFormat(DateTime.now()));
                     } else
                       widget.addHeadacheDateTimeDetailsData(
-                          "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
+                          "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
                     widget.currentUserHeadacheModel
                       ..isOnGoing = false
                       ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();

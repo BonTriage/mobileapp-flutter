@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreMyProfileBloc.dart';
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
-import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
-
-import 'NetworkErrorScreen.dart';
 
 class MoreMyProfileScreen extends StatefulWidget {
   final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
@@ -23,7 +19,7 @@ class MoreMyProfileScreen extends StatefulWidget {
 
 class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
   MoreMyProfileBloc _moreMyProfileBloc;
-  //List<SelectedAnswers> _profileSelectedAnswerList;
+
 
   @override
   void initState() {
@@ -101,16 +97,10 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                     stream: _moreMyProfileBloc.myProfileStream,
                     builder: (context, snapshot) {
                       if(snapshot.hasData && snapshot.data is ResponseModel && snapshot.data != null) {
-                        /*ResponseModel responseModel = snapshot.data;
-                        MobileEventDetails firstNameMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
-                        MobileEventDetails ageMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
-                        MobileEventDetails sexMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
-                        MobileEventDetails genderMobileEventDetails = responseModel.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);*/
                         SelectedAnswers firstNameSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
                         SelectedAnswers ageSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
                         SelectedAnswers sexSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
                         SelectedAnswers genderSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);
-                        //_initSelectedAnswer(firstNameMobileEventDetails, ageMobileEventDetails, sexMobileEventDetails, genderMobileEventDetails);
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -151,54 +141,10 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                     currentTag: Constant.profileSexTag,
                                     text: Constant.sex,
                                     moreStatus: sexSelectedAnswer?.answer ?? '',
-                                    isShowDivider: true,
+                                    isShowDivider: false,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
                                     selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        Constant.reCompleteInitialAssessment,
-                                        style: TextStyle(
-                                            color: Constant
-                                                .addCustomNotificationTextColor,
-                                            fontSize: 16,
-                                            fontFamily: Constant.jostRegular),
-                                      ),
-                                      Image(
-                                        width: 16,
-                                        height: 16,
-                                        image: AssetImage(Constant.rightArrow),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: Constant.locationServiceGreen,
-                                    thickness: 1,
-                                    height: 30,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _moreMyProfileBloc.initNetworkStreamController();
-                                        widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
-                                          _moreMyProfileBloc.enterSomeDummyData();
-                                          _moreMyProfileBloc.editMyProfileServiceCall();
-                                        });
-                                        _moreMyProfileBloc.editMyProfileServiceCall();
-                                      },
-                                      child: Text(
-                                        Constant.save,
-                                        style: TextStyle(
-                                            color: Constant.locationServiceGreen,
-                                            fontSize: 16,
-                                            fontFamily: Constant.jostMedium
-                                        ),
-                                      ),
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
@@ -278,15 +224,8 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                             SizedBox(height: 20,),
                           ],
                         );
-                      } /*else if (snapshot.hasError) {
-                        return NetworkErrorScreen(
-                          errorMessage: snapshot.error.toString(),
-                          tapToRetryFunction: () {
-                            Utils.showApiLoaderDialog(context);
-                            _moreMyProfileBloc.fetchMyProfileData();
-                          },
-                        );
-                      }*/
+                      }
+
                       return Container();
                     },
                   ),
@@ -300,8 +239,18 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
   }
 
   void _navigateToOtherScreen(String routeName, dynamic arguments) async {
-    await widget.onPush(context, routeName, arguments);
-    setState(() {});
+    var result = await widget.onPush(context, routeName, arguments);
+    if(result != null) {
+      if(result is bool && result) {
+        _moreMyProfileBloc.initNetworkStreamController();
+        widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
+          _moreMyProfileBloc.enterSomeDummyData();
+          _moreMyProfileBloc.editMyProfileServiceCall();
+        });
+        _moreMyProfileBloc.editMyProfileServiceCall();
+      }
+    }
+    //setState(() {});
   }
 
   @override

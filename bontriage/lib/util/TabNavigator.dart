@@ -116,10 +116,22 @@ class TabNavigator extends StatelessWidget {
         openActionSheetCallback: openActionSheetCallback,
       ),
       TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
-      TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(selectedAnswerList: arguments,),
-      TabNavigatorRoutes.moreAgeScreenRoute: (context) => MoreAgeScreen(selectedAnswerList: arguments,),
-      TabNavigatorRoutes.moreGenderScreenRoute: (context) => MoreGenderScreen(selectedAnswerList: arguments,),
-      TabNavigatorRoutes.moreSexScreenRoute: (context) => MoreSexScreen(selectedAnswerList: arguments,),
+      TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreAgeScreenRoute: (context) => MoreAgeScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreGenderScreenRoute: (context) => MoreGenderScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreSexScreenRoute: (context) => MoreSexScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
       TabNavigatorRoutes.moreTriggersScreenRoute: (context) => MoreTriggersScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
       ),
