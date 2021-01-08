@@ -509,6 +509,7 @@ class Utils {
     return Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics();
   }
 
+  ///This method is used to show validation error message to the user
   static void showValidationErrorDialog(BuildContext context, String errorMessage) {
     showDialog<void>(
       context: context,

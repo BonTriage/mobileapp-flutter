@@ -252,7 +252,7 @@ class CalendarHeadacheLogDayDetailsBloc {
 
         var medicationDosageData = element.mobileEventDetails.firstWhere(
                 (mobileEventElement) =>
-                mobileEventElement.questionTag.contains('.dosage'),
+                mobileEventElement.questionTag.contains(Constant.dotDosage),
             orElse: () => null);
 
         if (medicationData != null) {
@@ -264,16 +264,16 @@ class CalendarHeadacheLogDayDetailsBloc {
               String medicationDosage = '';
               formattedValues.asMap().forEach((index, medicationElement) {
                 if (medicationDosage.isEmpty) {
-                  DateTime medDateTime;
+                  DateTime medicationDateTime;
 
                   try {
-                    medDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
+                    medicationDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
                   } catch (e) {
                     print(e);
                   }
 
-                  if(medDateTime != null) {
-                    medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                  if(medicationDateTime != null) {
+                    medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
                   } else {
                     medicationDosage = '$medicationElement';
                   }

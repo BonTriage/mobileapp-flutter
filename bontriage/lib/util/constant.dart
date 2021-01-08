@@ -546,6 +546,7 @@ class Constant {
   static String migraineDaysVsHeadacheDaysDialogText = 'In this Intensity view of your calendar, you can see a distinction between Headache days and Migraine days. When you complete an assessment for a new headache type, we classify it internally as either a Headache or a Migraine. In most cases throughout the app, your migraines are included generally as a headache, but you can view the distinction between the two in this Intensity view, depending on which headache types you select when logging.';
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
+  static String dotDosage = '.dosage';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
