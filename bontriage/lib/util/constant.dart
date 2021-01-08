@@ -647,6 +647,9 @@ class Constant {
   static String addCircleIcon = 'images/add_circle_icon.png';
   static String calenderBackArrow = 'images/calender_back_arrow.png';
   static String calenderNextArrow = 'images/calender_next_arrow.png';
+  static String tutorialArrowUp = 'images/tutorial_arrow_up.png';
+  static String tutorialArrowDown = 'images/tutorial_arrow_down.png';
+  static String tutorialArrowDown2 = 'images/tutorial_arrow_down_2.png';
 
   static String leftArrow = 'images/left_arrow.png';
   static String downArrow2 = 'images/down_arrow_2.png';

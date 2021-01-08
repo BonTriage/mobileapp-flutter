@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     saveHomePosition();
+    _recordsGlobalKey = GlobalKey();
     saveCurrentIndexOfTabBar(0);
     print(Utils.getDateTimeInUtcFormat(DateTime.now()));
   }
@@ -84,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Image.asset(
                 Constant.recordsUnselected,
                 height: 25,
+                key: _recordsGlobalKey,
               ),
               activeIcon: Image.asset(
                 Constant.recordsSelected,
@@ -264,10 +266,13 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           barrierColor: Colors.transparent,
           pageBuilder: (buildContext, animation, secondaryAnimation) {
-            return MeScreenTutorial(
-              logDayGlobalKey: _logDayGlobalKey,
-              recordsGlobalKey: _recordsGlobalKey,
-              addHeadacheGlobalKey: _addHeadacheGlobalKey,
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: MeScreenTutorial(
+                logDayGlobalKey: _logDayGlobalKey,
+                recordsGlobalKey: _recordsGlobalKey,
+                addHeadacheGlobalKey: _addHeadacheGlobalKey,
+              ),
             );
           }
       );
