@@ -9,6 +9,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardFirstStepRepository {
@@ -18,8 +19,7 @@ class SignUpOnBoardFirstStepRepository {
     var client = http.Client();
     var album;
     try {
-      var response =
-          await NetworkService(url, requestMethod, _getPayload()).serviceCall();
+      var response = await NetworkService(url, requestMethod, _getPayload()).serviceCall();
       if (response is AppException) {
         return response;
       } else {
@@ -53,7 +53,26 @@ class SignUpOnBoardFirstStepRepository {
       } else {
         return response;
       }
-    } catch (Exception) {
+    } catch (e) {
+      return album;
+    }
+  }
+
+  Future<dynamic> signUpZeroStepInfoObjectServiceCall(
+      String url,
+      RequestMethod requestMethod,
+      SignUpOnBoardSelectedAnswersModel
+      signUpOnBoardSelectedAnswersModel) async {
+    var album;
+    try {
+      String payload = await _setUserZeroStepSignUpPayload(signUpOnBoardSelectedAnswersModel);
+      var response = await NetworkService(url, requestMethod, payload).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (e) {
       return album;
     }
   }
@@ -74,8 +93,8 @@ class SignUpOnBoardFirstStepRepository {
         SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType = "clinical_impression_short0";
     signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
-    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
@@ -83,7 +102,35 @@ class SignUpOnBoardFirstStepRepository {
             MobileEventDetails(
                 questionTag: model.questionTag,
                 questionJson: "",
-                updatedAt: "2020-10-08T08:18:21Z",
+                updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                value: [model.answer]));
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    return jsonEncode(signUpOnBoardAnswersRequestModel);
+  }
+
+  Future<String> _setUserZeroStepSignUpPayload(
+      SignUpOnBoardSelectedAnswersModel
+      signUpOnBoardSelectedAnswersModel) async {
+    var userProfileInfoData =
+    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
+    SignUpOnBoardAnswersRequestModel();
+    signUpOnBoardAnswersRequestModel.eventType = "profile";
+    signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());;
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+    signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
+    try {
+      signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
+        signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+            MobileEventDetails(
+                questionTag: model.questionTag,
+                questionJson: "",
+                updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
                 value: [model.answer]));
       });
     } catch (e) {

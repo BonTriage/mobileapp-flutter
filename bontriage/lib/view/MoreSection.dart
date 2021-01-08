@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -8,9 +9,10 @@ class MoreSection extends StatefulWidget {
   final String moreStatus;
   final bool isShowDivider;
   final String currentTag;
-  final Function(String) navigateToOtherScreenCallback;
+  final Function(String, dynamic) navigateToOtherScreenCallback;
+  final List<SelectedAnswers> selectedAnswerList;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -35,6 +37,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -42,46 +45,46 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
               if(widget.currentTag != null) {
                 switch(widget.currentTag) {
                   case Constant.settings:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSettingRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSettingRoute, null);
                     break;
                   case Constant.generateReport:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenerateReportRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenerateReportRoute, null);
                     break;
                   case Constant.support:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSupportRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSupportRoute, null);
                     break;
                   case Constant.myProfile:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyProfileScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMyProfileScreenRoute, null);
                     break;
                   case Constant.notifications:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNotificationScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNotificationScreenRoute, null);
                     break;
                   case Constant.faq:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute, null);
                     break;
                   case Constant.headacheType:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, null);
                     break;
                   case Constant.locationServices:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute, null);
                     break;
-                  case Constant.name:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute);
+                  case Constant.profileFirstNameTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreNameScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.age:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute);
+                  case Constant.profileAgeTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreAgeScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.gender:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute);
+                  case Constant.profileGenderTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreGenderScreenRoute, widget.selectedAnswerList);
                     break;
-                  case Constant.sex:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute);
+                  case Constant.profileSexTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute, widget.selectedAnswerList);
                     break;
                   case Constant.myTriggers:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute, null);
                     break;
                   case Constant.myMedications:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute, null);
                     break;
                   case Constant.dailyLog:
                   case Constant.medication:
@@ -109,23 +112,33 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                       fontFamily: Constant.jostRegular
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      widget.moreStatus,
-                      style: TextStyle(
-                          color: Constant.notificationTextColor,
-                          fontSize: 15,
-                          fontFamily: Constant.jostMedium
+                SizedBox(width: 10,),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          child: Text(
+                            widget.moreStatus,
+                            style: TextStyle(
+                                color: Constant.notificationTextColor,
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium
+                            ),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          alignment: Alignment.topRight,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10,),
-                    Image(
-                      width: 16,
-                      height: 16,
-                      image: AssetImage(Constant.rightArrow),
-                    ),
-                  ],
+                      SizedBox(width: 10,),
+                      Image(
+                        width: 16,
+                        height: 16,
+                        image: AssetImage(Constant.rightArrow),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -34,10 +34,10 @@ class TabNavigator extends StatelessWidget {
   TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback});
 
 
-  void _push(BuildContext context, String routeName) {
-    var routeBuilders = _routeBuilders(context);
+  Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
+    var routeBuilders = _routeBuilders(context, argument);
 
-    Navigator.push(
+    return await Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
@@ -59,7 +59,7 @@ class TabNavigator extends StatelessWidget {
         ));
   }
 
-  Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
+  Map<String, WidgetBuilder> _routeBuilders(BuildContext context, dynamic arguments) {
     return {
       TabNavigatorRoutes.root: (context) {
         print('Root name: $root');
@@ -72,22 +72,21 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(
               onPush: (context, routeName) {
-                _push(context, routeName);
+                _push(context, routeName, arguments);
               },
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
             showApiLoaderCallback: showApiLoaderCallback,
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {
-            _push(context, routeName);
+            _push(context, routeName, arguments);
           }),
       TabNavigatorRoutes.moreRoot: (context) => MoreScreen(
-            onPush: (context, routeName) {
-              _push(context, routeName);
-            },
+            onPush: _push,
             openActionSheetCallback: (actionSheetType) {
               openActionSheetCallback(actionSheetType);
             },
+            showApiLoaderCallback: showApiLoaderCallback,
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
@@ -97,13 +96,12 @@ class TabNavigator extends StatelessWidget {
 
       TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => MoreMyProfileScreen(
         onPush: _push,
+        showApiLoaderCallback: showApiLoaderCallback,
       ),
 
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
-            onPush: (context, routeName) {
-              _push(context, routeName);
-            },
+            onPush: _push,
             openActionSheetCallback: (actionSheetType) {
               openActionSheetCallback(actionSheetType);
             },
@@ -118,10 +116,22 @@ class TabNavigator extends StatelessWidget {
         openActionSheetCallback: openActionSheetCallback,
       ),
       TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
-      TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(),
-      TabNavigatorRoutes.moreAgeScreenRoute: (context) => MoreAgeScreen(),
-      TabNavigatorRoutes.moreGenderScreenRoute: (context) => MoreGenderScreen(),
-      TabNavigatorRoutes.moreSexScreenRoute: (context) => MoreSexScreen(),
+      TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreAgeScreenRoute: (context) => MoreAgeScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreGenderScreenRoute: (context) => MoreGenderScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreSexScreenRoute: (context) => MoreSexScreen(
+        selectedAnswerList: arguments,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
       TabNavigatorRoutes.moreTriggersScreenRoute: (context) => MoreTriggersScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
       ),
@@ -133,7 +143,7 @@ class TabNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var routeBuilders = _routeBuilders(context);
+    var routeBuilders = _routeBuilders(context, null);
 
     return Navigator(
         key: navigatorKey,

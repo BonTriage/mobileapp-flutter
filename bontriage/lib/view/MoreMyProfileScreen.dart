@@ -1,18 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/MoreMyProfileBloc.dart';
+import 'package:mobile/models/ResponseModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreMyProfileScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
   final Function(String) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const MoreMyProfileScreen({Key key, this.onPush, this.openActionSheetCallback})
+  const MoreMyProfileScreen({Key key, this.onPush, this.openActionSheetCallback, this.showApiLoaderCallback})
       : super(key: key);
+
   @override
   _MoreMyProfileScreenState createState() => _MoreMyProfileScreenState();
 }
 
 class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
+  MoreMyProfileBloc _moreMyProfileBloc;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _moreMyProfileBloc = MoreMyProfileBloc();
+
+    print('InitState');
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _moreMyProfileBloc.initNetworkStreamController();
+      widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
+        _moreMyProfileBloc.enterSomeDummyData();
+        _moreMyProfileBloc.fetchMyProfileData();
+      });
+      _moreMyProfileBloc.fetchMyProfileData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,139 +93,142 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                   SizedBox(
                     height: 40,
                   ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Constant.moreBackgroundColor,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MoreSection(
-                          currentTag: Constant.name,
-                          text: Constant.name,
-                          moreStatus: Constant.lindaJones,
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.age,
-                          text: Constant.age,
-                          moreStatus: Constant.twentyTwo,
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.gender,
-                          text: Constant.gender,
-                          moreStatus: Constant.female,
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.sex,
-                          text: Constant.sex,
-                          moreStatus: Constant.female,
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  StreamBuilder(
+                    stream: _moreMyProfileBloc.myProfileStream,
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData && snapshot.data is ResponseModel && snapshot.data != null) {
+                        SelectedAnswers firstNameSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileFirstNameTag, orElse: () => null);
+                        SelectedAnswers ageSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileAgeTag, orElse: () => null);
+                        SelectedAnswers sexSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileSexTag, orElse: () => null);
+                        SelectedAnswers genderSelectedAnswer = _moreMyProfileBloc.profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.reCompleteInitialAssessment,
-                              style: TextStyle(
-                                  color: Constant
-                                      .addCustomNotificationTextColor,
-                                  fontSize: 16,
-                                  fontFamily: Constant.jostRegular),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Constant.moreBackgroundColor,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  MoreSection(
+                                    currentTag: Constant.profileFirstNameTag,
+                                    text: Constant.name,
+                                    moreStatus: firstNameSelectedAnswer?.answer ?? '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.profileAgeTag,
+                                    text: Constant.age,
+                                    moreStatus: ageSelectedAnswer?.answer ?? '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.profileGenderTag,
+                                    text: Constant.gender,
+                                    moreStatus: genderSelectedAnswer?.answer ?? '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.profileSexTag,
+                                    text: Constant.sex,
+                                    moreStatus: sexSelectedAnswer?.answer ?? '',
+                                    isShowDivider: false,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
+                                  ),
+                                ],
+                              ),
                             ),
-                            Image(
-                              width: 16,
-                              height: 16,
-                              image: AssetImage(Constant.rightArrow),
+                            SizedBox(height: 30,),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Text(
+                                Constant.headacheTypes,
+                                style: TextStyle(
+                                    color: Constant.addCustomNotificationTextColor,
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium
+                                ),
+                              ),
                             ),
+                            SizedBox(height: 10,),
+                            Container(
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Constant.moreBackgroundColor,
+                              ),
+                              child: Column(
+                                children: [
+                                  MoreSection(
+                                    currentTag: Constant.headacheType,
+                                    text: Constant.headacheType,
+                                    moreStatus: '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.headacheType,
+                                    text: Constant.headacheType,
+                                    moreStatus: '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.headacheType,
+                                    text: Constant.headacheType,
+                                    moreStatus: '',
+                                    isShowDivider: false,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 30,),
+                            Container(
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Constant.moreBackgroundColor,
+                              ),
+                              child: Column(
+                                children: [
+                                  MoreSection(
+                                    currentTag: Constant.myTriggers,
+                                    text: Constant.myTriggers,
+                                    moreStatus: '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.myMedications,
+                                    text: Constant.myMedications,
+                                    moreStatus: '',
+                                    isShowDivider: false,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20,),
                           ],
-                        )
-                      ],
-                    ),
+                        );
+                      }
+
+                      return Container();
+                    },
                   ),
-                  SizedBox(height: 30,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      Constant.headacheTypes,
-                      style: TextStyle(
-                        color: Constant.addCustomNotificationTextColor,
-                        fontSize: 16,
-                        fontFamily: Constant.jostMedium
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Constant.moreBackgroundColor,
-                    ),
-                    child: Column(
-                      children: [
-                        MoreSection(
-                          currentTag: Constant.headacheType,
-                          text: Constant.headacheType,
-                          moreStatus: '',
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.headacheType,
-                          text: Constant.headacheType,
-                          moreStatus: '',
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.headacheType,
-                          text: Constant.headacheType,
-                          moreStatus: '',
-                          isShowDivider: false,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 30,),
-                  Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Constant.moreBackgroundColor,
-                    ),
-                    child: Column(
-                      children: [
-                        MoreSection(
-                          currentTag: Constant.myTriggers,
-                          text: Constant.myTriggers,
-                          moreStatus: '',
-                          isShowDivider: true,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                        MoreSection(
-                          currentTag: Constant.myMedications,
-                          text: Constant.myMedications,
-                          moreStatus: '',
-                          isShowDivider: false,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20,),
                 ],
               ),
             ),
@@ -210,8 +238,24 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
     );
   }
 
-  void _navigateToOtherScreen(String routeName) {
-    widget.onPush(
-        context, routeName);
+  void _navigateToOtherScreen(String routeName, dynamic arguments) async {
+    var result = await widget.onPush(context, routeName, arguments);
+    if(result != null) {
+      if(result is bool && result) {
+        _moreMyProfileBloc.initNetworkStreamController();
+        widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
+          _moreMyProfileBloc.enterSomeDummyData();
+          _moreMyProfileBloc.editMyProfileServiceCall();
+        });
+        _moreMyProfileBloc.editMyProfileServiceCall();
+      }
+    }
+    //setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _moreMyProfileBloc.dispose();
+    super.dispose();
   }
 }

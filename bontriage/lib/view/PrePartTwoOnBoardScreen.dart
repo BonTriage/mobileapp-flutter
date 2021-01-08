@@ -15,6 +15,7 @@ class PrePartTwoOnBoardScreen extends StatefulWidget {
 class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   SignUpBoardFirstStepBloc signUpBoardFirstStepBloc;
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel;
+  SignUpOnBoardSelectedAnswersModel profileOnBoardSelectedAnswersModel;
   bool _isButtonClicked = false;
 
   @override
@@ -22,6 +23,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     super.initState();
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
     signUpOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
+    profileOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
     Utils.saveUserProgress(0, Constant.prePartTwoEventStep);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -107,11 +109,13 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   void getFirstStepUserDataFromLocalDatabase() async {
     var signUpOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.firstEventStep);
-    if (signUpOnBoardSelectedAnswersListModel == null) {
+    var profileOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db.getAllSelectedAnswers(Constant.zeroEventStep);
+    if (signUpOnBoardSelectedAnswersListModel == null && profileOnBoardSelectedAnswersModel != null) {
       print("Nothing will be happen");
     } else {
       signUpOnBoardSelectedAnswersModel.selectedAnswers =
           signUpOnBoardSelectedAnswersListModel;
+      profileOnBoardSelectedAnswersModel.selectedAnswers = profileOnBoardSelectedAnswersListModel;
       Utils.showApiLoaderDialog(
         context,
         networkStream: signUpBoardFirstStepBloc.sendFirstStepDataStream,
@@ -126,7 +130,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
 
   void _callSendFirstStepDataApi() async{
     var apiResponse = await signUpBoardFirstStepBloc
-        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
+        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel, profileOnBoardSelectedAnswersModel);
 
     if (apiResponse is String) {
       if (apiResponse == Constant.success) {

@@ -326,6 +326,10 @@ class Constant {
   static const String logDayNoteTag = 'logday.note';
   static const String administeredTag = 'administered';
   static const String triggersTag = 'triggers1';
+  static const String profileFirstNameTag = 'profile.firstname';
+  static const String profileAgeTag = 'profile.age';
+  static const String profileSexTag = 'profile.sex';
+  static const String profileGenderTag = 'profile.gender';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =
@@ -463,6 +467,7 @@ class Constant {
   static String findALocalDoctor = 'Find a local doctor (non-urgent)';
   static String openYourProviderApp = 'Open your provider’s app';
   static String lindaJonesPdf = 'Linda_Jones_4_29_20.pdf';
+  static String saveAndExit = 'Save & Exit';
   static String text = 'Text';
   static String print = 'Print';
   static const String name = 'Name';
@@ -541,12 +546,14 @@ class Constant {
   static String migraineDaysVsHeadacheDaysDialogText = 'In this Intensity view of your calendar, you can see a distinction between Headache days and Migraine days. When you complete an assessment for a new headache type, we classify it internally as either a Headache or a Migraine. In most cases throughout the app, your migraines are included generally as a headache, but you can view the distinction between the two in this Intensity view, depending on which headache types you select when logging.';
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
+  static String dotDosage = '.dosage';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
   static const String generateReportActionSheet = 'generateReportActionSheet';
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
+  static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -655,6 +662,7 @@ class Constant {
   static String discoverSelected = 'images/discover_selected.png';
   static String moreUnselected = 'images/more_unselected.png';
   static String moreSelected = 'images/more_selected.png';
+  static String errorGreen = 'images/error_green.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

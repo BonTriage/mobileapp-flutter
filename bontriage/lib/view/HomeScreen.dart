@@ -8,6 +8,7 @@ import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
+import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -168,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openActionSheet(String actionSheetType) async {
+  Future<dynamic> _openActionSheet(String actionSheetType) async {
     switch (actionSheetType) {
       case Constant.medicalHelpActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -179,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => MedicalHelpActionSheet());
+        return resultOfActionSheet;
         break;
       case Constant.generateReportActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -189,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => GenerateReportActionSheet());
+        return resultOfActionSheet;
         break;
       case Constant.deleteHeadacheTypeActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -199,7 +202,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => DeleteHeadacheTypeActionSheet());
+        return resultOfActionSheet;
         break;
+      case Constant.saveAndExitActionSheet:
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => SaveAndExitActionSheet());
+        return resultOfActionSheet;
+        break;
+      default: return null;
     }
   }
 

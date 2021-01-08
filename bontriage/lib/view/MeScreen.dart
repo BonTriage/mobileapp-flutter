@@ -139,12 +139,7 @@ class _MeScreenState extends State<MeScreen>
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     _getUserCurrentHeadacheData();
-  }
-
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('Applifecyclestate????$state');
+    getUserProfileDetails();
   }
 
   @override
@@ -621,7 +616,15 @@ class _MeScreenState extends State<MeScreen>
   ///This method is used to get text of notification banner
   String _getNotificationText() {
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
-      return 'Headache log currently in progress.';
+      DateTime startDateTime = DateTime.tryParse(currentUserHeadacheModel.selectedDate);
+      if(startDateTime == null) {
+        return 'Headache log currently in progress.';
+      } else {
+        startDateTime = startDateTime.toLocal();
+        return 'Headache log currently in progress. Started on ${startDateTime
+            .day} ${Utils.getShortMonthName(startDateTime.month)} at ${Utils
+            .getTimeInAmPmFormat(startDateTime.hour, startDateTime.minute)}.';
+      }
     }
     return Constant.onBoardingAssessmentIncomplete;
   }

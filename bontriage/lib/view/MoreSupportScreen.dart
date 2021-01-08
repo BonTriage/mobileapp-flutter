@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreSupportScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Function(BuildContext, String, dynamic) onPush;
 
   const MoreSupportScreen({Key key, this.onPush})
       : super(key: key);
@@ -100,8 +99,8 @@ class _MoreSupportScreenState extends State<MoreSupportScreen> {
       );
   }
 
-  void _navigateToOtherScreen(String routeName) {
+  void _navigateToOtherScreen(String routeName, dynamic arguments) {
     widget.onPush(
-        context, routeName);
+        context, routeName, arguments);
   }
 }

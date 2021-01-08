@@ -5,7 +5,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreGenerateReportScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Function(BuildContext, String, dynamic) onPush;
   final Function(String) openActionSheetCallback;
 
   const MoreGenerateReportScreen({Key key, this.onPush, this.openActionSheetCallback})
