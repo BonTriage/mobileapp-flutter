@@ -231,8 +231,7 @@ class _MeScreenState extends State<MeScreen>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          widget.navigateToOtherScreenCallback(
-                                              TabNavigatorRoutes.recordsRoot,
+                                          widget.navigateToOtherScreenCallback(TabNavigatorRoutes.recordsRoot,
                                               null);
                                         },
                                         child: Text(
