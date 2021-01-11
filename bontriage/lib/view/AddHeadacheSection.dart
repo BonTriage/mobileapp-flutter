@@ -1327,7 +1327,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       _numberOfDosageAddedList[whichMedicationItemSelected] = _numberOfDosageAddedList[whichMedicationItemSelected] - 1;
                       _medicineTimeList[whichMedicationItemSelected].removeAt(index + 1);
                       _medicationDosageList[whichMedicationItemSelected].removeAt(index + 1);
-                      _additionalMedicationDosage[whichMedicationItemSelected].removeAt(index);
+                      try {
+                        _additionalMedicationDosage[whichMedicationItemSelected]
+                            .removeAt(index);
+                      } catch(e) {
+                        print(e);
+                      }
                       _updateMedicationSelectedDataModel();
                       _storeExpandedWidgetDataIntoLocalModel();
                     });

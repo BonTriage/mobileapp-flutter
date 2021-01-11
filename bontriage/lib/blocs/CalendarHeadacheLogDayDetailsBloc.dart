@@ -147,6 +147,7 @@ class CalendarHeadacheLogDayDetailsBloc {
           if(headacheStartTimeData != null) {
             DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
             if(startDataTime != null) {
+              startDataTime = startDataTime.toLocal();
               headacheInfo = '$headacheInfo\nStart Time: ${Utils.getTimeInAmPmFormat(startDataTime.hour, startDataTime.minute)}';
             }
           }

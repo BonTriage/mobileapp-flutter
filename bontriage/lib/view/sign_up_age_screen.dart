@@ -190,7 +190,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        widget.maxText,
+                                        _getMaxText(),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -266,5 +266,11 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         ),
       ),
     );
+  }
+
+  String _getMaxText() {
+    if(widget.currentTag == 'headache.typical' || widget.currentTag == 'headache.number')
+      return '${widget.maxText}+';
+    return widget.maxText;
   }
 }
