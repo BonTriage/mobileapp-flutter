@@ -8,7 +8,7 @@ class SaveAndExitActionSheet extends StatefulWidget {
 }
 
 class _SaveAndExitActionSheetState extends State<SaveAndExitActionSheet> {
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),

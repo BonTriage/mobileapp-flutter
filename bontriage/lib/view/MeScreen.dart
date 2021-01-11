@@ -657,6 +657,9 @@ class _MeScreenState extends State<MeScreen>
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
+    currentUserHeadacheModel.isOnGoing = false;
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();
   }
