@@ -440,7 +440,11 @@ class LogDayBloc {
             }
           });
           medicationSelectedDataModel.isDoubleTapped = false;
-          selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
+          try {
+            selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
+          } catch (e) {
+            print(e);
+          }
         });
 
         calendarInfoModel.triggers.forEach((triggerElement) {
@@ -484,13 +488,14 @@ class LogDayBloc {
         selectedAnswerElement.questionTag == Constant.behaviourPreMealTag ||
         selectedAnswerElement.questionTag == Constant.administeredTag ||
         selectedAnswerElement.questionTag == Constant.triggersTag) {
-        SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag && doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer, orElse: () => null);
+        SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag /*&& doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer*/, orElse: () => null);
         if(doubleTappedSelectedAnswer != null) {
           if(doubleTappedSelectedAnswer.questionTag != Constant.administeredTag) {
             if(doubleTappedSelectedAnswer.answer == selectedAnswerElement.answer) {
               selectedAnswerElement.isDoubleTapped = true;
             }
           } else {
+            print(selectedAnswerElement);
             if(selectedAnswerElement.answer.isNotEmpty && doubleTappedSelectedAnswer.answer.isNotEmpty) {
               MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(doubleTappedSelectedAnswer.answer));
               MedicationSelectedDataModel medicationSelectedDataModel1 = MedicationSelectedDataModel.fromJson(jsonDecode(selectedAnswerElement.answer));

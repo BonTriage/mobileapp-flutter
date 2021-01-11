@@ -31,7 +31,7 @@ class NetworkService{
   }
 
   dynamic getApiResponse(http.Response response){
-    switch(response.statusCode){
+    switch(response.statusCode) {
       case 200:
       case 201:
         return response.body;

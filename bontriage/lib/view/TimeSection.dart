@@ -562,13 +562,13 @@ class _TimeSectionState extends State<TimeSection>
                       ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
 
                     //this condition is put because we don't want to update headache data in db when user comes from record screen
-                    if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
-                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                    /*if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);*/
                   } else {
                     widget.currentUserHeadacheModel.isOnGoing = true;
 
-                    if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
-                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);
+                    /*if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
+                      SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(widget.currentUserHeadacheModel);*/
 
                     widget.addHeadacheDateTimeDetailsData("ongoing", "Yes");
                     widget.addHeadacheDateTimeDetailsData("endtime", "");

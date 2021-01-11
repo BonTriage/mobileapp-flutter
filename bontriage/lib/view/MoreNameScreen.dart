@@ -98,12 +98,12 @@ class _MoreNameScreenState
                       child: TextField(
                         controller: _textEditingController,
                         onChanged: (value) {
-                          if(value.isNotEmpty) {
+                          /*if(value.isNotEmpty) {
                             _selectedAnswers.answer = value;
                           } else {
                             _textEditingController.text = _initialNameValue;
                             //_selectedAnswers.answer = _initialNameValue;
-                          }
+                          }*/
                         },
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
@@ -148,7 +148,7 @@ class _MoreNameScreenState
   }
 
   Future<void> _openSaveAndExitActionSheet() async {
-    if (_initialNameValue != _textEditingController.text) {
+    if (_initialNameValue != _textEditingController.text && _textEditingController.text.trim().isNotEmpty) {
       var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet);
       if (result != null) {
         if(result == Constant.saveAndExit) {

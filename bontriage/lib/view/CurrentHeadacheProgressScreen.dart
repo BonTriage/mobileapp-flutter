@@ -432,7 +432,7 @@ class _CurrentHeadacheProgressScreenState
     }*/
 
     _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
-    await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
+    //await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
 
     Navigator.pushReplacementNamed(context,
         Constant.addHeadacheOnGoingScreenRouter,

@@ -605,10 +605,11 @@ class _MeScreenState extends State<MeScreen>
           _animationController.forward();
         });
       } else {
-        setState(() {
+        /*setState(() {
           _isOnBoardAssessmentInComplete = false;
           _animationController.reverse();
-        });
+        });*/
+        _checkForProfileIncomplete();
       }
     }
   }
@@ -638,7 +639,7 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _navigateToAddHeadacheScreen() async{
-    currentUserHeadacheModel.isOnGoing = false;
+    //currentUserHeadacheModel.isOnGoing = false;
 
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
@@ -651,7 +652,11 @@ class _MeScreenState extends State<MeScreen>
     }*/
 
     currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
-    await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(currentUserHeadacheModel);
+    //await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(currentUserHeadacheModel);
+
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();
