@@ -258,7 +258,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
             onDidReceiveLocalNotification:
                 (int id, String title, String body, String payload) async {
               didReceiveLocalNotificationSubject.add(ReceivedNotification(
-                  id: id, title: title, body: body, payload: payload));
+                  id: 1, title: 'BonTriage', body: 'Log Kar diya', payload: 'Log kar de na'));
             });
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -439,6 +439,22 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
 
     }
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    var androidDetails = AndroidNotificationDetails(
+        "ChannelId", "BonTriage", 'Bhag Le na',
+        importance: Importance.max);
+    var iosDetails = IOSNotificationDetails();
+    var notificationDetails =
+    NotificationDetails(android: androidDetails, iOS: iosDetails);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        2,
+        "BonTriage",
+        "Medication le le na",
+        Time(_selectedHour, _selectedMinute),
+        notificationDetails);
   }
 /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
