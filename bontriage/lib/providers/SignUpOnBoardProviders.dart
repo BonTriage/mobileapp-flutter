@@ -22,6 +22,7 @@ class SignUpOnBoardProviders {
   static const String USER_SCREEN_POSITION = "userScreenPosition";
   static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
   static const String TABLE_USER_CURRENT_HEADACHE = 'userCurrentHeadache';
+  static const String TABLE_TUTORIAL = 'tutorialTable';
 
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
@@ -35,6 +36,7 @@ class SignUpOnBoardProviders {
   static const String HEADACHE_ONGOING = "headacheOnGoing";
   static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
   static const String USER_CURRENT_HEADACHE_JSON = "userCurrentHeadacheJson";
+  static const String TUTORIAL_ID = "tutorialId";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -80,7 +82,6 @@ class SignUpOnBoardProviders {
           "$QUESTIONNAIRES TEXT,"
           "$SELECTED_ANSWERS TEXT"
           ")");
-
       batch.execute("CREATE TABLE $TABLE_ADD_HEADACHE ("
           "$USER_ID TEXT PRIMARY KEY,"
           "$SELECTED_ANSWERS TEXT"
@@ -93,6 +94,10 @@ class SignUpOnBoardProviders {
           "$USER_ID TEXT PRIMARY KEY,"
           "$USER_CURRENT_HEADACHE_JSON TEXT"
           ")");
+      batch.execute("CREATE TABLE $TABLE_TUTORIAL ("
+          "$TUTORIAL_ID INT(10) PRIMARY KEY,"
+          "$USER_ID TEXT"
+          ")");
       await batch.commit();
     });
   }
@@ -102,6 +107,27 @@ class SignUpOnBoardProviders {
     final db = await database;
     await db.insert(TABLE_USER_PROGRESS, userProgressDataModel.toMap());
     return userProgressDataModel;
+  }
+
+  ///This method is used to insert tutorial data
+  ///@param: tutorial id: 1 for me screen tutorial
+  Future<void> insertTutorialData(int tutorialId) async{
+    final db = await database;
+    var userProfileInfoData = await getLoggedInUserAllInformation();
+    Map<String, dynamic> map = {
+      TUTORIAL_ID: tutorialId,
+      USER_ID: userProfileInfoData.userId
+    };
+    db.insert(TABLE_TUTORIAL, map);
+  }
+
+  ///This method is used to check if user has already seen a tutorial
+  ///@param: tutorial id: 1 for me screen tutorial
+  Future<bool> isUserHasAlreadySeenTutorial(int tutorialId) async {
+    final db = await database;
+    var userProfileInfoData = await getLoggedInUserAllInformation();
+    List<dynamic> tutorialListData = await db.rawQuery('SELECT * FROM $TABLE_TUTORIAL WHERE $TUTORIAL_ID = $tutorialId AND $USER_ID = ${userProfileInfoData.userId}');
+    return tutorialListData.length != 0;
   }
 
   void updateUserProgress(UserProgressDataModel userProgressDataModel) async {

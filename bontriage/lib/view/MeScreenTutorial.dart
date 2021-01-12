@@ -17,42 +17,35 @@ class MeScreenTutorial extends StatefulWidget {
 class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerProviderStateMixin {
 
   bool _shouldClip;
-  AnimationController _animationController;
-  Offset logDayOffset;
-  Offset addHeadacheOffset;
-  RenderBox logDayRenderBox;
-  RenderBox addHeadacheRenderBox;
-  RenderBox recordsRenderBox;
-  Offset recordsOffset;
+  Offset _logDayOffset;
+  Offset _addHeadacheOffset;
+  RenderBox _logDayRenderBox;
+  RenderBox _addHeadacheRenderBox;
+  RenderBox _recordsRenderBox;
+  Offset _recordsOffset;
   List<List<TextSpan>> _textSpanList;
-  List<String> chatBubbleTextList;
+  List<String> _chatBubbleTextList;
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _shouldClip = true;
-    logDayRenderBox = widget.logDayGlobalKey.currentContext.findRenderObject();
-    logDayOffset = logDayRenderBox.localToGlobal(Offset.zero);
-    print('LogDayOffset????$logDayOffset???${logDayRenderBox.size}');
+    _logDayRenderBox = widget.logDayGlobalKey.currentContext.findRenderObject();
+    _logDayOffset = _logDayRenderBox.localToGlobal(Offset.zero);
+    print('LogDayOffset????$_logDayOffset???${_logDayRenderBox.size}');
 
-    addHeadacheRenderBox = widget.addHeadacheGlobalKey.currentContext.findRenderObject();
-    addHeadacheOffset = addHeadacheRenderBox.localToGlobal(Offset.zero);
-    print('AddHeadacheOffset????$addHeadacheOffset');
+    _addHeadacheRenderBox = widget.addHeadacheGlobalKey.currentContext.findRenderObject();
+    _addHeadacheOffset = _addHeadacheRenderBox.localToGlobal(Offset.zero);
+    print('AddHeadacheOffset????$_addHeadacheOffset');
 
-    recordsRenderBox = widget.recordsGlobalKey.currentContext.findRenderObject();
-    recordsOffset = recordsRenderBox.localToGlobal(Offset.zero);
-    print('RecordsOffset????$recordsOffset');
+    _recordsRenderBox = widget.recordsGlobalKey.currentContext.findRenderObject();
+    _recordsOffset = _recordsRenderBox.localToGlobal(Offset.zero);
+    print('RecordsOffset????$_recordsOffset');
 
-    /*Future.delayed(Duration(seconds: 10), () {
-      setState(() {
-        _shouldClip = true;
-      });
-    });*/
-
-    chatBubbleTextList = [
-      'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.',
-      'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.'
+    _chatBubbleTextList = [
+      Constant.meScreenTutorial1,
+      Constant.meScreenTutorial2,
     ];
 
     _textSpanList = [
@@ -147,8 +140,9 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
         children: [
           ClipPath(
             clipper: TutorialClipper(
-              logDayBox: widget.logDayGlobalKey.currentContext.findRenderObject(),
-              addHeadacheBox: widget.addHeadacheGlobalKey.currentContext.findRenderObject(),
+              logDayBox: _logDayRenderBox,
+              addHeadacheBox: _addHeadacheRenderBox,
+              recordsBox: _recordsRenderBox,
               currentIndex: _currentIndex,
               shouldClip: _shouldClip
             ),
@@ -161,15 +155,17 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
                 child: Stack(
                   children: [
                     TutorialChatBubble(
-                      chatBubbleText: chatBubbleTextList[_currentIndex],
+                      chatBubbleText: _chatBubbleTextList[_currentIndex],
                       textSpanList: _textSpanList[_currentIndex],
                       currentIndex: _currentIndex,
                       nextButtonFunction: () {
-                        if(_currentIndex < _textSpanList.length) {
+                        if(_currentIndex < _textSpanList.length - 1) {
                           setState(() {
                             _currentIndex++;
                             _shouldClip = false;
                           });
+                        } else {
+                          Navigator.pop(context);
                         }
                       },
                       backButtonFunction: () {
@@ -184,7 +180,7 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
                     Visibility(
                       visible: _shouldClip,
                       child: Padding(
-                        padding: EdgeInsets.only(top: logDayOffset.dy + 40, right: logDayOffset.dx - 20),
+                        padding: EdgeInsets.only(top: _logDayOffset.dy + 40, right: _logDayOffset.dx - 20),
                         child: Row(
                           children: [
                             Expanded(
@@ -211,7 +207,7 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
                     Visibility(
                       visible: !_shouldClip,
                       child: Container(
-                        padding: EdgeInsets.only(left: recordsOffset.dx - 35, top: recordsOffset.dy - 50),
+                        padding: EdgeInsets.only(left: _recordsOffset.dx - 35, top: _recordsOffset.dy - 50),
                         child: Image(
                           image: AssetImage(Constant.tutorialArrowDown2),
                           width: 40,
@@ -241,12 +237,13 @@ class TutorialClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    if(shouldClip) {
-      Offset logDayOffset = logDayBox.localToGlobal(Offset.zero);
-      Size logDaySize = logDayBox.size;
+    Offset logDayOffset = logDayBox.localToGlobal(Offset.zero);
+    Size logDaySize = logDayBox.size;
 
-      Offset addHeadacheOffset = addHeadacheBox.localToGlobal(Offset.zero);
-      Size addHeadacheSize = addHeadacheBox.size;
+    Offset addHeadacheOffset = addHeadacheBox.localToGlobal(Offset.zero);
+    Size addHeadacheSize = addHeadacheBox.size;
+
+    if(shouldClip) {
       return Path.combine(
         PathOperation.difference,
         Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
@@ -256,10 +253,11 @@ class TutorialClipper extends CustomClipper<Path> {
           ..close(),
       );
     } else {
+      Offset recordsOffset = recordsBox.localToGlobal(Offset.zero);
       return Path.combine(
         PathOperation.difference,
         Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
-        Path()..lineTo(0, 0)
+        Path()..addOval(Rect.fromLTWH(recordsOffset.dx - 18, recordsOffset.dy - 10, 65, 65))
           ..close(),
       );
     }

@@ -546,6 +546,10 @@ class Constant {
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
 
+  //tutorial text
+  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
+
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
   static const String generateReportActionSheet = 'generateReportActionSheet';

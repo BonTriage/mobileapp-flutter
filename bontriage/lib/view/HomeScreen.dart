@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
@@ -253,6 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
   }
 
+  ///This method is used to show api loader dialog
   void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
     Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
   }
@@ -261,7 +263,17 @@ class _HomeScreenState extends State<HomeScreen> {
     _logDayGlobalKey = logDayGlobalKey;
     _addHeadacheGlobalKey = addHeadacheGlobalKey;
 
-    Future.delayed(Duration(milliseconds: 450), () {
+    Future.delayed(Duration(milliseconds: 350), () {
+      _showTutorialDialog();
+    });
+  }
+
+  ///This method is used to show tutorial dialog
+  void _showTutorialDialog() async {
+    bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
+    print('isTutorialHasSeen???$isTutorialHasSeen');
+    if(!isTutorialHasSeen) {
+      await SignUpOnBoardProviders.db.insertTutorialData(1);
       showGeneralDialog(
           context: context,
           barrierColor: Colors.transparent,
@@ -276,6 +288,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
       );
-    });
+    }
   }
 }
