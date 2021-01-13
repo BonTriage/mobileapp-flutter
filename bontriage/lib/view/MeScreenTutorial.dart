@@ -115,6 +115,7 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
             fontFamily: Constant.jostMedium,
             height: 1.3,
             color: Constant.chatBubbleGreen,
+              fontStyle: FontStyle.italic
           ),
         ),
         TextSpan(

@@ -95,7 +95,7 @@ class SignUpOnBoardProviders {
           "$USER_CURRENT_HEADACHE_JSON TEXT"
           ")");
       batch.execute("CREATE TABLE $TABLE_TUTORIAL ("
-          "$TUTORIAL_ID INT(10) PRIMARY KEY,"
+          "$TUTORIAL_ID INT(10),"
           "$USER_ID TEXT"
           ")");
       await batch.commit();
