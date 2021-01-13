@@ -386,7 +386,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                 questionType: element.questionType,
                 allQuestionsList: allQuestionList,
                 selectedAnswers: selectedAnswers,
-            doubleTapSelectedAnswer: doubleTapSelectedAnswerList,),
+            doubleTapSelectedAnswer: doubleTapSelectedAnswerList,
+            isFromRecordsScreen: (widget.logDayScreenArgumentModel != null) ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false : false,),
           );
         }
       });

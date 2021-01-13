@@ -6,6 +6,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -519,6 +520,22 @@ class Utils {
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
           content: ValidationErrorDialog(errorMessage: errorMessage,),
+        );
+      },
+    );
+  }
+
+  ///This method is used to show compass tutorial dialog.
+  ///@param context: build context of the screen
+  ///@param indexValue: 0 for compass, 1 for Intensity, 2 for Disability, 3 for Frequency, and 4 for Duration.
+  static Future<void> showCompassTutorialDialog(BuildContext context, int indexValue) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
         );
       },
     );

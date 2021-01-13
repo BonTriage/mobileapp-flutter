@@ -24,7 +24,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
@@ -131,23 +130,29 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
             ),
             Stack(
               children: [
-                Container(
-                  alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(left: 65, top: 10),
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: Constant.chatBubbleGreen, width: 1)),
-                  child: Center(
-                    child: Text(
-                      'i',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostBold),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    Utils.showCompassTutorialDialog(context, 0);
+                  },
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    margin: EdgeInsets.only(left: 65, top: 10),
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: Constant.chatBubbleGreen, width: 1)),
+                    child: Center(
+                      child: Text(
+                        'i',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Constant.chatBubbleGreen,
+                            fontFamily: Constant.jostBold),
+                      ),
                     ),
                   ),
                 ),
@@ -156,23 +161,33 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                   children: <Widget>[
                     RotatedBox(
                       quarterTurns: 3,
-                      child: Text(
-                        "Frequency",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 16,
-                            fontFamily: Constant.jostMedium),
+                      child: GestureDetector(
+                        onTap: () {
+                          Utils.showCompassTutorialDialog(context, 3);
+                        },
+                        child: Text(
+                          "Frequency",
+                          style: TextStyle(
+                              color: Constant.chatBubbleGreen,
+                              fontSize: 16,
+                              fontFamily: Constant.jostMedium),
+                        ),
                       ),
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          "Intensity",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 16,
-                              fontFamily: Constant.jostMedium),
+                        GestureDetector(
+                          onTap: () {
+                            Utils.showCompassTutorialDialog(context, 1);
+                          },
+                          child: Text(
+                            "Intensity",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 16,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                         Center(
                           child: Container(
@@ -226,23 +241,33 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Disability",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 16,
-                              fontFamily: Constant.jostMedium),
+                        GestureDetector(
+                          onTap: () {
+                            Utils.showCompassTutorialDialog(context, 2);
+                          },
+                          child: Text(
+                            "Disability",
+                            style: TextStyle(
+                                color: Color(0xffafd794),
+                                fontSize: 16,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ],
                     ),
                     RotatedBox(
                       quarterTurns: 1,
-                      child: Text(
-                        "Duration",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 16,
-                            fontFamily: Constant.jostMedium),
+                      child: GestureDetector(
+                        onTap: () {
+                          Utils.showCompassTutorialDialog(context, 4);
+                        },
+                        child: Text(
+                          "Duration",
+                          style: TextStyle(
+                              color: Color(0xffafd794),
+                              fontSize: 16,
+                              fontFamily: Constant.jostMedium),
+                        ),
                       ),
                     ),
                   ],

@@ -212,7 +212,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     BouncingWidget(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       child: Container(
                                         width: 110,
                                         padding:
