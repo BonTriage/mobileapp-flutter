@@ -435,6 +435,7 @@ class Constant {
       'We noticed you didn’t log a headache today. Can you confirm what happened?';
 
   static String deleteLog = ' Delete Log';
+  static String discardChanges = ' Discard Changes';
   static const String settings = ' Settings';
   static String allowed = 'Allowed';
   static const String myInfo = 'My Info';
@@ -547,6 +548,7 @@ class Constant {
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
+  static String selectAtLeastOneOptionLogDayError = 'Please select at least one option.';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
-class DeleteLogOptionsBottomSheet extends StatefulWidget {
+class DiscardChangesBottomSheet extends StatefulWidget {
   @override
-  _DeleteLogOptionsBottomSheetState createState() =>
-      _DeleteLogOptionsBottomSheetState();
+  _DiscardChangesBottomSheetState createState() =>
+      _DiscardChangesBottomSheetState();
 }
 
-class _DeleteLogOptionsBottomSheetState
-    extends State<DeleteLogOptionsBottomSheet> {
+class _DiscardChangesBottomSheetState
+    extends State<DiscardChangesBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +21,7 @@ class _DeleteLogOptionsBottomSheetState
           GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
-              Navigator.pop(context, Constant.deleteLog);
+              Navigator.pop(context, Constant.discardChanges);
             },
             child: Container(
               height: 45,
@@ -30,7 +30,7 @@ class _DeleteLogOptionsBottomSheetState
                   color: Colors.white),
               child: Center(
                 child: Text(
-                  'Delete Log',
+                  'Discard Changes',
                   style: TextStyle(
                     color: Constant.deleteLogRedColor,
                     fontSize: 20,

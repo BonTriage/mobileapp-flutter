@@ -14,7 +14,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
-import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
+import 'package:mobile/view/DiscardChangesBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
@@ -114,7 +114,10 @@ class _LogDayScreenState extends State<LogDayScreen>
     return WillPopScope(
       onWillPop: () async {
         FocusScope.of(context).requestFocus(FocusNode());
-        _showDeleteLogOptionBottomSheet();
+        if(selectedAnswers.length > 0)
+          _showDiscardChangesBottomSheet();
+        else
+          return true;
         return false;
       },
       child: Scaffold(
@@ -151,7 +154,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-                                _showDeleteLogOptionBottomSheet();
+                                _showDiscardChangesBottomSheet();
                                 //Navigator.pop(context);
                               },
                               child: Image(
@@ -214,6 +217,8 @@ class _LogDayScreenState extends State<LogDayScreen>
                                       onPressed: () {
                                         if(selectedAnswers.length > 0)
                                           _onSubmitClicked();
+                                        else
+                                          Utils.showValidationErrorDialog(context, Constant.selectAtLeastOneOptionLogDayError);
                                       },
                                       child: Container(
                                         width: 110,
@@ -247,7 +252,10 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _showDeleteLogOptionBottomSheet();
+                                        if(selectedAnswers.length > 0)
+                                          _showDiscardChangesBottomSheet();
+                                        else
+                                          Navigator.pop(context, false);
                                       },
                                       child: Container(
                                         width: 110,
@@ -395,17 +403,17 @@ class _LogDayScreenState extends State<LogDayScreen>
     _isDataPopulated = true;
   }
 
-  void _showDeleteLogOptionBottomSheet() async {
-    var resultOfDeleteBottomSheet = await showModalBottomSheet(
+  void _showDiscardChangesBottomSheet() async {
+    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => DeleteLogOptionsBottomSheet());
-    if (resultOfDeleteBottomSheet == Constant.deleteLog) {
-      SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        builder: (context) => DiscardChangesBottomSheet());
+    if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
       Navigator.pop(context, false);
     }
   }

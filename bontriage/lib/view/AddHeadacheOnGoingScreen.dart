@@ -13,6 +13,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
+import 'DiscardChangesBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
@@ -93,174 +94,189 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: Container(
-        decoration: Constant.backgroundBoxDecoration,
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: SafeArea(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                decoration: BoxDecoration(
-                  color: Constant.backgroundColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Constant.chatBubbleGreen,
-                                fontFamily: Constant.jostMedium),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
-                            },
-                            child: Image(
-                              image: AssetImage(Constant.closeIcon),
-                              width: 22,
-                              height: 22,
+    return WillPopScope(
+      onWillPop: () async {
+        if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+          _showDiscardChangesBottomSheet();
+        else
+          return true;
+        return false;
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: SafeArea(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Divider(
-                        height: 30,
-                        thickness: 1,
-                        color: Constant.chatBubbleGreen,
-                      ),
-                    ),
-                    Container(
-                      child: StreamBuilder<dynamic>(
-                        stream: _addHeadacheLogBloc.addHeadacheLogDataStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if(!_isDataPopulated) {
-                              /*if(widget.currentUserHeadacheModel.isFromRecordScreen ?? false) {
-                                addSelectedHeadacheDetailsData(Constant.onGoingTag, 'No');
-                                addSelectedHeadacheDetailsData(Constant.endTimeTag, widget.currentUserHeadacheModel.selectedEndDate);
-                              }*/
-                              Utils.closeApiLoaderDialog(context);
-                            }
-                            return Column(
-                              children: [
-                                Column(
-                                  children:
-                                      _getAddHeadacheSection(snapshot.data),
-                                ),
-                                AddANoteWidget(
-                                  selectedAnswerList: signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                                  scaffoldKey: scaffoldKey,
-                                  noteTag: 'headache.note',
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    BouncingWidget(
-                                      onPressed: () {
-                                        saveDataInLocalDataBaseOrServer();
-                                      },
-                                      child: Container(
-                                        width: 110,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          color: Constant.chatBubbleGreen,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            _isUserHeadacheEnded
-                                                ? Constant.submit
-                                                : Constant.save,
-                                            style: TextStyle(
-                                                color:
-                                                    Constant.bubbleChatTextView,
-                                                fontSize: 15,
-                                                fontFamily:
-                                                    Constant.jostMedium),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    BouncingWidget(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 110,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 1.3,
-                                              color: Constant.chatBubbleGreen),
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            Constant.cancel,
-                                            style: TextStyle(
-                                                color: Constant.chatBubbleGreen,
-                                                fontSize: 15,
-                                                fontFamily:
-                                                    Constant.jostMedium),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            );
-                          } else if (snapshot.hasError){
-                            Utils.closeApiLoaderDialog(context);
-                            return NetworkErrorScreen(
-                              errorMessage: snapshot.error.toString(),
-                              tapToRetryFunction: () {
-                                Utils.showApiLoaderDialog(context);
-                                requestService();
+                            GestureDetector(
+                              onTap: () {
+                                if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+                                  _showDiscardChangesBottomSheet();
+                                else
+                                  Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
                               },
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
+                              child: Image(
+                                image: AssetImage(Constant.closeIcon),
+                                width: 22,
+                                height: 22,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Divider(
+                          height: 30,
+                          thickness: 1,
+                          color: Constant.chatBubbleGreen,
+                        ),
+                      ),
+                      Container(
+                        child: StreamBuilder<dynamic>(
+                          stream: _addHeadacheLogBloc.addHeadacheLogDataStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if(!_isDataPopulated) {
+                                /*if(widget.currentUserHeadacheModel.isFromRecordScreen ?? false) {
+                                  addSelectedHeadacheDetailsData(Constant.onGoingTag, 'No');
+                                  addSelectedHeadacheDetailsData(Constant.endTimeTag, widget.currentUserHeadacheModel.selectedEndDate);
+                                }*/
+                                Utils.closeApiLoaderDialog(context);
+                              }
+                              return Column(
+                                children: [
+                                  Column(
+                                    children:
+                                        _getAddHeadacheSection(snapshot.data),
+                                  ),
+                                  AddANoteWidget(
+                                    selectedAnswerList: signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                                    scaffoldKey: scaffoldKey,
+                                    noteTag: 'headache.note',
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          saveDataInLocalDataBaseOrServer();
+                                        },
+                                        child: Container(
+                                          width: 110,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: Constant.chatBubbleGreen,
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              _isUserHeadacheEnded
+                                                  ? Constant.submit
+                                                  : Constant.save,
+                                              style: TextStyle(
+                                                  color:
+                                                      Constant.bubbleChatTextView,
+                                                  fontSize: 15,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+                                            _showDiscardChangesBottomSheet();
+                                          else
+                                            Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                        },
+                                        child: Container(
+                                          width: 110,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1.3,
+                                                color: Constant.chatBubbleGreen),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              Constant.cancel,
+                                              style: TextStyle(
+                                                  color: Constant.chatBubbleGreen,
+                                                  fontSize: 15,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError){
+                              Utils.closeApiLoaderDialog(context);
+                              return NetworkErrorScreen(
+                                errorMessage: snapshot.error.toString(),
+                                tapToRetryFunction: () {
+                                  Utils.showApiLoaderDialog(context);
+                                  requestService();
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -507,6 +523,21 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         //put condition for the headache id to fetch the current on going headache data
         _addHeadacheLogBloc.fetchAddHeadacheLogData();
       }
+    }
+  }
+
+  void _showDiscardChangesBottomSheet() async {
+    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DiscardChangesBottomSheet());
+    if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+      Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
     }
   }
 }

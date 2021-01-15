@@ -1133,6 +1133,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           child: TextFormField(
                             minLines: 5,
                             maxLines: 6,
+                            textCapitalization: TextCapitalization.sentences,
                             textInputAction: TextInputAction.done,
                             onChanged: (text) {
                               onValueChangedCallback(questionTag, text.trim());

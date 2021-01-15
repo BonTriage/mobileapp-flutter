@@ -80,6 +80,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                 children: [
                   Container(
                     child: TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       focusNode: _focusNode,
                       controller: _textEditingController,
                       minLines: 5,
@@ -89,6 +90,10 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                       },
                       onEditingComplete: () {
                         print('onEditingComplete');
+                      },
+                      onFieldSubmitted: (value) {
+                        widget.addNoteCallback(_textEditingController.text);
+                        Navigator.pop(context, _textEditingController.text);
                       },
                       textInputAction: TextInputAction.done,
                       style: TextStyle(
