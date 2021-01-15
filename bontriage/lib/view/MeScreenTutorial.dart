@@ -18,7 +18,6 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
 
   bool _shouldClip;
   Offset _logDayOffset;
-  Offset _addHeadacheOffset;
   RenderBox _logDayRenderBox;
   RenderBox _addHeadacheRenderBox;
   RenderBox _recordsRenderBox;
@@ -33,15 +32,11 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
     _shouldClip = true;
     _logDayRenderBox = widget.logDayGlobalKey.currentContext.findRenderObject();
     _logDayOffset = _logDayRenderBox.localToGlobal(Offset.zero);
-    print('LogDayOffset????$_logDayOffset???${_logDayRenderBox.size}');
 
     _addHeadacheRenderBox = widget.addHeadacheGlobalKey.currentContext.findRenderObject();
-    _addHeadacheOffset = _addHeadacheRenderBox.localToGlobal(Offset.zero);
-    print('AddHeadacheOffset????$_addHeadacheOffset');
 
     _recordsRenderBox = widget.recordsGlobalKey.currentContext.findRenderObject();
     _recordsOffset = _recordsRenderBox.localToGlobal(Offset.zero);
-    print('RecordsOffset????$_recordsOffset');
 
     _chatBubbleTextList = [
       Constant.meScreenTutorial1,

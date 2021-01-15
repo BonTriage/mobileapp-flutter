@@ -271,7 +271,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ///This method is used to show tutorial dialog
   void _showTutorialDialog() async {
     bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
-    print('isTutorialHasSeen???$isTutorialHasSeen');
     if(!isTutorialHasSeen) {
       await SignUpOnBoardProviders.db.insertTutorialData(1);
       showGeneralDialog(
