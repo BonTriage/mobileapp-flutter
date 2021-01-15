@@ -234,11 +234,11 @@ class _RecordCalendarHeadacheSectionState
   void didUpdateWidget(RecordCalendarHeadacheSection oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null) {
+    if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null || widget.userHeadacheLogDayDetailsModel.headacheLogDayListData.length == 0) {
       userHeadacheListData = [];
-    } else
-      userHeadacheListData = widget.userHeadacheLogDayDetailsModel
-          .headacheLogDayListData[0].headacheListData;
+    } else {
+      userHeadacheListData = widget.userHeadacheLogDayDetailsModel.headacheLogDayListData[0].headacheListData;
+    }
 
     if(userHeadacheListData.length > 0) {
       widget.onHeadacheTypeSelectedCallback(userHeadacheListData[_value].headacheId);
