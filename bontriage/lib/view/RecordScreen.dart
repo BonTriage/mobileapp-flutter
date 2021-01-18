@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
+
 
   const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}) : super(key: key);
 
@@ -21,12 +23,15 @@ class _RecordScreenState extends State<RecordScreen> {
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
   void didUpdateWidget(RecordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     getTabPosition();
+
+
   }
 
   @override
@@ -95,6 +100,14 @@ class _RecordScreenState extends State<RecordScreen> {
     String tabPosition =
         sharedPreferences.getString(Constant.tabNavigatorState);
     print("TabPosition:$tabPosition");
+    print(tabPosition);
+    /*  if(tabPosition == '1') {
+        setState(() {
+          currentIndex = 0;
+           Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "0");
+        });
+    }*/
+
   }
 
   Widget _buildOffstageNavigator(int index) {
@@ -120,4 +133,6 @@ class _RecordScreenState extends State<RecordScreen> {
         return Container();
     }
   }
+
+  void getRecordsTabPosition() {}
 }

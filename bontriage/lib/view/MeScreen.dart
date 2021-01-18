@@ -234,8 +234,7 @@ class _MeScreenState extends State<MeScreen>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          widget.navigateToOtherScreenCallback(
-                                              TabNavigatorRoutes.recordsRoot,
+                                          widget.navigateToOtherScreenCallback(TabNavigatorRoutes.recordsRoot,
                                               null);
                                         },
                                         child: Text(
@@ -669,6 +668,9 @@ class _MeScreenState extends State<MeScreen>
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    currentUserHeadacheModel.isOnGoing = false;
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();

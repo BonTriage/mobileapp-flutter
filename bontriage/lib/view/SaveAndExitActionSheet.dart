@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'dart:io' show Platform;
 
 class SaveAndExitActionSheet extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class _SaveAndExitActionSheetState extends State<SaveAndExitActionSheet> {
               ),
             ),
           ),
-          SizedBox(height: 10,)
+          SizedBox(height: Platform.isAndroid ? 10 : 15)
         ],
       ),
     );

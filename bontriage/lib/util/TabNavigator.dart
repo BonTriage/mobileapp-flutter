@@ -76,6 +76,7 @@ class TabNavigator extends StatelessWidget {
               },
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
             showApiLoaderCallback: showApiLoaderCallback,
+
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {
