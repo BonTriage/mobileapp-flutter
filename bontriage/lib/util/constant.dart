@@ -154,6 +154,7 @@ class Constant {
   static String yearsOld = 'years old';
   static String days = 'days';
   static String hours = 'hours';
+  static const String noneAtAll = 'NONE AT\nALL';
   static String blankString = '';
   static String atWhatAge = 'At what age did you first experience headaches?';
   static String selectOne = 'Select one';
@@ -330,6 +331,10 @@ class Constant {
   static const String profileAgeTag = 'profile.age';
   static const String profileSexTag = 'profile.sex';
   static const String profileGenderTag = 'profile.gender';
+  static const String headacheFreeTag = 'headache.free';
+  static const String headacheTypicalTag = 'headache.typical';
+  static const String headacheDisabledTag = 'headache.disabled';
+  static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =

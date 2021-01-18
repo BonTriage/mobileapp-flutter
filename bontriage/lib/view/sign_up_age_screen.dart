@@ -266,29 +266,29 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
 
   String _getLabelText() {
     if(widget.currentTag == Constant.profileAgeTag)
-      return 'years old';
-    else if (widget.currentTag == 'headache.free')
-      return 'days';
-    else if (widget.currentTag == 'headache.typical')
-      return 'hours';
+      return Constant.yearsOld;
+    else if (widget.currentTag == Constant.headacheFreeTag)
+      return Constant.days;
+    else if (widget.currentTag == Constant.headacheTypicalTag)
+      return Constant.hours;
     return '${widget.labelText}';
   }
 
   String _getMinTextLabel() {
-    if(widget.currentTag == 'headache.disabled')
-      return 'NONE AT\nALL';
-    else if (widget.currentTag == 'headache.typicalbadpain')
-      return 'MILD';
+    if(widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.noneAtALL;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.mild;
     return (widget.minTextLabel == null)
         ? Constant.min
         : widget.minTextLabel;
   }
 
   String _getMaxTextLabel() {
-    if(widget.currentTag == 'headache.disabled')
-      return 'TOTAL\nDISABILITY';
-    else if (widget.currentTag == 'headache.typicalbadpain')
-      return 'VERY\nPAINFUL';
+    if(widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.totalDisability;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.veryPainful;
     return (widget.maxTextLabel == null)
         ? Constant.max
         : widget.maxTextLabel;

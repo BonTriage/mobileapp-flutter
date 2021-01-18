@@ -7,8 +7,9 @@ class MeScreenTutorial extends StatefulWidget {
   final GlobalKey logDayGlobalKey;
   final GlobalKey addHeadacheGlobalKey;
   final GlobalKey recordsGlobalKey;
+  final bool isFromOnBoard;
 
-  const MeScreenTutorial({Key key, @required this.logDayGlobalKey, @required this.addHeadacheGlobalKey, @required this.recordsGlobalKey}) : super(key: key);
+  const MeScreenTutorial({Key key, @required this.logDayGlobalKey, @required this.addHeadacheGlobalKey, @required this.recordsGlobalKey, this.isFromOnBoard = false}) : super(key: key);
 
   @override
   _MeScreenTutorialState createState() => _MeScreenTutorialState();
@@ -161,7 +162,7 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
                             _shouldClip = false;
                           });
                         } else {
-                          Navigator.pop(context);
+                          _popOrNavigateToOtherScreen();
                         }
                       },
                       backButtonFunction: () {
@@ -219,6 +220,11 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
         ],
       ),
     );
+  }
+
+  void _popOrNavigateToOtherScreen() async {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, Constant.profileCompleteScreenRouter);
   }
 }
 

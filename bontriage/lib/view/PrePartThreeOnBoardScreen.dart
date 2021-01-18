@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -70,7 +71,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
           secondBottomButtonText: Constant.saveAndFinishLater,
           secondBottomButtonFunction: () {
-            Utils.navigateToHomeScreen(context, true);
+            Utils.navigateToHomeScreen(context, true, homeScreenArgumentModel: HomeScreenArgumentModel(isFromOnBoard: true));
 
           },
           closeButtonFunction: () {

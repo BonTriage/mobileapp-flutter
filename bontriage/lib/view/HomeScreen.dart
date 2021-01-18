@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigator.dart';
@@ -13,6 +14,10 @@ import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
+  final HomeScreenArgumentModel homeScreenArgumentModel;
+
+  const HomeScreen({Key key, this.homeScreenArgumentModel}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -283,6 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 logDayGlobalKey: _logDayGlobalKey,
                 recordsGlobalKey: _recordsGlobalKey,
                 addHeadacheGlobalKey: _addHeadacheGlobalKey,
+                isFromOnBoard: widget.homeScreenArgumentModel != null ? widget.homeScreenArgumentModel.isFromOnBoard ?? false : false,
               ),
             );
           }
