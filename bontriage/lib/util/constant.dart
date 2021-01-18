@@ -2,84 +2,84 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Constant {
-  static const String splashRouter = '/splash';
-  static const String homeRouter = '/home';
-  static const String loginRouter = '/login';
-  static const String signUpRouter = '/signUP';
-  static const String signUpOnBoardSplashRouter = '/signUpOnBoardSplash';
+  static const String splashRouter = 'splash';
+  static const String homeRouter = 'home';
+  static const String loginRouter = 'login';
+  static const String signUpRouter = 'signUP';
+  static const String signUpOnBoardSplashRouter = 'signUpOnBoardSplash';
   static const String signUpOnBoardStartAssessmentRouter =
-      '/signUpOnBoardStartAssessment';
+      'signUpOnBoardStartAssessment';
   static const String signUpFirstStepHeadacheResultRouter =
-      '/signUpFirstStepHeadacheResult';
+      'signUpFirstStepHeadacheResult';
   static const String signUpOnBoardPersonalizedHeadacheResultRouter =
-      '/signUpOnBoardPersonalizedHeadacheResult';
-  static const String signUpNameScreenRouter = '/signUpNameScreen';
-  static const String signUpAgeScreenRouter = '/signUpAgeScreen';
-  static const String signUpLocationServiceRouter = '/signUpLocationService';
+      'signUpOnBoardPersonalizedHeadacheResult';
+  static const String signUpNameScreenRouter = 'signUpNameScreen';
+  static const String signUpAgeScreenRouter = 'signUpAgeScreen';
+  static const String signUpLocationServiceRouter = 'signUpLocationService';
   static const String signUpOnBoardProfileQuestionRouter =
-      '/signUpOnBoardHeadacheQuestion';
+      'signUpOnBoardHeadacheQuestion';
   static const String partTwoOnBoardScreenRouter =
-      '/partTwoOnBoardScreenRouter';
+      'partTwoOnBoardScreenRouter';
   static const String partThreeOnBoardScreenRouter =
-      '/partThreeOnBoardScreenRouter';
+      'partThreeOnBoardScreenRouter';
 
-  static const String loginScreenRouter = '/loginScreenRouter';
+  static const String loginScreenRouter = 'loginScreenRouter';
   static const String onBoardingScreenSignUpRouter =
-      '/onBoardingScreenSignUpRouter';
+      'onBoardingScreenSignUpRouter';
   static const String signUpSecondStepHeadacheResultRouter =
-      '/signUpSecondStepHeadacheResult';
+      'signUpSecondStepHeadacheResult';
   static const String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
-      '/signUpOnBoardSecondStepPersonalizedHeadacheResult';
+      'signUpOnBoardSecondStepPersonalizedHeadacheResult';
 
   static const String welcomeScreenRouter = 'WelcomeScreen';
   static const String welcomeStartAssessmentScreenRouter =
-      '/welcomeStartAssessmentScreenRouter';
+      'welcomeStartAssessmentScreenRouter';
   static const String onBoardHeadacheInfoScreenRouter =
-      '/onBoardHeadacheInfoScreenRouter';
+      'onBoardHeadacheInfoScreenRouter';
 
   static const String partOneOnBoardScreenTwoRouter =
-      '/partOneOnBoardScreenTwo';
+      'partOneOnBoardScreenTwo';
   static const String onBoardCreateAccountScreenRouter =
-      '/onBoardCreateAccountScreen';
+      'onBoardCreateAccountScreen';
   static const String prePartTwoOnBoardScreenRouter =
-      '/prePartTwoOnBoardScreen';
+      'prePartTwoOnBoardScreen';
   static const String onBoardHeadacheNameScreenRouter =
-      '/onBoardHeadacheNameScreen';
+      'onBoardHeadacheNameScreen';
   static const String partTwoOnBoardMoveOnScreenRouter =
-      '/partTwoOnBoardMoveOnScreen';
+      'partTwoOnBoardMoveOnScreen';
   static const String prePartThreeOnBoardScreenRouter =
-      '/prePartThreeOnBoardScreen';
+      'prePartThreeOnBoardScreen';
   static const String signUpOnBoardBubbleTextViewRouter =
-      '/signUpOnBoardBubbleTextView';
+      'signUpOnBoardBubbleTextView';
   static const String postPartThreeOnBoardRouter =
-      '/postPartThreeOnBoardRouter';
+      'postPartThreeOnBoardRouter';
   static const String postNotificationOnBoardRouter =
-      '/postNotificationOnBoardRouter';
-  static const String notificationScreenRouter = '/NotificationScreenRouter';
+      'postNotificationOnBoardRouter';
+  static const String notificationScreenRouter = 'NotificationScreenRouter';
   static const String headacheStartedScreenRouter =
-      '/HeadacheStartedScreenRouter';
+      'HeadacheStartedScreenRouter';
   static const String currentHeadacheProgressScreenRouter =
-      '/CurrentHeadacheProgressScreenRouter';
+      'CurrentHeadacheProgressScreenRouter';
   static const String addHeadacheOnGoingScreenRouter =
-      '/addHeadacheOnGoingScreenRouter';
-  static const String logDayScreenRouter = '/logDayScreenRouter';
+      'addHeadacheOnGoingScreenRouter';
+  static const String logDayScreenRouter = 'logDayScreenRouter';
   static const String addHeadacheSuccessScreenRouter =
-      '/addHeadacheSuccessScreenRouter';
-  static const String logDaySuccessScreenRouter = '/logDaySuccessScreenRouter';
+      'addHeadacheSuccessScreenRouter';
+  static const String logDaySuccessScreenRouter = 'logDaySuccessScreenRouter';
   static const String profileCompleteScreenRouter =
-      '/profileCompleteScreenRouter';
-  static const String notificationTimerRouter = '/notificationTimerRouter';
+      'profileCompleteScreenRouter';
+  static const String notificationTimerRouter = 'notificationTimerRouter';
   static const String calendarTriggersScreenRouter =
-      '/calendarTriggersScreenRouter';
+      'calendarTriggersScreenRouter';
   static const String calendarSeverityScreenRouter =
-      '/calendarSeverityScreenRouter';
+      'calendarSeverityScreenRouter';
   static const String logDayNoHeadacheScreenRouter =
-      '/logDayNoHeadacheScreenRouter';
+      'logDayNoHeadacheScreenRouter';
   static const String calenderScreenRouter = 'calenderScreenRouter';
 
-  static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter';
+  static const String onBoardExitScreenRouter = 'onBoardExitScreenRouter';
   static const String onCalendarHeadacheLogDayDetailsScreenRouter =
-      '/onCalendarHeadacheLogDayDetailsScreenRouter';
+      'onCalendarHeadacheLogDayDetailsScreenRouter';
 
   static const String compassScreenRouter = 'compassScreenRouter';
   static const String webViewScreenRouter = 'webViewScreenRouter';

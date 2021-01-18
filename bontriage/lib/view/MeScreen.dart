@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,7 @@ class _MeScreenState extends State<MeScreen>
   List<Widget> currentWeekListData = [];
   List<TextSpan> textSpanList;
   AnimationController _animationController;
-  bool _isOnBoardAssessmentInComplete = false;
+  bool _isOnBoardAssessmentInComplete = true;
   int currentMonth;
   int currentYear;
   String monthName;
@@ -39,6 +41,7 @@ class _MeScreenState extends State<MeScreen>
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   CurrentUserHeadacheModel currentUserHeadacheModel;
+  Timer _timer;
 
   String userName = "";
 
@@ -131,7 +134,7 @@ class _MeScreenState extends State<MeScreen>
     ];
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _checkForProfileIncomplete();
+      _getUserCurrentHeadacheData();
     });
   }
 
@@ -453,6 +456,11 @@ class _MeScreenState extends State<MeScreen>
   @override
   void dispose() {
     _animationController.dispose();
+    try {
+      _timer.cancel();
+    } catch (e) {
+      print(e);
+    }
     super.dispose();
   }
 
@@ -461,9 +469,11 @@ class _MeScreenState extends State<MeScreen>
     bool isProfileInComplete =
         sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
 
-    await _getUserCurrentHeadacheData();
+    print('isProfileInComplete $isProfileInComplete');
+    print('_isOnBoardAssessmentInComplete$_isOnBoardAssessmentInComplete');
 
-    if (!_isOnBoardAssessmentInComplete && (isProfileInComplete != null || isProfileInComplete)) {
+    if (_isOnBoardAssessmentInComplete && (isProfileInComplete != null || isProfileInComplete)) {
+      print('in _checkForProfileIncomplete');
       setState(() {
         _isOnBoardAssessmentInComplete = isProfileInComplete;
         if (_isOnBoardAssessmentInComplete) {
@@ -593,22 +603,33 @@ class _MeScreenState extends State<MeScreen>
 }
 
   Future<void> _getUserCurrentHeadacheData() async {
+    /*if(_timer == null) {
+      _timer = Timer.periodic(Duration(milliseconds: 300), (_) {
+        _getUserCurrentHeadacheData1();
+      });
+    }*/
+    //_getUserCurrentHeadacheData1();
+    print('in getUserCurrentHeadacheData');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if(currentPositionOfTabBar == 0 && userProfileInfoData != null) {
       currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+      print('currentUserHeadacheModel$currentUserHeadacheModel');
       if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
         setState(() {
           _isOnBoardAssessmentInComplete = true;
           _animationController.forward();
         });
       } else {
-        /*setState(() {
-          _isOnBoardAssessmentInComplete = false;
-          _animationController.reverse();
-        });*/
+        /*try {
+          _timer.cancel();
+          _timer = null;
+        } catch(e) {
+          print(e);
+        }*/
+        print('_checkForProfileIncomplete');
         _checkForProfileIncomplete();
       }
     }
@@ -639,20 +660,11 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _navigateToAddHeadacheScreen() async{
-    //currentUserHeadacheModel.isOnGoing = false;
 
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
-    /*DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
-    Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);*/
-    /*if(duration.inSeconds.abs() <= (72*60*60)) {
-      _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
-    } else {
-      _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
-    }*/
 
     currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
-    //await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(currentUserHeadacheModel);
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 

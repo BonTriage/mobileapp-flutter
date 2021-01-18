@@ -405,7 +405,11 @@ class _LogDayScreenState extends State<LogDayScreen>
         builder: (context) => DeleteLogOptionsBottomSheet());
     if (resultOfDeleteBottomSheet == Constant.deleteLog) {
       SignUpOnBoardProviders.db.deleteAllUserLogDayData();
-      Navigator.pop(context, false);
+      if(widget.logDayScreenArgumentModel == null) {
+        Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+      } else {
+        Navigator.pop(context, false);
+      }
     }
   }
 
