@@ -77,16 +77,6 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   }
 
   @override
-  void didUpdateWidget(AddHeadacheOnGoingScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
     _addHeadacheLogBloc.dispose();
     super.dispose();
@@ -98,8 +88,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       onWillPop: () async {
         if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
           _showDiscardChangesBottomSheet();
-        else
-          return true;
+        else {
+          if(_isFromRecordScreen)
+            Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+          else
+            Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+        }
         return false;
       },
       child: Scaffold(
@@ -136,11 +130,14 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-
                                 if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
                                   _showDiscardChangesBottomSheet();
-                                else
-                                  Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                else {
+                                  if(_isFromRecordScreen)
+                                    Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                  else
+                                    Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+                                }
                               },
                               child: Image(
                                 image: AssetImage(Constant.closeIcon),
@@ -165,10 +162,6 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               if(!_isDataPopulated) {
-                                /*if(widget.currentUserHeadacheModel.isFromRecordScreen ?? false) {
-                                  addSelectedHeadacheDetailsData(Constant.onGoingTag, 'No');
-                                  addSelectedHeadacheDetailsData(Constant.endTimeTag, widget.currentUserHeadacheModel.selectedEndDate);
-                                }*/
                                 Utils.closeApiLoaderDialog(context);
                               }
                               return Column(
@@ -229,8 +222,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                         onPressed: () {
                                           if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
                                             _showDiscardChangesBottomSheet();
-                                          else
-                                            Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                          else {
+                                            if(_isFromRecordScreen)
+                                              Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                            else
+                                              Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+                                          }
                                         },
                                         child: Container(
                                           width: 110,
@@ -459,7 +456,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         }
         Navigator.pushNamed(context, Constant.addHeadacheSuccessScreenRouter);
       } else {
-        Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+        if(_isFromRecordScreen)
+          Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+        else
+          Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
       }
     }
   }
@@ -541,7 +541,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         builder: (context) => DiscardChangesBottomSheet());
     if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
       //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
-      Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+      if(_isFromRecordScreen)
+        Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+      else
+        Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
     }
   }
 }

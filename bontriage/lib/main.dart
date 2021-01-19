@@ -99,9 +99,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.homeRouter:
             {
-
-              return SlideFromRightPageRoute(widget: HomeScreen(homeScreenArgumentModel: settings.arguments,));
-
+              return SlideFromRightPageRoute(widget: HomeScreen(homeScreenArgumentModel: settings.arguments), routeSettings: routeSettings);
             }
           case Constant.loginRouter:
             {

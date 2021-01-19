@@ -676,7 +676,7 @@ class _MeScreenState extends State<MeScreen>
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       return Constant.endHeadache;
     }
-    return 'Add a Headache';
+    return 'Add Headache';
   }
 
   void _navigateToOtherScreen() async{
