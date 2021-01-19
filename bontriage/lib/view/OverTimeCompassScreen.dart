@@ -24,7 +24,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;

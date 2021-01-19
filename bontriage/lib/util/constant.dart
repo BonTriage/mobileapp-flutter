@@ -664,6 +664,9 @@ class Constant {
   static String moreSelected = 'images/more_selected.png';
   static String errorGreen = 'images/error_green.png';
 
+  static String barGraph = 'images/union.png';
+  static String lineGraph = 'images/vector.png';
+
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
   static String jostBold = "JostBold";

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassScreen.dart';
+import 'package:mobile/view/TrendsScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarScreen.dart';
 
@@ -130,7 +131,7 @@ class _RecordScreenState extends State<RecordScreen> {
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
         );
       default:
-        return Container();
+        return TrendsScreen();
     }
   }
 
