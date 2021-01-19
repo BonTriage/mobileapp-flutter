@@ -26,12 +26,13 @@ class TabNavigator extends StatelessWidget {
   final String root;
   final Function(String) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
+  final Function(GlobalKey, GlobalKey) getButtonsGlobalKeyCallback;
 
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   final Function(List<Values>) openTriggerMedicationActionSheetCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback});
 
 
   Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
@@ -68,6 +69,7 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.meRoot: (context) => MeScreen(
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         showApiLoaderCallback: showApiLoaderCallback,
+        getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
       ),
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(

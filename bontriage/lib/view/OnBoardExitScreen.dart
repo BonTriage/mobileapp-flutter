@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
@@ -53,7 +54,7 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
         secondBottomButtonFunction: () {
           if (widget.isAlreadyLoggedIn) {
             TextToSpeechRecognition.stopSpeech();
-            Utils.navigateToHomeScreen(context, true);
+            Utils.navigateToHomeScreen(context, true, homeScreenArgumentModel: HomeScreenArgumentModel(isFromOnBoard: true));
           } else {
             deleteUserAllWelComeBoardData();
           }

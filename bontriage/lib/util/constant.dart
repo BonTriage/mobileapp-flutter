@@ -154,6 +154,7 @@ class Constant {
   static String yearsOld = 'years old';
   static String days = 'days';
   static String hours = 'hours';
+  static const String noneAtAll = 'NONE AT\nALL';
   static String blankString = '';
   static String atWhatAge = 'At what age did you first experience headaches?';
   static String selectOne = 'Select one';
@@ -330,6 +331,10 @@ class Constant {
   static const String profileAgeTag = 'profile.age';
   static const String profileSexTag = 'profile.sex';
   static const String profileGenderTag = 'profile.gender';
+  static const String headacheFreeTag = 'headache.free';
+  static const String headacheTypicalTag = 'headache.typical';
+  static const String headacheDisabledTag = 'headache.disabled';
+  static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =
@@ -548,6 +553,10 @@ class Constant {
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
 
+  //tutorial text
+  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
+
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
   static const String generateReportActionSheet = 'generateReportActionSheet';
@@ -650,6 +659,9 @@ class Constant {
   static String addCircleIcon = 'images/add_circle_icon.png';
   static String calenderBackArrow = 'images/calender_back_arrow.png';
   static String calenderNextArrow = 'images/calender_next_arrow.png';
+  static String tutorialArrowUp = 'images/tutorial_arrow_up.png';
+  static String tutorialArrowDown = 'images/tutorial_arrow_down.png';
+  static String tutorialArrowDown2 = 'images/tutorial_arrow_down_2.png';
 
   static String leftArrow = 'images/left_arrow.png';
   static String downArrow2 = 'images/down_arrow_2.png';

@@ -174,9 +174,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         height: 3,
                                       ),
                                       Text(
-                                        (widget.minTextLabel == null)
-                                            ? Constant.min
-                                            : widget.minTextLabel,
+                                        _getMinTextLabel(),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -201,9 +199,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         height: 3,
                                       ),
                                       Text(
-                                        (widget.maxTextLabel == null)
-                                            ? Constant.max
-                                            : widget.maxTextLabel,
+                                        _getMaxTextLabel(),
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -244,7 +240,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     height: 5,
                                   ),
                                   Text(
-                                    '${widget.labelText}',
+                                    _getLabelText(),
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Constant.chatBubbleGreen,
@@ -268,9 +264,40 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
     );
   }
 
+
   String _getMaxText() {
-    if(widget.currentTag == 'headache.typical' || widget.currentTag == 'headache.number')
+    if (widget.currentTag == 'headache.typical' ||
+        widget.currentTag == 'headache.number')
       return '${widget.maxText}+';
     return widget.maxText;
+  }
+  String _getLabelText() {
+    if(widget.currentTag == Constant.profileAgeTag)
+      return Constant.yearsOld;
+    else if (widget.currentTag == Constant.headacheFreeTag)
+      return Constant.days;
+    else if (widget.currentTag == Constant.headacheTypicalTag)
+      return Constant.hours;
+    return '${widget.labelText}';
+  }
+
+  String _getMinTextLabel() {
+    if(widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.noneAtALL;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.mild;
+    return (widget.minTextLabel == null)
+        ? Constant.min
+        : widget.minTextLabel;
+  }
+
+  String _getMaxTextLabel() {
+    if (widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.totalDisability;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.veryPainful;
+    return (widget.maxTextLabel == null)
+        ? Constant.max
+        : widget.maxTextLabel;
   }
 }

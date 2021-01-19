@@ -99,7 +99,9 @@ class MyApp extends StatelessWidget {
             }
           case Constant.homeRouter:
             {
-              return SlideFromRightPageRoute(widget: HomeScreen(), routeSettings: routeSettings);
+
+              return SlideFromRightPageRoute(widget: HomeScreen(homeScreenArgumentModel: settings.arguments,));
+
             }
           case Constant.loginRouter:
             {
@@ -267,6 +269,7 @@ class MyApp extends StatelessWidget {
           case Constant.profileCompleteScreenRouter:
             {
               return SlideFromBottomPageRoute(widget: ProfileComplete(), routeSettings: routeSettings);
+
             }
           case Constant.notificationTimerRouter:
             {

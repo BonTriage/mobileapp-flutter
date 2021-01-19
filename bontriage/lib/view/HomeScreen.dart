@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
+import 'package:mobile/view/MeScreenTutorial.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
+  final HomeScreenArgumentModel homeScreenArgumentModel;
+
+  const HomeScreen({Key key, this.homeScreenArgumentModel}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+  GlobalKey _logDayGlobalKey;
+  GlobalKey _addHeadacheGlobalKey;
+  GlobalKey _recordsGlobalKey;
+
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
     1: GlobalKey<NavigatorState>(),
@@ -29,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     saveHomePosition();
+    _recordsGlobalKey = GlobalKey();
     saveCurrentIndexOfTabBar(0);
     print(Utils.getDateTimeInUtcFormat(DateTime.now()));
   }
@@ -80,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Image.asset(
                 Constant.recordsUnselected,
                 height: 25,
+                key: _recordsGlobalKey,
               ),
               activeIcon: Image.asset(
                 Constant.recordsSelected,
@@ -165,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
         openTriggerMedicationActionSheetCallback:
             _openTriggersMedicationActionSheet,
         showApiLoaderCallback: showApiLoader,
+        getButtonsGlobalKeyCallback: getButtonsGlobalKey,
       ),
     );
   }
@@ -261,7 +275,40 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
   }
 
+  ///This method is used to show api loader dialog
   void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
     Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
+  }
+
+  void getButtonsGlobalKey(GlobalKey logDayGlobalKey, GlobalKey addHeadacheGlobalKey) {
+    _logDayGlobalKey = logDayGlobalKey;
+    _addHeadacheGlobalKey = addHeadacheGlobalKey;
+
+    Future.delayed(Duration(milliseconds: 350), () {
+      _showTutorialDialog();
+    });
+  }
+
+  ///This method is used to show tutorial dialog
+  void _showTutorialDialog() async {
+    bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
+    if(!isTutorialHasSeen) {
+      await SignUpOnBoardProviders.db.insertTutorialData(1);
+      showGeneralDialog(
+          context: context,
+          barrierColor: Colors.transparent,
+          pageBuilder: (buildContext, animation, secondaryAnimation) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: MeScreenTutorial(
+                logDayGlobalKey: _logDayGlobalKey,
+                recordsGlobalKey: _recordsGlobalKey,
+                addHeadacheGlobalKey: _addHeadacheGlobalKey,
+                isFromOnBoard: widget.homeScreenArgumentModel != null ? widget.homeScreenArgumentModel.isFromOnBoard ?? false : false,
+              ),
+            );
+          }
+      );
+    }
   }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
@@ -17,9 +16,10 @@ import 'DateWidget.dart';
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
   final Function(Stream, Function) showApiLoaderCallback;
+  final Function(GlobalKey, GlobalKey) getButtonsGlobalKeyCallback;
 
   const MeScreen(
-      {Key key, this.navigateToOtherScreenCallback, this.showApiLoaderCallback})
+      {Key key, this.navigateToOtherScreenCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback})
       : super(key: key);
 
   @override
@@ -41,7 +41,10 @@ class _MeScreenState extends State<MeScreen>
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   CurrentUserHeadacheModel currentUserHeadacheModel;
+
   Timer _timer;
+  GlobalKey _logDayGlobalKey = GlobalKey();
+  GlobalKey _addHeadacheGlobalKey = GlobalKey();
 
   String userName = "";
 
@@ -68,17 +71,7 @@ class _MeScreenState extends State<MeScreen>
     lastDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, currentWeekDate.day + 6);
 
-    /*widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-      _calendarScreenBloc.enterSomeDummyDataToStreamController();
-      requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
-    });*/
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      /*Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
-      });*/
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         print('called service 2');
@@ -211,6 +204,7 @@ class _MeScreenState extends State<MeScreen>
                           if (snapshot.hasData) {
                             userLogHeadacheDataCalendarModel = snapshot.data;
                             setUserWeekData(userLogHeadacheDataCalendarModel);
+                            widget.getButtonsGlobalKeyCallback(_logDayGlobalKey, _addHeadacheGlobalKey);
                             return Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 10),
@@ -381,6 +375,7 @@ class _MeScreenState extends State<MeScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               BouncingWidget(
+                                key: _logDayGlobalKey,
                                 onPressed: () {
                                   widget.navigateToOtherScreenCallback(
                                       Constant.logDayScreenRouter, null);
@@ -415,6 +410,7 @@ class _MeScreenState extends State<MeScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BouncingWidget(
+                          key: _addHeadacheGlobalKey,
                           onPressed: () {
                             if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
                               _navigateToAddHeadacheScreen();

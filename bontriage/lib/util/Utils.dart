@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
@@ -414,11 +415,11 @@ class Utils {
   }
 
   static void navigateToHomeScreen(
-      BuildContext context, bool isProfileInComplete) async {
+      BuildContext context, bool isProfileInComplete, {HomeScreenArgumentModel homeScreenArgumentModel}) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(
         Constant.isProfileInCompleteStatus, isProfileInComplete);
-    Navigator.pushReplacementNamed(context, Constant.homeRouter);
+    Navigator.pushReplacementNamed(context, Constant.homeRouter, arguments: homeScreenArgumentModel);
   }
 
   static void closeApiLoaderDialog(BuildContext context) {
