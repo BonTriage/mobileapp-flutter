@@ -14,7 +14,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
-import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
+import 'package:mobile/view/DiscardChangesBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
@@ -23,7 +23,8 @@ import 'NetworkErrorScreen.dart';
 class LogDayScreen extends StatefulWidget {
   final LogDayScreenArgumentModel logDayScreenArgumentModel;
 
-  const LogDayScreen({Key key, this.logDayScreenArgumentModel}) : super(key: key);
+  const LogDayScreen({Key key, this.logDayScreenArgumentModel})
+      : super(key: key);
 
   @override
   _LogDayScreenState createState() => _LogDayScreenState();
@@ -51,8 +52,9 @@ class _LogDayScreenState extends State<LogDayScreen>
     } else {
       _dateTime = widget.logDayScreenArgumentModel.selectedDateTime;
     }
-    if(widget.logDayScreenArgumentModel != null) {
-      _logDayBloc = LogDayBloc(widget.logDayScreenArgumentModel.selectedDateTime);
+    if (widget.logDayScreenArgumentModel != null) {
+      _logDayBloc =
+          LogDayBloc(widget.logDayScreenArgumentModel.selectedDateTime);
     } else {
       _logDayBloc = LogDayBloc(null);
     }
@@ -76,7 +78,10 @@ class _LogDayScreenState extends State<LogDayScreen>
       logDayDataList.forEach((element) {
         List<dynamic> map = jsonDecode(element['selectedAnswers']);
         map.forEach((element) {
-          selectedAnswers.add(SelectedAnswers(questionTag: element['questionTag'], answer: element['answer'], isDoubleTapped: true));
+          selectedAnswers.add(SelectedAnswers(
+              questionTag: element['questionTag'],
+              answer: element['answer'],
+              isDoubleTapped: true));
         });
       });
     }
@@ -92,15 +97,18 @@ class _LogDayScreenState extends State<LogDayScreen>
       _logDayBloc.fetchLogDayData();
     }*/
 
-    String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
+    String selectedDate =
+        '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
     await _logDayBloc.fetchCalendarHeadacheLogDayData(selectedDate);
-    selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
+    selectedAnswers =
+        _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
 
-    if(widget.logDayScreenArgumentModel == null || (widget.logDayScreenArgumentModel != null && !widget.logDayScreenArgumentModel.isFromRecordScreen)) {
-      if(selectedAnswers.length == 0)
+    if (widget.logDayScreenArgumentModel == null ||
+        (widget.logDayScreenArgumentModel != null &&
+            !widget.logDayScreenArgumentModel.isFromRecordScreen)) {
+      if (selectedAnswers.length == 0)
         selectedAnswers = doubleTappedSelectedAnswerList;
     }
-
   }
 
   @override
@@ -114,7 +122,10 @@ class _LogDayScreenState extends State<LogDayScreen>
     return WillPopScope(
       onWillPop: () async {
         FocusScope.of(context).requestFocus(FocusNode());
-        _showDeleteLogOptionBottomSheet();
+        if (selectedAnswers.length > 0)
+          _showDiscardChangesBottomSheet();
+        else
+          return true;
         return false;
       },
       child: Scaffold(
@@ -151,7 +162,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-                                _showDeleteLogOptionBottomSheet();
+                                _showDiscardChangesBottomSheet();
                                 //Navigator.pop(context);
                               },
                               child: Image(
@@ -212,12 +223,25 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        if(selectedAnswers.length > 0) {
-                                          SelectedAnswers logDayNoteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == Constant.logDayNoteTag, orElse: () => null);
-                                          if(logDayNoteSelectedAnswer == null)
-                                            selectedAnswers.add(SelectedAnswers(questionTag: Constant.logDayNoteTag, answer: Constant.blankString));
+                                        if (selectedAnswers.length > 0) {
+                                          SelectedAnswers
+                                              logDayNoteSelectedAnswer =
+                                              selectedAnswers.firstWhere(
+                                                  (element) =>
+                                                      element.questionTag ==
+                                                      Constant.logDayNoteTag,
+                                                  orElse: () => null);
+                                          if (logDayNoteSelectedAnswer == null)
+                                            selectedAnswers.add(SelectedAnswers(
+                                                questionTag:
+                                                    Constant.logDayNoteTag,
+                                                answer: Constant.blankString));
                                           _onSubmitClicked();
-                                        }
+                                        } else
+                                          Utils.showValidationErrorDialog(
+                                              context,
+                                              Constant
+                                                  .selectAtLeastOneOptionLogDayError);
                                       },
                                       child: Container(
                                         width: 110,
@@ -251,7 +275,10 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _showDeleteLogOptionBottomSheet();
+                                        if (selectedAnswers.length > 0)
+                                          _showDiscardChangesBottomSheet();
+                                        else
+                                          Navigator.pop(context, false);
                                       },
                                       child: Container(
                                         width: 110,
@@ -346,7 +373,8 @@ class _LogDayScreenState extends State<LogDayScreen>
             try {
               int index = int.parse(element.answer) - 1;
               questions.values[index].isSelected = true;
-              questions.values[index].isDoubleTapped = element.isDoubleTapped ?? true;
+              questions.values[index].isDoubleTapped =
+                  element.isDoubleTapped ?? true;
             } catch (e) {
               print(e.toString());
             }
@@ -380,17 +408,21 @@ class _LogDayScreenState extends State<LogDayScreen>
         if (element.precondition == null || element.precondition.isEmpty) {
           _sectionWidgetList.add(
             AddHeadacheSection(
-                headerText: element.text,
-                subText: element.helpText,
-                contentType: element.tag,
-                sleepExpandableWidgetList: _sleepValuesList,
-                medicationExpandableWidgetList: _medicationValuesList,
-                triggerExpandableWidgetList: _triggerValuesList,
-                valuesList: element.values,
-                questionType: element.questionType,
-                allQuestionsList: allQuestionList,
-                selectedAnswers: selectedAnswers,
-            doubleTapSelectedAnswer: doubleTapSelectedAnswerList,),
+              headerText: element.text,
+              subText: element.helpText,
+              contentType: element.tag,
+              sleepExpandableWidgetList: _sleepValuesList,
+              medicationExpandableWidgetList: _medicationValuesList,
+              triggerExpandableWidgetList: _triggerValuesList,
+              valuesList: element.values,
+              questionType: element.questionType,
+              allQuestionsList: allQuestionList,
+              selectedAnswers: selectedAnswers,
+              doubleTapSelectedAnswer: doubleTapSelectedAnswerList,
+              isFromRecordsScreen: (widget.logDayScreenArgumentModel != null)
+                  ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false
+                  : false,
+            ),
           );
         }
       });
@@ -398,18 +430,17 @@ class _LogDayScreenState extends State<LogDayScreen>
     _isDataPopulated = true;
   }
 
-  void _showDeleteLogOptionBottomSheet() async {
-    var resultOfDeleteBottomSheet = await showModalBottomSheet(
+  void _showDiscardChangesBottomSheet() async {
+    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => DeleteLogOptionsBottomSheet());
-    if (resultOfDeleteBottomSheet == Constant.deleteLog) {
-      SignUpOnBoardProviders.db.deleteAllUserLogDayData();
-      if(widget.logDayScreenArgumentModel == null) {
+        builder: (context) => DiscardChangesBottomSheet());
+    if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      if (widget.logDayScreenArgumentModel == null) {
         Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
       } else {
         Navigator.pop(context, false);
@@ -455,11 +486,11 @@ class _LogDayScreenState extends State<LogDayScreen>
       if (response == Constant.success) {
         //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
         Navigator.pop(context);
-        if(widget.logDayScreenArgumentModel == null) {
+        if (widget.logDayScreenArgumentModel == null) {
           Navigator.pushReplacementNamed(
               context, Constant.logDaySuccessScreenRouter);
         } else {
-          if(widget.logDayScreenArgumentModel.isFromRecordScreen) {
+          if (widget.logDayScreenArgumentModel.isFromRecordScreen) {
             Navigator.pop(context, true);
           } else {
             Navigator.pushReplacementNamed(

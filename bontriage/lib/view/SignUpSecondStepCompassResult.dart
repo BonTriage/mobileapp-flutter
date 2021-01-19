@@ -227,23 +227,33 @@ class _SignUpSecondStepCompassResultState
                         children: <Widget>[
                           RotatedBox(
                             quarterTurns: 3,
-                            child: Text(
-                              "Frequency",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showCompassTutorialDialog(context, 3);
+                              },
+                              child: Text(
+                                "Frequency",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
                             ),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
-                                "Intensity",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 1);
+                                },
+                                child: Text(
+                                  "Intensity",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                               Center(
                                 child: Container(
@@ -297,23 +307,33 @@ class _SignUpSecondStepCompassResultState
                                   ),
                                 ),
                               ),
-                              Text(
-                                "Disability",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 2);
+                                },
+                                child: Text(
+                                  "Disability",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ],
                           ),
                           RotatedBox(
                             quarterTurns: 1,
-                            child: Text(
-                              "Duration",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showCompassTutorialDialog(context, 4);
+                              },
+                              child: Text(
+                                "Duration",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
                             ),
                           ),
                         ],

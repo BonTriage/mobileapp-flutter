@@ -6,7 +6,6 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 import 'CustomScrollBar.dart';
@@ -235,7 +234,7 @@ class _SignUpFirstStepCompassResultState
                             quarterTurns: 3,
                             child: GestureDetector(
                               onTap: () {
-                              //  _showTutorialDialog(3);
+                                Utils.showCompassTutorialDialog(context, 3);
                               },
                               child: Text(
                                 "Frequency",
@@ -251,7 +250,7 @@ class _SignUpFirstStepCompassResultState
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                //  _showTutorialDialog(1);
+                                  Utils.showCompassTutorialDialog(context, 1);
                                 },
                                 child: Text(
                                   "Intensity",
@@ -315,7 +314,7 @@ class _SignUpFirstStepCompassResultState
                               ),
                               GestureDetector(
                                 onTap: () {
-                               //   _showTutorialDialog(2);
+                                  Utils.showCompassTutorialDialog(context, 2);
                                 },
                                 child: Text(
                                   "Disability",
@@ -331,7 +330,7 @@ class _SignUpFirstStepCompassResultState
                             quarterTurns: 1,
                             child: GestureDetector(
                               onTap: () {
-                              //  _showTutorialDialog(4);
+                                Utils.showCompassTutorialDialog(context, 4);
                               },
                               child: Text(
                                 "Duration",
@@ -441,20 +440,6 @@ class _SignUpFirstStepCompassResultState
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showTutorialDialog(int indexValue) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
-        );
-      },
     );
   }
 

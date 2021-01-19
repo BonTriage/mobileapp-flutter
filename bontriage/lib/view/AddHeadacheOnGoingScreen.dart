@@ -13,6 +13,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
+import 'DiscardChangesBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
@@ -95,7 +96,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+        if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+          _showDiscardChangesBottomSheet();
+        else
+          return true;
         return false;
       },
       child: Scaffold(
@@ -132,14 +136,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-                                //Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
-                                if(_currentUserHeadacheModel != null) {
-                                  if(_currentUserHeadacheModel.isFromRecordScreen ?? false) {
-                                    Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
-                                  } else {
-                                    Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
-                                  }
-                                }
+
+                                if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+                                  _showDiscardChangesBottomSheet();
+                                else
+                                  Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
                               },
                               child: Image(
                                 image: AssetImage(Constant.closeIcon),
@@ -224,7 +225,13 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       BouncingWidget(
-                                        onPressed: () {},
+
+                                        onPressed: () {
+                                          if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
+                                            _showDiscardChangesBottomSheet();
+                                          else
+                                            Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
+                                        },
                                         child: Container(
                                           width: 110,
                                           padding:
@@ -520,6 +527,21 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         //put condition for the headache id to fetch the current on going headache data
         _addHeadacheLogBloc.fetchAddHeadacheLogData();
       }
+    }
+  }
+
+  void _showDiscardChangesBottomSheet() async {
+    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DiscardChangesBottomSheet());
+    if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+      Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
     }
   }
 }

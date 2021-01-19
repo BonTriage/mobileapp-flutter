@@ -86,7 +86,7 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
     if (noteSelectedAnswer != null) {
       text = noteSelectedAnswer.answer ?? '';
     }
-    showBottomSheet(context: context, builder: (context) => AddNoteBottomSheet(
+    /*showBottomSheet(context: context, builder: (context) => AddNoteBottomSheet(
       text: text,
       addNoteCallback: (note) {
         if(note != null) {
@@ -104,6 +104,32 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
         }
       },
     ),
-    backgroundColor: Colors.transparent);
+    backgroundColor: Colors.transparent);*/
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: AddNoteBottomSheet(
+            text: text,
+            addNoteCallback: (note) {
+              if(note != null) {
+                if(note is String) {
+                  if(note.trim() != '') {
+                    SelectedAnswers noteSelectedAnswer = widget.selectedAnswerList.firstWhere((element) => element.questionTag == widget.noteTag, orElse: () => null);
+                    if (noteSelectedAnswer == null)
+                      widget.selectedAnswerList.add(SelectedAnswers(questionTag: widget.noteTag, answer: note));
+                    else
+                      noteSelectedAnswer.answer = note;
+
+                    setState(() {});
+                  }
+                }
+              }
+            },
+          ),
+        ));
   }
 }
