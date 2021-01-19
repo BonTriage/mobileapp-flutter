@@ -57,6 +57,7 @@ class TabNavigator extends StatelessWidget {
             );
           },
           transitionDuration: Duration(milliseconds: 350),
+          settings: RouteSettings(name: routeName),
         ));
   }
 

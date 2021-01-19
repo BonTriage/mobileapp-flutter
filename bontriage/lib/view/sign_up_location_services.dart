@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpLocationServices extends StatefulWidget {
@@ -90,12 +92,16 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                 CupertinoSwitch(
                   value: _locationServicesSwitchState,
                   onChanged: (bool state) {
-                    setState(() {
-                      _locationServicesSwitchState = state;
-                      widget.selectedAnswerCallBack(widget.question.tag,
-                          _locationServicesSwitchState.toString());
-                      print(state);
-                    });
+                    if(state == true) {
+                      _checkLocationPermission();
+                    } else {
+                      setState(() {
+                        _locationServicesSwitchState = state;
+                        widget.selectedAnswerCallBack(widget.question.tag,
+                            _locationServicesSwitchState.toString());
+                        print(state);
+                      });
+                    }
                   },
                   activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
                   trackColor: Constant.chatBubbleGreen.withOpacity(0.2),
@@ -120,5 +126,17 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
         ),
       ),
     );
+  }
+
+  Future<void> _checkLocationPermission() async{
+    Position position = await Utils.determinePosition();
+
+    if(position != null) {
+      setState(() {
+        _locationServicesSwitchState = true;
+        widget.selectedAnswerCallBack(widget.question.tag,
+            _locationServicesSwitchState.toString());
+      });
+    }
   }
 }

@@ -266,7 +266,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.profileCompleteScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: ProfileComplete(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: ProfileComplete(), routeSettings: routeSettings);
 
             }
           case Constant.notificationTimerRouter:
