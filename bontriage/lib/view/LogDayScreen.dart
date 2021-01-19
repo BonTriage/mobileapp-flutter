@@ -212,8 +212,12 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        if(selectedAnswers.length > 0)
+                                        if(selectedAnswers.length > 0) {
+                                          SelectedAnswers logDayNoteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == Constant.logDayNoteTag, orElse: () => null);
+                                          if(logDayNoteSelectedAnswer == null)
+                                            selectedAnswers.add(SelectedAnswers(questionTag: Constant.logDayNoteTag, answer: Constant.blankString));
                                           _onSubmitClicked();
+                                        }
                                       },
                                       child: Container(
                                         width: 110,
