@@ -187,8 +187,9 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
               SizedBox(
                 height: 25,
               ),
-              if (widget.isShowNextButton)
-                Row(
+              Visibility(
+                visible: widget.isShowNextButton,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     BouncingWidget(
@@ -198,7 +199,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                        EdgeInsets.symmetric(horizontal: 50, vertical: 5),
                         decoration: BoxDecoration(
                           color: Constant.chatBubbleGreen,
                           borderRadius: BorderRadius.circular(20),
@@ -216,11 +217,13 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                     ),
                   ],
                 ),
+              ),
               Expanded(
                 child: Container(),
               ),
-              if (!widget.isShowNextButton)
-                Row(
+              Visibility(
+                visible: !widget.isShowNextButton,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
@@ -237,7 +240,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           ),
                           child: Center(
                             child: Text(
-                              widget.bottomButtonText,
+                              widget.bottomButtonText ?? Constant.blankString,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 15,
@@ -249,11 +252,13 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                     ),
                   ],
                 ),
+              ),
               SizedBox(
                 height: 14,
               ),
-              if (widget.isShowSecondBottomButton)
-                Row(
+              Visibility(
+                visible: widget.isShowSecondBottomButton,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
@@ -271,7 +276,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           ),
                           child: Center(
                             child: Text(
-                              widget.secondBottomButtonText,
+                              widget.secondBottomButtonText ?? Constant.blankString,
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 15,
@@ -283,6 +288,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                     ),
                   ],
                 ),
+              ),
               SizedBox(
                 height: 80,
               ),
@@ -304,6 +310,4 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
       }
     });
   }
-
-
 }

@@ -24,13 +24,18 @@ class SignUpLocationServices extends StatefulWidget {
 
 class _SignUpLocationServicesState extends State<SignUpLocationServices>
     with SingleTickerProviderStateMixin {
-  bool _locationServicesSwitchState = false;
+  bool _locationServicesSwitchState;
   AnimationController _animationController;
+  bool _isCheckingLocation;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _locationServicesSwitchState = false;
+    _isCheckingLocation = false;
+
     _animationController =
         AnimationController(duration: Duration(milliseconds: 800), vsync: this);
 
@@ -92,22 +97,23 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                 CupertinoSwitch(
                   value: _locationServicesSwitchState,
                   onChanged: (bool state) {
-                    if(state == true) {
-                      _checkLocationPermission();
-                    } else {
-                      setState(() {
-                        _locationServicesSwitchState = state;
-                        widget.selectedAnswerCallBack(widget.question.tag,
-                            _locationServicesSwitchState.toString());
-                        print(state);
-                      });
+                    if(!_isCheckingLocation) {
+                      if (state) {
+                        setState(() {
+                          _locationServicesSwitchState = state;
+                        });
+                        _checkLocationPermission();
+                      } else {
+                        setState(() {
+                          _locationServicesSwitchState = state;
+                          widget.selectedAnswerCallBack(widget.question.tag,
+                              _locationServicesSwitchState.toString());
+                        });
+                      }
                     }
                   },
                   activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
                   trackColor: Constant.chatBubbleGreen.withOpacity(0.2),
-                  /*activeTrackColor: Constant.chatBubbleGreen.withOpacity(0.6),
-                  inactiveThumbColor: Constant.chatBubbleGreen,
-                  inactiveTrackColor: Constant.chatBubbleGreenBlue,*/
                 ),
               ],
             ),
@@ -128,7 +134,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
     );
   }
 
-  Future<void> _checkLocationPermission() async{
+  Future<void> _checkLocationPermission() async {
+    _isCheckingLocation = true;
     Position position = await Utils.determinePosition();
 
     if(position != null) {
@@ -136,6 +143,14 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
         _locationServicesSwitchState = true;
         widget.selectedAnswerCallBack(widget.question.tag,
             _locationServicesSwitchState.toString());
+        _isCheckingLocation = false;
+      });
+    } else {
+      setState(() {
+        _locationServicesSwitchState = false;
+        widget.selectedAnswerCallBack(widget.question.tag,
+            _locationServicesSwitchState.toString());
+        _isCheckingLocation = false;
       });
     }
   }

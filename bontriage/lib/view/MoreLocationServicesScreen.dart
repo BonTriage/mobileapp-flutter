@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreLocationServicesScreen extends StatefulWidget {
@@ -9,7 +12,16 @@ class MoreLocationServicesScreen extends StatefulWidget {
 
 class _MoreLocationServicesScreenState
     extends State<MoreLocationServicesScreen> {
-  bool _locationServicesSwitchState = false;
+  bool _locationServicesSwitchState;
+  bool _isCheckingLocation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _locationServicesSwitchState = false;
+    _isCheckingLocation = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,16 +98,24 @@ class _MoreLocationServicesScreenState
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 5),
-                          child: Switch(
+                          child: CupertinoSwitch(
                             value: _locationServicesSwitchState,
                             onChanged: (bool state) {
-                              setState(() {
-                                _locationServicesSwitchState = state;
-                              });
+                              if(!_isCheckingLocation) {
+                                if (state) {
+                                  setState(() {
+                                    _locationServicesSwitchState = state;
+                                  });
+                                  _checkLocationPermission();
+                                } else {
+                                  setState(() {
+                                    _locationServicesSwitchState = state;
+                                  });
+                                }
+                              }
                             },
-                            activeColor: Constant.chatBubbleGreen,
-                            inactiveThumbColor: Constant.chatBubbleGreen,
-                            inactiveTrackColor: Constant.chatBubbleGreenBlue,
+                            activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
+                            trackColor: Constant.chatBubbleGreen.withOpacity(0.2),
                           ),
                         ),
                       ],
@@ -121,5 +141,15 @@ class _MoreLocationServicesScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _checkLocationPermission() async {
+    _isCheckingLocation = true;
+    Position position = await Utils.determinePosition();
+
+    setState(() {
+      _locationServicesSwitchState = position != null;
+      _isCheckingLocation = false;
+    });
   }
 }

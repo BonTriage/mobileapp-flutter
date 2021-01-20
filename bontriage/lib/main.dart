@@ -61,6 +61,20 @@ void main() {
   runApp(MyApp());
 }
 
+Map<int, Color> color =
+{
+  50:Constant.chatBubbleGreen,
+  100:Constant.chatBubbleGreen,
+  200:Constant.chatBubbleGreen,
+  300:Constant.chatBubbleGreen,
+  400:Constant.chatBubbleGreen,
+  500:Constant.chatBubbleGreen,
+  600:Constant.chatBubbleGreen,
+  700:Constant.chatBubbleGreen,
+  800:Constant.chatBubbleGreen,
+  900:Constant.chatBubbleGreen,
+};
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -84,6 +98,7 @@ class MyApp extends StatelessWidget {
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primarySwatch: MaterialColor(0xffafd794, color),
       ),
       home: Splash(),
       onGenerateRoute: (settings) {

@@ -266,8 +266,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
 
 
   String _getMaxText() {
-    if (widget.currentTag == 'headache.typical' ||
-        widget.currentTag == 'headache.number')
+    if (widget.currentTag == Constant.headacheTypicalTag ||
+        widget.currentTag == Constant.headacheNumberTag)
       return '${widget.maxText}+';
     return widget.maxText;
   }
