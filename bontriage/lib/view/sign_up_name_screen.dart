@@ -80,7 +80,6 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
     return FadeTransition(
       opacity: _animationController,
       child: Container(
-        height: 100,
         padding: EdgeInsets.fromLTRB(Constant.chatBubbleHorizontalPadding, 0,
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(

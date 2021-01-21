@@ -32,7 +32,7 @@ class _MeScreenState extends State<MeScreen>
   List<Widget> currentWeekListData = [];
   List<TextSpan> textSpanList;
   AnimationController _animationController;
-  bool _isOnBoardAssessmentInComplete = true;
+  bool _isOnBoardAssessmentInComplete = false;
   int currentMonth;
   int currentYear;
   String monthName;
@@ -52,12 +52,12 @@ class _MeScreenState extends State<MeScreen>
   void initState() {
     super.initState();
 
-    getUserProfileDetails();
+    _getUserProfileDetails();
 
     _calendarScreenBloc = CalendarScreenBloc();
     userLogHeadacheDataCalendarModel = UserLogHeadacheDataCalendarModel();
     _animationController =
-        AnimationController(duration: Duration(milliseconds: 350), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 350), reverseDuration: Duration(milliseconds: 0), vsync: this);
 
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
@@ -125,17 +125,13 @@ class _MeScreenState extends State<MeScreen>
             color: Constant.chatBubbleGreen),
       ),
     ];
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _getUserCurrentHeadacheData();
-    });
   }
 
   @override
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     _getUserCurrentHeadacheData();
-    getUserProfileDetails();
+    _getUserProfileDetails();
   }
 
   @override
@@ -456,6 +452,7 @@ class _MeScreenState extends State<MeScreen>
     } catch (e) {
       print(e);
     }
+    _calendarScreenBloc.dispose();
     super.dispose();
   }
 
@@ -467,13 +464,17 @@ class _MeScreenState extends State<MeScreen>
     print('isProfileInComplete $isProfileInComplete');
     print('_isOnBoardAssessmentInComplete$_isOnBoardAssessmentInComplete');
 
-    if (_isOnBoardAssessmentInComplete && (isProfileInComplete != null || isProfileInComplete)) {
+    if (!_isOnBoardAssessmentInComplete && (isProfileInComplete ?? false)) {
       print('in _checkForProfileIncomplete');
       setState(() {
         _isOnBoardAssessmentInComplete = isProfileInComplete;
         if (_isOnBoardAssessmentInComplete) {
           _animationController.forward();
         }
+      });
+    } else {
+      setState(() {
+        _animationController.reverse();
       });
     }
   }
@@ -502,8 +503,21 @@ class _MeScreenState extends State<MeScreen>
 
   void requestService(
       String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
-    await _calendarScreenBloc.fetchCalendarTriggersData(
-        firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
+    if(currentUserHeadacheModel == null) {
+      await _calendarScreenBloc.fetchUserOnGoingHeadache();
+      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+      if(userProfileInfoData != null)
+        await _getUserCurrentHeadacheData();
+
+      if(currentUserHeadacheModel != null) {
+        setState(() {
+          _isOnBoardAssessmentInComplete = true;
+          _animationController.forward();
+        });
+      }
+    }
+    await _calendarScreenBloc.fetchCalendarTriggersData(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
   }
 
   void setUserWeekData(
@@ -588,14 +602,13 @@ class _MeScreenState extends State<MeScreen>
     print(currentWeekConsData);
   }
 
-  void getUserProfileDetails() async {
+  void _getUserProfileDetails() async {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     setState(() {
       userName = userProfileInfoData.firstName;
     });
-
-}
+  }
 
   Future<void> _getUserCurrentHeadacheData() async {
     /*if(_timer == null) {
@@ -624,6 +637,7 @@ class _MeScreenState extends State<MeScreen>
         } catch(e) {
           print(e);
         }*/
+        _isOnBoardAssessmentInComplete = false;
         print('_checkForProfileIncomplete');
         _checkForProfileIncomplete();
       }
@@ -681,7 +695,6 @@ class _MeScreenState extends State<MeScreen>
 
   void _navigateToOtherScreen() async{
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
-      //_navigateToAddHeadacheScreen();
       await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
     } else {
       await widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter, null);
