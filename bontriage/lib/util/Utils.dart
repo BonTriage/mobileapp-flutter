@@ -565,7 +565,8 @@ class Utils {
         position = await Geolocator.getCurrentPosition();
       }
     } else {
-      position = await Geolocator.getCurrentPosition();
+      if(permission != LocationPermission.deniedForever)
+        position = await Geolocator.getCurrentPosition();
     }
 
     return position;

@@ -90,97 +90,95 @@ class _SecondStepCompassResultTutorialsState
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-          maxHeight: 220, maxWidth: MediaQuery.of(context).size.width),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Constant.backgroundColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      tutorialTitleByIndex(),
-                      style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 16,
-                          fontFamily: Constant.jostMedium),
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Constant.backgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    tutorialTitleByIndex(),
+                    style: TextStyle(
+                        color: Constant.chatBubbleGreen,
+                        fontSize: 16,
+                        fontFamily: Constant.jostMedium),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(
-                      Constant.chatBubbleHorizontalPadding, 20, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image(
-                          image: AssetImage(Constant.closeIcon),
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 100,
-              width: 250,
-              child: PageView.builder(
-                itemCount: _pageViewWidgets.length,
-                controller: _pageController,
-                onPageChanged: (currentPage) {
-                  setState(() {
-                    currentPageIndex = currentPage;
-                  });
-                  print(currentPage);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: CustomScrollBar(
-                      isAlwaysShown: true,
-                      controller: _scrollControllerList[index],
-                      child: SingleChildScrollView(
-                        physics: Utils.getScrollPhysics(),
-                        controller: _scrollControllerList[index],
-                        child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: _pageViewWidgets[index],
-                            )),
-                      ),
-                    ),
-                  );
-                },
               ),
+              Container(
+                padding: EdgeInsets.fromLTRB(
+                    Constant.chatBubbleHorizontalPadding, 20, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 180,
+            width: 250,
+            child: PageView.builder(
+              itemCount: _pageViewWidgets.length,
+              controller: _pageController,
+              onPageChanged: (currentPage) {
+                setState(() {
+                  currentPageIndex = currentPage;
+                });
+                print(currentPage);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomScrollBar(
+                    isAlwaysShown: true,
+                    controller: _scrollControllerList[index],
+                    child: SingleChildScrollView(
+                      physics: Utils.getScrollPhysics(),
+                      controller: _scrollControllerList[index],
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: _pageViewWidgets[index],
+                          )),
+                    ),
+                  ),
+                );
+              },
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-                padding: EdgeInsets.only(bottom: 15),
-                child: _getThreeDotsWidget())
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              padding: EdgeInsets.only(bottom: 15),
+              child: _getThreeDotsWidget())
+        ],
       ),
     );
   }
