@@ -43,6 +43,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   List<SelectedAnswers> selectedAnswers = [];
 
   bool _isDataPopulated = false;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
@@ -223,25 +224,33 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        if (selectedAnswers.length > 0) {
-                                          SelectedAnswers
-                                              logDayNoteSelectedAnswer =
-                                              selectedAnswers.firstWhere(
-                                                  (element) =>
-                                                      element.questionTag ==
-                                                      Constant.logDayNoteTag,
-                                                  orElse: () => null);
-                                          if (logDayNoteSelectedAnswer == null)
-                                            selectedAnswers.add(SelectedAnswers(
-                                                questionTag:
+                                        if (!_isButtonClicked) {
+                                          _isButtonClicked = true;
+                                          if (selectedAnswers.length > 0) {
+                                            SelectedAnswers
+                                            logDayNoteSelectedAnswer =
+                                            selectedAnswers.firstWhere(
+                                                    (element) =>
+                                                element.questionTag ==
                                                     Constant.logDayNoteTag,
-                                                answer: Constant.blankString));
-                                          _onSubmitClicked();
-                                        } else
-                                          Utils.showValidationErrorDialog(
-                                              context,
-                                              Constant
-                                                  .selectAtLeastOneOptionLogDayError);
+                                                orElse: () => null);
+                                            if (logDayNoteSelectedAnswer ==
+                                                null)
+                                              selectedAnswers.add(
+                                                  SelectedAnswers(
+                                                      questionTag:
+                                                      Constant.logDayNoteTag,
+                                                      answer: Constant
+                                                          .blankString));
+                                            _onSubmitClicked();
+                                          } else {
+                                            Utils.showValidationErrorDialog(
+                                                context,
+                                                Constant
+                                                    .selectAtLeastOneOptionLogDayError);
+                                            _isButtonClicked = false;
+                                          }
+                                        }
                                       },
                                       child: Container(
                                         width: 110,
@@ -499,5 +508,6 @@ class _LogDayScreenState extends State<LogDayScreen>
         }
       }
     }
+    _isButtonClicked = false;
   }
 }

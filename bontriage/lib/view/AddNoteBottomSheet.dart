@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
 
 class AddNoteBottomSheet extends StatefulWidget {
@@ -81,21 +82,22 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                   Container(
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
+                      maxLength: 100,
+                      maxLengthEnforced: true,
                       focusNode: _focusNode,
                       controller: _textEditingController,
-                      minLines: 5,
-                      maxLines: 6,
-                      onTap: () {
-                        print('ontap');
-                      },
-                      onEditingComplete: () {
-                        print('onEditingComplete');
+                      maxLines: 3,
+                      onChanged: (value) {
+                        if(value.length > 100) {
+                          _textEditingController.text = value.substring(0, 100);
+                          _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: _textEditingController.text.length));
+                        }
                       },
                       onFieldSubmitted: (value) {
                         widget.addNoteCallback(_textEditingController.text);
                         Navigator.pop(context, _textEditingController.text);
                       },
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.newline,
                       style: TextStyle(
                           fontSize: 15,
                           fontFamily: Constant.jostMedium,
@@ -103,6 +105,11 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                       cursorColor: Constant.unselectedTextColor,
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
+                        counterStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: Constant.jostRegular,
+                          color: Constant.unselectedTextColor,
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 5, horizontal: 10),
                         hintText: 'Add A Note...',
@@ -115,12 +122,12 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3)),
                           borderSide: BorderSide(
-                              color: Constant.backgroundTransparentColor, width: 1),
+                              color: Colors.transparent, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3)),
                           borderSide: BorderSide(
-                              color: Constant.backgroundTransparentColor, width: 1),
+                              color: Colors.transparent, width: 1),
                         ),
                       ),
                     ),

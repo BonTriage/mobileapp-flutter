@@ -311,7 +311,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   Future<bool> _onBackPressed() async {
-    if(_isButtonClicked) {
+    if(!_isButtonClicked) {
       _isButtonClicked = true;
       if (_currentPageIndex == 0) {
         Future.delayed(Duration(milliseconds: 350), () {

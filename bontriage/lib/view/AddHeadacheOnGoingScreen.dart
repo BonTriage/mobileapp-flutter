@@ -45,6 +45,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   bool _isDataPopulated = false;
   bool _isFromRecordScreen = false;
   CurrentUserHeadacheModel _currentUserHeadacheModel;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
@@ -183,7 +184,10 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                     children: [
                                       BouncingWidget(
                                         onPressed: () {
-                                          saveDataInLocalDataBaseOrServer();
+                                          if (!_isButtonClicked) {
+                                            _isButtonClicked = true;
+                                            saveDataInLocalDataBaseOrServer();
+                                          }
                                         },
                                         child: Container(
                                           width: 110,
@@ -441,6 +445,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       //show headacheType selection error
       print('headache type error');
       Utils.showValidationErrorDialog(context, 'Please select a headache type.');
+      _isButtonClicked = false;
     }
   }
 
@@ -462,6 +467,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
       }
     }
+    _isButtonClicked = false;
   }
 
   void saveAndUpdateDataInLocalDatabase(UserAddHeadacheLogModel userAddHeadacheLogModel) async {
