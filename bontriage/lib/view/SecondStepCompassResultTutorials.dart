@@ -84,15 +84,15 @@ class _SecondStepCompassResultTutorialsState
       ),
     ];
 
-    _scrollControllerList = List.generate(_pageViewWidgets.length, (index) => ScrollController());
+    _scrollControllerList =
+        List.generate(_pageViewWidgets.length, (index) => ScrollController());
   }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: 220,
-      ),
+          maxHeight: 220, maxWidth: MediaQuery.of(context).size.width),
       child: Container(
         decoration: BoxDecoration(
           color: Constant.backgroundColor,
@@ -140,7 +140,9 @@ class _SecondStepCompassResultTutorialsState
             SizedBox(
               height: 10,
             ),
-            Expanded(
+            Container(
+              height: 100,
+              width: 250,
               child: PageView.builder(
                 itemCount: _pageViewWidgets.length,
                 controller: _pageController,
