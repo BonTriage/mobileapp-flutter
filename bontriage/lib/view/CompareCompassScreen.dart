@@ -7,6 +7,10 @@ import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
 class CompareCompassScreen extends StatefulWidget {
+  final Future<dynamic> Function(String) openActionSheetCallback;
+
+  const CompareCompassScreen({Key key, this.openActionSheetCallback}) : super(key: key);
+
   @override
   _CompareCompassScreenState createState() => _CompareCompassScreenState();
 }
@@ -89,18 +93,23 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
-              decoration: BoxDecoration(
-                color: Constant.compassMyHeadacheTextColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'My headache',
-                style: TextStyle(
-                    color: Constant.locationServiceGreen,
-                    fontSize: 16,
-                    fontFamily: Constant.jostRegular),
+            GestureDetector(
+              onTap: () {
+                _openHeadacheTypeActionSheet();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Constant.compassMyHeadacheTextColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'My headache',
+                  style: TextStyle(
+                      color: Constant.locationServiceGreen,
+                      fontSize: 16,
+                      fontFamily: Constant.jostRegular),
+                ),
               ),
             ),
             SizedBox(
@@ -444,5 +453,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> {
           });
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
     });
+  }
+
+  void _openHeadacheTypeActionSheet() async {
+    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.compassHeadacheTypeActionSheet);
+    print(resultFromActionSheet);
   }
 }

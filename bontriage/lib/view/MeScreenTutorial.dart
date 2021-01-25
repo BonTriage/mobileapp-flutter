@@ -224,7 +224,9 @@ class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerPr
 
   void _popOrNavigateToOtherScreen() async {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Constant.profileCompleteScreenRouter);
+
+    if(widget.isFromOnBoard ?? false)
+      Navigator.pushNamed(context, Constant.profileCompleteScreenRouter);
   }
 }
 

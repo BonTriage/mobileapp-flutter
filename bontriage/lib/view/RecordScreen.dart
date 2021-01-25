@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,29 +8,40 @@ class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String) openActionSheetCallback;
 
 
-  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}) : super(key: key);
+  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.openActionSheetCallback}) : super(key: key);
 
   @override
   _RecordScreenState createState() => _RecordScreenState();
 }
 
-class _RecordScreenState extends State<RecordScreen> {
+class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderStateMixin {
   int currentIndex = 0;
+  TabController _tabController;
 
   @override
   void initState() {
     super.initState();
 
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+
+    _saveRecordTabNavigatorState();
   }
 
   @override
   void didUpdateWidget(RecordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    getTabPosition();
+    //getTabPosition();
 
+    _checkIfAnyButtonClicked();
+  }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,9 +63,11 @@ class _RecordScreenState extends State<RecordScreen> {
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(20)),
                   child: TabBar(
+                    controller: _tabController,
                     onTap: (index) {
                       setState(() {
                         currentIndex = index;
+                        _saveRecordTabNavigatorState();
                       });
                     },
                     labelStyle: TextStyle(
@@ -96,18 +108,11 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 
   void getTabPosition() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String tabPosition =
-        sharedPreferences.getString(Constant.tabNavigatorState);
+    /*SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int tabPosition =
+        sharedPreferences.getInt(Constant.tabNavigatorState);
     print("TabPosition:$tabPosition");
-    print(tabPosition);
-    /*  if(tabPosition == '1') {
-        setState(() {
-          currentIndex = 0;
-           Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "0");
-        });
-    }*/
-
+    print(tabPosition);*/
   }
 
   Widget _buildOffstageNavigator(int index) {
@@ -128,6 +133,7 @@ class _RecordScreenState extends State<RecordScreen> {
         return CompassScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+          openActionSheetCallback: widget.openActionSheetCallback,
         );
       default:
         return Container();
@@ -135,4 +141,31 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 
   void getRecordsTabPosition() {}
+
+  Future<void> _saveRecordTabNavigatorState() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setInt(Constant.recordTabNavigatorState, currentIndex);
+  }
+
+  Future<void> _checkIfAnyButtonClicked() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+    if(isSeeMoreClicked == Constant.trueString) {
+      _tabController.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.linear);
+      setState(() {
+        currentIndex = 0;
+        _saveRecordTabNavigatorState();
+      });
+    } else if (isViewTrendsClicked == Constant.trueString) {
+      sharedPreferences.remove(Constant.isViewTrendsClicked);
+      _saveRecordTabNavigatorState();
+      setState(() {
+        currentIndex = 2;
+      });
+      _tabController.animateTo(2, duration: Duration(milliseconds: 300), curve: Curves.linear);
+    }
+  }
 }

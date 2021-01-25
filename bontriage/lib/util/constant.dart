@@ -363,6 +363,9 @@ class Constant {
   static String currentIndexOfTabBar = 'currentIndexOfTabBar';
   static String currentIndexOfCalenderTabBar = 'currentIndexOfCalenderTabBar';
   static String tabNavigatorState = '0';
+  static const String recordTabNavigatorState = '0';
+  static const String isSeeMoreClicked = 'isSeeMoreClicked';
+  static const String isViewTrendsClicked = 'isViewTrendsClicked';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
   static const String firstCompassEventStep = "1.1";
@@ -379,6 +382,7 @@ class Constant {
   static const String notificationEventStep = '3.2';
   static const String postNotificationEventStep = '3.3';
   static const String userID = "4214";
+  static const String trueString = 'true';
 
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
@@ -555,6 +559,9 @@ class Constant {
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
   static String selectAtLeastOneOptionLogDayError = 'Please select at least one option.';
+  static const String singleHeadache = 'Single headache:';
+  static const String summaryOfAllHeadacheTypes = 'Summary of all my headache types';
+  static const String selectTheSavedHeadacheType = 'Select the saved Headache Type that you would like to view.';
 
   //tutorial text
   static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
@@ -566,6 +573,7 @@ class Constant {
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
   static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
+  static const String compassHeadacheTypeActionSheet = 'compassHeadacheTypeActionSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -678,6 +686,7 @@ class Constant {
   static String moreUnselected = 'images/more_unselected.png';
   static String moreSelected = 'images/more_selected.png';
   static String errorGreen = 'images/error_green.png';
+  static const String closeIcon2 = 'images/close_icon_2.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

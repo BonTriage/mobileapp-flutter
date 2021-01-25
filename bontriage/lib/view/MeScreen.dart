@@ -226,6 +226,7 @@ class _MeScreenState extends State<MeScreen>
                                         onTap: () {
                                           widget.navigateToOtherScreenCallback(TabNavigatorRoutes.recordsRoot,
                                               null);
+                                          Utils.saveDataInSharedPreference(Constant.isSeeMoreClicked, 'true');
                                         },
                                         child: Text(
                                           'SEE MORE >',

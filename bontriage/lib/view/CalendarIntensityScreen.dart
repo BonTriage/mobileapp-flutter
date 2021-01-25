@@ -8,6 +8,7 @@ import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
@@ -54,10 +55,10 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        _callApiService();
       });
     });
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    _callApiService();
 
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
@@ -72,7 +73,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
             currentMonth, currentYear, totalDaysInCurrentMonth);
         _calendarScreenBloc.initNetworkStreamController();
 
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        _callApiService();
       }
     });
   }
@@ -103,8 +104,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     });*/
-
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    _callApiService();
   }
 
   @override
@@ -286,8 +286,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                               errorMessage: snapshot.error.toString(),
                               tapToRetryFunction: () {
                                 Utils.showApiLoaderDialog(context);
-                                requestService(firstDayOfTheCurrentMonth,
-                                    lastDayOfTheCurrentMonth);
+                                _callApiService();
                               },
                             );
                           } else {
@@ -646,9 +645,9 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        _callApiService();
       });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      _callApiService();
     });
   }
 
@@ -667,5 +666,16 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
         );
       },
     );
+  }
+
+  void _callApiService() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+
+    if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
   }
 }

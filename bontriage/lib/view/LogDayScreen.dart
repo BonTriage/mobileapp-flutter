@@ -90,19 +90,11 @@ class _LogDayScreenState extends State<LogDayScreen>
     List<SelectedAnswers> doubleTappedSelectedAnswerList = [];
     doubleTappedSelectedAnswerList.addAll(selectedAnswers);
 
-    /*if(widget.logDayScreenArgumentModel != null && widget.logDayScreenArgumentModel.isFromRecordScreen) {
-      String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
-      await _logDayBloc.fetchCalendarHeadacheLogDayData(selectedDate);
-      selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
-    } else {
-      _logDayBloc.fetchLogDayData();
-    }*/
+    String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
 
-    String selectedDate =
-        '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
     await _logDayBloc.fetchCalendarHeadacheLogDayData(selectedDate);
-    selectedAnswers =
-        _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
+
+    selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
 
     if (widget.logDayScreenArgumentModel == null ||
         (widget.logDayScreenArgumentModel != null &&

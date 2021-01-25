@@ -8,9 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CompassScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String) openActionSheetCallback;
 
   const CompassScreen(
-      {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback})
+      {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback})
       : super(key: key);
 
   @override
@@ -144,8 +145,8 @@ class _CompassScreenState extends State<CompassScreen> {
     if (currentPositionOfTabBar == 1) {
       setState(() {
         pageViewWidgetList = [
-          OverTimeCompassScreen(),
-          CompareCompassScreen(),
+          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback,),
+          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback,),
         ];
       });
     }

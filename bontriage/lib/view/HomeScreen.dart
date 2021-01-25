@@ -6,6 +6,7 @@ import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MeScreenTutorial.dart';
@@ -229,11 +230,22 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => SaveAndExitActionSheet());
         return resultOfActionSheet;
         break;
+      case Constant.compassHeadacheTypeActionSheet:
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Constant.backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => CompassHeadacheTypeActionSheet());
+        return resultOfActionSheet;
+        break;
       default: return null;
     }
   }
 
-  Future<dynamic> navigateToOtherScreen(String routerName,dynamic argument) async {
+  Future<dynamic> navigateToOtherScreen(String routerName, dynamic argument) async {
     if (routerName == TabNavigatorRoutes.recordsRoot) {
       await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
       await saveCurrentIndexOfTabBar(1);
