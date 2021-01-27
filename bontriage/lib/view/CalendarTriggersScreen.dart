@@ -83,6 +83,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
         _calendarScreenBloc.initNetworkStreamController();
 
+        print('show api loader 2');
         widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
           _calendarScreenBloc.enterSomeDummyDataToStreamController();
           requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
@@ -95,8 +96,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
   @override
   void didUpdateWidget(CalendarTriggersScreen oldWidget) {
-    getCurrentPositionOfTabBar();
     super.didUpdateWidget(oldWidget);
+    //getCurrentPositionOfTabBar();
   }
 
   @override
@@ -621,8 +622,9 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
 
-    if(isSeeMoreClicked.isEmpty) {
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty) {
       _calendarScreenBloc.initNetworkStreamController();
       currentMonth = _dateTime.month;
       currentYear = _dateTime.year;
@@ -637,10 +639,15 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
       if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
         _calendarScreenBloc.initNetworkStreamController();
 
-        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-          _calendarScreenBloc.enterSomeDummyDataToStreamController();
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-        });
+        String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+        if(isViewTrendsClicked.isEmpty) {
+          print('show api loader 3');
+          widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+          });
+        }
 
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       }
@@ -650,19 +657,27 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   }
 
   void callAPIService() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    //try {
+      SharedPreferences sharedPreferences = await SharedPreferences
+          .getInstance();
+      int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+      int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+      String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
 
-    if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
-        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-          _calendarScreenBloc.enterSomeDummyDataToStreamController();
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if(isViewTrendsClicked.isEmpty) {
+            print('show api loader 1');
+            widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+              _calendarScreenBloc.enterSomeDummyDataToStreamController();
+              requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+            });
+          }
         });
-      });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    }
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+    //} catch(e) {
+      //print(e);
+    //}
   }
 }

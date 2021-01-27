@@ -34,7 +34,6 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
   void didUpdateWidget(RecordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     //getTabPosition();
-
     _checkIfAnyButtonClicked();
   }
 
@@ -66,6 +65,7 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
                     controller: _tabController,
                     onTap: (index) {
                       setState(() {
+                        print('set state 3');
                         currentIndex = index;
                         _saveRecordTabNavigatorState();
                       });
@@ -156,14 +156,18 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
     if(isSeeMoreClicked == Constant.trueString) {
       _tabController.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.linear);
       setState(() {
+        print('set state 1');
         currentIndex = 0;
         _saveRecordTabNavigatorState();
       });
     } else if (isViewTrendsClicked == Constant.trueString) {
-      sharedPreferences.remove(Constant.isViewTrendsClicked);
-      _saveRecordTabNavigatorState();
+      Future.delayed(Duration(seconds: 1), () {
+        sharedPreferences.remove(Constant.isViewTrendsClicked);
+      });
       setState(() {
+        print('set state 2');
         currentIndex = 2;
+        _saveRecordTabNavigatorState();
       });
       _tabController.animateTo(2, duration: Duration(milliseconds: 300), curve: Curves.linear);
     }

@@ -42,6 +42,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void didUpdateWidget(CalendarScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     getCurrentPositionOfTabBar();
+    print('in did update widget calendar screen');
   }
 
   @override

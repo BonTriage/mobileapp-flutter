@@ -224,7 +224,7 @@ class _MeScreenState extends State<MeScreen>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          widget.navigateToOtherScreenCallback(TabNavigatorRoutes.recordsRoot,
+                                          widget.navigateToOtherScreenCallback(TabNavigatorRoutes.calenderRoute,
                                               null);
                                           Utils.saveDataInSharedPreference(Constant.isSeeMoreClicked, 'true');
                                         },
@@ -612,15 +612,14 @@ class _MeScreenState extends State<MeScreen>
   }
 
   Future<void> _getUserCurrentHeadacheData() async {
-    /*if(_timer == null) {
-      _timer = Timer.periodic(Duration(milliseconds: 300), (_) {
-        _getUserCurrentHeadacheData1();
-      });
-    }*/
-    //_getUserCurrentHeadacheData1();
-    print('in getUserCurrentHeadacheData');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+
+    String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+    if (isViewTrendsClicked == Constant.trueString) {
+      await widget.navigateToOtherScreenCallback(TabNavigatorRoutes.trendsRoute, null);
+    }
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if(currentPositionOfTabBar == 0 && userProfileInfoData != null) {
@@ -632,12 +631,6 @@ class _MeScreenState extends State<MeScreen>
           _animationController.forward();
         });
       } else {
-        /*try {
-          _timer.cancel();
-          _timer = null;
-        } catch(e) {
-          print(e);
-        }*/
         _isOnBoardAssessmentInComplete = false;
         print('_checkForProfileIncomplete');
         _checkForProfileIncomplete();
@@ -670,7 +663,6 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _navigateToAddHeadacheScreen() async{
-
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
 

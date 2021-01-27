@@ -53,10 +53,9 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        _callApiService();
-      });
+      print('show api loader 4');
+      _showApiLoaderDialog();
+
     });
     _callApiService();
 
@@ -672,10 +671,28 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    int recordTabBarPosition = 0;
+
+    try {
+      recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    } catch (e) {
+      print(e);
+    }
 
     if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
+  }
+
+  void _showApiLoaderDialog() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+    if (isViewTrendsClicked.isEmpty) {
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        _callApiService();
+      });
     }
   }
 }

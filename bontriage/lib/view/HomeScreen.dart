@@ -246,10 +246,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<dynamic> navigateToOtherScreen(String routerName, dynamic argument) async {
-    if (routerName == TabNavigatorRoutes.recordsRoot) {
+    if (routerName == TabNavigatorRoutes.calenderRoute || routerName == TabNavigatorRoutes.trendsRoute) {
       await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
       await saveCurrentIndexOfTabBar(1);
       setState(() {
+        print('set state 4');
         currentIndex = 1;
       });
     } else {

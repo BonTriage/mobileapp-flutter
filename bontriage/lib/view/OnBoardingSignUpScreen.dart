@@ -46,9 +46,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     emailTextEditingController.dispose();
     passwordTextEditingController.dispose();
+    signUpScreenBloc.dispose();
+    super.dispose();
   }
 
   @override

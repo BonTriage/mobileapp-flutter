@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class AddHeadacheSuccessScreen extends StatefulWidget {
@@ -111,7 +112,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 50),
                           child: BouncingWidget(
                             onPressed: () {
-                              //Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter);
+                              _popAndSaveDataInSharePreference();
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -142,5 +143,10 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
         ),
       ),
     );
+  }
+
+  void _popAndSaveDataInSharePreference() async {
+    await Utils.saveDataInSharedPreference(Constant.isViewTrendsClicked, Constant.trueString);
+    Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
   }
 }
