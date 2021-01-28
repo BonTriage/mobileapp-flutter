@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
@@ -15,9 +16,31 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getTutorialsState();
+    //getTutorialsState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showGeneralDialog(
+          context: context,
+          barrierColor: Colors.transparent,
+          pageBuilder: (buildContext, animation, secondaryAnimation) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: TrendsScreenTutorialDialog(),
+            );
+          }
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    try {
+      timer.cancel();
+    } catch (e) {
+      print(e);
+    }
+    super.dispose();
   }
 
   @override

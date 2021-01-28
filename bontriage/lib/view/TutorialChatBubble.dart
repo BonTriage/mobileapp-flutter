@@ -10,7 +10,7 @@ import 'CustomScrollBar.dart';
 
 class TutorialChatBubble extends StatefulWidget {
   final String chatBubbleText;
-  final List<TextSpan> textSpanList;
+  final List<InlineSpan> textSpanList;
   final int currentIndex;
   final Function backButtonFunction;
   final Function nextButtonFunction;
@@ -36,7 +36,7 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
     _animationController = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     _animationController.forward();
     setVolumeIcon();
-    TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    //TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
 
   @override
@@ -76,8 +76,9 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
       _animationController.forward();
     }
 
-    if (isVolumeOn)
+    if (isVolumeOn) {
       TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    }
 
     try {
       _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);

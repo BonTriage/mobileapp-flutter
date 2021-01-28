@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/TutorialChatBubble.dart';
 
-class MeScreenTutorial extends StatefulWidget {
+class MeScreenTutorialDialog extends StatefulWidget {
   final GlobalKey logDayGlobalKey;
   final GlobalKey addHeadacheGlobalKey;
   final GlobalKey recordsGlobalKey;
   final bool isFromOnBoard;
 
-  const MeScreenTutorial({Key key, @required this.logDayGlobalKey, @required this.addHeadacheGlobalKey, @required this.recordsGlobalKey, this.isFromOnBoard = false}) : super(key: key);
+  const MeScreenTutorialDialog({Key key, @required this.logDayGlobalKey, @required this.addHeadacheGlobalKey, @required this.recordsGlobalKey, this.isFromOnBoard = false}) : super(key: key);
 
   @override
-  _MeScreenTutorialState createState() => _MeScreenTutorialState();
+  _MeScreenTutorialDialogState createState() => _MeScreenTutorialDialogState();
 }
 
-class _MeScreenTutorialState extends State<MeScreenTutorial> with SingleTickerProviderStateMixin {
+class _MeScreenTutorialDialogState extends State<MeScreenTutorialDialog> with SingleTickerProviderStateMixin {
 
   bool _shouldClip;
   Offset _logDayOffset;

@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
           pageBuilder: (buildContext, animation, secondaryAnimation) {
             return Scaffold(
               backgroundColor: Colors.transparent,
-              body: MeScreenTutorial(
+              body: MeScreenTutorialDialog(
                 logDayGlobalKey: _logDayGlobalKey,
                 recordsGlobalKey: _recordsGlobalKey,
                 addHeadacheGlobalKey: _addHeadacheGlobalKey,

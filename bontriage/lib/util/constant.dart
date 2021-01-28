@@ -562,6 +562,11 @@ class Constant {
   static const String singleHeadache = 'Single headache:';
   static const String summaryOfAllHeadacheTypes = 'Summary of all my headache types';
   static const String selectTheSavedHeadacheType = 'Select the saved Headache Type that you would like to view.';
+  static const String trendsTutorialText1 = 'For days you have completed your daily log, these dots represent the data you inputted.';
+  static const String trendsTutorialText2 = 'A filled circle (•) indicates if a certain behavior, potential trigger, or medication was present on a given day.';
+  static const String trendsTutorialText3 = 'An outlined circle () means you did not experience that item on a given day.';
+  static const String trendsTutorialText4 = 'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
+  static const String trendsTutorialText5 = 'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
 
   //tutorial text
   static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
@@ -687,6 +692,8 @@ class Constant {
   static String moreSelected = 'images/more_selected.png';
   static String errorGreen = 'images/error_green.png';
   static const String closeIcon2 = 'images/close_icon_2.png';
+  static const String graph = 'images/graph.png';
+  static const String trendsTutorialArrowUp = 'images/trends_tutorial_arrow_up.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
