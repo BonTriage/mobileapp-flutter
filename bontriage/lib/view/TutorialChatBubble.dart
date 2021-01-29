@@ -14,8 +14,11 @@ class TutorialChatBubble extends StatefulWidget {
   final int currentIndex;
   final Function backButtonFunction;
   final Function nextButtonFunction;
+  final bool isShowBackNextButton;
+  final bool isFromTrends;
+  final bool shouldSpeak;
 
-  const TutorialChatBubble({Key key, this.chatBubbleText, this.textSpanList, this.currentIndex = 0, this.backButtonFunction, this.nextButtonFunction}) : super(key: key);
+  const TutorialChatBubble({Key key, this.chatBubbleText, this.textSpanList, this.currentIndex = 0, this.backButtonFunction, this.nextButtonFunction, this.isShowBackNextButton = true, this.isFromTrends = false, this.shouldSpeak = true}) : super(key: key);
   @override
   _TutorialChatBubbleState createState() => _TutorialChatBubbleState();
 }
@@ -36,6 +39,7 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
     _animationController = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     _animationController.forward();
     setVolumeIcon();
+
     //TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
 
@@ -77,6 +81,8 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
     }
 
     if (isVolumeOn) {
+
+
       TextToSpeechRecognition.speechToText(widget.chatBubbleText);
     }
 
@@ -192,28 +198,31 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
                     opacity:
                     (widget.currentIndex != 0) ? 1.0 : 0.0,
                     duration: Duration(milliseconds: 250),
-                    child: BouncingWidget(
-                      duration: Duration(milliseconds: 100),
-                      scaleFactor: 1.5,
-                      onPressed: () {
-                        widget.backButtonFunction();
-                      },
-                      child: Container(
-                        width: 120,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: Color(0xffafd794),
-                          borderRadius:
-                          BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: Text(
-                            Constant.back,
-                            style: TextStyle(
-                              color:
-                              Constant.bubbleChatTextView,
-                              fontSize: 14,
-                              fontFamily: Constant.jostMedium,
+                    child: Visibility(
+                      visible: widget.isShowBackNextButton,
+                      child: BouncingWidget(
+                        duration: Duration(milliseconds: 100),
+                        scaleFactor: 1.5,
+                        onPressed: () {
+                          widget.backButtonFunction();
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xffafd794),
+                            borderRadius:
+                            BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              Constant.back,
+                              style: TextStyle(
+                                color:
+                                Constant.bubbleChatTextView,
+                                fontSize: 14,
+                                fontFamily: Constant.jostMedium,
+                              ),
                             ),
                           ),
                         ),
@@ -223,27 +232,30 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: BouncingWidget(
-                    duration: Duration(milliseconds: 100),
-                    scaleFactor: 1.5,
-                    onPressed: () {
-                      TextToSpeechRecognition.stopSpeech();
-                      widget.nextButtonFunction();
-                    },
-                    child: Container(
-                      width: 120,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Color(0xffafd794),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          Constant.next,
-                          style: TextStyle(
-                            color: Constant.bubbleChatTextView,
-                            fontSize: 14,
-                            fontFamily: Constant.jostMedium,
+                  child: Visibility(
+                    visible: widget.isShowBackNextButton,
+                    child: BouncingWidget(
+                      duration: Duration(milliseconds: 100),
+                      scaleFactor: 1.5,
+                      onPressed: () {
+                        TextToSpeechRecognition.stopSpeech();
+                        widget.nextButtonFunction();
+                      },
+                      child: Container(
+                        width: 120,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Color(0xffafd794),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            Constant.next,
+                            style: TextStyle(
+                              color: Constant.bubbleChatTextView,
+                              fontSize: 14,
+                              fontFamily: Constant.jostMedium,
+                            ),
                           ),
                         ),
                       ),

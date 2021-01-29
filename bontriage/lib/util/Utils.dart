@@ -9,6 +9,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
+import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -570,5 +571,18 @@ class Utils {
     }
 
     return position;
+  }
+
+  static void showTrendsTutorialDialog(BuildContext context) {
+    showGeneralDialog(
+        context: context,
+        barrierColor: Colors.transparent,
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: TrendsScreenTutorialDialog(),
+          );
+        }
+    );
   }
 }
