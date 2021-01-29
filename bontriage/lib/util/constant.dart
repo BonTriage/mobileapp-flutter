@@ -597,7 +597,7 @@ class Constant {
   static Color pinkTriggerColor = Color(0xffF479D9);
 
   static Color mildTriggerColor = Color(0xff55AE88);
-  static Color moderateTriggerColor = Color(0xfff69466);
+  static Color moderateTriggerColor = Color(0xfff69946);
   static Color severeTriggerColor = Color(0xffEB5757);
   static Color migraineColor = Color(0xffB8E1FF);
 
@@ -617,7 +617,7 @@ class Constant {
   static Color compareCompassMonthSelectedColor = Color(0xffB8FFFF);
   static const Color compareCompassChartValueColor = Color(0x597E00CB);
   static const Color compareCompassChartFirstLoggedValueColor = Color(0x007E00CB);
-
+  static  Color barTutorialsTapColor =Color.fromARGB(255,202, 215, 191);
 
   //images
   static String userAvatar = 'images/user_avatar.png';
@@ -666,6 +666,8 @@ class Constant {
 
   static String barGraph = 'images/union.png';
   static String lineGraph = 'images/vector.png';
+  static String upperArrow = 'images/upperArrow.png';
+  static String barQuestionMark = 'images/bar_question_mark.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";

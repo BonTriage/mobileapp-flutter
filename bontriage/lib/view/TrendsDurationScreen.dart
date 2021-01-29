@@ -5,12 +5,12 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
-class TrendsIntensityScreen extends StatefulWidget {
+class TrendsDurationScreen extends StatefulWidget {
   @override
-  _TrendsIntensityScreenState createState() => _TrendsIntensityScreenState();
+  _TrendsDurationScreenState createState() => _TrendsDurationScreenState();
 }
 
-class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
+class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -45,23 +45,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
-    final barGroup1 = makeGroupData(0, 10, 8, 0, 8, 10, 9, 0);
-    final barGroup2 = makeGroupData(1, 0, 4, 8, 0, 2, 4, 9);
-    final barGroup3 = makeGroupData(2, 0, 5, 4, 9, 0, 3, 6);
-    final barGroup4 = makeGroupData(3, 0, 2, 6, 9, 2, 0, 9);
-    //   final barGroup5 = makeGroupData(4, 0, 2, 6, 9, 2, 0, 9);
-    /*  final barGroup5 = makeGroupData(4, 0, 6);
-    final barGroup6 = makeGroupData(5, 0, 1.5);
-    final barGroup7 = makeGroupData(6, 0, 1.5);*/
+    final barGroup1 = makeGroupData(0, 60, 0, 0, 0, 0, 45, 0);
+    final barGroup2 = makeGroupData(1, 0, 12, 0, 0, 45, 40, 0);
+    final barGroup3 = makeGroupData(2, 0, 45, 24, 0, 0, 34, 0);
+    final barGroup4 = makeGroupData(3, 0, 12, 46, 0, 30, 0, 9);
+
 
     final items = [
       barGroup1,
       barGroup2,
       barGroup3,
       barGroup4,
-      // barGroup5,
-      /*  barGroup6,
-      barGroup7,*/
     ];
 
     rawBarGroups = items;
@@ -139,14 +133,14 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: BarChart(
                 BarChartData(
-                  maxY: 10,
+                  maxY: 60,
                   minY: 0,
                   groupsSpace: 10,
                   axisTitleData: FlAxisTitleData(
                       show: true,
                       leftTitle: AxisTitle(
                           showTitle: true,
-                          titleText: 'Maximum Intensity',
+                          titleText: 'Headache Duration (Hours)',
                           textStyle: TextStyle(
                               color: Color(0xffCAD7BF),
                               fontFamily: 'JostRegular',
@@ -165,9 +159,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                               weekDay +
                                   '\n' +
                                   (rod.y.toInt()).toString() +
-                                  '/10 Int.',
+                                  ' hours',
                               TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontFamily: 'JostRegular',
                                   fontSize: 12));
                         },
@@ -202,7 +196,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: true,
-                    checkToShowHorizontalLine: (value) => value % 2 == 0,
+                    checkToShowHorizontalLine: (value) => value % 10 == 0,
                     getDrawingHorizontalLine: (value) {
                       if (value == 0) {
                         return FlLine(
@@ -233,12 +227,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                             return 'Week 3';
                           case 3:
                             return 'Week 4';
-                          case 4:
-                            return 'Fr';
-                          case 5:
-                            return 'St';
-                          case 6:
-                            return 'Sn';
                           default:
                             return '';
                         }
@@ -255,17 +243,19 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                       getTitles: (value) {
                         if (value == 0) {
                           return '0';
-                        } else if (value == 2) {
-                          return '2';
-                        } else if (value == 4) {
-                          return '4';
-                        } else if (value == 6) {
-                          return '6';
-                        } else if (value == 8) {
-                          return '8';
                         } else if (value == 10) {
                           return '10';
-                        } else {
+                        } else if (value == 20) {
+                          return '20';
+                        } else if (value == 30) {
+                          return '30';
+                        } else if (value == 40) {
+                          return '40';
+                        } else if (value == 50) {
+                          return '50';
+                        } else if (value == 60) {
+                          return '60';
+                        }else {
                           return '';
                         }
                       },
@@ -306,7 +296,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month - 1);
+                    DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
                     _onStartDateSelected(dateTime);
                   },
@@ -340,7 +330,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month + 1);
+                    DateTime(_dateTime.year, _dateTime.month + 1);
                     Duration duration = dateTime.difference(DateTime.now());
                     if (duration.inSeconds < 0) {
                       _dateTime = dateTime;
@@ -364,74 +354,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.mildTriggerColor,
-                    shape: BoxShape.rectangle,
-                  ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Mild',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.moderateTriggerColor,
-                    shape: BoxShape.rectangle,
-                  ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Moderate',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.severeTriggerColor,
-                    shape: BoxShape.rectangle,
-                  ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Severe',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
+
           ],
         ),
       ),
@@ -504,9 +427,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
         ),
         context: context,
         builder: (context) => DateTimePicker(
-              cupertinoDatePickerMode: cupertinoDatePickerMode,
-              onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));
+          cupertinoDatePickerMode: cupertinoDatePickerMode,
+          onDateTimeSelected: _getDateTimeCallbackFunction(0),
+        ));
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -542,23 +465,11 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
   }
 
   Color setToolTipColor() {
-    if (clickedValue != null) {
-      if (clickedValue > 1 && clickedValue <= 3) {
-        return Constant.mildTriggerColor;
-      } else if (clickedValue >= 4 && clickedValue <= 7) {
-        return Constant.moderateTriggerColor;
-      } else
-        return Constant.severeTriggerColor;
-    }
-    return Colors.transparent;
+
+    return Constant.migraineColor;
   }
 
   List<Color> setBarChartColor(double barChartValue) {
-    if (barChartValue > 1 && barChartValue <= 3) {
-      return [Constant.mildTriggerColor];
-    } else if (barChartValue >= 4 && barChartValue <= 7) {
-      return [Constant.moderateTriggerColor];
-    } else
-      return [Constant.severeTriggerColor];
+      return [Constant.migraineColor];
   }
 }

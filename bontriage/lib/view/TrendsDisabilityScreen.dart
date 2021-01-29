@@ -5,12 +5,12 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
-class TrendsIntensityScreen extends StatefulWidget {
+class TrendsDisabilityScreen extends StatefulWidget {
   @override
-  _TrendsIntensityScreenState createState() => _TrendsIntensityScreenState();
+  _TrendsDisabilityScreenState createState() => _TrendsDisabilityScreenState();
 }
 
-class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
+class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -29,8 +29,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
 
   int clickedValue;
 
-  bool isClicked = false;
-
   @override
   void initState() {
     super.initState();
@@ -45,14 +43,11 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
-    final barGroup1 = makeGroupData(0, 10, 8, 0, 8, 10, 9, 0);
-    final barGroup2 = makeGroupData(1, 0, 4, 8, 0, 2, 4, 9);
-    final barGroup3 = makeGroupData(2, 0, 5, 4, 9, 0, 3, 6);
-    final barGroup4 = makeGroupData(3, 0, 2, 6, 9, 2, 0, 9);
-    //   final barGroup5 = makeGroupData(4, 0, 2, 6, 9, 2, 0, 9);
-    /*  final barGroup5 = makeGroupData(4, 0, 6);
-    final barGroup6 = makeGroupData(5, 0, 1.5);
-    final barGroup7 = makeGroupData(6, 0, 1.5);*/
+    final barGroup1 = makeGroupData(0, 2, 4, 0, 1, 2, 1, 4);
+    final barGroup2 = makeGroupData(1, 0, 4, 1, 0, 2, 3, 1);
+    final barGroup3 = makeGroupData(2, 0, 2, 1, 3, 0, 1, 4);
+    final barGroup4 = makeGroupData(3, 1, 3, 0, 1, 2, 0, 3);
+
 
     final items = [
       barGroup1,
@@ -139,14 +134,14 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: BarChart(
                 BarChartData(
-                  maxY: 10,
+                  maxY: 4,
                   minY: 0,
                   groupsSpace: 10,
                   axisTitleData: FlAxisTitleData(
                       show: true,
                       leftTitle: AxisTitle(
                           showTitle: true,
-                          titleText: 'Maximum Intensity',
+                          titleText: 'Maximum Disability',
                           textStyle: TextStyle(
                               color: Color(0xffCAD7BF),
                               fontFamily: 'JostRegular',
@@ -155,21 +150,14 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                     enabled: true,
                     touchTooltipData: BarTouchTooltipData(
                         tooltipBgColor: setToolTipColor(),
-                        tooltipPadding:
-                        EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+                        tooltipPadding:EdgeInsets.symmetric(horizontal: 13, vertical: 1),
                         tooltipRoundedRadius: 20,
                         tooltipBottomMargin: 10,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          String weekDay = 'Jan 20';
+                          String weekDay = 'Jan 10';
                           return BarTooltipItem(
-                              weekDay +
-                                  '\n' +
-                                  (rod.y.toInt()).toString() +
-                                  '/10 Int.',
-                              TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'JostRegular',
-                                  fontSize: 12));
+                              weekDay + '\n' + (rod.y.toInt()).toString()+'/4 Dis.', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
+                              fontSize: 12 ));
                         },
                         fitInsideHorizontally: true,
                         fitInsideVertically: true),
@@ -179,10 +167,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                           if (response.spot.spot.y != null) {
                             setState(() {
                               clickedValue = response.spot.spot.y.toInt();
-                              if (response.touchInput is FlLongPressEnd ||
-                                  response.touchInput is FlPanEnd) {
-                                isClicked = true;
-                              }
                             });
                           }
                         }
@@ -202,16 +186,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: true,
-                    checkToShowHorizontalLine: (value) => value % 2 == 0,
+                   drawHorizontalLine: true,
+                   // checkToShowHorizontalLine: (value) => value % 2 == 0,
                     getDrawingHorizontalLine: (value) {
                       if (value == 0) {
                         return FlLine(
                             color: const Color(0x800E4C47), strokeWidth: 1);
+                      }else{
+                        return FlLine(
+                            color: const Color(0x800E4C47), strokeWidth: 1);
                       }
-                      return FlLine(
-                        color: const Color(0x800E4C47),
-                        strokeWidth: 0.8,
-                      );
+
                     },
                   ),
                   titlesData: FlTitlesData(
@@ -249,10 +234,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                       getTextStyles: (value) => const TextStyle(
                           color: Color(0xffCAD7BF),
                           fontFamily: 'JostRegular',
-                          fontSize: 10),
+                          fontSize: 11),
                       margin: 10,
-                      reservedSize: 11,
-                      getTitles: (value) {
+                      reservedSize: 10,
+                     /* getTitles: (value) {
                         if (value == 0) {
                           return '0';
                         } else if (value == 2) {
@@ -268,7 +253,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                         } else {
                           return '';
                         }
-                      },
+                      },*/
                     ),
                   ),
                   barGroups: showingBarGroups,
@@ -306,7 +291,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month - 1);
+                    DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
                     _onStartDateSelected(dateTime);
                   },
@@ -340,7 +325,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month + 1);
+                    DateTime(_dateTime.year, _dateTime.month + 1);
                     Duration duration = dateTime.difference(DateTime.now());
                     if (duration.inSeconds < 0) {
                       _dateTime = dateTime;
@@ -444,14 +429,14 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
       BarChartRodData(
         y: y1,
         colors: setBarChartColor(y1),
-        width:  width,
+        width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y2,
         colors: setBarChartColor(y2),
-        width:  width,
+        width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
@@ -504,9 +489,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
         ),
         context: context,
         builder: (context) => DateTimePicker(
-              cupertinoDatePickerMode: cupertinoDatePickerMode,
-              onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));
+          cupertinoDatePickerMode: cupertinoDatePickerMode,
+          onDateTimeSelected: _getDateTimeCallbackFunction(0),
+        ));
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -543,9 +528,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
 
   Color setToolTipColor() {
     if (clickedValue != null) {
-      if (clickedValue > 1 && clickedValue <= 3) {
+      if (clickedValue > 1 && clickedValue <= 2) {
         return Constant.mildTriggerColor;
-      } else if (clickedValue >= 4 && clickedValue <= 7) {
+      } else if (clickedValue >2 && clickedValue <= 3) {
         return Constant.moderateTriggerColor;
       } else
         return Constant.severeTriggerColor;
@@ -554,9 +539,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
   }
 
   List<Color> setBarChartColor(double barChartValue) {
-    if (barChartValue > 1 && barChartValue <= 3) {
+    if (barChartValue == 1 ) {
       return [Constant.mildTriggerColor];
-    } else if (barChartValue >= 4 && barChartValue <= 7) {
+    } else if (barChartValue > 1 && barChartValue <= 3) {
       return [Constant.moderateTriggerColor];
     } else
       return [Constant.severeTriggerColor];

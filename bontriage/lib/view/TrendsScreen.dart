@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/TrendsDisabilityScreen.dart';
+import 'package:mobile/view/TrendsDurationScreen.dart';
+import 'package:mobile/view/TrendsFrequencyScreen.dart';
 import 'package:mobile/view/TrendsIntensityScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,22 +44,40 @@ class _TrendsScreenState extends State<TrendsScreen> {
             SizedBox(
               height: 5,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
-              decoration: BoxDecoration(
-                color: Constant.backgroundColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'Read about trends',
-                style: TextStyle(
-                    color: Constant.locationServiceGreen,
-                    fontSize: 16,
-                    fontFamily: Constant.jostRegular),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Read about trends',
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontSize: 16,
+                            fontFamily: Constant.jostRegular),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Image(
+                        image: AssetImage(Constant.upperArrow),
+                        width: 15,
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             SizedBox(
-              height:20,
+              height: 15,
             ),
             Text(
               'MY HEADACHE',
@@ -168,9 +189,9 @@ class _TrendsScreenState extends State<TrendsScreen> {
       setState(() {
         pageViewWidgetList = [
           TrendsIntensityScreen(),
-          CompareCompassScreen(),
-          OverTimeCompassScreen(),
-          CompareCompassScreen(),
+          TrendsDisabilityScreen(),
+          TrendsFrequencyScreen(),
+          TrendsDurationScreen(),
         ];
       });
     }
