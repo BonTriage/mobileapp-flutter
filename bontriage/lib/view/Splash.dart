@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/EditGraphViewBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
@@ -35,25 +36,39 @@ class _SplashState extends State<Splash> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                image: AssetImage(Constant.splashCompass),
-                width: 78,
-                height: 78,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                Constant.migraineMentor,
-                style: TextStyle(
-                    color: Constant.splashTextColor,
-                    fontSize: 22,
-                    fontFamily: Constant.jostRegular),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Constant.backgroundColor,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                ),
+                builder: (context) => EditGraphViewBottomSheet(),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  image: AssetImage(Constant.splashCompass),
+                  width: 78,
+                  height: 78,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  Constant.migraineMentor,
+                  style: TextStyle(
+                      color: Constant.splashTextColor,
+                      fontSize: 22,
+                      fontFamily: Constant.jostRegular),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -336,6 +336,7 @@ class Constant {
   static const String headacheDisabledTag = 'headache.disabled';
   static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
   static const String headacheNumberTag = 'headache.number';
+  static const String profileLocationTag = 'profile.location';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =
@@ -562,15 +563,23 @@ class Constant {
   static const String singleHeadache = 'Single headache:';
   static const String summaryOfAllHeadacheTypes = 'Summary of all my headache types';
   static const String selectTheSavedHeadacheType = 'Select the saved Headache Type that you would like to view.';
+  static const String editGraphView = 'Edit Graph View';
+  static const String viewSingleHeadache = 'View Single Headache';
+  static const String compareHeadache = 'Compare Headache';
+  static const String otherFactors = 'Other Factors:';
+  static const String loggedBehaviors = 'Logged Behaviors';
+  static const String loggedPotentialTriggers = 'Logged Potential Triggers';
+  static const String medications = 'Medications';
+  static const String noneRadioButtonText = 'None';
+
+  //tutorial text
+  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
   static const String trendsTutorialText1 = 'For days you have completed your daily log, these dots represent the data you inputted.';
   static const String trendsTutorialText2 = 'A filled circle (•) indicates if a certain behavior, potential trigger, or medication was present on a given day.';
   static const String trendsTutorialText3 = 'An outlined circle () means you did not experience that item on a given day.';
   static const String trendsTutorialText4 = 'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
   static const String trendsTutorialText5 = 'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
-
-  //tutorial text
-  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
-  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

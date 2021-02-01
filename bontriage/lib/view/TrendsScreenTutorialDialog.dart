@@ -151,7 +151,14 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        if(_currentIndex != 0) {
+          setState(() {
+            _currentIndex--;
+          });
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Container(
         color: Constant.backgroundColor,

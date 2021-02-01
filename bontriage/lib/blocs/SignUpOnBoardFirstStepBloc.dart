@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:mobile/models/LocalQuestionnaire.dart';
-import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';

@@ -16,7 +16,6 @@ class SignUpOnBoardFirstStepRepository {
   String url;
 
   Future<dynamic> serviceCall(String url, RequestMethod requestMethod) async {
-    var client = http.Client();
     var album;
     try {
       var response = await NetworkService(url, requestMethod, _getPayload()).serviceCall();
@@ -41,7 +40,6 @@ class SignUpOnBoardFirstStepRepository {
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    var client = http.Client();
     var album;
     try {
       String payload = await _setUserFirstStepSignUpPayload(
@@ -126,12 +124,22 @@ class SignUpOnBoardFirstStepRepository {
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
-        signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
-            MobileEventDetails(
-                questionTag: model.questionTag,
-                questionJson: "",
-                updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
-                value: [model.answer]));
+        if(model.questionTag == Constant.profileLocationTag) {
+          List<String> valuesList = (json.decode(model.answer) as List<dynamic>).cast<String>();
+          signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+              MobileEventDetails(
+                  questionTag: model.questionTag,
+                  questionJson: "",
+                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                  value: valuesList));
+        } else {
+          signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+              MobileEventDetails(
+                  questionTag: model.questionTag,
+                  questionJson: "",
+                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                  value: [model.answer]));
+        }
       });
     } catch (e) {
       print(e);

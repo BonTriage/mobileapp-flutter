@@ -131,6 +131,12 @@ class _MeScreenTutorialDialogState extends State<MeScreenTutorialDialog> with Si
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if(_currentIndex != 0) {
+          setState(() {
+            _currentIndex--;
+            _shouldClip = true;
+          });
+        }
         return false;
       },
       child: Stack(

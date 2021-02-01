@@ -115,6 +115,7 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
               SizedBox(width: 10,),
               Expanded(
                 child: Container(
+                  height: 25,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Constant.locationServiceGreen,

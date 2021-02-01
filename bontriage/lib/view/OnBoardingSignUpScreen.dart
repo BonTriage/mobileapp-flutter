@@ -414,7 +414,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       ),
                       FlatButton(
                         onPressed: () {
-                          signUpButtonClicked();
+                          _signUpButtonClicked();
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -497,7 +497,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
-  void signUpButtonClicked() {
+  void _signUpButtonClicked() {
     if (emailValue != null &&
         passwordValue != null &&
         Utils.validateEmail(emailValue) &&
