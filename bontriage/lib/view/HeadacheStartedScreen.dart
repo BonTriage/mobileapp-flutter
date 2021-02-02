@@ -100,7 +100,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context,
+                            Navigator.pushNamed(context,
                                 Constant.currentHeadacheProgressScreenRouter);
                           },
                           child: Container(
@@ -128,7 +128,7 @@ class _HeadacheStartedScreenState extends State<HeadacheStartedScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: BouncingWidget(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context,
+                            Navigator.pushNamed(context,
                                 Constant.addHeadacheOnGoingScreenRouter, arguments: _currentUserHeadacheModel);
                           },
                           child: Container(

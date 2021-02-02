@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 
 class RecordCalendarHeadacheSection extends StatefulWidget {
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
+  final Function(int) onHeadacheTypeSelectedCallback;
+  final DateTime dateTime;
+  final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
+  final int onGoingHeadacheId;
 
-  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel})
+  RecordCalendarHeadacheSection({Key key, this.userHeadacheLogDayDetailsModel, this.onHeadacheTypeSelectedCallback, this.dateTime, this.openHeadacheLogDayScreenCallback, this.onGoingHeadacheId})
       : super(key: key);
 
   @override
@@ -16,7 +22,7 @@ class RecordCalendarHeadacheSection extends StatefulWidget {
 
 class _RecordCalendarHeadacheSectionState
     extends State<RecordCalendarHeadacheSection> {
-  int _value = 1;
+  int _value = 0;
   List<HeadacheData> userHeadacheListData;
 
   @override
@@ -24,17 +30,24 @@ class _RecordCalendarHeadacheSectionState
     super.initState();
     if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null) {
       userHeadacheListData = [];
-    } else
+    } else {
       userHeadacheListData = widget.userHeadacheLogDayDetailsModel
           .headacheLogDayListData[0].headacheListData;
+      if (userHeadacheListData != null && userHeadacheListData.length >= 1)
+        widget
+            .onHeadacheTypeSelectedCallback(userHeadacheListData[0].headacheId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: userHeadacheListData.length > 0 || (widget.userHeadacheLogDayDetailsModel
-          .headacheLogDayListData != null && widget.userHeadacheLogDayDetailsModel
-          .headacheLogDayListData.length > 0),
+      visible: userHeadacheListData.length > 0 ||
+          (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData !=
+                  null &&
+              widget.userHeadacheLogDayDetailsModel.headacheLogDayListData
+                      .length >
+                  0),
       child: Column(
         children: [
           Row(
@@ -53,7 +66,9 @@ class _RecordCalendarHeadacheSectionState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userHeadacheListData.length > 0 ? 'Headaches' : 'No Headaches Logged',
+                      userHeadacheListData.length > 0
+                          ? 'Headaches'
+                          : 'No Headaches Logged',
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
                           fontFamily: Constant.jostRegular,
@@ -64,6 +79,7 @@ class _RecordCalendarHeadacheSectionState
                       height: 10,
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (int i = 0; i < userHeadacheListData.length; i++)
                           Padding(
@@ -79,15 +95,19 @@ class _RecordCalendarHeadacheSectionState
                                         unselectedWidgetColor:
                                             Constant.chatBubbleGreen),
                                     child: Radio(
-                                      value: 1,
+                                      value: i,
                                       activeColor: Constant.chatBubbleGreen,
                                       hoverColor: Constant.chatBubbleGreen,
                                       focusColor: Constant.chatBubbleGreen,
                                       groupValue: _value,
-                                      onChanged: i == 5
-                                          ? null
-                                          : (int value) {
+                                      onChanged: (int value) {
                                               setState(() {
+                                                print(
+                                                    "HeadacheType???${userHeadacheListData[i].headacheName}");
+                                                widget
+                                                    .onHeadacheTypeSelectedCallback(
+                                                        userHeadacheListData[i]
+                                                            .headacheId);
                                                 _value = value;
                                               });
                                             },
@@ -98,7 +118,8 @@ class _RecordCalendarHeadacheSectionState
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 8),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           userHeadacheListData[i].headacheName,
@@ -113,7 +134,8 @@ class _RecordCalendarHeadacheSectionState
                                         Text(
                                           userHeadacheListData[i].headacheInfo,
                                           style: TextStyle(
-                                              color: Constant.chatBubbleGreen60Alpha,
+                                              color: Constant
+                                                  .chatBubbleGreen60Alpha,
                                               fontFamily: Constant.jostRegular,
                                               fontWeight: FontWeight.w500,
                                               fontSize: 14),
@@ -122,15 +144,19 @@ class _RecordCalendarHeadacheSectionState
                                           height: 5,
                                         ),
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Visibility(
-                                              visible: userHeadacheListData[i].headacheNote.isNotEmpty,
+                                              visible: userHeadacheListData[i]
+                                                  .headacheNote
+                                                  .isNotEmpty,
                                               child: Text(
                                                 'Note:',
                                                 style: TextStyle(
                                                     color: Constant
                                                         .chatBubbleGreen60Alpha,
-                                                    fontFamily: Constant.jostRegular,
+                                                    fontFamily:
+                                                        Constant.jostRegular,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 14),
                                               ),
@@ -139,15 +165,23 @@ class _RecordCalendarHeadacheSectionState
                                               width: 10,
                                             ),
                                             Visibility(
-                                              visible:  userHeadacheListData[i].headacheNote.isNotEmpty,
-                                              child: Text(
-                                                userHeadacheListData[i].headacheNote,
-                                                style: TextStyle(
-                                                    color: Constant
-                                                        .addCustomNotificationTextColor,
-                                                    fontFamily: Constant.jostRegular,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14),
+                                              visible: userHeadacheListData[i]
+                                                  .headacheNote
+                                                  .isNotEmpty,
+                                              child: Flexible(
+                                                child: Text(
+                                                  userHeadacheListData[i]
+                                                      .headacheNote,
+                                                  maxLines: 3,
+                                                  style: TextStyle(
+                                                      color: Constant
+                                                          .addCustomNotificationTextColor,
+                                                      fontFamily: Constant
+                                                          .jostRegular,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14),
+                                                ),
                                               ),
                                             )
                                           ],
@@ -159,6 +193,24 @@ class _RecordCalendarHeadacheSectionState
                               ],
                             ),
                           ),
+                        SizedBox(height: 10,),
+                        Visibility(
+                          visible: userHeadacheListData.length > 0 && widget.onGoingHeadacheId == null,
+                          child: GestureDetector(
+                            onTap: () {
+                              _openAddHeadacheScreen();
+                            },
+                            child: Text(
+                              'Edit Headache',
+                              style: TextStyle(
+                                  color: Constant
+                                      .addCustomNotificationTextColor,
+                                  fontFamily: Constant.jostRegular,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -166,7 +218,6 @@ class _RecordCalendarHeadacheSectionState
               ),
             ],
           ),
-
           Divider(
             thickness: 0.5,
             color: Constant.chatBubbleGreen,
@@ -176,7 +227,49 @@ class _RecordCalendarHeadacheSectionState
           )
         ],
       ),
-
     );
+  }
+
+  @override
+  void didUpdateWidget(RecordCalendarHeadacheSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.userHeadacheLogDayDetailsModel.headacheLogDayListData == null || widget.userHeadacheLogDayDetailsModel.headacheLogDayListData.length == 0) {
+      userHeadacheListData = [];
+    } else {
+      userHeadacheListData = widget.userHeadacheLogDayDetailsModel.headacheLogDayListData[0].headacheListData;
+    }
+
+    if(userHeadacheListData.length > 0) {
+      widget.onHeadacheTypeSelectedCallback(userHeadacheListData[_value].headacheId);
+    }
+
+    setState(() {});
+  }
+
+  void _openAddHeadacheScreen() async {
+    var userProfileInfoData =
+    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if (userProfileInfoData != null) {
+      DateTime dateTime = DateTime(
+          widget.dateTime.year,
+          widget.dateTime.month,
+          widget.dateTime.day,
+          DateTime.now().hour,
+          DateTime.now().minute,0, 0);
+      CurrentUserHeadacheModel currentUserHeadacheModel =
+      CurrentUserHeadacheModel(
+          userId: userProfileInfoData.userId,
+          isOnGoing: true,
+          selectedDate: dateTime.toUtc().toIso8601String(),
+          isFromRecordScreen: true
+      );
+
+      widget.openHeadacheLogDayScreenCallback(true, true, currentUserHeadacheModel);
+      /*Navigator.pushNamed(
+          context, Constant.addHeadacheOnGoingScreenRouter,
+          arguments: currentUserHeadacheModel);*/
+    }
   }
 }

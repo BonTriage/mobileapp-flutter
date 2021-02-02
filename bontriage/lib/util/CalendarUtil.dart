@@ -66,8 +66,8 @@ class CalendarUtil {
             n < daysInMonth) {
           var j = i + 1;
           if (j < daysInMonth &&
-              (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
-              (currentWeekConsData[j] == 0 || currentWeekConsData[j] == 1)) {
+              (currentWeekConsData[i] == 0) &&
+              (currentWeekConsData[j] == 0)) {
             monthData.add(ConsecutiveSelectedDateWidget(
                 weekDateData:_firstDateOfMonth,
                 calendarType:calenderType,

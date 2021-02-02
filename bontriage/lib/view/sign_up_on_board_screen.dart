@@ -44,7 +44,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
   int currentScreenPosition = 0;
 
-  bool isButtonClicked = false;
+  bool _isButtonClicked = false;
   bool _isAlreadyDataFiltered = false;
 
   @override
@@ -129,37 +129,42 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                             _onBackPressed();
                           },
                           nextButtonFunction: () {
-                            isButtonClicked = true;
-                            if (Utils.validationForOnBoard(
-                                signUpOnBoardSelectedAnswersModel
-                                    .selectedAnswers,
-                                currentQuestionListData[
-                                _currentPageIndex])) {
-                              setState(() {
-                                if (_progressPercent == 0.66) {
-                                  /*     welcomeOnBoardProfileBloc
+                            if(!_isButtonClicked) {
+                              _isButtonClicked = true;
+                              if (Utils.validationForOnBoard(
+                                  signUpOnBoardSelectedAnswersModel
+                                      .selectedAnswers,
+                                  currentQuestionListData[
+                                  _currentPageIndex])) {
+                                setState(() {
+                                  if (_progressPercent == 0.66) {
+                                    /*     welcomeOnBoardProfileBloc
                                               .sendSignUpFirstStepData(
                                                   signUpOnBoardSelectedAnswersModel);*/
-                                  moveToNextScreen();
-                                } else {
-                                  _currentPageIndex++;
+                                    moveToNextScreen();
+                                  } else {
+                                    _currentPageIndex++;
 
-                                  if (_currentPageIndex !=
-                                      _pageViewWidgetList.length - 1)
-                                    _progressPercent += 0.11;
-                                  else {
-                                    _progressPercent = 0.66;
+                                    if (_currentPageIndex !=
+                                        _pageViewWidgetList.length - 1)
+                                      _progressPercent += 0.11;
+                                    else {
+                                      _progressPercent = 0.66;
+                                    }
+
+                                    _pageController.animateToPage(
+                                        _currentPageIndex,
+                                        duration:
+                                        Duration(milliseconds: 1),
+                                        curve: Curves.easeIn);
+
+                                    getCurrentQuestionTag(
+                                        _currentPageIndex);
                                   }
-
-                                  _pageController.animateToPage(
-                                      _currentPageIndex,
-                                      duration:
-                                      Duration(milliseconds: 1),
-                                      curve: Curves.easeIn);
-
-                                  getCurrentQuestionTag(
-                                      _currentPageIndex);
-                                }
+                                });
+                              }
+                              Future.delayed(Duration(milliseconds: 350), () {
+                                _isButtonClicked = false;
                               });
                             }
                           },
@@ -211,6 +216,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 
@@ -255,6 +261,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: selectedAnswerListData,
+                  removeSelectedAnswerCallback: _removeDataFromSelectedAnswer,
                 )));
             break;
         }
@@ -336,6 +343,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
     updateSelectedAnswerDataOnLocalDatabase();
   }
 
+  void _removeDataFromSelectedAnswer(String questionTag) {
+    signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == questionTag);
+    updateSelectedAnswerDataOnLocalDatabase();
+  }
+
   updateSelectedAnswerDataOnLocalDatabase() {
     var answerStringData =
         Utils.getStringFromJson(signUpOnBoardSelectedAnswersModel);
@@ -353,23 +365,33 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
   }
 
   Future<bool> _onBackPressed() async {
-    isButtonClicked = true;
-    if(_currentPageIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentPageIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          if (_currentPageIndex != 0) {
+            _progressPercent -= 0.11;
+            _currentPageIndex--;
+            _pageController.animateToPage(
+                _currentPageIndex,
+                duration:
+                Duration(milliseconds: 1),
+                curve: Curves.easeIn);
+          } else {
+            _progressPercent = 0;
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        if (_currentPageIndex != 0) {
-          _progressPercent -= 0.11;
-          _currentPageIndex--;
-          _pageController.animateToPage(
-              _currentPageIndex,
-              duration:
-              Duration(milliseconds: 1),
-              curve: Curves.easeIn);
-        } else {
-          _progressPercent = 0;
-        }
-      });
       return false;
     }
   }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:mobile/models/LocalQuestionnaire.dart';
-import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/WelcomeOnBoardProfileModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -72,14 +71,43 @@ class SignUpBoardFirstStepBloc {
 
   sendSignUpFirstStepData(
       SignUpOnBoardSelectedAnswersModel
-          signUpOnBoardSelectedAnswersModel) async {
+          signUpOnBoardSelectedAnswersModel, SignUpOnBoardSelectedAnswersModel profileOnBoardSelectedAnswersModel) async {
+    String apiResponse;
+    try {
+      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
+          .signUpZeroStepInfoObjectServiceCall(
+              WebservicePost.qaServerUrl + 'event',
+              RequestMethod.POST,
+              profileOnBoardSelectedAnswersModel);
+      if (signUpFirstStepData is AppException) {
+        sendFirstStepDataSink.addError(signUpFirstStepData);
+        apiResponse = signUpFirstStepData.toString();
+        //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
+      } else {
+        if(signUpFirstStepData != null) {
+          //apiResponse = Constant.success;
+          return await sendSignUpFirstStepData1(signUpOnBoardSelectedAnswersModel);
+        } else {
+          sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+      apiResponse = Constant.somethingWentWrong;
+    }
+    return apiResponse;
+  }
+
+  sendSignUpFirstStepData1(
+      SignUpOnBoardSelectedAnswersModel
+      signUpOnBoardSelectedAnswersModel) async {
     String apiResponse;
     try {
       var signUpFirstStepData = await _signUpOnBoardFirstStepRepository
           .signUpFirstStepInfoObjectServiceCall(
-              WebservicePost.qaServerUrl + 'event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
+          WebservicePost.qaServerUrl + 'event',
+          RequestMethod.POST,
+          signUpOnBoardSelectedAnswersModel);
       if (signUpFirstStepData is AppException) {
         sendFirstStepDataSink.addError(signUpFirstStepData);
         apiResponse = signUpFirstStepData.toString();

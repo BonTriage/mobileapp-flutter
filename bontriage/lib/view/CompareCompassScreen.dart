@@ -11,6 +11,10 @@ import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'DateTimePicker.dart';
 
 class CompareCompassScreen extends StatefulWidget {
+  final Future<dynamic> Function(String) openActionSheetCallback;
+
+  const CompareCompassScreen({Key key, this.openActionSheetCallback}) : super(key: key);
+
   @override
   _CompareCompassScreenState createState() => _CompareCompassScreenState();
 }
@@ -66,7 +70,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
      ticks = [7, 14, 21, 28, 35];
@@ -111,18 +114,23 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
             SizedBox(
               height: 20,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
-              decoration: BoxDecoration(
-                color: Constant.compassMyHeadacheTextColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'My headache',
-                style: TextStyle(
-                    color: Constant.locationServiceGreen,
-                    fontSize: 16,
-                    fontFamily: Constant.jostRegular),
+            GestureDetector(
+              onTap: () {
+                _openHeadacheTypeActionSheet();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Constant.compassMyHeadacheTextColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'My headache',
+                  style: TextStyle(
+                      color: Constant.locationServiceGreen,
+                      fontSize: 16,
+                      fontFamily: Constant.jostRegular),
+                ),
               ),
             ),
             SizedBox(
@@ -130,23 +138,34 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
             ),
             Stack(
               children: [
-                Container(
-                  alignment: Alignment.topRight,
-                  margin: EdgeInsets.only(left: 65, top: 10),
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: Constant.chatBubbleGreen, width: 1)),
-                  child: Center(
-                    child: Text(
-                      'i',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Constant.chatBubbleGreen,
-                          fontFamily: Constant.jostBold),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    Utils.showCompassTutorialDialog(context, 0);
+                  },
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    margin: EdgeInsets.only(left: 65, top: 10),
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: Constant.chatBubbleGreen, width: 1)),
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: (){
+                          Utils.showCompassTutorialDialog(context, 0);
+                        },
+                        child: Text(
+                          'i',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Constant.chatBubbleGreen,
+                              fontFamily: Constant.jostBold),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -160,23 +179,33 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                           children: <Widget>[
                             RotatedBox(
                               quarterTurns: 3,
-                              child: Text(
-                                "Frequency",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Utils.showCompassTutorialDialog(context, 3);
+                                },
+                                child: Text(
+                                  "Frequency",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  "Intensity",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
+                                GestureDetector(
+                                  onTap: (){
+                                    Utils.showCompassTutorialDialog(context, 1);
+                                  },
+                                  child: Text(
+                                    "Intensity",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
                                 Center(
                                   child: Container(
@@ -204,6 +233,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                                               reverseAxis: true,
                                               compassValue: compassValue,
                                             ),
+
                                           ),
                                           Center(
                                             child: Container(
@@ -234,23 +264,33 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  "Disability",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
+                                GestureDetector(
+                                  onTap: (){
+                                    Utils.showCompassTutorialDialog(context, 2);
+                                  },
+                                  child: Text(
+                                    "Disability",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
                               ],
                             ),
                             RotatedBox(
                               quarterTurns: 1,
-                              child: Text(
-                                "Duration",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Utils.showCompassTutorialDialog(context, 4);
+                                },
+                                child: Text(
+                                  "Duration",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ),
                           ],
@@ -271,23 +311,33 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                           children: <Widget>[
                             RotatedBox(
                               quarterTurns: 3,
-                              child: Text(
-                                "Frequency",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Utils.showCompassTutorialDialog(context, 3);
+                                },
+                                child: Text(
+                                  "Frequency",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  "Intensity",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
+                                GestureDetector(
+                                  onTap: (){
+                                    Utils.showCompassTutorialDialog(context, 1);
+                                  },
+                                  child: Text(
+                                    "Intensity",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
                                 Center(
                                   child: Container(
@@ -315,6 +365,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                                               reverseAxis: true,
                                               compassValue: compassValue,
                                             ),
+
                                           ),
                                           Center(
                                             child: Container(
@@ -345,29 +396,40 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  "Disability",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
+                                GestureDetector(
+                                  onTap: (){
+                                    Utils.showCompassTutorialDialog(context, 2);
+                                  },
+                                  child: Text(
+                                    "Disability",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
                                 ),
                               ],
                             ),
                             RotatedBox(
                               quarterTurns: 1,
-                              child: Text(
-                                "Duration",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Utils.showCompassTutorialDialog(context, 4);
+                                },
+                                child: Text(
+                                  "Duration",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ),
                           ],
                         );
                       }
                   }
+
                 ),
               ],
             ),
@@ -641,4 +703,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  void _openHeadacheTypeActionSheet() async {
+    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.compassHeadacheTypeActionSheet);
+    print(resultFromActionSheet);
+  }
 }

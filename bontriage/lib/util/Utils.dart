@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
+import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
+import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -136,6 +141,8 @@ class Utils {
 
     if (hrs < 10) {
       hrsString = '0$hrs';
+    } else {
+      hrsString = hrs.toString();
     }
 
     if (minutes < 10) {
@@ -411,11 +418,11 @@ class Utils {
   }
 
   static void navigateToHomeScreen(
-      BuildContext context, bool isProfileInComplete) async {
+      BuildContext context, bool isProfileInComplete, {HomeScreenArgumentModel homeScreenArgumentModel}) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(
         Constant.isProfileInCompleteStatus, isProfileInComplete);
-    Navigator.pushReplacementNamed(context, Constant.homeRouter);
+    Navigator.pushReplacementNamed(context, Constant.homeRouter, arguments: homeScreenArgumentModel);
   }
 
   static void closeApiLoaderDialog(BuildContext context) {
@@ -504,5 +511,78 @@ class Utils {
   ///This method is used to return scroll physics based on the platform
   static ScrollPhysics getScrollPhysics() {
     return Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics();
+  }
+
+  ///This method is used to show validation error message to the user
+  static void showValidationErrorDialog(BuildContext context, String errorMessage) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ValidationErrorDialog(errorMessage: errorMessage,),
+        );
+      },
+    );
+  }
+
+  ///This method is used to show compass tutorial dialog.
+  ///@param context: build context of the screen
+  ///@param indexValue: 0 for compass, 1 for Intensity, 2 for Disability, 3 for Frequency, and 4 for Duration.
+  static Future<void> showCompassTutorialDialog(BuildContext context, int indexValue) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
+        );
+      },
+    );
+  }
+
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will null.
+  static Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    Position position;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied && permission != LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition();
+      }
+    } else {
+      if(permission != LocationPermission.deniedForever)
+        position = await Geolocator.getCurrentPosition();
+    }
+
+    return position;
+  }
+
+  static void showTrendsTutorialDialog(BuildContext context) {
+    showGeneralDialog(
+        context: context,
+        barrierColor: Colors.transparent,
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: TrendsScreenTutorialDialog(),
+          );
+        }
+    );
   }
 }

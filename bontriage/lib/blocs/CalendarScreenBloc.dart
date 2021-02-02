@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:mobile/models/CalendarInfoDataModel.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/OnGoingHeadacheDataModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -16,6 +18,7 @@ class CalendarScreenBloc {
   StreamController<dynamic> _networkStreamController;
   UserLogHeadacheDataCalendarModel _userLogHeadacheDataCalendarModel;
   int count = 0;
+  CurrentUserHeadacheModel currentUserHeadacheModel;
 
   StreamSink<dynamic> get calendarDataSink => _calendarStreamController.sink;
 
@@ -36,6 +39,38 @@ class CalendarScreenBloc {
     _triggersStreamController = StreamController<dynamic>();
     _networkStreamController  = StreamController<dynamic>();
     _calendarRepository = CalendarRepository();
+  }
+
+  Future<CurrentUserHeadacheModel> fetchUserOnGoingHeadache() async {
+    CurrentUserHeadacheModel currentUserHeadacheModel;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(userProfileInfoData != null) {
+      try{
+        String url = '${WebservicePost.qaServerUrl}common/ongoingheadache/${userProfileInfoData.userId}';
+        var response = await _calendarRepository.onGoingHeadacheServiceCall(url, RequestMethod.GET);
+        if (response is AppException) {
+          networkDataSink.addError(response);
+        } else {
+          if(response != null && response is OnGoingHeadacheDataModel) {
+            if(response.isExists) {
+              currentUserHeadacheModel = CurrentUserHeadacheModel();
+              var headacheStartTimeMobileEventDetail = response.headaches[0].mobileEventDetails.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
+              currentUserHeadacheModel.selectedDate = headacheStartTimeMobileEventDetail.value;
+              currentUserHeadacheModel.userId = userProfileInfoData.userId;
+              currentUserHeadacheModel.headacheId = response.headaches[0].id;
+              currentUserHeadacheModel.isOnGoing = true;
+              currentUserHeadacheModel.isFromRecordScreen = false;
+              await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(currentUserHeadacheModel);
+            }
+          } else {
+            networkDataSink.addError(Exception(Constant.somethingWentWrong));
+          }
+        }
+      } catch(e) {
+        networkDataSink.addError(Exception(Constant.somethingWentWrong));
+      }
+    }
+    return currentUserHeadacheModel;
   }
 
   fetchCalendarTriggersData(String startDateValue, String endDateValue) async {

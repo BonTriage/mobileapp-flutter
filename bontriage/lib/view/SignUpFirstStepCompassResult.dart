@@ -10,9 +10,9 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
+import 'CustomScrollBar.dart';
 
 class SignUpFirstStepCompassResult extends StatefulWidget {
   @override
@@ -31,6 +31,8 @@ class _SignUpFirstStepCompassResultState
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
+  ScrollController _scrollController;
+  bool _isButtonClicked = false;
 
   int userFrequencyValue;
   int userDurationValue;
@@ -61,7 +63,12 @@ class _SignUpFirstStepCompassResultState
     // Save user progress database
     saveUserProgressInDataBase();
     setVolumeIcon();
+
     getCompassAxesFromDatabase();
+
+
+    _scrollController = ScrollController();
+
   }
 
   @override
@@ -108,252 +115,324 @@ class _SignUpFirstStepCompassResultState
       _animationController.forward();
     }
 
+    try {
+      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      Future.delayed(Duration(milliseconds: 150), () {
+        _scrollController.jumpTo(0);
+      });
+    } catch(e) {}
+
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         body: Container(
           decoration: Constant.backgroundBoxDecoration,
           height: MediaQuery.of(context).size.height,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Utils.navigateToExitScreen(context);
-                      },
-                      child: Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 26,
-                        height: 26,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image(
-                            image: AssetImage(Constant.userAvatar),
-                            width: 60.0,
-                            height: 60.0,
-                          ),
-                          GestureDetector(
-                            onTap: _toggleVolume,
-                            child: Container(
-                              margin: EdgeInsets.only(top: 10),
-                              child: AnimatedCrossFade(
-                                duration: Duration(milliseconds: 250),
-                                firstChild: Image(
-                                  alignment: Alignment.topLeft,
-                                  image: AssetImage(Constant.volumeOn),
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                secondChild: Image(
-                                  alignment: Alignment.topLeft,
-                                  image: AssetImage(Constant.volumeOff),
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                crossFadeState: isVolumeOn
-                                    ? CrossFadeState.showFirst
-                                    : CrossFadeState.showSecond,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 17, top: 25),
-                          child: ChatBubble(
-                            painter:
-                                ChatBubblePainter(Constant.chatBubbleGreen),
-                            child: AnimatedSize(
-                              duration: Duration(milliseconds: 300),
-                              vsync: this,
-                              child: Container(
-                                padding: EdgeInsets.all(15),
-                                child: FadeTransition(
-                                  opacity: _animationController,
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxHeight: Constant.chatBubbleMaxHeight,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      physics: BouncingScrollPhysics(),
-                                      child: Text(
-                                        _bubbleTextViewList[
-                                            _buttonPressedValue],
-                                        style: TextStyle(
-                                            height: 1.3,
-                                            fontSize: 15,
-                                            color: Constant.bubbleChatTextView,
-                                            fontFamily: Constant.jostRegular),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Utils.navigateToExitScreen(context);
+                        },
+                        child: Image(
+                          image: AssetImage(Constant.closeIcon),
+                          width: 26,
+                          height: 26,
                         ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Expanded(
-                  child: Center(
+                  SizedBox(height: 10),
+                  Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: GestureDetector(
-                            onTap: () {
-                              //  _showTutorialDialog(3);
-                            },
-                            child: Text(
-                              "Frequency",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
-                            ),
-                          ),
-                        ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                //  _showTutorialDialog(1);
-                              },
-                              child: Text(
-                                "Intensity",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image(
+                              image: AssetImage(Constant.userAvatar),
+                              width: 60.0,
+                              height: 60.0,
                             ),
-                            Center(
+                            GestureDetector(
+                              onTap: _toggleVolume,
                               child: Container(
-                                width: 220,
-                                height: 220,
-                                child: Center(
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        child: darkMode
-                                            ? RadarChart.dark(
-                                                ticks: ticks,
-                                                features: features,
-                                                data: userCompassAxesData,
-                                                reverseAxis: true,
-                                                compassValue: 0,
-                                              )
-                                            : RadarChart.light(
-                                                ticks: ticks,
-                                                features: features,
-                                                data: userCompassAxesData,
-                                                reverseAxis: true,
-                                                compassValue: 0,
-                                              ),
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          width: 36,
-                                          height: 36,
-                                          child: Center(
-                                            child: Text(
-                                              '70',
-                                              style: TextStyle(
-                                                  color: Color(0xff0E1712),
-                                                  fontSize: 14,
-                                                  fontFamily:
-                                                      Constant.jostMedium),
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(0xffB8FFFF),
-                                            border: Border.all(
-                                                color: Color(0xffB8FFFF),
-                                                width: 1.2),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                margin: EdgeInsets.only(top: 10),
+                                child: AnimatedCrossFade(
+                                  duration: Duration(milliseconds: 250),
+                                  firstChild: Image(
+                                    alignment: Alignment.topLeft,
+                                    image: AssetImage(Constant.volumeOn),
+                                    width: 20,
+                                    height: 20,
                                   ),
+                                  secondChild: Image(
+                                    alignment: Alignment.topLeft,
+                                    image: AssetImage(Constant.volumeOff),
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                  crossFadeState: isVolumeOn
+                                      ? CrossFadeState.showFirst
+                                      : CrossFadeState.showSecond,
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                //   _showTutorialDialog(2);
-                              },
-                              child: Text(
-                                "Disability",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                            ),
+
                           ],
                         ),
-                        RotatedBox(
-                          quarterTurns: 1,
-                          child: GestureDetector(
-                            onTap: () {
-                              //  _showTutorialDialog(4);
-                            },
-                            child: Text(
-                              "Duration",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 17, top: 25),
+                            child: ChatBubble(
+                              painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                              child: AnimatedSize(
+                                duration: Duration(milliseconds: 300),
+                                vsync: this,
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  child: FadeTransition(
+                                    opacity: _animationController,
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: Constant.chatBubbleMaxHeight,
+                                      ),
+                                      child: Theme(
+                                        data: ThemeData(highlightColor: Colors.black),
+                                        child: CustomScrollBar(
+                                          isAlwaysShown: false,
+                                          controller: _scrollController,
+                                          child: SingleChildScrollView(
+                                            controller: _scrollController,
+                                            physics: BouncingScrollPhysics(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 10),
+                                              child: Text(
+                                                _bubbleTextViewList[_buttonPressedValue],
+                                                style: TextStyle(
+                                                    height: 1.3,
+                                                    fontSize: 15,
+                                                    color: Constant.bubbleChatTextView,
+                                                    fontFamily: Constant.jostRegular),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  child: Stack(
-                    children: [
-                      AnimatedPositioned(
-                        left: (isBackButtonHide)
-                            ? 0
-                            : (MediaQuery.of(context).size.width - 190),
-                        duration: Duration(milliseconds: 250),
-                        child: AnimatedOpacity(
-                          opacity: (isBackButtonHide) ? 1.0 : 0.0,
+
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RotatedBox(
+                            quarterTurns: 3,
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showCompassTutorialDialog(context, 3);
+                              },
+                              child: Text(
+                                "Frequency",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 1);
+                                },
+                                child: Text(
+                                  "Intensity",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ),
+                              Center(
+                                child: Container(
+                                  width: 220,
+                                  height: 220,
+                                  child: Center(
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          child: darkMode
+                                              ? RadarChart.dark(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: userCompassAxesData,
+                                                  reverseAxis: true,
+                                                  compassValue: 0,
+                                                )
+                                              : RadarChart.light(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: userCompassAxesData,
+                                                  reverseAxis: true,
+                                                  compassValue: 0,
+                                                ),
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            width: 36,
+                                            height: 36,
+                                            child: Center(
+                                              child: Text(
+                                                '70',
+                                                style: TextStyle(
+                                                    color: Color(0xff0E1712),
+                                                    fontSize: 14,
+                                                    fontFamily:
+                                                        Constant.jostMedium),
+                                              ),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xffB8FFFF),
+                                              border: Border.all(
+                                                  color: Color(0xffB8FFFF),
+                                                  width: 1.2),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 2);
+                                },
+                                child: Text(
+                                  "Disability",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ),
+                            ],
+                          ),
+                          RotatedBox(
+                            quarterTurns: 1,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Utils.showCompassTutorialDialog(context, 4);
+
+                              },
+                              child: Text(
+                                "Duration",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Container(
+                    child: Stack(
+                      children: [
+                        AnimatedPositioned(
+                          left: (isBackButtonHide)
+                              ? 0
+                              : (MediaQuery.of(context).size.width -
+                              190),
                           duration: Duration(milliseconds: 250),
+                          child: AnimatedOpacity(
+                            opacity:
+                            (isBackButtonHide) ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 250),
+                            child: BouncingWidget(
+                              duration: Duration(milliseconds: 100),
+                              scaleFactor: 1.5,
+                              onPressed: _onBackPressed,
+                              child: Container(
+                                width: 130,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffafd794),
+                                  borderRadius:
+                                  BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    Constant.back,
+                                    style: TextStyle(
+                                      color:
+                                      Constant.bubbleChatTextView,
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
                           child: BouncingWidget(
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
-                            onPressed: _onBackPressed,
+                            onPressed: () {
+                              if(!_isButtonClicked) {
+                                _isButtonClicked = true;
+                                TextToSpeechRecognition.stopSpeech();
+                                setState(() {
+                                  if (_buttonPressedValue >= 0 &&
+                                      _buttonPressedValue < 4) {
+                                    _buttonPressedValue++;
+                                    isBackButtonHide = true;
+                                  } else {
+                                    moveToNextScreen();
+                                  }
+                                });
+                                Future.delayed(Duration(milliseconds: 350), () {
+                                  _isButtonClicked = false;
+                                });
+                              }
+                            },
                             child: Container(
                               width: 130,
                               height: 34,
@@ -363,7 +442,7 @@ class _SignUpFirstStepCompassResultState
                               ),
                               child: Center(
                                 child: Text(
-                                  Constant.back,
+                                  Constant.next,
                                   style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
@@ -374,66 +453,15 @@ class _SignUpFirstStepCompassResultState
                             ),
                           ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: BouncingWidget(
-                          duration: Duration(milliseconds: 100),
-                          scaleFactor: 1.5,
-                          onPressed: () {
-                            TextToSpeechRecognition.stopSpeech();
-                            setState(() {
-                              if (_buttonPressedValue >= 0 &&
-                                  _buttonPressedValue < 4) {
-                                _buttonPressedValue++;
-                                isBackButtonHide = true;
-                              } else {
-                                moveToNextScreen();
-                              }
-                            });
-                          },
-                          child: Container(
-                            width: 130,
-                            height: 34,
-                            decoration: BoxDecoration(
-                              color: Color(0xffafd794),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(
-                                Constant.next,
-                                style: TextStyle(
-                                  color: Constant.bubbleChatTextView,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showTutorialDialog(int indexValue) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          backgroundColor: Colors.transparent,
-          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
-        );
-      },
     );
   }
 
@@ -474,17 +502,29 @@ class _SignUpFirstStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if (_buttonPressedValue == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_buttonPressedValue == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          if (_buttonPressedValue <= 4 &&
+              _buttonPressedValue > 1) {
+            _buttonPressedValue--;
+          } else {
+            isBackButtonHide = false;
+            _buttonPressedValue = 0;
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        if (_buttonPressedValue <= 4 && _buttonPressedValue > 1) {
-          _buttonPressedValue--;
-        } else {
-          isBackButtonHide = false;
-          _buttonPressedValue = 0;
-        }
-      });
       return false;
     }
   }

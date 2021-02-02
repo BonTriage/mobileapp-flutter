@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -34,6 +35,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
   ];
 
   int _currentIndex = 0;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
@@ -50,9 +52,15 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
         body: OnBoardInformationScreen(
           isShowNextButton: _currentIndex != (_questionList.length - 1),
           nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+            if(!_isButtonClicked) {
+              _isButtonClicked = true;
+              setState(() {
+                _currentIndex++;
+              });
+              Future.delayed(Duration(milliseconds: 350), () {
+                _isButtonClicked = false;
+              });
+            }
           },
           bottomButtonText: Constant.continueText,
           chatText: bubbleChatTextView[_currentIndex],
@@ -63,7 +71,7 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
           isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
           secondBottomButtonText: Constant.saveAndFinishLater,
           secondBottomButtonFunction: () {
-            Utils.navigateToHomeScreen(context, true);
+            Utils.navigateToHomeScreen(context, true, homeScreenArgumentModel: HomeScreenArgumentModel(isFromOnBoard: true));
 
           },
           closeButtonFunction: () {
@@ -86,12 +94,23 @@ class _PrePartThreeOnBoardScreenState extends State<PrePartThreeOnBoardScreen> {
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }

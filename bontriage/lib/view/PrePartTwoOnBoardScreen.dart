@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardFirstStepBloc.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
@@ -15,13 +16,15 @@ class PrePartTwoOnBoardScreen extends StatefulWidget {
 class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   SignUpBoardFirstStepBloc signUpBoardFirstStepBloc;
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel;
+  SignUpOnBoardSelectedAnswersModel profileOnBoardSelectedAnswersModel;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
     signUpOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
+    profileOnBoardSelectedAnswersModel = SignUpOnBoardSelectedAnswersModel();
     Utils.saveUserProgress(0, Constant.prePartTwoEventStep);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -67,9 +70,15 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
           bubbleChatTextSpanList: _questionList[_currentIndex],
           chatText: bubbleChatTextView[_currentIndex],
           nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+            if(!_isButtonClicked) {
+              _isButtonClicked = true;
+              setState(() {
+                _currentIndex++;
+              });
+              Future.delayed(Duration(milliseconds: 350), () {
+                _isButtonClicked = false;
+              });
+            }
           },
           bottomButtonText: Constant.continueText,
           bottomButtonFunction: () {
@@ -80,7 +89,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
           isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
           secondBottomButtonText: Constant.saveAndFinishLater,
           secondBottomButtonFunction: () {
-            Utils.navigateToHomeScreen(context, true);
+            Utils.navigateToHomeScreen(context, true, homeScreenArgumentModel: HomeScreenArgumentModel(isFromOnBoard: true));
           },
           closeButtonFunction: () {
             Utils.navigateToExitScreen(context);
@@ -101,11 +110,13 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   void getFirstStepUserDataFromLocalDatabase() async {
     var signUpOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.firstEventStep);
-    if (signUpOnBoardSelectedAnswersListModel == null) {
+    var profileOnBoardSelectedAnswersListModel = await SignUpOnBoardProviders.db.getAllSelectedAnswers(Constant.zeroEventStep);
+    if (signUpOnBoardSelectedAnswersListModel == null && profileOnBoardSelectedAnswersModel != null) {
       print("Nothing will be happen");
     } else {
       signUpOnBoardSelectedAnswersModel.selectedAnswers =
           signUpOnBoardSelectedAnswersListModel;
+      profileOnBoardSelectedAnswersModel.selectedAnswers = profileOnBoardSelectedAnswersListModel;
       Utils.showApiLoaderDialog(
         context,
         networkStream: signUpBoardFirstStepBloc.sendFirstStepDataStream,
@@ -120,7 +131,7 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
 
   void _callSendFirstStepDataApi() async{
     var apiResponse = await signUpBoardFirstStepBloc
-        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel);
+        .sendSignUpFirstStepData(signUpOnBoardSelectedAnswersModel, profileOnBoardSelectedAnswersModel);
 
     if (apiResponse is String) {
       if (apiResponse == Constant.success) {
@@ -134,12 +145,23 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }

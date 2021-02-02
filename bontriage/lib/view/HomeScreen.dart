@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
+import 'package:mobile/view/MeScreenTutorial.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
+import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'EditGraphViewBottomSheet.dart';
+
 class HomeScreen extends StatefulWidget {
+  final HomeScreenArgumentModel homeScreenArgumentModel;
+
+  const HomeScreen({Key key, this.homeScreenArgumentModel}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+  GlobalKey _logDayGlobalKey;
+  GlobalKey _addHeadacheGlobalKey;
+  GlobalKey _recordsGlobalKey;
+
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
     1: GlobalKey<NavigatorState>(),
@@ -28,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     saveHomePosition();
+    _recordsGlobalKey = GlobalKey();
     saveCurrentIndexOfTabBar(0);
     print(Utils.getDateTimeInUtcFormat(DateTime.now()));
   }
@@ -79,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Image.asset(
                 Constant.recordsUnselected,
                 height: 25,
+                key: _recordsGlobalKey,
               ),
               activeIcon: Image.asset(
                 Constant.recordsSelected,
@@ -164,11 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
         openTriggerMedicationActionSheetCallback:
             _openTriggersMedicationActionSheet,
         showApiLoaderCallback: showApiLoader,
+        getButtonsGlobalKeyCallback: getButtonsGlobalKey,
       ),
     );
   }
 
-  void _openActionSheet(String actionSheetType) async {
+  Future<dynamic> _openActionSheet(String actionSheetType) async {
     switch (actionSheetType) {
       case Constant.medicalHelpActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -179,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => MedicalHelpActionSheet());
+        return resultOfActionSheet;
         break;
       case Constant.generateReportActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -189,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => GenerateReportActionSheet());
+        return resultOfActionSheet;
         break;
       case Constant.deleteHeadacheTypeActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -199,15 +219,53 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => DeleteHeadacheTypeActionSheet());
+        return resultOfActionSheet;
         break;
+      case Constant.saveAndExitActionSheet:
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => SaveAndExitActionSheet());
+        return resultOfActionSheet;
+        break;
+      case Constant.compassHeadacheTypeActionSheet:
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Constant.backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => CompassHeadacheTypeActionSheet());
+        return resultOfActionSheet;
+        break;
+      case Constant.editGraphViewBottomSheet:
+        var resultOfActionSheet = showModalBottomSheet(
+          context: context,
+          backgroundColor: Constant.backgroundColor,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          ),
+          builder: (context) => EditGraphViewBottomSheet(),
+        );
+        return resultOfActionSheet;
+        break;
+      default: return null;
     }
   }
 
-  Future<dynamic> navigateToOtherScreen(String routerName,dynamic argument) async {
-    if (routerName == TabNavigatorRoutes.recordsRoot) {
+  Future<dynamic> navigateToOtherScreen(String routerName, dynamic argument) async {
+    if (routerName == TabNavigatorRoutes.calenderRoute || routerName == TabNavigatorRoutes.trendsRoute) {
       await Utils.saveDataInSharedPreference(Constant.tabNavigatorState, "1");
       await saveCurrentIndexOfTabBar(1);
       setState(() {
+        print('set state 4');
         currentIndex = 1;
       });
     } else {
@@ -245,7 +303,40 @@ class _HomeScreenState extends State<HomeScreen> {
     sharedPreferences.setInt(Constant.currentIndexOfTabBar, currentIndex);
   }
 
+  ///This method is used to show api loader dialog
   void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
     Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
+  }
+
+  void getButtonsGlobalKey(GlobalKey logDayGlobalKey, GlobalKey addHeadacheGlobalKey) {
+    _logDayGlobalKey = logDayGlobalKey;
+    _addHeadacheGlobalKey = addHeadacheGlobalKey;
+
+    Future.delayed(Duration(milliseconds: 350), () {
+      _showTutorialDialog();
+    });
+  }
+
+  ///This method is used to show tutorial dialog
+  void _showTutorialDialog() async {
+    bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
+    if(!isTutorialHasSeen) {
+      await SignUpOnBoardProviders.db.insertTutorialData(1);
+      showGeneralDialog(
+          context: context,
+          barrierColor: Colors.transparent,
+          pageBuilder: (buildContext, animation, secondaryAnimation) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: MeScreenTutorialDialog(
+                logDayGlobalKey: _logDayGlobalKey,
+                recordsGlobalKey: _recordsGlobalKey,
+                addHeadacheGlobalKey: _addHeadacheGlobalKey,
+                isFromOnBoard: widget.homeScreenArgumentModel != null ? widget.homeScreenArgumentModel.isFromOnBoard ?? false : false,
+              ),
+            );
+          }
+      );
+    }
   }
 }

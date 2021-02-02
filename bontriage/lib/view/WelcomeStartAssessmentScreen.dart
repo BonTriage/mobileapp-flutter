@@ -137,7 +137,7 @@ class _WelcomeStartAssessmentScreenState
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(
+                            Navigator.pushNamed(
                                 context, Constant.loginScreenRouter);
                           },
                           child: Text(

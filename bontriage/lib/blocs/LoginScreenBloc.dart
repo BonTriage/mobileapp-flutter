@@ -89,8 +89,7 @@ class LoginScreenBloc {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
-      sharedPreferences.setBool(Constant.logDayDoubleTapDialog, false);
+      sharedPreferences.clear();
       await SignUpOnBoardProviders.db.deleteAllTableData();
     } catch (e) {
       print(e);

@@ -6,6 +6,7 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
@@ -26,14 +27,18 @@ class _SignUpSecondStepCompassResultState
   AnimationController _animationController;
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
+  bool _isButtonClicked = false;
 
   String userHeadacheName = "";
 
   static String userHeadacheTextView;
 
+  ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     getUserHeadacheName();
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
@@ -95,6 +100,13 @@ class _SignUpSecondStepCompassResultState
       _animationController.reset();
       _animationController.forward();
     }
+
+    try {
+      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      Future.delayed(Duration(milliseconds: 150), () {
+        _scrollController.jumpTo(0);
+      });
+    } catch(e) {}
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -183,11 +195,19 @@ class _SignUpSecondStepCompassResultState
                                           maxHeight:
                                               Constant.chatBubbleMaxHeight,
                                         ),
-                                        child: SingleChildScrollView(
-                                          physics: BouncingScrollPhysics(),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              children: _getBubbleTextSpans(),
+                                        child: CustomScrollBar(
+                                          controller: _scrollController,
+                                          isAlwaysShown: false,
+                                          child: SingleChildScrollView(
+                                            controller: _scrollController,
+                                            physics: BouncingScrollPhysics(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 10),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: _getBubbleTextSpans(),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -207,23 +227,33 @@ class _SignUpSecondStepCompassResultState
                         children: <Widget>[
                           RotatedBox(
                             quarterTurns: 3,
-                            child: Text(
-                              "Frequency",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showCompassTutorialDialog(context, 3);
+                              },
+                              child: Text(
+                                "Frequency",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
                             ),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
-                                "Intensity",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 1);
+                                },
+                                child: Text(
+                                  "Intensity",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                               Center(
                                 child: Container(
@@ -277,23 +307,33 @@ class _SignUpSecondStepCompassResultState
                                   ),
                                 ),
                               ),
-                              Text(
-                                "Disability",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
+                              GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 2);
+                                },
+                                child: Text(
+                                  "Disability",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
+                                ),
                               ),
                             ],
                           ),
                           RotatedBox(
                             quarterTurns: 1,
-                            child: Text(
-                              "Duration",
-                              style: TextStyle(
-                                  color: Color(0xffafd794),
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium),
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showCompassTutorialDialog(context, 4);
+                              },
+                              child: Text(
+                                "Duration",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
                             ),
                           ),
                         ],
@@ -373,16 +413,22 @@ class _SignUpSecondStepCompassResultState
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
                             onPressed: () {
-                              TextToSpeechRecognition.stopSpeech();
-                              setState(() {
-                                if (_buttonPressedValue >= 0 &&
-                                    _buttonPressedValue < 2) {
-                                  _buttonPressedValue++;
-                                  isBackButtonHide = true;
-                                } else {
-                                  moveToNextScreen();
-                                }
-                              });
+                              if(!_isButtonClicked) {
+                                _isButtonClicked = true;
+                                TextToSpeechRecognition.stopSpeech();
+                                setState(() {
+                                  if (_buttonPressedValue >= 0 &&
+                                      _buttonPressedValue < 2) {
+                                    _buttonPressedValue++;
+                                    isBackButtonHide = true;
+                                  } else {
+                                    moveToNextScreen();
+                                  }
+                                });
+                                Future.delayed(Duration(milliseconds: 350), () {
+                                  _isButtonClicked = false;
+                                });
+                              }
                             },
                             child: Container(
                               width: 130,
@@ -541,17 +587,28 @@ class _SignUpSecondStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if (_buttonPressedValue == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_buttonPressedValue == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          if (_buttonPressedValue <= 2 && _buttonPressedValue > 1) {
+            _buttonPressedValue--;
+          } else {
+            isBackButtonHide = false;
+            _buttonPressedValue = 0;
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        if (_buttonPressedValue <= 2 && _buttonPressedValue > 1) {
-          _buttonPressedValue--;
-        } else {
-          isBackButtonHide = false;
-          _buttonPressedValue = 0;
-        }
-      });
       return false;
     }
   }

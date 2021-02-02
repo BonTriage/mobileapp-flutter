@@ -25,12 +25,12 @@ class SignUpScreenRepository {
   }
 
   Future<dynamic> signUpServiceCall(String url, RequestMethod requestMethod,
-      List<SelectedAnswers> selectedAnswerListData, String emailValue, String passwordValue) async {
+      List<SelectedAnswers> selectedAnswerListData, String emailValue, String passwordValue, bool isTermConditionCheck, bool isEmailMarkCheck) async {
     var client = http.Client();
     var album;
     try {
       var response = await NetworkService(
-              url, requestMethod, _setUserSignUpPayload(selectedAnswerListData,emailValue,passwordValue))
+              url, requestMethod, _setUserSignUpPayload(selectedAnswerListData,emailValue,passwordValue,isTermConditionCheck,isEmailMarkCheck))
           .serviceCall();
       if (response is AppException) {
         return response;
@@ -42,7 +42,7 @@ class SignUpScreenRepository {
     }
   }
 
-  String _setUserSignUpPayload(List<SelectedAnswers> selectedAnswers, String emailValue, String passwordValue) {
+  String _setUserSignUpPayload(List<SelectedAnswers> selectedAnswers, String emailValue, String passwordValue, bool isTermConditionCheck, bool isEmailMarkCheck) {
     SignUpScreenOnBoardModel signUpScreenOnBoardModel =
         SignUpScreenOnBoardModel();
 
@@ -61,6 +61,8 @@ class SignUpScreenRepository {
     signUpScreenOnBoardModel.notificationKey = "";
     signUpScreenOnBoardModel.password = passwordValue;
     signUpScreenOnBoardModel.sex = genderValue.answer;
+    signUpScreenOnBoardModel.termsAndPolicy = isTermConditionCheck;
+    signUpScreenOnBoardModel.emailNotification = isEmailMarkCheck;
 
     return jsonEncode(signUpScreenOnBoardModel);
   }

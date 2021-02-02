@@ -38,8 +38,11 @@ class AddHeadacheSection extends StatefulWidget {
   final Function moveWelcomeOnBoardTwoScreen;
   final String updateAtValue;
   final List<SelectedAnswers> selectedAnswers;
+  final List<SelectedAnswers> doubleTapSelectedAnswer;
   final bool isHeadacheEnded;
   final CurrentUserHeadacheModel currentUserHeadacheModel;
+  final bool isFromRecordsScreen;
+  final String uiHints;
 
   AddHeadacheSection(
       {Key key,
@@ -61,7 +64,10 @@ class AddHeadacheSection extends StatefulWidget {
       this.allQuestionsList,
       this.selectedAnswers,
       this.isHeadacheEnded,
-      this.currentUserHeadacheModel})
+      this.currentUserHeadacheModel,
+      this.doubleTapSelectedAnswer,
+      this.isFromRecordsScreen = false,
+      this.uiHints})
       : super(key: key);
 
   @override
@@ -84,7 +90,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   List<TriggerWidgetModel> _triggerWidgetList = [];
   String previousMedicationTag;
   List<SelectedAnswers> selectedAnswerListOfTriggers = [];
-  List<SelectedAnswers> doubleTapSelectedAnswer = [];
   List<List<String>> _additionalMedicationDosage = [];
 
   ///Method to get section widget
@@ -98,6 +103,16 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           widget.valuesList.add(Values(
               text: Constant.plusText,
               valueNumber: widget.valuesList.length.toString()));
+        }
+
+        if(widget.selectedAnswers != null) {
+          SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element) => element.questionTag == widget.contentType, orElse: () => null);
+
+          if(selectedAnswers != null) {
+            Values selectedValue = widget.valuesList.firstWhere((element) => element.text == selectedAnswers.answer, orElse: () => null);
+            if (selectedValue != null)
+              selectedValue.isSelected = true;
+          }
         }
         return _getWidget(CircleLogOptions(
           logOptions: widget.valuesList,
@@ -117,6 +132,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'severity', orElse: () => null);
           if (intensitySelectedAnswer != null) {
             selectedCurrentValue = intensitySelectedAnswer.answer;
+          } else {
+            widget.selectedAnswers.add(SelectedAnswers(questionTag: 'severity', answer: widget.min.toInt().toString()));
           }
         }
 
@@ -138,6 +155,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
       case 'disability':
         String selectedCurrentValue;
@@ -145,6 +163,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           SelectedAnswers intensitySelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == 'disability', orElse: () => null);
           if (intensitySelectedAnswer != null) {
             selectedCurrentValue = intensitySelectedAnswer.answer;
+          } else {
+            widget.selectedAnswers.add(SelectedAnswers(questionTag: 'disability', answer: widget.min.toInt().toString()));
           }
         }
 
@@ -166,13 +186,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
 
       case 'behavior.presleep':
         if (!isValuesUpdated) {
           isValuesUpdated = true;
           Values value = widget.valuesList.firstWhere(
-              (element) => element.isDoubleTapped,
+              (element) => element.isDoubleTapped || element.isSelected,
               orElse: () => null);
           if (value != null) {
             try {
@@ -219,7 +240,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           if (!isValuesUpdated) {
             isValuesUpdated = true;
             Values value = widget.valuesList.firstWhere(
-                    (element) => element.isDoubleTapped,
+                    (element) => element.isDoubleTapped || element.isSelected,
                 orElse: () => null);
             if (value != null) {
               _onMedicationItemSelected(int.parse(value.valueNumber) - 1);
@@ -228,8 +249,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       (element) => element.questionTag == 'administered',
                   orElse: () => null);
               if (selectedAnswers != null) {
-                _medicineTimeList[whichMedicationItemSelected][0] =
-                    DateTime.parse(selectedAnswers.answer).toString();
+                DateTime dateTime = DateTime.parse(selectedAnswers.answer).toLocal();
+                _medicineTimeList[whichMedicationItemSelected][0] = Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
               }
             }
           }
@@ -257,7 +278,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if (!isValuesUpdated) {
           isValuesUpdated = true;
           widget.valuesList.asMap().forEach((index, element) {
-            if (element.isSelected && element.isDoubleTapped) {
+            if (element.isSelected || element.isDoubleTapped) {
               Future.delayed(Duration(milliseconds: index * 400), () {
                 _onTriggerItemSelected(index);
               });
@@ -314,19 +335,21 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       });
 
       widget.selectedAnswers.removeWhere((element) => element.questionTag.contains('triggers1'));
-      doubleTapSelectedAnswer.removeWhere((element) => element.questionTag.contains('triggers1'));
+      widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag.contains('triggers1'));
     }
     
     if (isDoubleTapped) {
       if (questionType == 'multi') {
-        widget.selectedAnswers.add(
-            SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
-        doubleTapSelectedAnswer.add(
-            SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        SelectedAnswers selectedAnswerValue = widget.selectedAnswers.firstWhere((element) => (element.questionTag == currentTag && element.answer == selectedAnswer), orElse: () => null);
+        if(selectedAnswerValue == null) {
+          widget.selectedAnswers.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+        }
+
+        SelectedAnswers doubleTapSelectedAnswer = widget.doubleTapSelectedAnswer.firstWhere((element) => (element.questionTag == currentTag && element.answer == selectedAnswer), orElse: () => null);
+        if(doubleTapSelectedAnswer == null)
+          widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
-        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
-            (element) => element.questionTag == currentTag,
-            orElse: () => null);
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
         if (selectedAnswerObj == null) {
           widget.selectedAnswers.add(
               SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
@@ -334,12 +357,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           selectedAnswerObj.answer = selectedAnswer;
         }
 
-        SelectedAnswers doubleTapSelectedAnswerObj = doubleTapSelectedAnswer.firstWhere(
-                (element) => element.questionTag == currentTag,
-            orElse: () => null);
+        SelectedAnswers doubleTapSelectedAnswerObj = widget.doubleTapSelectedAnswer.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
         if (doubleTapSelectedAnswerObj == null) {
-          doubleTapSelectedAnswer.add(
-              SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
+          widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
         } else {
           doubleTapSelectedAnswerObj.answer = selectedAnswer;
         }
@@ -359,7 +379,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         });
 
         List<SelectedAnswers> doubleTapSelectedAnswerList = [];
-        doubleTapSelectedAnswer.forEach((element) {
+        widget.doubleTapSelectedAnswer.forEach((element) {
           if (element.questionTag == currentTag &&
               element.answer == selectedAnswer) {
             doubleTapSelectedAnswerList.add(element);
@@ -367,7 +387,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         });
 
         doubleTapSelectedAnswerList.forEach((element) {
-          doubleTapSelectedAnswer.remove(element);
+          widget.doubleTapSelectedAnswer.remove(element);
         });
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
@@ -378,12 +398,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           widget.selectedAnswers.remove(selectedAnswerObj);
         }
 
-        SelectedAnswers doubleTapSelectedAnswerObj = doubleTapSelectedAnswer.firstWhere(
+        SelectedAnswers doubleTapSelectedAnswerObj = widget.doubleTapSelectedAnswer.firstWhere(
                 (element) => element.questionTag == currentTag,
             orElse: () => null);
 
         if (doubleTapSelectedAnswerObj != null) {
-          doubleTapSelectedAnswer.remove(doubleTapSelectedAnswerObj);
+          widget.doubleTapSelectedAnswer.remove(doubleTapSelectedAnswerObj);
         }
       }
     }
@@ -403,13 +423,13 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           values.forEach((element) {
             if (element.isSelected) {
               widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
-              doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+              widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
             }
           });
         } else {
           widget.selectedAnswers.removeWhere(
               (element) => element.questionTag == 'behavior.sleep');
-          doubleTapSelectedAnswer.removeWhere(
+          widget.doubleTapSelectedAnswer.removeWhere(
                   (element) => element.questionTag == 'behavior.sleep');
         }
         break;
@@ -432,11 +452,11 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
 
         if(isDoubleTapped) {
-          SelectedAnswers selectedAnswers = doubleTapSelectedAnswer.firstWhere(
+          SelectedAnswers selectedAnswers = widget.doubleTapSelectedAnswer.firstWhere(
                   (element) => element.questionTag == 'administered',
               orElse: () => null);
           if (selectedAnswers == null) {
-            doubleTapSelectedAnswer.add(SelectedAnswers(
+            widget.doubleTapSelectedAnswer.add(SelectedAnswers(
                 questionTag: 'administered',
                 answer: medicationSelectedDataModelToJson(
                     _medicationSelectedDataModel)));
@@ -445,7 +465,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 medicationSelectedDataModelToJson(_medicationSelectedDataModel);
           }
         } else {
-          doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == 'administered');
+          widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == 'administered');
         }
         break;
       case 'triggers1':
@@ -493,16 +513,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   element1.questionTag == questionTriggerData.tag,
                   orElse: () => null);
               if (selectedAnswerTriggerData != null) {
-                SelectedAnswers selectedAnswerData = doubleTapSelectedAnswer
+                SelectedAnswers selectedAnswerData = widget.doubleTapSelectedAnswer
                     .firstWhere(
                         (element1) =>
                     element1.questionTag ==
                         selectedAnswerTriggerData.questionTag,
                     orElse: () => null);
                 if (selectedAnswerData == null) {
-                  doubleTapSelectedAnswer.add(SelectedAnswers(
-                      questionTag: selectedAnswerTriggerData.questionTag,
-                      answer: selectedAnswerTriggerData.answer));
+                  widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: selectedAnswerTriggerData.questionTag, answer: selectedAnswerTriggerData.answer));
                 } else {
                   selectedAnswerData.answer = selectedAnswerTriggerData.answer;
                 }
@@ -515,6 +533,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void storeLogDayDataIntoDatabase() async {
+    print(widget.doubleTapSelectedAnswer);
     List<Map> userLogDataMap;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
@@ -531,15 +550,15 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       else
         logDayQuestionnaire.userId = '4214';
 
-      logDayQuestionnaire.selectedAnswers = jsonEncode(doubleTapSelectedAnswer);
+      logDayQuestionnaire.selectedAnswers = jsonEncode(widget.doubleTapSelectedAnswer);
       SignUpOnBoardProviders.db.insertLogDayData(logDayQuestionnaire);
     } else {
       var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
       if(userProfileInfoData != null)
-        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(doubleTapSelectedAnswer), userProfileInfoData.userId);
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.doubleTapSelectedAnswer), userProfileInfoData.userId);
       else
-        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(doubleTapSelectedAnswer), '4214');
+        SignUpOnBoardProviders.db.updateLogDayData(jsonEncode(widget.doubleTapSelectedAnswer), '4214');
     }
   }
 
@@ -557,6 +576,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       _animationController.forward();
     } else {
       _animationController.reverse();
+      widget.selectedAnswers.removeWhere((element) => element.questionTag == widget.sleepExpandableWidgetList[0].tag);
+      widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == widget.sleepExpandableWidgetList[0].tag);
     }
   }
 
@@ -755,7 +776,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         DateTime _medicationDateTime = DateTime.now();
 
         try {
-          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]);
+          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]).toLocal();
         } catch(e) {
           print(e.toString());
         }
@@ -795,10 +816,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                         padding:
                         EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Text(
-                          Utils.getTimeInAmPmFormat(
-                              _medicationDateTime.hour,
-                              _medicationDateTime
-                                  .minute),
+                          Utils.getTimeInAmPmFormat(_medicationDateTime.hour, _medicationDateTime.minute),
                           style: TextStyle(
                               color: Constant.splashColor,
                               fontFamily: Constant.jostRegular,
@@ -1087,6 +1105,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           isAnimate: false,
                           horizontalPadding: 0,
                           onValueChangeCallback: onValueChangedCallback,
+                          uiHints: questions.uiHints,
                         ),
                       ],
                     )));
@@ -1119,6 +1138,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           child: TextFormField(
                             minLines: 5,
                             maxLines: 6,
+                            textCapitalization: TextCapitalization.sentences,
                             textInputAction: TextInputAction.done,
                             onChanged: (text) {
                               onValueChangedCallback(questionTag, text.trim());
@@ -1250,7 +1270,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(_numberOfDosageAddedList[whichMedicationItemSelected], (index) {
           try {
-            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]);
+            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]).toLocal();
           } catch(e) {
             print(e.toString());
           }
@@ -1315,7 +1335,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       _numberOfDosageAddedList[whichMedicationItemSelected] = _numberOfDosageAddedList[whichMedicationItemSelected] - 1;
                       _medicineTimeList[whichMedicationItemSelected].removeAt(index + 1);
                       _medicationDosageList[whichMedicationItemSelected].removeAt(index + 1);
-                      _additionalMedicationDosage[whichMedicationItemSelected].removeAt(index + 1);
+                      try {
+                        _additionalMedicationDosage[whichMedicationItemSelected]
+                            .removeAt(index);
+                      } catch(e) {
+                        print(e);
+                      }
                       _updateMedicationSelectedDataModel();
                       _storeExpandedWidgetDataIntoLocalModel();
                     });
@@ -1560,13 +1585,11 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
     if (widget.selectedAnswers != null) {
-      doubleTapSelectedAnswer.addAll(widget.selectedAnswers);
       widget.selectedAnswers.forEach((element) {
         if (element.questionTag.contains('triggers1.')) {
           selectedAnswerListOfTriggers.add(element);
@@ -1637,6 +1660,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
 
         whichMedicationItemSelected = _medicationSelectedDataModel.selectedMedicationIndex;
+        widget.valuesList[whichMedicationItemSelected].isSelected = true;
+        widget.valuesList[whichMedicationItemSelected].isDoubleTapped = _medicationSelectedDataModel.isDoubleTapped ?? true;
         _numberOfDosageAddedList[whichMedicationItemSelected] = _medicationSelectedDataModel.selectedMedicationDateList.length - 1;
         _medicineTimeList[whichMedicationItemSelected] = _medicationSelectedDataModel.selectedMedicationDateList;
 
@@ -1694,6 +1719,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
       }
     }
+    if(widget.isFromRecordsScreen)
+      _updateDoubleTapSelectedAnswersList();
   }
 
   @override
@@ -1770,9 +1797,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   void _updateSelectedAnswerListWhenCircleItemSelected(String selectedAnswer, bool isSelected) {
     if(isSelected) {
       if (widget.questionType == 'multi') {
-        widget.selectedAnswers.add(
-            SelectedAnswers(
-                questionTag: widget.contentType, answer: selectedAnswer));
+        SelectedAnswers selectedAnswersValue = widget.selectedAnswers.firstWhere((element) => element.questionTag == widget.contentType && element.answer == selectedAnswer, orElse: () => null);
+        if(selectedAnswersValue == null)
+          widget.selectedAnswers.add(SelectedAnswers(questionTag: widget.contentType, answer: selectedAnswer));
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
                 (element) => element.questionTag == widget.contentType,
@@ -1924,16 +1951,15 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           },
         )
     );
+  }
 
-    /*if(addMedicationResult != null && addMedicationResult is String && addMedicationResult != '') {
-      setState(() {
-        widget.valuesList.insert(widget.valuesList.length - 1, Values(text: addMedicationResult, valueNumber: (widget.valuesList.length).toString(), isNewlyAdded: true));
-        _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
-        _medicationDosageList.add(List.generate(1, (index) => Questions()));
-        _numberOfDosageAddedList.add(0);
-        _additionalMedicationDosage.add([]);
-        widget.medicationExpandableWidgetList.add(Questions(precondition: ''));
-      });
-    }*/
+  ///Method to update double tap selected answers list
+  void _updateDoubleTapSelectedAnswersList() {
+    widget.doubleTapSelectedAnswer.clear();
+    widget.selectedAnswers.forEach((element) {
+      if(element.isDoubleTapped ?? false) {
+        widget.doubleTapSelectedAnswer.add(element);
+      }
+    });
   }
 }

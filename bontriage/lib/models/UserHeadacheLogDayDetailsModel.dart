@@ -21,8 +21,9 @@ class HeadacheData {
   String headacheName;
   String headacheInfo;
   String headacheNote;
+  int headacheId;
 
-  HeadacheData({this.headacheNote, this.headacheInfo, this.headacheName});
+  HeadacheData({this.headacheNote, this.headacheInfo, this.headacheName, this.headacheId});
 }
 
 class LogDayData {

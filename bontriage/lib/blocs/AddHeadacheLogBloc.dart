@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:mobile/models/AddHeadacheLogModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/HeadacheLogDataModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -15,6 +16,10 @@ class AddHeadacheLogBloc {
   StreamController<dynamic> _addNoteStreamController;
   CurrentUserHeadacheModel currentUserHeadacheModel;
   int count = 0;
+
+  List<SelectedAnswers> selectedAnswersList = [];
+
+  int headacheId;
 
   StreamSink<dynamic> get addHeadacheLogDataSink =>
       _addHeadacheLogStreamController.sink;
@@ -36,11 +41,63 @@ class AddHeadacheLogBloc {
   Stream<dynamic> get addNoteStream =>
       _addNoteStreamController.stream;
 
+  bool isHeadacheLogged = false;
+
+
   AddHeadacheLogBloc({this.count = 0}) {
     _addHeadacheLogStreamController = StreamController<dynamic>();
     _sendAddHeadacheLogStreamController = StreamController<dynamic>();
     _addNoteStreamController = StreamController<dynamic>();
     _addHeadacheLogRepository = AddHeadacheLogRepository();
+  }
+
+  fetchCalendarHeadacheLogDayData(CurrentUserHeadacheModel currentUserHeadacheModel) async {
+    this.headacheId = currentUserHeadacheModel.headacheId;
+    String apiResponse;
+    try {
+      String url = '${WebservicePost.qaServerUrl}calender/${currentUserHeadacheModel.headacheId}';
+      var response = await _addHeadacheLogRepository.calendarTriggersServiceCall(url, RequestMethod.GET);
+      if (response is AppException) {
+        apiResponse = response.toString();
+        addHeadacheLogDataSink.addError(response.toString());
+      } else {
+        if (response != null && response is List<HeadacheLogDataModel>) {
+          List<HeadacheLogDataModel> headacheLogDataModelList = response;
+
+          headacheLogDataModelList.forEach((headacheLogDataModelElement) {
+            headacheLogDataModelElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
+              selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
+            });
+          });
+        }
+
+        SelectedAnswers endTimeSelectedAnswer = selectedAnswersList.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+        SelectedAnswers onGoingSelectedAnswer = selectedAnswersList.firstWhere((element) => element.questionTag == Constant.onGoingTag, orElse: () => null);
+
+        if(onGoingSelectedAnswer != null) {
+          if(onGoingSelectedAnswer.answer.toLowerCase() == 'yes') {
+            onGoingSelectedAnswer.answer = 'No';
+
+            if(endTimeSelectedAnswer != null) {
+              endTimeSelectedAnswer.answer = currentUserHeadacheModel.selectedEndDate;
+            } else {
+              selectedAnswersList.add(SelectedAnswers(questionTag: Constant.endTimeTag, answer: currentUserHeadacheModel.selectedEndDate));
+            }
+          }
+        } else {
+          selectedAnswersList.add(SelectedAnswers(questionTag: Constant.onGoingTag, answer: 'No'));
+
+          if(endTimeSelectedAnswer == null) {
+            selectedAnswersList.add(SelectedAnswers(questionTag: Constant.endTimeTag, answer: currentUserHeadacheModel.selectedEndDate));
+          }
+        }
+        await fetchAddHeadacheLogData();
+      }
+    } catch (e) {
+      apiResponse = Constant.somethingWentWrong;
+      addHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));
+    }
+    return apiResponse;
   }
 
   fetchAddHeadacheLogData() async {
@@ -83,17 +140,19 @@ class AddHeadacheLogBloc {
     String apiResponse;
     try {
       _addHeadacheLogRepository.currentUserHeadacheModel = currentUserHeadacheModel;
-      var signUpFirstStepData =
-          await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(
-              WebservicePost.qaServerUrl + 'event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
+      var signUpFirstStepData;
+      if(headacheId == null)
+        signUpFirstStepData = await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(WebservicePost.qaServerUrl + 'event', RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+      else
+        signUpFirstStepData = await _addHeadacheLogRepository.userAddHeadacheObjectServiceCall(WebservicePost.qaServerUrl + 'event/$headacheId', RequestMethod.POST, signUpOnBoardSelectedAnswersModel);
+
       if (signUpFirstStepData is AppException) {
         sendAddHeadacheLogDataSink.addError(signUpFirstStepData);
         apiResponse = signUpFirstStepData.toString();
         //signUpFirstStepDataSink.add(signUpFirstStepData.toString());
       } else {
         if(signUpFirstStepData != null) {
+          isHeadacheLogged = true;
           apiResponse = Constant.success;
         } else {
           sendAddHeadacheLogDataSink.addError(Exception(Constant.somethingWentWrong));

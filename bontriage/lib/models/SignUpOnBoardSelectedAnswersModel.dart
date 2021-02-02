@@ -38,8 +38,9 @@ class SignUpOnBoardSelectedAnswersModel {
 class SelectedAnswers {
   String questionTag;
   String answer;
+  bool isDoubleTapped;
 
-  SelectedAnswers({this.questionTag, this.answer});
+  SelectedAnswers({this.questionTag, this.answer, this.isDoubleTapped});
 
   SelectedAnswers.fromJson(Map<dynamic, dynamic> json) {
     questionTag = json['questionTag'];

@@ -15,9 +15,18 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getTutorialsState();
+  }
+
+  @override
+  void dispose() {
+    try {
+      timer.cancel();
+    } catch (e) {
+      print(e);
+    }
+    super.dispose();
   }
 
   @override

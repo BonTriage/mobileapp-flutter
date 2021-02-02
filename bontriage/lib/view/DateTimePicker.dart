@@ -18,7 +18,6 @@ class _DateTimePickerState extends State<DateTimePicker> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
     _selectedDateTime = _dateTime;
@@ -86,7 +85,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                           backgroundColor: Colors.transparent,
                           mode: widget.cupertinoDatePickerMode,
                           use24hFormat: false,
-                          maximumDate: _dateTime,
+                          maximumDate: (widget.cupertinoDatePickerMode != CupertinoDatePickerMode.time) ? _dateTime : null,
                           maximumYear: _dateTime.year,
                           onDateTimeChanged: (dateTime) {
                             _selectedDateTime = dateTime;

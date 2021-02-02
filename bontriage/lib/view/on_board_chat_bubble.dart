@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/PhotoHero.dart';
 
@@ -33,6 +34,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool isVolumeOn = false;
   AnimationController _animationController;
+  ScrollController _scrollController;
 
   ///Method to toggle volume on or off
   void _toggleVolume() async {
@@ -47,6 +49,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addObserver(this);
 
     _animationController =
@@ -85,6 +88,13 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
       if (isVolumeOn)
         TextToSpeechRecognition.speechToText(widget.chatBubbleText);
     }
+
+    try {
+      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      Future.delayed(Duration(milliseconds: 150), () {
+        _scrollController.jumpTo(0);
+      });
+    } catch(e) {}
   }
 
   Widget _getTextWidget() {
@@ -93,11 +103,16 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: RichText(
-            text: TextSpan(
-              children: widget.textSpanList,
+        child: CustomScrollBar(
+          controller: _scrollController,
+          isAlwaysShown: false,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            child: RichText(
+              text: TextSpan(
+                children: widget.textSpanList,
+              ),
             ),
           ),
         ),
@@ -107,17 +122,22 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
         constraints: BoxConstraints(
           maxHeight: Constant.chatBubbleMaxHeight,
         ),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Text(
-            widget.chatBubbleText,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: Constant.jostRegular,
-              height: 1.3,
-              color: (widget.chatBubbleColor == null)
-                  ? Constant.chatBubbleGreen
-                  : Constant.bubbleChatTextView,
+        child: CustomScrollBar(
+          controller: _scrollController,
+          isAlwaysShown: false,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            child: Text(
+              widget.chatBubbleText,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: Constant.jostRegular,
+                height: 1.3,
+                color: (widget.chatBubbleColor == null)
+                    ? Constant.chatBubbleGreen
+                    : Constant.bubbleChatTextView,
+              ),
             ),
           ),
         ),

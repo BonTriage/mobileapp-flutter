@@ -121,7 +121,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
               style: TextStyle(
                   fontSize: 13,
                   fontFamily: Constant.jostMedium,
-                  color: Constant.selectTextColor),
+                  color: Constant.chatBubbleGreen.withOpacity(0.5)),
             ),
             SizedBox(
               height: 10,

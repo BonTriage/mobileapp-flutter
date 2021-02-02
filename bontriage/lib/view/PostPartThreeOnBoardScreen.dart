@@ -39,6 +39,7 @@ class _PostPartThreeOnBoardScreenState
   ];
 
   int _currentIndex = 0;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
@@ -55,9 +56,15 @@ class _PostPartThreeOnBoardScreenState
           isShowNextButton: _currentIndex != (_questionList.length - 1),
           bubbleChatTextSpanList: _questionList[_currentIndex],
           nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+            if(!_isButtonClicked) {
+              _isButtonClicked = true;
+              setState(() {
+                _currentIndex++;
+              });
+              Future.delayed(Duration(milliseconds: 350), () {
+                _isButtonClicked = false;
+              });
+            }
           },
           chatText: _chatTextList[_currentIndex],
           bottomButtonText: Constant.setUpNotifications,
@@ -80,12 +87,23 @@ class _PostPartThreeOnBoardScreenState
   }
 
   Future<bool> _onBackPressed() async {
-    if(_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if(_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }

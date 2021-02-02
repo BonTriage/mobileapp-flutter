@@ -42,25 +42,35 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   List<SignUpOnBoardFirstStepQuestionsModel> _pageViewWidgetList = [];
   bool isEndOfOnBoard = false;
-  bool isButtonClicked = false;
+  bool _isButtonClicked = false;
 
   bool isAlreadyDataFiltered = false;
 
   Future<bool> _onBackPressed() async{
-    if(_currentPageIndex == 0) {
-      return true;
-    } else {
-      isButtonClicked = true;
-      setState(() {
-        double stepOneProgress = 1 / _pageViewWidgetList.length;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentPageIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          double stepOneProgress = 1 / _pageViewWidgetList.length;
 
-        if (_currentPageIndex != 0) {
-          _progressPercent -= stepOneProgress;
-          _currentPageIndex--;
-          _pageController.animateToPage(_currentPageIndex,
-              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-        }
-      });
+          if (_currentPageIndex != 0) {
+            _progressPercent -= stepOneProgress;
+            _currentPageIndex--;
+            _pageController.animateToPage(_currentPageIndex,
+                duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
+    } else {
       return false;
     }
   }
@@ -130,33 +140,41 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                   )),
                   OnBoardBottomButtons(
                     progressPercent: _progressPercent,
-                    backButtonFunction: _onBackPressed,
+                    backButtonFunction: () {
+                      _onBackPressed();
+                    },
                     currentIndex: _currentPageIndex,
                     nextButtonFunction: () {
-                      isButtonClicked = true;
-                      if (Utils.validationForOnBoard(
-                          signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                          currentQuestionListData[_currentPageIndex])) {
-                        setState(() {
-                          double stepOneProgress = 1 / _pageViewWidgetList.length;
+                      if(!_isButtonClicked) {
+                        _isButtonClicked = true;
+                        if (Utils.validationForOnBoard(
+                            signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                            currentQuestionListData[_currentPageIndex])) {
+                          setState(() {
+                            double stepOneProgress = 1 /
+                                _pageViewWidgetList.length;
 
-                          if (_progressPercent == 1) {
-                            sendToNextScreen();
-                          } else {
-                            _currentPageIndex++;
+                            if (_progressPercent == 1) {
+                              sendToNextScreen();
+                            } else {
+                              _currentPageIndex++;
 
-                            if (_currentPageIndex !=
-                                _pageViewWidgetList.length - 1)
-                              _progressPercent += stepOneProgress;
-                            else {
-                              _progressPercent = 1;
+                              if (_currentPageIndex !=
+                                  _pageViewWidgetList.length - 1)
+                                _progressPercent += stepOneProgress;
+                              else {
+                                _progressPercent = 1;
+                              }
+
+                              _pageController.animateToPage(_currentPageIndex,
+                                  duration: Duration(milliseconds: 1),
+                                  curve: Curves.easeIn);
                             }
-
-                            _pageController.animateToPage(_currentPageIndex,
-                                duration: Duration(milliseconds: 1),
-                                curve: Curves.easeIn);
-                          }
-                          getCurrentQuestionTag(_currentPageIndex);
+                            getCurrentQuestionTag(_currentPageIndex);
+                          });
+                        }
+                        Future.delayed(Duration(milliseconds: 350), () {
+                          _isButtonClicked = false;
                         });
                       }
                     },
@@ -280,6 +298,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 

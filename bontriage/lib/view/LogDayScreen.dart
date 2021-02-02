@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:mobile/blocs/LogDayBloc.dart';
+import 'package:mobile/models/LogDayScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -13,16 +14,17 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
-import 'package:mobile/view/DeleteLogOptionsBottomSheet.dart';
+import 'package:mobile/view/DiscardChangesBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 import 'NetworkErrorScreen.dart';
 
 class LogDayScreen extends StatefulWidget {
-  final DateTime selectedDateTime;
+  final LogDayScreenArgumentModel logDayScreenArgumentModel;
 
-  const LogDayScreen({Key key, this.selectedDateTime}) : super(key: key);
+  const LogDayScreen({Key key, this.logDayScreenArgumentModel})
+      : super(key: key);
 
   @override
   _LogDayScreenState createState() => _LogDayScreenState();
@@ -41,16 +43,22 @@ class _LogDayScreenState extends State<LogDayScreen>
   List<SelectedAnswers> selectedAnswers = [];
 
   bool _isDataPopulated = false;
+  bool _isButtonClicked = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.selectedDateTime == null) {
+    if (widget.logDayScreenArgumentModel == null) {
       _dateTime = DateTime.now();
     } else {
-      _dateTime = widget.selectedDateTime;
+      _dateTime = widget.logDayScreenArgumentModel.selectedDateTime;
     }
-    _logDayBloc = LogDayBloc(widget.selectedDateTime);
+    if (widget.logDayScreenArgumentModel != null) {
+      _logDayBloc =
+          LogDayBloc(widget.logDayScreenArgumentModel.selectedDateTime);
+    } else {
+      _logDayBloc = LogDayBloc(null);
+    }
 
     requestService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -67,29 +75,50 @@ class _LogDayScreenState extends State<LogDayScreen>
           await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
     else
       logDayDataList = await _logDayBloc.getAllLogDayData('4214');
-    if (logDayDataList.length > 0) {
+    if (logDayDataList.length > 0 && selectedAnswers.length == 0) {
       logDayDataList.forEach((element) {
         List<dynamic> map = jsonDecode(element['selectedAnswers']);
         map.forEach((element) {
           selectedAnswers.add(SelectedAnswers(
-              questionTag: element['questionTag'], answer: element['answer']));
+              questionTag: element['questionTag'],
+              answer: element['answer'],
+              isDoubleTapped: true));
         });
       });
     }
-    _logDayBloc.fetchLogDayData();
+
+    List<SelectedAnswers> doubleTappedSelectedAnswerList = [];
+    doubleTappedSelectedAnswerList.addAll(selectedAnswers);
+
+    String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
+
+    await _logDayBloc.fetchCalendarHeadacheLogDayData(selectedDate);
+
+    selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
+
+    if (widget.logDayScreenArgumentModel == null ||
+        (widget.logDayScreenArgumentModel != null &&
+            !widget.logDayScreenArgumentModel.isFromRecordScreen)) {
+      if (selectedAnswers.length == 0)
+        selectedAnswers = doubleTappedSelectedAnswerList;
+    }
   }
 
   @override
   void dispose() {
+    _logDayBloc.dispose();
     super.dispose();
-    print('dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _showDeleteLogOptionBottomSheet();
+        FocusScope.of(context).requestFocus(FocusNode());
+        if (selectedAnswers.length > 0)
+          _showDiscardChangesBottomSheet();
+        else
+          return true;
         return false;
       },
       child: Scaffold(
@@ -126,7 +155,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                             ),
                             GestureDetector(
                               onTap: () {
-                                _showDeleteLogOptionBottomSheet();
+                                _showDiscardChangesBottomSheet();
                                 //Navigator.pop(context);
                               },
                               child: Image(
@@ -187,7 +216,33 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _onSubmitClicked();
+                                        if (!_isButtonClicked) {
+                                          _isButtonClicked = true;
+                                          if (selectedAnswers.length > 0) {
+                                            SelectedAnswers
+                                            logDayNoteSelectedAnswer =
+                                            selectedAnswers.firstWhere(
+                                                    (element) =>
+                                                element.questionTag ==
+                                                    Constant.logDayNoteTag,
+                                                orElse: () => null);
+                                            if (logDayNoteSelectedAnswer ==
+                                                null)
+                                              selectedAnswers.add(
+                                                  SelectedAnswers(
+                                                      questionTag:
+                                                      Constant.logDayNoteTag,
+                                                      answer: Constant
+                                                          .blankString));
+                                            _onSubmitClicked();
+                                          } else {
+                                            Utils.showValidationErrorDialog(
+                                                context,
+                                                Constant
+                                                    .selectAtLeastOneOptionLogDayError);
+                                            _isButtonClicked = false;
+                                          }
+                                        }
                                       },
                                       child: Container(
                                         width: 110,
@@ -221,7 +276,10 @@ class _LogDayScreenState extends State<LogDayScreen>
                                   children: [
                                     BouncingWidget(
                                       onPressed: () {
-                                        _showDeleteLogOptionBottomSheet();
+                                        if (selectedAnswers.length > 0)
+                                          _showDiscardChangesBottomSheet();
+                                        else
+                                          Navigator.pop(context, false);
                                       },
                                       child: Container(
                                         width: 110,
@@ -316,7 +374,8 @@ class _LogDayScreenState extends State<LogDayScreen>
             try {
               int index = int.parse(element.answer) - 1;
               questions.values[index].isSelected = true;
-              questions.values[index].isDoubleTapped = true;
+              questions.values[index].isDoubleTapped =
+                  element.isDoubleTapped ?? true;
             } catch (e) {
               print(e.toString());
             }
@@ -342,20 +401,30 @@ class _LogDayScreenState extends State<LogDayScreen>
       questionList
           .removeWhere((element) => _triggerValuesList.contains(element));
 
+      List<SelectedAnswers> doubleTapSelectedAnswerList = [];
+
+      doubleTapSelectedAnswerList.addAll(selectedAnswers);
+
       questionList.forEach((element) {
         if (element.precondition == null || element.precondition.isEmpty) {
           _sectionWidgetList.add(
             AddHeadacheSection(
-                headerText: element.text,
-                subText: element.helpText,
-                contentType: element.tag,
-                sleepExpandableWidgetList: _sleepValuesList,
-                medicationExpandableWidgetList: _medicationValuesList,
-                triggerExpandableWidgetList: _triggerValuesList,
-                valuesList: element.values,
-                questionType: element.questionType,
-                allQuestionsList: allQuestionList,
-                selectedAnswers: selectedAnswers),
+              headerText: element.text,
+              subText: element.helpText,
+              contentType: element.tag,
+              sleepExpandableWidgetList: _sleepValuesList,
+              medicationExpandableWidgetList: _medicationValuesList,
+              triggerExpandableWidgetList: _triggerValuesList,
+              valuesList: element.values,
+              questionType: element.questionType,
+              allQuestionsList: allQuestionList,
+              selectedAnswers: selectedAnswers,
+              doubleTapSelectedAnswer: doubleTapSelectedAnswerList,
+              isFromRecordsScreen: (widget.logDayScreenArgumentModel != null)
+                  ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false
+                  : false,
+              uiHints: element.uiHints,
+            ),
           );
         }
       });
@@ -363,18 +432,21 @@ class _LogDayScreenState extends State<LogDayScreen>
     _isDataPopulated = true;
   }
 
-  void _showDeleteLogOptionBottomSheet() async {
-    var resultOfDeleteBottomSheet = await showModalBottomSheet(
+  void _showDiscardChangesBottomSheet() async {
+    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => DeleteLogOptionsBottomSheet());
-    if (resultOfDeleteBottomSheet == Constant.deleteLog) {
-      SignUpOnBoardProviders.db.deleteAllUserLogDayData();
-      Navigator.pop(context);
+        builder: (context) => DiscardChangesBottomSheet());
+    if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      if (widget.logDayScreenArgumentModel == null) {
+        Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+      } else {
+        Navigator.pop(context, false);
+      }
     }
   }
 
@@ -414,11 +486,21 @@ class _LogDayScreenState extends State<LogDayScreen>
         await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
     if (response is String) {
       if (response == Constant.success) {
-        SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(
-            context, Constant.logDaySuccessScreenRouter);
+        if (widget.logDayScreenArgumentModel == null) {
+          Navigator.pushReplacementNamed(
+              context, Constant.logDaySuccessScreenRouter);
+        } else {
+          if (widget.logDayScreenArgumentModel.isFromRecordScreen) {
+            Navigator.pop(context, true);
+          } else {
+            Navigator.pushReplacementNamed(
+                context, Constant.logDaySuccessScreenRouter);
+          }
+        }
       }
     }
+    _isButtonClicked = false;
   }
 }

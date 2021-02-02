@@ -41,7 +41,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   bool isAlreadyDataFiltered = false;
   SignUpOnBoardSecondStepBloc _signUpOnBoardSecondStepBloc;
 
-  bool isButtonClicked = false;
+  bool _isButtonClicked = false;
   SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel =
       SignUpOnBoardSelectedAnswersModel();
 
@@ -50,30 +50,46 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   List<Questions> currentQuestionListData = [];
 
   Future<bool> _onBackPressed() async {
-    if(_currentPageIndex == 0) {
-      if (widget.argumentsName == Constant.clinicalImpressionEventType) {
-        var userHeadacheName = signUpOnBoardSelectedAnswersModel.selectedAnswers
-            .firstWhere((model) => model.questionTag == "nameClinicalImpression", orElse: () => null);
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentPageIndex == 0) {
+        if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+          var userHeadacheName = signUpOnBoardSelectedAnswersModel
+              .selectedAnswers
+              .firstWhere((model) =>
+          model.questionTag == "nameClinicalImpression", orElse: () => null);
 
-        if(userHeadacheName != null)
-          Navigator.pop(context, userHeadacheName.answer);
-        else
-          Navigator.pop(context);
+          if (userHeadacheName != null)
+            Navigator.pop(context, userHeadacheName.answer);
+          else
+            Navigator.pop(context);
 
+          Future.delayed(Duration(milliseconds: 350), () {
+            _isButtonClicked = false;
+          });
+          return false;
+        }
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          double stepOneProgress = 1 / _pageViewWidgetList.length;
+
+          if (_currentPageIndex != 0) {
+            _progressPercent -= stepOneProgress;
+            _currentPageIndex--;
+            _pageController.animateToPage(_currentPageIndex,
+                duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+          }
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
         return false;
       }
-      return true;
     } else {
-      setState(() {
-        double stepOneProgress = 1 / _pageViewWidgetList.length;
-
-        if (_currentPageIndex != 0) {
-          _progressPercent -= stepOneProgress;
-          _currentPageIndex--;
-          _pageController.animateToPage(_currentPageIndex,
-              duration: Duration(milliseconds: 1), curve: Curves.easeIn);
-        }
-      });
       return false;
     }
   }
@@ -115,10 +131,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     .signUpOnBoardSecondStepDataStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (!isAlreadyDataFiltered && !isButtonClicked) {
+                    if (!isAlreadyDataFiltered && !_isButtonClicked) {
                       Utils.closeApiLoaderDialog(context);
                       addFilteredQuestionListData(snapshot.data);
-                      isButtonClicked = false;
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -152,33 +167,41 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                         ),
                         OnBoardBottomButtons(
                           progressPercent: _progressPercent,
-                          backButtonFunction: _onBackPressed,
+                          backButtonFunction: () {
+                            _onBackPressed();
+                          },
                           currentIndex: _currentPageIndex,
                           nextButtonFunction: () {
-                            if (Utils.validationForOnBoard(
-                                signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                                currentQuestionListData[_currentPageIndex])) {
-                              setState(() {
-                                double stepOneProgress =
-                                    1 / _pageViewWidgetList.length;
-                                if (_progressPercent == 1) {
-                                  moveUserToNextScreen();
-                                } else {
-                                  _currentPageIndex++;
+                            if(!_isButtonClicked) {
+                              _isButtonClicked = true;
+                              if (Utils.validationForOnBoard(
+                                  signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                                  currentQuestionListData[_currentPageIndex])) {
+                                setState(() {
+                                  double stepOneProgress =
+                                      1 / _pageViewWidgetList.length;
+                                  if (_progressPercent == 1) {
+                                    moveUserToNextScreen();
+                                  } else {
+                                    _currentPageIndex++;
 
-                                  if (_currentPageIndex !=
-                                      _pageViewWidgetList.length - 1)
-                                    _progressPercent += stepOneProgress;
-                                  else {
-                                    _progressPercent = 1;
+                                    if (_currentPageIndex !=
+                                        _pageViewWidgetList.length - 1)
+                                      _progressPercent += stepOneProgress;
+                                    else {
+                                      _progressPercent = 1;
+                                    }
+
+                                    _pageController.animateToPage(_currentPageIndex,
+                                        duration: Duration(milliseconds: 1),
+                                        curve: Curves.easeIn);
                                   }
-
-                                  _pageController.animateToPage(_currentPageIndex,
-                                      duration: Duration(milliseconds: 1),
-                                      curve: Curves.easeIn);
-                                }
-                                if(widget.argumentsName == Constant.clinicalImpressionShort1)
-                                  getCurrentQuestionTag(_currentPageIndex);
+                                  if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                                    getCurrentQuestionTag(_currentPageIndex);
+                                });
+                              }
+                              Future.delayed(Duration(milliseconds: 350), () {
+                                _isButtonClicked = false;
                               });
                             }
                           },
@@ -226,6 +249,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 

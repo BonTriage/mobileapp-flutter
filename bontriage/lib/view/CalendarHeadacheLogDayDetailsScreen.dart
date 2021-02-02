@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarHeadacheLogDayDetailsBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -21,9 +22,11 @@ class _CalendarHeadacheLogDayDetailsScreenState
     extends State<CalendarHeadacheLogDayDetailsScreen> {
   DateTime _dateTime;
   bool isPageChanged = false;
+  bool isDataUpdated = false;
   CalendarHeadacheLogDayDetailsBloc calendarHeadacheLogDayDetailsBloc;
   UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel =
       UserHeadacheLogDayDetailsModel();
+  int _headacheIdSelected;
 
   @override
   void initState() {
@@ -82,7 +85,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
                                 alignment: Alignment.topRight,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.pop(context);
+                                    Navigator.pop(context, isDataUpdated);
                                   },
                                   child: Image(
                                     image: AssetImage(Constant.closeIcon),
@@ -100,19 +103,27 @@ class _CalendarHeadacheLogDayDetailsScreenState
                               stream: calendarHeadacheLogDayDetailsBloc
                                   .calendarLogDayDetailsDataStream,
                               builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  userHeadacheLogDayDetailsModel =
-                                      snapshot.data;
+                                if (snapshot.hasData && snapshot.data is UserHeadacheLogDayDetailsModel) {
+                                  userHeadacheLogDayDetailsModel = snapshot.data;
                                   return Column(
                                     children: [
                                       RecordCalendarHeadacheSection(
-                                          userHeadacheLogDayDetailsModel:
-                                              userHeadacheLogDayDetailsModel),
+                                        dateTime: _dateTime,
+                                          userHeadacheLogDayDetailsModel: userHeadacheLogDayDetailsModel,
+                                          onHeadacheTypeSelectedCallback: (headacheIdSelected) {
+                                            _headacheIdSelected = headacheIdSelected;
+                                          },
+                                        openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                        onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
+                                      ),
                                       RecordDayPage(
                                           hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
                                           dateTime: _dateTime,
                                           userHeadacheLogDayDetailsModel:
-                                              userHeadacheLogDayDetailsModel),
+                                              userHeadacheLogDayDetailsModel,
+                                        openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                        onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
+                                      ),
 
                                     ],
                                   );
@@ -136,13 +147,44 @@ class _CalendarHeadacheLogDayDetailsScreenState
   }
 
   void callAPIService() {
+    calendarHeadacheLogDayDetailsBloc.initNetworkStreamController();
     Utils.showApiLoaderDialog(context,
         networkStream: calendarHeadacheLogDayDetailsBloc.networkDataStream,
         tapToRetryFunction: () {
       calendarHeadacheLogDayDetailsBloc.enterSomeDummyDataToStream();
+      _requestService();
     });
+    _requestService();
+  }
+
+  void _requestService() {
     String selectedDate = '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}T00:00:00Z';
-    calendarHeadacheLogDayDetailsBloc
-        .fetchCalendarHeadacheLogDayData(selectedDate);
+    calendarHeadacheLogDayDetailsBloc.fetchCalendarHeadacheLogDayData(selectedDate);
+  }
+
+  ///Method to open headache or log day screen
+  ///@param isForHeadache: to identify which screen should open (Add Headache or Log Day screen)
+  ///@param arguments: arguments needed to be send to other screen
+  void _openHeadacheLogDayScreen(bool isForHeadache, bool isEditing, dynamic arguments) async{
+      dynamic dataReceived;
+
+      if(isForHeadache) {
+        if(arguments is CurrentUserHeadacheModel && arguments != null && isEditing) {
+          arguments.headacheId = _headacheIdSelected;
+        }
+        dataReceived = await Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: arguments);
+      } else {
+        dataReceived = await Navigator.pushNamed(context, Constant.logDayScreenRouter,
+            arguments: arguments);
+      }
+      
+      print('RECORD DAY DATA??????$dataReceived');
+
+      if(dataReceived != null && dataReceived is bool) {
+        if(dataReceived) {
+          isDataUpdated = true;
+          callAPIService();
+        }
+      }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
@@ -5,6 +7,8 @@ import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DateTimePicker.dart';
 import 'NetworkErrorScreen.dart';
@@ -12,7 +16,10 @@ import 'NetworkErrorScreen.dart';
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
-  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}): super(key: key);
+  final StreamSink<dynamic> refreshCalendarDataSink;
+  final Stream<dynamic> refreshCalendarDataStream;
+
+  const CalendarIntensityScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.refreshCalendarDataStream, this.refreshCalendarDataSink}): super(key: key);
 
   @override
   _CalendarIntensityScreenState createState() =>
@@ -45,13 +52,30 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      });
-    });*/
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print('show api loader 4');
+      _showApiLoaderDialog();
+
+    });
+    _callApiService();
+
+    widget.refreshCalendarDataStream.listen((event) {
+      if(event is bool && event) {
+        currentMonth = _dateTime.month;
+        currentYear = _dateTime.year;
+        monthName = Utils.getMonthName(currentMonth);
+        totalDaysInCurrentMonth =
+            Utils.daysInCurrentMonth(currentMonth, currentYear);
+        firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, 1);
+        lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, totalDaysInCurrentMonth);
+        _calendarScreenBloc.initNetworkStreamController();
+
+        _callApiService();
+      }
+    });
   }
 
   @override
@@ -80,8 +104,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     });*/
-
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    _callApiService();
   }
 
   @override
@@ -176,16 +199,13 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     children: [
                       TableRow(children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Center(
-                            child: Text(
-                              'Su',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Constant.locationServiceGreen,
-                                  fontFamily: Constant.jostMedium),
-                            ),
+                        Center(
+                          child: Text(
+                            'Su',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Constant.locationServiceGreen,
+                                fontFamily: Constant.jostMedium),
                           ),
                         ),
                         Center(
@@ -266,8 +286,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                               errorMessage: snapshot.error.toString(),
                               tapToRetryFunction: () {
                                 Utils.showApiLoaderDialog(context);
-                                requestService(firstDayOfTheCurrentMonth,
-                                    lastDayOfTheCurrentMonth);
+                                _callApiService();
                               },
                             );
                           } else {
@@ -360,22 +379,28 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             SizedBox(
                               width: 5,
                             ),
-                            Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                  color: Constant.backgroundTransparentColor,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Constant.chatBubbleGreen,
-                                      width: 1.3)),
-                              child: Center(
-                                child: Text(
-                                  'i',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Constant.locationServiceGreen,
-                                      fontFamily: Constant.jostRegular),
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                _showMigraineDaysVsHeadacheDaysDialog();
+                              },
+                              child: Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                    color: Constant.backgroundTransparentColor,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Constant.chatBubbleGreen,
+                                        width: 1.3)),
+                                child: Center(
+                                  child: Text(
+                                    'i',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Constant.locationServiceGreen,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
                                 ),
                               ),
                             ),
@@ -566,7 +591,14 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     var calendarUtil = CalendarUtil(
         calenderType: 2,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
-        userMonthTriggersListData: [],navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback);
+        userMonthTriggersListData: [],
+        navigateToOtherScreenCallback: (routeName, data) async{
+          dynamic isDataUpdated = await widget.navigateToOtherScreenCallback(routeName, data);
+          if(isDataUpdated != null && isDataUpdated is bool && isDataUpdated) {
+            widget.refreshCalendarDataSink.add(true);
+          }
+          return isDataUpdated;
+        });
     currentMonthData =
         calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
@@ -613,12 +645,55 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        _callApiService();
       });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      _callApiService();
     });
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  void _showMigraineDaysVsHeadacheDaysDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: MigraineDaysVsHeadacheDaysDialog(),
+        );
+      },
+    );
+  }
+
+  void _callApiService() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    int recordTabBarPosition = 0;
+
+    try {
+      recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    } catch (e) {
+      print(e);
+    }
+
+    if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
+  }
+
+  void _showApiLoaderDialog() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+    if (isViewTrendsClicked.isEmpty) {
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        _callApiService();
+      });
+    }
+  }
 }

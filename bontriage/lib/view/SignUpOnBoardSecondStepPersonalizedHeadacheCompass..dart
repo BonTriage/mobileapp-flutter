@@ -152,14 +152,14 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
                                     features: features,
                                     data: data,
                                     reverseAxis: true,
-                                    compassValue: 0,
+                                    compassValue: 1,
                                   )
                                 : RadarChart.light(
                                     ticks: ticks,
                                     features: features,
                                     data: data,
                                     reverseAxis: true,
-                                    compassValue: 0,
+                                    compassValue: 1,
                                   ),
                           ),
                         ],

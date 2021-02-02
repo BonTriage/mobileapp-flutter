@@ -5,6 +5,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/CalendarRepository.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -15,6 +16,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel =
       UserHeadacheLogDayDetailsModel();
   int count = 0;
+  int onGoingHeadacheId;
 
   StreamSink<dynamic> get calendarLogDayDataSink =>
       _calendarLogDayStreamController.sink;
@@ -33,9 +35,10 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   fetchCalendarHeadacheLogDayData(String selectedDate) async {
+    if(userHeadacheLogDayDetailsModel.headacheLogDayListData != null)
+      userHeadacheLogDayDetailsModel.headacheLogDayListData.clear();
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
       String url = WebservicePost.qaServerUrl +
           'common/?' +
@@ -44,8 +47,7 @@ class CalendarHeadacheLogDayDetailsBloc {
           "&" +
           "user_id=" +
           userProfileInfoData.userId;
-      var response = await _calendarRepository.calendarTriggersServiceCall(
-          url, RequestMethod.GET);
+      var response = await _calendarRepository.calendarTriggersServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         apiResponse = response.toString();
         networkDataSink.addError(response);
@@ -116,12 +118,17 @@ class CalendarHeadacheLogDayDetailsBloc {
           (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.disabilityTag,
           orElse: () => null);
+      var headacheOnGoingData = element.mobileEventDetails.firstWhere(
+              (mobileEventElement) =>
+          mobileEventElement.questionTag == Constant.onGoingTag,
+          orElse: () => null);
       var headacheNoteData = element.mobileEventDetails.firstWhere(
           (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.headacheNoteTag,
           orElse: () => null);
 
       HeadacheData headacheData = HeadacheData();
+      headacheData.headacheId = element.id;
       String headacheInfo = "";
       if (headacheTypeData != null) {
         headacheData.headacheName = headacheTypeData.value;
@@ -133,17 +140,30 @@ class CalendarHeadacheLogDayDetailsBloc {
       } else {
         headacheData.headacheNote = "";
       }
-      if (headacheEndTimeData != null && headacheStartTimeData != null) {
-        DateTime startDataTime = DateTime.parse(headacheStartTimeData.value);
-        DateTime endDataTime = DateTime.parse(headacheEndTimeData.value);
-        Duration headacheTimeDuration = endDataTime.difference(startDataTime);
-        headacheInfo = _getDisplayTime(headacheTimeDuration.inMinutes.abs());
+      if(headacheOnGoingData != null) {
+        if(headacheOnGoingData.value.toLowerCase() == 'yes') {
+          onGoingHeadacheId = element.id;
+          headacheInfo = 'Headache On-Going: Yes';
+          if(headacheStartTimeData != null) {
+            DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
+            if(startDataTime != null) {
+              startDataTime = startDataTime.toLocal();
+              headacheInfo = '$headacheInfo\nStart Time: ${Utils.getTimeInAmPmFormat(startDataTime.hour, startDataTime.minute)}';
+            }
+          }
+        } else if (headacheEndTimeData != null && headacheStartTimeData != null) {
+          onGoingHeadacheId = null;
+          DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
+          DateTime endDataTime = DateTime.tryParse(headacheEndTimeData.value);
+          Duration headacheTimeDuration = endDataTime.difference(startDataTime);
+          headacheInfo = 'Duration: ${_getDisplayTime(headacheTimeDuration.inMinutes.abs())}';
+        }
       }
       if (headacheIntensityData != null) {
         headacheInfo =
-            '$headacheInfo, Intensity: ${headacheIntensityData.value}';
+            '$headacheInfo\nIntensity: ${headacheIntensityData.value}';
       } else {
-        headacheInfo = '$headacheInfo, Intensity: 0';
+        headacheInfo = '$headacheInfo\nIntensity: 0';
       }
       if (headacheDisabilityData != null) {
         headacheInfo =
@@ -217,49 +237,101 @@ class CalendarHeadacheLogDayDetailsBloc {
     });
 
     response.medication.forEach((element) {
-      RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
-      logDayMedicationWidgetData.logDayListData = LogDayData();
+      if(element.mobileEventDetails.length >0){
+        RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
+        logDayMedicationWidgetData.logDayListData = LogDayData();
 
-      var medicationData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag == Constant.logDayMedicationTag,
-          orElse: () => null);
-      var medicationDosageData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag.contains('.dosage'),
-          orElse: () => null);
+        var medicationData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.logDayMedicationTag,
+            orElse: () => null);
 
-      if (medicationData != null) {
-        String titleInfo = medicationData.value;
-        if (medicationDosageData != null) {
-          List<String> formattedValues =
-              medicationDosageData.value?.split("%@");
-          if (formattedValues != null) {
-            String medicationDosage = '';
-            formattedValues.forEach((medicationElement) {
-              if (medicationDosage.isEmpty) {
-                medicationDosage = medicationElement;
-              } else {
-                medicationDosage = '$medicationDosage, $medicationElement';
-              }
-            });
-            titleInfo = '$titleInfo ($medicationDosage)';
+        var medicationTimeData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.administeredTag,
+            orElse: () => null);
+
+        var medicationDosageData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+                mobileEventElement.questionTag.contains(Constant.dotDosage),
+            orElse: () => null);
+
+        if (medicationData != null) {
+          String titleInfo = medicationData.value;
+          if (medicationDosageData != null && medicationTimeData != null) {
+            List<String> formattedValues = medicationDosageData.value?.split("%@");
+            List<String> medicationTimeValues = medicationTimeData.value?.split("%@");
+            if (formattedValues != null && medicationTimeValues != null) {
+              String medicationDosage = '';
+              formattedValues.asMap().forEach((index, medicationElement) {
+                if (medicationDosage.isEmpty) {
+                  DateTime medicationDateTime;
+
+                  try {
+                    medicationDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if(medicationDateTime != null) {
+                    medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                  } else {
+                    medicationDosage = '$medicationElement';
+                  }
+                } else {
+                  DateTime medDateTime;
+
+                  try {
+                    medDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
+                  } catch (e) {
+                    print(e);
+                  }
+
+                  if(medDateTime != null) {
+                    medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                  } else {
+                    medicationDosage = '$medicationDosage, $medicationElement';
+                  }
+                }
+              });
+              if(medicationDosage.isEmpty) {
+                titleInfo = '$titleInfo';
+              }else titleInfo = '$titleInfo\n($medicationDosage)';
+            }
           }
+          logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
         }
-        logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+
+        logDayMedicationWidgetData.logDayListData.titleName = Constant.medication;
+        logDayMedicationWidgetData.imagePath = Constant.pillIcon;
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayMedicationWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
       }
-
-      logDayMedicationWidgetData.logDayListData.titleName = Constant.medication;
-      logDayMedicationWidgetData.imagePath = Constant.pillIcon;
-      userHeadacheLogDayDetailsModel.headacheLogDayListData
-          .add(logDayMedicationWidgetData);
-      userHeadacheLogDayDetailsModel.isDayLogged = true;
     });
 
-    ///To:Do : Need to Show triggers Data
     response.triggers.forEach((element) {
-      userHeadacheLogDayDetailsModel.isDayLogged = true;
+      if(element.mobileEventDetails.length >0) {
+        RecordWidgetData logDayTriggersWidgetData = RecordWidgetData();
+        logDayTriggersWidgetData.logDayListData = LogDayData();
+        var triggersElement = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.triggersTag,
+            orElse: () => null);
+        String triggersValues = triggersElement.value;
+        List<String> formattedValues = triggersValues.split("%@");
+        logDayTriggersWidgetData.logDayListData.titleInfo =
+            formattedValues.toString();
+        logDayTriggersWidgetData.logDayListData.titleName = 'Triggers';
+
+        logDayTriggersWidgetData.imagePath = Constant.pillIcon;
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayTriggersWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
+      }
     });
+
+
     response.logDayNote.forEach((element) {
       var logDayNoteData = element.mobileEventDetails.firstWhere(
               (mobileEventElement) =>
@@ -273,7 +345,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   void enterSomeDummyDataToStream() {
-    calendarLogDayDataSink.add(Constant.loading);
+    networkDataSink.add(Constant.loading);
   }
 
   String _getDisplayTime(int totalTime) {

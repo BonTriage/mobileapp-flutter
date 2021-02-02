@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/LogDayScreenArgumentModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
@@ -8,12 +9,16 @@ class RecordDayPage extends StatefulWidget {
   final bool hasData;
   final DateTime dateTime;
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
+  final Function(bool, bool, dynamic) openHeadacheLogDayScreenCallback;
+  final int onGoingHeadacheId;
 
   const RecordDayPage(
       {Key key,
       this.hasData = false,
       this.dateTime,
-      this.userHeadacheLogDayDetailsModel})
+      this.userHeadacheLogDayDetailsModel,
+      this.openHeadacheLogDayScreenCallback,
+      this.onGoingHeadacheId})
       : super(key: key);
 
   @override
@@ -45,39 +50,48 @@ class _RecordDayPageState extends State<RecordDayPage>
       listWidget.add(Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 10,
+          Visibility(
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            child: SizedBox(
+              height: 10,
+            ),
           ),
-          Row(
-            children: [
-              Visibility(
-                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
-                child: Text(
-                  'Note:',
-                  style: TextStyle(
-                      color: Constant
-                          .chatBubbleGreen60Alpha,
-                      fontFamily: Constant.jostRegular,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
+          Visibility(
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                  child: Text(
+                    'Note:',
+                    style: TextStyle(
+                        color: Constant
+                            .chatBubbleGreen60Alpha,
+                        fontFamily: Constant.jostRegular,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Visibility(
-                visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
-                child: Text(
-                  widget.userHeadacheLogDayDetailsModel.logDayNote??"",
-                  style: TextStyle(
-                      color: Constant
-                          .addCustomNotificationTextColor,
-                      fontFamily: Constant.jostRegular,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14),
+                SizedBox(
+                  width: 10,
                 ),
-              )
-            ],
+                Flexible(
+                  child: Visibility(
+                    visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                    child: Text(
+                      widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                      style: TextStyle(
+                          color: Constant
+                              .addCustomNotificationTextColor,
+                          fontFamily: Constant.jostRegular,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(
             height: 10,
@@ -85,13 +99,14 @@ class _RecordDayPageState extends State<RecordDayPage>
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(
-              visible: !userLogDayDetails.isDayLogged,
+              visible: /*!userLogDayDetails.isDayLogged ?? true*/true,
               child: FlatButton.icon(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
+                  /*Navigator.pushNamed(
                       context, Constant.logDayScreenRouter,
-                      arguments: widget.dateTime);
+                      arguments: widget.dateTime);*/
+                  widget.openHeadacheLogDayScreenCallback(false, true, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
                 },
                 icon: Image.asset(
                   Constant.addCircleIcon,
@@ -99,7 +114,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                   height: 20,
                 ),
                 label: Text(
-                  'Add Info',
+                  'Add/Edit Info',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -116,7 +131,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           Container(
             alignment: Alignment.topLeft,
             child: Visibility(
-              visible: !userLogDayDetails.isHeadacheLogged,
+              visible: /*!userLogDayDetails.isHeadacheLogged*/true,
               child: FlatButton.icon(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
@@ -128,7 +143,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                   height: 20,
                 ),
                 label: Text(
-                  'Add Headache',
+                  widget.onGoingHeadacheId == null ? 'Add Headache' : 'Edit On-Going Headache',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -171,8 +186,9 @@ class _RecordDayPageState extends State<RecordDayPage>
         FlatButton.icon(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, Constant.logDayScreenRouter,
-                arguments: widget.dateTime);
+            /*Navigator.pushNamed(context, Constant.logDayScreenRouter,
+                arguments: widget.dateTime);*/
+            widget.openHeadacheLogDayScreenCallback(false, false, LogDayScreenArgumentModel(selectedDateTime: widget.dateTime, isFromRecordScreen: true));
           },
           icon: Image.asset(
             Constant.addCircleIcon,
@@ -180,7 +196,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             height: 20,
           ),
           label: Text(
-            'Add Info',
+            'Add/Edit Info',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -203,7 +219,7 @@ class _RecordDayPageState extends State<RecordDayPage>
             height: 20,
           ),
           label: Text(
-            'Add Headache',
+            'Add/Edit Headache',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -251,6 +267,11 @@ class _RecordDayPageState extends State<RecordDayPage>
       _animationController.reverse();
       _animationController.forward();
     }
+
+    print("IN DID UPDATE WIDGET???");
+
+    setState(() {
+    });
   }
 
   @override
@@ -313,6 +334,7 @@ class _RecordDayPageState extends State<RecordDayPage>
                     visible: noteText.isNotEmpty,
                     child: Text(
                       'Note:\n$noteText',
+                      maxLines: 3,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen60Alpha,
                           fontFamily: Constant.jostRegular,
@@ -378,16 +400,25 @@ class _RecordDayPageState extends State<RecordDayPage>
           widget.dateTime.month,
           widget.dateTime.day,
           DateTime.now().hour,
-          DateTime.now().minute,
-          DateTime.now().second);
+          DateTime.now().minute,0, 0);
+
+      DateTime currentDateTime = DateTime.now();
+      DateTime endDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+
       CurrentUserHeadacheModel currentUserHeadacheModel =
           CurrentUserHeadacheModel(
               userId: userProfileInfoData.userId,
-              isOnGoing: true,
-              selectedDate: dateTime.toUtc().toIso8601String());
-      Navigator.pushReplacementNamed(
+              isOnGoing: false,
+              selectedDate: dateTime.toUtc().toIso8601String(),
+              isFromRecordScreen: true,
+              selectedEndDate: endDateTime.toUtc().toIso8601String(),
+              headacheId: widget.onGoingHeadacheId
+          );
+
+      widget.openHeadacheLogDayScreenCallback(true, false, currentUserHeadacheModel);
+      /*Navigator.pushNamed(
           context, Constant.addHeadacheOnGoingScreenRouter,
-          arguments: currentUserHeadacheModel);
+          arguments: currentUserHeadacheModel);*/
     }
   }
 }

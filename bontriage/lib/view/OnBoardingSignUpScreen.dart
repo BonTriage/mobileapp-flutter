@@ -46,9 +46,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     emailTextEditingController.dispose();
     passwordTextEditingController.dispose();
+    signUpScreenBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -111,6 +112,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 },
+                                keyboardType: TextInputType.emailAddress,
                                 controller: emailTextEditingController,
                                 onChanged: (String value) {
                                   emailValue = emailTextEditingController.text;
@@ -285,7 +287,59 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               },
                             ),
                           ),
-                          RichText(
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  "I agree to the ",
+                                  style: TextStyle(
+                                      height: 1.3,
+                                      fontFamily: Constant.jostRegular,
+                                      fontSize: 12,
+                                      color: Constant.chatBubbleGreen),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, Constant.webViewScreenRouter, arguments: Constant.termsAndConditionUrl);
+                                  },
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Text(
+                                    "Terms & Condition",
+                                    style: TextStyle(
+                                        height: 1.3,
+                                        fontFamily: Constant.jostRegular,
+                                        fontSize: 12,
+                                        decoration: TextDecoration.underline,
+                                        color: Constant.chatBubbleGreen),
+                                  ),
+                                ),
+                                Text(
+                                  " and ",
+                                  style: TextStyle(
+                                      height: 1.3,
+                                      fontFamily: Constant.jostRegular,
+                                      fontSize: 12,
+                                      color: Constant.chatBubbleGreen),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, Constant.webViewScreenRouter, arguments: Constant.privacyPolicyUrl);
+                                  },
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Text(
+                                    "Privacy Policy",
+                                    style: TextStyle(
+                                        height: 1.3,
+                                        fontFamily: Constant.jostRegular,
+                                        fontSize: 12,
+                                        decoration: TextDecoration.underline,
+                                        color: Constant.chatBubbleGreen),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /*RichText(
                             text: TextSpan(children: [
                               TextSpan(
                                 text: "I agree to the ",
@@ -322,7 +376,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                     color: Constant.chatBubbleGreen),
                               ),
                             ]),
-                          ),
+                          ),*/
                         ],
                       ),
                       SizedBox(
@@ -361,7 +415,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       ),
                       FlatButton(
                         onPressed: () {
-                          signUpButtonClicked();
+                          _signUpButtonClicked();
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -397,8 +451,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             padding: const EdgeInsets.only(top: 5),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(
-                                    context, Constant.loginScreenRouter);
+                                Navigator.pushNamed(context, Constant.loginScreenRouter);
                               },
                               child: Text(
                                 Constant.signIn,
@@ -428,7 +481,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               fontFamily: Constant.jostRegular,
                               decoration: TextDecoration.underline),
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                     ],
                   ),
                 ),
@@ -442,7 +498,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
-  void signUpButtonClicked() {
+  void _signUpButtonClicked() {
     if (emailValue != null &&
         passwordValue != null &&
         Utils.validateEmail(emailValue) &&
@@ -456,7 +512,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         _errorMsg = Constant.signUpEmilFieldAlertMessage;
         _isShowAlert = true;
       });
-    } else if (passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
+    } else if (passwordValue == null || passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
       setState(() {
         _errorMsg = Constant.signUpAlertMessage;
         _isShowAlert = true;
@@ -522,7 +578,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
     var response = await signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, emailValue, passwordValue);
+        selectedAnswerListData, emailValue, passwordValue, isTermConditionCheck, isEmailMarkCheck);
     if (response is String) {
       if (response == Constant.success) {
         Navigator.pop(context);

@@ -4,13 +4,15 @@ class SignUpOnBoardAnswersRequestModel {
   List<MobileEventDetails> mobileEventDetails;
   String updatedAt;
   int userId;
+  int eventId;
 
   SignUpOnBoardAnswersRequestModel(
       {this.calendarEntryAt,
         this.eventType,
         this.mobileEventDetails,
         this.updatedAt,
-        this.userId});
+        this.userId,
+      this.eventId});
 
   SignUpOnBoardAnswersRequestModel.fromJson(Map<String, dynamic> json) {
     calendarEntryAt = json['calendar_entry_at'];
@@ -23,6 +25,7 @@ class SignUpOnBoardAnswersRequestModel {
     }
     updatedAt = json['updated_at'];
     userId = json['user_id'];
+    eventId = json['eventId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,8 @@ class SignUpOnBoardAnswersRequestModel {
     }
     data['updated_at'] = this.updatedAt;
     data['user_id'] = this.userId;
+    if(this.eventId != null)
+      data['event_id'] = this.eventId;
     return data;
   }
 }
@@ -43,16 +48,18 @@ class MobileEventDetails {
   String questionJson;
   String questionTag;
   String updatedAt;
+  int eventId;
   List<String> value;
 
   MobileEventDetails(
-      {this.questionJson, this.questionTag, this.updatedAt, this.value});
+      {this.questionJson, this.questionTag, this.updatedAt, this.value, this.eventId});
 
   MobileEventDetails.fromJson(Map<String, dynamic> json) {
     questionJson = json['question_json'];
     questionTag = json['question_tag'];
     updatedAt = json['updated_at'];
     value = json['value'].cast<String>();
+    eventId = json['event_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +68,8 @@ class MobileEventDetails {
     data['question_tag'] = this.questionTag;
     data['updated_at'] = this.updatedAt;
     data['value'] = this.value;
+    if(this.eventId != null)
+      data['event_id'] = this.eventId;
     return data;
   }
 }

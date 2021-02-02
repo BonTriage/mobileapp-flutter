@@ -59,7 +59,7 @@ class SignUpOnBoardFirstStepRepository {
 
         return response;
       }
-    } catch (Exception) {
+    } catch (e) {
       return album;
     }
   }

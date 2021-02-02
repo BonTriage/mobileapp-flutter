@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
@@ -14,8 +16,10 @@ import 'NetworkErrorScreen.dart';
 class CalendarTriggersScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
+  final StreamSink<dynamic> refreshCalendarDataSink;
+  final Stream<dynamic> refreshCalendarDataStream;
 
-  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}): super(key: key);
+  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.refreshCalendarDataSink, this.refreshCalendarDataStream}): super(key: key);
 
   @override
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
@@ -62,23 +66,40 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-  //  callAPIService();
+
+    callAPIService();
+    
+    widget.refreshCalendarDataStream.listen((event) {
+      if(event is bool && event) {
+        _calendarScreenBloc.initNetworkStreamController();
+        currentMonth = _dateTime.month;
+        currentYear = _dateTime.year;
+        monthName = Utils.getMonthName(currentMonth);
+        totalDaysInCurrentMonth =
+            Utils.daysInCurrentMonth(currentMonth, currentYear);
+        firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, 1);
+        lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, totalDaysInCurrentMonth);
+
+        _calendarScreenBloc.initNetworkStreamController();
+
+        print('show api loader 2');
+        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        });
+
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+    });
+
   }
 
   @override
   void didUpdateWidget(CalendarTriggersScreen oldWidget) {
-    _calendarScreenBloc.initNetworkStreamController();
-    currentMonth = _dateTime.month;
-    currentYear = _dateTime.year;
-    monthName = Utils.getMonthName(currentMonth);
-    totalDaysInCurrentMonth =
-        Utils.daysInCurrentMonth(currentMonth, currentYear);
-    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, 1);
-    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, totalDaysInCurrentMonth);
-   // getCurrentPositionOfTabBar();
     super.didUpdateWidget(oldWidget);
+    getCurrentPositionOfTabBar();
   }
 
   @override
@@ -174,16 +195,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: [
                     TableRow(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Center(
-                          child: Text(
-                            'Su',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Constant.locationServiceGreen,
-                                fontFamily: Constant.jostMedium),
-                          ),
+                      Center(
+                        child: Text(
+                          'Su',
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
                         ),
                       ),
                       Center(
@@ -538,7 +556,14 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     var calendarUtil = CalendarUtil(
         calenderType: 1,
         userLogHeadacheDataCalendarModel: userLogHeadacheDataCalendarModel,
-        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback);
+        userMonthTriggersListData: _calendarScreenBloc.userMonthTriggersData,
+        navigateToOtherScreenCallback: (routeName, data) async{
+          dynamic isDataUpdated = await widget.navigateToOtherScreenCallback(routeName, data);
+          if(isDataUpdated != null && isDataUpdated is bool && isDataUpdated) {
+            widget.refreshCalendarDataSink.add(true);
+          }
+          return isDataUpdated;
+        });
     currentMonthData =
         calendarUtil.drawMonthCalendar(yy: currentYear, mm: currentMonth);
   }
@@ -597,33 +622,64 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
   void getCurrentPositionOfTabBar() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int currentPositionOfTabBar =
-        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    if (currentPositionOfTabBar == 1) {
+
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty) {
       _calendarScreenBloc.initNetworkStreamController();
+      currentMonth = _dateTime.month;
+      currentYear = _dateTime.year;
+      monthName = Utils.getMonthName(currentMonth);
+      totalDaysInCurrentMonth = Utils.daysInCurrentMonth(currentMonth, currentYear);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(currentMonth, currentYear, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(currentMonth, currentYear, totalDaysInCurrentMonth);
 
-      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+      int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+      int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+
+      if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+        _calendarScreenBloc.initNetworkStreamController();
+
+        String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+
+        if(isViewTrendsClicked.isEmpty) {
+          print('show api loader 3');
+          widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+          });
+        }
+
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      });
-
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+    } else {
+      sharedPreferences.remove(Constant.isSeeMoreClicked);
     }
   }
 
   void callAPIService() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int currentPositionOfTabBar =
-        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    if (currentPositionOfTabBar == 1) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //try {
+      SharedPreferences sharedPreferences = await SharedPreferences
+          .getInstance();
+      int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+      int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+      String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
 
-        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-          _calendarScreenBloc.enterSomeDummyDataToStreamController();
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if(isViewTrendsClicked.isEmpty) {
+            print('show api loader 1');
+            widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+              _calendarScreenBloc.enterSomeDummyDataToStreamController();
+              requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+            });
+          }
         });
-      });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    }
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+    //} catch(e) {
+      //print(e);
+    //}
   }
 }

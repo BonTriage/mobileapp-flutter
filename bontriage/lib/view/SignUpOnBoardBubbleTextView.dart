@@ -94,24 +94,34 @@ class _StateSignUpOnBoardBubbleTextView
   ];
 
   int _currentIndex = 0;
+  bool _isButtonClicked = false;
 
   Future<bool> _onBackPressed() async {
-    if (_currentIndex == 0) {
-      return true;
+    if(!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (_currentIndex == 0) {
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return true;
+      } else {
+        setState(() {
+          _currentIndex--;
+        });
+        Future.delayed(Duration(milliseconds: 350), () {
+          _isButtonClicked = false;
+        });
+        return false;
+      }
     } else {
-      setState(() {
-        _currentIndex--;
-      });
       return false;
     }
   }
 
   @override
   void initState() {
-        super.initState();
+    super.initState();
   }
-
-
 
   @override
   void dispose() {
@@ -129,9 +139,15 @@ class _StateSignUpOnBoardBubbleTextView
           bubbleChatTextSpanList: _questionList[_currentIndex],
           isShowNextButton: _currentIndex != (_questionList.length - 1),
           nextButtonFunction: () {
-            setState(() {
-              _currentIndex++;
-            });
+            if(!_isButtonClicked) {
+              _isButtonClicked = true;
+              setState(() {
+                _currentIndex++;
+              });
+              Future.delayed(Duration(milliseconds: 350), () {
+                _isButtonClicked = false;
+              });
+            }
           },
           bottomButtonText: Constant.startAssessment,
           bottomButtonFunction: () {
