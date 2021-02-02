@@ -423,6 +423,7 @@ class _LogDayScreenState extends State<LogDayScreen>
               isFromRecordsScreen: (widget.logDayScreenArgumentModel != null)
                   ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false
                   : false,
+              uiHints: element.uiHints,
             ),
           );
         }

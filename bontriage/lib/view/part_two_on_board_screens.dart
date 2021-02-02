@@ -249,6 +249,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 

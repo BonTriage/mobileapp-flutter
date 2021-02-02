@@ -15,6 +15,8 @@ import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'EditGraphViewBottomSheet.dart';
+
 class HomeScreen extends StatefulWidget {
   final HomeScreenArgumentModel homeScreenArgumentModel;
 
@@ -239,6 +241,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             context: context,
             builder: (context) => CompassHeadacheTypeActionSheet());
+        return resultOfActionSheet;
+        break;
+      case Constant.editGraphViewBottomSheet:
+        var resultOfActionSheet = showModalBottomSheet(
+          context: context,
+          backgroundColor: Constant.backgroundColor,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          ),
+          builder: (context) => EditGraphViewBottomSheet(),
+        );
         return resultOfActionSheet;
         break;
       default: return null;

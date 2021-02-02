@@ -112,6 +112,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 },
+                                keyboardType: TextInputType.emailAddress,
                                 controller: emailTextEditingController,
                                 onChanged: (String value) {
                                   emailValue = emailTextEditingController.text;
@@ -577,7 +578,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
     var response = await signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, emailValue, passwordValue);
+        selectedAnswerListData, emailValue, passwordValue, isTermConditionCheck, isEmailMarkCheck);
     if (response is String) {
       if (response == Constant.success) {
         Navigator.pop(context);

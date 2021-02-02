@@ -571,6 +571,13 @@ class Constant {
   static const String loggedPotentialTriggers = 'Logged Potential Triggers';
   static const String medications = 'Medications';
   static const String noneRadioButtonText = 'None';
+  static const String minText = 'min_text';
+  static const String maxText = 'max_text';
+  static const String minLabel = 'min_label';
+  static const String maxLabel = 'max_label';
+  static const String minLabel1 = 'minlabel';
+  static const String maxLabel1 = 'maxlabel';
+  static const String label = 'label';
 
   //tutorial text
   static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
@@ -588,6 +595,7 @@ class Constant {
       'deleteHeadacheTypeActionSheet';
   static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
   static const String compassHeadacheTypeActionSheet = 'compassHeadacheTypeActionSheet';
+  static const String editGraphViewBottomSheet = 'editGraphViewBottomSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;

@@ -15,6 +15,8 @@ class SignUpScreenOnBoardModel {
     this.notificationKey,
     this.password,
     this.sex,
+    this.termsAndPolicy = false,
+    this.emailNotification = false,
   });
 
   String age;
@@ -25,6 +27,8 @@ class SignUpScreenOnBoardModel {
   String notificationKey;
   String password;
   String sex;
+  bool termsAndPolicy;
+  bool emailNotification;
 
   factory SignUpScreenOnBoardModel.fromJson(Map<String, dynamic> json) => SignUpScreenOnBoardModel(
     age: json["age"],
@@ -35,6 +39,8 @@ class SignUpScreenOnBoardModel {
     notificationKey: json["notification_key"],
     password: json["password"],
     sex: json["sex"],
+    termsAndPolicy: json['terms_and_policy'],
+    emailNotification: json['email_notification']
   );
 
   Map<String, dynamic> toJson() => {
@@ -46,5 +52,7 @@ class SignUpScreenOnBoardModel {
     "notification_key": notificationKey,
     "password": password,
     "sex": sex,
+    'terms_and_policy': termsAndPolicy,
+    'email_notification': emailNotification,
   };
 }

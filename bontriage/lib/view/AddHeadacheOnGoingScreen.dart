@@ -335,6 +335,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
         currentUserHeadacheModel: _currentUserHeadacheModel,
+        uiHints: element.uiHints,
       ));
     });
 

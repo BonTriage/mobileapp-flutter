@@ -42,6 +42,7 @@ class AddHeadacheSection extends StatefulWidget {
   final bool isHeadacheEnded;
   final CurrentUserHeadacheModel currentUserHeadacheModel;
   final bool isFromRecordsScreen;
+  final String uiHints;
 
   AddHeadacheSection(
       {Key key,
@@ -65,7 +66,8 @@ class AddHeadacheSection extends StatefulWidget {
       this.isHeadacheEnded,
       this.currentUserHeadacheModel,
       this.doubleTapSelectedAnswer,
-      this.isFromRecordsScreen = false})
+      this.isFromRecordsScreen = false,
+      this.uiHints})
       : super(key: key);
 
   @override
@@ -153,6 +155,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
       case 'disability':
         String selectedCurrentValue;
@@ -183,6 +186,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
 
       case 'behavior.presleep':
@@ -1101,6 +1105,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           isAnimate: false,
                           horizontalPadding: 0,
                           onValueChangeCallback: onValueChangedCallback,
+                          uiHints: questions.uiHints,
                         ),
                       ],
                     )));

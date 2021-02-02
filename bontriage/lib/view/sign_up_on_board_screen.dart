@@ -216,6 +216,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 

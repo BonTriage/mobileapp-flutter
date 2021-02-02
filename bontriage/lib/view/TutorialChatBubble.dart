@@ -40,7 +40,7 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
     _animationController.forward();
     setVolumeIcon();
 
-    //TextToSpeechRecognition.speechToText(widget.chatBubbleText);
+    TextToSpeechRecognition.speechToText(widget.chatBubbleText);
   }
 
   @override
