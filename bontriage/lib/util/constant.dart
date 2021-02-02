@@ -385,6 +385,10 @@ class Constant {
   static const String behaviourSleepTag = 'behavior.sleep';
   static const String behaviourPreExerciseTag = 'behavior.preexercise';
   static const String behaviourPreMealTag = 'behavior.premeal';
+  static const String headacheFreeTag = 'headache.free';
+  static const String headacheTypicalTag = 'headache.typical';
+  static const String headacheDisabledTag = 'headache.disabled';
+  static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
 
   static String whenYouAreLoggingYourDay =
       'When you’re logging your day, you can double tap any items you experience frequently to keep them pre-selected for every time you come back. For example, if you drink coffee every morning, you could double tap “Caffeine.”';

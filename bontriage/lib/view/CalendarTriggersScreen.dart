@@ -62,7 +62,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    callAPIService();
+  //  callAPIService();
   }
 
   @override
@@ -77,7 +77,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    getCurrentPositionOfTabBar();
+   // getCurrentPositionOfTabBar();
     super.didUpdateWidget(oldWidget);
   }
 

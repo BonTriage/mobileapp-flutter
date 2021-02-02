@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
@@ -28,6 +32,13 @@ class _SignUpFirstStepCompassResultState
   bool isEndOfOnBoard = false;
   bool isVolumeOn = false;
 
+  int userFrequencyValue;
+  int userDurationValue;
+  int userIntensityValue;
+  int userDisabilityValue;
+
+  List<List<int>> userCompassAxesData;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +61,7 @@ class _SignUpFirstStepCompassResultState
     // Save user progress database
     saveUserProgressInDataBase();
     setVolumeIcon();
+    getCompassAxesFromDatabase();
   }
 
   @override
@@ -72,12 +84,13 @@ class _SignUpFirstStepCompassResultState
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
-    TextToSpeechRecognition.speechToText(Constant.welcomePersonalizedHeadacheFirstTextView);
+    TextToSpeechRecognition.speechToText(
+        Constant.welcomePersonalizedHeadacheFirstTextView);
   }
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [7, 14, 21, 28, 35];
+    const ticks = [7, 14, 21, 28,35];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
@@ -87,8 +100,7 @@ class _SignUpFirstStepCompassResultState
       "C",
       "D",
     ];
-    var data = [
-      [9, 15, 7, 7]
+     userCompassAxesData = [   [16, 15, 18, 24]
     ];
 
     if (!_animationController.isAnimating) {
@@ -166,7 +178,8 @@ class _SignUpFirstStepCompassResultState
                         child: Container(
                           padding: EdgeInsets.only(left: 17, top: 25),
                           child: ChatBubble(
-                            painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                            painter:
+                                ChatBubblePainter(Constant.chatBubbleGreen),
                             child: AnimatedSize(
                               duration: Duration(milliseconds: 300),
                               vsync: this,
@@ -181,7 +194,8 @@ class _SignUpFirstStepCompassResultState
                                     child: SingleChildScrollView(
                                       physics: BouncingScrollPhysics(),
                                       child: Text(
-                                        _bubbleTextViewList[_buttonPressedValue],
+                                        _bubbleTextViewList[
+                                            _buttonPressedValue],
                                         style: TextStyle(
                                             height: 1.3,
                                             fontSize: 15,
@@ -211,7 +225,7 @@ class _SignUpFirstStepCompassResultState
                           quarterTurns: 3,
                           child: GestureDetector(
                             onTap: () {
-                            //  _showTutorialDialog(3);
+                              //  _showTutorialDialog(3);
                             },
                             child: Text(
                               "Frequency",
@@ -227,7 +241,7 @@ class _SignUpFirstStepCompassResultState
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                              //  _showTutorialDialog(1);
+                                //  _showTutorialDialog(1);
                               },
                               child: Text(
                                 "Intensity",
@@ -249,14 +263,14 @@ class _SignUpFirstStepCompassResultState
                                             ? RadarChart.dark(
                                                 ticks: ticks,
                                                 features: features,
-                                                data: data,
+                                                data: userCompassAxesData,
                                                 reverseAxis: true,
                                                 compassValue: 0,
                                               )
                                             : RadarChart.light(
                                                 ticks: ticks,
                                                 features: features,
-                                                data: data,
+                                                data: userCompassAxesData,
                                                 reverseAxis: true,
                                                 compassValue: 0,
                                               ),
@@ -291,7 +305,7 @@ class _SignUpFirstStepCompassResultState
                             ),
                             GestureDetector(
                               onTap: () {
-                             //   _showTutorialDialog(2);
+                                //   _showTutorialDialog(2);
                               },
                               child: Text(
                                 "Disability",
@@ -307,7 +321,7 @@ class _SignUpFirstStepCompassResultState
                           quarterTurns: 1,
                           child: GestureDetector(
                             onTap: () {
-                            //  _showTutorialDialog(4);
+                              //  _showTutorialDialog(4);
                             },
                             child: Text(
                               "Duration",
@@ -331,12 +345,10 @@ class _SignUpFirstStepCompassResultState
                       AnimatedPositioned(
                         left: (isBackButtonHide)
                             ? 0
-                            : (MediaQuery.of(context).size.width -
-                            190),
+                            : (MediaQuery.of(context).size.width - 190),
                         duration: Duration(milliseconds: 250),
                         child: AnimatedOpacity(
-                          opacity:
-                          (isBackButtonHide) ? 1.0 : 0.0,
+                          opacity: (isBackButtonHide) ? 1.0 : 0.0,
                           duration: Duration(milliseconds: 250),
                           child: BouncingWidget(
                             duration: Duration(milliseconds: 100),
@@ -347,15 +359,13 @@ class _SignUpFirstStepCompassResultState
                               height: 34,
                               decoration: BoxDecoration(
                                 color: Color(0xffafd794),
-                                borderRadius:
-                                BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               child: Center(
                                 child: Text(
                                   Constant.back,
                                   style: TextStyle(
-                                    color:
-                                    Constant.bubbleChatTextView,
+                                    color: Constant.bubbleChatTextView,
                                     fontSize: 14,
                                     fontFamily: Constant.jostMedium,
                                   ),
@@ -468,8 +478,7 @@ class _SignUpFirstStepCompassResultState
       return true;
     } else {
       setState(() {
-        if (_buttonPressedValue <= 4 &&
-            _buttonPressedValue > 1) {
+        if (_buttonPressedValue <= 4 && _buttonPressedValue > 1) {
           _buttonPressedValue--;
         } else {
           isBackButtonHide = false;
@@ -478,5 +487,52 @@ class _SignUpFirstStepCompassResultState
       });
       return false;
     }
+  }
+
+  void getCompassAxesFromDatabase() async {
+    List<LocalQuestionnaire> localQuestionnaireData =
+        await SignUpOnBoardProviders.db
+            .getQuestionnaire(Constant.firstEventStep);
+    print(localQuestionnaireData);
+    SignUpOnBoardSelectedAnswersModel answerListData = SignUpOnBoardSelectedAnswersModel.fromJson(json.decode(localQuestionnaireData[0].selectedAnswers));
+    List<SelectedAnswers>  selectedAnswerListData = answerListData.selectedAnswers;
+     var userFrequency = selectedAnswerListData.firstWhere(
+            (intensityElement) =>
+            intensityElement.questionTag == Constant.headacheFreeTag,
+        orElse: () => null);
+     if(userFrequency != null){
+       userFrequencyValue = int.tryParse(userFrequency.answer);
+       userFrequencyValue = (userFrequencyValue*0.9).toInt();
+     }
+    var userDuration = selectedAnswerListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.questionTag == Constant.headacheTypicalTag,
+        orElse: () => null);
+    if(userDuration != null){
+      userDurationValue = int.tryParse(userDuration.answer);
+
+    }
+    var userIntensity = selectedAnswerListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.questionTag == Constant.headacheTypicalBadPainTag,
+        orElse: () => null);
+    if(userIntensity != null){
+      userIntensityValue = int.tryParse(userIntensity.answer);
+    }
+    var userDisability = selectedAnswerListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.questionTag == Constant.headacheDisabledTag,
+        orElse: () => null);
+    if(userDisability != null){
+      userDisabilityValue = int.tryParse(userDisability.answer);
+    }
+    setState(() {
+      // Intensity,Duration,Disability,Frequency
+    /*  1. 16  last 3 month  1
+      2. 32 hour last 3 month
+      3. 7 intensity
+      4 . 2 disability*/
+      userCompassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
+    });
   }
 }

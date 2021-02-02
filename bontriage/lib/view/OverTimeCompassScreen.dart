@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/RecordsCompassScreenBloc.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:mobile/view/NetworkErrorScreen.dart';
+import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
 import 'DateTimePicker.dart';
 
 class OverTimeCompassScreen extends StatefulWidget {
@@ -11,7 +15,8 @@ class OverTimeCompassScreen extends StatefulWidget {
   _OverTimeCompassScreenState createState() => _OverTimeCompassScreenState();
 }
 
-class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
+class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with AutomaticKeepAliveClientMixin {
+  RecordsCompassScreenBloc _recordsCompassScreenBloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
   DateTime _dateTime;
@@ -22,10 +27,78 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
   String firstDayOfTheCurrentMonth;
   String lastDayOfTheCurrentMonth;
 
+  List<List<int>> compassAxesData;
+
+  List<int> ticks;
+
+  List<String> features;
+
+  List<TextSpan> _getBubbleTextSpans() {
+    List<TextSpan> list = [];
+    list.add(TextSpan(
+        text: 'Your Headache Score for December was ',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.chatBubbleGreen)));
+    list.add(TextSpan(
+        text: '62',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.addCustomNotificationTextColor)));
+    list.add(TextSpan(
+        text: ' up from ',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.chatBubbleGreen)));
+    list.add(TextSpan(
+        text: '60',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.addCustomNotificationTextColor)));
+    list.add(TextSpan(
+        text: ' last month. This was primarily due to an ',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.chatBubbleGreen)));
+    list.add(TextSpan(
+        text: 'increase in duration.',
+        style: TextStyle(
+            height: 1.3,
+            fontSize: 14,
+            fontFamily: Constant.jostRegular,
+            color: Constant.addCustomNotificationTextColor)));
+
+    return list;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+     ticks = [7, 14, 21, 28, 35];
+
+     features = [
+      "A",
+      "B",
+      "C",
+      "D",
+    ];
+    compassAxesData = [
+      [14, 15, 7, 7]
+    ];
+
+
+    _recordsCompassScreenBloc = RecordsCompassScreenBloc();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
@@ -36,75 +109,18 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+  }
+
+  @override
+  void didUpdateWidget(covariant OverTimeCompassScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
   }
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [7, 14, 21, 28, 35];
-
-    var features = [
-      "A",
-      "B",
-      "C",
-      "D",
-    ];
-    var data = [
-      [14, 15, 7, 7]
-    ];
-
-    List<TextSpan> _getBubbleTextSpans() {
-      List<TextSpan> list = [];
-        list.add(TextSpan(
-            text: 'Your Headache Score for December was ',
-            style: TextStyle(
-                height: 1.3,
-                fontSize: 14,
-                fontFamily: Constant.jostRegular,
-                color: Constant.chatBubbleGreen)));
-        list.add(TextSpan(
-            text: '62',
-            style: TextStyle(
-                height: 1.3,
-                fontSize: 14,
-                fontFamily: Constant.jostRegular,
-                color: Constant.addCustomNotificationTextColor)));
-        list.add(TextSpan(
-            text: ' up from ',
-            style: TextStyle(
-                height: 1.3,
-                fontSize: 14,
-                fontFamily: Constant.jostRegular,
-                color: Constant.chatBubbleGreen)));
-        list.add(TextSpan(
-            text: '60',
-            style: TextStyle(
-                height: 1.3,
-                fontSize: 14,
-                fontFamily: Constant.jostRegular,
-                color: Constant.addCustomNotificationTextColor)));
-        list.add(TextSpan(
-            text:
-            ' last month. This was primarily due to an ',
-            style: TextStyle(
-                height: 1.3,
-                fontSize: 14,
-                fontFamily: Constant.jostRegular,
-                color: Constant.chatBubbleGreen))
-        );
-      list.add(TextSpan(
-          text:
-          'increase in duration.',
-          style: TextStyle(
-              height: 1.3,
-              fontSize: 14,
-              fontFamily: Constant.jostRegular,
-              color: Constant.addCustomNotificationTextColor))
-      );
-
-
-      return list;
-    }
-
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -151,103 +167,227 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    RotatedBox(
-                      quarterTurns: 3,
-                      child: Text(
-                        "Frequency",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 16,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Intensity",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 16,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                        Center(
-                          child: Container(
-                            width: 220,
-                            height: 220,
-                            child: Center(
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    child: darkMode
-                                        ? RadarChart.dark(
-                                            ticks: ticks,
-                                            features: features,
-                                            data: data,
-                                            reverseAxis: true,
-                                            compassValue: 1,
-                                          )
-                                        : RadarChart.light(
-                                            ticks: ticks,
-                                            features: features,
-                                            data: data,
-                                            outlineColor: Constant.chatBubbleGreen
-                                                .withOpacity(0.5),
-                                            reverseAxis: true,
-                                            compassValue: 1,
+                StreamBuilder<Object>(
+                    stream: _recordsCompassScreenBloc.recordsCompassDataStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        setCompassAxesData(snapshot.data);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RotatedBox(
+                              quarterTurns: 3,
+                              child: Text(
+                                "Frequency",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Intensity",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+
+                                Center(
+                                  child: Container(
+                                    width: 220,
+                                    height: 220,
+                                    child: Center(
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            child: darkMode
+                                                ? RadarChart.dark(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: compassAxesData,
+                                              reverseAxis: true,
+                                              compassValue: 1,
+                                            )
+                                                : RadarChart.light(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: compassAxesData,
+                                              outlineColor: Constant
+                                                  .chatBubbleGreen
+                                                  .withOpacity(0.5),
+                                              reverseAxis: true,
+                                              compassValue: 1,
+                                            ),
                                           ),
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      width: 36,
-                                      height: 36,
-                                      child: Center(
-                                        child: Text(
-                                          '60',
-                                          style: TextStyle(
-                                              color: Color(0xff0E1712),
-                                              fontSize: 14,
-                                              fontFamily: Constant.jostMedium),
-                                        ),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xff97c289),
-                                        border: Border.all(
-                                            color: Color(0xff97c289), width: 1.2),
+                                          Center(
+                                            child: Container(
+                                              width: 36,
+                                              height: 36,
+                                              child: Center(
+                                                child: Text(
+                                                  '60',
+                                                  style: TextStyle(
+                                                      color: Color(0xff0E1712),
+                                                      fontSize: 14,
+                                                      fontFamily:
+                                                      Constant.jostMedium),
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(0xff97c289),
+                                                border: Border.all(
+                                                    color: Color(0xff97c289),
+                                                    width: 1.2),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
+
+                                Text(
+                                  "Disability",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ],
+                            ),
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Text(
+                                "Duration",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium),
                               ),
                             ),
-                          ),
-                        ),
-                        Text(
-                          "Disability",
-                          style: TextStyle(
-                              color: Color(0xffafd794),
-                              fontSize: 16,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ],
-                    ),
-                    RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        "Duration",
-                        style: TextStyle(
-                            color: Color(0xffafd794),
-                            fontSize: 16,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                    ),
-                  ],
-                ),
+                          ],
+                        );
+                      }else if (snapshot.hasError) {
+                        Utils.closeApiLoaderDialog(context);
+                        return NetworkErrorScreen(
+                          errorMessage: snapshot.error.toString(),
+                          tapToRetryFunction: () {
+                            Utils.showApiLoaderDialog(context);
+                            requestService(firstDayOfTheCurrentMonth,
+                                lastDayOfTheCurrentMonth);
+                          },
+                        );
+                      } else {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RotatedBox(
+                              quarterTurns: 3,
+                              child: Text(
+                                "Frequency",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Intensity",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
 
+                                Center(
+                                  child: Container(
+                                    width: 220,
+                                    height: 220,
+                                    child: Center(
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            child: darkMode
+                                                ? RadarChart.dark(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: compassAxesData,
+                                              reverseAxis: true,
+                                              compassValue: 1,
+                                            )
+                                                : RadarChart.light(
+                                              ticks: ticks,
+                                              features: features,
+                                              data: compassAxesData,
+                                              outlineColor: Constant
+                                                  .chatBubbleGreen
+                                                  .withOpacity(0.5),
+                                              reverseAxis: true,
+                                              compassValue: 1,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Container(
+                                              width: 36,
+                                              height: 36,
+                                              child: Center(
+                                                child: Text(
+                                                  '60',
+                                                  style: TextStyle(
+                                                      color: Color(0xff0E1712),
+                                                      fontSize: 14,
+                                                      fontFamily:
+                                                      Constant.jostMedium),
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(0xff97c289),
+                                                border: Border.all(
+                                                    color: Color(0xff97c289),
+                                                    width: 1.2),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                Text(
+                                  "Disability",
+                                  style: TextStyle(
+                                      color: Color(0xffafd794),
+                                      fontSize: 16,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ],
+                            ),
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Text(
+                                "Duration",
+                                style: TextStyle(
+                                    color: Color(0xffafd794),
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                  }
+                ),
               ],
             ),
             SizedBox(
@@ -258,10 +398,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month - 1);
-                        _dateTime = dateTime;
-                        _onStartDateSelected(dateTime);
+                    DateTime dateTime =
+                    DateTime(_dateTime.year, _dateTime.month - 1);
+                    _dateTime = dateTime;
+                    _onStartDateSelected(dateTime);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -277,8 +417,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    _openDatePickerBottomSheet(
-                        CupertinoDatePickerMode.date);
+                    _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
                   },
                   child: Text(
                     '$monthName $currentYear',
@@ -293,16 +432,16 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                     DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month + 1);
-                        Duration duration = dateTime.difference(DateTime.now());
-                        if (duration.inSeconds < 0) {
-                          _dateTime = dateTime;
-                          _onStartDateSelected(dateTime);
-                        } else {
-                          ///To:Do
-                          print("Not Allowed");
-                        }
+                    DateTime dateTime =
+                    DateTime(_dateTime.year, _dateTime.month + 1);
+                    Duration duration = dateTime.difference(DateTime.now());
+                    if (duration.inSeconds < 0) {
+                      _dateTime = dateTime;
+                      _onStartDateSelected(dateTime);
+                    } else {
+                      ///To:Do
+                      print("Not Allowed");
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -320,7 +459,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.symmetric(vertical:3),
+              padding: EdgeInsets.symmetric(vertical: 3),
               decoration: BoxDecoration(
                 color: Constant.locationServiceGreen.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
@@ -342,6 +481,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
       ),
     );
   }
+
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
       CupertinoDatePickerMode cupertinoDatePickerMode) {
@@ -352,11 +492,13 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => DateTimePicker(
-          cupertinoDatePickerMode: cupertinoDatePickerMode,
-          onDateTimeSelected: _getDateTimeCallbackFunction(0),
-        ));
+        builder: (context) =>
+            DateTimePicker(
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
   }
+
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
     switch (whichPickerClicked) {
       case 0:
@@ -378,14 +520,65 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> {
       currentYear = dateTime.year;
       currentMonth = dateTime.month;
       _dateTime = dateTime;
-/*      _calendarScreenBloc.initNetworkStreamController();
+      _recordsCompassScreenBloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
+          networkStream: _recordsCompassScreenBloc.networkDataStream,
           tapToRetryFunction: () {
-            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+            _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
             requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
           });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     });
   }
+
+//http://34.222.200.187:8080/mobileapi/v0/compass/calender?end_date=2021-01-31T18:30:00Z&start_date=2021-01-01T18:30:00Z&user_id=4609&headache_name=Headache1
+
+  void requestService(String firstDayOfTheCurrentMonth,
+      String lastDayOfTheCurrentMonth) async {
+    await _recordsCompassScreenBloc.fetchOverTimeCompassAxesResult(
+        '2021-01-01T18:30:00Z', '2021-01-31T18:30:00Z', 'Headache1');
+  }
+
+  void setCompassAxesData(
+      RecordsCompassAxesResultModel recordsCompassAxesResultModel) {
+    int userDisabilityValue, userFrequencyValue, userDurationValue,
+        userIntensityValue;
+    List<Axes> compassAxesListData = recordsCompassAxesResultModel.axes;
+    print(recordsCompassAxesResultModel);
+    var userFrequency = compassAxesListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == Constant.intensity,
+        orElse: () => null);
+    if (userFrequency != null) {
+      userFrequencyValue = userFrequency.value.toInt();
+    }
+    var userDuration = compassAxesListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == Constant.duration,
+        orElse: () => null);
+    if (userDuration != null) {
+      userDurationValue = userDuration.value.toInt();
+    }
+    var userIntensity = compassAxesListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == Constant.intensity,
+        orElse: () => null);
+    if (userIntensity != null) {
+      userIntensityValue = userIntensity.value.toInt();
+    }
+    var userDisability = compassAxesListData.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == Constant.disability,
+        orElse: () => null);
+    if (userDisability != null) {
+      userDisabilityValue = userDisability.value.toInt();
+    }
+
+    compassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
+
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

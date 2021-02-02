@@ -45,12 +45,12 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       });
-    });
+    });*/
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 

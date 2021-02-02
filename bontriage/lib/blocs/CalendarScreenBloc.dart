@@ -34,7 +34,7 @@ class CalendarScreenBloc {
   CalendarScreenBloc({this.count = 0}) {
     _calendarStreamController = StreamController<dynamic>();
     _triggersStreamController = StreamController<dynamic>();
-    _networkStreamController = StreamController<dynamic>();
+    _networkStreamController  = StreamController<dynamic>();
     _calendarRepository = CalendarRepository();
   }
 
