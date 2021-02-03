@@ -56,7 +56,6 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       print('show api loader 4');
       _showApiLoaderDialog();
-
     });
     _callApiService();
 
@@ -81,7 +80,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
   @override
   void didUpdateWidget(CalendarIntensityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    currentMonth = _dateTime.month;
+    /*currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
     totalDaysInCurrentMonth =
@@ -91,20 +90,20 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     _calendarScreenBloc.initNetworkStreamController();
-   /* Utils.showApiLoaderDialog(context,
+   *//* Utils.showApiLoaderDialog(context,
         networkStream: _calendarScreenBloc.networkDataStream,
         tapToRetryFunction: () {
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });*/
+    });*//*
 
-    /*_calendarScreenBloc.initNetworkStreamController();
+    *//*_calendarScreenBloc.initNetworkStreamController();
 
     widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
       _calendarScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });*/
-    _callApiService();
+    });*//*
+    _callApiService();*/
   }
 
   @override

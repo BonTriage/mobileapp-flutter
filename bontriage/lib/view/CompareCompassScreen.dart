@@ -12,8 +12,9 @@ import 'DateTimePicker.dart';
 
 class CompareCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const CompareCompassScreen({Key key, this.openActionSheetCallback}) : super(key: key);
+  const CompareCompassScreen({Key key, this.openActionSheetCallback, this.showApiLoaderCallback}) : super(key: key);
 
   @override
   _CompareCompassScreenState createState() => _CompareCompassScreenState();
@@ -95,18 +96,31 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    print('init state of compare compass');
+    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
+        _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      }
+      );
+    });*/
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
   @override
   void didUpdateWidget(covariant CompareCompassScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    print('didUpdateWidget of compare compass');
+    /*widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
+      _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    });
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -701,7 +715,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   void _openHeadacheTypeActionSheet() async {

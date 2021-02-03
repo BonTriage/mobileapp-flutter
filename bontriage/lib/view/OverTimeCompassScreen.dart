@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsCompassScreenBloc.dart';
@@ -8,12 +6,14 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'DateTimePicker.dart';
 
 class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const OverTimeCompassScreen({Key key, this.openActionSheetCallback}) : super(key: key);
+  const OverTimeCompassScreen({Key key, this.openActionSheetCallback, this.showApiLoaderCallback}) : super(key: key);
   @override
   _OverTimeCompassScreenState createState() => _OverTimeCompassScreenState();
 }
@@ -111,18 +111,20 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    print('init state of overTime compass');
+    _recordsCompassScreenBloc.initNetworkStreamController();
+    _showApiLoaderDialog();
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
   @override
   void didUpdateWidget(covariant OverTimeCompassScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -619,7 +621,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   void _openHeadacheTypeActionSheet() async {
@@ -627,4 +628,19 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
     print(resultFromActionSheet);
   }
 
+  void _showApiLoaderDialog() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    if(isViewTrendsClicked.isEmpty && isSeeMoreClicked.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        widget.showApiLoaderCallback(
+            _recordsCompassScreenBloc.networkDataStream, () {
+          _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        }
+        );
+      });
+    }
+  }
 }

@@ -61,20 +61,22 @@ class RecordsCompassScreenBloc {
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
           recordsCompassAxesResultModel =
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
+          networkDataSink.add(Constant.success);
           recordsCompassDataSink.add(recordsCompassAxesResultModel);
         } else {
           recordsCompassDataSink
               .addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -102,7 +104,7 @@ class RecordsCompassScreenBloc {
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
@@ -110,12 +112,12 @@ class RecordsCompassScreenBloc {
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
           await fetchFirstLoggedCompassAxesResult();
         } else {
-          recordsCompassDataSink
+          networkDataSink
               .addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -132,20 +134,21 @@ class RecordsCompassScreenBloc {
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
           _recordsCompareCompassModel.signUpCompassAxesResultModel =
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
           recordsCompassDataSink.add(_recordsCompareCompassModel);
+          networkDataSink.add(Constant.success);
         } else {
-          recordsCompassDataSink
+           networkDataSink
               .addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
