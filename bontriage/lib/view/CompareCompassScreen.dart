@@ -643,6 +643,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userFrequency != null) {
       userMonthlyFrequencyValue = userFrequency.value.toInt();
+      userMonthlyFrequencyValue = userMonthlyFrequencyValue*3.1.toInt();
     }
     var userDuration = recordsCompareCompassAxesListData.firstWhere(
             (intensityElement) =>
@@ -650,6 +651,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userDuration != null) {
       userMonthlyDurationValue = userDuration.value.toInt();
+      userMonthlyDurationValue = userMonthlyDurationValue*7.2.toInt();
     }
     var userIntensity = recordsCompareCompassAxesListData.firstWhere(
             (intensityElement) =>
@@ -664,6 +666,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userDisability != null) {
       userMonthlyDisabilityValue = userDisability.value.toInt();
+      userMonthlyDisabilityValue = userMonthlyDisabilityValue*0.4.toInt();
     }
     int userOvertimeFrequencyValue,userOverTimeDurationValue,userOverTimeIntensityValue,userOverTimeDisabilityValue;
 
@@ -674,6 +677,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userOverTimeFrequency != null) {
       userOvertimeFrequencyValue = userOverTimeFrequency.value.toInt();
+      userOvertimeFrequencyValue = userOvertimeFrequencyValue*3.1.toInt();
     }
     var userOvertimeDuration = recordsOverTimeCompassAxesListData.firstWhere(
             (intensityElement) =>
@@ -681,6 +685,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userOvertimeDuration != null) {
       userOverTimeDurationValue = userOvertimeDuration.value.toInt();
+      userOverTimeDurationValue = userOverTimeDurationValue*7.2.toInt();
     }
     var userOverTimeIntensity = recordsOverTimeCompassAxesListData.firstWhere(
             (intensityElement) =>
@@ -695,6 +700,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
         orElse: () => null);
     if (userOverTimeDisability != null) {
       userOverTimeDisabilityValue = userOverTimeDisability.value.toInt();
+      userOverTimeDisabilityValue = userOverTimeDisabilityValue*0.4.toInt();
     }
     compassAxesData = [[userMonthlyIntensityValue,userMonthlyDurationValue,userMonthlyDisabilityValue,userMonthlyFrequencyValue],[userOverTimeIntensityValue, userOverTimeDurationValue, userOverTimeDisabilityValue, userOvertimeFrequencyValue]];
 

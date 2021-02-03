@@ -87,7 +87,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
   @override
   void initState() {
     super.initState();
-     ticks = [7, 14, 21, 28, 35];
+     ticks = [10,8,6,4,2,0];
 
      features = [
       "A",
@@ -591,6 +591,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = userFrequency.value.toInt();
+      userFrequencyValue = userFrequencyValue*3.1.toInt();
     }
     var userDuration = compassAxesListData.firstWhere(
             (intensityElement) =>
@@ -598,6 +599,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         orElse: () => null);
     if (userDuration != null) {
       userDurationValue = userDuration.value.toInt();
+      userDurationValue = userDurationValue*7.2.toInt();
     }
     var userIntensity = compassAxesListData.firstWhere(
             (intensityElement) =>
@@ -605,6 +607,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue = userIntensity.value.toInt();
+
     }
     var userDisability = compassAxesListData.firstWhere(
             (intensityElement) =>
@@ -612,6 +615,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         orElse: () => null);
     if (userDisability != null) {
       userDisabilityValue = userDisability.value.toInt();
+      userDisabilityValue = userDisabilityValue*0.4.toInt();
     }
 
     compassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
