@@ -38,7 +38,6 @@ class MoreMyProfileBloc {
 
     if(userProfileInfoModel != null) {
       try {
-        //String url = '${WebservicePost.productionServerUrl}event/?event_type=profile&latest_event_only=true&user_id=4617';
         String url = '${WebservicePost.qaServerUrl}event/?event_type=profile&latest_event_only=true&user_id=${userProfileInfoModel.userId}';
         var response = await _moreMyProfileRepository.myProfileServiceCall(url, RequestMethod.GET);
         if (response is AppException) {

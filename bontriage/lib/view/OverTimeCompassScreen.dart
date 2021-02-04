@@ -99,7 +99,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
       [14, 15, 7, 7]
     ];
 
-
     _recordsCompassScreenBloc = RecordsCompassScreenBloc();
     _dateTime = DateTime.now();
     currentMonth = _dateTime.month;
@@ -120,6 +119,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
   @override
   void didUpdateWidget(covariant OverTimeCompassScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _updateCompassData();
   }
 
   @override
@@ -641,6 +641,31 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         }
         );
       });
+    }
+  }
+
+  void _updateCompassData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+    String updateOverTimeCompassData = sharedPreferences.getString(Constant.updateOverTimeCompassData) ?? Constant.blankString;
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateOverTimeCompassData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateOverTimeCompassData);
+      _dateTime = DateTime.now();
+      currentMonth = _dateTime.month;
+      currentYear = _dateTime.year;
+      monthName = Utils.getMonthName(currentMonth);
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(currentMonth, currentYear);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, totalDaysInCurrentMonth);
+      print('init state of overTime compass');
+      _recordsCompassScreenBloc.initNetworkStreamController();
+      _showApiLoaderDialog();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     }
   }
 }

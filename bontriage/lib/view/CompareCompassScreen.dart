@@ -7,6 +7,7 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DateTimePicker.dart';
 
@@ -111,6 +112,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
   void didUpdateWidget(covariant CompareCompassScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     print('didUpdateWidget of compare compass');
+    _updateCompassData();
     /*widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
       _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
@@ -720,5 +722,33 @@ class _CompareCompassScreenState extends State<CompareCompassScreen> with Automa
   void _openHeadacheTypeActionSheet() async {
     var resultFromActionSheet = await widget.openActionSheetCallback(Constant.compassHeadacheTypeActionSheet);
     print(resultFromActionSheet);
+  }
+
+  void _updateCompassData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+    String updateOverTimeCompassData = sharedPreferences.getString(Constant.updateOverTimeCompassData) ?? Constant.blankString;
+
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateOverTimeCompassData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateOverTimeCompassData);
+      _dateTime = DateTime.now();
+      currentMonth = _dateTime.month;
+      currentYear = _dateTime.year;
+      monthName = Utils.getMonthName(currentMonth);
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(currentMonth, currentYear);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, totalDaysInCurrentMonth);
+      widget.showApiLoaderCallback(
+          _recordsCompassScreenBloc.networkDataStream, () {
+        _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    }
   }
 }

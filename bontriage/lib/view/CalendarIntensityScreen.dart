@@ -61,6 +61,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
 
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
+        _removeDataFromSharedPreference();
         currentMonth = _dateTime.month;
         currentYear = _dateTime.year;
         monthName = Utils.getMonthName(currentMonth);
@@ -80,30 +81,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
   @override
   void didUpdateWidget(CalendarIntensityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    /*currentMonth = _dateTime.month;
-    currentYear = _dateTime.year;
-    monthName = Utils.getMonthName(currentMonth);
-    totalDaysInCurrentMonth =
-        Utils.daysInCurrentMonth(currentMonth, currentYear);
-    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, 1);
-    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, totalDaysInCurrentMonth);
-    _calendarScreenBloc.initNetworkStreamController();
-   *//* Utils.showApiLoaderDialog(context,
-        networkStream: _calendarScreenBloc.networkDataStream,
-        tapToRetryFunction: () {
-      _calendarScreenBloc.enterSomeDummyDataToStreamController();
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });*//*
-
-    *//*_calendarScreenBloc.initNetworkStreamController();
-
-    widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-      _calendarScreenBloc.enterSomeDummyDataToStreamController();
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });*//*
-    _callApiService();*/
+    _updateCalendarData();
   }
 
   @override
@@ -694,5 +672,39 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
         _callApiService();
       });
     }
+  }
+
+  void _updateCalendarData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+    String updateCalendarIntensityData = sharedPreferences.getString(Constant.updateCalendarIntensityData) ?? Constant.blankString;
+
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateCalendarIntensityData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateCalendarIntensityData);
+      currentMonth = _dateTime.month;
+      currentYear = _dateTime.year;
+      monthName = Utils.getMonthName(currentMonth);
+      totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(currentMonth, currentYear);
+      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, 1);
+      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+          currentMonth, currentYear, totalDaysInCurrentMonth);
+
+      _calendarScreenBloc.initNetworkStreamController();
+
+      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+        _calendarScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+      });
+      _callApiService();
+    }
+  }
+
+  void _removeDataFromSharedPreference() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove(Constant.updateCalendarIntensityData);
   }
 }

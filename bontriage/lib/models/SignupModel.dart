@@ -183,18 +183,24 @@ class Questions {
 class Values {
   String valueNumber;
   String text;
+  bool isValid;
+  bool isSelected;
 
-  Values({this.valueNumber, this.text});
+  Values({this.valueNumber, this.text, this.isValid = true, this.isSelected = false});
 
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];
     text = json['text'];
+    isValid = json['is_valid'];
+    isSelected = json['isSelected'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['value_number'] = this.valueNumber;
     data['text'] = this.text;
+    data['is_valid'] = this.isValid;
+    data['isSelected'] = this.isSelected;
     return data;
   }
 }

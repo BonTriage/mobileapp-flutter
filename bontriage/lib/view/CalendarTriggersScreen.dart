@@ -71,6 +71,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
+        _removeDataFromSharedPreference();
         _calendarScreenBloc.initNetworkStreamController();
         currentMonth = _dateTime.month;
         currentYear = _dateTime.year;
@@ -99,7 +100,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    //getCurrentPositionOfTabBar();
+    getCurrentPositionOfTabBar();
   }
 
   @override
@@ -625,8 +626,10 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
     String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
     String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
+    String updateCalendarTriggerData = sharedPreferences.getString(Constant.updateCalendarTriggerData) ?? Constant.blankString;
 
-    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty) {
+    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateCalendarTriggerData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateCalendarTriggerData);
       _calendarScreenBloc.initNetworkStreamController();
       currentMonth = _dateTime.month;
       currentYear = _dateTime.year;
@@ -681,5 +684,10 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     //} catch(e) {
       //print(e);
     //}
+  }
+
+  void _removeDataFromSharedPreference() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove(Constant.updateCalendarTriggerData);
   }
 }

@@ -118,6 +118,7 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MoreNotificationScreen(),
       TabNavigatorRoutes.moreHeadachesScreenRoute: (context) => MoreHeadachesScreen(
         openActionSheetCallback: openActionSheetCallback,
+        moreHeadacheScreenArgumentModel: arguments,
       ),
       TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
       TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(

@@ -294,7 +294,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: OnBoardMultiSelectOptions(
-                    selectOptionList: valuesListData,
+                    selectOptionList: element.values,
                     questionTag: element.tag,
                     selectedAnswerListData:
                         signUpOnBoardSelectedAnswersModel.selectedAnswers,

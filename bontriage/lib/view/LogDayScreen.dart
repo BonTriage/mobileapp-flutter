@@ -482,12 +482,17 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void _callSendLogDayDataApi() async {
-    var response =
-        await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var response = await _logDayBloc.sendLogDayData(selectedAnswers, _questionsList);
     if (response is String) {
       if (response == Constant.success) {
         //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
+        prefs.setString(Constant.updateCalendarTriggerData, 'true');
+        prefs.setString(Constant.updateCalendarIntensityData, 'true');
+        prefs.setString(Constant.updateOverTimeCompassData, 'true');
+        prefs.setString(Constant.updateCompareCompassData, 'true');
         Navigator.pop(context);
+
         if (widget.logDayScreenArgumentModel == null) {
           Navigator.pushReplacementNamed(
               context, Constant.logDaySuccessScreenRouter);

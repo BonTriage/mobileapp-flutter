@@ -15,6 +15,7 @@ import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'DiscardChangesBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddHeadacheOnGoingScreen extends StatefulWidget {
   final CurrentUserHeadacheModel currentUserHeadacheModel;
@@ -451,9 +452,14 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   }
 
   void _callSendAddHeadacheLogApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var response = await _addHeadacheLogBloc
         .sendAddHeadacheDetailsData(signUpOnBoardSelectedAnswersModel);
     if (response == Constant.success) {
+      prefs.setString(Constant.updateCalendarTriggerData, 'true');
+      prefs.setString(Constant.updateCalendarIntensityData, 'true');
+      prefs.setString(Constant.updateOverTimeCompassData, 'true');
+      prefs.setString(Constant.updateCompareCompassData, 'true');
       Navigator.pop(context);
       if(!_isFromRecordScreen) {
         if(_isUserHeadacheEnded) {
