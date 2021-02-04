@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/models/OnBoardSelectOptionModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class OnBoardMultiSelectOptions extends StatefulWidget {
-  final List<OnBoardSelectOptionModel> selectOptionList;
+  final List<Values> selectOptionList;
   final Function(String, String) selectedAnswerCallBack;
   final String questionTag;
   final List<SelectedAnswers> selectedAnswerListData;
@@ -67,14 +67,14 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
               (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
                   String>();
           _valuesSelectedList.forEach((element) {
-            OnBoardSelectOptionModel value = widget.selectOptionList
+            Values value = widget.selectOptionList
                 .firstWhere((valueElement) =>
-            valueElement.optionText == element, orElse: () => null);
+            valueElement.text == element, orElse: () => null);
 
             if (value != null)
               value.isSelected = true;
             else
-              widget.selectOptionList.add(OnBoardSelectOptionModel(optionText: element, optionId: (widget.selectOptionList.length + 1).toString(), isSelected: true));
+              widget.selectOptionList.add(Values(valueNumber: (widget.selectOptionList.length + 1).toString(), text: element, isSelected: true));
           });
         } catch (e) {
           print(e.toString());
@@ -144,28 +144,28 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                         onTap: () {
                           setState(() {
                             bool isSelected = widget.selectOptionList[index].isSelected;
-                            String valueText = widget.selectOptionList[index].optionText;
-                            if(valueText.toLowerCase() == Constant.noneOfTheAbove.toLowerCase() && !isSelected) {
+                            bool isValid = widget.selectOptionList[index].isValid;
+                            if(!isValid && !isSelected) {
                               widget.selectOptionList.forEach((element) {
                                 element.isSelected = false;
                               });
                               widget.selectOptionList[index].isSelected = true;
                               _valuesSelectedList.clear();
                             } else {
-                              OnBoardSelectOptionModel noneOfTheAboveOption = widget.selectOptionList.firstWhere((element) => element.optionText == Constant.noneOfTheAbove, orElse: () => null);
+                              Values noneOfTheAboveOption = widget.selectOptionList.firstWhere((element) => !element.isValid, orElse: () => null);
                               if(noneOfTheAboveOption != null)
                                 noneOfTheAboveOption.isSelected = false;
 
-                              _valuesSelectedList.removeWhere((element) => element == Constant.noneOfTheAbove);
+                              _valuesSelectedList.removeWhere((element) => element == (noneOfTheAboveOption == null ? '' : noneOfTheAboveOption.text));
                               _onOptionSelected(index);
                             }
 
                             if (widget.selectOptionList[index].isSelected) {
                               _valuesSelectedList.add(
-                                  widget.selectOptionList[index].optionText);
+                                  widget.selectOptionList[index].text);
                             } else {
                               _valuesSelectedList.remove(
-                                  widget.selectOptionList[index].optionText);
+                                  widget.selectOptionList[index].text);
                             }
 
                             widget.selectedAnswerCallBack(widget.questionTag, jsonEncode(_valuesSelectedList));
@@ -177,7 +177,7 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                             child: Text(
-                              widget.selectOptionList[index].optionText,
+                              widget.selectOptionList[index].text,
                               style: TextStyle(
                                   fontSize: 14,
                                   color: _getOptionTextColor(index),

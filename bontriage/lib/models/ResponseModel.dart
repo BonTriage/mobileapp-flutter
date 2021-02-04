@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final responseModel = responseModelFromJson(jsonString);
-
 import 'dart:convert';
 
 List<ResponseModel> responseModelFromJson(String str) => List<ResponseModel>.from(json.decode(str).map((x) => ResponseModel.fromJson(x)));
@@ -17,6 +13,7 @@ class ResponseModel {
     this.calendarEntryAt,
     this.eventType,
     this.mobileEventDetails,
+    this.headacheList
   });
 
   int id;
@@ -26,6 +23,8 @@ class ResponseModel {
   DateTime calendarEntryAt;
   String eventType;
   List<ResponseMobileEventDetails> mobileEventDetails;
+  List<HeadacheTypeData> headacheList;
+
 
   factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
     id: json["id"],
@@ -35,6 +34,7 @@ class ResponseModel {
     calendarEntryAt: DateTime.parse(json["calendar_entry_at"]),
     eventType: json["event_type"],
     mobileEventDetails: List<ResponseMobileEventDetails>.from(json["mobile_event_details"].map((x) => ResponseMobileEventDetails.fromJson(x))),
+    headacheList: List<HeadacheTypeData>.from(json["headache_list"].map((x) => HeadacheTypeData.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +45,7 @@ class ResponseModel {
     "calendar_entry_at": calendarEntryAt.toIso8601String(),
     "event_type": eventType,
     "mobile_event_details": List<dynamic>.from(mobileEventDetails.map((x) => x.toJson())),
+    'headache_list': List<dynamic>.from(headacheList.map((x) => x.toJson())),
   };
 }
 
@@ -86,4 +87,32 @@ class ResponseMobileEventDetails {
     "uploaded_at": uploadedAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };
+}
+
+class HeadacheTypeData {
+  String valueNumber;
+  String text;
+  bool isValid;
+  bool isSelected;
+  int eventId;
+
+  HeadacheTypeData({this.valueNumber, this.text, this.isValid = true, this.isSelected = false, this.eventId});
+
+  HeadacheTypeData.fromJson(Map<String, dynamic> json) {
+    valueNumber = json['value_number'];
+    text = json['text'];
+    isValid = json['is_valid'];
+    isSelected = json['isSelected'] ?? false;
+    eventId = json['event_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['value_number'] = this.valueNumber;
+    data['text'] = this.text;
+    data['is_valid'] = this.isValid;
+    data['isSelected'] = this.isSelected;
+    data['event_id'] = this.eventId;
+    return data;
+  }
 }

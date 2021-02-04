@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreHeadachesScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(String,dynamic) openActionSheetCallback;
+  final MoreHeadacheScreenArgumentModel moreHeadacheScreenArgumentModel;
+
 
   const MoreHeadachesScreen(
-      {Key key, this.onPush, this.openActionSheetCallback})
+      {Key key, this.onPush, this.openActionSheetCallback, this.moreHeadacheScreenArgumentModel})
       : super(key: key);
 
   @override
@@ -57,7 +60,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                             width: 10,
                           ),
                           Text(
-                            Constant.headacheType,
+                            widget.moreHeadacheScreenArgumentModel.headacheTypeData.text,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -148,7 +151,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                      Constant.basedOnWhatYouEntered,
+                      _getInfoText(),
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,
@@ -163,5 +166,9 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
         ),
       ),
     );
+  }
+
+  String _getInfoText() {
+    return 'Based on what you entered, it looks like your ${widget.moreHeadacheScreenArgumentModel.headacheTypeData.text} could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
   }
 }

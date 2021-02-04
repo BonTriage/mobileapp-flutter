@@ -93,7 +93,7 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                   SizedBox(
                     height: 40,
                   ),
-                  StreamBuilder(
+                  StreamBuilder<dynamic>(
                     stream: _moreMyProfileBloc.myProfileStream,
                     builder: (context, snapshot) {
                       if(snapshot.hasData && snapshot.data is ResponseModel && snapshot.data != null) {
@@ -148,52 +148,7 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 30,),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                Constant.headacheTypes,
-                                style: TextStyle(
-                                    color: Constant.addCustomNotificationTextColor,
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Container(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Constant.moreBackgroundColor,
-                              ),
-                              child: Column(
-                                children: [
-                                  MoreSection(
-                                    currentTag: Constant.headacheType,
-                                    text: Constant.headacheType,
-                                    moreStatus: '',
-                                    isShowDivider: true,
-                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
-                                  ),
-                                  MoreSection(
-                                    currentTag: Constant.headacheType,
-                                    text: Constant.headacheType,
-                                    moreStatus: '',
-                                    isShowDivider: true,
-                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
-                                  ),
-                                  MoreSection(
-                                    currentTag: Constant.headacheType,
-                                    text: Constant.headacheType,
-                                    moreStatus: '',
-                                    isShowDivider: false,
-                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            _getHeadacheTypeWidget(snapshot.data.headacheList),
                             SizedBox(height: 30,),
                             Container(
                               padding:
@@ -257,5 +212,52 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
   void dispose() {
     _moreMyProfileBloc.dispose();
     super.dispose();
+  }
+
+  Widget _getHeadacheTypeWidget(List<HeadacheTypeData> headacheList) {
+    List<Widget> headacheTypeWidgetList = [];
+
+    headacheList.asMap().forEach((index, value) {
+      headacheTypeWidgetList.add(
+        MoreSection(
+          currentTag: Constant.headacheType,
+          text: value.text,
+          moreStatus: '',
+          isShowDivider: index != headacheList.length - 1,
+          navigateToOtherScreenCallback: _navigateToOtherScreen,
+          headacheTypeData: value,
+        ),
+      );
+    });
+
+    return headacheList.length == 0 ? Container() : Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            Constant.headacheTypes,
+            style: TextStyle(
+                color: Constant.addCustomNotificationTextColor,
+                fontSize: 16,
+                fontFamily: Constant.jostMedium
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
+        Container(
+          padding:
+          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Constant.moreBackgroundColor,
+          ),
+          child: Column(
+            children: headacheTypeWidgetList,
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -101,13 +101,15 @@ class Values {
   bool isSelected = false;
   bool isDoubleTapped = false;
   bool isNewlyAdded = false;
+  bool isValid;
 
-  Values({this.valueNumber, this.text, this.isSelected = false, this.isDoubleTapped = false, this.isNewlyAdded = false});
+  Values({this.valueNumber, this.text, this.isSelected = false, this.isDoubleTapped = false, this.isNewlyAdded = false, this.isValid = true});
 
   Values.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];
     text = json['text'];
     isSelected = (json['isSelected'] == null) ? false : json['isSelected'];
+    isValid = json['is_valid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +117,7 @@ class Values {
     data['value_number'] = this.valueNumber;
     data['text'] = this.text;
     data['isSelected'] = this.isSelected;
+    data['is_valid'] = isValid;
     return data;
   }
 }

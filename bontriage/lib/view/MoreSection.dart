@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
+import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
@@ -11,8 +13,9 @@ class MoreSection extends StatefulWidget {
   final String currentTag;
   final Function(String, dynamic) navigateToOtherScreenCallback;
   final List<SelectedAnswers> selectedAnswerList;
+  final HeadacheTypeData headacheTypeData;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -63,7 +66,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute, null);
                     break;
                   case Constant.headacheType:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, null);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, MoreHeadacheScreenArgumentModel(headacheTypeData: widget.headacheTypeData));
                     break;
                   case Constant.locationServices:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute, null);
