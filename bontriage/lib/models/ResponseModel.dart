@@ -94,16 +94,14 @@ class HeadacheTypeData {
   String text;
   bool isValid;
   bool isSelected;
-  int eventId;
 
-  HeadacheTypeData({this.valueNumber, this.text, this.isValid = true, this.isSelected = false, this.eventId});
+  HeadacheTypeData({this.valueNumber, this.text, this.isValid = true, this.isSelected = false});
 
   HeadacheTypeData.fromJson(Map<String, dynamic> json) {
     valueNumber = json['value_number'];
     text = json['text'];
     isValid = json['is_valid'];
     isSelected = json['isSelected'] ?? false;
-    eventId = json['event_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -112,7 +110,6 @@ class HeadacheTypeData {
     data['text'] = this.text;
     data['is_valid'] = this.isValid;
     data['isSelected'] = this.isSelected;
-    data['event_id'] = this.eventId;
     return data;
   }
 }

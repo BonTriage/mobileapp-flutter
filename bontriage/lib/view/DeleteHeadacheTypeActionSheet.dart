@@ -25,7 +25,7 @@ class _DeleteHeadacheTypeActionSheetState
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context, Constant.print);
+                    Navigator.pop(context, Constant.deleteHeadacheType);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),

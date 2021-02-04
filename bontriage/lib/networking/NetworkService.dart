@@ -23,6 +23,8 @@ class NetworkService{
         response = await client.get(url, headers: RequestHeader().createRequestHeaders());
       } else if (requestMethod == RequestMethod.POST) {
         response = await client.post(url, headers: RequestHeader().createRequestHeaders(), body: requestBody,);
+      } else if (requestMethod == RequestMethod.DELETE) {
+        response = await client.delete(url, headers: RequestHeader().createRequestHeaders());
       }
       return  getApiResponse(response);
     } on SocketException {

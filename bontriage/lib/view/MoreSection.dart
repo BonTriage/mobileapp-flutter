@@ -27,7 +27,6 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController = AnimationController(
       duration: Duration(milliseconds: 350),
