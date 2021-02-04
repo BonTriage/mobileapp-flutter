@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CompassScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
 
   const CompassScreen(
       {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback})
@@ -142,11 +142,13 @@ class _CompassScreenState extends State<CompassScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    if (currentPositionOfTabBar == 1) {
+    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    print(currentPositionOfTabBar);
+    if (currentPositionOfTabBar == 1 && recordTabBarPosition == 1) {
       setState(() {
         pageViewWidgetList = [
-          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback,),
-          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback,),
+          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,),
+          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,),
         ];
       });
     }

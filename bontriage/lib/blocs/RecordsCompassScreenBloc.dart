@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsCompareCompassModel.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:mobile/models/RecordsOverTimeCompassModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -29,14 +32,77 @@ class RecordsCompassScreenBloc {
 
   StreamSink<dynamic> get networkDataSink => _networkStreamController.sink;
 
-  RecordsCompassAxesResultModel recordsCompassAxesResultModel;
+  RecordsOverTimeCompassModel _recordsOverTimeCompassModel =
+      RecordsOverTimeCompassModel();
 
-  RecordsCompareCompassModel _recordsCompareCompassModel = RecordsCompareCompassModel();
+  RecordsCompareCompassModel _recordsCompareCompassModel =
+      RecordsCompareCompassModel();
 
   RecordsCompassScreenBloc({this.count = 0}) {
     _recordsCompassStreamController = StreamController<dynamic>();
     _recordsCompassRepository = RecordsCompassRepository();
-    _networkStreamController  = StreamController<dynamic>();
+    _networkStreamController = StreamController<dynamic>();
+  }
+
+  fetchAllHeadacheListData(String startDate, String endDate,
+      bool isOverTimeCompassScreen, String headacheName) async {
+    String apiResponse;
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    try {
+      String url = WebservicePost.qaServerUrl +
+          'common/fetchheadaches/' +
+          userProfileInfoData.userId;
+      var response = await _recordsCompassRepository.compassServiceCall(
+          url, RequestMethod.GET);
+      if (response is AppException) {
+        networkDataSink.addError(response);
+        apiResponse = response.toString();
+      } else {
+        if (response != null) {
+          var json = jsonDecode(response);
+          List<HeadacheListDataModel> headacheListModelData = [];
+          json.forEach((v) {
+            headacheListModelData.add(new HeadacheListDataModel.fromJson(v));
+          });
+
+          if (headacheListModelData.length > 0) {
+            if (isOverTimeCompassScreen) {
+              _recordsOverTimeCompassModel.headacheListDataModel =
+                  headacheListModelData;
+              if (headacheName != null) {
+                fetchOverTimeCompassAxesResult(
+                    startDate, endDate, headacheName);
+              } else {
+                fetchOverTimeCompassAxesResult(
+                    startDate, endDate, headacheListModelData[0].text);
+              }
+            } else {
+              _recordsCompareCompassModel.headacheListDataModel =
+                  headacheListModelData;
+              if (headacheName == null) {
+                fetchCompareCompassAxesResult(
+                    startDate, endDate, headacheListModelData[0].text);
+              } else {
+                fetchCompareCompassAxesResult(startDate, endDate, headacheName);
+              }
+            }
+          } else {
+            networkDataSink.addError(Exception(Constant.somethingWentWrong));
+            apiResponse = Constant.somethingWentWrong;
+          }
+          print(headacheListModelData);
+        } else {
+          recordsCompassDataSink
+              .addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
+      apiResponse = Constant.somethingWentWrong;
+    }
+    return apiResponse;
   }
 
   fetchOverTimeCompassAxesResult(
@@ -61,20 +127,22 @@ class RecordsCompassScreenBloc {
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
-          recordsCompassAxesResultModel =
+          _recordsOverTimeCompassModel.recordsCompareCompassAxesResultModel =
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
-          recordsCompassDataSink.add(recordsCompassAxesResultModel);
+          networkDataSink.add(Constant.success);
+          recordsCompassDataSink.add(_recordsOverTimeCompassModel);
         } else {
           recordsCompassDataSink
               .addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -102,7 +170,7 @@ class RecordsCompassScreenBloc {
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
@@ -110,12 +178,11 @@ class RecordsCompassScreenBloc {
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
           await fetchFirstLoggedCompassAxesResult();
         } else {
-          recordsCompassDataSink
-              .addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -124,28 +191,27 @@ class RecordsCompassScreenBloc {
   //http://localhost:8080/mobileapi/v0/compass/profile/4579
   fetchFirstLoggedCompassAxesResult() async {
     String apiResponse;
-    var userProfileInfoData =  await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
-      String url = WebservicePost.qaServerUrl +
-          'compass/profile/' +
-          '4579';
+      String url = WebservicePost.qaServerUrl + 'compass/profile/' + '4579';
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
-        recordsCompassDataSink.addError(response);
+        networkDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
           _recordsCompareCompassModel.signUpCompassAxesResultModel =
               RecordsCompassAxesResultModel.fromJson(jsonDecode(response));
           recordsCompassDataSink.add(_recordsCompareCompassModel);
+          networkDataSink.add(Constant.success);
         } else {
-          recordsCompassDataSink
-              .addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
-      recordsCompassDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;

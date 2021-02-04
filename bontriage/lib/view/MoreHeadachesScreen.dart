@@ -4,7 +4,7 @@ import 'package:mobile/view/MoreSection.dart';
 
 class MoreHeadachesScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
-  final Function(String) openActionSheetCallback;
+  final Function(String,dynamic) openActionSheetCallback;
 
   const MoreHeadachesScreen(
       {Key key, this.onPush, this.openActionSheetCallback})
@@ -113,7 +113,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            widget.openActionSheetCallback(Constant.deleteHeadacheTypeActionSheet);
+                            widget.openActionSheetCallback(Constant.deleteHeadacheTypeActionSheet,null);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

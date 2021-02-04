@@ -1,24 +1,30 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsCompassScreenBloc.dart';
+import 'package:mobile/models/HeadacheListDataModel.dart';
+import 'package:mobile/models/RecordsOverTimeCompassModel.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'DateTimePicker.dart';
 
 class OverTimeCompassScreen extends StatefulWidget {
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
+  final Function(Stream, Function) showApiLoaderCallback;
 
-  const OverTimeCompassScreen({Key key, this.openActionSheetCallback}) : super(key: key);
+  const OverTimeCompassScreen(
+      {Key key, this.openActionSheetCallback, this.showApiLoaderCallback})
+      : super(key: key);
+
   @override
   _OverTimeCompassScreenState createState() => _OverTimeCompassScreenState();
 }
 
-class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with AutomaticKeepAliveClientMixin {
+class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
+    with AutomaticKeepAliveClientMixin {
   RecordsCompassScreenBloc _recordsCompassScreenBloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -35,6 +41,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
   List<int> ticks;
 
   List<String> features;
+  String selectedHeadacheName;
+  List<HeadacheListDataModel> headacheListModelData;
+  String userScoreData;
 
   List<TextSpan> _getBubbleTextSpans() {
     List<TextSpan> list = [];
@@ -87,9 +96,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
   @override
   void initState() {
     super.initState();
-     ticks = [10,8,6,4,2,0];
+    ticks = [0, 2, 4, 6, 8, 10];
 
-     features = [
+    features = [
       "A",
       "B",
       "C",
@@ -98,7 +107,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
     compassAxesData = [
       [14, 15, 7, 7]
     ];
-
 
     _recordsCompassScreenBloc = RecordsCompassScreenBloc();
     _dateTime = DateTime.now();
@@ -111,92 +119,108 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+    print('init state of overTime compass');
+    _recordsCompassScreenBloc.initNetworkStreamController();
+    _showApiLoaderDialog();
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+        selectedHeadacheName);
   }
 
   @override
   void didUpdateWidget(covariant OverTimeCompassScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                _openHeadacheTypeActionSheet();
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 30),
-                decoration: BoxDecoration(
-                  color: Constant.compassMyHeadacheTextColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'My headache',
-                  style: TextStyle(
-                      color: Constant.locationServiceGreen,
-                      fontSize: 16,
-                      fontFamily: Constant.jostRegular),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Stack(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Utils.showCompassTutorialDialog(context, 0);
-                  },
-                  child: Container(
-                    alignment: Alignment.topRight,
-                    margin: EdgeInsets.only(left: 65, top: 10),
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: Constant.chatBubbleGreen, width: 1)),
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: (){
-                          Utils.showCompassTutorialDialog(context, 0);
-                        },
+      child: StreamBuilder<dynamic>(
+          stream: _recordsCompassScreenBloc.recordsCompassDataStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (selectedHeadacheName == null) {
+                List<HeadacheListDataModel> headacheListModelData =
+                    snapshot.data.headacheListDataModel;
+                selectedHeadacheName = headacheListModelData[0].text;
+              }
+              setCompassAxesData(snapshot.data);
+              return Container(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (headacheListModelData != null) {
+                          _openHeadacheTypeActionSheet(headacheListModelData);
+                        } else {
+                          _openHeadacheTypeActionSheet(
+                              snapshot.data.headacheListDataModel);
+                        }
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: Constant.compassMyHeadacheTextColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Text(
-                          'i',
+                          selectedHeadacheName != null
+                              ? selectedHeadacheName
+                              : '',
                           style: TextStyle(
+                              color: Constant.locationServiceGreen,
                               fontSize: 16,
-                              color: Constant.chatBubbleGreen,
-                              fontFamily: Constant.jostBold),
+                              fontFamily: Constant.jostRegular),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                StreamBuilder<Object>(
-                    stream: _recordsCompassScreenBloc.recordsCompassDataStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        setCompassAxesData(snapshot.data);
-                        return Row(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            Utils.showCompassTutorialDialog(context, 0);
+                          },
+                          child: Container(
+                            alignment: Alignment.topRight,
+                            margin: EdgeInsets.only(left: 65, top: 10),
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Constant.chatBubbleGreen, width: 1)),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Utils.showCompassTutorialDialog(context, 0);
+                                },
+                                child: Text(
+                                  'i',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Constant.chatBubbleGreen,
+                                      fontFamily: Constant.jostBold),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RotatedBox(
                               quarterTurns: 3,
                               child: GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   Utils.showCompassTutorialDialog(context, 3);
                                 },
                                 child: Text(
@@ -212,7 +236,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     Utils.showCompassTutorialDialog(context, 1);
                                   },
                                   child: Text(
@@ -223,7 +247,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                                         fontFamily: Constant.jostMedium),
                                   ),
                                 ),
-
                                 Center(
                                   child: Container(
                                     width: 220,
@@ -234,23 +257,22 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                                           Container(
                                             child: darkMode
                                                 ? RadarChart.dark(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              reverseAxis: true,
-                                              compassValue: 1,
-                                            )
+                                                    ticks: ticks,
+                                                    features: features,
+                                                    data: compassAxesData,
+                                                    reverseAxis: true,
+                                                    compassValue: 1,
+                                                  )
                                                 : RadarChart.light(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              outlineColor: Constant
-                                                  .chatBubbleGreen
-                                                  .withOpacity(0.5),
-                                              reverseAxis: true,
-                                              compassValue: 1,
-                                            ),
-
+                                                    ticks: ticks,
+                                                    features: features,
+                                                    data: compassAxesData,
+                                                    outlineColor: Constant
+                                                        .chatBubbleGreen
+                                                        .withOpacity(0.5),
+                                                    reverseAxis: true,
+                                                    compassValue: 1,
+                                                  ),
                                           ),
                                           Center(
                                             child: Container(
@@ -280,9 +302,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                                     ),
                                   ),
                                 ),
-
                                 GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     Utils.showCompassTutorialDialog(context, 2);
                                   },
                                   child: Text(
@@ -298,7 +319,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                             RotatedBox(
                               quarterTurns: 1,
                               child: GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   Utils.showCompassTutorialDialog(context, 4);
                                 },
                                 child: Text(
@@ -311,214 +332,114 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
                               ),
                             ),
                           ],
-                        );
-                      }else if (snapshot.hasError) {
-                        Utils.closeApiLoaderDialog(context);
-                        return NetworkErrorScreen(
-                          errorMessage: snapshot.error.toString(),
-                          tapToRetryFunction: () {
-                            Utils.showApiLoaderDialog(context);
-                            requestService(firstDayOfTheCurrentMonth,
-                                lastDayOfTheCurrentMonth);
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            DateTime dateTime =
+                                DateTime(_dateTime.year, _dateTime.month - 1);
+                            _dateTime = dateTime;
+                            _onStartDateSelected(dateTime);
                           },
-                        );
-                      } else {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: Text(
-                                "Frequency",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image(
+                              image: AssetImage(Constant.backArrow),
+                              width: 17,
+                              height: 17,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Intensity",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-
-                                Center(
-                                  child: Container(
-                                    width: 220,
-                                    height: 220,
-                                    child: Center(
-                                      child: Stack(
-                                        children: <Widget>[
-                                          Container(
-                                            child: darkMode
-                                                ? RadarChart.dark(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              reverseAxis: true,
-                                              compassValue: 1,
-                                            )
-                                                : RadarChart.light(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              outlineColor: Constant
-                                                  .chatBubbleGreen
-                                                  .withOpacity(0.5),
-                                              reverseAxis: true,
-                                              compassValue: 1,
-                                            ),
-                                          ),
-                                          Center(
-                                            child: Container(
-                                              width: 36,
-                                              height: 36,
-                                              child: Center(
-                                                child: Text(
-                                                  '60',
-                                                  style: TextStyle(
-                                                      color: Color(0xff0E1712),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                      Constant.jostMedium),
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Color(0xff97c289),
-                                                border: Border.all(
-                                                    color: Color(0xff97c289),
-                                                    width: 1.2),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                Text(
-                                  "Disability",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _openDatePickerBottomSheet(
+                                CupertinoDatePickerMode.date);
+                          },
+                          child: Text(
+                            '$monthName $currentYear',
+                            style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 15,
+                                fontFamily: Constant.jostRegular),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            DateTime dateTime =
+                                DateTime(_dateTime.year, _dateTime.month + 1);
+                            Duration duration =
+                                dateTime.difference(DateTime.now());
+                            if (duration.inSeconds < 0) {
+                              _dateTime = dateTime;
+                              _onStartDateSelected(dateTime);
+                            } else {
+                              ///To:Do
+                              print("Not Allowed");
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image(
+                              image: AssetImage(Constant.nextArrow),
+                              width: 17,
+                              height: 17,
                             ),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Text(
-                                "Duration",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 16,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                  }
-
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month - 1);
-                    _dateTime = dateTime;
-                    _onStartDateSelected(dateTime);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image(
-                      image: AssetImage(Constant.backArrow),
-                      width: 17,
-                      height: 17,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
-                  },
-                  child: Text(
-                    '$monthName $currentYear',
-                    style: TextStyle(
-                        color: Constant.chatBubbleGreen,
-                        fontSize: 15,
-                        fontFamily: Constant.jostRegular),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month + 1);
-                    Duration duration = dateTime.difference(DateTime.now());
-                    if (duration.inSeconds < 0) {
-                      _dateTime = dateTime;
-                      _onStartDateSelected(dateTime);
-                    } else {
-                      ///To:Do
-                      print("Not Allowed");
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image(
-                      image: AssetImage(Constant.nextArrow),
-                      width: 17,
-                      height: 17,
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      padding: EdgeInsets.symmetric(vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Constant.locationServiceGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: RichText(
+                          text: TextSpan(
+                            children: _getBubbleTextSpans(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.symmetric(vertical: 3),
-              decoration: BoxDecoration(
-                color: Constant.locationServiceGreen.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: RichText(
-                  text: TextSpan(
-                    children: _getBubbleTextSpans(),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-      ),
+              );
+            } else if (snapshot.hasError) {
+              Utils.closeApiLoaderDialog(context);
+              return NetworkErrorScreen(
+                errorMessage: snapshot.error.toString(),
+                tapToRetryFunction: () {
+                  Utils.showApiLoaderDialog(context);
+                  requestService(firstDayOfTheCurrentMonth,
+                      lastDayOfTheCurrentMonth, selectedHeadacheName);
+                },
+              );
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 
@@ -532,8 +453,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) =>
-            DateTimePicker(
+        builder: (context) => DateTimePicker(
               cupertinoDatePickerMode: cupertinoDatePickerMode,
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
             ));
@@ -564,71 +484,121 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen> with Auto
       Utils.showApiLoaderDialog(context,
           networkStream: _recordsCompassScreenBloc.networkDataStream,
           tapToRetryFunction: () {
-            _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-          });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName);
+      });
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
     });
   }
 
-//http://34.222.200.187:8080/mobileapi/v0/compass/calender?end_date=2021-01-31T18:30:00Z&start_date=2021-01-01T18:30:00Z&user_id=4609&headache_name=Headache1
-
   void requestService(String firstDayOfTheCurrentMonth,
-      String lastDayOfTheCurrentMonth) async {
-    await _recordsCompassScreenBloc.fetchOverTimeCompassAxesResult(
-        '2021-01-01T18:30:00Z', '2021-01-31T18:30:00Z', 'Headache1');
+      String lastDayOfTheCurrentMonth, String selectedHeadacheName) async {
+    await _recordsCompassScreenBloc.fetchAllHeadacheListData(
+        firstDayOfTheCurrentMonth,
+        lastDayOfTheCurrentMonth,
+        true,
+        selectedHeadacheName);
   }
 
   void setCompassAxesData(
-      RecordsCompassAxesResultModel recordsCompassAxesResultModel) {
-    int userDisabilityValue, userFrequencyValue, userDurationValue,
+      RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
+    int userDisabilityValue,
+        userFrequencyValue,
+        userDurationValue,
         userIntensityValue;
-    List<Axes> compassAxesListData = recordsCompassAxesResultModel.axes;
-    print(recordsCompassAxesResultModel);
+    int baseMaxValue = 10;
+    List<Axes> compassAxesListData =
+        recordsOverTimeCompassModel.recordsCompareCompassAxesResultModel.axes;
+    print(recordsOverTimeCompassModel);
     var userFrequency = compassAxesListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.name == Constant.intensity,
+        (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      userFrequencyValue = userFrequency.value.toInt();
-      userFrequencyValue = userFrequencyValue*3.1.toInt();
-    }
-    var userDuration = compassAxesListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.name == Constant.duration,
-        orElse: () => null);
-    if (userDuration != null) {
-      userDurationValue = userDuration.value.toInt();
-      userDurationValue = userDurationValue*7.2.toInt();
-    }
-    var userIntensity = compassAxesListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.name == Constant.intensity,
-        orElse: () => null);
-    if (userIntensity != null) {
-      userIntensityValue = userIntensity.value.toInt();
+      userFrequencyValue =
+          userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
 
     }
+    var userDuration = compassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.duration,
+        orElse: () => null);
+    if (userDuration != null) {
+      userDurationValue =
+          userDuration.value.toInt() ~/ (userDuration.max / baseMaxValue);
+    }
+    var userIntensity = compassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.intensity,
+        orElse: () => null);
+    if (userIntensity != null) {
+      userIntensityValue =
+          userIntensity.value.toInt() ~/ (userIntensity.max / baseMaxValue);
+    }
     var userDisability = compassAxesListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.name == Constant.disability,
+        (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
       userDisabilityValue = userDisability.value.toInt();
-      userDisabilityValue = userDisabilityValue*0.4.toInt();
+      userDisabilityValue =
+          userDisability.value.toInt() ~/ (userDisability.max / baseMaxValue);
     }
 
-    compassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
-
+    compassAxesData = [
+      [
+        userIntensityValue,
+        userDurationValue,
+        userDisabilityValue,
+        userFrequencyValue
+      ]
+    ];
+    setCompassDataScore(userIntensity,userDisability,userFrequency,userDuration);
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
-  void _openHeadacheTypeActionSheet() async {
-    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.compassHeadacheTypeActionSheet);
-    print(resultFromActionSheet);
+  void _openHeadacheTypeActionSheet(
+      List<HeadacheListDataModel> headacheListData) async {
+    var resultFromActionSheet = await widget.openActionSheetCallback(
+        Constant.compassHeadacheTypeActionSheet, headacheListData);
+    headacheListModelData = headacheListData;
+    if (resultFromActionSheet != null) {
+      selectedHeadacheName = resultFromActionSheet.toString();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
+      print(resultFromActionSheet);
+    }
   }
 
+  void _showApiLoaderDialog() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String isViewTrendsClicked =
+        sharedPreferences.getString(Constant.isViewTrendsClicked) ??
+            Constant.blankString;
+    String isSeeMoreClicked =
+        sharedPreferences.getString(Constant.isSeeMoreClicked) ??
+            Constant.blankString;
+    if (isViewTrendsClicked.isEmpty && isSeeMoreClicked.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        widget.showApiLoaderCallback(
+            _recordsCompassScreenBloc.networkDataStream, () {
+          _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+              selectedHeadacheName);
+        });
+      });
+    }
+  }
+
+  void setCompassDataScore(Axes userIntensityValue , Axes userDisabilityValue,Axes userFrequencyValue,Axes userDurationValue) {
+
+    var  intensityScore = userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
+    var  disabilityScore = userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
+    var  frequencyScore = userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
+    var  durationScore = userDurationValue.value.toInt() / userDurationValue.max * 100.0;
+
+    var userTotalScore = (intensityScore+disabilityScore+frequencyScore+durationScore)/4;
+    userScoreData = userTotalScore.toInt().toString();
+    print(userScoreData);
+  }
 }

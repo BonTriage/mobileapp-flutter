@@ -24,7 +24,7 @@ import 'package:mobile/view/RecordScreen.dart';
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final String root;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
   final Function(GlobalKey, GlobalKey) getButtonsGlobalKeyCallback;
 
@@ -87,9 +87,7 @@ class TabNavigator extends StatelessWidget {
           }),
       TabNavigatorRoutes.moreRoot: (context) => MoreScreen(
             onPush: _push,
-            openActionSheetCallback: (actionSheetType) {
-              openActionSheetCallback(actionSheetType);
-            },
+            openActionSheetCallback: openActionSheetCallback,
             showApiLoaderCallback: showApiLoaderCallback,
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
@@ -106,9 +104,7 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
             onPush: _push,
-            openActionSheetCallback: (actionSheetType) {
-              openActionSheetCallback(actionSheetType);
-            },
+            openActionSheetCallback: openActionSheetCallback,
           ),
       TabNavigatorRoutes.moreSupportRoute: (context) => MoreSupportScreen(
             onPush: _push,

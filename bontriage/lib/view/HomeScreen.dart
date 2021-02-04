@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<dynamic> _openActionSheet(String actionSheetType) async {
+  Future<dynamic> _openActionSheet(String actionSheetType,dynamic argument) async {
     switch (actionSheetType) {
       case Constant.medicalHelpActionSheet:
         var resultOfActionSheet = await showModalBottomSheet(
@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             context: context,
-            builder: (context) => CompassHeadacheTypeActionSheet());
+            builder: (context) => CompassHeadacheTypeActionSheet(headacheListModelData: argument));
         return resultOfActionSheet;
         break;
       case Constant.editGraphViewBottomSheet:

@@ -8,7 +8,7 @@ class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
 
 
   const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.openActionSheetCallback}) : super(key: key);

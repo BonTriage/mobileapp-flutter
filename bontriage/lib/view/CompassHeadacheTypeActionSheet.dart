@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class CompassHeadacheTypeActionSheet extends StatefulWidget {
+  final List<HeadacheListDataModel> headacheListModelData;
+
+  CompassHeadacheTypeActionSheet({this.headacheListModelData});
+
   @override
-  _CompassHeadacheTypeActionSheetState createState() => _CompassHeadacheTypeActionSheetState();
+  _CompassHeadacheTypeActionSheetState createState() =>
+      _CompassHeadacheTypeActionSheetState();
 }
 
-class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActionSheet> {
+class _CompassHeadacheTypeActionSheetState
+    extends State<CompassHeadacheTypeActionSheet> {
   List<String> _radioList;
-  List<String> _headacheDropDownList;
-
   String _value;
   String _dropDownValue;
 
@@ -24,15 +29,15 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
       Constant.summaryOfAllHeadacheTypes,
     ];
 
-    _headacheDropDownList = [
-      'Headache 1',
-      'Headache 2',
-      'Headache 3',
-      'Headache 4',
-    ];
-    _dropDownValue = _headacheDropDownList[0];
+    _dropDownValue = widget.headacheListModelData[0].text;
 
-    _value = Constant.singleHeadache;
+    var userSelectedHeadache = widget.headacheListModelData
+        .firstWhere((element) => element.isSelected, orElse: () => null);
+    if (userSelectedHeadache != null) {
+      _value = userSelectedHeadache.text;
+    } else {
+      _value = widget.headacheListModelData[0].text;
+    }
 
     _textStyle = TextStyle(
       fontFamily: Constant.jostRegular,
@@ -40,6 +45,7 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
       color: Constant.locationServiceGreen,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +83,9 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             Constant.selectTheSavedHeadacheType,
             textAlign: TextAlign.center,
@@ -87,91 +95,43 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
               color: Constant.locationServiceGreen,
             ),
           ),
-          SizedBox(height: 30,),
-          Row(
-            children: [
-              Theme(
-                data: ThemeData(
-                  unselectedWidgetColor: Constant.locationServiceGreen,
-                ),
-                child: Radio(
-                  value: _radioList[0],
-                  activeColor: Constant.locationServiceGreen,
-                  hoverColor: Constant.locationServiceGreen,
-                  focusColor: Constant.locationServiceGreen,
-                  groupValue: _value,
-                  onChanged: (String value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(width: 10,),
-              Text(
-                Constant.singleHeadache,
-                style: _textStyle,
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Container(
-                  height: 25,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Constant.locationServiceGreen,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButton(
-                    value: _dropDownValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _dropDownValue = value;
-                      });
-                    },
-                    isExpanded: true,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constant.jostRegular,
-                      color: Constant.locationServiceGreen
-                    ),
-                    icon: Image.asset(Constant.downArrow2, height: 10, width: 10,),
-                    dropdownColor: Constant.backgroundColor,
-                    items: _getDropDownMenuItems(),
-                    underline: Container(),
-                  ),
-                ),
-              ),
-            ],
+          SizedBox(
+            height: 10,
           ),
-          Row(
-            children: [
-              Theme(
-                data: ThemeData(
-                  unselectedWidgetColor: Constant.locationServiceGreen,
-                ),
-                child: Radio(
-                  value: _radioList[1],
-                  activeColor: Constant.locationServiceGreen,
-                  hoverColor: Constant.locationServiceGreen,
-                  focusColor: Constant.locationServiceGreen,
-                  groupValue: _value,
-                  onChanged: (String value) {
-                    setState(() {
-                      _value = value;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(width: 10,),
-              Text(
-                Constant.summaryOfAllHeadacheTypes,
-                style: _textStyle,
-              ),
-            ],
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.headacheListModelData.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    Theme(
+                      data: ThemeData(
+                        unselectedWidgetColor: Constant.locationServiceGreen,
+                      ),
+                      child: Radio(
+                        value: widget.headacheListModelData[index].text,
+                        activeColor: Constant.locationServiceGreen,
+                        hoverColor: Constant.locationServiceGreen,
+                        focusColor: Constant.locationServiceGreen,
+                        groupValue: _value,
+                        onChanged: (String value) {
+                          widget.headacheListModelData[index].isSelected = true;
+                          Navigator.pop(context, value);
+                        },
+                      ),
+                    ),
+                    Text(
+                      widget.headacheListModelData[index].text,
+                      style: _textStyle,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-          SizedBox(height: 50,),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
@@ -180,12 +140,10 @@ class _CompassHeadacheTypeActionSheetState extends State<CompassHeadacheTypeActi
   List<DropdownMenuItem<String>> _getDropDownMenuItems() {
     List<DropdownMenuItem<String>> dropDownMenuItemList = [];
 
-    _headacheDropDownList.forEach((element) {
+    widget.headacheListModelData.forEach((element) {
       dropDownMenuItemList.add(DropdownMenuItem(
-        value: element,
-        child: Text(
-          element
-        ),
+        value: element.text,
+        child: Text(element.text),
       ));
     });
 
