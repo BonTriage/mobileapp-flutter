@@ -508,8 +508,10 @@ class _MeScreenState extends State<MeScreen>
       await _calendarScreenBloc.fetchUserOnGoingHeadache();
       var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-      if(userProfileInfoData != null)
+      if(userProfileInfoData != null) {
+        print('USERID???${userProfileInfoData.userId}');
         await _getUserCurrentHeadacheData();
+      }
 
       if(currentUserHeadacheModel != null) {
         setState(() {

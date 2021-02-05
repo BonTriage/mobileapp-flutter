@@ -108,13 +108,13 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     print('init state of compare compass');
-    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      }
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth, selectedHeadacheName);
+        }
       );
-    });*/
+    });
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);
   }
