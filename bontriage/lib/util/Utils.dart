@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
@@ -303,7 +304,7 @@ class Utils {
         case Constant.secondEventStep:
           Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardScreenRouter,
-              arguments: Constant.clinicalImpressionShort1);
+              arguments: PartTwoOnBoardArgumentModel(argumentName: Constant.clinicalImpressionShort1));
           break;
         case Constant.thirdEventStep:
           Navigator.pushReplacementNamed(

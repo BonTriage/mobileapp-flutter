@@ -38,7 +38,6 @@ class AddHeadacheLogRepository{
   }
 
   Future<dynamic> calendarTriggersServiceCall(String url, RequestMethod requestMethod) async {
-    var client = http.Client();
     var calendarData;
     try {
       var response =
@@ -59,7 +58,6 @@ class AddHeadacheLogRepository{
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
       signUpOnBoardSelectedAnswersModel) async {
-    var client = http.Client();
     var album;
     try {
       String payload = await _setUserAddHeadachePayload(signUpOnBoardSelectedAnswersModel);

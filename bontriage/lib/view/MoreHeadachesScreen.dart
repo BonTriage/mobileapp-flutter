@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
@@ -104,31 +105,41 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           moreStatus: '',
                           isShowDivider: true,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              Constant.reCompleteInitialAssessment,
-                              style: TextStyle(
-                                  color: Constant.addCustomNotificationTextColor,
-                                  fontSize: 16,
-                                  fontFamily: Constant.jostRegular
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(width: 10,),
-                                Image(
-                                  width: 16,
-                                  height: 16,
-                                  image: AssetImage(Constant.rightArrow),
+                        GestureDetector(
+                          onTap: () {
+                            _bloc.initNetworkStreamController();
+                            widget.showApiLoaderCallback(_bloc.networkStream, () {
+                              _bloc.networkSink.add(Constant.loading);
+                              _getDiagnosticAnswerList();
+                            });
+                            _getDiagnosticAnswerList();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Constant.reCompleteInitialAssessment,
+                                style: TextStyle(
+                                    color: Constant.addCustomNotificationTextColor,
+                                    fontSize: 16,
+                                    fontFamily: Constant.jostRegular
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(width: 10,),
+                                  Image(
+                                    width: 16,
+                                    height: 16,
+                                    image: AssetImage(Constant.rightArrow),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         Divider(
-                          thickness: 0.5,
+                          thickness: 1,
                           height: 30,
                           color: Constant.locationServiceGreen,
                         ),
@@ -200,7 +211,6 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
       });
       _bloc.callDeleteHeadacheTypeService(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
     }
-    print(resultOfActionSheet);
   }
 
   void _listenToDeleteHeadacheStream() {
@@ -209,5 +219,10 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
         Navigator.pop(context, data);
       }
     });
+  }
+
+  void _getDiagnosticAnswerList() async {
+    List<SelectedAnswers> selectedAnswerList = await _bloc.fetchDiagnosticAnswers(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
+    print(selectedAnswerList);
   }
 }

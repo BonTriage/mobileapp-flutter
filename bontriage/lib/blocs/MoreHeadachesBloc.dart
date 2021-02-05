@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/DeleteHeadacheResponseModel.dart';
+import 'package:mobile/models/ResponseModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/repository/MoreHeadacheRepository.dart';
@@ -48,6 +51,35 @@ class MoreHeadacheBloc {
     } catch(e) {
       networkSink.addError(Exception(Constant.somethingWentWrong));
     }
+  }
+
+  Future<List<SelectedAnswers>> fetchDiagnosticAnswers(String eventId) async {
+    List<SelectedAnswers> selectedAnswersList = [];
+    try {
+      var response = await _moreHeadacheRepository.callServiceForDiagnosticData(
+          '${WebservicePost.qaServerUrl}calender/$eventId',
+          RequestMethod.GET
+      );
+      if (response is AppException) {
+        networkSink.addError(response);
+      } else {
+        if(response != null && response is List<ResponseModel>) {
+          networkSink.add(Constant.success);
+          response[0].mobileEventDetails.forEach((element) {
+            if(element.value.contains("%@")) {
+              List<String> splitList = element.value.split("%@");
+              selectedAnswersList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(splitList)));
+            } else
+              selectedAnswersList.add(SelectedAnswers(questionTag: element.questionTag, answer: element.value));
+          });
+        } else {
+          networkSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch(e) {
+      networkSink.addError(Exception(Constant.somethingWentWrong));
+    }
+    return selectedAnswersList;
   }
 
   void initNetworkStreamController() {

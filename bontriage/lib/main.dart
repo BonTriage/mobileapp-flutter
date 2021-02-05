@@ -164,12 +164,12 @@ class MyApp extends StatelessWidget {
             }
           case Constant.partTwoOnBoardScreenRouter:
             {
-              String argsName = settings.arguments;
               return SlideFromRightPageRoute(
                   widget: PartTwoOnBoardScreens(
-                      argumentsName: (argsName != null)
-                          ? argsName
-                          : Constant.clinicalImpressionShort1), routeSettings: routeSettings);
+                    partTwoOnBoardArgumentModel: settings.arguments,
+                  ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
