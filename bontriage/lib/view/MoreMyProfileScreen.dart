@@ -203,6 +203,13 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
           _moreMyProfileBloc.editMyProfileServiceCall();
         });
         _moreMyProfileBloc.editMyProfileServiceCall();
+      } else if (result is String && result == 'Event Deleted') {
+        _moreMyProfileBloc.initNetworkStreamController();
+        widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
+          _moreMyProfileBloc.enterSomeDummyData();
+          _moreMyProfileBloc.fetchMyProfileData();
+        });
+        _moreMyProfileBloc.fetchMyProfileData();
       }
     }
     //setState(() {});

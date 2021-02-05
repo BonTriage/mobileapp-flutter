@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/AddHeadacheLogBloc.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
@@ -375,7 +376,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
   moveOnWelcomeBoardSecondStepScreens() async {
     final pushToScreenResult = await Navigator.pushNamed(
         context, Constant.partTwoOnBoardScreenRouter,
-        arguments: Constant.clinicalImpressionEventType);
+        arguments: PartTwoOnBoardArgumentModel(argumentName: Constant.clinicalImpressionEventType));
     if (pushToScreenResult != null) {
       setState(() {
         if (_addHeadacheUserListData != null) {

@@ -26,7 +26,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _animationController = AnimationController(
@@ -138,16 +137,36 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                     BottomSheetContainer(
                         question: widget.question,
                         selectedAnswerCallback: (index) {
-                          if (widget.question.values[index].isSelected) {
+                          Values value = widget.question.values[index];
+                          if (value.isSelected) {
+                            if(!value.isValid) {
+                              _valuesSelectedList.clear();
+                              widget.question.values.forEach((element) {
+                                element.isSelected = false;
+                              });
+                              value.isSelected = true;
+                            } else {
+                              Values noneOfTheAboveValue = widget.question.values.firstWhere((element) => !element.isValid);
+                              if(noneOfTheAboveValue != null) {
+                                noneOfTheAboveValue.isSelected = false;
+                                _valuesSelectedList.removeWhere((element) =>
+                                element == noneOfTheAboveValue.text);
+                              }
+                            }
                             _valuesSelectedList.add(
-                                widget.question.values[index].text);
+                                value.text);
                           } else {
                             _valuesSelectedList.remove(
-                                widget.question.values[index].text);
+                                value.text);
                           }
                           widget.selectAnswerCallback(
                               widget.question, _valuesSelectedList);
                           setState(() {});
+
+                          //Remove this code after testing
+                          _valuesSelectedList.forEach((element) {
+                            print(element + '\n');
+                          });
                         })
                 );
               },
@@ -221,7 +240,6 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
