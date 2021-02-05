@@ -33,8 +33,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   int compassValue = 2;
   DateTime _dateTime;
   int currentMonth;
-  int currentYear;
-  String monthName;
+
+  int currentYear = 2021;
+  String monthName = 'Feb';
   int totalDaysInCurrentMonth;
   String firstDayOfTheCurrentMonth;
   String lastDayOfTheCurrentMonth;
@@ -50,6 +51,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   List<HeadacheListDataModel> headacheListModelData;
   String userMonthlyCompassScoreData = '0';
   String userFirstLoggedCompassScoreData = '0';
+  String lastSelectedHeadacheName;
 
   List<TextSpan> _getBubbleTextSpans() {
     List<TextSpan> list = [];
@@ -61,19 +63,20 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
-        text: '63',
+        text: userFirstLoggedCompassScoreData,
         style: TextStyle(
             height: 1,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-        text: ' in may 2019. Tap the Compass to view December 2020  ',
+        text: ' in may 2019. Tap the Compass to view $monthName $currentYear  ',
         style: TextStyle(
             height: 1,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
+
     return list;
   }
 
@@ -81,7 +84,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   void initState() {
     super.initState();
 
-    ticks = [7, 14, 21, 28, 35];
+    ticks = [0, 2, 4, 6, 8, 10];
 
     features = [
       "A",
@@ -121,7 +124,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     super.didUpdateWidget(oldWidget);
     print('didUpdateWidget of compare compass');
     _updateCompassData();
-
   }
 
   @override
@@ -146,12 +148,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (headacheListModelData != null) {
-                          _openHeadacheTypeActionSheet(headacheListModelData);
-                        } else {
-                          _openHeadacheTypeActionSheet(
-                              snapshot.data.headacheListDataModel);
-                        }
+                        _openHeadacheTypeActionSheet(
+                            snapshot.data.headacheListDataModel);
                       },
                       child: Container(
                         padding:
@@ -442,14 +440,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                   )
                                 ],
                               ),
-                              Text(
-                                'Change',
-                                style: TextStyle(
-                                    color:
-                                        Constant.addCustomNotificationTextColor,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostRegular),
-                              )
                             ],
                           ),
                         ),
@@ -563,34 +553,34 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         userMonthlyDurationValue,
         userMonthlyIntensityValue;
 
+    int baseMaxValue = 10;
+
     List<Axes> recordsCompareCompassAxesListData =
         recordsCompassAxesResultModel.recordsCompareCompassAxesResultModel.axes;
     var userFrequency = recordsCompareCompassAxesListData.firstWhere(
-        (intensityElement) => intensityElement.name == Constant.intensity,
+        (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      userMonthlyFrequencyValue = userFrequency.value.toInt();
-      userMonthlyFrequencyValue = userMonthlyFrequencyValue * 3.1.toInt();
+      userMonthlyFrequencyValue =
+          userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
     }
     var userDuration = recordsCompareCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
-      userMonthlyDurationValue = userDuration.value.toInt();
-      userMonthlyDurationValue = userMonthlyDurationValue * 7.2.toInt();
+      userMonthlyDurationValue = userDuration.value.toInt() ~/ (userDuration.max / baseMaxValue);
     }
     var userIntensity = recordsCompareCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
-      userMonthlyIntensityValue = userIntensity.value.toInt();
+      userMonthlyIntensityValue = userIntensity.value.toInt()~/ (userIntensity.max / baseMaxValue);
     }
     var userDisability = recordsCompareCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
-      userMonthlyDisabilityValue = userDisability.value.toInt();
-      userMonthlyDisabilityValue = userMonthlyDisabilityValue * 0.4.toInt();
+      userMonthlyDisabilityValue = userDisability.value.toInt() ~/ (userDisability.max / baseMaxValue);
     }
     int userOvertimeFrequencyValue,
         userOverTimeDurationValue,
@@ -603,28 +593,25 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userOverTimeFrequency != null) {
-      userOvertimeFrequencyValue = userOverTimeFrequency.value.toInt();
-      userOvertimeFrequencyValue = userOvertimeFrequencyValue * 3.1.toInt();
+      userOvertimeFrequencyValue = userOverTimeFrequency.value.toInt() ~/ (userOverTimeFrequency.max / baseMaxValue);
     }
     var userOvertimeDuration = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userOvertimeDuration != null) {
-      userOverTimeDurationValue = userOvertimeDuration.value.toInt();
-      userOverTimeDurationValue = userOverTimeDurationValue * 7.2.toInt();
+      userOverTimeDurationValue = userOvertimeDuration.value.toInt() ~/ (userOvertimeDuration.max / baseMaxValue);
     }
     var userOverTimeIntensity = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userOverTimeIntensity != null) {
-      userOverTimeIntensityValue = userOverTimeIntensity.value.toInt();
+      userOverTimeIntensityValue = userOverTimeIntensity.value.toInt() ~/ (userOverTimeIntensity.max / baseMaxValue);
     }
     var userOverTimeDisability = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userOverTimeDisability != null) {
-      userOverTimeDisabilityValue = userOverTimeDisability.value.toInt();
-      userOverTimeDisabilityValue = userOverTimeDisabilityValue * 0.4.toInt();
+      userOverTimeDisabilityValue = userOverTimeDisability.value.toInt() ~/ (userOverTimeDisability.max / baseMaxValue);
     }
     compassAxesData = [
       [
@@ -693,8 +680,17 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
 
   void _openHeadacheTypeActionSheet(
       List<HeadacheListDataModel> headacheListData) async {
+    if (lastSelectedHeadacheName != null) {
+      var lastSelectedHeadacheNameData = headacheListData.firstWhere(
+          (element) => element.text == lastSelectedHeadacheName,
+          orElse: () => null);
+      if (lastSelectedHeadacheNameData != null) {
+        lastSelectedHeadacheNameData.isSelected = true;
+      }
+    }
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.compassHeadacheTypeActionSheet, headacheListData);
+    lastSelectedHeadacheName = resultFromActionSheet;
     headacheListModelData = headacheListData;
     if (resultFromActionSheet != null) {
       selectedHeadacheName = resultFromActionSheet.toString();
@@ -708,11 +704,19 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   void _updateCompassData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
-    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
-    String updateOverTimeCompassData = sharedPreferences.getString(Constant.updateOverTimeCompassData) ?? Constant.blankString;
+    String isSeeMoreClicked =
+        sharedPreferences.getString(Constant.isSeeMoreClicked) ??
+            Constant.blankString;
+    String isTrendsClicked =
+        sharedPreferences.getString(Constant.isViewTrendsClicked) ??
+            Constant.blankString;
+    String updateOverTimeCompassData =
+        sharedPreferences.getString(Constant.updateOverTimeCompassData) ??
+            Constant.blankString;
 
-    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateOverTimeCompassData == Constant.trueString) {
+    if (isSeeMoreClicked.isEmpty &&
+        isTrendsClicked.isEmpty &&
+        updateOverTimeCompassData == Constant.trueString) {
       sharedPreferences.remove(Constant.updateOverTimeCompassData);
       _dateTime = DateTime.now();
       currentMonth = _dateTime.month;
@@ -724,12 +728,14 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
           currentMonth, currentYear, 1);
       lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
           currentMonth, currentYear, totalDaysInCurrentMonth);
-      widget.showApiLoaderCallback(
-          _recordsCompassScreenBloc.networkDataStream, () {
+      widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
+          () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,selectedHeadacheName);
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName);
       });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,selectedHeadacheName);
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
     }
   }
 }

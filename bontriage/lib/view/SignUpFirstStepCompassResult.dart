@@ -41,6 +41,8 @@ class _SignUpFirstStepCompassResultState
 
   List<List<int>> userCompassAxesData;
 
+  String userScoreData;
+
   @override
   void initState() {
     super.initState();
@@ -308,7 +310,7 @@ class _SignUpFirstStepCompassResultState
                                             height: 36,
                                             child: Center(
                                               child: Text(
-                                                '70',
+                                                userScoreData,
                                                 style: TextStyle(
                                                     color: Color(0xff0E1712),
                                                     fontSize: 14,
@@ -542,15 +544,23 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
      if(userFrequency != null){
        userFrequencyValue = int.tryParse(userFrequency.answer);
-       userFrequencyValue = (userFrequencyValue*0.9).toInt();
+       userFrequencyValue = userFrequencyValue~/0.9;
      }
     var userDuration = selectedAnswerListData.firstWhere(
             (intensityElement) =>
         intensityElement.questionTag == Constant.headacheTypicalTag,
         orElse: () => null);
     if(userDuration != null){
+      int userMaxDurationValue;
       userDurationValue = int.tryParse(userDuration.answer);
-
+      if(userDurationValue == 1){
+         userMaxDurationValue = 1;
+      }else if(userDurationValue > 1 && userDurationValue <= 24){
+        userMaxDurationValue = 24;
+      }else if(userDurationValue > 24 && userDurationValue <= 72){
+        userMaxDurationValue = 72;
+      }
+      userDurationValue = userDurationValue~/(userMaxDurationValue/10);
     }
     var userIntensity = selectedAnswerListData.firstWhere(
             (intensityElement) =>
@@ -565,6 +575,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if(userDisability != null){
       userDisabilityValue = int.tryParse(userDisability.answer);
+      userDisabilityValue = userDisabilityValue~/0.4;
     }
     setState(() {
       // Intensity,Duration,Disability,Frequency
@@ -573,6 +584,28 @@ class _SignUpFirstStepCompassResultState
       3. 7 intensity
       4 . 2 disability*/
       userCompassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
+      setCompassDataScore(userIntensityValue,userDisabilityValue,userFrequencyValue,userDurationValue);
     });
   }
+
+  void setCompassDataScore(int userIntensityValue, int userDisabilityValue, int userFrequencyValue, int userDurationValue) {
+int userMaxDurationValue;
+    var intensityScore = userIntensityValue / 10 * 100.0;
+    var disabilityScore = userDisabilityValue.toInt() /4 * 100.0;
+    var frequencyScore = userFrequencyValue.toInt() /90 * 100.0;
+    if(userDurationValue == 1){
+      userMaxDurationValue = 1;
+    }else if(userDurationValue > 1 && userDurationValue <= 24){
+      userMaxDurationValue = 24;
+    }else if(userDurationValue > 24 && userDurationValue <= 72){
+      userMaxDurationValue = 72;
+    }
+    var durationScore = userDurationValue.toInt() / userMaxDurationValue * 100.0;
+    var userTotalScore = (intensityScore + disabilityScore + frequencyScore +
+        durationScore) / 4;
+    userScoreData = userTotalScore.toInt().toString();
+    print(userScoreData);
+  }
+
+
 }

@@ -42,7 +42,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   List<String> features;
   String selectedHeadacheName;
-  List<HeadacheListDataModel> headacheListModelData;
+  String lastSelectedHeadacheName;
+
   String userScoreData;
 
   List<TextSpan> _getBubbleTextSpans() {
@@ -154,12 +155,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (headacheListModelData != null) {
-                          _openHeadacheTypeActionSheet(headacheListModelData);
-                        } else {
-                          _openHeadacheTypeActionSheet(
-                              snapshot.data.headacheListDataModel);
-                        }
+                        _openHeadacheTypeActionSheet(
+                            snapshot.data.headacheListDataModel);
                       },
                       child: Container(
                         padding:
@@ -281,12 +278,14 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                               height: 36,
                                               child: Center(
                                                 child: Text(
-                                                  '60',
+                                                  userScoreData != null
+                                                      ? userScoreData
+                                                      : '0',
                                                   style: TextStyle(
                                                       color: Color(0xff0E1712),
                                                       fontSize: 14,
                                                       fontFamily:
-                                                      Constant.jostMedium),
+                                                          Constant.jostMedium),
                                                 ),
                                               ),
                                               decoration: BoxDecoration(
@@ -519,7 +518,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userFrequency != null) {
       userFrequencyValue =
           userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
-
     }
     var userDuration = compassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
@@ -552,7 +550,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userFrequencyValue
       ]
     ];
-    setCompassDataScore(userIntensity,userDisability,userFrequency,userDuration);
+    setCompassDataScore(
+        userIntensity, userDisability, userFrequency, userDuration);
   }
 
   @override
@@ -560,9 +559,17 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   void _openHeadacheTypeActionSheet(
       List<HeadacheListDataModel> headacheListData) async {
+    if (lastSelectedHeadacheName != null) {
+      var lastSelectedHeadacheNameData = headacheListData.firstWhere(
+          (element) => element.text == lastSelectedHeadacheName,
+          orElse: () => null);
+      if (lastSelectedHeadacheNameData != null) {
+        lastSelectedHeadacheNameData.isSelected = true;
+      }
+    }
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.compassHeadacheTypeActionSheet, headacheListData);
-    headacheListModelData = headacheListData;
+    lastSelectedHeadacheName = resultFromActionSheet;
     if (resultFromActionSheet != null) {
       selectedHeadacheName = resultFromActionSheet.toString();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
@@ -591,28 +598,38 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     }
   }
 
-  void setCompassDataScore(Axes userIntensityValue , Axes userDisabilityValue,Axes userFrequencyValue,Axes userDurationValue) {
-    var intensityScore = userIntensityValue.value.toInt() /
-        userIntensityValue.max * 100.0;
-    var disabilityScore = userDisabilityValue.value.toInt() /
-        userDisabilityValue.max * 100.0;
-    var frequencyScore = userFrequencyValue.value.toInt() /
-        userFrequencyValue.max * 100.0;
-    var durationScore = userDurationValue.value.toInt() /
-        userDurationValue.max * 100.0;
+  void setCompassDataScore(Axes userIntensityValue, Axes userDisabilityValue,
+      Axes userFrequencyValue, Axes userDurationValue) {
+    var intensityScore =
+        userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
+    var disabilityScore =
+        userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
+    var frequencyScore =
+        userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
+    var durationScore =
+        userDurationValue.value.toInt() / userDurationValue.max * 100.0;
 
-    var userTotalScore = (intensityScore + disabilityScore + frequencyScore +
-        durationScore) / 4;
+    var userTotalScore =
+        (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userScoreData = userTotalScore.toInt().toString();
     print(userScoreData);
   }
+
   void _updateCompassData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
-    String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
-    String updateOverTimeCompassData = sharedPreferences.getString(Constant.updateOverTimeCompassData) ?? Constant.blankString;
-    if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateOverTimeCompassData == Constant.trueString) {
+    String isSeeMoreClicked =
+        sharedPreferences.getString(Constant.isSeeMoreClicked) ??
+            Constant.blankString;
+    String isTrendsClicked =
+        sharedPreferences.getString(Constant.isViewTrendsClicked) ??
+            Constant.blankString;
+    String updateOverTimeCompassData =
+        sharedPreferences.getString(Constant.updateOverTimeCompassData) ??
+            Constant.blankString;
+    if (isSeeMoreClicked.isEmpty &&
+        isTrendsClicked.isEmpty &&
+        updateOverTimeCompassData == Constant.trueString) {
       sharedPreferences.remove(Constant.updateOverTimeCompassData);
       _dateTime = DateTime.now();
       currentMonth = _dateTime.month;
@@ -627,8 +644,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       print('init state of overTime compass');
       _recordsCompassScreenBloc.initNetworkStreamController();
       _showApiLoaderDialog();
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,selectedHeadacheName);
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
     }
-
   }
 }

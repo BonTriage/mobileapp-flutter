@@ -8,7 +8,6 @@ class MoreHeadachesScreen extends StatefulWidget {
   final Function(String,dynamic) openActionSheetCallback;
   final MoreHeadacheScreenArgumentModel moreHeadacheScreenArgumentModel;
 
-
   const MoreHeadachesScreen(
       {Key key, this.onPush, this.openActionSheetCallback, this.moreHeadacheScreenArgumentModel})
       : super(key: key);
