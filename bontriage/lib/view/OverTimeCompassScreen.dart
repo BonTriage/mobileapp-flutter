@@ -98,6 +98,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   void initState() {
     super.initState();
     ticks = [0, 2, 4, 6, 8, 10];
+   // ticks = [10, 8, 6, 4, 2, 0];
 
     features = [
       "A",
@@ -258,7 +259,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                     ticks: ticks,
                                                     features: features,
                                                     data: compassAxesData,
-                                                    reverseAxis: true,
+                                                    reverseAxis: false,
                                                     compassValue: 1,
                                                   )
                                                 : RadarChart.light(
@@ -268,7 +269,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                     outlineColor: Constant
                                                         .chatBubbleGreen
                                                         .withOpacity(0.5),
-                                                    reverseAxis: true,
+                                                    reverseAxis: false,
                                                     compassValue: 1,
                                                   ),
                                           ),
@@ -518,6 +519,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userFrequency != null) {
       userFrequencyValue =
           userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
+    }else{
+      userFrequencyValue = 0;
     }
     var userDuration = compassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
@@ -526,12 +529,17 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDurationValue =
           userDuration.value.toInt() ~/ (userDuration.max / baseMaxValue);
     }
+    else{
+      userDurationValue = 0;
+    }
     var userIntensity = compassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue =
           userIntensity.value.toInt() ~/ (userIntensity.max / baseMaxValue);
+    }else{
+      userIntensityValue = 0;
     }
     var userDisability = compassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.disability,
@@ -541,6 +549,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDisabilityValue =
           userDisability.value.toInt() ~/ (userDisability.max / baseMaxValue);
     }
+    else{
+    userDisabilityValue = 0;
+    }
+
 
     compassAxesData = [
       [
@@ -550,8 +562,13 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userFrequencyValue
       ]
     ];
-    setCompassDataScore(
-        userIntensity, userDisability, userFrequency, userDuration);
+    if(compassAxesListData.length >0){
+      setCompassDataScore(
+          userIntensity, userDisability, userFrequency, userDuration);
+    }else{
+      userScoreData = '0';
+    }
+
   }
 
   @override
@@ -600,14 +617,28 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   void setCompassDataScore(Axes userIntensityValue, Axes userDisabilityValue,
       Axes userFrequencyValue, Axes userDurationValue) {
-    var intensityScore =
-        userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
-    var disabilityScore =
-        userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
-    var frequencyScore =
-        userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
-    var durationScore =
-        userDurationValue.value.toInt() / userDurationValue.max * 100.0;
+    var intensityScore,disabilityScore,frequencyScore,durationScore;
+    if(userIntensityValue.value != null){
+      intensityScore = userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
+    }else{
+      intensityScore = 0;
+    }
+    if(userDisabilityValue.value != null){
+      disabilityScore = userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
+    }else{
+      disabilityScore = 0;
+    }
+    if(userFrequencyValue.value != null){
+      frequencyScore = userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
+    }else{
+      frequencyScore = 0;
+    }
+    if(userDurationValue.value != null){
+      durationScore = userDurationValue.value.toInt() / userDurationValue.max * 100.0;
+    }else{
+      durationScore = 0;
+    }
+
 
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;

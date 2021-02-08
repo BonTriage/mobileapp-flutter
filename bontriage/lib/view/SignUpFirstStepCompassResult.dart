@@ -293,14 +293,14 @@ class _SignUpFirstStepCompassResultState
                                                   ticks: ticks,
                                                   features: features,
                                                   data: userCompassAxesData,
-                                                  reverseAxis: true,
+                                                  reverseAxis: false,
                                                   compassValue: 0,
                                                 )
                                               : RadarChart.light(
                                                   ticks: ticks,
                                                   features: features,
                                                   data: userCompassAxesData,
-                                                  reverseAxis: true,
+                                                  reverseAxis: false,
                                                   compassValue: 0,
                                                 ),
                                         ),
@@ -532,6 +532,7 @@ class _SignUpFirstStepCompassResultState
   }
 
   void getCompassAxesFromDatabase() async {
+    int baseMaxValue = 10;
     List<LocalQuestionnaire> localQuestionnaireData =
         await SignUpOnBoardProviders.db
             .getQuestionnaire(Constant.firstEventStep);
@@ -544,7 +545,8 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
      if(userFrequency != null){
        userFrequencyValue = int.tryParse(userFrequency.answer);
-       userFrequencyValue = userFrequencyValue~/0.9;
+       userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+
      }
     var userDuration = selectedAnswerListData.firstWhere(
             (intensityElement) =>
@@ -560,7 +562,7 @@ class _SignUpFirstStepCompassResultState
       }else if(userDurationValue > 24 && userDurationValue <= 72){
         userMaxDurationValue = 72;
       }
-      userDurationValue = userDurationValue~/(userMaxDurationValue/10);
+      userDurationValue = userDurationValue~/(userMaxDurationValue/baseMaxValue);
     }
     var userIntensity = selectedAnswerListData.firstWhere(
             (intensityElement) =>
@@ -568,6 +570,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if(userIntensity != null){
       userIntensityValue = int.tryParse(userIntensity.answer);
+      //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
     }
     var userDisability = selectedAnswerListData.firstWhere(
             (intensityElement) =>
@@ -575,7 +578,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if(userDisability != null){
       userDisabilityValue = int.tryParse(userDisability.answer);
-      userDisabilityValue = userDisabilityValue~/0.4;
+      userDisabilityValue = userDisabilityValue~/(4/baseMaxValue);
     }
     setState(() {
       // Intensity,Duration,Disability,Frequency
