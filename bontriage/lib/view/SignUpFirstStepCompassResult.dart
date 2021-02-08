@@ -546,16 +546,15 @@ class _SignUpFirstStepCompassResultState
      if(userFrequency != null){
        userFrequencyValue = int.tryParse(userFrequency.answer);
        userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
-
      }
     var userDuration = selectedAnswerListData.firstWhere(
             (intensityElement) =>
         intensityElement.questionTag == Constant.headacheTypicalTag,
         orElse: () => null);
     if(userDuration != null){
-      int userMaxDurationValue;
+      int userMaxDurationValue ;
       userDurationValue = int.tryParse(userDuration.answer);
-      if(userDurationValue == 1){
+      if( userDurationValue <= 1){
          userMaxDurationValue = 1;
       }else if(userDurationValue > 1 && userDurationValue <= 24){
         userMaxDurationValue = 24;
