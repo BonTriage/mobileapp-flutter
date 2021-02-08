@@ -29,9 +29,9 @@ class ResponseModel {
   factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
     id: json["id"],
     userId: json["user_id"],
-    uploadedAt: DateTime.parse(json["uploaded_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    calendarEntryAt: DateTime.parse(json["calendar_entry_at"]),
+    uploadedAt: DateTime.tryParse(json["uploaded_at"]),
+    updatedAt: DateTime.tryParse(json["updated_at"]),
+    calendarEntryAt: DateTime.tryParse(json["calendar_entry_at"]),
     eventType: json["event_type"],
     mobileEventDetails: List<ResponseMobileEventDetails>.from(json["mobile_event_details"].map((x) => ResponseMobileEventDetails.fromJson(x))),
     headacheList: List<HeadacheTypeData>.from(json["headache_list"].map((x) => HeadacheTypeData.fromJson(x))),

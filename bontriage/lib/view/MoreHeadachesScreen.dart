@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
@@ -221,7 +219,9 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   void _listenToDeleteHeadacheStream() {
     _bloc.deleteHeadacheStream.listen((data) {
       if(data == 'Event Deleted') {
-        Navigator.pop(context, data);
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.pop(context, data);
+        });
       }
     });
   }
@@ -229,7 +229,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   void _getDiagnosticAnswerList() async {
     List<SelectedAnswers> selectedAnswerList = await _bloc.fetchDiagnosticAnswers(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
     if(selectedAnswerList.length > 0) {
-      Future.delayed(Duration(seconds: 10), () {
+      Future.delayed(Duration(milliseconds: 500), () {
         widget.navigateToOtherScreenCallback(Constant.partTwoOnBoardScreenRouter, PartTwoOnBoardArgumentModel(
           eventId: widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber,
           selectedAnswersList: selectedAnswerList,
