@@ -110,12 +110,12 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     print('init state of compare compass');
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
-          () {
+      widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName);
-      });
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth, selectedHeadacheName);
+        }
+      );
+
     });
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);

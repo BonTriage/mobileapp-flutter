@@ -334,6 +334,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       }
 
       getCurrentQuestionTag(currentScreenPosition);
+    } else {
+      List<SelectedAnswers> selectedAnswerList = widget.partTwoOnBoardArgumentModel.selectedAnswersList;
+      signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswerList ?? [];
     }
 
     requestService();
@@ -351,7 +354,6 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
           .fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
-
       _signUpOnBoardSecondStepBloc
           .fetchSignUpOnBoardSecondStepData(_argumentName);
     }
@@ -432,7 +434,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   void _callSendSecondStepDataApi() async {
-    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel);
+    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
     if (response is String) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db

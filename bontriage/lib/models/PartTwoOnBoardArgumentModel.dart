@@ -1,9 +1,10 @@
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 
 class PartTwoOnBoardArgumentModel {
-  int eventId;
-  SelectedAnswers selectedAnswers;
+  String eventId;
+  List<SelectedAnswers> selectedAnswersList;
   String argumentName;
+  bool isFromMoreScreen;
 
-  PartTwoOnBoardArgumentModel({this.eventId, this.selectedAnswers, this.argumentName});
+  PartTwoOnBoardArgumentModel({this.eventId, this.selectedAnswersList, this.argumentName, this.isFromMoreScreen = false});
 }

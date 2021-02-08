@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -9,12 +10,11 @@ class MoreHeadachesScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final MoreHeadacheScreenArgumentModel moreHeadacheScreenArgumentModel;
-
   final Function(Stream, Function) showApiLoaderCallback;
-
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
 
   const MoreHeadachesScreen(
-      {Key key, this.onPush, this.openActionSheetCallback, this.moreHeadacheScreenArgumentModel, this.showApiLoaderCallback})
+      {Key key, this.onPush, this.openActionSheetCallback, this.moreHeadacheScreenArgumentModel, this.showApiLoaderCallback, this.navigateToOtherScreenCallback})
       : super(key: key);
 
   @override
@@ -108,6 +108,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           isShowDivider: true,
                         ),
                         GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             _bloc.initNetworkStreamController();
                             widget.showApiLoaderCallback(_bloc.networkStream, () {
@@ -218,13 +219,24 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   void _listenToDeleteHeadacheStream() {
     _bloc.deleteHeadacheStream.listen((data) {
       if(data == 'Event Deleted') {
-        Navigator.pop(context, data);
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.pop(context, data);
+        });
       }
     });
   }
 
   void _getDiagnosticAnswerList() async {
     List<SelectedAnswers> selectedAnswerList = await _bloc.fetchDiagnosticAnswers(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
-    print(selectedAnswerList);
+    if(selectedAnswerList.length > 0) {
+      Future.delayed(Duration(milliseconds: 500), () {
+        widget.navigateToOtherScreenCallback(Constant.partTwoOnBoardScreenRouter, PartTwoOnBoardArgumentModel(
+          eventId: widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber,
+          selectedAnswersList: selectedAnswerList,
+          argumentName: Constant.clinicalImpressionEventType,
+          isFromMoreScreen: true,
+        ));
+      });
+    }
   }
 }

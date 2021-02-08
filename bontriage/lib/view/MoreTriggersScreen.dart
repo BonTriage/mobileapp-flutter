@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/SignUpBottomSheet.dart';
 
 class MoreTriggersScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
@@ -86,7 +87,10 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                   SizedBox(
                     height: 40,
                   ),
-                  ConstrainedBox(
+                  SignUpBottomSheet(
+                    question: Questions(values: _valuesList),
+                  ),
+                  /*ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: 100),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -160,7 +164,7 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                       height: 7,
                       thickness: 2,
                     ),
-                  ),
+                  ),*/
                   SizedBox(height: 40,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -181,13 +185,6 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
         ),
       ),
     );
-  }
-
-
-
-  void _navigateToOtherScreen(String routeName) {
-    widget.onPush(
-        context, routeName);
   }
 }
 

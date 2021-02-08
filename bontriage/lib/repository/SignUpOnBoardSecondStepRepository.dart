@@ -45,7 +45,6 @@ class SignUpOnBoardFirstStepRepository {
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    var client = http.Client();
     var album;
     try {
       String payload =
