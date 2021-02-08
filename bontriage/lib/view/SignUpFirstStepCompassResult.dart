@@ -41,7 +41,9 @@ class _SignUpFirstStepCompassResultState
 
   List<List<int>> userCompassAxesData;
 
-  String userScoreData;
+  String userScoreData = '0';
+
+  List<int> ticks;
 
   @override
   void initState() {
@@ -68,9 +70,7 @@ class _SignUpFirstStepCompassResultState
 
     getCompassAxesFromDatabase();
 
-
     _scrollController = ScrollController();
-
   }
 
   @override
@@ -99,7 +99,7 @@ class _SignUpFirstStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [7, 14, 21, 28,35];
+    ticks = [0, 2, 4, 6, 8, 10];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
@@ -109,7 +109,8 @@ class _SignUpFirstStepCompassResultState
       "C",
       "D",
     ];
-     userCompassAxesData = [   [16, 15, 18, 24]
+    userCompassAxesData = [
+      [0, 0, 0, 0]
     ];
 
     if (!_animationController.isAnimating) {
@@ -118,11 +119,12 @@ class _SignUpFirstStepCompassResultState
     }
 
     try {
-      _scrollController.animateTo(1, duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+      _scrollController.animateTo(1,
+          duration: Duration(milliseconds: 150), curve: Curves.easeIn);
       Future.delayed(Duration(milliseconds: 150), () {
         _scrollController.jumpTo(0);
       });
-    } catch(e) {}
+    } catch (e) {}
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -189,14 +191,14 @@ class _SignUpFirstStepCompassResultState
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 17, top: 25),
                             child: ChatBubble(
-                              painter: ChatBubblePainter(Constant.chatBubbleGreen),
+                              painter:
+                                  ChatBubblePainter(Constant.chatBubbleGreen),
                               child: AnimatedSize(
                                 duration: Duration(milliseconds: 300),
                                 vsync: this,
@@ -209,7 +211,8 @@ class _SignUpFirstStepCompassResultState
                                         maxHeight: Constant.chatBubbleMaxHeight,
                                       ),
                                       child: Theme(
-                                        data: ThemeData(highlightColor: Colors.black),
+                                        data: ThemeData(
+                                            highlightColor: Colors.black),
                                         child: CustomScrollBar(
                                           isAlwaysShown: false,
                                           controller: _scrollController,
@@ -217,14 +220,18 @@ class _SignUpFirstStepCompassResultState
                                             controller: _scrollController,
                                             physics: BouncingScrollPhysics(),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(right: 10),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
                                               child: Text(
-                                                _bubbleTextViewList[_buttonPressedValue],
+                                                _bubbleTextViewList[
+                                                    _buttonPressedValue],
                                                 style: TextStyle(
                                                     height: 1.3,
                                                     fontSize: 15,
-                                                    color: Constant.bubbleChatTextView,
-                                                    fontFamily: Constant.jostRegular),
+                                                    color: Constant
+                                                        .bubbleChatTextView,
+                                                    fontFamily:
+                                                        Constant.jostRegular),
                                               ),
                                             ),
                                           ),
@@ -240,7 +247,6 @@ class _SignUpFirstStepCompassResultState
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: 30,
                   ),
@@ -263,7 +269,6 @@ class _SignUpFirstStepCompassResultState
                                     fontFamily: Constant.jostMedium),
                               ),
                             ),
-
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -350,9 +355,7 @@ class _SignUpFirstStepCompassResultState
                             quarterTurns: 1,
                             child: GestureDetector(
                               onTap: () {
-
                                 Utils.showCompassTutorialDialog(context, 4);
-
                               },
                               child: Text(
                                 "Duration",
@@ -362,13 +365,11 @@ class _SignUpFirstStepCompassResultState
                                     fontFamily: Constant.jostMedium),
                               ),
                             ),
-
                           ),
                         ],
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 50,
                   ),
@@ -378,12 +379,10 @@ class _SignUpFirstStepCompassResultState
                         AnimatedPositioned(
                           left: (isBackButtonHide)
                               ? 0
-                              : (MediaQuery.of(context).size.width -
-                              190),
+                              : (MediaQuery.of(context).size.width - 190),
                           duration: Duration(milliseconds: 250),
                           child: AnimatedOpacity(
-                            opacity:
-                            (isBackButtonHide) ? 1.0 : 0.0,
+                            opacity: (isBackButtonHide) ? 1.0 : 0.0,
                             duration: Duration(milliseconds: 250),
                             child: BouncingWidget(
                               duration: Duration(milliseconds: 100),
@@ -394,15 +393,13 @@ class _SignUpFirstStepCompassResultState
                                 height: 34,
                                 decoration: BoxDecoration(
                                   color: Color(0xffafd794),
-                                  borderRadius:
-                                  BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Center(
                                   child: Text(
                                     Constant.back,
                                     style: TextStyle(
-                                      color:
-                                      Constant.bubbleChatTextView,
+                                      color: Constant.bubbleChatTextView,
                                       fontSize: 14,
                                       fontFamily: Constant.jostMedium,
                                     ),
@@ -418,7 +415,7 @@ class _SignUpFirstStepCompassResultState
                             duration: Duration(milliseconds: 100),
                             scaleFactor: 1.5,
                             onPressed: () {
-                              if(!_isButtonClicked) {
+                              if (!_isButtonClicked) {
                                 _isButtonClicked = true;
                                 TextToSpeechRecognition.stopSpeech();
                                 setState(() {
@@ -504,7 +501,7 @@ class _SignUpFirstStepCompassResultState
   }
 
   Future<bool> _onBackPressed() async {
-    if(!_isButtonClicked) {
+    if (!_isButtonClicked) {
       _isButtonClicked = true;
       if (_buttonPressedValue == 0) {
         Future.delayed(Duration(milliseconds: 350), () {
@@ -513,8 +510,7 @@ class _SignUpFirstStepCompassResultState
         return true;
       } else {
         setState(() {
-          if (_buttonPressedValue <= 4 &&
-              _buttonPressedValue > 1) {
+          if (_buttonPressedValue <= 4 && _buttonPressedValue > 1) {
             _buttonPressedValue--;
           } else {
             isBackButtonHide = false;
@@ -537,77 +533,89 @@ class _SignUpFirstStepCompassResultState
         await SignUpOnBoardProviders.db
             .getQuestionnaire(Constant.firstEventStep);
     print(localQuestionnaireData);
-    SignUpOnBoardSelectedAnswersModel answerListData = SignUpOnBoardSelectedAnswersModel.fromJson(json.decode(localQuestionnaireData[0].selectedAnswers));
-    List<SelectedAnswers>  selectedAnswerListData = answerListData.selectedAnswers;
-     var userFrequency = selectedAnswerListData.firstWhere(
-            (intensityElement) =>
+    SignUpOnBoardSelectedAnswersModel answerListData =
+        SignUpOnBoardSelectedAnswersModel.fromJson(
+            json.decode(localQuestionnaireData[0].selectedAnswers));
+    List<SelectedAnswers> selectedAnswerListData =
+        answerListData.selectedAnswers;
+    var userFrequency = selectedAnswerListData.firstWhere(
+        (intensityElement) =>
             intensityElement.questionTag == Constant.headacheFreeTag,
         orElse: () => null);
-     if(userFrequency != null){
-       userFrequencyValue = int.tryParse(userFrequency.answer);
-       userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
-     }
+    if (userFrequency != null) {
+      userFrequencyValue = int.tryParse(userFrequency.answer);
+      userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+    }
     var userDuration = selectedAnswerListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.questionTag == Constant.headacheTypicalTag,
+        (intensityElement) =>
+            intensityElement.questionTag == Constant.headacheTypicalTag,
         orElse: () => null);
-    if(userDuration != null){
-      int userMaxDurationValue ;
+    if (userDuration != null) {
+      int userMaxDurationValue;
       userDurationValue = int.tryParse(userDuration.answer);
-      if( userDurationValue <= 1){
-         userMaxDurationValue = 1;
-      }else if(userDurationValue > 1 && userDurationValue <= 24){
+      if (userDurationValue <= 1) {
+        userMaxDurationValue = 1;
+      } else if (userDurationValue > 1 && userDurationValue <= 24) {
         userMaxDurationValue = 24;
-      }else if(userDurationValue > 24 && userDurationValue <= 72){
+      } else if (userDurationValue > 24 && userDurationValue <= 72) {
         userMaxDurationValue = 72;
       }
-      userDurationValue = userDurationValue~/(userMaxDurationValue/baseMaxValue);
+      userDurationValue =
+          userDurationValue ~/ (userMaxDurationValue / baseMaxValue);
     }
     var userIntensity = selectedAnswerListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.questionTag == Constant.headacheTypicalBadPainTag,
+        (intensityElement) =>
+            intensityElement.questionTag == Constant.headacheTypicalBadPainTag,
         orElse: () => null);
-    if(userIntensity != null){
+    if (userIntensity != null) {
       userIntensityValue = int.tryParse(userIntensity.answer);
       //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
     }
     var userDisability = selectedAnswerListData.firstWhere(
-            (intensityElement) =>
-        intensityElement.questionTag == Constant.headacheDisabledTag,
+        (intensityElement) =>
+            intensityElement.questionTag == Constant.headacheDisabledTag,
         orElse: () => null);
-    if(userDisability != null){
+    if (userDisability != null) {
       userDisabilityValue = int.tryParse(userDisability.answer);
-      userDisabilityValue = userDisabilityValue~/(4/baseMaxValue);
+      userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
     setState(() {
       // Intensity,Duration,Disability,Frequency
-    /*  1. 16  last 3 month  1
+      /*  1. 16  last 3 month  1
       2. 32 hour last 3 month
       3. 7 intensity
       4 . 2 disability*/
-      userCompassAxesData = [[userIntensityValue,userDurationValue,userDisabilityValue,userFrequencyValue]];
-      setCompassDataScore(userIntensityValue,userDisabilityValue,userFrequencyValue,userDurationValue);
+      userCompassAxesData = [
+        [
+          userIntensityValue,
+          userDurationValue,
+          userDisabilityValue,
+          userFrequencyValue
+        ]
+      ];
+      setCompassDataScore(userIntensityValue, userDisabilityValue,
+          userFrequencyValue, userDurationValue);
     });
   }
 
-  void setCompassDataScore(int userIntensityValue, int userDisabilityValue, int userFrequencyValue, int userDurationValue) {
-int userMaxDurationValue;
+  void setCompassDataScore(int userIntensityValue, int userDisabilityValue,
+      int userFrequencyValue, int userDurationValue) {
+    int userMaxDurationValue;
     var intensityScore = userIntensityValue / 10 * 100.0;
-    var disabilityScore = userDisabilityValue.toInt() /4 * 100.0;
-    var frequencyScore = userFrequencyValue.toInt() /90 * 100.0;
-    if(userDurationValue == 1){
+    var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
+    var frequencyScore = userFrequencyValue.toInt() / 90 * 100.0;
+    if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
-    }else if(userDurationValue > 1 && userDurationValue <= 24){
+    } else if (userDurationValue > 1 && userDurationValue <= 24) {
       userMaxDurationValue = 24;
-    }else if(userDurationValue > 24 && userDurationValue <= 72){
+    } else if (userDurationValue > 24 && userDurationValue <= 72) {
       userMaxDurationValue = 72;
     }
-    var durationScore = userDurationValue.toInt() / userMaxDurationValue * 100.0;
-    var userTotalScore = (intensityScore + disabilityScore + frequencyScore +
-        durationScore) / 4;
+    var durationScore =
+        userDurationValue.toInt() / userMaxDurationValue * 100.0;
+    var userTotalScore =
+        (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userScoreData = userTotalScore.toInt().toString();
     print(userScoreData);
   }
-
-
 }
