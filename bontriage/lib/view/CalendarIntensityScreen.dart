@@ -104,7 +104,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     });*/
 
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+  //  requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
   }
 
   @override

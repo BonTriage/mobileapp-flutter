@@ -547,6 +547,7 @@ class Constant {
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
+  static const String noHeadacheData = 'NoHeadacheData';
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

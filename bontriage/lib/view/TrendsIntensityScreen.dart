@@ -1,11 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
+  final RecordsTrendsDataModel recordsTrendsDataModel;
+
+  const TrendsIntensityScreen({Key key, this.recordsTrendsDataModel}): super(key: key);
+
+
+
   @override
   _TrendsIntensityScreenState createState() => _TrendsIntensityScreenState();
 }
@@ -49,10 +56,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
     final barGroup2 = makeGroupData(1, 0, 4, 8, 0, 2, 4, 9);
     final barGroup3 = makeGroupData(2, 0, 5, 4, 9, 0, 3, 6);
     final barGroup4 = makeGroupData(3, 0, 2, 6, 9, 2, 0, 9);
-    //   final barGroup5 = makeGroupData(4, 0, 2, 6, 9, 2, 0, 9);
-    /*  final barGroup5 = makeGroupData(4, 0, 6);
-    final barGroup6 = makeGroupData(5, 0, 1.5);
-    final barGroup7 = makeGroupData(6, 0, 1.5);*/
+
 
     final items = [
       barGroup1,

@@ -66,7 +66,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    callAPIService();
+  //  callAPIService();
     
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
