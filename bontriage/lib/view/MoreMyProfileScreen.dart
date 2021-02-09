@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreMyProfileBloc.dart';
+import 'package:mobile/models/MoreTriggerArgumentModel.dart';
+import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
@@ -157,30 +159,12 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 color: Constant.moreBackgroundColor,
                               ),
-                              child: Column(
-                                children: [
-                                  MoreSection(
-                                    currentTag: Constant.myTriggers,
-                                    text: Constant.myTriggers,
-                                    moreStatus: '',
-                                    isShowDivider: true,
-                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
-                                  ),
-                                  MoreSection(
-                                    currentTag: Constant.myMedications,
-                                    text: Constant.myMedications,
-                                    moreStatus: '',
-                                    isShowDivider: false,
-                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
-                                  ),
-                                ],
-                              ),
+                              child: _getTriggerMedicationWidget(snapshot.data),
                             ),
                             SizedBox(height: 20,),
                           ],
                         );
                       }
-
                       return Container();
                     },
                   ),
@@ -263,6 +247,39 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
           child: Column(
             children: headacheTypeWidgetList,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getTriggerMedicationWidget(ResponseModel responseModel) {
+    List<Values> triggerValues = [];
+    triggerValues.addAll(responseModel.triggerValues);
+    List<Values> medicationValues = [];
+    medicationValues.addAll(responseModel.medicationValues);
+    List<SelectedAnswers> selectedAnswerList = [];
+    _moreMyProfileBloc.setSelectedAnswerList(selectedAnswerList, responseModel.triggerMedicationValues[0]);
+    return Column(
+      children: [
+        MoreSection(
+          currentTag: Constant.myTriggers,
+          text: Constant.myTriggers,
+          moreStatus: '',
+          isShowDivider: true,
+          navigateToOtherScreenCallback: _navigateToOtherScreen,
+          moreTriggersArgumentModel: MoreTriggersArgumentModel(
+            eventId: responseModel.triggerMedicationValues[0].id.toString(),
+            triggerValues: triggerValues,
+            responseModel: responseModel,
+            selectedAnswerList: selectedAnswerList
+          ),
+        ),
+        MoreSection(
+          currentTag: Constant.myMedications,
+          text: Constant.myMedications,
+          moreStatus: '',
+          isShowDivider: false,
+          navigateToOtherScreenCallback: _navigateToOtherScreen,
         ),
       ],
     );

@@ -234,8 +234,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   /// This method will be use for to set the UI content from the respective Question Tag.
-  addFilteredQuestionListData(List<dynamic> questionListData) {
+  addFilteredQuestionListData(List<Questions> questionListData) {
     if (questionListData != null) {
+      //This code is to two remove the infoClinicalImpression tag from clinical_impression event
+      questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
+
       currentQuestionListData = questionListData;
       questionListData.forEach((element) {
         switch (element.questionType) {

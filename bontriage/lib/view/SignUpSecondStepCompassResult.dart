@@ -1,5 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/SignUpSecondStepCompassBloc.dart';
+import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
@@ -18,6 +20,7 @@ class SignUpSecondStepCompassResult extends StatefulWidget {
 
 class _SignUpSecondStepCompassResultState
     extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin {
+  SignUpSecondStepCompassBloc _bloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -30,14 +33,25 @@ class _SignUpSecondStepCompassResultState
   bool _isButtonClicked = false;
 
   String userHeadacheName = "";
+  String _userScoreData = '0';
 
   static String userHeadacheTextView;
 
   ScrollController _scrollController;
 
+  int userFrequencyValue;
+  int userDurationValue;
+  int userIntensityValue;
+  int userDisabilityValue;
+
+  var data = [
+    [0, 0, 0, 0]
+  ];
+
   @override
   void initState() {
     super.initState();
+    _bloc = SignUpSecondStepCompassBloc();
     _scrollController = ScrollController();
     getUserHeadacheName();
     _bubbleTextViewList = [
@@ -56,6 +70,14 @@ class _SignUpSecondStepCompassResultState
     //Save User Progress
     saveUserProgressInDataBase();
     setVolumeIcon();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utils.showApiLoaderDialog(context, networkStream: _bloc.networkDataStream, tapToRetryFunction: () {
+        _bloc.networkDataSink.add(Constant.loading);
+        _bloc.fetchFirstLoggedScoreData();
+      });
+      _bloc.fetchFirstLoggedScoreData();
+    });
   }
 
   @override
@@ -75,14 +97,14 @@ class _SignUpSecondStepCompassResultState
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
+    _bloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [7, 14, 21, 28, 35];
+    const ticks = [0, 2, 4, 6, 8, 10];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
@@ -91,9 +113,6 @@ class _SignUpSecondStepCompassResultState
       "B",
       "C",
       "D",
-    ];
-    var data = [
-      [14, 15, 7, 7]
     ];
 
     if (!_animationController.isAnimating) {
@@ -220,125 +239,246 @@ class _SignUpSecondStepCompassResultState
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RotatedBox(
-                            quarterTurns: 3,
-                            child: GestureDetector(
-                              onTap: () {
-                                Utils.showCompassTutorialDialog(context, 3);
-                              },
-                              child: Text(
-                                "Frequency",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 1);
-                                },
-                                child: Text(
-                                  "Intensity",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 14,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                              Center(
-                                child: Container(
-                                  width: 185,
-                                  height: 185,
-                                  child: Center(
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Container(
-                                          child: darkMode
-                                              ? RadarChart.dark(
-                                                  ticks: ticks,
-                                                  features: features,
-                                                  data: data,
-                                                  reverseAxis: true,
-                                                  compassValue: 0,
-                                                )
-                                              : RadarChart.light(
-                                                  ticks: ticks,
-                                                  features: features,
-                                                  data: data,
-                                                  reverseAxis: true,
-                                                  compassValue: 0,
-                                                ),
-                                        ),
-                                        Center(
-                                          child: Container(
-                                            width: 36,
-                                            height: 36,
-                                            child: Center(
-                                              child: Text(
-                                                '60',
-                                                style: TextStyle(
-                                                    color: Color(0xff0E1712),
-                                                    fontSize: 14,
-                                                    fontFamily:
-                                                        Constant.jostMedium),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Color(0xffB8FFFF),
-                                              border: Border.all(
-                                                  color: Color(0xffB8FFFF),
-                                                  width: 1.2),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                  StreamBuilder<dynamic>(
+                    stream: _bloc.recordsCompassDataStream,
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData) {
+                        _getCompassAxesFromDatabase(snapshot.data);
+                        return Expanded(
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                RotatedBox(
+                                  quarterTurns: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(context, 3);
+                                    },
+                                    child: Text(
+                                      "Frequency",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium),
                                     ),
                                   ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 2);
-                                },
-                                child: Text(
-                                  "Disability",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 14,
-                                      fontFamily: Constant.jostMedium),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        Utils.showCompassTutorialDialog(context, 1);
+                                      },
+                                      child: Text(
+                                        "Intensity",
+                                        style: TextStyle(
+                                            color: Color(0xffafd794),
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        width: 185,
+                                        height: 185,
+                                        child: Center(
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                child: RadarChart.light(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: data,
+                                                  reverseAxis: false,
+                                                  compassValue: 0,
+                                                ),
+                                              ),
+                                              Center(
+                                                child: Container(
+                                                  width: 36,
+                                                  height: 36,
+                                                  child: Center(
+                                                    child: Text(
+                                                      _userScoreData,
+                                                      style: TextStyle(
+                                                          color: Color(0xff0E1712),
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                          Constant.jostMedium),
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Color(0xffB8FFFF),
+                                                    border: Border.all(
+                                                        color: Color(0xffB8FFFF),
+                                                        width: 1.2),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Utils.showCompassTutorialDialog(context, 2);
+                                      },
+                                      child: Text(
+                                        "Disability",
+                                        style: TextStyle(
+                                            color: Color(0xffafd794),
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          RotatedBox(
-                            quarterTurns: 1,
-                            child: GestureDetector(
-                              onTap: () {
-                                Utils.showCompassTutorialDialog(context, 4);
-                              },
-                              child: Text(
-                                "Duration",
-                                style: TextStyle(
-                                    color: Color(0xffafd794),
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
+                                RotatedBox(
+                                  quarterTurns: 1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(context, 4);
+                                    },
+                                    child: Text(
+                                      "Duration",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
+                        );
+                      } else {
+                        return Expanded(
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                RotatedBox(
+                                  quarterTurns: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(context, 3);
+                                    },
+                                    child: Text(
+                                      "Frequency",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        Utils.showCompassTutorialDialog(context, 1);
+                                      },
+                                      child: Text(
+                                        "Intensity",
+                                        style: TextStyle(
+                                            color: Color(0xffafd794),
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        width: 185,
+                                        height: 185,
+                                        child: Center(
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                child: darkMode
+                                                    ? RadarChart.dark(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: data,
+                                                  reverseAxis: false,
+                                                  compassValue: 0,
+                                                )
+                                                    : RadarChart.light(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: data,
+                                                  reverseAxis: false,
+                                                  compassValue: 0,
+                                                ),
+                                              ),
+                                              Center(
+                                                child: Container(
+                                                  width: 36,
+                                                  height: 36,
+                                                  child: Center(
+                                                    child: Text(
+                                                      '0',
+                                                      style: TextStyle(
+                                                          color: Color(0xff0E1712),
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                          Constant.jostMedium),
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Color(0xffB8FFFF),
+                                                    border: Border.all(
+                                                        color: Color(0xffB8FFFF),
+                                                        width: 1.2),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Utils.showCompassTutorialDialog(context, 2);
+                                      },
+                                      child: Text(
+                                        "Disability",
+                                        style: TextStyle(
+                                            color: Color(0xffafd794),
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                RotatedBox(
+                                  quarterTurns: 1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(context, 4);
+                                    },
+                                    child: Text(
+                                      "Duration",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -618,5 +758,87 @@ class _SignUpSecondStepCompassResultState
     userHeadacheName = sharedPreferences.get(Constant.userHeadacheName);
     userHeadacheTextView =
         'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app';
+  }
+
+  void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {
+    int baseMaxValue = 10;
+    var userFrequency = recordsCompassAxesResultModel.axes.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == 'Frequency',
+        orElse: () => null);
+    if (userFrequency != null) {
+      userFrequencyValue = userFrequency.value.toInt();
+      userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+    }
+    var userDuration = recordsCompassAxesResultModel.axes.firstWhere(
+            (intensityElement) =>
+            intensityElement.name == 'Duration',
+        orElse: () => null);
+    if (userDuration != null) {
+      int userMaxDurationValue;
+      userDurationValue = userDuration.value.toInt();
+      if (userDurationValue <= 1) {
+        userMaxDurationValue = 1;
+      } else if (userDurationValue > 1 && userDurationValue <= 24) {
+        userMaxDurationValue = 24;
+      } else if (userDurationValue > 24 && userDurationValue <= 72) {
+        userMaxDurationValue = 72;
+      }
+      userDurationValue =
+          userDurationValue ~/ (userMaxDurationValue / baseMaxValue);
+    }
+    var userIntensity = recordsCompassAxesResultModel.axes.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == 'Disability',
+        orElse: () => null);
+    if (userIntensity != null) {
+      userIntensityValue = userIntensity.value.toInt();
+      //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+    }
+    var userDisability = recordsCompassAxesResultModel.axes.firstWhere(
+            (intensityElement) =>
+        intensityElement.name == 'Intensity',
+        orElse: () => null);
+    if (userDisability != null) {
+      userDisabilityValue = userDisability.value.toInt();
+      userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
+    }
+      // Intensity,Duration,Disability,Frequency
+      /*  1. 16  last 3 month  1
+      2. 32 hour last 3 month
+      3. 7 intensity
+      4 . 2 disability*/
+      data = [
+        [
+          userIntensityValue,
+          userDurationValue,
+          userDisabilityValue,
+          userFrequencyValue
+        ]
+      ];
+      print(data);
+      setCompassDataScore(userIntensityValue, userDisabilityValue,
+          userFrequencyValue, userDurationValue);
+  }
+
+  void setCompassDataScore(int userIntensityValue, int userDisabilityValue,
+      int userFrequencyValue, int userDurationValue) {
+    int userMaxDurationValue;
+    var intensityScore = userIntensityValue / 10 * 100.0;
+    var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
+    var frequencyScore = userFrequencyValue.toInt() / 90 * 100.0;
+    if (userDurationValue <= 1) {
+      userMaxDurationValue = 1;
+    } else if (userDurationValue > 1 && userDurationValue <= 24) {
+      userMaxDurationValue = 24;
+    } else if (userDurationValue > 24 && userDurationValue <= 72) {
+      userMaxDurationValue = 72;
+    }
+    var durationScore =
+        userDurationValue.toInt() / userMaxDurationValue * 100.0;
+    var userTotalScore =
+        (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
+    _userScoreData = userTotalScore.toInt().toString();
+    print(_userScoreData);
   }
 }

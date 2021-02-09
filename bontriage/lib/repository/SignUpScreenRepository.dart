@@ -10,7 +10,6 @@ class SignUpScreenRepository {
   String url;
 
   Future<dynamic> serviceCall(String url, RequestMethod requestMethod) async {
-    var client = http.Client();
     var album;
     try {
       var response = await NetworkService.getRequest(url, requestMethod).serviceCall();
@@ -26,7 +25,6 @@ class SignUpScreenRepository {
 
   Future<dynamic> signUpServiceCall(String url, RequestMethod requestMethod,
       List<SelectedAnswers> selectedAnswerListData, String emailValue, String passwordValue, bool isTermConditionCheck, bool isEmailMarkCheck) async {
-    var client = http.Client();
     var album;
     try {
       var response = await NetworkService(

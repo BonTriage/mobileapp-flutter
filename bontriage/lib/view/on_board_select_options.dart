@@ -55,9 +55,7 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
     super.initState();
 
     if (widget.selectedAnswerListData != null) {
-      selectedAnswers = widget.selectedAnswerListData.firstWhere(
-          (model) => model.questionTag == widget.questionTag,
-          orElse: () => null);
+      selectedAnswers = widget.selectedAnswerListData.firstWhere((model) => model.questionTag == widget.questionTag, orElse: () => null);
       if (selectedAnswers != null) {
         OnBoardSelectOptionModel onBoardSelectOptionModelData = widget.selectOptionList.firstWhere((element) => element.optionText == selectedAnswers.answer, orElse: () => null);
         if(onBoardSelectOptionModelData != null) {

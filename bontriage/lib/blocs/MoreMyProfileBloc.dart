@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -142,5 +143,13 @@ class MoreMyProfileBloc {
         }
       }
     }
+  }
+
+  void setSelectedAnswerList(List<SelectedAnswers> selectedAnswerList, ResponseModel triggerMedicationValues) {
+    triggerMedicationValues.mobileEventDetails.forEach((element) {
+      List<String> splitList = element.value.split('%@');
+      String answer = jsonEncode(splitList);
+      selectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: answer));
+    });
   }
 }

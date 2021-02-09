@@ -137,6 +137,8 @@ class TabNavigator extends StatelessWidget {
       ),
       TabNavigatorRoutes.moreTriggersScreenRoute: (context) => MoreTriggersScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+        openActionSheetCallback: openActionSheetCallback,
+        moreTriggersArgumentModel: arguments,
       ),
       TabNavigatorRoutes.moreMedicationsScreenRoute: (context) => MoreMedicationScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
