@@ -322,6 +322,7 @@ class Constant {
   static const String QuestionSingleType = 'single';
   static const String QuestionMultiType = 'multi';
   static const String QuestionLocationType = 'location';
+  static const String QuestionInfoType = 'info';
   static const String HeadacheTypeTag = 'headacheType';
   static const String logDayMedicationTag = 'medication';
   static const String logDayNoteTag = 'logday.note';

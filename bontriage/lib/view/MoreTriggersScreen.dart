@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/MoreTriggerArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/SignUpBottomSheet.dart';
 
 class MoreTriggersScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
-  final Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final Function(List<Values>) openTriggerMedicationActionSheetCallback;
+  final MoreTriggersArgumentModel moreTriggersArgumentModel;
 
-  const MoreTriggersScreen({Key key, this.onPush, this.openActionSheetCallback, this.openTriggerMedicationActionSheetCallback})
+  const MoreTriggersScreen({Key key, this.onPush, this.openActionSheetCallback, this.openTriggerMedicationActionSheetCallback, this.moreTriggersArgumentModel})
       : super(key: key);
   @override
   _MoreTriggersScreenState createState() => _MoreTriggersScreenState();
@@ -20,7 +22,6 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _valuesList = [
@@ -32,6 +33,7 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
       Values(isSelected: false, text: 'Triggers 6'),
     ];
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,7 +90,12 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                     height: 40,
                   ),
                   SignUpBottomSheet(
-                    question: Questions(values: _valuesList),
+                    question: Questions(tag: 'headache.trigger', values: widget.moreTriggersArgumentModel.triggerValues),
+                    isFromMoreScreen: true,
+                    selectAnswerListData: widget.moreTriggersArgumentModel.selectedAnswerList,
+                    selectAnswerCallback: (question, valuesList) {
+
+                    },
                   ),
                   /*ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: 100),

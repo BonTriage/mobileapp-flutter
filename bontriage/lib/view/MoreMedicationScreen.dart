@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/SignUpBottomSheet.dart';
 
 class MoreMedicationScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
@@ -86,81 +87,9 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                   SizedBox(
                     height: 40,
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 100),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: AnimatedSize(
-                        vsync: this,
-                        duration: Duration(milliseconds: 350),
-                        child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          child: Wrap(
-                            spacing: 10,
-                            children: <Widget>[
-                              for (var i = 0; i < _valuesList.length; i++)
-                                if (_valuesList[i].isSelected)
-                                  Chip(
-                                    label: Text(_valuesList[i].text),
-                                    labelStyle: TextStyle(
-                                        fontFamily: Constant.jostRegular,
-                                        fontSize: 14,
-                                        color: Constant.bubbleChatTextView
-                                    ),
-                                    backgroundColor: Constant.locationServiceGreen,
-                                    deleteIcon: IconButton(
-                                      icon: new Image.asset('images/cross.png'),
-                                      onPressed: () {
-                                        setState(() {
-                                          _valuesList[i].isSelected = false;
-                                        });
-                                      },
-                                    ),
-                                    onDeleted: () {},
-                                  ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            Constant.searchYourType,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen.withOpacity(0.5),
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
-                          ),
-                        ),
-                        Container(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              widget.openTriggerMedicationActionSheetCallback(_valuesList);
-                            },
-                            child: Image(
-                              image: AssetImage(Constant.downArrow2),
-                              width: 16,
-                              height: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Divider(
-                      color: Constant.locationServiceGreen,
-                      height: 7,
-                      thickness: 2,
-                    ),
+                  SignUpBottomSheet(
+                    question: Questions(values: _valuesList),
+                    isFromMoreScreen: true,
                   ),
                   SizedBox(height: 40,),
                   Padding(

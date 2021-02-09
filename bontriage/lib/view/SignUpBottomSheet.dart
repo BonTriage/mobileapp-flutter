@@ -10,9 +10,10 @@ class SignUpBottomSheet extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final Function(Questions, List<String>) selectAnswerCallback;
   final List<SelectedAnswers> selectAnswerListData;
+  final bool isFromMoreScreen;
 
   SignUpBottomSheet(
-      {Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData})
+      {Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData, this.isFromMoreScreen = false})
       : super(key: key);
 
   @override
@@ -104,7 +105,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                         if (widget.question.values[i].isSelected)
                           Chip(
                             label: Text(widget.question.values[i].text),
-                            backgroundColor: Constant.chatBubbleGreen,
+                            backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                             deleteIcon: IconButton(
                               icon: new Image.asset('images/cross.png'),
                               onPressed: () {
@@ -136,6 +137,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                     builder: (context)=>
                     BottomSheetContainer(
                         question: widget.question,
+                        isFromMoreScreen: widget.isFromMoreScreen,
                         selectedAnswerCallback: (index) {
                           Values value = widget.question.values[index];
                           if (value.isSelected) {
@@ -184,7 +186,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                   ),
                   Container(
                     child: Image(
-                      image: AssetImage(Constant.downArrow),
+                      image: AssetImage(widget.isFromMoreScreen ? Constant.downArrow2 : Constant.downArrow),
                       width: 16,
                       height: 16,
                     ),
@@ -194,7 +196,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
             ),
           ),
           Divider(
-            color: Constant.chatBubbleGreen,
+            color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
             thickness: 2,
             height: 10,
             indent: 30,
@@ -209,9 +211,10 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
 class BottomSheetContainer extends StatefulWidget {
   final Questions question;
   final Function(int) selectedAnswerCallback;
+  final bool isFromMoreScreen;
 
   const BottomSheetContainer(
-      {Key key, this.selectedAnswerCallback, this.question})
+      {Key key, this.selectedAnswerCallback, this.question, this.isFromMoreScreen = false})
       : super(key: key);
 
   @override
@@ -226,13 +229,13 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
     if (widget.question.values[index].isSelected) {
       return Constant.bubbleChatTextView;
     } else {
-      return Constant.chatBubbleGreen;
+      return widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen;
     }
   }
 
   Color _getOptionBackgroundColor(int index) {
     if (widget.question.values[index].isSelected) {
-      return Constant.chatBubbleGreen;
+      return widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen;
     } else {
       return Constant.transparentColor;
     }
@@ -289,7 +292,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: Constant.jostRegular,
-                          color: Constant.chatBubbleGreen,
+                          color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                         ),
                       ),
                     ),
@@ -326,22 +329,22 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                       });
                     },
                     style: TextStyle(
-                        color: Constant.chatBubbleGreen,
+                        color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                         fontSize: 15,
                         fontFamily: Constant.jostMedium),
-                    cursorColor: Constant.chatBubbleGreen,
+                    cursorColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                     decoration: InputDecoration(
                       hintText: Constant.searchType,
                       hintStyle: TextStyle(
-                          color: Constant.chatBubbleGreen,
+                          color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                           fontSize: 13,
                           fontFamily: Constant.jostMedium),
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              color: Constant.chatBubbleGreen)),
+                              color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen)),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              color: Constant.chatBubbleGreen)),
+                              color: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen)),
                       contentPadding:
                       EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                     ),

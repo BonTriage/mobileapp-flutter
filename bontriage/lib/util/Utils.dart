@@ -274,8 +274,10 @@ class Utils {
           return false;
         }
         break;
-      default:
+      case Constant.QuestionInfoType:
         return true;
+      default:
+        return false;
     }
   }
 
