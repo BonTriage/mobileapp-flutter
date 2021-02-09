@@ -8,7 +8,6 @@ import 'DateTimePicker.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final RecordsTrendsDataModel recordsTrendsDataModel;
-
   const TrendsIntensityScreen({Key key, this.recordsTrendsDataModel}): super(key: key);
 
 
@@ -37,6 +36,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
   int clickedValue;
 
   bool isClicked = false;
+  List<Ity> intensityListData = [];
 
   @override
   void initState() {
@@ -51,6 +51,16 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+
+    intensityListData = widget.recordsTrendsDataModel.headache.severity;
+    for (int i = 0;  i < intensityListData.length; i++) {
+      var date = intensityListData[i].date ;
+      var value = intensityListData[i].value ;
+      print('Intensity ListData>>>$date $value');
+    }
+
+
+
 
     final barGroup1 = makeGroupData(0, 10, 8, 0, 8, 10, 9, 0);
     final barGroup2 = makeGroupData(1, 0, 4, 8, 0, 2, 4, 9);
