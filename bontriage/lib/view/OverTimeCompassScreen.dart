@@ -1,3 +1,4 @@
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsCompassScreenBloc.dart';
@@ -14,9 +15,10 @@ import 'DateTimePicker.dart';
 class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
 
   const OverTimeCompassScreen(
-      {Key key, this.openActionSheetCallback, this.showApiLoaderCallback})
+      {Key key, this.openActionSheetCallback, this.showApiLoaderCallback,this.navigateToOtherScreenCallback})
       : super(key: key);
 
   @override
@@ -98,7 +100,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   void initState() {
     super.initState();
     ticks = [0, 2, 4, 6, 8, 10];
-   // ticks = [10, 8, 6, 4, 2, 0];
 
     features = [
       "A",
@@ -142,291 +143,347 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
           stream: _recordsCompassScreenBloc.recordsCompassDataStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if (selectedHeadacheName == null) {
-                List<HeadacheListDataModel> headacheListModelData =
-                    snapshot.data.headacheListDataModel;
-                selectedHeadacheName = headacheListModelData[0].text;
-              }
-              setCompassAxesData(snapshot.data);
-              return Container(
-                child: Column(
+              if (snapshot.data == Constant.noHeadacheData) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _openHeadacheTypeActionSheet(
-                            snapshot.data.headacheListDataModel);
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 30),
-                        decoration: BoxDecoration(
-                          color: Constant.compassMyHeadacheTextColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          selectedHeadacheName != null
-                              ? selectedHeadacheName
-                              : '',
-                          style: TextStyle(
-                              color: Constant.locationServiceGreen,
-                              fontSize: 16,
-                              fontFamily: Constant.jostRegular),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Stack(
-                      children: [
-                        GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            Utils.showCompassTutorialDialog(context, 0);
-                          },
-                          child: Container(
-                            alignment: Alignment.topRight,
-                            margin: EdgeInsets.only(left: 65, top: 10),
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Constant.chatBubbleGreen, width: 1)),
-                            child: Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 0);
-                                },
-                                child: Text(
-                                  'i',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Constant.chatBubbleGreen,
-                                      fontFamily: Constant.jostBold),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 3);
-                                },
-                                child: Text(
-                                  "Frequency",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Utils.showCompassTutorialDialog(context, 1);
-                                  },
-                                  child: Text(
-                                    "Intensity",
-                                    style: TextStyle(
-                                        color: Color(0xffafd794),
-                                        fontSize: 16,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    width: 220,
-                                    height: 220,
-                                    child: Center(
-                                      child: Stack(
-                                        children: <Widget>[
-                                          Container(
-                                            child: darkMode
-                                                ? RadarChart.dark(
-                                                    ticks: ticks,
-                                                    features: features,
-                                                    data: compassAxesData,
-                                                    reverseAxis: false,
-                                                    compassValue: 1,
-                                                  )
-                                                : RadarChart.light(
-                                                    ticks: ticks,
-                                                    features: features,
-                                                    data: compassAxesData,
-                                                    outlineColor: Constant
-                                                        .chatBubbleGreen
-                                                        .withOpacity(0.5),
-                                                    reverseAxis: false,
-                                                    compassValue: 1,
-                                                  ),
-                                          ),
-                                          Center(
-                                            child: Container(
-                                              width: 36,
-                                              height: 36,
-                                              child: Center(
-                                                child: Text(
-                                                  userScoreData != null
-                                                      ? userScoreData
-                                                      : '0',
-                                                  style: TextStyle(
-                                                      color: Color(0xff0E1712),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          Constant.jostMedium),
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Color(0xff97c289),
-                                                border: Border.all(
-                                                    color: Color(0xff97c289),
-                                                    width: 1.2),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Utils.showCompassTutorialDialog(context, 2);
-                                  },
-                                  child: Text(
-                                    "Disability",
-                                    style: TextStyle(
-                                        color: Color(0xffafd794),
-                                        fontSize: 16,
-                                        fontFamily: Constant.jostMedium),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 4);
-                                },
-                                child: Text(
-                                  "Duration",
-                                  style: TextStyle(
-                                      color: Color(0xffafd794),
-                                      fontSize: 16,
-                                      fontFamily: Constant.jostMedium),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                    SizedBox(height: 150,),
+                    Text(
+                        'You didn\'t add any headache yet. So please\nadd any headache to see your Compass data.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            height: 1.3,
+                            fontSize: 18,
+                            fontFamily: Constant.jostRegular,
+                            color: Constant.chatBubbleGreen)),
                     SizedBox(
                       height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            DateTime dateTime =
-                                DateTime(_dateTime.year, _dateTime.month - 1);
-                            _dateTime = dateTime;
-                            _onStartDateSelected(dateTime);
+                        BouncingWidget(
+                          onPressed: (){
+                           navigateToHeadacheStartScreen();
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Image(
-                              image: AssetImage(Constant.backArrow),
-                              width: 17,
-                              height: 17,
+                          child: Container(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                            decoration: BoxDecoration(
+                              color: Constant.chatBubbleGreen,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _openDatePickerBottomSheet(
-                                CupertinoDatePickerMode.date);
-                          },
-                          child: Text(
-                            '$monthName $currentYear',
-                            style: TextStyle(
-                                color: Constant.chatBubbleGreen,
-                                fontSize: 15,
-                                fontFamily: Constant.jostRegular),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            DateTime dateTime =
-                                DateTime(_dateTime.year, _dateTime.month + 1);
-                            Duration duration =
-                                dateTime.difference(DateTime.now());
-                            if (duration.inSeconds < 0) {
-                              _dateTime = dateTime;
-                              _onStartDateSelected(dateTime);
-                            } else {
-                              ///To:Do
-                              print("Not Allowed");
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Image(
-                              image: AssetImage(Constant.nextArrow),
-                              width: 17,
-                              height: 17,
+                            child: Center(
+                              child: Text(
+                                'Add Headache',
+                                style: TextStyle(
+                                    color: Constant.bubbleChatTextView,
+                                    fontSize: 15,
+                                    fontFamily: Constant.jostMedium),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
-                      padding: EdgeInsets.symmetric(vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Constant.locationServiceGreen.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
+                  ],
+                );
+              } else {
+                if (selectedHeadacheName == null) {
+                  List<HeadacheListDataModel> headacheListModelData =
+                      snapshot.data.headacheListDataModel;
+                  selectedHeadacheName = headacheListModelData[0].text;
+                }
+                setCompassAxesData(snapshot.data);
+                return Container(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: RichText(
-                          text: TextSpan(
-                            children: _getBubbleTextSpans(),
+                      GestureDetector(
+                        onTap: () {
+                          _openHeadacheTypeActionSheet(
+                              snapshot.data.headacheListDataModel);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 30),
+                          decoration: BoxDecoration(
+                            color: Constant.compassMyHeadacheTextColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            selectedHeadacheName != null
+                                ? selectedHeadacheName
+                                : '',
+                            style: TextStyle(
+                                color: Constant.locationServiceGreen,
+                                fontSize: 16,
+                                fontFamily: Constant.jostRegular),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              );
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Stack(
+                        children: [
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Utils.showCompassTutorialDialog(context, 0);
+                            },
+                            child: Container(
+                              alignment: Alignment.topRight,
+                              margin: EdgeInsets.only(left: 65, top: 10),
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Constant.chatBubbleGreen,
+                                      width: 1)),
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Utils.showCompassTutorialDialog(
+                                        context, 0);
+                                  },
+                                  child: Text(
+                                    'i',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Constant.chatBubbleGreen,
+                                        fontFamily: Constant.jostBold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              RotatedBox(
+                                quarterTurns: 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Utils.showCompassTutorialDialog(
+                                        context, 3);
+                                  },
+                                  child: Text(
+                                    "Frequency",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(
+                                          context, 1);
+                                    },
+                                    child: Text(
+                                      "Intensity",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 16,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: 220,
+                                      height: 220,
+                                      child: Center(
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              child: darkMode
+                                                  ? RadarChart.dark(
+                                                      ticks: ticks,
+                                                      features: features,
+                                                      data: compassAxesData,
+                                                      reverseAxis: false,
+                                                      compassValue: 1,
+                                                    )
+                                                  : RadarChart.light(
+                                                      ticks: ticks,
+                                                      features: features,
+                                                      data: compassAxesData,
+                                                      outlineColor: Constant
+                                                          .chatBubbleGreen
+                                                          .withOpacity(0.5),
+                                                      reverseAxis: false,
+                                                      compassValue: 1,
+                                                    ),
+                                            ),
+                                            Center(
+                                              child: Container(
+                                                width: 36,
+                                                height: 36,
+                                                child: Center(
+                                                  child: Text(
+                                                    userScoreData != null
+                                                        ? userScoreData
+                                                        : '0',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xff0E1712),
+                                                        fontSize: 14,
+                                                        fontFamily: Constant
+                                                            .jostMedium),
+                                                  ),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Color(0xff97c289),
+                                                  border: Border.all(
+                                                      color:
+                                                          Color(0xff97c289),
+                                                      width: 1.2),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Utils.showCompassTutorialDialog(
+                                          context, 2);
+                                    },
+                                    child: Text(
+                                      "Disability",
+                                      style: TextStyle(
+                                          color: Color(0xffafd794),
+                                          fontSize: 16,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              RotatedBox(
+                                quarterTurns: 1,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Utils.showCompassTutorialDialog(
+                                        context, 4);
+                                  },
+                                  child: Text(
+                                    "Duration",
+                                    style: TextStyle(
+                                        color: Color(0xffafd794),
+                                        fontSize: 16,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              DateTime dateTime = DateTime(
+                                  _dateTime.year, _dateTime.month - 1);
+                              _dateTime = dateTime;
+                              _onStartDateSelected(dateTime);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Image(
+                                image: AssetImage(Constant.backArrow),
+                                width: 17,
+                                height: 17,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _openDatePickerBottomSheet(
+                                  CupertinoDatePickerMode.date);
+                            },
+                            child: Text(
+                              '$monthName $currentYear',
+                              style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontSize: 15,
+                                  fontFamily: Constant.jostRegular),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              DateTime dateTime = DateTime(
+                                  _dateTime.year, _dateTime.month + 1);
+                              Duration duration =
+                                  dateTime.difference(DateTime.now());
+                              if (duration.inSeconds < 0) {
+                                _dateTime = dateTime;
+                                _onStartDateSelected(dateTime);
+                              } else {
+                                ///To:Do
+                                print("Not Allowed");
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Image(
+                                image: AssetImage(Constant.nextArrow),
+                                width: 17,
+                                height: 17,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        padding: EdgeInsets.symmetric(vertical: 3),
+                        decoration: BoxDecoration(
+                          color:
+                              Constant.locationServiceGreen.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: RichText(
+                            text: TextSpan(
+                              children: _getBubbleTextSpans(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                );
+              }
             } else if (snapshot.hasError) {
               Utils.closeApiLoaderDialog(context);
               return NetworkErrorScreen(
@@ -519,7 +576,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userFrequency != null) {
       userFrequencyValue =
           userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
-    }else{
+    } else {
       userFrequencyValue = 0;
     }
     var userDuration = compassAxesListData.firstWhere(
@@ -528,8 +585,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userDuration != null) {
       userDurationValue =
           userDuration.value.toInt() ~/ (userDuration.max / baseMaxValue);
-    }
-    else{
+    } else {
       userDurationValue = 0;
     }
     var userIntensity = compassAxesListData.firstWhere(
@@ -538,7 +594,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userIntensity != null) {
       userIntensityValue =
           userIntensity.value.toInt() ~/ (userIntensity.max / baseMaxValue);
-    }else{
+    } else {
       userIntensityValue = 0;
     }
     var userDisability = compassAxesListData.firstWhere(
@@ -548,11 +604,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDisabilityValue = userDisability.value.toInt();
       userDisabilityValue =
           userDisability.value.toInt() ~/ (userDisability.max / baseMaxValue);
+    } else {
+      userDisabilityValue = 0;
     }
-    else{
-    userDisabilityValue = 0;
-    }
-
 
     compassAxesData = [
       [
@@ -562,13 +616,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userFrequencyValue
       ]
     ];
-    if(compassAxesListData.length >0){
+    if (compassAxesListData.length > 0) {
       setCompassDataScore(
           userIntensity, userDisability, userFrequency, userDuration);
-    }else{
+    } else {
       userScoreData = '0';
     }
-
   }
 
   @override
@@ -617,28 +670,31 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   void setCompassDataScore(Axes userIntensityValue, Axes userDisabilityValue,
       Axes userFrequencyValue, Axes userDurationValue) {
-    var intensityScore,disabilityScore,frequencyScore,durationScore;
-    if(userIntensityValue.value != null){
-      intensityScore = userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
-    }else{
+    var intensityScore, disabilityScore, frequencyScore, durationScore;
+    if (userIntensityValue.value != null) {
+      intensityScore =
+          userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
+    } else {
       intensityScore = 0;
     }
-    if(userDisabilityValue.value != null){
-      disabilityScore = userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
-    }else{
+    if (userDisabilityValue.value != null) {
+      disabilityScore =
+          userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
+    } else {
       disabilityScore = 0;
     }
-    if(userFrequencyValue.value != null){
-      frequencyScore = userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
-    }else{
+    if (userFrequencyValue.value != null) {
+      frequencyScore =
+          userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
+    } else {
       frequencyScore = 0;
     }
-    if(userDurationValue.value != null){
-      durationScore = userDurationValue.value.toInt() / userDurationValue.max * 100.0;
-    }else{
+    if (userDurationValue.value != null) {
+      durationScore =
+          userDurationValue.value.toInt() / userDurationValue.max * 100.0;
+    } else {
       durationScore = 0;
     }
-
 
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
@@ -678,5 +734,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
           selectedHeadacheName);
     }
+  }
+  void navigateToHeadacheStartScreen() async {
+    await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
   }
 }

@@ -147,8 +147,8 @@ class _CompassScreenState extends State<CompassScreen> {
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 1) {
       setState(() {
         pageViewWidgetList = [
-          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,),
-          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,),
+          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
+          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
         ];
       });
     }

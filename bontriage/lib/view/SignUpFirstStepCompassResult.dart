@@ -48,6 +48,10 @@ class _SignUpFirstStepCompassResultState
   @override
   void initState() {
     super.initState();
+
+    userCompassAxesData = [
+      [0, 0, 0, 0]
+    ];
     _bubbleTextViewList = [
       Constant.welcomePersonalizedHeadacheFirstTextView,
       Constant.welcomePersonalizedHeadacheSecondTextView,
@@ -109,9 +113,7 @@ class _SignUpFirstStepCompassResultState
       "C",
       "D",
     ];
-    userCompassAxesData = [
-      [0, 0, 0, 0]
-    ];
+
 
     if (!_animationController.isAnimating) {
       _animationController.reset();

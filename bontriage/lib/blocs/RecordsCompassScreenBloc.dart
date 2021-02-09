@@ -88,8 +88,8 @@ class RecordsCompassScreenBloc {
               }
             }
           } else {
-            networkDataSink.addError(Exception(Constant.somethingWentWrong));
-            apiResponse = Constant.somethingWentWrong;
+            networkDataSink.add(Constant.success);
+            recordsCompassDataSink.add(Constant.noHeadacheData);
           }
           print(headacheListModelData);
         } else {

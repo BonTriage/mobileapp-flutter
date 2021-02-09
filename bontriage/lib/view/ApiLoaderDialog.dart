@@ -210,7 +210,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                 } catch (e) {}
               });
               return Container();
-            } else {
+            }else {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

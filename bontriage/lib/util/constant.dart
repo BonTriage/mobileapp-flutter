@@ -582,6 +582,7 @@ class Constant {
   static const String updateCalendarIntensityData = 'updateCalendarIntensityData';
   static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
   static const String updateCompareCompassData = 'updateCompareCompassData';
+  static const String noHeadacheData = 'NoHeadacheData';
 
   //tutorial text
   static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
