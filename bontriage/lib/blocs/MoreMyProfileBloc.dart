@@ -146,10 +146,12 @@ class MoreMyProfileBloc {
   }
 
   void setSelectedAnswerList(List<SelectedAnswers> selectedAnswerList, ResponseModel triggerMedicationValues) {
-    triggerMedicationValues.mobileEventDetails.forEach((element) {
-      List<String> splitList = element.value.split('%@');
-      String answer = jsonEncode(splitList);
-      selectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: answer));
-    });
+    if(triggerMedicationValues != null) {
+      triggerMedicationValues.mobileEventDetails.forEach((element) {
+        List<String> splitList = element.value.split('%@');
+        String answer = jsonEncode(splitList);
+        selectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: answer));
+      });
+    }
   }
 }

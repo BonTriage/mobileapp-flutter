@@ -42,10 +42,10 @@ class ResponseModel {
     calendarEntryAt: DateTime.tryParse(json["calendar_entry_at"]),
     eventType: json["event_type"],
     mobileEventDetails: List<ResponseMobileEventDetails>.from(json["mobile_event_details"].map((x) => ResponseMobileEventDetails.fromJson(x))),
-    headacheList: json["headache_list"] != null ? List<HeadacheTypeData>.from(json["headache_list"].map((x) => HeadacheTypeData.fromJson(x))) : null,
-    triggerMedicationValues: json['trigger_medication_values'] != null ? List<ResponseModel>.from(json["trigger_medication_values"].map((x) => ResponseModel.fromJson(x))) : null,
-    triggerValues: json["trigger_values"] != null ? List<Values>.from(json["trigger_values"].map((x) => Values.fromJson(x))) : null,
-    medicationValues: json["medication_values"] != null ? List<Values>.from(json["medication_values"].map((x) => Values.fromJson(x))) : null,
+    headacheList: json["headache_list"] != null ? List<HeadacheTypeData>.from(json["headache_list"].map((x) => HeadacheTypeData.fromJson(x))) : [],
+    triggerMedicationValues: json['trigger_medication_values'] != null ? List<ResponseModel>.from(json["trigger_medication_values"].map((x) => ResponseModel.fromJson(x))) : [],
+    triggerValues: json["trigger_values"] != null ? List<Values>.from(json["trigger_values"].map((x) => Values.fromJson(x))) : [],
+    medicationValues: json["medication_values"] != null ? List<Values>.from(json["medication_values"].map((x) => Values.fromJson(x))) : [],
   );
 
   Map<String, dynamic> toJson() => {

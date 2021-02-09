@@ -194,7 +194,7 @@ class RecordsCompassScreenBloc {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
-      String url = WebservicePost.qaServerUrl + 'compass/profile/' + '4579';
+      String url = '${WebservicePost.qaServerUrl}compass/profile/${userProfileInfoData.userId}';
       var response = await _recordsCompassRepository.compassServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {

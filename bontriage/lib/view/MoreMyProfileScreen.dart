@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreMyProfileBloc.dart';
+import 'package:mobile/models/MoreMedicationArgumentModel.dart';
 import 'package:mobile/models/MoreTriggerArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
@@ -194,9 +196,11 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
           _moreMyProfileBloc.fetchMyProfileData();
         });
         _moreMyProfileBloc.fetchMyProfileData();
+      } else if(routeName == TabNavigatorRoutes.moreTriggersScreenRoute ||
+          routeName == TabNavigatorRoutes.moreMedicationsScreenRoute) {
+        setState(() {});
       }
     }
-    //setState(() {});
   }
 
   @override
@@ -253,12 +257,19 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
   }
 
   Widget _getTriggerMedicationWidget(ResponseModel responseModel) {
-    List<Values> triggerValues = [];
-    triggerValues.addAll(responseModel.triggerValues);
-    List<Values> medicationValues = [];
-    medicationValues.addAll(responseModel.medicationValues);
+    List<Values> triggerValues = responseModel.triggerValues;
+    triggerValues.forEach((element) {
+      element.isSelected = false;
+    });
+    List<Values> medicationValues = responseModel.medicationValues;
+    medicationValues.forEach((element) {
+      element.isSelected = false;
+    });
     List<SelectedAnswers> selectedAnswerList = [];
-    _moreMyProfileBloc.setSelectedAnswerList(selectedAnswerList, responseModel.triggerMedicationValues[0]);
+    if(responseModel.triggerMedicationValues.length > 0)
+      _moreMyProfileBloc.setSelectedAnswerList(selectedAnswerList, responseModel.triggerMedicationValues[0]);
+    else
+      _moreMyProfileBloc.setSelectedAnswerList(selectedAnswerList, null);
     return Column(
       children: [
         MoreSection(
@@ -268,7 +279,7 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
           isShowDivider: true,
           navigateToOtherScreenCallback: _navigateToOtherScreen,
           moreTriggersArgumentModel: MoreTriggersArgumentModel(
-            eventId: responseModel.triggerMedicationValues[0].id.toString(),
+            eventId: responseModel.triggerMedicationValues.length > 0 ? responseModel.triggerMedicationValues[0].id.toString() : null,
             triggerValues: triggerValues,
             responseModel: responseModel,
             selectedAnswerList: selectedAnswerList
@@ -280,6 +291,12 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
           moreStatus: '',
           isShowDivider: false,
           navigateToOtherScreenCallback: _navigateToOtherScreen,
+          moreMedicationArgumentModel: MoreMedicationArgumentModel(
+            eventId: responseModel.triggerMedicationValues.length > 0 ? responseModel.triggerMedicationValues[0].id.toString() : null,
+            medicationValues: medicationValues,
+            responseModel: responseModel,
+            selectedAnswerList: selectedAnswerList,
+          ),
         ),
       ],
     );

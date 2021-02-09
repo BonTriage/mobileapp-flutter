@@ -295,15 +295,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                       child: Stack(
                                         children: <Widget>[
                                           Container(
-                                            child: darkMode
-                                                ? RadarChart.dark(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              reverseAxis: false,
-                                              compassValue: compassValue,
-                                            )
-                                                : RadarChart.light(
+                                            child: RadarChart.light(
                                               ticks: ticks,
                                               features: features,
                                               data: compassAxesData,
@@ -690,18 +682,20 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     }
     compassAxesData = [
       [
+        userOverTimeIntensityValue,
+        userOverTimeDurationValue,
+        userOverTimeDisabilityValue,
+        userOvertimeFrequencyValue
+      ],
+      [
         userMonthlyIntensityValue,
         userMonthlyDurationValue,
         userMonthlyDisabilityValue,
         userMonthlyFrequencyValue
       ],
-      [
-        userOverTimeIntensityValue,
-        userOverTimeDurationValue,
-        userOverTimeDisabilityValue,
-        userOvertimeFrequencyValue
-      ]
     ];
+
+    print('Compare Compass Axes Data?????$compassAxesData');
 
     if(recordsCompareCompassAxesListData.length > 0){
       setMonthlyCompassDataScore(

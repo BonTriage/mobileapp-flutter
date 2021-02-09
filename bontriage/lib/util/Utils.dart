@@ -277,7 +277,7 @@ class Utils {
       case Constant.QuestionInfoType:
         return true;
       default:
-        return false;
+        return true;
     }
   }
 

@@ -789,7 +789,7 @@ class _SignUpSecondStepCompassResultState
     }
     var userIntensity = recordsCompassAxesResultModel.axes.firstWhere(
             (intensityElement) =>
-        intensityElement.name == 'Disability',
+        intensityElement.name == 'Intensity',
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue = userIntensity.value.toInt();
@@ -797,12 +797,13 @@ class _SignUpSecondStepCompassResultState
     }
     var userDisability = recordsCompassAxesResultModel.axes.firstWhere(
             (intensityElement) =>
-        intensityElement.name == 'Intensity',
+        intensityElement.name == 'Disability',
         orElse: () => null);
     if (userDisability != null) {
       userDisabilityValue = userDisability.value.toInt();
       userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
+    print('Frequency???${userFrequency.value}Duration???${userDuration.value}Intensity???${userIntensity.value}Disability???${userDisability.value}');
       // Intensity,Duration,Disability,Frequency
       /*  1. 16  last 3 month  1
       2. 32 hour last 3 month
@@ -816,7 +817,7 @@ class _SignUpSecondStepCompassResultState
           userFrequencyValue
         ]
       ];
-      print(data);
+      print('Second Step Compass Data: $data');
       setCompassDataScore(userIntensityValue, userDisabilityValue,
           userFrequencyValue, userDurationValue);
   }
@@ -839,6 +840,6 @@ class _SignUpSecondStepCompassResultState
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     _userScoreData = userTotalScore.toInt().toString();
-    print(_userScoreData);
+    print('Second Step $_userScoreData');
   }
 }

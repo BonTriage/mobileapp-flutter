@@ -581,6 +581,8 @@ class _SignUpFirstStepCompassResultState
       userDisabilityValue = int.tryParse(userDisability.answer);
       userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
+
+    print('Frequency???${userFrequency.answer}Duration???${userDuration.answer}Intensity???${userIntensity.answer}Disability???${userDisability.answer}');
     setState(() {
       // Intensity,Duration,Disability,Frequency
       /*  1. 16  last 3 month  1
@@ -595,6 +597,7 @@ class _SignUpFirstStepCompassResultState
           userFrequencyValue
         ]
       ];
+      print('First Step Compass Axes $userCompassAxesData');
       setCompassDataScore(userIntensityValue, userDisabilityValue,
           userFrequencyValue, userDurationValue);
     });
@@ -618,6 +621,6 @@ class _SignUpFirstStepCompassResultState
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userScoreData = userTotalScore.toInt().toString();
-    print(userScoreData);
+    print('First Step User ScoreData$userScoreData');
   }
 }

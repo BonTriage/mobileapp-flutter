@@ -9,6 +9,7 @@ import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpOnBoardThirdStepRepository {
@@ -16,7 +17,6 @@ class SignUpOnBoardThirdStepRepository {
 
   Future<dynamic> serviceCall(
       String url, RequestMethod requestMethod, String argumentsName) async {
-    var client = http.Client();
     var album;
     try {
       eventTypeName = argumentsName;
@@ -44,7 +44,6 @@ class SignUpOnBoardThirdStepRepository {
       RequestMethod requestMethod,
       SignUpOnBoardSelectedAnswersModel
           signUpOnBoardSelectedAnswersModel) async {
-    var client = http.Client();
     var album;
     try {
       var dataPayload =
@@ -89,14 +88,14 @@ class SignUpOnBoardThirdStepRepository {
                 MobileEventDetails(
                     questionTag: model.questionTag,
                     questionJson: "",
-                    updatedAt: "2020-10-08T08:18:21Z",
+                    updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
                     value: valuesList));
           } else {
             signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
                 MobileEventDetails(
                     questionTag: model.questionTag,
                     questionJson: "",
-                    updatedAt: "2020-10-08T08:18:21Z",
+                    updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
                     value: [model.answer]));
           }
         } on FormatException catch(e) {
@@ -106,7 +105,7 @@ class SignUpOnBoardThirdStepRepository {
               MobileEventDetails(
                   questionTag: model.questionTag,
                   questionJson: "",
-                  updatedAt: "2020-10-08T08:18:21Z",
+                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
                   value: [model.answer]));
         }
       });

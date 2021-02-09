@@ -139,9 +139,13 @@ class TabNavigator extends StatelessWidget {
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
         openActionSheetCallback: openActionSheetCallback,
         moreTriggersArgumentModel: arguments,
+        showApiLoaderCallback: showApiLoaderCallback,
       ),
       TabNavigatorRoutes.moreMedicationsScreenRoute: (context) => MoreMedicationScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+        moreMedicationArgumentModel: arguments,
+        showApiLoaderCallback: showApiLoaderCallback,
+        openActionSheetCallback: openActionSheetCallback,
       ),
     };
   }

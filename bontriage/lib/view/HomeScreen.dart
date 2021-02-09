@@ -16,6 +16,7 @@ import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'EditGraphViewBottomSheet.dart';
+import 'SignUpBottomSheet.dart';
 
 class HomeScreen extends StatefulWidget {
   final HomeScreenArgumentModel homeScreenArgumentModel;
@@ -286,11 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => BottomSheetContainer(
-            selectOptionList: valuesList,
-            selectedAnswerCallback: (index) {
-              setState(() {});
-            }));
+        builder: (context) => BottomSheetContainer());
   }
 
   void saveHomePosition() async {
