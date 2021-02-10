@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardFirstStepBloc.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
@@ -83,12 +85,12 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
           bottomButtonFunction: () {
             Navigator.pushReplacementNamed(
                 context, Constant.partTwoOnBoardScreenRouter,
-                arguments: Constant.clinicalImpressionShort1);
+                arguments: PartTwoOnBoardArgumentModel(argumentName: Constant.clinicalImpressionShort1));
           },
           isShowSecondBottomButton: _currentIndex == (_questionList.length - 1),
           secondBottomButtonText: Constant.saveAndFinishLater,
           secondBottomButtonFunction: () {
-            Utils.navigateToHomeScreen(context, true);
+            Utils.navigateToHomeScreen(context, true, homeScreenArgumentModel: HomeScreenArgumentModel(isFromOnBoard: true));
           },
           closeButtonFunction: () {
             Utils.navigateToExitScreen(context);

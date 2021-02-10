@@ -19,4 +19,6 @@ class TabNavigatorRoutes {
   static const String moreSexScreenRoute = 'moreSexScreenRoute';
   static const String moreTriggersScreenRoute = 'moreTriggersScreenRoute';
   static const String moreMedicationsScreenRoute = 'moreMedicationsScreenRoute';
+  static const String calenderRoute = 'calenderRoute';
+  static const String trendsRoute = 'trendsRoute';
 }

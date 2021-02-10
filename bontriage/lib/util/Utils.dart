@@ -1,11 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mobile/models/HomeScreenArgumentModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
+import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -269,6 +274,8 @@ class Utils {
           return false;
         }
         break;
+      case Constant.QuestionInfoType:
+        return true;
       default:
         return true;
     }
@@ -299,7 +306,7 @@ class Utils {
         case Constant.secondEventStep:
           Navigator.pushReplacementNamed(
               context, Constant.partTwoOnBoardScreenRouter,
-              arguments: Constant.clinicalImpressionShort1);
+              arguments: PartTwoOnBoardArgumentModel(argumentName: Constant.clinicalImpressionShort1));
           break;
         case Constant.thirdEventStep:
           Navigator.pushReplacementNamed(
@@ -414,11 +421,11 @@ class Utils {
   }
 
   static void navigateToHomeScreen(
-      BuildContext context, bool isProfileInComplete) async {
+      BuildContext context, bool isProfileInComplete, {HomeScreenArgumentModel homeScreenArgumentModel}) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(
         Constant.isProfileInCompleteStatus, isProfileInComplete);
-    Navigator.pushReplacementNamed(context, Constant.homeRouter);
+    Navigator.pushReplacementNamed(context, Constant.homeRouter, arguments: homeScreenArgumentModel);
   }
 
   static void closeApiLoaderDialog(BuildContext context) {
@@ -521,6 +528,64 @@ class Utils {
           content: ValidationErrorDialog(errorMessage: errorMessage,),
         );
       },
+    );
+  }
+
+  ///This method is used to show compass tutorial dialog.
+  ///@param context: build context of the screen
+  ///@param indexValue: 0 for compass, 1 for Intensity, 2 for Disability, 3 for Frequency, and 4 for Duration.
+  static Future<void> showCompassTutorialDialog(BuildContext context, int indexValue) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
+        );
+      },
+    );
+  }
+
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will null.
+  static Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    Position position;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied && permission != LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition();
+      }
+    } else {
+      if(permission != LocationPermission.deniedForever)
+        position = await Geolocator.getCurrentPosition();
+    }
+
+    return position;
+  }
+
+  static void showTrendsTutorialDialog(BuildContext context) {
+    showGeneralDialog(
+        context: context,
+        barrierColor: Colors.transparent,
+        pageBuilder: (buildContext, animation, secondaryAnimation) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: TrendsScreenTutorialDialog(),
+          );
+        }
     );
   }
 }

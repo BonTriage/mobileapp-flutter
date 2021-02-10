@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TutorialsSliderDots.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/slide_dots.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 
 class SecondStepCompassResultTutorials extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _SecondStepCompassResultTutorialsState
   List<Widget> _pageViewWidgets;
 
   PageController _pageController;
+  List<ScrollController> _scrollControllerList;
 
   Widget _getThreeDotsWidget() {
     return Row(
@@ -36,7 +38,6 @@ class _SecondStepCompassResultTutorialsState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: widget.tutorialsIndex);
     currentPageIndex = widget.tutorialsIndex;
@@ -82,18 +83,22 @@ class _SecondStepCompassResultTutorialsState
             fontFamily: Constant.jostMedium),
       ),
     ];
+
+    _scrollControllerList =
+        List.generate(_pageViewWidgets.length, (index) => ScrollController());
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 280,
       decoration: BoxDecoration(
         color: Constant.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Stack(
             children: <Widget>[
@@ -132,9 +137,11 @@ class _SecondStepCompassResultTutorialsState
             ],
           ),
           SizedBox(
-            height: 25,
+            height: 10,
           ),
-          Expanded(
+          Container(
+            height: 180,
+            width: 250,
             child: PageView.builder(
               itemCount: _pageViewWidgets.length,
               controller: _pageController,
@@ -145,11 +152,28 @@ class _SecondStepCompassResultTutorialsState
                 print(currentPage);
               },
               itemBuilder: (BuildContext context, int index) {
-                return Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(child: _pageViewWidgets[index]));
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomScrollBar(
+                    isAlwaysShown: true,
+                    controller: _scrollControllerList[index],
+                    child: SingleChildScrollView(
+                      physics: Utils.getScrollPhysics(),
+                      controller: _scrollControllerList[index],
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: _pageViewWidgets[index],
+                          )),
+                    ),
+                  ),
+                );
               },
             ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Container(
               padding: EdgeInsets.only(bottom: 15),
@@ -173,5 +197,14 @@ class _SecondStepCompassResultTutorialsState
         return Constant.duration;
     }
     return "";
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    _scrollControllerList.forEach((element) {
+      element?.dispose();
+    });
+    super.dispose();
   }
 }

@@ -216,6 +216,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 
@@ -260,6 +261,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: selectedAnswerListData,
+                  removeSelectedAnswerCallback: _removeDataFromSelectedAnswer,
                 )));
             break;
         }
@@ -338,6 +340,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
           SelectedAnswers(questionTag: currentTag, answer: selectedUserAnswer));
       print(signUpOnBoardSelectedAnswersModel.selectedAnswers);
     }
+    updateSelectedAnswerDataOnLocalDatabase();
+  }
+
+  void _removeDataFromSelectedAnswer(String questionTag) {
+    signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == questionTag);
     updateSelectedAnswerDataOnLocalDatabase();
   }
 

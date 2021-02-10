@@ -64,7 +64,7 @@ class SignUpScreenBloc {
 
   /// This method will be use for implement API for SignUp into the app.
   Future<dynamic> signUpOfNewUser(List<SelectedAnswers> selectedAnswerListData,
-      String emailValue, String passwordValue) async {
+      String emailValue, String passwordValue, bool isTermConditionCheck, bool isEmailMarkCheck) async {
     String apiResponse;
     UserProfileInfoModel userProfileInfoModel;
     try {
@@ -73,7 +73,10 @@ class SignUpScreenBloc {
           RequestMethod.POST,
           selectedAnswerListData,
           emailValue,
-          passwordValue);
+          passwordValue,
+        isTermConditionCheck,
+        isEmailMarkCheck
+      );
       if (response is AppException) {
         apiResponse = response.toString();
         _signUpOfNewUserStreamController.addError(response);

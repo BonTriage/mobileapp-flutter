@@ -15,9 +15,18 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getTutorialsState();
+  }
+
+  @override
+  void dispose() {
+    try {
+      timer.cancel();
+    } catch (e) {
+      print(e);
+    }
+    super.dispose();
   }
 
   @override
@@ -58,6 +67,8 @@ class _SplashState extends State<Splash> {
         sharedPreferences.getBool(Constant.tutorialsState);
     var userAlreadyLoggedIn =
     sharedPreferences.getBool(Constant.userAlreadyLoggedIn);
+
+    _removeKeysFromSharedPreference(sharedPreferences);
     if(userAlreadyLoggedIn != null && userAlreadyLoggedIn) {
       timer = Timer.periodic(Duration(seconds: 2), (timer) {
         Navigator.pushReplacementNamed(context, Constant.homeRouter);
@@ -83,5 +94,12 @@ class _SplashState extends State<Splash> {
         }
       }
     }
+  }
+
+  void _removeKeysFromSharedPreference(SharedPreferences sharedPreferences) {
+    sharedPreferences.remove(Constant.updateCalendarTriggerData);
+    sharedPreferences.remove(Constant.updateCalendarIntensityData);
+    sharedPreferences.remove(Constant.updateOverTimeCompassData);
+    sharedPreferences.remove(Constant.updateCompareCompassData);
   }
 }

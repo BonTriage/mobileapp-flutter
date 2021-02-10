@@ -2,84 +2,84 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Constant {
-  static const String splashRouter = '/splash';
-  static const String homeRouter = '/home';
-  static const String loginRouter = '/login';
-  static const String signUpRouter = '/signUP';
-  static const String signUpOnBoardSplashRouter = '/signUpOnBoardSplash';
+  static const String splashRouter = 'splash';
+  static const String homeRouter = 'home';
+  static const String loginRouter = 'login';
+  static const String signUpRouter = 'signUP';
+  static const String signUpOnBoardSplashRouter = 'signUpOnBoardSplash';
   static const String signUpOnBoardStartAssessmentRouter =
-      '/signUpOnBoardStartAssessment';
+      'signUpOnBoardStartAssessment';
   static const String signUpFirstStepHeadacheResultRouter =
-      '/signUpFirstStepHeadacheResult';
+      'signUpFirstStepHeadacheResult';
   static const String signUpOnBoardPersonalizedHeadacheResultRouter =
-      '/signUpOnBoardPersonalizedHeadacheResult';
-  static const String signUpNameScreenRouter = '/signUpNameScreen';
-  static const String signUpAgeScreenRouter = '/signUpAgeScreen';
-  static const String signUpLocationServiceRouter = '/signUpLocationService';
+      'signUpOnBoardPersonalizedHeadacheResult';
+  static const String signUpNameScreenRouter = 'signUpNameScreen';
+  static const String signUpAgeScreenRouter = 'signUpAgeScreen';
+  static const String signUpLocationServiceRouter = 'signUpLocationService';
   static const String signUpOnBoardProfileQuestionRouter =
-      '/signUpOnBoardHeadacheQuestion';
+      'signUpOnBoardHeadacheQuestion';
   static const String partTwoOnBoardScreenRouter =
-      '/partTwoOnBoardScreenRouter';
+      'partTwoOnBoardScreenRouter';
   static const String partThreeOnBoardScreenRouter =
-      '/partThreeOnBoardScreenRouter';
+      'partThreeOnBoardScreenRouter';
 
-  static const String loginScreenRouter = '/loginScreenRouter';
+  static const String loginScreenRouter = 'loginScreenRouter';
   static const String onBoardingScreenSignUpRouter =
-      '/onBoardingScreenSignUpRouter';
+      'onBoardingScreenSignUpRouter';
   static const String signUpSecondStepHeadacheResultRouter =
-      '/signUpSecondStepHeadacheResult';
+      'signUpSecondStepHeadacheResult';
   static const String signUpOnBoardSecondStepPersonalizedHeadacheResultRouter =
-      '/signUpOnBoardSecondStepPersonalizedHeadacheResult';
+      'signUpOnBoardSecondStepPersonalizedHeadacheResult';
 
   static const String welcomeScreenRouter = 'WelcomeScreen';
   static const String welcomeStartAssessmentScreenRouter =
-      '/welcomeStartAssessmentScreenRouter';
+      'welcomeStartAssessmentScreenRouter';
   static const String onBoardHeadacheInfoScreenRouter =
-      '/onBoardHeadacheInfoScreenRouter';
+      'onBoardHeadacheInfoScreenRouter';
 
   static const String partOneOnBoardScreenTwoRouter =
-      '/partOneOnBoardScreenTwo';
+      'partOneOnBoardScreenTwo';
   static const String onBoardCreateAccountScreenRouter =
-      '/onBoardCreateAccountScreen';
+      'onBoardCreateAccountScreen';
   static const String prePartTwoOnBoardScreenRouter =
-      '/prePartTwoOnBoardScreen';
+      'prePartTwoOnBoardScreen';
   static const String onBoardHeadacheNameScreenRouter =
-      '/onBoardHeadacheNameScreen';
+      'onBoardHeadacheNameScreen';
   static const String partTwoOnBoardMoveOnScreenRouter =
-      '/partTwoOnBoardMoveOnScreen';
+      'partTwoOnBoardMoveOnScreen';
   static const String prePartThreeOnBoardScreenRouter =
-      '/prePartThreeOnBoardScreen';
+      'prePartThreeOnBoardScreen';
   static const String signUpOnBoardBubbleTextViewRouter =
-      '/signUpOnBoardBubbleTextView';
+      'signUpOnBoardBubbleTextView';
   static const String postPartThreeOnBoardRouter =
-      '/postPartThreeOnBoardRouter';
+      'postPartThreeOnBoardRouter';
   static const String postNotificationOnBoardRouter =
-      '/postNotificationOnBoardRouter';
-  static const String notificationScreenRouter = '/NotificationScreenRouter';
+      'postNotificationOnBoardRouter';
+  static const String notificationScreenRouter = 'NotificationScreenRouter';
   static const String headacheStartedScreenRouter =
-      '/HeadacheStartedScreenRouter';
+      'HeadacheStartedScreenRouter';
   static const String currentHeadacheProgressScreenRouter =
-      '/CurrentHeadacheProgressScreenRouter';
+      'CurrentHeadacheProgressScreenRouter';
   static const String addHeadacheOnGoingScreenRouter =
-      '/addHeadacheOnGoingScreenRouter';
-  static const String logDayScreenRouter = '/logDayScreenRouter';
+      'addHeadacheOnGoingScreenRouter';
+  static const String logDayScreenRouter = 'logDayScreenRouter';
   static const String addHeadacheSuccessScreenRouter =
-      '/addHeadacheSuccessScreenRouter';
-  static const String logDaySuccessScreenRouter = '/logDaySuccessScreenRouter';
+      'addHeadacheSuccessScreenRouter';
+  static const String logDaySuccessScreenRouter = 'logDaySuccessScreenRouter';
   static const String profileCompleteScreenRouter =
-      '/profileCompleteScreenRouter';
-  static const String notificationTimerRouter = '/notificationTimerRouter';
+      'profileCompleteScreenRouter';
+  static const String notificationTimerRouter = 'notificationTimerRouter';
   static const String calendarTriggersScreenRouter =
-      '/calendarTriggersScreenRouter';
+      'calendarTriggersScreenRouter';
   static const String calendarSeverityScreenRouter =
-      '/calendarSeverityScreenRouter';
+      'calendarSeverityScreenRouter';
   static const String logDayNoHeadacheScreenRouter =
-      '/logDayNoHeadacheScreenRouter';
+      'logDayNoHeadacheScreenRouter';
   static const String calenderScreenRouter = 'calenderScreenRouter';
 
-  static const String onBoardExitScreenRouter = '/onBoardExitScreenRouter';
+  static const String onBoardExitScreenRouter = 'onBoardExitScreenRouter';
   static const String onCalendarHeadacheLogDayDetailsScreenRouter =
-      '/onCalendarHeadacheLogDayDetailsScreenRouter';
+      'onCalendarHeadacheLogDayDetailsScreenRouter';
 
   static const String compassScreenRouter = 'compassScreenRouter';
   static const String webViewScreenRouter = 'webViewScreenRouter';
@@ -154,6 +154,7 @@ class Constant {
   static String yearsOld = 'years old';
   static String days = 'days';
   static String hours = 'hours';
+  static const String noneAtAll = 'NONE AT\nALL';
   static String blankString = '';
   static String atWhatAge = 'At what age did you first experience headaches?';
   static String selectOne = 'Select one';
@@ -321,6 +322,7 @@ class Constant {
   static const String QuestionSingleType = 'single';
   static const String QuestionMultiType = 'multi';
   static const String QuestionLocationType = 'location';
+  static const String QuestionInfoType = 'info';
   static const String HeadacheTypeTag = 'headacheType';
   static const String logDayMedicationTag = 'medication';
   static const String logDayNoteTag = 'logday.note';
@@ -330,6 +332,12 @@ class Constant {
   static const String profileAgeTag = 'profile.age';
   static const String profileSexTag = 'profile.sex';
   static const String profileGenderTag = 'profile.gender';
+  static const String headacheFreeTag = 'headache.free';
+  static const String headacheTypicalTag = 'headache.typical';
+  static const String headacheDisabledTag = 'headache.disabled';
+  static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
+  static const String headacheNumberTag = 'headache.number';
+  static const String profileLocationTag = 'profile.location';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =
@@ -357,6 +365,9 @@ class Constant {
   static String currentIndexOfTabBar = 'currentIndexOfTabBar';
   static String currentIndexOfCalenderTabBar = 'currentIndexOfCalenderTabBar';
   static String tabNavigatorState = '0';
+  static const String recordTabNavigatorState = '0';
+  static const String isSeeMoreClicked = 'isSeeMoreClicked';
+  static const String isViewTrendsClicked = 'isViewTrendsClicked';
   static const String zeroEventStep = "0";
   static const String firstEventStep = "1";
   static const String firstCompassEventStep = "1.1";
@@ -373,6 +384,7 @@ class Constant {
   static const String notificationEventStep = '3.2';
   static const String postNotificationEventStep = '3.3';
   static const String userID = "4214";
+  static const String trueString = 'true';
 
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
@@ -435,6 +447,7 @@ class Constant {
       'We noticed you didn’t log a headache today. Can you confirm what happened?';
 
   static String deleteLog = ' Delete Log';
+  static String discardChanges = ' Discard Changes';
   static const String settings = ' Settings';
   static String allowed = 'Allowed';
   static const String myInfo = 'My Info';
@@ -547,8 +560,44 @@ class Constant {
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
+
   static const String noHeadacheData = 'NoHeadacheData';
   static const String compassHeadacheTypeActionSheet = 'compassHeadacheTypeActionSheet';
+
+  static String selectAtLeastOneOptionLogDayError = 'Please select at least one option.';
+  static const String singleHeadache = 'Single headache:';
+  static const String summaryOfAllHeadacheTypes = 'Summary of all my headache types';
+  static const String selectTheSavedHeadacheType = 'Select the saved Headache Type that you would like to view.';
+  static const String editGraphView = 'Edit Graph View';
+  static const String viewSingleHeadache = 'View Single Headache';
+  static const String compareHeadache = 'Compare Headache';
+  static const String otherFactors = 'Other Factors:';
+  static const String loggedBehaviors = 'Logged Behaviors';
+  static const String loggedPotentialTriggers = 'Logged Potential Triggers';
+  static const String medications = 'Medications';
+  static const String noneRadioButtonText = 'None';
+  static const String minText = 'min_text';
+  static const String maxText = 'max_text';
+  static const String minLabel = 'min_label';
+  static const String maxLabel = 'max_label';
+  static const String minLabel1 = 'minlabel';
+  static const String maxLabel1 = 'maxlabel';
+  static const String label = 'label';
+  static const String updateCalendarTriggerData = 'updateCalendarTriggerData';
+  static const String updateCalendarIntensityData = 'updateCalendarIntensityData';
+  static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
+  static const String updateCompareCompassData = 'updateCompareCompassData';
+
+
+  //tutorial text
+  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
+  static const String trendsTutorialText1 = 'For days you have completed your daily log, these dots represent the data you inputted.';
+  static const String trendsTutorialText2 = 'A filled circle (•) indicates if a certain behavior, potential trigger, or medication was present on a given day.';
+  static const String trendsTutorialText3 = 'An outlined circle () means you did not experience that item on a given day.';
+  static const String trendsTutorialText4 = 'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
+  static const String trendsTutorialText5 = 'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
+
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
@@ -556,6 +605,7 @@ class Constant {
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
   static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
+  static const String editGraphViewBottomSheet = 'editGraphViewBottomSheet';
 
   //Dimensions
   static final double screenHorizontalPadding = 25;
@@ -652,6 +702,9 @@ class Constant {
   static String addCircleIcon = 'images/add_circle_icon.png';
   static String calenderBackArrow = 'images/calender_back_arrow.png';
   static String calenderNextArrow = 'images/calender_next_arrow.png';
+  static String tutorialArrowUp = 'images/tutorial_arrow_up.png';
+  static String tutorialArrowDown = 'images/tutorial_arrow_down.png';
+  static String tutorialArrowDown2 = 'images/tutorial_arrow_down_2.png';
 
   static String leftArrow = 'images/left_arrow.png';
   static String downArrow2 = 'images/down_arrow_2.png';
@@ -665,6 +718,9 @@ class Constant {
   static String moreUnselected = 'images/more_unselected.png';
   static String moreSelected = 'images/more_selected.png';
   static String errorGreen = 'images/error_green.png';
+  static const String closeIcon2 = 'images/close_icon_2.png';
+  static const String graph = 'images/graph.png';
+  static const String trendsTutorialArrowUp = 'images/trends_tutorial_arrow_up.png';
 
   static String barGraph = 'images/union.png';
   static String lineGraph = 'images/vector.png';

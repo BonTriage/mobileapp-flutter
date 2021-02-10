@@ -6,7 +6,7 @@ import 'package:mobile/view/MoreSection.dart';
 
 class MoreGenerateReportScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
-  final Function(String) openActionSheetCallback;
+  final Function(String,dynamic) openActionSheetCallback;
 
   const MoreGenerateReportScreen({Key key, this.onPush, this.openActionSheetCallback})
       : super(key: key);
@@ -114,7 +114,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            widget.openActionSheetCallback(Constant.generateReportActionSheet);
+                            widget.openActionSheetCallback(Constant.generateReportActionSheet,null);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),

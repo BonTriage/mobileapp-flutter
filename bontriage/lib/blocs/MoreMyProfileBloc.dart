@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -38,7 +39,6 @@ class MoreMyProfileBloc {
 
     if(userProfileInfoModel != null) {
       try {
-        //String url = '${WebservicePost.productionServerUrl}event/?event_type=profile&latest_event_only=true&user_id=4617';
         String url = '${WebservicePost.qaServerUrl}event/?event_type=profile&latest_event_only=true&user_id=${userProfileInfoModel.userId}';
         var response = await _moreMyProfileRepository.myProfileServiceCall(url, RequestMethod.GET);
         if (response is AppException) {
@@ -142,6 +142,16 @@ class MoreMyProfileBloc {
           SignUpOnBoardProviders.db.updateUserProfileInfoModel(userProfileInfoModel);
         }
       }
+    }
+  }
+
+  void setSelectedAnswerList(List<SelectedAnswers> selectedAnswerList, ResponseModel triggerMedicationValues) {
+    if(triggerMedicationValues != null) {
+      triggerMedicationValues.mobileEventDetails.forEach((element) {
+        List<String> splitList = element.value.split('%@');
+        String answer = jsonEncode(splitList);
+        selectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: answer));
+      });
     }
   }
 }

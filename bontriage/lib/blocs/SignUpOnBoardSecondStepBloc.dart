@@ -90,14 +90,23 @@ class SignUpOnBoardSecondStepBloc {
 
   sendSignUpSecondStepData(
       SignUpOnBoardSelectedAnswersModel
-          signUpOnBoardSelectedAnswersModel) async {
+          signUpOnBoardSelectedAnswersModel, String eventId) async {
     String response;
     try {
-      var signUpSecondStepData = await _signUpOnBoardFirstStepRepository
-          .signUpWelcomeOnBoardSecondStepServiceCall(
-              WebservicePost.qaServerUrl + 'event',
-              RequestMethod.POST,
-              signUpOnBoardSelectedAnswersModel);
+      var signUpSecondStepData;
+      if(eventId == null) {
+        signUpSecondStepData = await _signUpOnBoardFirstStepRepository
+            .signUpWelcomeOnBoardSecondStepServiceCall(
+            '${WebservicePost.qaServerUrl}event',
+            RequestMethod.POST,
+            signUpOnBoardSelectedAnswersModel);
+      } else {
+        signUpSecondStepData = await _signUpOnBoardFirstStepRepository
+            .signUpWelcomeOnBoardSecondStepServiceCall(
+            '${WebservicePost.qaServerUrl}event/$eventId',
+            RequestMethod.POST,
+            signUpOnBoardSelectedAnswersModel);
+      }
       if (signUpSecondStepData is AppException) {
         print(signUpSecondStepData);
         response = signUpSecondStepData.toString();

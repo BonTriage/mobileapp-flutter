@@ -24,14 +24,15 @@ import 'package:mobile/view/RecordScreen.dart';
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final String root;
-  final Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
+  final Function(GlobalKey, GlobalKey) getButtonsGlobalKeyCallback;
 
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   final Function(List<Values>) openTriggerMedicationActionSheetCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback});
 
 
   Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
@@ -56,6 +57,7 @@ class TabNavigator extends StatelessWidget {
             );
           },
           transitionDuration: Duration(milliseconds: 350),
+          settings: RouteSettings(name: routeName),
         ));
   }
 
@@ -68,6 +70,7 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.meRoot: (context) => MeScreen(
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         showApiLoaderCallback: showApiLoaderCallback,
+        getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
       ),
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(
@@ -76,7 +79,7 @@ class TabNavigator extends StatelessWidget {
               },
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
             showApiLoaderCallback: showApiLoaderCallback,
-
+            openActionSheetCallback: openActionSheetCallback,
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {
@@ -84,9 +87,7 @@ class TabNavigator extends StatelessWidget {
           }),
       TabNavigatorRoutes.moreRoot: (context) => MoreScreen(
             onPush: _push,
-            openActionSheetCallback: (actionSheetType) {
-              openActionSheetCallback(actionSheetType);
-            },
+            openActionSheetCallback: openActionSheetCallback,
             showApiLoaderCallback: showApiLoaderCallback,
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
@@ -103,9 +104,7 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
             onPush: _push,
-            openActionSheetCallback: (actionSheetType) {
-              openActionSheetCallback(actionSheetType);
-            },
+            openActionSheetCallback: openActionSheetCallback,
           ),
       TabNavigatorRoutes.moreSupportRoute: (context) => MoreSupportScreen(
             onPush: _push,
@@ -115,6 +114,9 @@ class TabNavigator extends StatelessWidget {
       TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MoreNotificationScreen(),
       TabNavigatorRoutes.moreHeadachesScreenRoute: (context) => MoreHeadachesScreen(
         openActionSheetCallback: openActionSheetCallback,
+        moreHeadacheScreenArgumentModel: arguments,
+        showApiLoaderCallback: showApiLoaderCallback,
+        navigateToOtherScreenCallback: navigateToOtherScreenCallback,
       ),
       TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
       TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(
@@ -135,9 +137,15 @@ class TabNavigator extends StatelessWidget {
       ),
       TabNavigatorRoutes.moreTriggersScreenRoute: (context) => MoreTriggersScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+        openActionSheetCallback: openActionSheetCallback,
+        moreTriggersArgumentModel: arguments,
+        showApiLoaderCallback: showApiLoaderCallback,
       ),
       TabNavigatorRoutes.moreMedicationsScreenRoute: (context) => MoreMedicationScreen(
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
+        moreMedicationArgumentModel: arguments,
+        showApiLoaderCallback: showApiLoaderCallback,
+        openActionSheetCallback: openActionSheetCallback,
       ),
     };
   }

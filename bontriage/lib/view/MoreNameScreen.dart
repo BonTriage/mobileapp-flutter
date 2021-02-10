@@ -4,7 +4,7 @@ import 'package:mobile/util/constant.dart';
 
 class MoreNameScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
   const MoreNameScreen({Key key, @required this.selectedAnswerList, @required this.openActionSheetCallback}): super(key: key);
   @override
   _MoreNameScreenState createState() =>
@@ -149,7 +149,7 @@ class _MoreNameScreenState
 
   Future<void> _openSaveAndExitActionSheet() async {
     if (_initialNameValue != _textEditingController.text && _textEditingController.text.trim().isNotEmpty) {
-      var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet);
+      var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
       if (result != null) {
         if(result == Constant.saveAndExit) {
           _selectedAnswers.answer = _textEditingController.text;

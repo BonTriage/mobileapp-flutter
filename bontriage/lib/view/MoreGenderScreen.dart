@@ -5,7 +5,7 @@ import 'package:mobile/util/constant.dart';
 
 class MoreGenderScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
 
   const MoreGenderScreen({Key key, this.selectedAnswerList, @required this.openActionSheetCallback}) : super(key: key);
   @override
@@ -212,7 +212,7 @@ class _MoreGenderScreenState
   Future<void> _openSaveAndExitActionSheet() async {
     if (_initialSelectedValue != null) {
       if (_initialSelectedValue != _currentSelectedValue) {
-        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet);
+        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
         if (result != null) {
           if (result == Constant.saveAndExit) {
             _selectedAnswers.answer = _currentSelectedValue;

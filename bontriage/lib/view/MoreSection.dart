@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
+import 'package:mobile/models/MoreMedicationArgumentModel.dart';
+import 'package:mobile/models/MoreTriggerArgumentModel.dart';
+import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
@@ -11,8 +15,11 @@ class MoreSection extends StatefulWidget {
   final String currentTag;
   final Function(String, dynamic) navigateToOtherScreenCallback;
   final List<SelectedAnswers> selectedAnswerList;
+  final HeadacheTypeData headacheTypeData;
+  final MoreTriggersArgumentModel moreTriggersArgumentModel;
+  final MoreMedicationArgumentModel moreMedicationArgumentModel;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData, this.moreTriggersArgumentModel, this.moreMedicationArgumentModel}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -24,7 +31,6 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController = AnimationController(
       duration: Duration(milliseconds: 350),
@@ -63,7 +69,7 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreFaqScreenRoute, null);
                     break;
                   case Constant.headacheType:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, null);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreHeadachesScreenRoute, MoreHeadacheScreenArgumentModel(headacheTypeData: widget.headacheTypeData));
                     break;
                   case Constant.locationServices:
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreLocationServicesScreenRoute, null);
@@ -81,10 +87,10 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreSexScreenRoute, widget.selectedAnswerList);
                     break;
                   case Constant.myTriggers:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute, null);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreTriggersScreenRoute, widget.moreTriggersArgumentModel);
                     break;
                   case Constant.myMedications:
-                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute, null);
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreMedicationsScreenRoute, widget.moreMedicationArgumentModel);
                     break;
                   case Constant.dailyLog:
                   case Constant.medication:

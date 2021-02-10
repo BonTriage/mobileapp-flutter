@@ -46,9 +46,10 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     emailTextEditingController.dispose();
     passwordTextEditingController.dispose();
+    signUpScreenBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -111,6 +112,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 },
+                                keyboardType: TextInputType.emailAddress,
                                 controller: emailTextEditingController,
                                 onChanged: (String value) {
                                   emailValue = emailTextEditingController.text;
@@ -413,7 +415,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       ),
                       FlatButton(
                         onPressed: () {
-                          signUpButtonClicked();
+                          _signUpButtonClicked();
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -496,7 +498,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
-  void signUpButtonClicked() {
+  void _signUpButtonClicked() {
     if (emailValue != null &&
         passwordValue != null &&
         Utils.validateEmail(emailValue) &&
@@ -576,7 +578,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
     var response = await signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, emailValue, passwordValue);
+        selectedAnswerListData, emailValue, passwordValue, isTermConditionCheck, isEmailMarkCheck);
     if (response is String) {
       if (response == Constant.success) {
         Navigator.pop(context);

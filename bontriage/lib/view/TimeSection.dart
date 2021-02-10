@@ -213,7 +213,7 @@ class _TimeSectionState extends State<TimeSection>
         }
         _selectedStartDate = _selectedStartTime;
 
-        if(_selectedEndDateAndTime.isBefore(_selectedStartTime)) {
+        if(_selectedEndDateAndTime != null && _selectedEndDateAndTime.isBefore(_selectedStartTime)) {
           _selectedEndDate = _selectedStartTime;
           _selectedEndTime = _selectedEndDate;
           _selectedEndDateAndTime = _selectedEndDate;

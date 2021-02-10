@@ -1,19 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class SignUpLocationServices extends StatefulWidget {
   final Questions question;
   final Function(String, String) selectedAnswerCallBack;
+  final Function(String) removeSelectedAnswerCallback;
   final List<SelectedAnswers> selectedAnswerListData;
 
   const SignUpLocationServices(
       {Key key,
       this.question,
       this.selectedAnswerCallBack,
-      this.selectedAnswerListData})
+      this.selectedAnswerListData,
+      this.removeSelectedAnswerCallback})
       : super(key: key);
 
   @override
@@ -22,13 +28,18 @@ class SignUpLocationServices extends StatefulWidget {
 
 class _SignUpLocationServicesState extends State<SignUpLocationServices>
     with SingleTickerProviderStateMixin {
-  bool _locationServicesSwitchState = false;
+  bool _locationServicesSwitchState;
   AnimationController _animationController;
+  bool _isCheckingLocation;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _locationServicesSwitchState = false;
+    _isCheckingLocation = false;
+
     _animationController =
         AnimationController(duration: Duration(milliseconds: 800), vsync: this);
 
@@ -48,7 +59,6 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
 
   @override
   void didUpdateWidget(SignUpLocationServices oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (!_animationController.isAnimating) {
@@ -59,7 +69,6 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
@@ -90,18 +99,24 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                 CupertinoSwitch(
                   value: _locationServicesSwitchState,
                   onChanged: (bool state) {
-                    setState(() {
-                      _locationServicesSwitchState = state;
-                      widget.selectedAnswerCallBack(widget.question.tag,
-                          _locationServicesSwitchState.toString());
-                      print(state);
-                    });
+                    if(!_isCheckingLocation) {
+                      if (state) {
+                        setState(() {
+                          _locationServicesSwitchState = state;
+                        });
+                        _checkLocationPermission();
+                      } else {
+                        setState(() {
+                          _locationServicesSwitchState = state;
+                          /*widget.selectedAnswerCallBack(widget.question.tag,
+                              _locationServicesSwitchState.toString());*/
+                          widget.removeSelectedAnswerCallback(widget.question.tag);
+                        });
+                      }
+                    }
                   },
                   activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
                   trackColor: Constant.chatBubbleGreen.withOpacity(0.2),
-                  /*activeTrackColor: Constant.chatBubbleGreen.withOpacity(0.6),
-                  inactiveThumbColor: Constant.chatBubbleGreen,
-                  inactiveTrackColor: Constant.chatBubbleGreenBlue,*/
                 ),
               ],
             ),
@@ -120,5 +135,30 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
         ),
       ),
     );
+  }
+
+  Future<void> _checkLocationPermission() async {
+    _isCheckingLocation = true;
+    Position position = await Utils.determinePosition();
+
+    if(position != null) {
+      setState(() {
+        _locationServicesSwitchState = true;
+        /*widget.selectedAnswerCallBack(widget.question.tag,
+            _locationServicesSwitchState.toString());*/
+        _isCheckingLocation = false;
+      });
+      List<String> latLngList = [];
+      latLngList.add(position.latitude.toString());
+      latLngList.add(position.longitude.toString());
+      widget.selectedAnswerCallBack(widget.question.tag,
+          jsonEncode(latLngList));
+    } else {
+      setState(() {
+        _locationServicesSwitchState = false;
+        widget.removeSelectedAnswerCallback(widget.question.tag);
+        _isCheckingLocation = false;
+      });
+    }
   }
 }

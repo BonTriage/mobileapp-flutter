@@ -9,7 +9,7 @@ import 'package:mobile/view/MoreSection.dart';
 class MoreScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
-  final Function(String) openActionSheetCallback;
+  final Function(String,dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
 
   const MoreScreen({Key key, this.onPush, this.openActionSheetCallback, this.navigateToOtherScreenCallback, this.showApiLoaderCallback})
@@ -116,7 +116,7 @@ class _MoreScreenState extends State<MoreScreen> {
                     onPressed: () {
                       //_showDeleteLogOptionBottomSheet();
                       widget.openActionSheetCallback(
-                          Constant.medicalHelpActionSheet);
+                          Constant.medicalHelpActionSheet,null);
                     },
                     child: Container(
                       padding:
@@ -152,8 +152,7 @@ class _MoreScreenState extends State<MoreScreen> {
   void _logOutFromApp() async{
     try {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setBool(Constant.userAlreadyLoggedIn, false);
-      sharedPreferences.setBool(Constant.logDayDoubleTapDialog, false);
+      sharedPreferences.clear();
       await SignUpOnBoardProviders.db.deleteAllTableData();
       widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter,null);
     } catch(e) {

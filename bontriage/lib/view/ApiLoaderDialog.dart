@@ -339,13 +339,13 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
     }
   }
 
-  void _popDialog() async{
-    if(!isPopped) {
+  void _popDialog() async {
+    if (!isPopped) {
       bool mayBePop = await Navigator.maybePop(context);
       isPopped = true;
 
       print("may be pop $mayBePop");
-      if(mayBePop) {
+      if (mayBePop) {
         Navigator.pop(context);
       }
     }

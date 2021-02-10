@@ -4,7 +4,7 @@ import 'package:mobile/util/constant.dart';
 
 class MoreAgeScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
-  final Future<dynamic> Function(String) openActionSheetCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
 
   const MoreAgeScreen({Key key, @required this.selectedAnswerList, @required this.openActionSheetCallback}): super(key: key);
   @override
@@ -214,7 +214,7 @@ class _MoreAgeScreenState
   Future<void> _openSaveAndExitActionSheet() async {
     if (_initialAgeValue != null) {
       if (_initialAgeValue != _currentAgeValue) {
-        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet);
+        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
         if (result != null) {
           if (result == Constant.saveAndExit) {
             _selectedAnswers.answer = _currentAgeValue.toInt().toString();

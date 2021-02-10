@@ -41,6 +41,8 @@ class AddHeadacheSection extends StatefulWidget {
   final List<SelectedAnswers> doubleTapSelectedAnswer;
   final bool isHeadacheEnded;
   final CurrentUserHeadacheModel currentUserHeadacheModel;
+  final bool isFromRecordsScreen;
+  final String uiHints;
 
   AddHeadacheSection(
       {Key key,
@@ -63,7 +65,9 @@ class AddHeadacheSection extends StatefulWidget {
       this.selectedAnswers,
       this.isHeadacheEnded,
       this.currentUserHeadacheModel,
-      this.doubleTapSelectedAnswer})
+      this.doubleTapSelectedAnswer,
+      this.isFromRecordsScreen = false,
+      this.uiHints})
       : super(key: key);
 
   @override
@@ -151,6 +155,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
       case 'disability':
         String selectedCurrentValue;
@@ -181,6 +186,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           horizontalPadding: 0,
           selectedAnswerCallBack: _onHeadacheIntensitySelected,
           isAnimate: false,
+          uiHints: widget.uiHints,
         ));
 
       case 'behavior.presleep':
@@ -1099,6 +1105,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           isAnimate: false,
                           horizontalPadding: 0,
                           onValueChangeCallback: onValueChangedCallback,
+                          uiHints: questions.uiHints,
                         ),
                       ],
                     )));
@@ -1131,6 +1138,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                           child: TextFormField(
                             minLines: 5,
                             maxLines: 6,
+                            textCapitalization: TextCapitalization.sentences,
                             textInputAction: TextInputAction.done,
                             onChanged: (text) {
                               onValueChangedCallback(questionTag, text.trim());
@@ -1711,6 +1719,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
       }
     }
+    if(widget.isFromRecordsScreen)
+      _updateDoubleTapSelectedAnswersList();
   }
 
   @override
@@ -1941,16 +1951,15 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           },
         )
     );
+  }
 
-    /*if(addMedicationResult != null && addMedicationResult is String && addMedicationResult != '') {
-      setState(() {
-        widget.valuesList.insert(widget.valuesList.length - 1, Values(text: addMedicationResult, valueNumber: (widget.valuesList.length).toString(), isNewlyAdded: true));
-        _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
-        _medicationDosageList.add(List.generate(1, (index) => Questions()));
-        _numberOfDosageAddedList.add(0);
-        _additionalMedicationDosage.add([]);
-        widget.medicationExpandableWidgetList.add(Questions(precondition: ''));
-      });
-    }*/
+  ///Method to update double tap selected answers list
+  void _updateDoubleTapSelectedAnswersList() {
+    widget.doubleTapSelectedAnswer.clear();
+    widget.selectedAnswers.forEach((element) {
+      if(element.isDoubleTapped ?? false) {
+        widget.doubleTapSelectedAnswer.add(element);
+      }
+    });
   }
 }

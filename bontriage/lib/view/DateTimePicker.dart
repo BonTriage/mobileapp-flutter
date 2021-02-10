@@ -18,7 +18,6 @@ class _DateTimePickerState extends State<DateTimePicker> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dateTime = DateTime.now();
     _selectedDateTime = _dateTime;

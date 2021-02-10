@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardSecondStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/OnBoardSelectOptionModel.dart';
+import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardFirstStepQuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
@@ -20,9 +21,9 @@ import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PartTwoOnBoardScreens extends StatefulWidget {
-  final String argumentsName;
+  final PartTwoOnBoardArgumentModel partTwoOnBoardArgumentModel;
 
-  const PartTwoOnBoardScreens({this.argumentsName = Constant.clinicalImpressionShort1});
+  const PartTwoOnBoardScreens({this.partTwoOnBoardArgumentModel});
 
   @override
   _PartTwoOnBoardScreensState createState() => _PartTwoOnBoardScreensState();
@@ -32,6 +33,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   PageController _pageController = PageController(
     initialPage: 0,
   );
+  
+  String _argumentName = Constant.clinicalImpressionShort1;
 
   int _currentPageIndex = 0;
   double _progressPercent = 0;
@@ -53,7 +56,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if(!_isButtonClicked) {
       _isButtonClicked = true;
       if (_currentPageIndex == 0) {
-        if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+        if (_argumentName == Constant.clinicalImpressionEventType) {
           var userHeadacheName = signUpOnBoardSelectedAnswersModel
               .selectedAnswers
               .firstWhere((model) =>
@@ -108,6 +111,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     _signUpOnBoardSecondStepBloc = SignUpOnBoardSecondStepBloc();
     signUpOnBoardSelectedAnswersModel.eventType = Constant.secondEventStep;
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
+    
+    if(widget.partTwoOnBoardArgumentModel != null) {
+      _argumentName = widget.partTwoOnBoardArgumentModel.argumentName ?? Constant.clinicalImpressionShort1;
+    }
 
     _pageViewWidgetList = [];
 
@@ -144,7 +151,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                           chatBubbleText:
                               _pageViewWidgetList[_currentPageIndex].questions,
                           closeButtonFunction: () {
-                            if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                            if(_argumentName == Constant.clinicalImpressionShort1)
                               Utils.navigateToExitScreen(context);
                             else
                               Navigator.pop(context);
@@ -196,7 +203,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                         duration: Duration(milliseconds: 1),
                                         curve: Curves.easeIn);
                                   }
-                                  if(widget.argumentsName == Constant.clinicalImpressionShort1)
+                                  if(_argumentName == Constant.clinicalImpressionShort1)
                                     getCurrentQuestionTag(_currentPageIndex);
                                 });
                               }
@@ -227,8 +234,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   /// This method will be use for to set the UI content from the respective Question Tag.
-  addFilteredQuestionListData(List<dynamic> questionListData) {
+  addFilteredQuestionListData(List<Questions> questionListData) {
     if (questionListData != null) {
+      //This code is to two remove the infoClinicalImpression tag from clinical_impression event
+      questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
+
       currentQuestionListData = questionListData;
       questionListData.forEach((element) {
         switch (element.questionType) {
@@ -249,6 +259,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                     print(currentTag + selectedUserAnswer);
                     selectedAnswerListData(currentTag, selectedUserAnswer);
                   },
+                  uiHints: element.uiHints,
                 )));
             break;
 
@@ -293,7 +304,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
             _pageViewWidgetList.add(SignUpOnBoardFirstStepQuestionsModel(
                 questions: element.helpText,
                 questionsWidget: OnBoardMultiSelectOptions(
-                    selectOptionList: valuesListData,
+                    selectOptionList: element.values,
                     questionTag: element.tag,
                     selectedAnswerListData:
                         signUpOnBoardSelectedAnswersModel.selectedAnswers,
@@ -316,7 +327,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// This method will be use for to get current position of the user. When he last time quit the application or click the close
   /// icon. We will fetch last position from Local database.
   void getCurrentUserPosition() async {
-    if(widget.argumentsName == Constant.clinicalImpressionShort1) {
+    if(_argumentName == Constant.clinicalImpressionShort1) {
       UserProgressDataModel userProgressModel =
       await SignUpOnBoardProviders.db.getUserProgress();
       if (userProgressModel != null &&
@@ -326,6 +337,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       }
 
       getCurrentQuestionTag(currentScreenPosition);
+    } else {
+      List<SelectedAnswers> selectedAnswerList = widget.partTwoOnBoardArgumentModel.selectedAnswersList;
+      signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswerList ?? [];
     }
 
     requestService();
@@ -343,9 +357,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
           .fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
-
       _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
+          .fetchSignUpOnBoardSecondStepData(_argumentName);
     }
   }
 
@@ -357,7 +370,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
     if (!isDataBaseExists) {
       userProgressDataModel = await _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(widget.argumentsName);
+          .fetchSignUpOnBoardSecondStepData(_argumentName);
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
@@ -393,7 +406,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       print(signUpOnBoardSelectedAnswersModel.selectedAnswers);
     }
 
-    if(widget.argumentsName == Constant.clinicalImpressionShort1)
+    if(_argumentName == Constant.clinicalImpressionShort1)
       updateSelectedAnswerDataOnLocalDatabase();
   }
 
@@ -424,13 +437,13 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   void _callSendSecondStepDataApi() async {
-    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel);
+    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
     if (response is String) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db
             .deleteOnBoardQuestionnaireProgress(Constant.secondEventStep);
         Navigator.pop(context);
-        if (widget.argumentsName == Constant.clinicalImpressionEventType) {
+        if (_argumentName == Constant.clinicalImpressionEventType) {
           var userHeadacheName =
           signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere(
                   (model) => model.questionTag == "nameClinicalImpression");

@@ -62,8 +62,8 @@ class CalendarUtil {
         monthData.add(Container());
       } else {
         if ((currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
-            (n + 1) % 7 != 0 &&
-            n < daysInMonth) {
+            (n + 1) % 7 != 0) {
+
           var j = i + 1;
           if (j < daysInMonth &&
               (currentWeekConsData[i] == 0) &&

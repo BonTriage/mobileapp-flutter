@@ -18,6 +18,7 @@ class SignUpAgeScreen extends StatefulWidget {
   final Function(String, String) selectedAnswerCallBack;
   final List<SelectedAnswers> selectedAnswerListData;
   final Function(String, String) onValueChangeCallback;
+  final String uiHints;
 
   SignUpAgeScreen(
       {Key key,
@@ -34,7 +35,8 @@ class SignUpAgeScreen extends StatefulWidget {
       this.currentTag,
       this.selectedAnswerListData,
       this.selectedAnswerCallBack,
-      this.onValueChangeCallback})
+      this.onValueChangeCallback,
+      this.uiHints})
       : super(key: key);
 
   @override
@@ -47,6 +49,12 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
 
   SelectedAnswers selectedAnswers;
   double sliderValue;
+
+  String _minText = '';
+  String _maxText = '';
+  String _minLabel = '';
+  String _maxLabel = '';
+  String _label = '';
 
   @override
   void initState() {
@@ -77,11 +85,14 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
     if (widget.selectedAnswerCallBack != null && widget.isAnimate)
       widget.selectedAnswerCallBack(
           widget.currentTag, widget.sliderValue.toInt().toString());
+
+    _minLabel = widget.sliderMinValue.toInt().toString();
+    _maxLabel = widget.sliderMaxValue.toInt().toString();
+    _initLabelValues();
   }
 
   @override
   void didUpdateWidget(SignUpAgeScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (!_animationController.isAnimating) {
@@ -92,7 +103,6 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
@@ -163,7 +173,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        widget.minText,
+                                        _minText,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -174,9 +184,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         height: 3,
                                       ),
                                       Text(
-                                        (widget.minTextLabel == null)
-                                            ? Constant.min
-                                            : widget.minTextLabel,
+                                        _minLabel,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -190,7 +198,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        _getMaxText(),
+                                        _maxText,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -201,9 +209,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         height: 3,
                                       ),
                                       Text(
-                                        (widget.maxTextLabel == null)
-                                            ? Constant.max
-                                            : widget.maxTextLabel,
+                                        _maxLabel,
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -244,7 +250,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     height: 5,
                                   ),
                                   Text(
-                                    '${widget.labelText}',
+                                    _label,
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Constant.chatBubbleGreen,
@@ -268,9 +274,73 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
     );
   }
 
+
   String _getMaxText() {
-    if(widget.currentTag == 'headache.typical' || widget.currentTag == 'headache.number')
+    if (widget.currentTag == Constant.headacheTypicalTag ||
+        widget.currentTag == Constant.headacheNumberTag)
       return '${widget.maxText}+';
     return widget.maxText;
+  }
+  String _getLabelText() {
+    if(widget.currentTag == Constant.profileAgeTag)
+      return Constant.yearsOld;
+    else if (widget.currentTag == Constant.headacheFreeTag)
+      return Constant.days;
+    else if (widget.currentTag == Constant.headacheTypicalTag)
+      return Constant.hours;
+    return '${widget.labelText}';
+  }
+
+  String _getMinTextLabel() {
+    if(widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.noneAtALL;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.mild;
+    return (widget.minTextLabel == null)
+        ? Constant.min
+        : widget.minTextLabel;
+  }
+
+  String _getMaxTextLabel() {
+    if (widget.currentTag == Constant.headacheDisabledTag)
+      return Constant.totalDisability;
+    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
+      return Constant.veryPainful;
+    return (widget.maxTextLabel == null)
+        ? Constant.max
+        : widget.maxTextLabel;
+  }
+
+  void _initLabelValues() {
+    List<String> uiHintsSplitList = widget.uiHints.split(';');
+    uiHintsSplitList.forEach((uiHintsElement) {
+      List<String> labelSplitList = uiHintsElement.split('=');
+      if(labelSplitList.length == 2) {
+        labelSplitList[1] = labelSplitList[1].replaceAll('\\n', '\n');
+        switch (labelSplitList[0]) {
+          case Constant.minLabel1:
+            _minLabel = labelSplitList[1];
+            break;
+          case Constant.maxLabel1:
+            _maxLabel = labelSplitList[1];
+            break;
+          case Constant.minLabel:
+            _minLabel = labelSplitList[1];
+            break;
+          case Constant.maxLabel:
+            _maxLabel = labelSplitList[1];
+            break;
+          case Constant.minText:
+            _minText = labelSplitList[1];
+            break;
+          case Constant.maxText:
+            _maxText = labelSplitList[1];
+            break;
+          case Constant.label:
+            _label = labelSplitList[1];
+            break;
+        }
+      }
+    });
   }
 }

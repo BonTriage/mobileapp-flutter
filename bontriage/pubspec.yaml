@@ -35,9 +35,12 @@ dependencies:
   percent_indicator: ^2.1.7+4
   webview_flutter: ^1.0.7
   fl_chart: ^0.12.2
+  geolocator: ^6.1.14
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  flutter_driver:
     sdk: flutter
   mockito: ^4.1.1
   test_coverage: ^0.4.0
