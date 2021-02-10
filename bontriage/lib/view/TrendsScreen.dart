@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsTrendsScreenBloc.dart';
+import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -13,6 +14,14 @@ import 'package:mobile/view/slide_dots.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TrendsScreen extends StatefulWidget {
+  final Function(Stream, Function) showApiLoaderCallback;
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
+
+  const TrendsScreen(
+      {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback})
+      : super(key: key);
+
   @override
   _TrendsScreenState createState() => _TrendsScreenState();
 }
@@ -24,6 +33,14 @@ class _TrendsScreenState extends State<TrendsScreen> {
   RecordsTrendsScreenBloc _recordsTrendsScreenBloc;
   String selectedHeadacheName;
   RecordsTrendsDataModel recordsTrendsDataModel;
+  DateTime _dateTime;
+  int currentMonth;
+  int currentYear;
+  int totalDaysInCurrentMonth;
+  String firstDayOfTheCurrentMonth;
+  String lastDayOfTheCurrentMonth;
+
+  var lastSelectedHeadacheName;
 
   @override
   void initState() {
@@ -32,13 +49,21 @@ class _TrendsScreenState extends State<TrendsScreen> {
     _recordsTrendsScreenBloc = RecordsTrendsScreenBloc();
     _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
+    _dateTime = DateTime.now();
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
   }
 
   @override
   void didUpdateWidget(TrendsScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    requestService();
+    requestService(firstDayOfTheCurrentMonth,lastDayOfTheCurrentMonth,selectedHeadacheName);
   }
 
   @override
@@ -100,18 +125,28 @@ class _TrendsScreenState extends State<TrendsScreen> {
                 } else {
                   recordsTrendsDataModel = snapshot.data;
                   getCurrentPositionOfTabBar();
+                  if (selectedHeadacheName == null) {
+                    List<HeadacheListDataModel> headacheListModelData =   snapshot.data.headacheListModelData;
+                    selectedHeadacheName = headacheListModelData[0].text;
+                  }
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        'MY HEADACHE',
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 16,
-                            fontFamily: Constant.jostRegular),
+                      GestureDetector(
+                        onTap: () {
+                          _openHeadacheTypeActionSheet(
+                              snapshot.data.headacheListModelData);
+                        },
+                        child: Text(
+                          selectedHeadacheName,
+                          style: TextStyle(
+                              color: Constant.locationServiceGreen,
+                              fontSize: 16,
+                              fontFamily: Constant.jostRegular),
+                        ),
                       ),
                       SizedBox(
                         height: 10,
@@ -125,7 +160,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 setState(() {
                                   currentIndex = currentIndex - 1;
                                   _pageController.animateToPage(currentIndex,
-                                      duration: Duration(microseconds: 300),
+                                      duration: Duration(milliseconds: 300),
                                       curve: Curves.easeIn);
                                 });
                               }
@@ -236,7 +271,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
       setState(() {
         pageViewWidgetList = [
           TrendsIntensityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
-          TrendsDisabilityScreen(),
+          TrendsDisabilityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
           TrendsFrequencyScreen(),
           TrendsDurationScreen(),
         ];
@@ -257,15 +292,36 @@ class _TrendsScreenState extends State<TrendsScreen> {
     return 'Intensity';
   }
 
-  void requestService() async {
+  void requestService(String firstDayOfTheCurrentMonth ,String lastDayOfTheCurrentMonth,String selectedHeadacheName) async {
     _recordsTrendsScreenBloc.fetchAllHeadacheListData(
-            '2021-01-01T18:30:00Z',
-            '2021-01-31T18:30:00Z',
+            firstDayOfTheCurrentMonth,
+            lastDayOfTheCurrentMonth,
             selectedHeadacheName);
 
   }
 
   void navigateToHeadacheStartScreen() async {
     // await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+  }
+
+  void _openHeadacheTypeActionSheet(
+      List<HeadacheListDataModel> headacheListData) async {
+    if (lastSelectedHeadacheName != null) {
+      var lastSelectedHeadacheNameData = headacheListData.firstWhere(
+              (element) => element.text == lastSelectedHeadacheName,
+          orElse: () => null);
+      if (lastSelectedHeadacheNameData != null) {
+        lastSelectedHeadacheNameData.isSelected = true;
+      }
+    }
+    var resultFromActionSheet = await widget.openActionSheetCallback(
+        Constant.compassHeadacheTypeActionSheet, headacheListData);
+    lastSelectedHeadacheName = resultFromActionSheet;
+    if (resultFromActionSheet != null) {
+      selectedHeadacheName = resultFromActionSheet.toString();
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
+      print(resultFromActionSheet);
+    }
   }
 }

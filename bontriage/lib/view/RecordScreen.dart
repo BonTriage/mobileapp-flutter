@@ -131,7 +131,10 @@ class _RecordScreenState extends State<RecordScreen> {
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
         );
       default:
-        return TrendsScreen();
+        return TrendsScreen(
+          showApiLoaderCallback: widget.showApiLoaderCallback,
+          navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+        );
     }
   }
 

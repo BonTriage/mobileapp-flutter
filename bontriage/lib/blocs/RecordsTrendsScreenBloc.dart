@@ -14,13 +14,16 @@ import 'package:mobile/util/constant.dart';
 class RecordsTrendsScreenBloc {
   RecordsTrendsRepository _recordsTrendsRepository;
   StreamController<dynamic> _recordsTrendsStreamController;
-  StreamController <dynamic> _networkStreamController;
+  StreamController<dynamic> _networkStreamController;
   RecordsTrendsDataModel _recordsTrendsDataModel = RecordsTrendsDataModel();
+
   int count = 0;
 
-  StreamSink<dynamic> get recordsTrendsDataSink => _recordsTrendsStreamController.sink;
+  StreamSink<dynamic> get recordsTrendsDataSink =>
+      _recordsTrendsStreamController.sink;
 
-  Stream<dynamic> get recordsTrendsDataStream => _recordsTrendsStreamController.stream;
+  Stream<dynamic> get recordsTrendsDataStream =>
+      _recordsTrendsStreamController.stream;
 
   Stream<dynamic> get networkDataStream => _networkStreamController.stream;
 
@@ -32,14 +35,15 @@ class RecordsTrendsScreenBloc {
     _networkStreamController = StreamController<dynamic>();
   }
 
-  fetchAllHeadacheListData(String startDate, String endDate, String headacheName) async {
+  fetchAllHeadacheListData(
+      String startDate, String endDate, String headacheName) async {
     String apiResponse;
     var userProfileInfoData =
-    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
       String url = WebservicePost.qaServerUrl +
           'common/fetchheadaches/' +
-          /*userProfileInfoData.userId*/'4613';
+          userProfileInfoData.userId;
       var response = await _recordsTrendsRepository.trendsServiceCall(
           url, RequestMethod.GET);
       if (response is AppException) {
@@ -54,15 +58,14 @@ class RecordsTrendsScreenBloc {
           });
 
           if (headacheListModelData.length > 0) {
-            _recordsTrendsDataModel.headacheListModelData = headacheListModelData;
-              if (headacheName != null) {
-                getTrendsUserData(
-                    startDate, endDate, headacheName);
-              } else {
-                getTrendsUserData(
-                    startDate, endDate, headacheListModelData[0].text);
-              }
-
+            _recordsTrendsDataModel.headacheListModelData =
+                headacheListModelData;
+            if (headacheName != null) {
+              getTrendsUserData(startDate, endDate, headacheName);
+            } else {
+              getTrendsUserData(
+                  startDate, endDate, headacheListModelData[0].text);
+            }
           } else {
             networkDataSink.add(Constant.success);
             recordsTrendsDataSink.add(Constant.noHeadacheData);
@@ -80,10 +83,13 @@ class RecordsTrendsScreenBloc {
     }
     return apiResponse;
   }
+
 //http://34.222.200.187:8080/mobileapi/v0/trends/event/?end_date=2021-01-31T18:30:00Z&headache_name=Headache1&start_date=2021-01-01T18:30:00Z&user_id=4613
-  getTrendsUserData(String startDate, String endDate,String headacheName) async {
+  getTrendsUserData(
+      String startDate, String endDate, String headacheName) async {
     String apiResponse;
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     try {
       String url = WebservicePost.qaServerUrl +
           'trends/event/?' +
@@ -91,23 +97,32 @@ class RecordsTrendsScreenBloc {
           startDate +
           "&" +
           "end_date=" +
-          endDate + "&" +
+          endDate +
+          "&" +
           "user_id=" +
-          '4613' + "&" +
+          userProfileInfoData.userId +
+          "&" +
           "headache_name=" +
           headacheName;
-      var response =  await _recordsTrendsRepository.trendsServiceCall(url, RequestMethod.GET);
+      var response = await _recordsTrendsRepository.trendsServiceCall(
+          url, RequestMethod.GET);
       if (response is AppException) {
         recordsTrendsDataSink.addError(response);
         apiResponse = response.toString();
       } else {
         if (response != null) {
-          _recordsTrendsDataModel =  RecordsTrendsDataModel.fromJson(jsonDecode(response));
-            apiResponse = Constant.success;
-            recordsTrendsDataSink.add(_recordsTrendsDataModel);
-
+          List<HeadacheListDataModel> headacheDataList = [];
+          if (_recordsTrendsDataModel.headacheListModelData.length > 0) {
+            headacheDataList = _recordsTrendsDataModel.headacheListModelData;
+          }
+          _recordsTrendsDataModel =
+              RecordsTrendsDataModel.fromJson(jsonDecode(response));
+          apiResponse = Constant.success;
+          _recordsTrendsDataModel.headacheListModelData = headacheDataList;
+          recordsTrendsDataSink.add(_recordsTrendsDataModel);
         } else {
-          recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+          recordsTrendsDataSink
+              .addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
@@ -125,6 +140,7 @@ class RecordsTrendsScreenBloc {
     _recordsTrendsStreamController?.close();
     _recordsTrendsStreamController = StreamController<dynamic>();
   }
+
   void initNetworkStreamController() {
     _networkStreamController?.close();
     _networkStreamController = StreamController<dynamic>();
@@ -133,6 +149,4 @@ class RecordsTrendsScreenBloc {
   void dispose() {
     _recordsTrendsStreamController?.close();
   }
-
-
 }
