@@ -250,26 +250,6 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
                             ),
                           ],
                         ),
-                        /*Padding(
-                          padding: const EdgeInsets.only(left: 40, right: 10),
-                          child: Row(
-                            children: _getDots(1),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 40, right: 10),
-                          child: Row(
-                            children: _getDots(2),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 40, right: 10),
-                          child: Row(
-                            children: _getDots(3),
-                          ),
-                        ),*/
                       ],
                     ),
                     SizedBox(

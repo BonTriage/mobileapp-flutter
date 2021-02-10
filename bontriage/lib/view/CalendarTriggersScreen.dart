@@ -608,6 +608,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
       currentMonth = dateTime.month;
       _dateTime = dateTime;
       _calendarScreenBloc.initNetworkStreamController();
+      print('show api loader 8');
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
@@ -648,6 +649,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
         if(isViewTrendsClicked.isEmpty) {
           print('show api loader 3');
+          _calendarScreenBloc.initNetworkStreamController();
           widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
             _calendarScreenBloc.enterSomeDummyDataToStreamController();
             requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);

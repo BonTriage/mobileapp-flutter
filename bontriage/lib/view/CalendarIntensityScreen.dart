@@ -11,7 +11,6 @@ import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DateTimePicker.dart';
-import 'NetworkErrorScreen.dart';
 
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
@@ -258,14 +257,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                   return e;
                                 }).toList());
                           } else if (snapshot.hasError) {
-                            Utils.closeApiLoaderDialog(context);
-                            return NetworkErrorScreen(
-                              errorMessage: snapshot.error.toString(),
-                              tapToRetryFunction: () {
-                                Utils.showApiLoaderDialog(context);
-                                _callApiService();
-                              },
-                            );
+                            return Container();
                           } else {
                             /*return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -618,6 +610,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       currentMonth = dateTime.month;
       _dateTime = dateTime;
       _calendarScreenBloc.initNetworkStreamController();
+      print('show api loader 9');
       Utils.showApiLoaderDialog(context,
           networkStream: _calendarScreenBloc.networkDataStream,
           tapToRetryFunction: () {
@@ -667,6 +660,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
 
     if (isViewTrendsClicked.isEmpty) {
+      _calendarScreenBloc.initNetworkStreamController();
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         _callApiService();
@@ -693,12 +687,17 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
           currentMonth, currentYear, totalDaysInCurrentMonth);
 
-      _calendarScreenBloc.initNetworkStreamController();
+      print('show api loader 10');
+      int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+      int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
 
-      widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-      });
+      if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+        _calendarScreenBloc.initNetworkStreamController();
+        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+        });
+      }
       _callApiService();
     }
   }

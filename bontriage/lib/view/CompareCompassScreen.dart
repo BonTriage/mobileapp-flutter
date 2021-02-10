@@ -112,6 +112,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     print('init state of compare compass');
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print('show api loader 6');
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream, () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth, selectedHeadacheName);
@@ -515,15 +516,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
               }
 
             } else if (snapshot.hasError) {
-              Utils.closeApiLoaderDialog(context);
-              return NetworkErrorScreen(
-                errorMessage: snapshot.error.toString(),
-                tapToRetryFunction: () {
-                  Utils.showApiLoaderDialog(context);
-                  requestService(firstDayOfTheCurrentMonth,
-                      lastDayOfTheCurrentMonth, selectedHeadacheName);
-                },
-              );
+              return Container();
             } else {
               return Container();
             }
@@ -569,6 +562,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       currentMonth = dateTime.month;
       _dateTime = dateTime;
       _recordsCompassScreenBloc.initNetworkStreamController();
+      print('show api loader 11');
       Utils.showApiLoaderDialog(context,
           networkStream: _recordsCompassScreenBloc.networkDataStream,
           tapToRetryFunction: () {
@@ -839,6 +833,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
           currentMonth, currentYear, 1);
       lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
           currentMonth, currentYear, totalDaysInCurrentMonth);
+      print('show api loader 7');
+      _recordsCompassScreenBloc.initNetworkStreamController();
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
           () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();

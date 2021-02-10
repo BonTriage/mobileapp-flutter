@@ -30,7 +30,7 @@ class TabNavigator extends StatelessWidget {
 
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
-  final Function(List<Values>) openTriggerMedicationActionSheetCallback;
+  final Function(Questions questions, Function(int) selectedAnswerCallback) openTriggerMedicationActionSheetCallback;
 
   TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback});
 
