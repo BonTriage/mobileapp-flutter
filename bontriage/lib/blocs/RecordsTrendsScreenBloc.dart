@@ -120,6 +120,7 @@ class RecordsTrendsScreenBloc {
           apiResponse = Constant.success;
           _recordsTrendsDataModel.headacheListModelData = headacheDataList;
           recordsTrendsDataSink.add(_recordsTrendsDataModel);
+          networkDataSink.add(Constant.success);
         } else {
           recordsTrendsDataSink
               .addError(Exception(Constant.somethingWentWrong));

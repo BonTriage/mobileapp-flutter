@@ -61,9 +61,11 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   }
   @override
   void didUpdateWidget(covariant TrendsDisabilityScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
- //   setDisabilityValuesData();
+
+    print('In did update widget of disability');
+    setDisabilityValuesData();
+
   }
 
   @override
@@ -607,8 +609,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       }
     }
 
-    print(
-        'AllIntensityListData $firstWeekDisabilityData $secondWeekDisabilityData $thirdWeekDisabilityData $fourthWeekDisabilityData');
+    print('AllDisabilityListData $firstWeekDisabilityData $secondWeekDisabilityData $thirdWeekDisabilityData $fourthWeekDisabilityData');
 
     final barGroup1 = makeGroupData(
         0,

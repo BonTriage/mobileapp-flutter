@@ -141,6 +141,7 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
           showApiLoaderCallback: widget.showApiLoaderCallback,
           openActionSheetCallback: widget.openActionSheetCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+          openActionSheetCallback: widget.openActionSheetCallback,
         );
     }
   }
