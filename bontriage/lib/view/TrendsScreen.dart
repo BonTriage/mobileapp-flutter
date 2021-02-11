@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsTrendsScreenBloc.dart';
+import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
@@ -39,6 +40,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   int totalDaysInCurrentMonth;
   String firstDayOfTheCurrentMonth;
   String lastDayOfTheCurrentMonth;
+  EditGraphViewFilterModel _editGraphViewFilterModel;
 
   var lastSelectedHeadacheName;
 
@@ -58,6 +60,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+
+    _editGraphViewFilterModel = EditGraphViewFilterModel();
   }
 
   @override
@@ -124,11 +128,11 @@ class _TrendsScreenState extends State<TrendsScreen> {
                   );
                 } else {
                   recordsTrendsDataModel = snapshot.data;
-                  getCurrentPositionOfTabBar();
                   if (selectedHeadacheName == null) {
                     List<HeadacheListDataModel> headacheListModelData =   snapshot.data.headacheListModelData;
                     selectedHeadacheName = headacheListModelData[0].text;
                   }
+                  getCurrentPositionOfTabBar();
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -324,6 +328,14 @@ class _TrendsScreenState extends State<TrendsScreen> {
   }
 
   void getCurrentPositionOfTabBar() async {
+    _editGraphViewFilterModel.recordsTrendsDataModel = recordsTrendsDataModel;
+    if(_editGraphViewFilterModel.singleTypeHeadacheSelected == null) {
+      String headacheName = recordsTrendsDataModel.headacheListModelData[0].text;
+      _editGraphViewFilterModel
+        ..singleTypeHeadacheSelected = headacheName
+        ..compareHeadacheTypeSelected1 = headacheName
+        ..compareHeadacheTypeSelected2 = headacheName;
+    }
     pageViewWidgetList = [
       TrendsIntensityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
       TrendsDisabilityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
@@ -391,7 +403,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
     }
   }
 
-  void openEditGraphViewBottomSheet() async{
-    widget.openActionSheetCallback(Constant.editGraphViewBottomSheet,recordsTrendsDataModel);
+  void openEditGraphViewBottomSheet() async {
+    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.editGraphViewBottomSheet, _editGraphViewFilterModel);
+    print(resultFromActionSheet);
   }
 }

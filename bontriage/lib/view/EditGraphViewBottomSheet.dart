@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
-import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class EditGraphViewBottomSheet extends StatefulWidget {
+  final EditGraphViewFilterModel editGraphViewFilterModel;
 
-  final RecordsTrendsDataModel recordsTrendsDataModel;
-
-  const EditGraphViewBottomSheet({Key key, this.recordsTrendsDataModel})
+  const EditGraphViewBottomSheet({Key key, this.editGraphViewFilterModel})
       : super(key: key);
 
   @override
@@ -48,14 +47,14 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
     ];
     _headacheTypeRadioButtonSelected = _headacheTypeRadioButtonList[0];
 
-    _singleHeadacheTypeList = widget.recordsTrendsDataModel.headacheListModelData;
-    _singleHeadacheTypeSelected = _singleHeadacheTypeList[0].text;
+    _singleHeadacheTypeList = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _singleHeadacheTypeSelected = widget.editGraphViewFilterModel.singleTypeHeadacheSelected;
 
-    _compareHeadacheTypeList1 = widget.recordsTrendsDataModel.headacheListModelData;
-    _compareHeadacheTypeSelected1 = _compareHeadacheTypeList1[0].text;
+    _compareHeadacheTypeList1 = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected1 = widget.editGraphViewFilterModel.compareHeadacheTypeSelected1;
 
-    _compareHeadacheTypeList2 = widget.recordsTrendsDataModel.headacheListModelData;
-    _compareHeadacheTypeSelected2 = _compareHeadacheTypeList2[0].text;
+    _compareHeadacheTypeList2 = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected2 = widget.editGraphViewFilterModel.compareHeadacheTypeSelected2;
 
     _otherFactorsRadioButtonList = [
       Constant.noneRadioButtonText,
@@ -63,7 +62,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
       Constant.loggedPotentialTriggers,
       Constant.medications,
     ];
-    _otherFactorsSelected = _otherFactorsRadioButtonList[0];
+    _otherFactorsSelected = widget.editGraphViewFilterModel.whichOtherFactorSelected;
 
     _radioTextStyle = TextStyle(
       fontFamily: Constant.jostRegular,
@@ -104,7 +103,11 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    widget.editGraphViewFilterModel.singleTypeHeadacheSelected = _singleHeadacheTypeSelected;
+                    widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 = _compareHeadacheTypeSelected1;
+                    widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 = _compareHeadacheTypeSelected2;
+                    widget.editGraphViewFilterModel.whichOtherFactorSelected = _otherFactorsSelected;
+                    Navigator.pop(context, Constant.success);
                   },
                   child: Image.asset(
                     Constant.closeIcon2,
@@ -120,6 +123,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
           ),
           DefaultTabController(
             length: 4,
+            initialIndex: widget.editGraphViewFilterModel.currentTabIndex,
             child: Container(
               padding: EdgeInsets.all(5),
               height: 40,
