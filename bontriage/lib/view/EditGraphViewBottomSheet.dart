@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/HeadacheListDataModel.dart';
+import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class EditGraphViewBottomSheet extends StatefulWidget {
+
+  final RecordsTrendsDataModel recordsTrendsDataModel;
+
+  const EditGraphViewBottomSheet({Key key, this.recordsTrendsDataModel})
+      : super(key: key);
+
   @override
   _EditGraphViewBottomSheetState createState() => _EditGraphViewBottomSheetState();
 }
@@ -9,9 +17,9 @@ class EditGraphViewBottomSheet extends StatefulWidget {
 class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
 
   List<String> _headacheTypeRadioButtonList;
-  List<String> _singleHeadacheTypeList;
-  List<String> _compareHeadacheTypeList1;
-  List<String> _compareHeadacheTypeList2;
+  List<HeadacheListDataModel> _singleHeadacheTypeList;
+  List<HeadacheListDataModel> _compareHeadacheTypeList1;
+  List<HeadacheListDataModel> _compareHeadacheTypeList2;
   List<String> _otherFactorsRadioButtonList;
 
   String _headacheTypeRadioButtonSelected;
@@ -40,29 +48,14 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
     ];
     _headacheTypeRadioButtonSelected = _headacheTypeRadioButtonList[0];
 
-    _singleHeadacheTypeList = [
-      'Headache 1',
-      'Headache 2',
-      'Headache 3',
-      'Headache 4',
-    ];
-    _singleHeadacheTypeSelected = _singleHeadacheTypeList[0];
+    _singleHeadacheTypeList = widget.recordsTrendsDataModel.headacheListModelData;
+    _singleHeadacheTypeSelected = _singleHeadacheTypeList[0].text;
 
-    _compareHeadacheTypeList1 = [
-      'Headache 1',
-      'Headache 2',
-      'Headache 3',
-      'Headache 4',
-    ];
-    _compareHeadacheTypeSelected1 = _compareHeadacheTypeList1[0];
+    _compareHeadacheTypeList1 = widget.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected1 = _compareHeadacheTypeList1[0].text;
 
-    _compareHeadacheTypeList2 = [
-      'Headache 1',
-      'Headache 2',
-      'Headache 3',
-      'Headache 4',
-    ];
-    _compareHeadacheTypeSelected2 = _compareHeadacheTypeList2[0];
+    _compareHeadacheTypeList2 = widget.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected2 = _compareHeadacheTypeList2[0].text;
 
     _otherFactorsRadioButtonList = [
       Constant.noneRadioButtonText,
@@ -331,14 +324,13 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getDropDownMenuItems(List<String> dropDownStringList) {
+  List<DropdownMenuItem<String>> _getDropDownMenuItems(List<HeadacheListDataModel> dropDownStringList) {
     List<DropdownMenuItem<String>> dropDownMenuItemList = [];
 
     dropDownStringList.forEach((element) {
       dropDownMenuItemList.add(DropdownMenuItem(
-        value: element,
-        child: Text(
-            element,
+        value: element.text,
+        child: Text(element.text,
         ),
       ));
     });

@@ -80,62 +80,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundTransparentColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Edit graph view',
-                    style: TextStyle(
-                        color: Constant.locationServiceGreen,
-                        fontSize: 12,
-                        fontFamily: Constant.jostRegular),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Visibility(
-                  visible: false,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Constant.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(12),
-                          topLeft: Radius.circular(12)),
-                    ),
-                    child: Image(
-                      image: AssetImage(Constant.barGraph),
-                      width: 15,
-                      height: 15,
-                    ),
-                  ),
-                ),
-                /*Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundTransparentColor,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(12),
-                        bottomRight: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.lineGraph),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),*/
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
+
             SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20),
               scrollDirection: Axis.horizontal,

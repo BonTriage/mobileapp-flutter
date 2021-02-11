@@ -226,6 +226,65 @@ class _TrendsScreenState extends State<TrendsScreen> {
                           SlideDots(isActive: currentIndex == 3)
                         ],
                       ),
+                      SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              openEditGraphViewBottomSheet();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: Constant.backgroundTransparentColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'Edit graph view',
+                                style: TextStyle(
+                                    color: Constant.locationServiceGreen,
+                                    fontSize: 12,
+                                    fontFamily: Constant.jostRegular),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Visibility(
+                            visible: false,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: Constant.backgroundColor,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(12),
+                                    topLeft: Radius.circular(12)),
+                              ),
+                              child: Image(
+                                image: AssetImage(Constant.barGraph),
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                          ),
+                          /*Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundTransparentColor,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(12),
+                        bottomRight: Radius.circular(12)),
+                  ),
+                  child: Image(
+                    image: AssetImage(Constant.lineGraph),
+                    width: 15,
+                    height: 15,
+                  ),
+                ),*/
+                        ],
+                      ),
                       Expanded(
                         child: PageView.builder(
                           itemBuilder: (context, index) {
@@ -330,5 +389,9 @@ class _TrendsScreenState extends State<TrendsScreen> {
           selectedHeadacheName);
       print(resultFromActionSheet);
     }
+  }
+
+  void openEditGraphViewBottomSheet() async{
+    widget.openActionSheetCallback(Constant.editGraphViewBottomSheet,recordsTrendsDataModel);
   }
 }

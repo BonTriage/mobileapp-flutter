@@ -82,7 +82,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
             currentMonth, currentYear, totalDaysInCurrentMonth);
 
-        _calendarScreenBloc.initNetworkStreamController();
+       // _calendarScreenBloc.initNetworkStreamController();
 
         print('show api loader 2');
         widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
@@ -99,7 +99,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    getCurrentPositionOfTabBar();
+  //  getCurrentPositionOfTabBar();
   }
 
   @override
