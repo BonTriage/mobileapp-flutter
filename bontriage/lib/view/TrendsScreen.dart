@@ -300,6 +300,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                             print('trends set state 2');
                             setState(() {
                               currentIndex = index;
+                              _editGraphViewFilterModel.currentTabIndex = currentIndex;
                             });
                           },
                           reverse: false,

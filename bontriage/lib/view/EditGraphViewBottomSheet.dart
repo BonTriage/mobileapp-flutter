@@ -45,7 +45,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
       Constant.viewSingleHeadache,
       Constant.compareHeadache
     ];
-    _headacheTypeRadioButtonSelected = _headacheTypeRadioButtonList[0];
+    _headacheTypeRadioButtonSelected = widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected;
 
     _singleHeadacheTypeList = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
     _singleHeadacheTypeSelected = widget.editGraphViewFilterModel.singleTypeHeadacheSelected;
