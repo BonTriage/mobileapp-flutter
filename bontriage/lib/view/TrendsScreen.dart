@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TrendsScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
-  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
 
   const TrendsScreen(
       {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback})
@@ -234,6 +234,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                           controller: _pageController,
                           scrollDirection: Axis.horizontal,
                           onPageChanged: (index) {
+                            print('trends set state 2');
                             setState(() {
                               currentIndex = index;
                             });
@@ -264,19 +265,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
   }
 
   void getCurrentPositionOfTabBar() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int currentPositionOfTabBar =
-        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    if (currentPositionOfTabBar == 1) {
-      setState(() {
-        pageViewWidgetList = [
-          TrendsIntensityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
-          TrendsDisabilityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
-          TrendsFrequencyScreen(),
-          TrendsDurationScreen(),
-        ];
-      });
-    }
+    pageViewWidgetList = [
+      TrendsIntensityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
+      TrendsDisabilityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
+      TrendsFrequencyScreen(),
+      TrendsDurationScreen(),
+    ];
   }
 
   String getCurrentTextView() {
@@ -292,12 +286,25 @@ class _TrendsScreenState extends State<TrendsScreen> {
     return 'Intensity';
   }
 
-  void requestService(String firstDayOfTheCurrentMonth ,String lastDayOfTheCurrentMonth,String selectedHeadacheName) async {
-    _recordsTrendsScreenBloc.fetchAllHeadacheListData(
-            firstDayOfTheCurrentMonth,
-            lastDayOfTheCurrentMonth,
-            selectedHeadacheName);
+  void requestService(String firstDayOfTheCurrentMonth ,String lastDayOfTheCurrentMonth, String selectedHeadacheName) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
 
+    if(currentPositionOfTabBar == 1 && recordTabBarPosition == 2) {
+      _recordsTrendsScreenBloc.initNetworkStreamController();
+      widget.showApiLoaderCallback(_recordsTrendsScreenBloc.networkDataStream, () {
+          _recordsTrendsScreenBloc.enterSomeDummyDataToStream();
+          _recordsTrendsScreenBloc.fetchAllHeadacheListData(
+              firstDayOfTheCurrentMonth,
+              lastDayOfTheCurrentMonth,
+              selectedHeadacheName);
+      });
+      _recordsTrendsScreenBloc.fetchAllHeadacheListData(
+          firstDayOfTheCurrentMonth,
+          lastDayOfTheCurrentMonth,
+          selectedHeadacheName);
+    }
   }
 
   void navigateToHeadacheStartScreen() async {

@@ -140,6 +140,7 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
         return TrendsScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+          openActionSheetCallback: widget.openActionSheetCallback,
         );
     }
   }
