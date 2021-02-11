@@ -8,7 +8,6 @@ import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DateTimePicker.dart';
@@ -55,7 +54,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   String userFirstLoggedCompassScoreData = '0';
   String lastSelectedHeadacheName;
 
-  List<TextSpan> _getBubbleTextSpans() {
+  List<TextSpan> _getBubbleTextSpans(DateTime calendarEntryAt) {
     List<TextSpan> list = [];
     list.add(TextSpan(
         text: 'Your first logged Headache score was ',
@@ -72,7 +71,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-        text: ' in may 2019. Tap the Compass to view $monthName $currentYear  ',
+        text: ' in ${Utils.getShortMonthName(calendarEntryAt.month)} ${calendarEntryAt.year}. Tap the Compass to view $monthName $currentYear  ',
         style: TextStyle(
             height: 1,
             fontSize: 14,
@@ -502,7 +501,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                           padding: EdgeInsets.all(10),
                           child: RichText(
                             text: TextSpan(
-                              children: _getBubbleTextSpans(),
+                              children: _getBubbleTextSpans(snapshot.data.calendarEntryAt),
                             ),
                           ),
                         ),

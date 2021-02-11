@@ -1,7 +1,8 @@
 class RecordsCompassAxesResultModel {
   List<Axes> axes;
+  DateTime calendarEntryAt;
 
-  RecordsCompassAxesResultModel({this.axes});
+  RecordsCompassAxesResultModel({this.axes, this.calendarEntryAt,});
 
   RecordsCompassAxesResultModel.fromJson(Map<String, dynamic> json) {
     if (json['axes'] != null) {
@@ -10,6 +11,7 @@ class RecordsCompassAxesResultModel {
         axes.add(new Axes.fromJson(v));
       });
     }
+    calendarEntryAt = DateTime.parse(json["calendarEntryAt"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class RecordsCompassAxesResultModel {
     if (this.axes != null) {
       data['axes'] = this.axes.map((v) => v.toJson()).toList();
     }
+    data["calendarEntryAt"] = calendarEntryAt.toIso8601String();
     return data;
   }
 }
@@ -24,7 +27,7 @@ class RecordsCompassAxesResultModel {
 class Axes {
   double total;
   int min;
-  int max;
+  double max;
   String name;
   double value;
 
@@ -33,7 +36,7 @@ class Axes {
   Axes.fromJson(Map<String, dynamic> json) {
     total = double.tryParse(json['total'].toString());
     min = json['min'];
-    max = json['max'];
+    max = double.tryParse(json['max'].toString());
     name = json['name'];
     value = double.tryParse(json['value'].toString());
   }

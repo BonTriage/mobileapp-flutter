@@ -63,7 +63,7 @@ class RecordsCompassScreenBloc {
           var json = jsonDecode(response);
           List<HeadacheListDataModel> headacheListModelData = [];
           json.forEach((v) {
-            headacheListModelData.add(new HeadacheListDataModel.fromJson(v));
+            headacheListModelData.add(HeadacheListDataModel.fromJson(v));
           });
 
           if (headacheListModelData.length > 0) {
