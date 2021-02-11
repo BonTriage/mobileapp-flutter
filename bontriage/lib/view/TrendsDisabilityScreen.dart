@@ -583,6 +583,13 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
   void setDisabilityValuesData() {
     disabilityListData = widget.recordsTrendsDataModel.headache.disability;
+
+    firstWeekDisabilityData = [];
+    secondWeekDisabilityData = [];
+    thirdWeekDisabilityData = [];
+    fourthWeekDisabilityData = [];
+    fifthWeekDisabilityData = [];
+
     for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
       String date;
       String month;

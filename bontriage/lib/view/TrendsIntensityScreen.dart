@@ -64,10 +64,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
 
   @override
   void didUpdateWidget(covariant TrendsIntensityScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    print('in did update widget of trends intensity screen');
     setIntensityValuesData();
-
   }
 
   @override
@@ -662,6 +661,11 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
 
   void setIntensityValuesData() {
     intensityListData = widget.recordsTrendsDataModel.headache.severity;
+    firstWeekIntensityData = [];
+    secondWeekIntensityData = [];
+    thirdWeekIntensityData = [];
+    fourthWeekIntensityData = [];
+    fifthWeekIntensityData = [];
 
     for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
       String date;
