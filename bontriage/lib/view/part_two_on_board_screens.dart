@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardSecondStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
@@ -190,7 +192,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                   if (_progressPercent == 1) {
                                     moveUserToNextScreen();
                                   } else {
-                                    _currentPageIndex++;
+                                    //_currentPageIndex++;
+
+                                    _fetchQuestionTag();
 
                                     if (_currentPageIndex !=
                                         _pageViewWidgetList.length - 1)
@@ -456,6 +460,127 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           }
           Navigator.pushReplacementNamed(context,
               Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
+        }
+      }
+    }
+  }
+
+  void _fetchQuestionTag() {
+    if(_currentPageIndex < currentQuestionListData.length - 1) {
+      _currentPageIndex++;
+      Questions questions = currentQuestionListData[_currentPageIndex];
+
+      //replacing the parenthesis with the blank string
+      questions.precondition = questions.precondition.replaceAll('(', Constant.blankString);
+      questions.precondition = questions.precondition.replaceAll(')', Constant.blankString);
+      questions.precondition = questions.precondition.replaceAll(' ', Constant.blankString);
+
+      if (questions.precondition.isEmpty) {
+        print('QUESTION TAG???${questions.tag}');
+      } else {
+        //write logic for precondition
+        if (questions.precondition.contains('AND')) {
+          bool isConditionSatisfied = false;
+
+          List<String> splitANDCondition = questions.precondition.split('AND');
+
+          splitANDCondition.forEach((splitANDConditionElement) {
+            if(splitANDConditionElement.contains('<=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('<=');
+              if (splitConditionList.length == 2) {
+                String questionTag = splitConditionList[0];
+                int answer = int.tryParse(splitConditionList[1]);
+                SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                if (selectedAnswer != null) {
+                  if (int.tryParse(selectedAnswer.answer) <= answer) {
+                    isConditionSatisfied = isConditionSatisfied && true;
+                  } else {
+                    _fetchQuestionTag();
+                  }
+                }
+              }
+            } else if (splitANDConditionElement.contains('>=')) {
+
+            } else if (splitANDConditionElement.contains('=')) {
+
+            }
+          });
+        } else if (questions.precondition.contains('OR')) {
+
+        } else if (questions.precondition.contains('NOT')) {
+
+        } else {
+          if (questions.precondition.contains('<=')) {
+            List<String> splitConditionList = questions.precondition.split('<=');
+            if (splitConditionList.length == 2) {
+              String questionTag = splitConditionList[0];
+              int answer = int.tryParse(splitConditionList[1]);
+              SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+              if (selectedAnswer != null) {
+                if (int.tryParse(selectedAnswer.answer) <= answer) {
+                  print('QUESTION TAG???${questions.tag}');
+                } else {
+                  _fetchQuestionTag();
+                }
+              }
+            }
+          } else if (questions.precondition.contains('>=')) {
+            List<String> splitConditionList = questions.precondition.split('>=');
+            if (splitConditionList.length == 2) {
+              String questionTag = splitConditionList[0];
+              int answer = int.tryParse(splitConditionList[1]);
+              SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+              if (selectedAnswer != null) {
+                if (int.tryParse(selectedAnswer.answer) >= answer) {
+                  print('QUESTION TAG???${questions.tag}');
+                } else {
+                  _fetchQuestionTag();
+                }
+              }
+            }
+          } else if (questions.precondition.contains('>')) {
+            List<String> splitConditionList = questions.precondition.split('>');
+            if (splitConditionList.length == 2) {
+              String questionTag = splitConditionList[0];
+              int answer = int.tryParse(splitConditionList[1]);
+              SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+              if (selectedAnswer != null) {
+                if (int.tryParse(selectedAnswer.answer) > answer) {
+                  print('QUESTION TAG???${questions.tag}');
+                } else {
+                  _fetchQuestionTag();
+                }
+              }
+            }
+          } else if (questions.precondition.contains('<')) {
+            List<String> splitConditionList = questions.precondition.split('<');
+            if (splitConditionList.length == 2) {
+              String questionTag = splitConditionList[0];
+              int answer = int.tryParse(splitConditionList[1]);
+              SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+              if (selectedAnswer != null) {
+                if (int.tryParse(selectedAnswer.answer) < answer) {
+                  print('QUESTION TAG???${questions.tag}');
+                } else {
+                  _fetchQuestionTag();
+                }
+              }
+            }
+          } else if (questions.precondition.contains('=')) {
+            List<String> splitConditionList = questions.precondition.split('=');
+            if (splitConditionList.length == 2) {
+              String questionTag = splitConditionList[0];
+              String answer = splitConditionList[1];
+              SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+              if (selectedAnswer != null) {
+                if (selectedAnswer.answer == answer) {
+                  print('QUESTION TAG???${questions.tag}');
+                } else {
+                  _fetchQuestionTag();
+                }
+              }
+            }
+          }
         }
       }
     }
