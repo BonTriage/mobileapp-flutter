@@ -16,7 +16,7 @@ class TrendsDisabilityScreen extends StatefulWidget {
   _TrendsDisabilityScreenState createState() => _TrendsDisabilityScreenState();
 }
 
-class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> {
+class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with AutomaticKeepAliveClientMixin {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -63,11 +63,12 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> {
   void didUpdateWidget(covariant TrendsDisabilityScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    setDisabilityValuesData();
+ //   setDisabilityValuesData();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -667,4 +668,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> {
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
   }
+  @override
+  bool get wantKeepAlive => true;
 }

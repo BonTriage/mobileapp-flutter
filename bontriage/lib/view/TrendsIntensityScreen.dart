@@ -16,7 +16,7 @@ class TrendsIntensityScreen extends StatefulWidget {
   _TrendsIntensityScreenState createState() => _TrendsIntensityScreenState();
 }
 
-class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
+class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with AutomaticKeepAliveClientMixin {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -58,12 +58,21 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-
     setIntensityValuesData();
+
+  }
+
+  @override
+  void didUpdateWidget(covariant TrendsIntensityScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    setIntensityValuesData();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -789,4 +798,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen> {
 
     return dotsList;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
