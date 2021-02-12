@@ -107,6 +107,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                     widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 = _compareHeadacheTypeSelected1;
                     widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 = _compareHeadacheTypeSelected2;
                     widget.editGraphViewFilterModel.whichOtherFactorSelected = _otherFactorsSelected;
+                    widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected = _headacheTypeRadioButtonSelected;
                     Navigator.pop(context, Constant.success);
                   },
                   child: Image.asset(
