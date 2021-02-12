@@ -1,15 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
-  final RecordsTrendsDataModel recordsTrendsDataModel;
+  final EditGraphViewFilterModel editGraphViewFilterModel;
 
-  const TrendsIntensityScreen({Key key, this.recordsTrendsDataModel})
+  const TrendsIntensityScreen({Key key, this.editGraphViewFilterModel})
       : super(key: key);
 
   @override
@@ -239,61 +240,13 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
                         padding: const EdgeInsets.only(left: 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Exercise',
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 12,
-                                  fontFamily: Constant.jostRegular
-                              ),
-                            ),
-                            SizedBox(height: 2,),
-                            Text(
-                              'Reg. meals',
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 12,
-                                  fontFamily: Constant.jostRegular
-                              ),
-                            ),
-                            SizedBox(height: 2,),
-                            Text(
-                              'Good Sleep',
-                              style: TextStyle(
-                                  color: Constant.locationServiceGreen,
-                                  fontSize: 12,
-                                  fontFamily: Constant.jostRegular
-                              ),
-                            ),
-                          ],
+                          children: getDotText(),
                         ),
                       ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 10),
-                              child: Row(
-                                children: _getDots(1),
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 10),
-                              child: Row(
-                                children: _getDots(2),
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 10),
-                              child: Row(
-                                children: _getDots(3),
-                              ),
-                            ),
-                          ],
+                          children: getDotsWidget()
                         ),
                       ),
                     ],
@@ -605,7 +558,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
   }
 
   void setIntensityValuesData() {
-    intensityListData = widget.recordsTrendsDataModel.headache.severity;
+    intensityListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.severity;
     firstWeekIntensityData = [];
     secondWeekIntensityData = [];
     thirdWeekIntensityData = [];
@@ -702,7 +655,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
     List<Widget> dotsList;
 
     switch(type) {
-      case 1:
+      case 0:
         dotsList = List.generate(31, (index) => Expanded(
           child: Container(
             height: 10,
@@ -716,7 +669,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
           ),
         ));
         break;
-      case 2:
+      case 1:
         dotsList = List.generate(31, (index) => Expanded(
           child: Container(
             height: 10,
@@ -750,4 +703,34 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
 
   @override
   bool get wantKeepAlive => true;
+
+ List<Widget> getDotText() {
+  List<Widget> widgetListData = [];
+ for(int i= 0; i<3; i++){
+   widgetListData.add( Text(
+     'Exercise',
+     style: TextStyle(
+         color: Constant.locationServiceGreen,
+         fontSize: 12,
+         fontFamily: Constant.jostRegular
+     ),
+   ),
+   );
+   widgetListData.add(SizedBox(height: 2,));
+ }
+  return widgetListData;
+ }
+
+ List<Widget> getDotsWidget() {
+   List<Widget> widgetListData = [];
+   for(int i = 0; i< 3; i++){
+     widgetListData.add(Padding(
+       padding: const EdgeInsets.only(left: 5, right: 10),
+       child: Row(
+         children: _getDots(i),
+       ),
+     ));
+   }
+   return widgetListData;
+ }
 }

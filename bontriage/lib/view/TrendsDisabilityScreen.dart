@@ -1,15 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
 class TrendsDisabilityScreen extends StatefulWidget {
-  final RecordsTrendsDataModel recordsTrendsDataModel;
+  final EditGraphViewFilterModel editGraphViewFilterModel;
 
-  const TrendsDisabilityScreen({Key key, this.recordsTrendsDataModel})
+  const TrendsDisabilityScreen({Key key, this.editGraphViewFilterModel})
       : super(key: key);
 
   @override
@@ -525,7 +526,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   }
 
   void setDisabilityValuesData() {
-    disabilityListData = widget.recordsTrendsDataModel.headache.disability;
+    disabilityListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.disability;
 
     firstWeekDisabilityData = [];
     secondWeekDisabilityData = [];

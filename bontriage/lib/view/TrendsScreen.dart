@@ -139,18 +139,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          _openHeadacheTypeActionSheet(
-                              snapshot.data.headacheListModelData);
-                        },
-                        child: Text(
-                          selectedHeadacheName,
-                          style: TextStyle(
-                              color: Constant.locationServiceGreen,
-                              fontSize: 16,
-                              fontFamily: Constant.jostRegular),
-                        ),
+                      Text(
+                        selectedHeadacheName,
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontSize: 16,
+                            fontFamily: Constant.jostRegular),
                       ),
                       SizedBox(
                         height: 10,
@@ -338,8 +332,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
         ..compareHeadacheTypeSelected2 = headacheName;
     }
     pageViewWidgetList = [
-      TrendsIntensityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
-      TrendsDisabilityScreen(recordsTrendsDataModel: recordsTrendsDataModel),
+      TrendsIntensityScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
+      TrendsDisabilityScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
       TrendsFrequencyScreen(),
       TrendsDurationScreen(),
     ];
@@ -383,29 +377,26 @@ class _TrendsScreenState extends State<TrendsScreen> {
     // await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
   }
 
-  void _openHeadacheTypeActionSheet(
-      List<HeadacheListDataModel> headacheListData) async {
-    if (lastSelectedHeadacheName != null) {
-      var lastSelectedHeadacheNameData = headacheListData.firstWhere(
-              (element) => element.text == lastSelectedHeadacheName,
-          orElse: () => null);
-      if (lastSelectedHeadacheNameData != null) {
-        lastSelectedHeadacheNameData.isSelected = true;
-      }
-    }
-    var resultFromActionSheet = await widget.openActionSheetCallback(
-        Constant.compassHeadacheTypeActionSheet, headacheListData);
-    lastSelectedHeadacheName = resultFromActionSheet;
-    if (resultFromActionSheet != null) {
-      selectedHeadacheName = resultFromActionSheet.toString();
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-          selectedHeadacheName);
-      print(resultFromActionSheet);
-    }
-  }
 
   void openEditGraphViewBottomSheet() async {
     var resultFromActionSheet = await widget.openActionSheetCallback(Constant.editGraphViewBottomSheet, _editGraphViewFilterModel);
+    if(resultFromActionSheet == Constant.success){
+      if(_editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+        selectedHeadacheName = _editGraphViewFilterModel.singleTypeHeadacheSelected;
+        _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex, duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+
+        //Constant.noneRadioButtonText,
+        // Constant.loggedBehaviors,
+        // Constant.loggedPotentialTriggers,
+        // Constant.medications,
+
+
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName);
+
+      }
+
+    }
     print(resultFromActionSheet);
   }
 }
