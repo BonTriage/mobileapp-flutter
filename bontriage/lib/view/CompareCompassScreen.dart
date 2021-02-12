@@ -55,26 +55,28 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   String userFirstLoggedCompassScoreData = '0';
   String lastSelectedHeadacheName;
 
+  DateTime firstLoggedSignUpData = DateTime.now();
+
   List<TextSpan> _getBubbleTextSpans() {
     List<TextSpan> list = [];
     list.add(TextSpan(
         text: 'Your first logged Headache score was ',
         style: TextStyle(
-            height: 1,
+            height: 1.2,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
         text: userFirstLoggedCompassScoreData,
         style: TextStyle(
-            height: 1,
+            height: 1.2,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-        text: ' in may 2019. Tap the Compass to view $monthName $currentYear  ',
+        text: ' in ${Utils.getMonthName(firstLoggedSignUpData.month)} ${firstLoggedSignUpData.year}. Tap the Compass to view $monthName $currentYear  ',
         style: TextStyle(
-            height: 1,
+            height: 1.2,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
@@ -600,7 +602,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     int baseMaxValue = 10;
 
     List<Axes> recordsCompareCompassAxesListData =
-        recordsCompassAxesResultModel.recordsCompareCompassAxesResultModel.axes;
+        recordsCompassAxesResultModel.recordsCompareCompassAxesResultModel.previousAxes;
     var userFrequency = recordsCompareCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
@@ -643,7 +645,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         userOverTimeDisabilityValue;
 
     List<Axes> recordsOverTimeCompassAxesListData =
-        recordsCompassAxesResultModel.signUpCompassAxesResultModel.axes;
+        recordsCompassAxesResultModel.signUpCompassAxesResultModel.signUpAxes;
+    firstLoggedSignUpData =DateTime.parse(recordsCompassAxesResultModel.signUpCompassAxesResultModel.calendarEntryAt).toLocal();
+
+
     var userOverTimeFrequency = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);

@@ -18,7 +18,10 @@ class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
 
   const OverTimeCompassScreen(
-      {Key key, this.openActionSheetCallback, this.showApiLoaderCallback,this.navigateToOtherScreenCallback})
+      {Key key,
+      this.openActionSheetCallback,
+      this.showApiLoaderCallback,
+      this.navigateToOtherScreenCallback})
       : super(key: key);
 
   @override
@@ -46,33 +49,36 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   String selectedHeadacheName;
   String lastSelectedHeadacheName;
 
-  String userScoreData;
+  int userCurrentMonthScoreData;
+  int userPreviousMonthScoreData = 0;
+  String headacheDownOrUp = '';
+  String increaseOrDecrease = '';
 
   List<TextSpan> _getBubbleTextSpans() {
     List<TextSpan> list = [];
     list.add(TextSpan(
-        text: 'Your Headache Score for December was ',
+        text: 'Your Headache Score for $monthName was ',
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
-        text: '62',
+        text: userCurrentMonthScoreData.toString(),
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-        text: ' up from ',
+        text: ' $headacheDownOrUp from ',
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
-        text: '60',
+        text: userPreviousMonthScoreData.toString(),
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
@@ -86,7 +92,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
-        text: 'increase in duration.',
+        text: '$increaseOrDecrease in Frequency.',
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
@@ -147,7 +153,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 150,),
+                    SizedBox(
+                      height: 150,
+                    ),
                     Text(
                         'You didn\'t add any headache yet. So please\nadd any headache to see your Compass data.',
                         textAlign: TextAlign.center,
@@ -163,12 +171,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         BouncingWidget(
-                          onPressed: (){
-                           navigateToHeadacheStartScreen();
+                          onPressed: () {
+                            navigateToHeadacheStartScreen();
                           },
                           child: Container(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 7),
                             decoration: BoxDecoration(
                               color: Constant.chatBubbleGreen,
                               borderRadius: BorderRadius.circular(20),
@@ -207,8 +215,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               snapshot.data.headacheListDataModel);
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 30),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 3, horizontal: 30),
                           decoration: BoxDecoration(
                             color: Constant.compassMyHeadacheTextColor,
                             borderRadius: BorderRadius.circular(20),
@@ -248,8 +256,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               child: Center(
                                 child: GestureDetector(
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(
-                                        context, 0);
+                                    Utils.showCompassTutorialDialog(context, 0);
                                   },
                                   child: Text(
                                     'i',
@@ -269,8 +276,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                 quarterTurns: 3,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(
-                                        context, 3);
+                                    Utils.showCompassTutorialDialog(context, 3);
                                   },
                                   child: Text(
                                     "Frequency",
@@ -330,8 +336,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                 height: 36,
                                                 child: Center(
                                                   child: Text(
-                                                    userScoreData != null
-                                                        ? userScoreData
+                                                    userCurrentMonthScoreData !=
+                                                            null
+                                                        ? userCurrentMonthScoreData.toString()
                                                         : '0',
                                                     style: TextStyle(
                                                         color:
@@ -345,8 +352,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                   shape: BoxShape.circle,
                                                   color: Color(0xff97c289),
                                                   border: Border.all(
-                                                      color:
-                                                          Color(0xff97c289),
+                                                      color: Color(0xff97c289),
                                                       width: 1.2),
                                                 ),
                                               ),
@@ -375,8 +381,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                 quarterTurns: 1,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(
-                                        context, 4);
+                                    Utils.showCompassTutorialDialog(context, 4);
                                   },
                                   child: Text(
                                     "Duration",
@@ -399,8 +404,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         children: [
                           GestureDetector(
                             onTap: () {
-                              DateTime dateTime = DateTime(
-                                  _dateTime.year, _dateTime.month - 1);
+                              DateTime dateTime =
+                                  DateTime(_dateTime.year, _dateTime.month - 1);
                               _dateTime = dateTime;
                               _onStartDateSelected(dateTime);
                             },
@@ -434,8 +439,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                           ),
                           GestureDetector(
                             onTap: () {
-                              DateTime dateTime = DateTime(
-                                  _dateTime.year, _dateTime.month + 1);
+                              DateTime dateTime =
+                                  DateTime(_dateTime.year, _dateTime.month + 1);
                               Duration duration =
                                   dateTime.difference(DateTime.now());
                               if (duration.inSeconds < 0) {
@@ -464,8 +469,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         margin: EdgeInsets.only(left: 10, right: 10),
                         padding: EdgeInsets.symmetric(vertical: 3),
                         decoration: BoxDecoration(
-                          color:
-                              Constant.locationServiceGreen.withOpacity(0.1),
+                          color: Constant.locationServiceGreen.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -567,10 +571,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userDurationValue,
         userIntensityValue;
     int baseMaxValue = 10;
-    List<Axes> compassAxesListData =
-        recordsOverTimeCompassModel.recordsCompareCompassAxesResultModel.axes;
+    List<Axes> currentMonthCompassAxesListData = recordsOverTimeCompassModel
+        .recordsCompareCompassAxesResultModel.currentAxes;
     print(recordsOverTimeCompassModel);
-    var userFrequency = compassAxesListData.firstWhere(
+    var userFrequency = currentMonthCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
@@ -579,7 +583,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     } else {
       userFrequencyValue = 0;
     }
-    var userDuration = compassAxesListData.firstWhere(
+    var userDuration = currentMonthCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
@@ -588,7 +592,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     } else {
       userDurationValue = 0;
     }
-    var userIntensity = compassAxesListData.firstWhere(
+    var userIntensity = currentMonthCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
@@ -597,7 +601,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     } else {
       userIntensityValue = 0;
     }
-    var userDisability = compassAxesListData.firstWhere(
+    var userDisability = currentMonthCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
@@ -616,12 +620,15 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userFrequencyValue
       ]
     ];
-    if (compassAxesListData.length > 0) {
-      setCompassDataScore(
+
+    if (currentMonthCompassAxesListData.length > 0) {
+      setCurrentMonthCompassDataScore(
           userIntensity, userDisability, userFrequency, userDuration);
     } else {
-      userScoreData = '0';
+      userCurrentMonthScoreData = 0;
     }
+
+    setPreviousMonthAxesData(recordsOverTimeCompassModel);
   }
 
   @override
@@ -668,8 +675,11 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     }
   }
 
-  void setCompassDataScore(Axes userIntensityValue, Axes userDisabilityValue,
-      Axes userFrequencyValue, Axes userDurationValue) {
+  void setCurrentMonthCompassDataScore(
+      Axes userIntensityValue,
+      Axes userDisabilityValue,
+      Axes userFrequencyValue,
+      Axes userDurationValue) {
     var intensityScore, disabilityScore, frequencyScore, durationScore;
     if (userIntensityValue.value != null) {
       intensityScore =
@@ -698,8 +708,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
-    userScoreData = userTotalScore.toInt().toString();
-    print(userScoreData);
+    userCurrentMonthScoreData = userTotalScore.toInt();
+    print(userCurrentMonthScoreData);
   }
 
   void _updateCompassData() async {
@@ -735,7 +745,110 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
           selectedHeadacheName);
     }
   }
+
   void navigateToHeadacheStartScreen() async {
-    await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+    await widget.navigateToOtherScreenCallback(
+        Constant.headacheStartedScreenRouter, null);
+  }
+
+  void setPreviousMonthAxesData(
+      RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
+    int userDisabilityValue,
+        userFrequencyValue,
+        userDurationValue,
+        userIntensityValue;
+
+    int baseMaxValue = 10;
+    List<Axes> previousMonthCompassAxesListData = recordsOverTimeCompassModel
+        .recordsCompareCompassAxesResultModel.previousAxes;
+    print(recordsOverTimeCompassModel);
+    var userFrequency = previousMonthCompassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.frequency,
+        orElse: () => null);
+    if (userFrequency != null) {
+      userFrequencyValue =
+          userFrequency.value.toInt() ~/ (userFrequency.max / baseMaxValue);
+    } else {
+      userFrequencyValue = 0;
+    }
+    var userDuration = previousMonthCompassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.duration,
+        orElse: () => null);
+    if (userDuration != null) {
+      userDurationValue =
+          userDuration.value.toInt() ~/ (userDuration.max / baseMaxValue);
+    } else {
+      userDurationValue = 0;
+    }
+    var userIntensity = previousMonthCompassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.intensity,
+        orElse: () => null);
+    if (userIntensity != null) {
+      userIntensityValue =
+          userIntensity.value.toInt() ~/ (userIntensity.max / baseMaxValue);
+    } else {
+      userIntensityValue = 0;
+    }
+    var userDisability = previousMonthCompassAxesListData.firstWhere(
+        (intensityElement) => intensityElement.name == Constant.disability,
+        orElse: () => null);
+    if (userDisability != null) {
+      userDisabilityValue = userDisability.value.toInt();
+      userDisabilityValue =
+          userDisability.value.toInt() ~/ (userDisability.max / baseMaxValue);
+    } else {
+      userDisabilityValue = 0;
+    }
+    if (previousMonthCompassAxesListData.length > 0) {
+      setPreviousMonthCompassDataScore(
+          userIntensity, userDisability, userFrequency, userDuration);
+    } else {
+      userPreviousMonthScoreData = 0;
+    }
+  }
+
+  void setPreviousMonthCompassDataScore(
+      Axes userIntensityValue,
+      Axes userDisabilityValue,
+      Axes userFrequencyValue,
+      Axes userDurationValue) {
+    var intensityScore, disabilityScore, frequencyScore, durationScore;
+    if (userIntensityValue.value != null) {
+      intensityScore =
+          userIntensityValue.value.toInt() / userIntensityValue.max * 100.0;
+    } else {
+      intensityScore = 0;
+    }
+    if (userDisabilityValue.value != null) {
+      disabilityScore =
+          userDisabilityValue.value.toInt() / userDisabilityValue.max * 100.0;
+    } else {
+      disabilityScore = 0;
+    }
+    if (userFrequencyValue.value != null) {
+      frequencyScore =
+          userFrequencyValue.value.toInt() / userFrequencyValue.max * 100.0;
+    } else {
+      frequencyScore = 0;
+    }
+    if (userDurationValue.value != null) {
+      durationScore =
+          userDurationValue.value.toInt() / userDurationValue.max * 100.0;
+    } else {
+      durationScore = 0;
+    }
+
+    var userTotalScore =
+        (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
+    userPreviousMonthScoreData = userTotalScore.toInt();
+    print(userPreviousMonthScoreData);
+
+    if (userPreviousMonthScoreData > userCurrentMonthScoreData) {
+      headacheDownOrUp = 'down';
+      increaseOrDecrease = 'decrease';
+    } else {
+      headacheDownOrUp = 'up';
+      increaseOrDecrease = 'increase';
+    }
   }
 }
