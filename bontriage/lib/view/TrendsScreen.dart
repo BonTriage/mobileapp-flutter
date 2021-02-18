@@ -334,7 +334,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
     pageViewWidgetList = [
       TrendsIntensityScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
       TrendsDisabilityScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
-      TrendsFrequencyScreen(),
+      TrendsFrequencyScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
       TrendsDurationScreen(),
     ];
   }

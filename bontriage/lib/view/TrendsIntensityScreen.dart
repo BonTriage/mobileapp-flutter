@@ -706,7 +706,23 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
 
  List<Widget> getDotText() {
   List<Widget> widgetListData = [];
- for(int i= 0; i<3; i++){
+
+  List<Trigger> triggersListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.triggers;
+
+  triggersListData.forEach((element) {element.data.forEach((element) {
+
+    
+
+
+  }
+  );
+
+  }
+  );
+
+
+
+ for(int i= 0; i< 3; i++){
    widgetListData.add( Text(
      'Exercise',
      style: TextStyle(

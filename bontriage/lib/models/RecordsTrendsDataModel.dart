@@ -3,6 +3,7 @@
 //     final recordsTrendsDataModel = recordsTrendsDataModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:mobile/models/HeadacheListDataModel.dart';
 
@@ -88,19 +89,27 @@ class Headache {
   Headache({
     this.severity,
     this.disability,
+    this.frequency,
+    this.duration,
   });
 
   List<Ity> severity;
   List<Ity> disability;
+  List<Ity> frequency;
+  List<Ity> duration;
 
   factory Headache.fromJson(Map<String, dynamic> json) => Headache(
     severity: List<Ity>.from(json["severity"].map((x) => Ity.fromJson(x))),
     disability: List<Ity>.from(json["disability"].map((x) => Ity.fromJson(x))),
+    frequency: List<Ity>.from(json["frequency"].map((x) => Ity.fromJson(x))),
+    duration: List<Ity>.from(json["duration"].map((x) => Ity.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "severity": List<dynamic>.from(severity.map((x) => x.toJson())),
     "disability": List<dynamic>.from(disability.map((x) => x.toJson())),
+    "frequency": List<dynamic>.from(frequency.map((x) => x.toJson())),
+    "duration": List<dynamic>.from(duration.map((x) => x.toJson())),
   };
 }
 
@@ -111,11 +120,11 @@ class Ity {
   });
 
   DateTime date;
-  int value;
+  double value;
 
   factory Ity.fromJson(Map<String, dynamic> json) => Ity(
     date: DateTime.parse(json["date"]),
-    value: json["value"],
+    value: double.parse(json["value"].toString()),
   );
 
   Map<String, dynamic> toJson() => {

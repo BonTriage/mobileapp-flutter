@@ -1,11 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/EditGraphViewFilterModel.dart';
+import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 
 class TrendsFrequencyScreen extends StatefulWidget {
+
+  final EditGraphViewFilterModel editGraphViewFilterModel;
+
+  const TrendsFrequencyScreen({Key key, this.editGraphViewFilterModel})
+      : super(key: key);
   @override
   _TrendsFrequencyScreenState createState() => _TrendsFrequencyScreenState();
 }
@@ -20,7 +27,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   String lastDayOfTheCurrentMonth;
   final Color leftBarColor = const Color(0xff000000);
   final Color rightBarColor = const Color(0xffff5182);
-  final double width = 90;
+  final double width = 7;
 
   List<BarChartGroupData> rawBarGroups;
   List<BarChartGroupData> showingBarGroups;
@@ -28,6 +35,14 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   int touchedGroupIndex;
 
   int clickedValue;
+  List<Ity> frequencyListData = [];
+  BarChartGroupData barGroup5;
+  List<BarChartGroupData> items;
+  List<double> firstWeekFrequencyData = [];
+  List<double> secondWeekFrequencyData = [];
+  List<double> thirdWeekFrequencyData = [];
+  List<double> fourthWeekFrequencyData = [];
+  List<double> fifthWeekFrequencyData = [];
 
   @override
   void initState() {
@@ -43,21 +58,15 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
-    final barGroup1 = makeGroupData(0, 10);
-    final barGroup2 = makeGroupData(1, 16);
-    final barGroup3 = makeGroupData(2, 24);
+    setFrequencyValuesData();
 
+  }
 
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-
-    ];
-
-    rawBarGroups = items;
-
-    showingBarGroups = rawBarGroups;
+  @override
+  void didUpdateWidget(covariant TrendsFrequencyScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    setFrequencyValuesData();
   }
 
   @override
@@ -70,68 +79,12 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundTransparentColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Edit graph view',
-                    style: TextStyle(
-                        color: Constant.locationServiceGreen,
-                        fontSize: 12,
-                        fontFamily: Constant.jostRegular),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Visibility(
-                  visible: false,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Constant.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(12),
-                          topLeft: Radius.circular(12)),
-                    ),
-                    child: Image(
-                      image: AssetImage(Constant.barGraph),
-                      width: 15,
-                      height: 15,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundTransparentColor,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(12),
-                        bottomRight: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.lineGraph),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: BarChart(
                 BarChartData(
                   minY: 0,
-maxY: 30,
+                  maxY: 30,
                   groupsSpace: 10,
                   axisTitleData: FlAxisTitleData(
                       show: true,
@@ -207,13 +160,22 @@ maxY: 30,
                       getTitles: (double value) {
                         switch (value.toInt()) {
                           case 0:
-                            return 'Jan';
+                            return 'Week 1';
                           case 1:
-                            return 'Feb';
+                            return 'Week 2';
                           case 2:
-                            return 'Mar';
+                            return 'Week 3';
                           case 3:
-                            return 'Fr';
+                            return 'Week 4';
+                          case 4:
+                            if (totalDaysInCurrentMonth > 28) {
+                              return 'Week 5';
+                            }
+                            return '';
+                          case 5:
+                            return 'St';
+                          case 6:
+                            return 'Sn';
                           default:
                             return '';
                         }
@@ -347,14 +309,57 @@ maxY: 30,
     );
   }
 
-  BarChartGroupData makeGroupData(int x, double y1) {
+  BarChartGroupData makeGroupData(int x, double y1, double y2, double y3,
+      double y4, double y5, double y6, double y7) {
     return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
       BarChartRodData(
         y: y1,
         colors: setBarChartColor(y1),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y2,
+        colors: setBarChartColor(y2),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y3,
+        colors: setBarChartColor(y3),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y4,
+        colors: setBarChartColor(y4),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y5,
+        colors: setBarChartColor(y5),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y6,
+        colors: setBarChartColor(y6),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y7,
+        colors: setBarChartColor(y7),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
     ]);
   }
@@ -412,6 +417,118 @@ maxY: 30,
   }
 //3315662,4d7483,658c9f,82aac0,99c1db
   List<Color> setBarChartColor(double barChartValue) {
-      return [Color(0xff476c7a) ,Color(0xff4d7483),Color(0xff658c9f),Color(0xff82aac0),Color(0xff99c1db)];
+    return [Constant.migraineColor];
+  }
+
+  void setFrequencyValuesData() {
+    frequencyListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.frequency;
+    firstWeekFrequencyData = [];
+    secondWeekFrequencyData = [];
+    thirdWeekFrequencyData = [];
+    fourthWeekFrequencyData = [];
+    fifthWeekFrequencyData = [];
+
+    for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
+      String date;
+      String month;
+      if (i < 10) {
+        date = '0$i';
+      } else {
+        date = i.toString();
+      }
+      if (currentMonth < 10) {
+        month = '0$currentMonth';
+      } else {
+        month = currentMonth.toString();
+      }
+      DateTime dateTime =
+      DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+      var intensityData = frequencyListData.firstWhere(
+              (element) => element.date.isAtSameMomentAs(dateTime),
+          orElse: () => null);
+      if (intensityData != null) {
+        setAllWeekIntensityData(i, intensityData.value.toDouble());
+      } else {
+        setAllWeekIntensityData(i, 0);
+      }
+    }
+
+    print(
+        'AllIntensityListData $firstWeekFrequencyData $secondWeekFrequencyData $thirdWeekFrequencyData $fourthWeekFrequencyData');
+
+    final barGroup1 = makeGroupData(
+        0,
+        firstWeekFrequencyData[0],
+        firstWeekFrequencyData[1],
+        firstWeekFrequencyData[2],
+        firstWeekFrequencyData[3],
+        firstWeekFrequencyData[4],
+        firstWeekFrequencyData[5],
+        firstWeekFrequencyData[6]);
+    final barGroup2 = makeGroupData(
+        1,
+        secondWeekFrequencyData[0],
+        secondWeekFrequencyData[1],
+        secondWeekFrequencyData[2],
+        secondWeekFrequencyData[3],
+        secondWeekFrequencyData[4],
+        secondWeekFrequencyData[5],
+        secondWeekFrequencyData[6]);
+    final barGroup3 = makeGroupData(
+        2,
+        thirdWeekFrequencyData[0],
+        thirdWeekFrequencyData[1],
+        thirdWeekFrequencyData[2],
+        thirdWeekFrequencyData[3],
+        thirdWeekFrequencyData[4],
+        thirdWeekFrequencyData[5],
+        thirdWeekFrequencyData[6]);
+    final barGroup4 = makeGroupData(
+        3,
+        fourthWeekFrequencyData[0],
+        fourthWeekFrequencyData[1],
+        fourthWeekFrequencyData[2],
+        fourthWeekFrequencyData[3],
+        fourthWeekFrequencyData[4],
+        fourthWeekFrequencyData[5],
+        fourthWeekFrequencyData[6]);
+
+    if (totalDaysInCurrentMonth > 28) {
+      barGroup5 = makeGroupData(
+          4,
+          fifthWeekFrequencyData[0],
+          fifthWeekFrequencyData[1],
+          fifthWeekFrequencyData[2],
+          fifthWeekFrequencyData[3],
+          fifthWeekFrequencyData[4],
+          fifthWeekFrequencyData[5],
+          fifthWeekFrequencyData[6]);
+    }
+
+    if (totalDaysInCurrentMonth > 28) {
+      items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
+    } else {
+      items = [barGroup1, barGroup2, barGroup3, barGroup4];
+    }
+
+    rawBarGroups = items;
+    showingBarGroups = rawBarGroups;
+  }
+  void setAllWeekIntensityData(int i, double intensityData) {
+    if (i <= 7) {
+      firstWeekFrequencyData.add(intensityData);
+    }
+    if (i > 7 && i <= 14) {
+      secondWeekFrequencyData.add(intensityData);
+    }
+    if (i > 14 && i <= 21) {
+      thirdWeekFrequencyData.add(intensityData);
+    }
+    if (i > 21 && i <= 28) {
+      fourthWeekFrequencyData.add(intensityData);
+    }
+    if (i > 28) {
+      fifthWeekFrequencyData.add(intensityData);
+    }
   }
 }
