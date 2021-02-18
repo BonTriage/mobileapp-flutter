@@ -107,7 +107,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan';
+                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
                                 fontSize: 12 ));
@@ -233,9 +233,12 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: getDotText(),
+                        child: Container(
+                          width: 60,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: getDotText(),
+                          ),
                         ),
                       ),
                       Expanded(
@@ -595,6 +598,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
               color: Constant.locationServiceGreen,
               fontSize: 12,
               fontFamily: Constant.jostRegular),
+          overflow: TextOverflow.ellipsis,
         ),
       );
       widgetListData.add(SizedBox(

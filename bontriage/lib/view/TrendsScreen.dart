@@ -167,7 +167,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (currentIndex == 3) {
+                              if (currentIndex != 0) {
                                 setState(() {
                                   currentIndex = currentIndex - 1;
                                   _pageController.animateToPage(currentIndex,
@@ -203,7 +203,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (currentIndex == 0) {
+                              if (currentIndex != 3) {
                                 setState(() {
                                   currentIndex = currentIndex + 1;
                                   _pageController.animateToPage(currentIndex,

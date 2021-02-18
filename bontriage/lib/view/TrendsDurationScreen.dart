@@ -111,7 +111,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan 20';
+                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -236,9 +236,12 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: getDotText(),
+                        child: Container(
+                          width: 60,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: getDotText(),
+                          ),
                         ),
                       ),
                       Expanded(
@@ -489,6 +492,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
               color: Constant.locationServiceGreen,
               fontSize: 12,
               fontFamily: Constant.jostRegular),
+          overflow: TextOverflow.ellipsis,
         ),
       );
       widgetListData.add(SizedBox(

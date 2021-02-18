@@ -110,7 +110,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan 20';
+                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -118,7 +118,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                                     '/10 Int.',
                                 TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'JostRegular',
+                                    fontFamily: Constant.jostRegular,
                                     fontSize: 12));
                           },
                           fitInsideHorizontally: true,
@@ -242,16 +242,18 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: getDotText(),
+                        child: Container(
+                          width: 60,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: getDotText(),
+                          ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Column(
-
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
                         ),
@@ -715,7 +717,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           style: TextStyle(
               color: Constant.locationServiceGreen,
               fontSize: 12,
-              fontFamily: Constant.jostRegular),
+              fontFamily: Constant.jostRegular,
+          ),
+          overflow: TextOverflow.ellipsis,
         ),
       );
       widgetListData.add(SizedBox(
