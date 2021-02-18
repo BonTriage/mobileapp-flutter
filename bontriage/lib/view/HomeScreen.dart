@@ -148,10 +148,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
           onTap: (index) {
-            setState(() {
-              currentIndex = index;
-              saveCurrentIndexOfTabBar(currentIndex);
-            });
+            if(index != currentIndex) {
+              setState(() {
+                currentIndex = index;
+                saveCurrentIndexOfTabBar(currentIndex);
+              });
+            }
           },
         ),
       ),

@@ -74,6 +74,36 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
       _animationController.reset();
       _animationController.forward();
     }
+
+    if(widget.isFromMoreScreen ?? false) {
+      if (widget.selectAnswerListData != null) {
+        SelectedAnswers selectedAnswers = widget.selectAnswerListData.firstWhere((
+            element) => element.questionTag == widget.question.tag,
+            orElse: () => null);
+
+        if (selectedAnswers != null) {
+          try {
+            _valuesSelectedList =
+                (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
+                    String>();
+            _valuesSelectedList.forEach((element) {
+              Values value = widget.question.values.firstWhere((
+                  valueElement) => valueElement.text == element,
+                  orElse: () => null);
+
+              if (value != null)
+                value.isSelected = true;
+              else
+                widget.question.values.add(Values(text: element,
+                    isSelected: true,
+                    valueNumber: (widget.question.values.length + 1).toString()));
+            });
+          } catch (e) {
+            print(e.toString());
+          }
+        }
+      }
+    }
   }
 
   @override
