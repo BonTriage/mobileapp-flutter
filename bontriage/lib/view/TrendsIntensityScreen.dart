@@ -6,6 +6,7 @@ import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
+import 'package:mobile/models/TrendsFilterModel.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
@@ -17,7 +18,8 @@ class TrendsIntensityScreen extends StatefulWidget {
   _TrendsIntensityScreenState createState() => _TrendsIntensityScreenState();
 }
 
-class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with AutomaticKeepAliveClientMixin {
+class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
+    with AutomaticKeepAliveClientMixin {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -60,7 +62,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
     setIntensityValuesData();
-
   }
 
   @override
@@ -81,7 +82,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
             SizedBox(
               height: 20,
             ),
-
             SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20),
               scrollDirection: Axis.horizontal,
@@ -230,10 +230,14 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
               ),
             ),
             Visibility(
-              visible: false,
+              visible:
+                  widget.editGraphViewFilterModel.whichOtherFactorSelected !=
+                      Constant.noneRadioButtonText,
               child: Column(
                 children: [
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
                       Padding(
@@ -244,9 +248,12 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
                         ),
                       ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: getDotsWidget()
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12),
+                          child: Column(
+
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: getDotsWidget()),
                         ),
                       ),
                     ],
@@ -254,8 +261,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
                 ],
               ),
             ),
-            SizedBox(height: 10,),
-            Column(
+            SizedBox(
+              height: 10,
+            ),
+            /*Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
@@ -273,7 +282,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
                   ),
                 ),
               ],
-            ),
+            ),*/
             SizedBox(
               height: 10,
             ),
@@ -558,7 +567,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
   }
 
   void setIntensityValuesData() {
-    intensityListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.severity;
+    intensityListData = widget
+        .editGraphViewFilterModel.recordsTrendsDataModel.headache.severity;
     firstWeekIntensityData = [];
     secondWeekIntensityData = [];
     thirdWeekIntensityData = [];
@@ -651,102 +661,97 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>  with Aut
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
   }
-  List<Widget> _getDots(int type) {
-    List<Widget> dotsList;
 
-    switch(type) {
-      case 0:
-        dotsList = List.generate(31, (index) => Expanded(
-          child: Container(
-            height: 10,
-            child: Center(
-              child: Icon(
-                true ? Icons.circle : Icons.brightness_1_outlined,
-                size: 8,
-                color: Constant.locationServiceGreen,
-              ),
+  List<Widget> _getDots(TrendsFilterModel trendsFilterModel) {
+    List<Widget> dotsList = [];
+
+    for (int i = 1;
+        i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
+        i++) {
+      var dotData = trendsFilterModel.occurringDateList
+          .firstWhere((element) => element.day == i, orElse: () => null);
+
+      dotsList.add(Expanded(
+        child: Container(
+          height: 10,
+          child: Center(
+            child: Icon(
+              dotData != null ? Icons.circle : Icons.brightness_1_outlined,
+              size: 8,
+              color: Constant.locationServiceGreen,
             ),
           ),
-        ));
-        break;
-      case 1:
-        dotsList = List.generate(31, (index) => Expanded(
-          child: Container(
-            height: 10,
-            child: Center(
-              child: Icon(
-                false ? Icons.circle : Icons.brightness_1_outlined,
-                size: 8,
-                color: Constant.locationServiceGreen,
-              ),
-            ),
-          ),
-        ));
-        break;
-      default:
-        dotsList = List.generate(31, (index) => Expanded(
-          child: Container(
-            height: 10,
-            child: Center(
-              child: Icon(
-                true ? Icons.circle : Icons.brightness_1_outlined,
-                size: 8,
-                color: Constant.locationServiceGreen,
-              ),
-            ),
-          ),
-        ));
+        ),
+      ));
     }
-
     return dotsList;
   }
 
   @override
   bool get wantKeepAlive => true;
 
- List<Widget> getDotText() {
-  List<Widget> widgetListData = [];
-
-  List<Trigger> triggersListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.triggers;
-
-  triggersListData.forEach((element) {element.data.forEach((element) {
-
-    
-
-
+  List<Widget> getDotText() {
+    List<Widget> widgetListData = [];
+    List<TrendsFilterModel> dotTextModelDataList = [];
+    if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedBehaviors) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.behavioursListData;
+    } else if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedPotentialTriggers) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.triggersListData;
+    } else {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.medicationListData;
+    }
+    for (int i = 0; i < dotTextModelDataList.length; i++) {
+      if (i > 2) {
+        break;
+      }
+      widgetListData.add(
+        Text(
+          dotTextModelDataList[i].dotName,
+          style: TextStyle(
+              color: Constant.locationServiceGreen,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular),
+        ),
+      );
+      widgetListData.add(SizedBox(
+        height: 6,
+      ));
+    }
+    return widgetListData;
   }
-  );
 
+  List<Widget> getDotsWidget() {
+    List<Widget> widgetListData = [];
+    List<TrendsFilterModel> dotTextModelDataList;
+    if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedBehaviors) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.behavioursListData;
+    } else if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedPotentialTriggers) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.triggersListData;
+    } else {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.medicationListData;
+    }
+    for (int i = 0; i < dotTextModelDataList.length; i++) {
+      if (i > 2) {
+        break;
+      }
+      widgetListData.add(Padding(
+        padding: const EdgeInsets.only(left: 5, right: 10),
+        child: Row(
+          children: _getDots(dotTextModelDataList[i]),
+        ),
+      ));
+      widgetListData.add(SizedBox(height: 14,));
+    }
+    return widgetListData;
   }
-  );
-
-
-
- for(int i= 0; i< 3; i++){
-   widgetListData.add( Text(
-     'Exercise',
-     style: TextStyle(
-         color: Constant.locationServiceGreen,
-         fontSize: 12,
-         fontFamily: Constant.jostRegular
-     ),
-   ),
-   );
-   widgetListData.add(SizedBox(height: 2,));
- }
-  return widgetListData;
- }
-
- List<Widget> getDotsWidget() {
-   List<Widget> widgetListData = [];
-   for(int i = 0; i< 3; i++){
-     widgetListData.add(Padding(
-       padding: const EdgeInsets.only(left: 5, right: 10),
-       child: Row(
-         children: _getDots(i),
-       ),
-     ));
-   }
-   return widgetListData;
- }
 }

@@ -620,7 +620,7 @@ class _SignUpFirstStepCompassResultState
         userDurationValue.toInt() / userMaxDurationValue * 100.0;
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
-    userScoreData = userTotalScore.toInt().toString();
+    userScoreData = userTotalScore.round().toString();
     print('First Step User ScoreData$userScoreData');
   }
 }

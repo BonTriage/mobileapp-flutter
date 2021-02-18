@@ -1,6 +1,7 @@
 import 'package:mobile/util/constant.dart';
 
 import 'RecordsTrendsDataModel.dart';
+import 'package:mobile/models/TrendsFilterModel.dart';
 
 class EditGraphViewFilterModel {
   String singleTypeHeadacheSelected;
@@ -12,7 +13,10 @@ class EditGraphViewFilterModel {
   String whichOtherFactorSelected;
 
   RecordsTrendsDataModel recordsTrendsDataModel;
+  TrendsFilterListModel trendsFilterListModel;
   int currentTabIndex;
+  int numberOfDaysInMonth;
+
 
 
 
@@ -24,5 +28,6 @@ class EditGraphViewFilterModel {
     this.recordsTrendsDataModel,
     this.currentTabIndex = 0,
     this.headacheTypeRadioButtonSelected = Constant.viewSingleHeadache,
+    this.numberOfDaysInMonth = 0
   });
 }

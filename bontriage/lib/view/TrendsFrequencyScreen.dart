@@ -6,6 +6,7 @@ import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
+import 'package:mobile/models/TrendsFilterModel.dart';
 
 class TrendsFrequencyScreen extends StatefulWidget {
 
@@ -79,143 +80,180 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: BarChart(
-                BarChartData(
-                  minY: 0,
-                  maxY: 30,
-                  groupsSpace: 10,
-                  axisTitleData: FlAxisTitleData(
-                      show: true,
-                      leftTitle: AxisTitle(
-                          showTitle: true,
-                          titleText: 'No. Headache Days per Month',
-                          textStyle: TextStyle(
-                              color: Color(0xffCAD7BF),
-                              fontFamily: 'JostRegular',
-                              fontSize: 12))),
-                  barTouchData: BarTouchData(
-                    enabled: true,
-                    touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: setToolTipColor(),
-                        tooltipPadding:EdgeInsets.symmetric(horizontal: 13, vertical: 1),
-                        tooltipRoundedRadius: 20,
-                        tooltipBottomMargin: 10,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          String weekDay = 'Jan';
-                          return BarTooltipItem(
-                              weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
-                              fontSize: 12 ));
-                        },
-                        fitInsideHorizontally: true,
-                        fitInsideVertically: true),
-                    touchCallback: (response) {
-                      if (response.spot != null) {
-                        if (response.spot.spot != null) {
-                          if (response.spot.spot.y != null) {
-                            setState(() {
-                              clickedValue = response.spot.spot.y.toInt();
-                            });
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: totalDaysInCurrentMonth <= 28 ? 350:420,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: BarChart(
+                  BarChartData(
+                    minY: 0,
+                    maxY: 30,
+                    groupsSpace: 10,
+                    axisTitleData: FlAxisTitleData(
+                        show: true,
+                        leftTitle: AxisTitle(
+                            showTitle: true,
+                            titleText: 'No. Headache Days per Month',
+                            textStyle: TextStyle(
+                                color: Color(0xffCAD7BF),
+                                fontFamily: 'JostRegular',
+                                fontSize: 12))),
+                    barTouchData: BarTouchData(
+                      enabled: true,
+                      touchTooltipData: BarTouchTooltipData(
+                          tooltipBgColor: setToolTipColor(),
+                          tooltipPadding:EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+                          tooltipRoundedRadius: 20,
+                          tooltipBottomMargin: 10,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            String weekDay = 'Jan';
+                            return BarTooltipItem(
+                                weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
+                                fontSize: 12 ));
+                          },
+                          fitInsideHorizontally: true,
+                          fitInsideVertically: true),
+                      touchCallback: (response) {
+                        if (response.spot != null) {
+                          if (response.spot.spot != null) {
+                            if (response.spot.spot.y != null) {
+                              setState(() {
+                                clickedValue = response.spot.spot.y.toInt();
+                              });
+                            }
                           }
                         }
-                      }
-                    },
-                    handleBuiltInTouches: true,
-                  ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: const Border(
-                      left: BorderSide(color: const Color(0x800E4C47)),
-                      top: BorderSide(color: Colors.transparent),
-                      bottom: BorderSide(color: const Color(0x800E4C47)),
-                      right: BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: true,
-                    drawHorizontalLine: true,
-                     checkToShowHorizontalLine: (value) => value % 5 == 0,
-                    getDrawingHorizontalLine: (value) {
-                      if (value == 0) {
-                        return FlLine(
-                            color: const Color(0x800E4C47), strokeWidth: 1);
-                      }else{
-                        return FlLine(
-                            color: const Color(0x800E4C47), strokeWidth: 1);
-                      }
-
-                    },
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      getTextStyles: (value) => const TextStyle(
-                          color: Color(0xffCAD7BF),
-                          fontFamily: 'JostRegular',
-                          fontSize: 11),
-                      margin: 2,
-                      getTitles: (double value) {
-                        switch (value.toInt()) {
-                          case 0:
-                            return 'Week 1';
-                          case 1:
-                            return 'Week 2';
-                          case 2:
-                            return 'Week 3';
-                          case 3:
-                            return 'Week 4';
-                          case 4:
-                            if (totalDaysInCurrentMonth > 28) {
-                              return 'Week 5';
-                            }
-                            return '';
-                          case 5:
-                            return 'St';
-                          case 6:
-                            return 'Sn';
-                          default:
-                            return '';
-                        }
                       },
+                      handleBuiltInTouches: true,
                     ),
-                    leftTitles: SideTitles(
-                      showTitles: true,
-                      getTextStyles: (value) => const TextStyle(
-                          color: Color(0xffCAD7BF),
-                          fontFamily: 'JostRegular',
-                          fontSize: 11),
-                      margin: 10,
-                      reservedSize: 10,
-                       getTitles: (value) {
+                    borderData: FlBorderData(
+                      show: true,
+                      border: const Border(
+                        left: BorderSide(color: const Color(0x800E4C47)),
+                        top: BorderSide(color: Colors.transparent),
+                        bottom: BorderSide(color: const Color(0x800E4C47)),
+                        right: BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: true,
+                      drawHorizontalLine: true,
+                       checkToShowHorizontalLine: (value) => value % 5 == 0,
+                      getDrawingHorizontalLine: (value) {
                         if (value == 0) {
-                          return '0';
-                        } else if (value == 5) {
-                          return '5';
-                        } else if (value == 10) {
-                          return '10';
-                        } else if (value == 15) {
-                          return '15';
-                        } else if (value == 20) {
-                          return '20';
-                        } else if (value == 25) {
-                          return '25';
-                        } else if (value == 30) {
-                          return '30';
-                        }else {
-                          return '';
+                          return FlLine(
+                              color: const Color(0x800E4C47), strokeWidth: 1);
+                        }else{
+                          return FlLine(
+                              color: const Color(0x800E4C47), strokeWidth: 1);
                         }
+
                       },
                     ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      bottomTitles: SideTitles(
+                        showTitles: true,
+                        getTextStyles: (value) => const TextStyle(
+                            color: Color(0xffCAD7BF),
+                            fontFamily: 'JostRegular',
+                            fontSize: 11),
+                        margin: 2,
+                        getTitles: (double value) {
+                          switch (value.toInt()) {
+                            case 0:
+                              return 'Week 1';
+                            case 1:
+                              return 'Week 2';
+                            case 2:
+                              return 'Week 3';
+                            case 3:
+                              return 'Week 4';
+                            case 4:
+                              if (totalDaysInCurrentMonth > 28) {
+                                return 'Week 5';
+                              }
+                              return '';
+                            case 5:
+                              return 'St';
+                            case 6:
+                              return 'Sn';
+                            default:
+                              return '';
+                          }
+                        },
+                      ),
+                      leftTitles: SideTitles(
+                        showTitles: true,
+                        getTextStyles: (value) => const TextStyle(
+                            color: Color(0xffCAD7BF),
+                            fontFamily: 'JostRegular',
+                            fontSize: 11),
+                        margin: 10,
+                        reservedSize: 10,
+                         getTitles: (value) {
+                          if (value == 0) {
+                            return '0';
+                          } else if (value == 5) {
+                            return '5';
+                          } else if (value == 10) {
+                            return '10';
+                          } else if (value == 15) {
+                            return '15';
+                          } else if (value == 20) {
+                            return '20';
+                          } else if (value == 25) {
+                            return '25';
+                          } else if (value == 30) {
+                            return '30';
+                          }else {
+                            return '';
+                          }
+                        },
+                      ),
+                    ),
+                    barGroups: showingBarGroups,
                   ),
-                  barGroups: showingBarGroups,
                 ),
+
+              ),
+            ),
+            Visibility(
+              visible:
+              widget.editGraphViewFilterModel.whichOtherFactorSelected !=
+                  Constant.noneRadioButtonText,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: getDotText(),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12),
+                          child: Column(
+
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: getDotsWidget()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -530,5 +568,93 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     if (i > 28) {
       fifthWeekFrequencyData.add(intensityData);
     }
+  }
+  List<Widget> getDotText() {
+    List<Widget> widgetListData = [];
+    List<TrendsFilterModel> dotTextModelDataList = [];
+    if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedBehaviors) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.behavioursListData;
+    } else if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedPotentialTriggers) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.triggersListData;
+    } else {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.medicationListData;
+    }
+    for (int i = 0; i < dotTextModelDataList.length; i++) {
+      if (i > 2) {
+        break;
+      }
+      widgetListData.add(
+        Text(
+          dotTextModelDataList[i].dotName,
+          style: TextStyle(
+              color: Constant.locationServiceGreen,
+              fontSize: 12,
+              fontFamily: Constant.jostRegular),
+        ),
+      );
+      widgetListData.add(SizedBox(
+        height: 6,
+      ));
+    }
+    return widgetListData;
+  }
+
+  List<Widget> getDotsWidget() {
+    List<Widget> widgetListData = [];
+    List<TrendsFilterModel> dotTextModelDataList;
+    if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedBehaviors) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.behavioursListData;
+    } else if (widget.editGraphViewFilterModel.whichOtherFactorSelected ==
+        Constant.loggedPotentialTriggers) {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.triggersListData;
+    } else {
+      dotTextModelDataList = widget
+          .editGraphViewFilterModel.trendsFilterListModel.medicationListData;
+    }
+    for (int i = 0; i < dotTextModelDataList.length; i++) {
+      if (i > 2) {
+        break;
+      }
+      widgetListData.add(Padding(
+        padding: const EdgeInsets.only(left: 5, right: 10),
+        child: Row(
+          children: _getDots(dotTextModelDataList[i]),
+        ),
+      ));
+      widgetListData.add(SizedBox(height: 14,));
+    }
+    return widgetListData;
+  }
+  List<Widget> _getDots(TrendsFilterModel trendsFilterModel) {
+    List<Widget> dotsList = [];
+
+    for (int i = 1;
+    i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
+    i++) {
+      var dotData = trendsFilterModel.occurringDateList
+          .firstWhere((element) => element.day == i, orElse: () => null);
+
+      dotsList.add(Expanded(
+        child: Container(
+          height: 10,
+          child: Center(
+            child: Icon(
+              dotData != null ? Icons.circle : Icons.brightness_1_outlined,
+              size: 8,
+              color: Constant.locationServiceGreen,
+            ),
+          ),
+        ),
+      ));
+    }
+    return dotsList;
   }
 }

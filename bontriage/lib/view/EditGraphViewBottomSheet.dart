@@ -10,11 +10,11 @@ class EditGraphViewBottomSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _EditGraphViewBottomSheetState createState() => _EditGraphViewBottomSheetState();
+  _EditGraphViewBottomSheetState createState() =>
+      _EditGraphViewBottomSheetState();
 }
 
 class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
-
   List<String> _headacheTypeRadioButtonList;
   List<HeadacheListDataModel> _singleHeadacheTypeList;
   List<HeadacheListDataModel> _compareHeadacheTypeList1;
@@ -30,11 +30,12 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
   TextStyle _headerTextStyle;
   TextStyle _radioTextStyle;
   TextStyle _dropDownTextStyle;
+  int selectedTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
+    selectedTabIndex = widget.editGraphViewFilterModel.currentTabIndex;
     _headerTextStyle = TextStyle(
       fontSize: 16,
       color: Constant.locationServiceGreen,
@@ -45,16 +46,23 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
       Constant.viewSingleHeadache,
       Constant.compareHeadache
     ];
-    _headacheTypeRadioButtonSelected = widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected;
+    _headacheTypeRadioButtonSelected =
+        widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected;
 
-    _singleHeadacheTypeList = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
-    _singleHeadacheTypeSelected = widget.editGraphViewFilterModel.singleTypeHeadacheSelected;
+    _singleHeadacheTypeList = widget
+        .editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _singleHeadacheTypeSelected =
+        widget.editGraphViewFilterModel.singleTypeHeadacheSelected;
 
-    _compareHeadacheTypeList1 = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
-    _compareHeadacheTypeSelected1 = widget.editGraphViewFilterModel.compareHeadacheTypeSelected1;
+    _compareHeadacheTypeList1 = widget
+        .editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected1 =
+        widget.editGraphViewFilterModel.compareHeadacheTypeSelected1;
 
-    _compareHeadacheTypeList2 = widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
-    _compareHeadacheTypeSelected2 = widget.editGraphViewFilterModel.compareHeadacheTypeSelected2;
+    _compareHeadacheTypeList2 = widget
+        .editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData;
+    _compareHeadacheTypeSelected2 =
+        widget.editGraphViewFilterModel.compareHeadacheTypeSelected2;
 
     _otherFactorsRadioButtonList = [
       Constant.noneRadioButtonText,
@@ -62,7 +70,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
       Constant.loggedPotentialTriggers,
       Constant.medications,
     ];
-    _otherFactorsSelected = widget.editGraphViewFilterModel.whichOtherFactorSelected;
+    _otherFactorsSelected =
+        widget.editGraphViewFilterModel.whichOtherFactorSelected;
 
     _radioTextStyle = TextStyle(
       fontFamily: Constant.jostRegular,
@@ -103,20 +112,34 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    widget.editGraphViewFilterModel.singleTypeHeadacheSelected = _singleHeadacheTypeSelected;
-                    widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 = _compareHeadacheTypeSelected1;
-                    widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 = _compareHeadacheTypeSelected2;
-                    widget.editGraphViewFilterModel.whichOtherFactorSelected = _otherFactorsSelected;
-                    widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected = _headacheTypeRadioButtonSelected;
+                    widget.editGraphViewFilterModel.singleTypeHeadacheSelected =
+                        _singleHeadacheTypeSelected;
+                    widget.editGraphViewFilterModel
+                            .compareHeadacheTypeSelected1 =
+                        _compareHeadacheTypeSelected1;
+                    widget.editGraphViewFilterModel
+                            .compareHeadacheTypeSelected2 =
+                        _compareHeadacheTypeSelected2;
+                    widget.editGraphViewFilterModel.whichOtherFactorSelected =
+                        _otherFactorsSelected;
+                    widget.editGraphViewFilterModel
+                            .headacheTypeRadioButtonSelected =
+                        _headacheTypeRadioButtonSelected;
+                    widget.editGraphViewFilterModel.currentTabIndex = selectedTabIndex;
                     Navigator.pop(context, Constant.success);
                   },
-                  child: Image.asset(
-                    Constant.closeIcon2,
-                    height: 20,
-                    width: 20,
-                  ),
+                  child: Text(
+                    'Done',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: Constant.jostMedium,
+                          fontWeight: FontWeight.w500,
+                          color: Constant.locationServiceGreen
+                      ),
                 ),
-              ),
+                  )
+                ),
+
             ],
           ),
           SizedBox(
@@ -130,22 +153,21 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
               height: 40,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Constant.locationServiceGreen,
-                ),
-                color: Colors.transparent
-              ),
+                  border: Border.all(
+                    color: Constant.locationServiceGreen,
+                  ),
+                  color: Colors.transparent),
               child: TabBar(
                 onTap: (index) {
-
+                  selectedTabIndex = index;
                 },
                 indicatorPadding: EdgeInsets.all(0),
                 labelPadding: EdgeInsets.all(0),
-                labelStyle: TextStyle(
-                    fontSize: 14, fontFamily: Constant.jostRegular),
+                labelStyle:
+                    TextStyle(fontSize: 14, fontFamily: Constant.jostRegular),
                 //For Selected tab
-                unselectedLabelStyle: TextStyle(
-                    fontSize: 14, fontFamily: Constant.jostRegular),
+                unselectedLabelStyle:
+                    TextStyle(fontSize: 14, fontFamily: Constant.jostRegular),
                 //For Un-selected Tabs
                 labelColor: Constant.backgroundColor,
                 unselectedLabelColor: Constant.locationServiceGreen,
@@ -169,7 +191,9 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
               ),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Text(
             '${Constant.headacheType}:',
             style: _headerTextStyle,
@@ -193,11 +217,10 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                   },
                 ),
               ),
-              Text(
-                _headacheTypeRadioButtonList[0],
-                style: _radioTextStyle
+              Text(_headacheTypeRadioButtonList[0], style: _radioTextStyle),
+              SizedBox(
+                width: 10,
               ),
-              SizedBox(width: 10,),
               Expanded(
                 child: Container(
                   height: 25,
@@ -217,7 +240,11 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                     },
                     isExpanded: true,
                     style: _dropDownTextStyle,
-                    icon: Image.asset(Constant.downArrow2, height: 10, width: 10,),
+                    icon: Image.asset(
+                      Constant.downArrow2,
+                      height: 10,
+                      width: 10,
+                    ),
                     dropdownColor: Constant.backgroundColor,
                     items: _getDropDownMenuItems(_singleHeadacheTypeList),
                     underline: Container(),
@@ -226,97 +253,118 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Theme(
-                data: ThemeData(
-                  unselectedWidgetColor: Constant.locationServiceGreen,
-                ),
-                child: Radio(
-                  value: _headacheTypeRadioButtonList[1],
-                  activeColor: Constant.locationServiceGreen,
-                  hoverColor: Constant.locationServiceGreen,
-                  focusColor: Constant.locationServiceGreen,
-                  groupValue: _headacheTypeRadioButtonSelected,
-                  onChanged: (String value) {
-                    setState(() {
-                      _headacheTypeRadioButtonSelected = value;
-                    });
-                  },
-                ),
-              ),
-              Text(
-                  _headacheTypeRadioButtonList[1],
-                  style: _radioTextStyle
-              ),
-              SizedBox(width: 10,),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 15,),
-              Expanded(
-                child: Container(
-                  height: 25,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Constant.locationServiceGreen,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
+          Visibility(
+            visible: _singleHeadacheTypeList.length > 1,
+            child: Row(
+              children: [
+                Theme(
+                  data: ThemeData(
+                    unselectedWidgetColor: Constant.locationServiceGreen,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButton(
-                    value: _compareHeadacheTypeSelected1,
-                    onChanged: (value) {
+                  child: Radio(
+                    value: _headacheTypeRadioButtonList[1],
+                    activeColor: Constant.locationServiceGreen,
+                    hoverColor: Constant.locationServiceGreen,
+                    focusColor: Constant.locationServiceGreen,
+                    groupValue: _headacheTypeRadioButtonSelected,
+                    onChanged: (String value) {
                       setState(() {
-                        _compareHeadacheTypeSelected1 = value;
+                        _headacheTypeRadioButtonSelected = value;
                       });
                     },
-                    isExpanded: true,
-                    style: _dropDownTextStyle,
-                    icon: Image.asset(Constant.downArrow2, height: 10, width: 10,),
-                    dropdownColor: Constant.backgroundColor,
-                    items: _getDropDownMenuItems(_compareHeadacheTypeList1),
-                    underline: Container(),
                   ),
                 ),
-              ),
-              SizedBox(width: 20,),
-              Expanded(
-                child: Container(
-                  height: 25,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Constant.locationServiceGreen,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButton(
-                    value: _compareHeadacheTypeSelected2,
-                    onChanged: (value) {
-                      setState(() {
-                        _compareHeadacheTypeSelected2 = value;
-                      });
-                    },
-                    isExpanded: true,
-                    style: _dropDownTextStyle,
-                    icon: Image.asset(Constant.downArrow2, height: 10, width: 10,),
-                    dropdownColor: Constant.backgroundColor,
-                    items: _getDropDownMenuItems(_compareHeadacheTypeList2),
-                    underline: Container(),
-                  ),
+                Text(_headacheTypeRadioButtonList[1], style: _radioTextStyle),
+                SizedBox(
+                  width: 10,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(height: 20,),
+          Visibility(
+            visible: _singleHeadacheTypeList.length > 1,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 25,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Constant.locationServiceGreen,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton(
+                      value: _compareHeadacheTypeSelected1,
+                      onChanged: (value) {
+                        setState(() {
+                          _compareHeadacheTypeSelected1 = value;
+                        });
+                      },
+                      isExpanded: true,
+                      style: _dropDownTextStyle,
+                      icon: Image.asset(
+                        Constant.downArrow2,
+                        height: 10,
+                        width: 10,
+                      ),
+                      dropdownColor: Constant.backgroundColor,
+                      items: _getDropDownMenuItems(_compareHeadacheTypeList1),
+                      underline: Container(),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 25,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Constant.locationServiceGreen,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton(
+                      value: _compareHeadacheTypeSelected2,
+                      onChanged: (value) {
+                        setState(() {
+                          _compareHeadacheTypeSelected2 = value;
+                        });
+                      },
+                      isExpanded: true,
+                      style: _dropDownTextStyle,
+                      icon: Image.asset(
+                        Constant.downArrow2,
+                        height: 10,
+                        width: 10,
+                      ),
+                      dropdownColor: Constant.backgroundColor,
+                      items: _getDropDownMenuItems(_compareHeadacheTypeList2),
+                      underline: Container(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
           Divider(
             color: Constant.locationServiceGreen,
             thickness: 0.5,
             height: 0.5,
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             Constant.otherFactors,
             style: _headerTextStyle,
@@ -329,13 +377,15 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getDropDownMenuItems(List<HeadacheListDataModel> dropDownStringList) {
+  List<DropdownMenuItem<String>> _getDropDownMenuItems(
+      List<HeadacheListDataModel> dropDownStringList) {
     List<DropdownMenuItem<String>> dropDownMenuItemList = [];
 
     dropDownStringList.forEach((element) {
       dropDownMenuItemList.add(DropdownMenuItem(
         value: element.text,
-        child: Text(element.text,
+        child: Text(
+          element.text,
         ),
       ));
     });
@@ -366,10 +416,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
               },
             ),
           ),
-          Text(
-              element,
-              style: _radioTextStyle
-          ),
+          Text(element, style: _radioTextStyle),
         ],
       ));
     });
