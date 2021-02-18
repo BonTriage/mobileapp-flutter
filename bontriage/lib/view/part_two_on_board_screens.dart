@@ -53,6 +53,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   int currentScreenPosition = 0;
 
   List<Questions> currentQuestionListData = [];
+  List<int> _backQuestionIndexList = [];
 
   Future<bool> _onBackPressed() async {
     if(!_isButtonClicked) {
@@ -83,8 +84,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           double stepOneProgress = 1 / _pageViewWidgetList.length;
 
           if (_currentPageIndex != 0) {
-            _progressPercent -= stepOneProgress;
-            _currentPageIndex--;
+            _currentPageIndex = _backQuestionIndexList.last;
+            _backQuestionIndexList.removeLast();
+            _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
             _pageController.animateToPage(_currentPageIndex,
                 duration: Duration(milliseconds: 1), curve: Curves.easeIn);
           }
@@ -190,15 +192,19 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                   double stepOneProgress =
                                       1 / _pageViewWidgetList.length;
                                   if (_progressPercent == 1) {
+                                    _backQuestionIndexList.add(_currentPageIndex);
                                     moveUserToNextScreen();
                                   } else {
                                     //_currentPageIndex++;
 
+                                    _backQuestionIndexList.add(_currentPageIndex);
                                     _fetchQuestionTag();
+
+                                    print('QuestionTAG?????' + currentQuestionListData[_currentPageIndex].tag);
 
                                     if (_currentPageIndex !=
                                         _pageViewWidgetList.length - 1)
-                                      _progressPercent += stepOneProgress;
+                                      _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
                                     else {
                                       _progressPercent = 1;
                                     }
@@ -244,6 +250,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
 
       currentQuestionListData = questionListData;
+      print(jsonEncode(currentQuestionListData));
       questionListData.forEach((element) {
         switch (element.questionType) {
           case Constant.QuestionNumberType:
@@ -324,7 +331,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       _currentPageIndex = currentScreenPosition;
       _progressPercent =
           (_currentPageIndex + 1) * (1 / _pageViewWidgetList.length);
-      _pageController = PageController(initialPage: currentScreenPosition);
+      _pageController = PageController(initialPage: _currentPageIndex);
     }
   }
 
@@ -337,6 +344,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       if (userProgressModel != null &&
           userProgressModel.step == Constant.secondEventStep) {
         currentScreenPosition = userProgressModel.userScreenPosition;
+        if(userProgressModel.backQuestionIndexList != null && userProgressModel.backQuestionIndexList.length > 0)
+          _backQuestionIndexList.addAll(userProgressModel.backQuestionIndexList);
+        print(_backQuestionIndexList);
         print(userProgressModel);
       }
 
@@ -384,7 +394,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag = (currentQuestionListData.length > 0)
           ? currentQuestionListData[currentPageIndex].tag
-          : '';
+          : Constant.blankString;
+      userProgressDataModel.backQuestionIndexList = _backQuestionIndexList;
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -441,6 +452,16 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   void _callSendSecondStepDataApi() async {
+    List<SelectedAnswers> selectedAnswersList = [];
+    _backQuestionIndexList.forEach((questionIndex) {
+      String questionTag = currentQuestionListData[questionIndex].tag;
+      SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+      if(selectedAnswer != null)
+        selectedAnswersList.add(selectedAnswer);
+    });
+
+    signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
+
     var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
     if (response is String) {
       if (response == Constant.success) {
@@ -470,21 +491,23 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       _currentPageIndex++;
       Questions questions = currentQuestionListData[_currentPageIndex];
 
-      //replacing the parenthesis with the blank string
-      questions.precondition = questions.precondition.replaceAll('(', Constant.blankString);
-      questions.precondition = questions.precondition.replaceAll(')', Constant.blankString);
-      questions.precondition = questions.precondition.replaceAll(' ', Constant.blankString);
-
       if (questions.precondition.isEmpty) {
         print('QUESTION TAG???${questions.tag}');
       } else {
         //write logic for precondition
+
+        //replacing the parenthesis with the blank string
+        questions.precondition = questions.precondition.replaceAll('(', Constant.blankString);
+        questions.precondition = questions.precondition.replaceAll(')', Constant.blankString);
+        questions.precondition = questions.precondition.replaceAll(' ', Constant.blankString);
+
         if (questions.precondition.contains('AND')) {
-          bool isConditionSatisfied = false;
+          bool isConditionSatisfied;
 
           List<String> splitANDCondition = questions.precondition.split('AND');
 
-          splitANDCondition.forEach((splitANDConditionElement) {
+          for(int i = 0; i < splitANDCondition.length; i++) {
+            String splitANDConditionElement = splitANDCondition[i];
             if(splitANDConditionElement.contains('<=')) {
               List<String> splitConditionList = splitANDConditionElement.split('<=');
               if (splitConditionList.length == 2) {
@@ -493,22 +516,165 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
                 if (selectedAnswer != null) {
                   if (int.tryParse(selectedAnswer.answer) <= answer) {
-                    isConditionSatisfied = isConditionSatisfied && true;
+                    if(isConditionSatisfied == null) {
+                      isConditionSatisfied = true;
+                    }
                   } else {
-                    _fetchQuestionTag();
+                    isConditionSatisfied = false;
+                    break;
                   }
+                } else {
+                  isConditionSatisfied = false;
+                  break;
                 }
               }
             } else if (splitANDConditionElement.contains('>=')) {
-
+              List<String> splitConditionList = splitANDConditionElement.split('>=');
+              if (splitConditionList.length == 2) {
+                String questionTag = splitConditionList[0];
+                int answer = int.tryParse(splitConditionList[1]);
+                SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                if (selectedAnswer != null) {
+                  if (int.tryParse(selectedAnswer.answer) >= answer) {
+                    if(isConditionSatisfied == null) {
+                      isConditionSatisfied = true;
+                    }
+                  } else {
+                    isConditionSatisfied = false;
+                    break;
+                  }
+                } else {
+                  isConditionSatisfied = false;
+                  break;
+                }
+              }
             } else if (splitANDConditionElement.contains('=')) {
-
+              if(splitANDConditionElement.contains('NOT')) {
+                questions.precondition = questions.precondition.replaceAll('NOT', Constant.blankString);
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if (splitConditionList.length == 2) {
+                  String questionTag = splitConditionList[0];
+                  String answer = splitConditionList[1];
+                  SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                  if (selectedAnswer != null) {
+                    if (!selectedAnswer.answer.contains(answer)) {
+                      if(isConditionSatisfied == null) {
+                        isConditionSatisfied = true;
+                      }
+                    } else {
+                      isConditionSatisfied = false;
+                      break;
+                    }
+                  } else {
+                    isConditionSatisfied = false;
+                    break;
+                  }
+                }
+              } else {
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if (splitConditionList.length == 2) {
+                  String questionTag = splitConditionList[0];
+                  String answer = splitConditionList[1];
+                  SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                  if (selectedAnswer != null) {
+                    if (selectedAnswer.answer.contains(answer)) {
+                      if(isConditionSatisfied == null) {
+                        isConditionSatisfied = true;
+                      }
+                    } else {
+                      isConditionSatisfied = false;
+                      break;
+                    }
+                  } else {
+                    isConditionSatisfied = false;
+                    break;
+                  }
+                }
+              }
             }
-          });
+          }
+
+          if(isConditionSatisfied != null && !isConditionSatisfied)
+            _fetchQuestionTag();
         } else if (questions.precondition.contains('OR')) {
+          bool isConditionSatisfied = false;
 
-        } else if (questions.precondition.contains('NOT')) {
+          List<String> splitANDCondition = questions.precondition.split('OR');
 
+          for(int i = 0; i < splitANDCondition.length; i++) {
+            String splitANDConditionElement = splitANDCondition[i];
+            if(splitANDConditionElement.contains('<=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('<=');
+              if (splitConditionList.length == 2) {
+                String questionTag = splitConditionList[0];
+                int answer = int.tryParse(splitConditionList[1]);
+                SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                if (selectedAnswer != null) {
+                  if (int.tryParse(selectedAnswer.answer) <= answer) {
+                    isConditionSatisfied = true;
+                    break;
+                  } else {
+                    isConditionSatisfied = isConditionSatisfied || false;
+                  }
+                } else
+                  isConditionSatisfied = isConditionSatisfied || false;
+              }
+            } else if (splitANDConditionElement.contains('>=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('>=');
+              if (splitConditionList.length == 2) {
+                String questionTag = splitConditionList[0];
+                int answer = int.tryParse(splitConditionList[1]);
+                SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                if (selectedAnswer != null) {
+                  if (int.tryParse(selectedAnswer.answer) <= answer) {
+                    isConditionSatisfied = true;
+                    break;
+                  } else {
+                    isConditionSatisfied = isConditionSatisfied || false;
+                  }
+                } else
+                  isConditionSatisfied = isConditionSatisfied || false;
+              }
+            } else if (splitANDConditionElement.contains('=')) {
+              if(splitANDConditionElement.contains('NOT')) {
+                questions.precondition = questions.precondition.replaceAll('NOT', Constant.blankString);
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if (splitConditionList.length == 2) {
+                  String questionTag = splitConditionList[0];
+                  String answer = splitConditionList[1];
+                  SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                  if (selectedAnswer != null) {
+                    if (!selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer)) {
+                      isConditionSatisfied = true;
+                      break;
+                    } else {
+                      isConditionSatisfied = isConditionSatisfied || false;
+                    }
+                  } else
+                    isConditionSatisfied = isConditionSatisfied || false;
+                }
+              } else {
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if (splitConditionList.length == 2) {
+                  String questionTag = splitConditionList[0];
+                  String answer = splitConditionList[1];
+                  SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+                  if (selectedAnswer != null) {
+                    if (selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer)) {
+                      isConditionSatisfied = true;
+                      break;
+                    } else {
+                      isConditionSatisfied = isConditionSatisfied || false;
+                    }
+                  } else
+                    isConditionSatisfied = isConditionSatisfied || false;
+                }
+              }
+            }
+          }
+
+          if(!isConditionSatisfied)
+            _fetchQuestionTag();
         } else {
           if (questions.precondition.contains('<=')) {
             List<String> splitConditionList = questions.precondition.split('<=');
@@ -522,7 +688,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 } else {
                   _fetchQuestionTag();
                 }
-              }
+              } else
+                _fetchQuestionTag();
             }
           } else if (questions.precondition.contains('>=')) {
             List<String> splitConditionList = questions.precondition.split('>=');
@@ -536,7 +703,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 } else {
                   _fetchQuestionTag();
                 }
-              }
+              } else
+                _fetchQuestionTag();
             }
           } else if (questions.precondition.contains('>')) {
             List<String> splitConditionList = questions.precondition.split('>');
@@ -550,7 +718,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 } else {
                   _fetchQuestionTag();
                 }
-              }
+              } else
+                _fetchQuestionTag();
             }
           } else if (questions.precondition.contains('<')) {
             List<String> splitConditionList = questions.precondition.split('<');
@@ -564,7 +733,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                 } else {
                   _fetchQuestionTag();
                 }
-              }
+              } else
+                _fetchQuestionTag();
             }
           } else if (questions.precondition.contains('=')) {
             List<String> splitConditionList = questions.precondition.split('=');
@@ -573,12 +743,13 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               String answer = splitConditionList[1];
               SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
               if (selectedAnswer != null) {
-                if (selectedAnswer.answer == answer) {
+                if (selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer)) {
                   print('QUESTION TAG???${questions.tag}');
                 } else {
                   _fetchQuestionTag();
                 }
-              }
+              } else
+                _fetchQuestionTag();
             }
           }
         }
