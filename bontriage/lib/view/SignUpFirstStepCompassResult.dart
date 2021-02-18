@@ -546,7 +546,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = int.tryParse(userFrequency.answer);
-      userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+      userFrequencyValue = userFrequencyValue ~/ (30 / baseMaxValue);
     }
     var userDuration = selectedAnswerListData.firstWhere(
         (intensityElement) =>
@@ -608,7 +608,7 @@ class _SignUpFirstStepCompassResultState
     int userMaxDurationValue;
     var intensityScore = userIntensityValue / 10 * 100.0;
     var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
-    var frequencyScore = userFrequencyValue.toInt() / 90 * 100.0;
+    var frequencyScore = userFrequencyValue.toInt() / 30 * 100.0;
     if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
     } else if (userDurationValue > 1 && userDurationValue <= 24) {
