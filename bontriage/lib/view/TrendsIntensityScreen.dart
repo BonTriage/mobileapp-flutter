@@ -10,8 +10,9 @@ import 'package:mobile/models/TrendsFilterModel.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
+  final Function updateTrendsDataCallback;
 
-  const TrendsIntensityScreen({Key key, this.editGraphViewFilterModel})
+  const TrendsIntensityScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
 
   @override
@@ -51,7 +52,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   void initState() {
     super.initState();
 
-    _dateTime = DateTime.now();
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
@@ -68,6 +69,16 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   void didUpdateWidget(covariant TrendsIntensityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     print('in did update widget of trends intensity screen');
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
     setIntensityValuesData();
   }
 
@@ -110,7 +121,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -656,26 +667,18 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    setState(() {
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
-      monthName = Utils.getMonthName(dateTime.month);
-      currentYear = dateTime.year;
-      currentMonth = dateTime.month;
-      _dateTime = dateTime;
-/*      _calendarScreenBloc.initNetworkStreamController();
-      Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-            _calendarScreenBloc.enterSomeDummyDataToStreamController();
-            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-          });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
-    });
+    _dateTime = dateTime;
+    widget.editGraphViewFilterModel.selectedDateTime = _dateTime;
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+    monthName = Utils.getMonthName(dateTime.month);
+    currentYear = dateTime.year;
+    currentMonth = dateTime.month;
+    widget.updateTrendsDataCallback();
   }
 
   Color setToolTipColor() {
@@ -797,10 +800,11 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           fifthWeekIntensityData[0],
           fifthWeekIntensityData[1],
           fifthWeekIntensityData[2],
-          fifthWeekIntensityData[0],
-          fifthWeekIntensityData[0],
-          fifthWeekIntensityData[0],
-          fifthWeekIntensityData[0]);
+          0,
+          0,
+          0,
+          0,);
+
     }
 
     if (totalDaysInCurrentMonth > 28) {

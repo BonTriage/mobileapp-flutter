@@ -11,8 +11,9 @@ import 'package:mobile/models/TrendsFilterModel.dart';
 class TrendsFrequencyScreen extends StatefulWidget {
 
   final EditGraphViewFilterModel editGraphViewFilterModel;
+  final Function updateTrendsDataCallback;
 
-  const TrendsFrequencyScreen({Key key, this.editGraphViewFilterModel})
+  const TrendsFrequencyScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
   @override
   _TrendsFrequencyScreenState createState() => _TrendsFrequencyScreenState();
@@ -48,7 +49,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
@@ -60,13 +61,21 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
     setFrequencyValuesData();
-
   }
 
   @override
   void didUpdateWidget(covariant TrendsFrequencyScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
     setFrequencyValuesData();
   }
 
@@ -107,7 +116,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
                                 fontSize: 12 ));
@@ -431,26 +440,18 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    setState(() {
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
-      monthName = Utils.getMonthName(dateTime.month);
-      currentYear = dateTime.year;
-      currentMonth = dateTime.month;
-      _dateTime = dateTime;
-/*      _calendarScreenBloc.initNetworkStreamController();
-      Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-            _calendarScreenBloc.enterSomeDummyDataToStreamController();
-            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-          });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
-    });
+    _dateTime = dateTime;
+    widget.editGraphViewFilterModel.selectedDateTime = _dateTime;
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+    monthName = Utils.getMonthName(dateTime.month);
+    currentYear = dateTime.year;
+    currentMonth = dateTime.month;
+    widget.updateTrendsDataCallback();
   }
 
   Color setToolTipColor() {
@@ -540,10 +541,10 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           fifthWeekFrequencyData[0],
           fifthWeekFrequencyData[1],
           fifthWeekFrequencyData[2],
-          fifthWeekFrequencyData[3],
-          fifthWeekFrequencyData[4],
-          fifthWeekFrequencyData[5],
-          fifthWeekFrequencyData[6]);
+          0,
+          0,
+          0,
+          0);
     }
 
     if (totalDaysInCurrentMonth > 28) {

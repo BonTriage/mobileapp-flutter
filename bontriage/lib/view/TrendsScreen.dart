@@ -60,7 +60,10 @@ class _TrendsScreenState extends State<TrendsScreen> {
     _recordsTrendsScreenBloc = RecordsTrendsScreenBloc();
     _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
-    _dateTime = DateTime.now();
+
+    _editGraphViewFilterModel = EditGraphViewFilterModel();
+    _editGraphViewFilterModel.selectedDateTime = DateTime.now();
+    _dateTime = _editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
     totalDaysInCurrentMonth =
@@ -69,8 +72,6 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-
-    _editGraphViewFilterModel = EditGraphViewFilterModel();
 
   }
 
@@ -352,11 +353,11 @@ class _TrendsScreenState extends State<TrendsScreen> {
     }
     pageViewWidgetList = [
       TrendsIntensityScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel),
+          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
       TrendsDisabilityScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel),
+          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
       TrendsFrequencyScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel),
+          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
       TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
     ];
   }
@@ -392,6 +393,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
             lastDayOfTheCurrentMonth,
             selectedHeadacheName);
       });
+      print('Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
       _recordsTrendsScreenBloc.fetchAllHeadacheListData(
           firstDayOfTheCurrentMonth,
           lastDayOfTheCurrentMonth,
@@ -506,5 +508,19 @@ class _TrendsScreenState extends State<TrendsScreen> {
         medicationsListData;
     print('AllModelsData $_editGraphViewFilterModel');
     _editGraphViewFilterModel.numberOfDaysInMonth = totalDaysInCurrentMonth;
+  }
+
+  void _updateTrendsData() {
+    _dateTime = _editGraphViewFilterModel.selectedDateTime;
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+        selectedHeadacheName);
   }
 }

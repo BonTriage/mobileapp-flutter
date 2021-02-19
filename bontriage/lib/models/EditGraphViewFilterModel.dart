@@ -16,7 +16,7 @@ class EditGraphViewFilterModel {
   TrendsFilterListModel trendsFilterListModel;
   int currentTabIndex;
   int numberOfDaysInMonth;
-
+  DateTime selectedDateTime;
 
 
 
@@ -28,6 +28,7 @@ class EditGraphViewFilterModel {
     this.recordsTrendsDataModel,
     this.currentTabIndex = 0,
     this.headacheTypeRadioButtonSelected = Constant.viewSingleHeadache,
-    this.numberOfDaysInMonth = 0
+    this.numberOfDaysInMonth = 0,
+    this.selectedDateTime,
   });
 }
