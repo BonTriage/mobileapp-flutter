@@ -107,7 +107,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
                                 fontSize: 12 ));
@@ -540,10 +540,10 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           fifthWeekFrequencyData[0],
           fifthWeekFrequencyData[1],
           fifthWeekFrequencyData[2],
-          fifthWeekFrequencyData[3],
-          fifthWeekFrequencyData[4],
-          fifthWeekFrequencyData[5],
-          fifthWeekFrequencyData[6]);
+          0,
+          0,
+          0,
+          0);
     }
 
     if (totalDaysInCurrentMonth > 28) {

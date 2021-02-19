@@ -111,7 +111,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +

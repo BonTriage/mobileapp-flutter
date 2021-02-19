@@ -108,7 +108,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -641,10 +641,10 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           fifthWeekDisabilityData[0],
           fifthWeekDisabilityData[1],
           fifthWeekDisabilityData[2],
-          fifthWeekDisabilityData[3],
-          fifthWeekDisabilityData[4],
-          fifthWeekDisabilityData[5],
-          fifthWeekDisabilityData[6]);
+          0,
+          0,
+          0,
+          0);
     }
 
     if (totalDaysInCurrentMonth > 28) {

@@ -110,7 +110,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = 'Jan ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -648,10 +648,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           fifthWeekIntensityData[0],
           fifthWeekIntensityData[1],
           fifthWeekIntensityData[2],
-          fifthWeekIntensityData[3],
-          fifthWeekIntensityData[4],
-          fifthWeekIntensityData[5],
-          fifthWeekIntensityData[6]);
+          0,
+          0,
+          0,
+          0,);
     }
 
     if (totalDaysInCurrentMonth > 28) {
