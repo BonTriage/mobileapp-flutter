@@ -641,10 +641,10 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           fifthWeekDisabilityData[0],
           fifthWeekDisabilityData[1],
           fifthWeekDisabilityData[2],
-          fifthWeekDisabilityData[3],
-          fifthWeekDisabilityData[4],
-          fifthWeekDisabilityData[5],
-          fifthWeekDisabilityData[6]);
+          fifthWeekDisabilityData[0],
+          fifthWeekDisabilityData[0],
+          fifthWeekDisabilityData[0],
+          fifthWeekDisabilityData[0]);
     }
 
     if (totalDaysInCurrentMonth > 28) {
