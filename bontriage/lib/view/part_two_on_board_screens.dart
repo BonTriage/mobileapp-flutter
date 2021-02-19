@@ -530,7 +530,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               }
             } else if (splitANDConditionElement.contains('=')) {
               if(splitANDConditionElement.contains('NOT')) {
-                questions.precondition = questions.precondition.replaceAll('NOT', Constant.blankString);
+                splitANDConditionElement = questions.precondition.replaceAll('NOT', Constant.blankString);
                 List<String> splitConditionList = splitANDConditionElement.split('=');
                 if(!_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
                   if(isConditionSatisfied == null) {
@@ -693,7 +693,14 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         String answer = splitConditionList[1];
         SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
         if (selectedAnswer != null) {
-          return selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer);
+          int intSelectedAnswer = int.tryParse(selectedAnswer.answer.replaceAll(' ', Constant.blankString));
+          int intAnswer = int.tryParse(answer);
+
+          if(intSelectedAnswer != null && intAnswer != null) {
+            return intAnswer == intSelectedAnswer;
+          } else {
+            return selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer);
+          }
         } else {
           return false;
         }
