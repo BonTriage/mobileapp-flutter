@@ -438,8 +438,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.editGraphViewBottomSheet, _editGraphViewFilterModel);
     if (resultFromActionSheet == Constant.success) {
-      if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
-          Constant.viewSingleHeadache) {
+/*      if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+          Constant.viewSingleHeadache) {*/
         selectedHeadacheName =
             _editGraphViewFilterModel.singleTypeHeadacheSelected;
         _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
@@ -452,7 +452,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
             selectedHeadacheName);
-      }
+     // }
     }
     print(resultFromActionSheet);
   }

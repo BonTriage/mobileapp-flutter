@@ -360,70 +360,136 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.mildTriggerColor,
-                    shape: BoxShape.rectangle,
+            Visibility(
+              visible: widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.mildTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
                   ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Mild',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.moderateTriggerColor,
-                    shape: BoxShape.rectangle,
+                  SizedBox(
+                    width: 10,
                   ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Moderate',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.severeTriggerColor,
-                    shape: BoxShape.rectangle,
+                  Text(
+                    'Mild',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
                   ),
-                  height: 13,
-                  width: 13,
+                  SizedBox(
+                    width: 14,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.moderateTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Moderate',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
+                  ),
+                  SizedBox(
+                    width: 14,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.severeTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Severe',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected != Constant.viewSingleHeadache,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Constant.otherHeadacheColor,
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'My Headache',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Constant.migraineColor,
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'My Other Headache ',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Severe',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-              ],
+              ),
             ),
             SizedBox(
               height: 20,
@@ -436,57 +502,140 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   BarChartGroupData makeGroupData(int x, double y1, double y2, double y3,
       double y4, double y5, double y6, double y7) {
-    return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
-      BarChartRodData(
-        y: y1,
-        colors: setBarChartColor(y1),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y2,
-        colors: setBarChartColor(y2),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y3,
-        colors: setBarChartColor(y3),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y4,
-        colors: setBarChartColor(y4),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y5,
-        colors: setBarChartColor(y5),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y6,
-        colors: setBarChartColor(y6),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y7,
-        colors: setBarChartColor(y7),
-        width: width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-    ]);
+    if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+      return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
+        BarChartRodData(
+          y: y1,
+          colors: setBarChartColor(y1),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y2,
+          colors: setBarChartColor(y2),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y3,
+          colors: setBarChartColor(y3),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y4,
+          colors: setBarChartColor(y4),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y5,
+          colors: setBarChartColor(y5),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y6,
+          colors: setBarChartColor(y6),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y7,
+          colors: setBarChartColor(y7),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+      ]);
+    }else{
+      return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
+        BarChartRodData(
+          y: y1,
+          rodStackItems: [
+            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
+            BarChartRodStackItem(2, 7, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y1),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y2,
+          rodStackItems: [
+            BarChartRodStackItem(0, 4, Constant.otherHeadacheColor),
+            BarChartRodStackItem(4, 8, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y2),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y3,
+          rodStackItems: [
+            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
+            BarChartRodStackItem(5, 9, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y3),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y4,
+          rodStackItems: [
+            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
+            BarChartRodStackItem(2, 6, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y4),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y5,
+          rodStackItems: [
+            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
+            BarChartRodStackItem(3, 7, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y5),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y6,
+          rodStackItems: [
+            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
+            BarChartRodStackItem(5, 8, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y6),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+        BarChartRodData(
+          y: y7,
+          rodStackItems: [
+            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
+            BarChartRodStackItem(2, 7, Constant.migraineColor),
+          ],
+          colors: setBarChartColor(y7),
+          width: width,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+        ),
+      ]);
+    }
+
   }
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
@@ -652,6 +801,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           0,
           0,
           0,);
+
     }
 
     if (totalDaysInCurrentMonth > 28) {
