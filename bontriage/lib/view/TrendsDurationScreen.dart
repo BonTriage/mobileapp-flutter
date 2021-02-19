@@ -275,29 +275,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.barTutorialsTapColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        topLeft: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.barQuestionMark),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
+              height: 40,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
