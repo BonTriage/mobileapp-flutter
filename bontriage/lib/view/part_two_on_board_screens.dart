@@ -497,14 +497,15 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         //write logic for precondition
 
         //replacing the parenthesis with the blank string
-        questions.precondition = questions.precondition.replaceAll('(', Constant.blankString);
-        questions.precondition = questions.precondition.replaceAll(')', Constant.blankString);
-        questions.precondition = questions.precondition.replaceAll(' ', Constant.blankString);
+        String preCondition = questions.precondition;
+        preCondition = preCondition.replaceAll('(', Constant.blankString);
+        preCondition = preCondition.replaceAll(')', Constant.blankString);
+        preCondition = preCondition.replaceAll(' ', Constant.blankString);
 
-        if (questions.precondition.contains('AND')) {
+        if (preCondition.contains('AND')) {
           bool isConditionSatisfied;
 
-          List<String> splitANDCondition = questions.precondition.split('AND');
+          List<String> splitANDCondition = preCondition.split('AND');
 
           for(int i = 0; i < splitANDCondition.length; i++) {
             String splitANDConditionElement = splitANDCondition[i];
@@ -530,7 +531,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               }
             } else if (splitANDConditionElement.contains('=')) {
               if(splitANDConditionElement.contains('NOT')) {
-                splitANDConditionElement = questions.precondition.replaceAll('NOT', Constant.blankString);
+                splitANDConditionElement = splitANDConditionElement.replaceAll('NOT', Constant.blankString);
                 List<String> splitConditionList = splitANDConditionElement.split('=');
                 if(!_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
                   if(isConditionSatisfied == null) {
@@ -556,10 +557,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
           if(isConditionSatisfied != null && !isConditionSatisfied)
             _fetchQuestionTag();
-        } else if (questions.precondition.contains('OR')) {
+        } else if (preCondition.contains('OR')) {
           bool isConditionSatisfied = false;
 
-          List<String> splitANDCondition = questions.precondition.split('OR');
+          List<String> splitANDCondition = preCondition.split('OR');
 
           for(int i = 0; i < splitANDCondition.length; i++) {
             String splitANDConditionElement = splitANDCondition[i];
@@ -581,7 +582,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               }
             } else if (splitANDConditionElement.contains('=')) {
               if(splitANDConditionElement.contains('NOT')) {
-                questions.precondition = questions.precondition.replaceAll('NOT', Constant.blankString);
+                splitANDConditionElement = preCondition.replaceAll('NOT', Constant.blankString);
                 List<String> splitConditionList = splitANDConditionElement.split('=');
                 if(!_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
                   isConditionSatisfied = true;
@@ -604,36 +605,36 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           if(!isConditionSatisfied)
             _fetchQuestionTag();
         } else {
-          if (questions.precondition.contains('<=')) {
-            List<String> splitConditionList = questions.precondition.split('<=');
+          if (preCondition.contains('<=')) {
+            List<String> splitConditionList = preCondition.split('<=');
             if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<=')) {
               print('QUESTION TAG???${questions.tag}');
             } else {
               _fetchQuestionTag();
             }
-          } else if (questions.precondition.contains('>=')) {
-            List<String> splitConditionList = questions.precondition.split('>=');
+          } else if (preCondition.contains('>=')) {
+            List<String> splitConditionList = preCondition.split('>=');
             if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>=')) {
               print('QUESTION TAG???${questions.tag}');
             } else {
               _fetchQuestionTag();
             }
-          } else if (questions.precondition.contains('>')) {
-            List<String> splitConditionList = questions.precondition.split('>');
+          } else if (preCondition.contains('>')) {
+            List<String> splitConditionList = preCondition.split('>');
             if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>')) {
               print('QUESTION TAG???${questions.tag}');
             } else {
               _fetchQuestionTag();
             }
-          } else if (questions.precondition.contains('<')) {
-            List<String> splitConditionList = questions.precondition.split('<');
+          } else if (preCondition.contains('<')) {
+            List<String> splitConditionList = preCondition.split('<');
             if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<')) {
               print('QUESTION TAG???${questions.tag}');
             } else {
               _fetchQuestionTag();
             }
-          } else if (questions.precondition.contains('=')) {
-            List<String> splitConditionList = questions.precondition.split('=');
+          } else if (preCondition.contains('=')) {
+            List<String> splitConditionList = preCondition.split('=');
             if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
               print('QUESTION TAG???${questions.tag}');
             } else {
