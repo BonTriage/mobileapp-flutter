@@ -10,8 +10,9 @@ import 'package:mobile/models/TrendsFilterModel.dart';
 
 class TrendsDisabilityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
+  final Function updateTrendsDataCallback;
 
-  const TrendsDisabilityScreen({Key key, this.editGraphViewFilterModel})
+  const TrendsDisabilityScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
 
   @override
@@ -48,7 +49,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
@@ -65,7 +66,16 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   void didUpdateWidget(covariant TrendsDisabilityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    print('In did update widget of disability');
+    _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
+    currentMonth = _dateTime.month;
+    currentYear = _dateTime.year;
+    monthName = Utils.getMonthName(currentMonth);
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(currentMonth, currentYear);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        currentMonth, currentYear, totalDaysInCurrentMonth);
     setDisabilityValuesData();
   }
 
@@ -500,26 +510,18 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    setState(() {
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
-      monthName = Utils.getMonthName(dateTime.month);
-      currentYear = dateTime.year;
-      currentMonth = dateTime.month;
-      _dateTime = dateTime;
-/*      _calendarScreenBloc.initNetworkStreamController();
-      Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-            _calendarScreenBloc.enterSomeDummyDataToStreamController();
-            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-          });
-      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);*/
-    });
+    _dateTime = dateTime;
+    widget.editGraphViewFilterModel.selectedDateTime = _dateTime;
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+    monthName = Utils.getMonthName(dateTime.month);
+    currentYear = dateTime.year;
+    currentMonth = dateTime.month;
+    widget.updateTrendsDataCallback();
   }
 
   Color setToolTipColor() {
