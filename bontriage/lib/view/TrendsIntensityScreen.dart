@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +64,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   BarChartGroupData barGroup3;
   BarChartGroupData barGroup4;
   BarChartGroupData barGroup5;
+
+  bool headacheColorChanged = false;
 
   @override
   void initState() {
@@ -290,25 +294,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                 ],
               ),
             ),
-            /*Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.barTutorialsTapColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        topLeft: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.barQuestionMark),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),
-              ],
-            ),*/
             SizedBox(
               height: 40,
             ),
@@ -459,7 +444,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Constant.otherHeadacheColor,
+                            color: setHeadacheColor(),
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -469,7 +454,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          'My Headache',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length >0 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -488,7 +473,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Constant.migraineColor,
+                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -498,7 +483,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          'My Other Headache ',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -1128,4 +1113,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     }
     return maxValue;
   }
+
+ Color setHeadacheColor() {
+   if(firstWeekIntensityData.length > 0  && multipleFirstWeekIntensityData.length> 0) {
+     if (firstWeekIntensityData[0] >= multipleFirstWeekIntensityData[0]) {
+       headacheColorChanged = true;
+       return Constant.otherHeadacheColor;
+     } else{
+       headacheColorChanged = false;
+       return Constant.migraineColor;
+     }
+
+   }else return Colors.transparent;
+ }
 }

@@ -455,10 +455,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
       }else{
           selectedHeadacheName =
               _editGraphViewFilterModel.compareHeadacheTypeSelected1;
+         var secondSelectedHeadacheName =
+              _editGraphViewFilterModel.compareHeadacheTypeSelected2;
           _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
               duration: Duration(milliseconds: 300), curve: Curves.easeIn);
           requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName,'Headache2',true);
+            selectedHeadacheName,secondSelectedHeadacheName,true);
 
       }
     }
