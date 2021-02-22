@@ -79,7 +79,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   void didUpdateWidget(TrendsScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-        selectedHeadacheName);
+        selectedHeadacheName,"",false);
   }
 
   @override
@@ -376,7 +376,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   }
 
   void requestService(String firstDayOfTheCurrentMonth,
-      String lastDayOfTheCurrentMonth, String selectedHeadacheName) async {
+      String lastDayOfTheCurrentMonth,String selectedHeadacheName, String selectedAnotherHeadacheName, bool isMultipleHeadacheSelected) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
@@ -391,13 +391,13 @@ class _TrendsScreenState extends State<TrendsScreen> {
         _recordsTrendsScreenBloc.fetchAllHeadacheListData(
             firstDayOfTheCurrentMonth,
             lastDayOfTheCurrentMonth,
-            selectedHeadacheName);
+            selectedHeadacheName,selectedAnotherHeadacheName,isMultipleHeadacheSelected);
       });
       print('Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
       _recordsTrendsScreenBloc.fetchAllHeadacheListData(
           firstDayOfTheCurrentMonth,
           lastDayOfTheCurrentMonth,
-          selectedHeadacheName);
+          selectedHeadacheName,selectedAnotherHeadacheName,isMultipleHeadacheSelected);
     }
   }
 
@@ -409,8 +409,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.editGraphViewBottomSheet, _editGraphViewFilterModel);
     if (resultFromActionSheet == Constant.success) {
-/*      if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
-          Constant.viewSingleHeadache) {*/
+      if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+          Constant.viewSingleHeadache) {
         selectedHeadacheName =
             _editGraphViewFilterModel.singleTypeHeadacheSelected;
         _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
@@ -422,8 +422,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
         // Constant.medications,
 
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName);
-     // }
+            selectedHeadacheName,'',false);
+      }else{
+          selectedHeadacheName =
+              _editGraphViewFilterModel.compareHeadacheTypeSelected1;
+          _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
+              duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName,'Headache2',true);
+
+      }
     }
     print(resultFromActionSheet);
   }
@@ -520,7 +528,13 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-        selectedHeadacheName);
+    if(_editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName,'',false);
+    }else{
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+          selectedHeadacheName,'',true);
+    }
+
   }
 }

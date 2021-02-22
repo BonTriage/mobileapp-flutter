@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/RecordsTrendsRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 
 class RecordsTrendsScreenBloc {
   RecordsTrendsRepository _recordsTrendsRepository;
@@ -36,7 +36,7 @@ class RecordsTrendsScreenBloc {
   }
 
   fetchAllHeadacheListData(
-      String startDate, String endDate, String headacheName) async {
+      String startDate, String endDate, String firstHeadacheName,String secondHeadacheName, bool isMultiPleHeadacheSelected) async {
     String apiResponse;
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
@@ -60,8 +60,10 @@ class RecordsTrendsScreenBloc {
           if (headacheListModelData.length > 0) {
             _recordsTrendsDataModel.headacheListModelData =
                 headacheListModelData;
-            if (headacheName != null) {
-              getTrendsUserData(startDate, endDate, headacheName);
+            if (firstHeadacheName != null) {
+              if(isMultiPleHeadacheSelected){
+                getMultipleHeadacheTrendsDate(startDate, endDate, firstHeadacheName, secondHeadacheName);
+              }else getTrendsUserData(startDate, endDate, firstHeadacheName);
             } else {
               getTrendsUserData(
                   startDate, endDate, headacheListModelData[0].text);
@@ -83,6 +85,8 @@ class RecordsTrendsScreenBloc {
     }
     return apiResponse;
   }
+
+
 
 //http://34.222.200.187:8080/mobileapi/v0/trends/event/?end_date=2021-01-31T18:30:00Z&headache_name=Headache1&start_date=2021-01-01T18:30:00Z&user_id=4613
   getTrendsUserData(
@@ -131,6 +135,57 @@ class RecordsTrendsScreenBloc {
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
+  }
+
+  getMultipleHeadacheTrendsDate(String startDate, String endDate,String firstHeadacheName,String secondHeadacheName)async{
+    String apiResponse;
+    var userProfileInfoData =
+    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    try {
+      String url = WebservicePost.qaServerUrl +
+          'trends/compare/?' +
+          "start_date=" +
+          startDate +
+          "&" +
+          "end_date=" +
+          endDate +
+          "&" +
+          "user_id=" +
+          userProfileInfoData.userId +
+          "&" +
+          "headache_first=" +
+          firstHeadacheName
+          +
+          "&" +
+          "headache_second=" +
+          secondHeadacheName;
+      var response = await _recordsTrendsRepository.trendsServiceCall(
+          url, RequestMethod.GET);
+      if (response is AppException) {
+        recordsTrendsDataSink.addError(response);
+        apiResponse = response.toString();
+      } else {
+        if (response != null) {
+          List<HeadacheListDataModel> headacheDataList = [];
+          if (_recordsTrendsDataModel.headacheListModelData.length > 0) {
+            headacheDataList = _recordsTrendsDataModel.headacheListModelData;
+          }
+          _recordsTrendsDataModel.recordsTrendsMultipleHeadacheDataModel = RecordsTrendsMultipleHeadacheDataModel.fromJson(jsonDecode(response));
+          apiResponse = Constant.success;
+          _recordsTrendsDataModel.headacheListModelData = headacheDataList;
+          recordsTrendsDataSink.add(_recordsTrendsDataModel);
+          networkDataSink.add(Constant.success);
+        } else {
+          recordsTrendsDataSink
+              .addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+      apiResponse = Constant.somethingWentWrong;
+    }
+    return apiResponse;
+
   }
 
   void enterSomeDummyDataToStream() {

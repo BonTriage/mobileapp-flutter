@@ -3,9 +3,8 @@
 //     final recordsTrendsDataModel = recordsTrendsDataModelFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:mobile/models/HeadacheListDataModel.dart';
+import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 
 RecordsTrendsDataModel recordsTrendsDataModelFromJson(String str) => RecordsTrendsDataModel.fromJson(json.decode(str));
 
@@ -17,7 +16,8 @@ class RecordsTrendsDataModel {
     this.medication,
     this.headache,
     this.triggers,
-    this.headacheListModelData
+    this.headacheListModelData,
+    this.recordsTrendsMultipleHeadacheDataModel
   });
 
   List<Behavior> behaviors;
@@ -25,6 +25,7 @@ class RecordsTrendsDataModel {
   Headache headache;
   List<Trigger> triggers;
   List<HeadacheListDataModel> headacheListModelData;
+  RecordsTrendsMultipleHeadacheDataModel recordsTrendsMultipleHeadacheDataModel;
 
   factory RecordsTrendsDataModel.fromJson(Map<String, dynamic> json) => RecordsTrendsDataModel(
     behaviors: List<Behavior>.from(json["behaviors"].map((x) => Behavior.fromJson(x))),

@@ -7,12 +7,14 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
+import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
 
-  const TrendsIntensityScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
+  const TrendsIntensityScreen(
+      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
 
   @override
@@ -40,13 +42,26 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   int clickedValue;
   bool isClicked = false;
   List<Ity> intensityListData = [];
-  BarChartGroupData barGroup5;
+  List<Data> multipleFirstIntensityListData = [];
+  List<Data> multipleSecondIntensityListData = [];
   List<BarChartGroupData> items;
   List<double> firstWeekIntensityData = [];
   List<double> secondWeekIntensityData = [];
   List<double> thirdWeekIntensityData = [];
   List<double> fourthWeekIntensityData = [];
   List<double> fifthWeekIntensityData = [];
+
+  List<double> multipleFirstWeekIntensityData = [];
+  List<double> multipleSecondWeekIntensityData = [];
+  List<double> multipleThirdWeekIntensityData = [];
+  List<double> multipleFourthWeekIntensityData = [];
+  List<double> multipleFifthWeekIntensityData = [];
+
+  BarChartGroupData barGroup2;
+  BarChartGroupData barGroup1;
+  BarChartGroupData barGroup3;
+  BarChartGroupData barGroup4;
+  BarChartGroupData barGroup5;
 
   @override
   void initState() {
@@ -121,7 +136,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay =
+                                '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -364,7 +380,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               height: 10,
             ),
             Visibility(
-              visible: widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache,
+              visible: widget.editGraphViewFilterModel
+                      .headacheTypeRadioButtonSelected ==
+                  Constant.viewSingleHeadache,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -432,7 +450,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               ),
             ),
             Visibility(
-              visible: widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected != Constant.viewSingleHeadache,
+              visible: widget.editGraphViewFilterModel
+                      .headacheTypeRadioButtonSelected !=
+                  Constant.viewSingleHeadache,
               child: Padding(
                 padding: const EdgeInsets.only(left: 60),
                 child: Column(
@@ -463,7 +483,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -505,140 +527,133 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   BarChartGroupData makeGroupData(int x, double y1, double y2, double y3,
       double y4, double y5, double y6, double y7) {
-    if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
-      return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
-        BarChartRodData(
-          y: y1,
-          colors: setBarChartColor(y1),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y2,
-          colors: setBarChartColor(y2),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y3,
-          colors: setBarChartColor(y3),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y4,
-          colors: setBarChartColor(y4),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y5,
-          colors: setBarChartColor(y5),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y6,
-          colors: setBarChartColor(y6),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y7,
-          colors: setBarChartColor(y7),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-      ]);
-    }else{
-      return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
-        BarChartRodData(
-          y: y1,
-          rodStackItems: [
-            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
-            BarChartRodStackItem(2, 7, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y1),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y2,
-          rodStackItems: [
-            BarChartRodStackItem(0, 4, Constant.otherHeadacheColor),
-            BarChartRodStackItem(4, 8, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y2),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y3,
-          rodStackItems: [
-            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
-            BarChartRodStackItem(5, 9, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y3),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y4,
-          rodStackItems: [
-            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
-            BarChartRodStackItem(2, 6, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y4),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y5,
-          rodStackItems: [
-            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
-            BarChartRodStackItem(3, 7, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y5),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y6,
-          rodStackItems: [
-            BarChartRodStackItem(0, 5, Constant.otherHeadacheColor),
-            BarChartRodStackItem(5, 8, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y6),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-        BarChartRodData(
-          y: y7,
-          rodStackItems: [
-            BarChartRodStackItem(0, 2, Constant.otherHeadacheColor),
-            BarChartRodStackItem(2, 7, Constant.migraineColor),
-          ],
-          colors: setBarChartColor(y7),
-          width: width,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-        ),
-      ]);
-    }
+    return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
+      BarChartRodData(
+        y: y1,
+        colors: setBarChartColor(y1),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y2,
+        colors: setBarChartColor(y2),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y3,
+        colors: setBarChartColor(y3),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y4,
+        colors: setBarChartColor(y4),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y5,
+        colors: setBarChartColor(y5),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y6,
+        colors: setBarChartColor(y6),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: y7,
+        colors: setBarChartColor(y7),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+    ]);
+  }
 
+  BarChartGroupData makeMultipleGroupData(
+      int x,
+      double firstMultipleHeadache1,
+      double firstMultipleHeadache2,
+      double firstMultipleHeadache3,
+      double firstMultipleHeadache4,
+      double firstMultipleHeadache5,
+      double firstMultipleHeadache6,
+      double firstMultipleHeadache7,
+      double secondMultipleHeadache1,
+      double secondMultipleHeadache2,
+      double secondMultipleHeadache3,
+      double secondMultipleHeadache4,
+      double secondMultipleHeadache5,
+      double secondMultipleHeadache6,
+      double secondMultipleHeadache7) {
+    return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache1, secondMultipleHeadache1),
+        rodStackItems: setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache2, secondMultipleHeadache2),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache3, secondMultipleHeadache3),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache3, secondMultipleHeadache3)
+        ,
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache4, secondMultipleHeadache4),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache5, secondMultipleHeadache5),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache6, secondMultipleHeadache6),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache7, secondMultipleHeadache7),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+    ]);
   }
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
@@ -720,82 +735,102 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     }
   }
 
-  void setIntensityValuesData() {
-    intensityListData = widget
-        .editGraphViewFilterModel.recordsTrendsDataModel.headache.severity;
-    firstWeekIntensityData = [];
-    secondWeekIntensityData = [];
-    thirdWeekIntensityData = [];
-    fourthWeekIntensityData = [];
-    fifthWeekIntensityData = [];
-
-    for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
-      String date;
-      String month;
-      if (i < 10) {
-        date = '0$i';
-      } else {
-        date = i.toString();
-      }
-      if (currentMonth < 10) {
-        month = '0$currentMonth';
-      } else {
-        month = currentMonth.toString();
-      }
-      DateTime dateTime =
-          DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
-      var intensityData = intensityListData.firstWhere(
-          (element) => element.date.isAtSameMomentAs(dateTime),
-          orElse: () => null);
-      if (intensityData != null) {
-        setAllWeekIntensityData(i, intensityData.value.toDouble());
-      } else {
-        setAllWeekIntensityData(i, 0);
-      }
+  void setAllMultipleWeekIntensityData(int i, double intensityData) {
+    if (i <= 7) {
+      multipleFirstWeekIntensityData.add(intensityData);
     }
+    if (i > 7 && i <= 14) {
+      multipleSecondWeekIntensityData.add(intensityData);
+    }
+    if (i > 14 && i <= 21) {
+      multipleThirdWeekIntensityData.add(intensityData);
+    }
+    if (i > 21 && i <= 28) {
+      multipleFourthWeekIntensityData.add(intensityData);
+    }
+    if (i > 28) {
+      multipleFifthWeekIntensityData.add(intensityData);
+    }
+  }
 
-    print(
-        'AllIntensityListData $firstWeekIntensityData $secondWeekIntensityData $thirdWeekIntensityData $fourthWeekIntensityData');
+  void setIntensityValuesData() {
+    if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+        Constant.viewSingleHeadache) {
+      intensityListData = widget
+          .editGraphViewFilterModel.recordsTrendsDataModel.headache.severity;
+      firstWeekIntensityData = [];
+      secondWeekIntensityData = [];
+      thirdWeekIntensityData = [];
+      fourthWeekIntensityData = [];
+      fifthWeekIntensityData = [];
 
-    final barGroup1 = makeGroupData(
-        0,
-        firstWeekIntensityData[0],
-        firstWeekIntensityData[1],
-        firstWeekIntensityData[2],
-        firstWeekIntensityData[3],
-        firstWeekIntensityData[4],
-        firstWeekIntensityData[5],
-        firstWeekIntensityData[6]);
-    final barGroup2 = makeGroupData(
-        1,
-        secondWeekIntensityData[0],
-        secondWeekIntensityData[1],
-        secondWeekIntensityData[2],
-        secondWeekIntensityData[3],
-        secondWeekIntensityData[4],
-        secondWeekIntensityData[5],
-        secondWeekIntensityData[6]);
-    final barGroup3 = makeGroupData(
-        2,
-        thirdWeekIntensityData[0],
-        thirdWeekIntensityData[1],
-        thirdWeekIntensityData[2],
-        thirdWeekIntensityData[3],
-        thirdWeekIntensityData[4],
-        thirdWeekIntensityData[5],
-        thirdWeekIntensityData[6]);
-    final barGroup4 = makeGroupData(
-        3,
-        fourthWeekIntensityData[0],
-        fourthWeekIntensityData[1],
-        fourthWeekIntensityData[2],
-        fourthWeekIntensityData[3],
-        fourthWeekIntensityData[4],
-        fourthWeekIntensityData[5],
-        fourthWeekIntensityData[6]);
+      for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
+        String date;
+        String month;
+        if (i < 10) {
+          date = '0$i';
+        } else {
+          date = i.toString();
+        }
+        if (currentMonth < 10) {
+          month = '0$currentMonth';
+        } else {
+          month = currentMonth.toString();
+        }
+        DateTime dateTime =
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+        var intensityData = intensityListData.firstWhere(
+            (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (intensityData != null) {
+          setAllWeekIntensityData(i, intensityData.value.toDouble());
+        } else {
+          setAllWeekIntensityData(i, 0);
+        }
+      }
 
-    if (totalDaysInCurrentMonth > 28) {
-      barGroup5 = makeGroupData(
+      print(
+          'AllIntensityListData $firstWeekIntensityData $secondWeekIntensityData $thirdWeekIntensityData $fourthWeekIntensityData');
+
+      barGroup1 = makeGroupData(
+          0,
+          firstWeekIntensityData[0],
+          firstWeekIntensityData[1],
+          firstWeekIntensityData[2],
+          firstWeekIntensityData[3],
+          firstWeekIntensityData[4],
+          firstWeekIntensityData[5],
+          firstWeekIntensityData[6]);
+      barGroup2 = makeGroupData(
+          1,
+          secondWeekIntensityData[0],
+          secondWeekIntensityData[1],
+          secondWeekIntensityData[2],
+          secondWeekIntensityData[3],
+          secondWeekIntensityData[4],
+          secondWeekIntensityData[5],
+          secondWeekIntensityData[6]);
+      barGroup3 = makeGroupData(
+          2,
+          thirdWeekIntensityData[0],
+          thirdWeekIntensityData[1],
+          thirdWeekIntensityData[2],
+          thirdWeekIntensityData[3],
+          thirdWeekIntensityData[4],
+          thirdWeekIntensityData[5],
+          thirdWeekIntensityData[6]);
+      barGroup4 = makeGroupData(
+          3,
+          fourthWeekIntensityData[0],
+          fourthWeekIntensityData[1],
+          fourthWeekIntensityData[2],
+          fourthWeekIntensityData[3],
+          fourthWeekIntensityData[4],
+          fourthWeekIntensityData[5],
+          fourthWeekIntensityData[6]);
+
+      if (totalDaysInCurrentMonth > 28) {
+        barGroup5 = makeGroupData(
           4,
           fifthWeekIntensityData[0],
           fifthWeekIntensityData[1],
@@ -803,10 +838,167 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           0,
           0,
           0,
-          0,);
+          0,
+        );
+      }
+      if (totalDaysInCurrentMonth > 28) {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
+      } else {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4];
+      }
 
+      rawBarGroups = items;
+      showingBarGroups = rawBarGroups;
+    } else {
+      multipleFirstIntensityListData = widget
+          .editGraphViewFilterModel
+          .recordsTrendsDataModel
+          .recordsTrendsMultipleHeadacheDataModel
+          .headacheFirst
+          .severity;
+      multipleSecondIntensityListData = widget
+          .editGraphViewFilterModel
+          .recordsTrendsDataModel
+          .recordsTrendsMultipleHeadacheDataModel
+          .headacheSecond
+          .severity;
+
+      firstWeekIntensityData = [];
+      secondWeekIntensityData = [];
+      thirdWeekIntensityData = [];
+      fourthWeekIntensityData = [];
+      fifthWeekIntensityData = [];
+
+      multipleFirstWeekIntensityData = [];
+      multipleSecondWeekIntensityData = [];
+      multipleThirdWeekIntensityData = [];
+      multipleFourthWeekIntensityData = [];
+      multipleFifthWeekIntensityData = [];
+
+      for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
+        String date;
+        String month;
+        if (i < 10) {
+          date = '0$i';
+        } else {
+          date = i.toString();
+        }
+        if (currentMonth < 10) {
+          month = '0$currentMonth';
+        } else {
+          month = currentMonth.toString();
+        }
+        DateTime dateTime =
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+        var firstIntensityData = multipleFirstIntensityListData.firstWhere(
+            (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (firstIntensityData != null) {
+          setAllWeekIntensityData(i, firstIntensityData.value.toDouble());
+        } else {
+          setAllWeekIntensityData(i, 0);
+        }
+        var secondIntensityData = multipleSecondIntensityListData.firstWhere(
+            (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (secondIntensityData != null) {
+          setAllMultipleWeekIntensityData(
+              i, secondIntensityData.value.toDouble());
+        } else {
+          setAllMultipleWeekIntensityData(i, 0);
+        }
+      }
+      print(
+          'AllIntensityListData $firstWeekIntensityData $secondWeekIntensityData $thirdWeekIntensityData $fourthWeekIntensityData');
+
+      print(
+          'AllIntensityListData $multipleFirstWeekIntensityData $multipleSecondWeekIntensityData $multipleThirdWeekIntensityData $multipleFourthWeekIntensityData');
+
+      barGroup1 = makeMultipleGroupData(
+          0,
+          firstWeekIntensityData[0],
+          firstWeekIntensityData[1],
+          firstWeekIntensityData[2],
+          firstWeekIntensityData[3],
+          firstWeekIntensityData[4],
+          firstWeekIntensityData[5],
+          firstWeekIntensityData[6],
+          multipleFirstWeekIntensityData[0],
+          multipleFirstWeekIntensityData[1],
+          multipleFirstWeekIntensityData[2],
+          multipleFirstWeekIntensityData[3],
+          multipleFirstWeekIntensityData[4],
+          multipleFirstWeekIntensityData[5],
+          multipleFirstWeekIntensityData[6]);
+      barGroup2 = makeMultipleGroupData(
+          1,
+          secondWeekIntensityData[0],
+          secondWeekIntensityData[1],
+          secondWeekIntensityData[2],
+          secondWeekIntensityData[3],
+          secondWeekIntensityData[4],
+          secondWeekIntensityData[5],
+          secondWeekIntensityData[6],
+          multipleSecondWeekIntensityData[0],
+          multipleSecondWeekIntensityData[1],
+          multipleSecondWeekIntensityData[2],
+          multipleSecondWeekIntensityData[3],
+          multipleSecondWeekIntensityData[4],
+          multipleSecondWeekIntensityData[5],
+          multipleSecondWeekIntensityData[6]);
+      barGroup3 = makeMultipleGroupData(
+          2,
+          thirdWeekIntensityData[0],
+          thirdWeekIntensityData[1],
+          thirdWeekIntensityData[2],
+          thirdWeekIntensityData[3],
+          thirdWeekIntensityData[4],
+          thirdWeekIntensityData[5],
+          thirdWeekIntensityData[6],
+          multipleThirdWeekIntensityData[0],
+          multipleThirdWeekIntensityData[1],
+          multipleThirdWeekIntensityData[2],
+          multipleThirdWeekIntensityData[3],
+          multipleThirdWeekIntensityData[4],
+          multipleThirdWeekIntensityData[5],
+          multipleThirdWeekIntensityData[6]);
+      barGroup4 = makeMultipleGroupData(
+          3,
+          fourthWeekIntensityData[0],
+          fourthWeekIntensityData[1],
+          fourthWeekIntensityData[2],
+          fourthWeekIntensityData[3],
+          fourthWeekIntensityData[4],
+          fourthWeekIntensityData[5],
+          fourthWeekIntensityData[6],
+          multipleFourthWeekIntensityData[0],
+          multipleFourthWeekIntensityData[1],
+          multipleFourthWeekIntensityData[2],
+          multipleFourthWeekIntensityData[3],
+          multipleFourthWeekIntensityData[4],
+          multipleFourthWeekIntensityData[5],
+          multipleFourthWeekIntensityData[6]);
+
+      if (totalDaysInCurrentMonth > 28) {
+        barGroup5 = makeMultipleGroupData(
+          4,
+          fifthWeekIntensityData[0],
+          fifthWeekIntensityData[1],
+          fifthWeekIntensityData[2],
+          0,
+          0,
+          0,
+          0,
+          multipleFifthWeekIntensityData[0],
+          multipleFifthWeekIntensityData[1],
+          multipleFifthWeekIntensityData[2],
+          0,
+          0,
+          0,
+          0,
+        );
+      }
     }
-
     if (totalDaysInCurrentMonth > 28) {
       items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
     } else {
@@ -868,9 +1060,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
         Text(
           dotTextModelDataList[i].dotName,
           style: TextStyle(
-              color: Constant.locationServiceGreen,
-              fontSize: 12,
-              fontFamily: Constant.jostRegular,
+            color: Constant.locationServiceGreen,
+            fontSize: 12,
+            fontFamily: Constant.jostRegular,
           ),
           overflow: TextOverflow.ellipsis,
         ),
@@ -907,8 +1099,36 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           children: _getDots(dotTextModelDataList[i]),
         ),
       ));
-      widgetListData.add(SizedBox(height: 14,));
+      widgetListData.add(SizedBox(
+        height: 14,
+      ));
     }
     return widgetListData;
+  }
+
+  List<BarChartRodStackItem> setRodStack(
+      double firstMultipleHeadache1, double secondMultipleHeadache1) {
+    var maxValue, minValue = 0.0;
+    if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
+      maxValue = firstMultipleHeadache1;
+      minValue = secondMultipleHeadache1;
+    } else {
+      minValue = firstMultipleHeadache1;
+      maxValue = secondMultipleHeadache1;
+    }
+    return [
+      BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
+      BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
+    ];
+  }
+
+  double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {
+    var maxValue;
+    if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
+    maxValue = firstMultipleHeadache1;
+    } else {
+    maxValue = secondMultipleHeadache1;
+    }
+    return maxValue;
   }
 }
