@@ -166,7 +166,7 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
         _saveRecordTabNavigatorState();
       });
     } else if (isViewTrendsClicked == Constant.trueString) {
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(Duration(seconds: 5), () {
         sharedPreferences.remove(Constant.isViewTrendsClicked);
       });
       setState(() {
