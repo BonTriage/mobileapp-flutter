@@ -280,10 +280,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-
            /* Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -304,7 +300,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
               ],
             ),*/
             SizedBox(
-              height: 10,
+              height: 40,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

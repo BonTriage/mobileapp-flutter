@@ -147,177 +147,206 @@ class _TrendsScreenState extends State<TrendsScreen> {
                   }
                   getDotsFilterListData();
                   getCurrentPositionOfTabBar();
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
+                  return Stack(
                     children: [
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        selectedHeadacheName,
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 16,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (currentIndex != 0) {
-                                setState(() {
-                                  currentIndex = currentIndex - 1;
-                                  _pageController.animateToPage(currentIndex,
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeIn);
-                                });
-                              }
-                            },
-                            child: CircleAvatar(
-                              radius: 16,
-                              backgroundColor:
-                                  Constant.backgroundColor.withOpacity(0.85),
-                              child: Image(
-                                image: AssetImage(Constant.calenderBackArrow),
-                                width: 15,
-                                height: 15,
-                              ),
-                            ),
-                          ),
                           SizedBox(
-                            width: 60,
+                            height: 5,
                           ),
                           Text(
-                            getCurrentTextView(),
+                            selectedHeadacheName,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: Constant.jostMedium),
+                                fontSize: 16,
+                                fontFamily: Constant.jostRegular),
                           ),
                           SizedBox(
-                            width: 60,
+                            height: 10,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              if (currentIndex != 3) {
-                                setState(() {
-                                  currentIndex = currentIndex + 1;
-                                  _pageController.animateToPage(currentIndex,
-                                      duration: Duration(microseconds: 300),
-                                      curve: Curves.easeIn);
-                                });
-                              }
-                            },
-                            child: CircleAvatar(
-                              radius: 16,
-                              backgroundColor:
-                                  Constant.backgroundColor.withOpacity(0.85),
-                              child: Image(
-                                image: AssetImage(Constant.calenderNextArrow),
-                                width: 15,
-                                height: 15,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (currentIndex != 0) {
+                                    setState(() {
+                                      currentIndex = currentIndex - 1;
+                                      _pageController.animateToPage(currentIndex,
+                                          duration: Duration(milliseconds: 300),
+                                          curve: Curves.easeIn);
+                                    });
+                                  }
+                                },
+                                child: CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor:
+                                      Constant.backgroundColor.withOpacity(0.85),
+                                  child: Image(
+                                    image: AssetImage(Constant.calenderBackArrow),
+                                    width: 15,
+                                    height: 15,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SlideDots(isActive: currentIndex == 0),
-                          SlideDots(isActive: currentIndex == 1),
-                          SlideDots(isActive: currentIndex == 2),
-                          SlideDots(isActive: currentIndex == 3)
-                        ],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              openEditGraphViewBottomSheet();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 12),
-                              decoration: BoxDecoration(
-                                color: Constant.backgroundTransparentColor,
-                                borderRadius: BorderRadius.circular(20),
+                              SizedBox(
+                                width: 60,
                               ),
-                              child: Text(
-                                'Edit graph view',
+                              Text(
+                                getCurrentTextView(),
                                 style: TextStyle(
                                     color: Constant.locationServiceGreen,
-                                    fontSize: 12,
-                                    fontFamily: Constant.jostRegular),
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: Constant.jostMedium),
                               ),
-                            ),
+                              SizedBox(
+                                width: 60,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (currentIndex != 3) {
+                                    setState(() {
+                                      currentIndex = currentIndex + 1;
+                                      _pageController.animateToPage(currentIndex,
+                                          duration: Duration(microseconds: 300),
+                                          curve: Curves.easeIn);
+                                    });
+                                  }
+                                },
+                                child: CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor:
+                                      Constant.backgroundColor.withOpacity(0.85),
+                                  child: Image(
+                                    image: AssetImage(Constant.calenderNextArrow),
+                                    width: 15,
+                                    height: 15,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 5,
+                            height: 10,
                           ),
-                          Visibility(
-                            visible: false,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 12),
-                              decoration: BoxDecoration(
-                                color: Constant.backgroundColor,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(12),
-                                    topLeft: Radius.circular(12)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SlideDots(isActive: currentIndex == 0),
+                              SlideDots(isActive: currentIndex == 1),
+                              SlideDots(isActive: currentIndex == 2),
+                              SlideDots(isActive: currentIndex == 3)
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  openEditGraphViewBottomSheet();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: Constant.backgroundTransparentColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    'Edit graph view',
+                                    style: TextStyle(
+                                        color: Constant.locationServiceGreen,
+                                        fontSize: 12,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                ),
                               ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Visibility(
+                                visible: false,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: Constant.backgroundColor,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(12),
+                                        topLeft: Radius.circular(12)),
+                                  ),
+                                  child: Image(
+                                    image: AssetImage(Constant.barGraph),
+                                    width: 15,
+                                    height: 15,
+                                  ),
+                                ),
+                              ),
+                              /*Container(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Constant.backgroundTransparentColor,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(12),
+                            bottomRight: Radius.circular(12)),
+                      ),
+                      child: Image(
+                        image: AssetImage(Constant.lineGraph),
+                        width: 15,
+                        height: 15,
+                      ),
+                ),*/
+                            ],
+                          ),
+                          Expanded(
+                            child: PageView.builder(
+                              itemBuilder: (context, index) {
+                                return pageViewWidgetList[index];
+                              },
+                              controller: _pageController,
+                              scrollDirection: Axis.horizontal,
+                              onPageChanged: (index) {
+                                print('trends set state 2');
+                                setState(() {
+                                  currentIndex = index;
+                                  _editGraphViewFilterModel.currentTabIndex =
+                                      currentIndex;
+                                });
+                              },
+                              reverse: false,
+                              itemCount: pageViewWidgetList.length,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 100),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Constant.barTutorialsTapColor,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(12),
+                                  topLeft: Radius.circular(12)),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Utils.showTrendsTutorialDialog(context);
+                              },
                               child: Image(
-                                image: AssetImage(Constant.barGraph),
+                                image: AssetImage(Constant.barQuestionMark),
                                 width: 15,
                                 height: 15,
                               ),
                             ),
                           ),
-                          /*Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundTransparentColor,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(12),
-                        bottomRight: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.lineGraph),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),*/
-                        ],
-                      ),
-                      Expanded(
-                        child: PageView.builder(
-                          itemBuilder: (context, index) {
-                            return pageViewWidgetList[index];
-                          },
-                          controller: _pageController,
-                          scrollDirection: Axis.horizontal,
-                          onPageChanged: (index) {
-                            print('trends set state 2');
-                            setState(() {
-                              currentIndex = index;
-                              _editGraphViewFilterModel.currentTabIndex =
-                                  currentIndex;
-                            });
-                          },
-                          reverse: false,
-                          itemCount: pageViewWidgetList.length,
                         ),
                       ),
                     ],

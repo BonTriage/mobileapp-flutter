@@ -290,9 +290,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
             /*Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -313,7 +310,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               ],
             ),*/
             SizedBox(
-              height: 10,
+              height: 40,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

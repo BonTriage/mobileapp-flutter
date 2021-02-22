@@ -14,7 +14,7 @@ class EditGraphViewBottomSheet extends StatefulWidget {
       _EditGraphViewBottomSheetState();
 }
 
-class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
+class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> with SingleTickerProviderStateMixin {
   List<String> _headacheTypeRadioButtonList;
   List<HeadacheListDataModel> _singleHeadacheTypeList;
   List<HeadacheListDataModel> _compareHeadacheTypeList1;
@@ -32,9 +32,17 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
   TextStyle _dropDownTextStyle;
   int selectedTabIndex = 0;
 
+  bool _isShowAlert;
+
+  String _errorMsg;
+
   @override
   void initState() {
     super.initState();
+
+    _isShowAlert = false;
+    _errorMsg = '';
+
     selectedTabIndex = widget.editGraphViewFilterModel.currentTabIndex;
     _headerTextStyle = TextStyle(
       fontSize: 16,
@@ -112,21 +120,18 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    widget.editGraphViewFilterModel.singleTypeHeadacheSelected =
-                        _singleHeadacheTypeSelected;
-                    widget.editGraphViewFilterModel
-                            .compareHeadacheTypeSelected1 =
-                        _compareHeadacheTypeSelected1;
-                    widget.editGraphViewFilterModel
-                            .compareHeadacheTypeSelected2 =
-                        _compareHeadacheTypeSelected2;
-                    widget.editGraphViewFilterModel.whichOtherFactorSelected =
-                        _otherFactorsSelected;
-                    widget.editGraphViewFilterModel
-                            .headacheTypeRadioButtonSelected =
-                        _headacheTypeRadioButtonSelected;
-                    widget.editGraphViewFilterModel.currentTabIndex = selectedTabIndex;
-                    Navigator.pop(context, Constant.success);
+                    if(_headacheTypeRadioButtonSelected == Constant.compareHeadache) {
+                       if (_compareHeadacheTypeSelected1 == _compareHeadacheTypeSelected2) {
+                         setState(() {
+                           _isShowAlert = true;
+                           _errorMsg = 'Compare Headache Types should not be same.';
+                         });
+                       } else {
+                         _popBottomSheet();
+                       }
+                    } else {
+                      _popBottomSheet();
+                    }
                   },
                   child: Text(
                     'Done',
@@ -139,7 +144,6 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                 ),
                   )
                 ),
-
             ],
           ),
           SizedBox(
@@ -188,6 +192,35 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
                     text: Constant.duration,
                   ),
                 ],
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: Duration(milliseconds: 300),
+            vsync: this,
+            child: Visibility(
+              visible: _isShowAlert,
+              child: Container(
+                padding: EdgeInsets.only(top: 20,),
+                child: Row(
+                  children: [
+                    Image(
+                      image: AssetImage(Constant.warningPink),
+                      width: 22,
+                      height: 22,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      _errorMsg,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Constant.pinkTriggerColor,
+                          fontFamily: Constant.jostRegular),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -354,6 +387,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
               ],
             ),
           ),
+
           SizedBox(
             height: 20,
           ),
@@ -422,5 +456,27 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> {
     });
 
     return widgetList;
+  }
+
+  void _popBottomSheet() {
+    setState(() {
+      _isShowAlert = false;
+      _errorMsg = Constant.blankString;
+    });
+    widget.editGraphViewFilterModel.singleTypeHeadacheSelected =
+        _singleHeadacheTypeSelected;
+    widget.editGraphViewFilterModel
+        .compareHeadacheTypeSelected1 =
+        _compareHeadacheTypeSelected1;
+    widget.editGraphViewFilterModel
+        .compareHeadacheTypeSelected2 =
+        _compareHeadacheTypeSelected2;
+    widget.editGraphViewFilterModel.whichOtherFactorSelected =
+        _otherFactorsSelected;
+    widget.editGraphViewFilterModel
+        .headacheTypeRadioButtonSelected =
+        _headacheTypeRadioButtonSelected;
+    widget.editGraphViewFilterModel.currentTabIndex = selectedTabIndex;
+    Navigator.pop(context, Constant.success);
   }
 }
