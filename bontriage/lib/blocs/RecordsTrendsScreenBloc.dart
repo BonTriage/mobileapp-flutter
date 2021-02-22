@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
