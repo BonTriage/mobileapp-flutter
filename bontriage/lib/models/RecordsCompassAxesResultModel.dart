@@ -1,25 +1,51 @@
 class RecordsCompassAxesResultModel {
-  List<Axes> axes;
-  DateTime calendarEntryAt;
+  List<Axes> previousAxes;
+  List<Axes> currentAxes;
+  List<Axes> signUpAxes;
+  String calendarEntryAt;
 
-  RecordsCompassAxesResultModel({this.axes, this.calendarEntryAt,});
+  RecordsCompassAxesResultModel(
+      {this.previousAxes,
+      this.currentAxes,
+      this.signUpAxes,
+      this.calendarEntryAt});
 
   RecordsCompassAxesResultModel.fromJson(Map<String, dynamic> json) {
-    if (json['axes'] != null) {
-      axes = new List<Axes>();
-      json['axes'].forEach((v) {
-        axes.add(new Axes.fromJson(v));
+    if (json['previous_axes'] != null) {
+      previousAxes = new List<Axes>();
+      json['previous_axes'].forEach((v) {
+        previousAxes.add(new Axes.fromJson(v));
       });
     }
-    calendarEntryAt = DateTime.parse(json["calendarEntryAt"]);
+    if (json['axes'] != null) {
+      signUpAxes = new List<Axes>();
+      json['axes'].forEach((v) {
+        signUpAxes.add(new Axes.fromJson(v));
+      });
+    }
+    if (json['current_axes'] != null) {
+      currentAxes = new List<Axes>();
+      json['current_axes'].forEach((v) {
+        currentAxes.add(new Axes.fromJson(v));
+      });
+    }
+
+    calendarEntryAt = json['calendarEntryAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.axes != null) {
-      data['axes'] = this.axes.map((v) => v.toJson()).toList();
+    data['calendarEntryAt'] = this.calendarEntryAt;
+    if (this.previousAxes != null) {
+      data['previous_axes'] = this.previousAxes.map((v) => v.toJson()).toList();
     }
-    data["calendarEntryAt"] = calendarEntryAt.toIso8601String();
+    if (this.currentAxes != null) {
+      data['current_axes'] = this.currentAxes.map((v) => v.toJson()).toList();
+    }
+    if (this.signUpAxes != null) {
+      data['axes'] = this.signUpAxes.map((v) => v.toJson()).toList();
+    }
+    data["calendarEntryAt"] = calendarEntryAt;
     return data;
   }
 }
