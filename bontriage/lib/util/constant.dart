@@ -18,8 +18,7 @@ class Constant {
   static const String signUpLocationServiceRouter = 'signUpLocationService';
   static const String signUpOnBoardProfileQuestionRouter =
       'signUpOnBoardHeadacheQuestion';
-  static const String partTwoOnBoardScreenRouter =
-      'partTwoOnBoardScreenRouter';
+  static const String partTwoOnBoardScreenRouter = 'partTwoOnBoardScreenRouter';
   static const String partThreeOnBoardScreenRouter =
       'partThreeOnBoardScreenRouter';
 
@@ -37,12 +36,10 @@ class Constant {
   static const String onBoardHeadacheInfoScreenRouter =
       'onBoardHeadacheInfoScreenRouter';
 
-  static const String partOneOnBoardScreenTwoRouter =
-      'partOneOnBoardScreenTwo';
+  static const String partOneOnBoardScreenTwoRouter = 'partOneOnBoardScreenTwo';
   static const String onBoardCreateAccountScreenRouter =
       'onBoardCreateAccountScreen';
-  static const String prePartTwoOnBoardScreenRouter =
-      'prePartTwoOnBoardScreen';
+  static const String prePartTwoOnBoardScreenRouter = 'prePartTwoOnBoardScreen';
   static const String onBoardHeadacheNameScreenRouter =
       'onBoardHeadacheNameScreen';
   static const String partTwoOnBoardMoveOnScreenRouter =
@@ -51,8 +48,7 @@ class Constant {
       'prePartThreeOnBoardScreen';
   static const String signUpOnBoardBubbleTextViewRouter =
       'signUpOnBoardBubbleTextView';
-  static const String postPartThreeOnBoardRouter =
-      'postPartThreeOnBoardRouter';
+  static const String postPartThreeOnBoardRouter = 'postPartThreeOnBoardRouter';
   static const String postNotificationOnBoardRouter =
       'postNotificationOnBoardRouter';
   static const String notificationScreenRouter = 'NotificationScreenRouter';
@@ -116,7 +112,7 @@ class Constant {
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that’s what you’re looking for, and are willing to put in a little time and effort, you’ve come to the right app.';
 
   static String migraineMentorHelpTextView =
-      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention.if that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
+      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention. if that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
 
@@ -365,7 +361,7 @@ class Constant {
   static String currentIndexOfTabBar = 'currentIndexOfTabBar';
   static String currentIndexOfCalenderTabBar = 'currentIndexOfCalenderTabBar';
   static String tabNavigatorState = '0';
-  static const String recordTabNavigatorState = '0';
+  static const String recordTabNavigatorState = 'recordTabNavigatorState';
   static const String isSeeMoreClicked = 'isSeeMoreClicked';
   static const String isViewTrendsClicked = 'isViewTrendsClicked';
   static const String zeroEventStep = "0";
@@ -556,14 +552,24 @@ class Constant {
   static String logDayDoubleTapDialog = 'logDayDoubleTapDialog';
   static String noneOfTheAbove = 'None of the above';
   static String cancelAssessment = 'Cancel Assessment';
-  static String migraineDaysVsHeadacheDaysDialogText = 'In this Intensity view of your calendar, you can see a distinction between Headache days and Migraine days. When you complete an assessment for a new headache type, we classify it internally as either a Headache or a Migraine. In most cases throughout the app, your migraines are included generally as a headache, but you can view the distinction between the two in this Intensity view, depending on which headache types you select when logging.';
+  static String migraineDaysVsHeadacheDaysDialogText =
+      'In this Intensity view of your calendar, you can see a distinction between Headache days and Migraine days. When you complete an assessment for a new headache type, we classify it internally as either a Headache or a Migraine. In most cases throughout the app, your migraines are included generally as a headache, but you can view the distinction between the two in this Intensity view, depending on which headache types you select when logging.';
   static String migraineDaysVsHeadacheDays = 'Migraine days vs Headache days';
   static String headacheLogInProgress = 'Headache log currently in progress. ';
   static String dotDosage = '.dosage';
+
+
+  static const String noHeadacheData = 'NoHeadacheData';
+  static const String compassHeadacheTypeActionSheet = 'compassHeadacheTypeActionSheet';
+
   static String selectAtLeastOneOptionLogDayError = 'Please select at least one option.';
+
+
   static const String singleHeadache = 'Single headache:';
-  static const String summaryOfAllHeadacheTypes = 'Summary of all my headache types';
-  static const String selectTheSavedHeadacheType = 'Select the saved Headache Type that you would like to view.';
+  static const String summaryOfAllHeadacheTypes =
+      'Summary of all my headache types';
+  static const String selectTheSavedHeadacheType =
+      'Select the saved Headache Type that you would like to view.';
   static const String editGraphView = 'Edit Graph View';
   static const String viewSingleHeadache = 'View Single Headache';
   static const String compareHeadache = 'Compare Headache';
@@ -580,19 +586,28 @@ class Constant {
   static const String maxLabel1 = 'maxlabel';
   static const String label = 'label';
   static const String updateCalendarTriggerData = 'updateCalendarTriggerData';
-  static const String updateCalendarIntensityData = 'updateCalendarIntensityData';
+  static const String updateCalendarIntensityData =
+      'updateCalendarIntensityData';
   static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
   static const String updateCompareCompassData = 'updateCompareCompassData';
-  static const String noHeadacheData = 'NoHeadacheData';
+
 
   //tutorial text
-  static const String meScreenTutorial1 = 'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
-  static const String meScreenTutorial2 = 'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
-  static const String trendsTutorialText1 = 'For days you have completed your daily log, these dots represent the data you inputted.';
-  static const String trendsTutorialText2 = 'A filled circle (•) indicates if a certain behavior, potential trigger, or medication was present on a given day.';
-  static const String trendsTutorialText3 = 'An outlined circle () means you did not experience that item on a given day.';
-  static const String trendsTutorialText4 = 'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
-  static const String trendsTutorialText5 = 'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
+  static const String meScreenTutorial1 =
+      'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+  static const String meScreenTutorial2 =
+      'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
+  static const String trendsTutorialText1 =
+      'For days you have completed your daily log, these dots represent the data you inputted.';
+  static const String trendsTutorialText2 =
+      'A filled circle (•) indicates if a certain behavior, potential trigger, or medication was present on a given day.';
+  static const String trendsTutorialText3 =
+      'An outlined circle () means you did not experience that item on a given day.';
+  static const String trendsTutorialText4 =
+      'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
+  static const String trendsTutorialText5 =
+      'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
+
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';
@@ -600,7 +615,9 @@ class Constant {
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
   static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
-  static const String compassHeadacheTypeActionSheet = 'compassHeadacheTypeActionSheet';
+
+
+
   static const String editGraphViewBottomSheet = 'editGraphViewBottomSheet';
 
   //Dimensions
@@ -645,9 +662,12 @@ class Constant {
   static Color pinkTriggerColor = Color(0xffF479D9);
 
   static Color mildTriggerColor = Color(0xff55AE88);
-  static Color moderateTriggerColor = Color(0xfff69466);
+  static Color moderateTriggerColor = Color(0xfff69946);
   static Color severeTriggerColor = Color(0xffEB5757);
   static Color migraineColor = Color(0xffB8E1FF);
+
+  static Color otherHeadacheColor = Color(0xff177D5A);
+
 
   static Color deleteLogRedColor = Color(0xffFF2D55);
   static Color cancelBlueColor = Color(0xff007AFF);
@@ -664,7 +684,9 @@ class Constant {
   static Color compareCompassHeadacheValueColor = Color(0xff7E00CB);
   static Color compareCompassMonthSelectedColor = Color(0xffB8FFFF);
   static const Color compareCompassChartValueColor = Color(0x597E00CB);
+
   static const Color compareCompassChartFirstLoggedValueColor = Color(0x007E00CB);
+  static  Color barTutorialsTapColor =Color.fromARGB(255,202, 215, 191);
 
 
   //images
@@ -716,7 +738,13 @@ class Constant {
   static String errorGreen = 'images/error_green.png';
   static const String closeIcon2 = 'images/close_icon_2.png';
   static const String graph = 'images/graph.png';
-  static const String trendsTutorialArrowUp = 'images/trends_tutorial_arrow_up.png';
+  static const String trendsTutorialArrowUp =
+      'images/trends_tutorial_arrow_up.png';
+
+  static String barGraph = 'images/union.png';
+  static String lineGraph = 'images/vector.png';
+  static String upperArrow = 'images/upperArrow.png';
+  static String barQuestionMark = 'images/bar_question_mark.png';
 
   //fontFamily
   static String futuraMaxiLight = "FuturaMaxiLight";
@@ -736,6 +764,8 @@ class Constant {
   static const String noteEventType = 'note';
 
   //urls
-  static const String termsAndConditionUrl = 'https://www.bontriage.com/terms-of-service.html';
-  static const String privacyPolicyUrl = 'https://www.bontriage.com/privacy.html';
+  static const String termsAndConditionUrl =
+      'https://www.bontriage.com/terms-of-service.html';
+  static const String privacyPolicyUrl =
+      'https://www.bontriage.com/privacy.html';
 }

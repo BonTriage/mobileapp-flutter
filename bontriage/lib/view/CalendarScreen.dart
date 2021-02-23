@@ -153,7 +153,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void getCurrentPositionOfTabBar() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    if (currentPositionOfTabBar == 1) {
+    if (currentPositionOfTabBar == 1 && pageViewWidgetList.length != 2) {
      setState(() {
        pageViewWidgetList = [
          CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),

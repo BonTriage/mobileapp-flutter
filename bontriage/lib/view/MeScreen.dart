@@ -125,6 +125,8 @@ class _MeScreenState extends State<MeScreen>
             color: Constant.chatBubbleGreen),
       ),
     ];
+
+    _saveRecordTabBarPosition();
   }
 
   @override
@@ -695,5 +697,10 @@ class _MeScreenState extends State<MeScreen>
       await widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter, null);
     }
     _getUserCurrentHeadacheData();
+  }
+
+  void _saveRecordTabBarPosition() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setInt(Constant.recordTabNavigatorState, 0);
   }
 }

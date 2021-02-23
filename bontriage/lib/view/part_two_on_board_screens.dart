@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardSecondStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
@@ -51,6 +53,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   int currentScreenPosition = 0;
 
   List<Questions> currentQuestionListData = [];
+  List<int> _backQuestionIndexList = [];
 
   Future<bool> _onBackPressed() async {
     if(!_isButtonClicked) {
@@ -81,8 +84,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           double stepOneProgress = 1 / _pageViewWidgetList.length;
 
           if (_currentPageIndex != 0) {
-            _progressPercent -= stepOneProgress;
-            _currentPageIndex--;
+            _currentPageIndex = _backQuestionIndexList.last;
+            _backQuestionIndexList.removeLast();
+            _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
             _pageController.animateToPage(_currentPageIndex,
                 duration: Duration(milliseconds: 1), curve: Curves.easeIn);
           }
@@ -188,13 +192,19 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                   double stepOneProgress =
                                       1 / _pageViewWidgetList.length;
                                   if (_progressPercent == 1) {
+                                    _backQuestionIndexList.add(_currentPageIndex);
                                     moveUserToNextScreen();
                                   } else {
-                                    _currentPageIndex++;
+                                    //_currentPageIndex++;
+
+                                    _backQuestionIndexList.add(_currentPageIndex);
+                                    _fetchQuestionTag();
+
+                                    print('QuestionTAG?????' + currentQuestionListData[_currentPageIndex].tag);
 
                                     if (_currentPageIndex !=
                                         _pageViewWidgetList.length - 1)
-                                      _progressPercent += stepOneProgress;
+                                      _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
                                     else {
                                       _progressPercent = 1;
                                     }
@@ -240,6 +250,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
 
       currentQuestionListData = questionListData;
+      print(jsonEncode(currentQuestionListData));
       questionListData.forEach((element) {
         switch (element.questionType) {
           case Constant.QuestionNumberType:
@@ -320,7 +331,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       _currentPageIndex = currentScreenPosition;
       _progressPercent =
           (_currentPageIndex + 1) * (1 / _pageViewWidgetList.length);
-      _pageController = PageController(initialPage: currentScreenPosition);
+      _pageController = PageController(initialPage: _currentPageIndex);
     }
   }
 
@@ -333,6 +344,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       if (userProgressModel != null &&
           userProgressModel.step == Constant.secondEventStep) {
         currentScreenPosition = userProgressModel.userScreenPosition;
+        if(userProgressModel.backQuestionIndexList != null && userProgressModel.backQuestionIndexList.length > 0)
+          _backQuestionIndexList.addAll(userProgressModel.backQuestionIndexList);
+        print(_backQuestionIndexList);
         print(userProgressModel);
       }
 
@@ -380,7 +394,8 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       userProgressDataModel.userScreenPosition = currentPageIndex;
       userProgressDataModel.questionTag = (currentQuestionListData.length > 0)
           ? currentQuestionListData[currentPageIndex].tag
-          : '';
+          : Constant.blankString;
+      userProgressDataModel.backQuestionIndexList = _backQuestionIndexList;
 
       if (userProgressDataCount == 0) {
         SignUpOnBoardProviders.db.insertUserProgress(userProgressDataModel);
@@ -437,6 +452,16 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   }
 
   void _callSendSecondStepDataApi() async {
+    List<SelectedAnswers> selectedAnswersList = [];
+    _backQuestionIndexList.forEach((questionIndex) {
+      String questionTag = currentQuestionListData[questionIndex].tag;
+      SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+      if(selectedAnswer != null)
+        selectedAnswersList.add(selectedAnswer);
+    });
+
+    signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
+
     var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
     if (response is String) {
       if (response == Constant.success) {
@@ -458,6 +483,234 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
               Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
         }
       }
+    }
+  }
+
+  void _fetchQuestionTag() {
+    if(_currentPageIndex < currentQuestionListData.length - 1) {
+      _currentPageIndex++;
+      Questions questions = currentQuestionListData[_currentPageIndex];
+
+      if (questions.precondition.isEmpty) {
+        print('QUESTION TAG???${questions.tag}');
+      } else {
+        //write logic for precondition
+
+        //replacing the parenthesis with the blank string
+        String preCondition = questions.precondition;
+        preCondition = preCondition.replaceAll('(', Constant.blankString);
+        preCondition = preCondition.replaceAll(')', Constant.blankString);
+        preCondition = preCondition.replaceAll(' ', Constant.blankString);
+
+        if (preCondition.contains('AND')) {
+          bool isConditionSatisfied;
+
+          List<String> splitANDCondition = preCondition.split('AND');
+
+          for(int i = 0; i < splitANDCondition.length; i++) {
+            String splitANDConditionElement = splitANDCondition[i];
+            if(splitANDConditionElement.contains('<=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('<=');
+              if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<=')) {
+                if(isConditionSatisfied == null) {
+                  isConditionSatisfied = true;
+                }
+              } else {
+                isConditionSatisfied = false;
+                break;
+              }
+            } else if (splitANDConditionElement.contains('>=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('>=');
+              if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>=')) {
+                if(isConditionSatisfied == null) {
+                  isConditionSatisfied = true;
+                }
+              } else {
+                isConditionSatisfied = false;
+                break;
+              }
+            } else if (splitANDConditionElement.contains('=')) {
+              if(splitANDConditionElement.contains('NOT')) {
+                splitANDConditionElement = splitANDConditionElement.replaceAll('NOT', Constant.blankString);
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if(!_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
+                  if(isConditionSatisfied == null) {
+                    isConditionSatisfied = true;
+                  }
+                } else {
+                  isConditionSatisfied = false;
+                  break;
+                }
+              } else {
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
+                  if(isConditionSatisfied == null) {
+                    isConditionSatisfied = true;
+                  }
+                } else {
+                  isConditionSatisfied = false;
+                  break;
+                }
+              }
+            }
+          }
+
+          if(isConditionSatisfied != null && !isConditionSatisfied)
+            _fetchQuestionTag();
+        } else if (preCondition.contains('OR')) {
+          bool isConditionSatisfied = false;
+
+          List<String> splitANDCondition = preCondition.split('OR');
+
+          for(int i = 0; i < splitANDCondition.length; i++) {
+            String splitANDConditionElement = splitANDCondition[i];
+            if(splitANDConditionElement.contains('<=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('<=');
+              if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<=')) {
+                isConditionSatisfied = true;
+                break;
+              } else {
+                isConditionSatisfied = isConditionSatisfied || false;
+              }
+            } else if (splitANDConditionElement.contains('>=')) {
+              List<String> splitConditionList = splitANDConditionElement.split('>=');
+              if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>=')) {
+                isConditionSatisfied = true;
+                break;
+              } else {
+                isConditionSatisfied = isConditionSatisfied || false;
+              }
+            } else if (splitANDConditionElement.contains('=')) {
+              if(splitANDConditionElement.contains('NOT')) {
+                splitANDConditionElement = preCondition.replaceAll('NOT', Constant.blankString);
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if(!_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
+                  isConditionSatisfied = true;
+                  break;
+                } else {
+                  isConditionSatisfied = isConditionSatisfied || false;
+                }
+              } else {
+                List<String> splitConditionList = splitANDConditionElement.split('=');
+                if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
+                  isConditionSatisfied = true;
+                  break;
+                } else {
+                  isConditionSatisfied = isConditionSatisfied || false;
+                }
+              }
+            }
+          }
+
+          if(!isConditionSatisfied)
+            _fetchQuestionTag();
+        } else {
+          if (preCondition.contains('<=')) {
+            List<String> splitConditionList = preCondition.split('<=');
+            if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<=')) {
+              print('QUESTION TAG???${questions.tag}');
+            } else {
+              _fetchQuestionTag();
+            }
+          } else if (preCondition.contains('>=')) {
+            List<String> splitConditionList = preCondition.split('>=');
+            if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>=')) {
+              print('QUESTION TAG???${questions.tag}');
+            } else {
+              _fetchQuestionTag();
+            }
+          } else if (preCondition.contains('>')) {
+            List<String> splitConditionList = preCondition.split('>');
+            if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '>')) {
+              print('QUESTION TAG???${questions.tag}');
+            } else {
+              _fetchQuestionTag();
+            }
+          } else if (preCondition.contains('<')) {
+            List<String> splitConditionList = preCondition.split('<');
+            if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '<')) {
+              print('QUESTION TAG???${questions.tag}');
+            } else {
+              _fetchQuestionTag();
+            }
+          } else if (preCondition.contains('=')) {
+            List<String> splitConditionList = preCondition.split('=');
+            if(_evaluatePreCondition(splitConditionList: splitConditionList, predicate: '=')) {
+              print('QUESTION TAG???${questions.tag}');
+            } else {
+              _fetchQuestionTag();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  bool _evaluatePreCondition({List<String> splitConditionList, String predicate}) {
+    String questionTag = splitConditionList[0];
+    if(splitConditionList.length == 2) {
+      switch (predicate) {
+        case '<=':
+          int answer = int.tryParse(splitConditionList[1]);
+          SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) =>
+          element.questionTag == questionTag, orElse: () => null);
+          if (selectedAnswer != null) {
+            return int.tryParse(selectedAnswer.answer) <= answer;
+          } else {
+            return false;
+          }
+          break;
+        case '>=':
+          int answer = int.tryParse(splitConditionList[1]);
+          SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) =>
+          element.questionTag == questionTag, orElse: () => null);
+          if (selectedAnswer != null) {
+            return int.tryParse(selectedAnswer.answer) >= answer;
+          } else {
+            return false;
+          }
+          break;
+        case '<':
+          int answer = int.tryParse(splitConditionList[1]);
+          SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) =>
+          element.questionTag == questionTag, orElse: () => null);
+          if (selectedAnswer != null) {
+            return int.tryParse(selectedAnswer.answer) < answer;
+          } else {
+            return false;
+          }
+          break;
+        case '>':
+          int answer = int.tryParse(splitConditionList[1]);
+          SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) =>
+          element.questionTag == questionTag, orElse: () => null);
+          if (selectedAnswer != null) {
+            return int.tryParse(selectedAnswer.answer) > answer;
+          } else {
+            return false;
+          }
+          break;
+        case '=':
+        String answer = splitConditionList[1];
+        SelectedAnswers selectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == questionTag, orElse: () => null);
+        if (selectedAnswer != null) {
+          int intSelectedAnswer = int.tryParse(selectedAnswer.answer.replaceAll(' ', Constant.blankString));
+          int intAnswer = int.tryParse(answer);
+
+          if(intSelectedAnswer != null && intAnswer != null) {
+            return intAnswer == intSelectedAnswer;
+          } else {
+            return selectedAnswer.answer.replaceAll(' ', Constant.blankString).contains(answer);
+          }
+        } else {
+          return false;
+        }
+        break;
+        default:
+          return false;
+      }
+    } else {
+      return false;
     }
   }
 }

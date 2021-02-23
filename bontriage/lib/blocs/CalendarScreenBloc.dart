@@ -141,7 +141,7 @@ class CalendarScreenBloc {
     headache.forEach((element) {
       SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
       _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
-      DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
+      DateTime _dateTime = DateTime.parse(element.calendarEntryAt).toLocal();
       _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
       var userSelectedHeadacheDayIntensityData =  userLogHeadacheDataCalendarModel.addHeadacheIntensityListData.firstWhere((intensityElementData) => intensityElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
       if(userSelectedHeadacheDayIntensityData != null){
@@ -183,7 +183,7 @@ class CalendarScreenBloc {
       triggers.forEach((element) {
         SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
         _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
-        DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
+        DateTime _dateTime = DateTime.parse(element.calendarEntryAt).toLocal();
         var userSelectedHeadacheDayTriggersData =  userLogHeadacheDataCalendarModel.addTriggersListData.firstWhere((triggersElementData) => triggersElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
            if(userSelectedHeadacheDayTriggersData != null){
              _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();

@@ -66,9 +66,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-
     callAPIService();
-    
+
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
         _removeDataFromSharedPreference();
@@ -83,7 +82,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
             currentMonth, currentYear, totalDaysInCurrentMonth);
 
-        _calendarScreenBloc.initNetworkStreamController();
+       // _calendarScreenBloc.initNetworkStreamController();
 
         print('show api loader 2');
         widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
@@ -100,7 +99,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    getCurrentPositionOfTabBar();
+  //  getCurrentPositionOfTabBar();
   }
 
   @override

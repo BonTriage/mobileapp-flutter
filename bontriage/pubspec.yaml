@@ -34,6 +34,7 @@ dependencies:
   bouncing_widget: ^1.2.0
   percent_indicator: ^2.1.7+4
   webview_flutter: ^1.0.7
+  fl_chart: ^0.12.2
   geolocator: ^6.1.14
 
 dev_dependencies:

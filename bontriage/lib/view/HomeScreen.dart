@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           ),
-          builder: (context) => EditGraphViewBottomSheet(),
+          builder: (context) => EditGraphViewBottomSheet(editGraphViewFilterModel: argument),
         );
         return resultOfActionSheet;
         break;
