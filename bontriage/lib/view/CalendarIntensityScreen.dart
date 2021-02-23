@@ -53,11 +53,11 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
-   /* WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       print('show api loader 4');
       _showApiLoaderDialog();
     });
-    _callApiService();*/
+    _callApiService();
 
     widget.refreshCalendarDataStream.listen((event) {
       if(event is bool && event) {
@@ -73,7 +73,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
             currentMonth, currentYear, totalDaysInCurrentMonth);
         _calendarScreenBloc.initNetworkStreamController();
 
-       // _callApiService();
+        _callApiService();
       }
     });
   }

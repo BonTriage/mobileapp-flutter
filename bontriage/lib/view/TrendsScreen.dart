@@ -162,7 +162,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 : selectedHeadacheName,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontFamily: Constant.jostRegular),
                           ),
                           SizedBox(
