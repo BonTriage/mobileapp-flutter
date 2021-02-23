@@ -142,7 +142,13 @@ class _CompassScreenState extends State<CompassScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    int recordTabBarPosition = 0;
+
+    try {
+      recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    } catch (e) {
+      print(e);
+    }
     print(currentPositionOfTabBar);
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 1) {
       setState(() {

@@ -365,7 +365,7 @@ class Constant {
   static String currentIndexOfTabBar = 'currentIndexOfTabBar';
   static String currentIndexOfCalenderTabBar = 'currentIndexOfCalenderTabBar';
   static String tabNavigatorState = '0';
-  static const String recordTabNavigatorState = '0';
+  static const String recordTabNavigatorState = 'recordTabNavigatorState';
   static const String isSeeMoreClicked = 'isSeeMoreClicked';
   static const String isViewTrendsClicked = 'isViewTrendsClicked';
   static const String zeroEventStep = "0";
