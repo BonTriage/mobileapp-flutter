@@ -105,6 +105,7 @@ class _MoreNameScreenState
                             //_selectedAnswers.answer = _initialNameValue;
                           }*/
                         },
+                        textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 15,

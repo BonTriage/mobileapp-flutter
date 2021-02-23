@@ -11,9 +11,10 @@ class SignUpBottomSheet extends StatefulWidget {
   final Function(Questions, List<String>) selectAnswerCallback;
   final List<SelectedAnswers> selectAnswerListData;
   final bool isFromMoreScreen;
+  final Function(Questions, Function(int)) openTriggerMedicationActionSheetCallback;
 
   SignUpBottomSheet(
-      {Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData, this.isFromMoreScreen = false})
+      {Key key, this.question, this.selectAnswerCallback, this.selectAnswerListData, this.isFromMoreScreen = false, this.openTriggerMedicationActionSheetCallback})
       : super(key: key);
 
   @override
@@ -131,7 +132,44 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                showBottomSheet(
+                if(widget.isFromMoreScreen) {
+                  widget.openTriggerMedicationActionSheetCallback(
+                    widget.question,
+                          (index) {
+                        Values value = widget.question.values[index];
+                        if (value.isSelected) {
+                          if(!value.isValid) {
+                            _valuesSelectedList.clear();
+                            widget.question.values.forEach((element) {
+                              element.isSelected = false;
+                            });
+                            value.isSelected = true;
+                          } else {
+                            Values noneOfTheAboveValue = widget.question.values.firstWhere((element) => !element.isValid);
+                            if(noneOfTheAboveValue != null) {
+                              noneOfTheAboveValue.isSelected = false;
+                              _valuesSelectedList.removeWhere((element) =>
+                              element == noneOfTheAboveValue.text);
+                            }
+                          }
+                          _valuesSelectedList.add(
+                              value.text);
+                        } else {
+                          _valuesSelectedList.remove(
+                              value.text);
+                        }
+                        widget.selectAnswerCallback(
+                            widget.question, _valuesSelectedList);
+                        setState(() {});
+
+                        //Remove this code after testing
+                        _valuesSelectedList.forEach((element) {
+                          print(element + '\n');
+                        });
+                      }
+                  );
+                }
+                else showBottomSheet(
                     backgroundColor: Colors.transparent,
                     context: context,
                     builder: (context)=>

@@ -68,7 +68,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       setState(() {
                         currentIndex = currentIndex - 1;
                         _pageController.animateToPage(currentIndex,
-                            duration: Duration(microseconds: 300),
+                            duration: Duration(milliseconds: 300),
                             curve: Curves.easeIn);
                       });
                     }
@@ -103,7 +103,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       setState(() {
                         currentIndex = currentIndex + 1;
                         _pageController.animateToPage(currentIndex,
-                            duration: Duration(microseconds: 300),
+                            duration: Duration(milliseconds: 300),
                             curve: Curves.easeIn);
                       });
                     }

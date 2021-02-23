@@ -11,7 +11,7 @@ import 'package:mobile/view/SignUpBottomSheet.dart';
 class MoreTriggersScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
-  final Function(List<Values>) openTriggerMedicationActionSheetCallback;
+  final Function(Questions, Function(int)) openTriggerMedicationActionSheetCallback;
   final MoreTriggersArgumentModel moreTriggersArgumentModel;
   final Function(Stream, Function) showApiLoaderCallback;
 
@@ -109,6 +109,7 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                           widget.moreTriggersArgumentModel.selectedAnswerList.add(SelectedAnswers(questionTag: 'headache.trigger', answer: jsonEncode(valuesList)));
                         }
                       },
+                      openTriggerMedicationActionSheetCallback: widget.openTriggerMedicationActionSheetCallback,
                     ),
                     SizedBox(height: 40,),
                     Padding(

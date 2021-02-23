@@ -658,6 +658,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
             Constant.blankString;
     if (isViewTrendsClicked.isEmpty && isSeeMoreClicked.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        print('show api loader 5');
         widget.showApiLoaderCallback(
             _recordsCompassScreenBloc.networkDataStream, () {
           _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();

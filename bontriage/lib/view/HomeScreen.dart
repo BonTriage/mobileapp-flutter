@@ -278,16 +278,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _openTriggersMedicationActionSheet(List<Values> valuesList) {
+  void _openTriggersMedicationActionSheet(Questions questions, Function(int) selectedAnswerCallback) {
     showModalBottomSheet(
-        elevation: 4,
-        backgroundColor: Constant.backgroundTransparentColor,
+        backgroundColor: Constant.transparentColor  ,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
-        builder: (context) => BottomSheetContainer());
+        builder: (context) => BottomSheetContainer(
+          question: questions,
+          selectedAnswerCallback: selectedAnswerCallback,
+          isFromMoreScreen: true,
+        ));
   }
 
   void saveHomePosition() async {
@@ -302,6 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ///This method is used to show api loader dialog
   void showApiLoader(Stream networkStream, Function tapToRetryFunction) {
+    print('Home show api loader');
     Utils.showApiLoaderDialog(context, networkStream: networkStream, tapToRetryFunction: tapToRetryFunction);
   }
 

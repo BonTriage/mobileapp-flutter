@@ -11,7 +11,7 @@ import 'package:mobile/view/SignUpBottomSheet.dart';
 class MoreMedicationScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
-  final Function(List<Values>) openTriggerMedicationActionSheetCallback;
+  final Function(Questions, Function(int)) openTriggerMedicationActionSheetCallback;
   final MoreMedicationArgumentModel moreMedicationArgumentModel;
   final Function(Stream, Function) showApiLoaderCallback;
 
@@ -115,6 +115,7 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                           widget.moreMedicationArgumentModel.selectedAnswerList.add(SelectedAnswers(questionTag: 'headache.medications', answer: jsonEncode(valuesList)));
                         }
                       },
+                      openTriggerMedicationActionSheetCallback: widget.openTriggerMedicationActionSheetCallback,
                     ),
                     SizedBox(height: 40,),
                     Padding(

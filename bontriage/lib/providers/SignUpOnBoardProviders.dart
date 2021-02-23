@@ -20,6 +20,7 @@ class SignUpOnBoardProviders {
   static const String QUESTIONNAIRES = "questionnaires";
   static const String SELECTED_ANSWERS = "selectedAnswers";
   static const String USER_SCREEN_POSITION = "userScreenPosition";
+  static const String backQuestionIndexList = "backQuestionIndexList";
   static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
   static const String TABLE_USER_CURRENT_HEADACHE = 'userCurrentHeadache';
   static const String TABLE_TUTORIAL = 'tutorialTable';
@@ -70,7 +71,8 @@ class SignUpOnBoardProviders {
           "$USER_ID TEXT PRIMARY KEY,"
           "$STEP TEXT,"
           "$QUESTION_TAG TEXT,"
-          "$USER_SCREEN_POSITION integer"
+          "$USER_SCREEN_POSITION integer,"
+          "$backQuestionIndexList TEXT"
           ")");
       batch.execute("CREATE TABLE $TABLE_USER_PROFILE_INFO ("
           "$USER_ID TEXT PRIMARY KEY,"
@@ -204,7 +206,7 @@ class SignUpOnBoardProviders {
     final db = await database;
     UserProgressDataModel userProgress;
     var userProgressDetail = await db.query(TABLE_USER_PROGRESS,
-        columns: [USER_ID, STEP, QUESTION_TAG, USER_SCREEN_POSITION]);
+        columns: [USER_ID, STEP, QUESTION_TAG, USER_SCREEN_POSITION, backQuestionIndexList]);
     userProgressDetail.forEach((userProgressDetail) {
       userProgress = UserProgressDataModel.fromMap(userProgressDetail);
     });
