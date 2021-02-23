@@ -541,12 +541,12 @@ class _SignUpFirstStepCompassResultState
     List<SelectedAnswers> selectedAnswerListData =
         answerListData.selectedAnswers;
     var userFrequency = selectedAnswerListData.firstWhere(
-        (intensityElement) =>
-            intensityElement.questionTag == Constant.headacheFreeTag,
+        (frequencyElement) =>
+            frequencyElement.questionTag == Constant.headacheFreeTag,
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = int.tryParse(userFrequency.answer);
-      userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+      userFrequencyValue = 31-userFrequencyValue ~/ (31 / baseMaxValue);
     }
     var userDuration = selectedAnswerListData.firstWhere(
         (intensityElement) =>

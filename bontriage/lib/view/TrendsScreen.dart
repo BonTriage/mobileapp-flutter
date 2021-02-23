@@ -53,6 +53,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
   List<TrendsFilterModel> triggersListData = [];
 
+  String secondSelectedHeadacheName;
+
   @override
   void initState() {
     super.initState();
@@ -72,14 +74,13 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-
   }
 
   @override
   void didUpdateWidget(TrendsScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-        selectedHeadacheName,"",false);
+        selectedHeadacheName, "", false);
   }
 
   @override
@@ -156,7 +157,9 @@ class _TrendsScreenState extends State<TrendsScreen> {
                             height: 5,
                           ),
                           Text(
-                            selectedHeadacheName,
+                            secondSelectedHeadacheName != null
+                                ? '$selectedHeadacheName Vs $secondSelectedHeadacheName'
+                                : selectedHeadacheName,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -173,7 +176,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                   if (currentIndex != 0) {
                                     setState(() {
                                       currentIndex = currentIndex - 1;
-                                      _pageController.animateToPage(currentIndex,
+                                      _pageController.animateToPage(
+                                          currentIndex,
                                           duration: Duration(milliseconds: 300),
                                           curve: Curves.easeIn);
                                     });
@@ -181,10 +185,11 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 },
                                 child: CircleAvatar(
                                   radius: 16,
-                                  backgroundColor:
-                                      Constant.backgroundColor.withOpacity(0.85),
+                                  backgroundColor: Constant.backgroundColor
+                                      .withOpacity(0.85),
                                   child: Image(
-                                    image: AssetImage(Constant.calenderBackArrow),
+                                    image:
+                                        AssetImage(Constant.calenderBackArrow),
                                     width: 15,
                                     height: 15,
                                   ),
@@ -209,7 +214,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                   if (currentIndex != 3) {
                                     setState(() {
                                       currentIndex = currentIndex + 1;
-                                      _pageController.animateToPage(currentIndex,
+                                      _pageController.animateToPage(
+                                          currentIndex,
                                           duration: Duration(microseconds: 300),
                                           curve: Curves.easeIn);
                                     });
@@ -217,10 +223,11 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 },
                                 child: CircleAvatar(
                                   radius: 16,
-                                  backgroundColor:
-                                      Constant.backgroundColor.withOpacity(0.85),
+                                  backgroundColor: Constant.backgroundColor
+                                      .withOpacity(0.85),
                                   child: Image(
-                                    image: AssetImage(Constant.calenderNextArrow),
+                                    image:
+                                        AssetImage(Constant.calenderNextArrow),
                                     width: 15,
                                     height: 15,
                                   ),
@@ -250,19 +257,28 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 onTap: () {
                                   openEditGraphViewBottomSheet();
                                 },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: Constant.backgroundTransparentColor,
-                                    borderRadius: BorderRadius.circular(20),
+                                child: Card(
+                                  elevation: 4,
+                                  color: Colors.transparent,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  semanticContainer: false,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                  child: Text(
-                                    'Edit graph view',
-                                    style: TextStyle(
-                                        color: Constant.locationServiceGreen,
-                                        fontSize: 12,
-                                        fontFamily: Constant.jostRegular),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 12),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Constant.backgroundTransparentColor,
+                                    ),
+                                    child: Text(
+                                      'Edit graph view',
+                                      style: TextStyle(
+                                          color: Constant.locationServiceGreen,
+                                          fontSize: 12,
+                                          fontFamily: Constant.jostRegular),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -329,7 +345,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 12),
                             decoration: BoxDecoration(
                               color: Constant.barTutorialsTapColor,
                               borderRadius: BorderRadius.only(
@@ -382,11 +399,17 @@ class _TrendsScreenState extends State<TrendsScreen> {
     }
     pageViewWidgetList = [
       TrendsIntensityScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
+        editGraphViewFilterModel: _editGraphViewFilterModel,
+        updateTrendsDataCallback: _updateTrendsData,
+      ),
       TrendsDisabilityScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
+        editGraphViewFilterModel: _editGraphViewFilterModel,
+        updateTrendsDataCallback: _updateTrendsData,
+      ),
       TrendsFrequencyScreen(
-          editGraphViewFilterModel: _editGraphViewFilterModel, updateTrendsDataCallback: _updateTrendsData,),
+        editGraphViewFilterModel: _editGraphViewFilterModel,
+        updateTrendsDataCallback: _updateTrendsData,
+      ),
       TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
     ];
   }
@@ -404,8 +427,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
     return 'Intensity';
   }
 
-  void requestService(String firstDayOfTheCurrentMonth,
-      String lastDayOfTheCurrentMonth,String selectedHeadacheName, String selectedAnotherHeadacheName, bool isMultipleHeadacheSelected) async {
+  void requestService(
+      String firstDayOfTheCurrentMonth,
+      String lastDayOfTheCurrentMonth,
+      String selectedHeadacheName,
+      String selectedAnotherHeadacheName,
+      bool isMultipleHeadacheSelected) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar =
         sharedPreferences.getInt(Constant.currentIndexOfTabBar);
@@ -420,13 +447,18 @@ class _TrendsScreenState extends State<TrendsScreen> {
         _recordsTrendsScreenBloc.fetchAllHeadacheListData(
             firstDayOfTheCurrentMonth,
             lastDayOfTheCurrentMonth,
-            selectedHeadacheName,selectedAnotherHeadacheName,isMultipleHeadacheSelected);
+            selectedHeadacheName,
+            selectedAnotherHeadacheName,
+            isMultipleHeadacheSelected);
       });
-      print('Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
+      print(
+          'Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
       _recordsTrendsScreenBloc.fetchAllHeadacheListData(
           firstDayOfTheCurrentMonth,
           lastDayOfTheCurrentMonth,
-          selectedHeadacheName,selectedAnotherHeadacheName,isMultipleHeadacheSelected);
+          selectedHeadacheName,
+          selectedAnotherHeadacheName,
+          isMultipleHeadacheSelected);
     }
   }
 
@@ -444,24 +476,19 @@ class _TrendsScreenState extends State<TrendsScreen> {
             _editGraphViewFilterModel.singleTypeHeadacheSelected;
         _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
             duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-
-        //Constant.noneRadioButtonText,
-        // Constant.loggedBehaviors,
-        // Constant.loggedPotentialTriggers,
-        // Constant.medications,
+        secondSelectedHeadacheName = null;
 
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName,'',false);
-      }else{
-          selectedHeadacheName =
-              _editGraphViewFilterModel.compareHeadacheTypeSelected1;
-         var secondSelectedHeadacheName =
-              _editGraphViewFilterModel.compareHeadacheTypeSelected2;
-          _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
-              duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName,secondSelectedHeadacheName,true);
-
+            selectedHeadacheName, '', false);
+      } else {
+        selectedHeadacheName =
+            _editGraphViewFilterModel.compareHeadacheTypeSelected1;
+        secondSelectedHeadacheName =
+            _editGraphViewFilterModel.compareHeadacheTypeSelected2;
+        _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
+            duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName, secondSelectedHeadacheName, true);
       }
     }
     print(resultFromActionSheet);
@@ -559,13 +586,13 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-    if(_editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+    if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+        Constant.viewSingleHeadache) {
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-          selectedHeadacheName,'',false);
-    }else{
+          selectedHeadacheName, '', false);
+    } else {
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-          selectedHeadacheName,'',true);
+          selectedHeadacheName, '', true);
     }
-
   }
 }

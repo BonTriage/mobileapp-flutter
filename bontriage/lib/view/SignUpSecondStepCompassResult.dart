@@ -768,7 +768,7 @@ class _SignUpSecondStepCompassResultState
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = userFrequency.value.toInt();
-      userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
+      userFrequencyValue = 31-userFrequencyValue ~/ (31 / baseMaxValue);
     }
     var userDuration = recordsCompassAxesResultModel.axes.firstWhere(
             (intensityElement) =>
@@ -793,7 +793,6 @@ class _SignUpSecondStepCompassResultState
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue = userIntensity.value.toInt();
-      //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
     }
     var userDisability = recordsCompassAxesResultModel.axes.firstWhere(
             (intensityElement) =>

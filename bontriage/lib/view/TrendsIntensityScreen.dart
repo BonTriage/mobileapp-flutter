@@ -130,7 +130,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                             textStyle: TextStyle(
                                 color: Color(0xffCAD7BF),
                                 fontFamily: 'JostRegular',
-                                fontSize: 12))),
+                                fontSize: 10))),
                     barTouchData: BarTouchData(
                       enabled: true,
                       touchTooltipData: BarTouchTooltipData(
@@ -148,7 +148,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                                     (rod.y.toInt()).toString() +
                                     '/10 Int.',
                                 TextStyle(
-                                    color: Colors.white,
+                                    color: setToolTipTextColor(),
                                     fontFamily: Constant.jostRegular,
                                     fontSize: 12));
                           },
@@ -202,7 +202,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                         getTextStyles: (value) => const TextStyle(
                             color: Color(0xffCAD7BF),
                             fontFamily: 'JostRegular',
-                            fontSize: 11),
+                            fontSize: 10),
                         margin: 2,
                         getTitles: (double value) {
                           switch (value.toInt()) {
@@ -359,7 +359,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             Visibility(
               visible: widget.editGraphViewFilterModel
@@ -454,7 +454,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length >0 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -483,7 +483,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -680,12 +680,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   Color setToolTipColor() {
     if (clickedValue != null) {
-      if (clickedValue > 1 && clickedValue <= 3) {
-        return Constant.mildTriggerColor;
-      } else if (clickedValue >= 4 && clickedValue <= 7) {
-        return Constant.moderateTriggerColor;
-      } else
-        return Constant.severeTriggerColor;
+      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+        if (clickedValue > 1 && clickedValue <= 3) {
+          return Constant.mildTriggerColor;
+        } else if (clickedValue >= 4 && clickedValue <= 7) {
+          return Constant.moderateTriggerColor;
+        } else
+          return Constant.severeTriggerColor;
+      }else{
+        return Constant.migraineColor;
+      }
+
     }
     return Colors.transparent;
   }
@@ -1126,4 +1131,12 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
    }else return Colors.transparent;
  }
+
+  setToolTipTextColor() {
+      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+         return Colors.white;
+      }else{
+        return Colors.black;
+      }
+  }
 }

@@ -10,12 +10,13 @@ import 'package:mobile/models/TrendsFilterModel.dart';
 import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 
 class TrendsFrequencyScreen extends StatefulWidget {
-
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
 
-  const TrendsFrequencyScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
+  const TrendsFrequencyScreen(
+      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
+
   @override
   _TrendsFrequencyScreenState createState() => _TrendsFrequencyScreenState();
 }
@@ -43,7 +44,6 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   List<Data> multipleSecondFrequencyListData = [];
   List<BarChartGroupData> items;
 
-
   List<double> multipleFirstWeekFrequencyData = [];
   List<double> multipleSecondWeekFrequencyData = [];
   List<double> multipleThirdWeekFrequencyData = [];
@@ -60,6 +60,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   List<double> thirdWeekFrequencyData = [];
   List<double> fourthWeekFrequencyData = [];
   List<double> fifthWeekFrequencyData = [];
+  bool headacheColorChanged = false;
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                width: totalDaysInCurrentMonth <= 28 ? 350:420,
+                width: totalDaysInCurrentMonth <= 28 ? 350 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: BarChart(
                   BarChartData(
@@ -122,19 +123,27 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                             textStyle: TextStyle(
                                 color: Color(0xffCAD7BF),
                                 fontFamily: 'JostRegular',
-                                fontSize: 12))),
+                                fontSize: 10))),
                     barTouchData: BarTouchData(
                       enabled: true,
                       touchTooltipData: BarTouchTooltipData(
                           tooltipBgColor: setToolTipColor(),
-                          tooltipPadding:EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+                          tooltipPadding:
+                              EdgeInsets.symmetric(horizontal: 13, vertical: 1),
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay =
+                                '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
-                                weekDay + '\n' + (rod.y.toInt()).toString()+' Days', TextStyle(color: Colors.black,fontFamily: 'JostRegular',
-                                fontSize: 12 ));
+                                weekDay +
+                                    '\n' +
+                                    (rod.y.toInt()).toString() +
+                                    ' Days',
+                                TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'JostRegular',
+                                    fontSize: 12));
                           },
                           fitInsideHorizontally: true,
                           fitInsideVertically: true),
@@ -164,16 +173,15 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                       show: true,
                       drawVerticalLine: true,
                       drawHorizontalLine: true,
-                       checkToShowHorizontalLine: (value) => value % 5 == 0,
+                      checkToShowHorizontalLine: (value) => value % 5 == 0,
                       getDrawingHorizontalLine: (value) {
                         if (value == 0) {
                           return FlLine(
                               color: const Color(0x800E4C47), strokeWidth: 1);
-                        }else{
+                        } else {
                           return FlLine(
                               color: const Color(0x800E4C47), strokeWidth: 1);
                         }
-
                       },
                     ),
                     titlesData: FlTitlesData(
@@ -183,7 +191,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                         getTextStyles: (value) => const TextStyle(
                             color: Color(0xffCAD7BF),
                             fontFamily: 'JostRegular',
-                            fontSize: 11),
+                            fontSize: 10),
                         margin: 2,
                         getTitles: (double value) {
                           switch (value.toInt()) {
@@ -214,10 +222,10 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                         getTextStyles: (value) => const TextStyle(
                             color: Color(0xffCAD7BF),
                             fontFamily: 'JostRegular',
-                            fontSize: 11),
+                            fontSize: 10),
                         margin: 10,
                         reservedSize: 10,
-                         getTitles: (value) {
+                        getTitles: (value) {
                           if (value == 0) {
                             return '0';
                           } else if (value == 5) {
@@ -232,7 +240,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                             return '25';
                           } else if (value == 30) {
                             return '30';
-                          }else {
+                          } else {
                             return '';
                           }
                         },
@@ -241,13 +249,12 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                     barGroups: showingBarGroups,
                   ),
                 ),
-
               ),
             ),
             Visibility(
               visible:
-              widget.editGraphViewFilterModel.whichOtherFactorSelected !=
-                  Constant.noneRadioButtonText,
+                  widget.editGraphViewFilterModel.whichOtherFactorSelected !=
+                      Constant.noneRadioButtonText,
               child: Column(
                 children: [
                   SizedBox(
@@ -269,7 +276,6 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Column(
-
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
                         ),
@@ -288,7 +294,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month - 1);
+                        DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
                     _onStartDateSelected(dateTime);
                   },
@@ -322,7 +328,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month + 1);
+                        DateTime(_dateTime.year, _dateTime.month + 1);
                     Duration duration = dateTime.difference(DateTime.now());
                     if (duration.inSeconds < 0) {
                       _dateTime = dateTime;
@@ -343,8 +349,93 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                 ),
               ],
             ),
+            Visibility(
+              visible: widget.editGraphViewFilterModel
+                      .headacheTypeRadioButtonSelected !=
+                  Constant.viewSingleHeadache,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: setHeadacheColor(),
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  0
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[0]
+                                  .text
+                              : '',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: headacheColorChanged
+                                ? Constant.migraineColor
+                                : Constant.otherHeadacheColor,
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  1
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[1]
+                                  .text
+                              : '',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
           ],
         ),
@@ -418,9 +509,9 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
         ),
         context: context,
         builder: (context) => DateTimePicker(
-          cupertinoDatePickerMode: cupertinoDatePickerMode,
-          onDateTimeSelected: _getDateTimeCallbackFunction(0),
-        ));
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -448,8 +539,9 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   }
 
   Color setToolTipColor() {
-     return Constant.migraineColor;
+    return Constant.migraineColor;
   }
+
 //3315662,4d7483,658c9f,82aac0,99c1db
   List<Color> setBarChartColor(double barChartValue) {
     return [Constant.migraineColor];
@@ -458,7 +550,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   void setFrequencyValuesData() {
     if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
         Constant.viewSingleHeadache) {
-      frequencyListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.frequency;
+      frequencyListData = widget
+          .editGraphViewFilterModel.recordsTrendsDataModel.headache.frequency;
       firstWeekFrequencyData = [];
       secondWeekFrequencyData = [];
       thirdWeekFrequencyData = [];
@@ -479,9 +572,9 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           month = currentMonth.toString();
         }
         DateTime dateTime =
-        DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
         var intensityData = frequencyListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (intensityData != null) {
           setAllWeekIntensityData(i, intensityData.value.toDouble());
@@ -493,7 +586,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       print(
           'AllIntensityListData $firstWeekFrequencyData $secondWeekFrequencyData $thirdWeekFrequencyData $fourthWeekFrequencyData');
 
-       barGroup1 = makeGroupData(
+      barGroup1 = makeGroupData(
           0,
           firstWeekFrequencyData[0],
           firstWeekFrequencyData[1],
@@ -502,7 +595,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           firstWeekFrequencyData[4],
           firstWeekFrequencyData[5],
           firstWeekFrequencyData[6]);
-       barGroup2 = makeGroupData(
+      barGroup2 = makeGroupData(
           1,
           secondWeekFrequencyData[0],
           secondWeekFrequencyData[1],
@@ -511,7 +604,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           secondWeekFrequencyData[4],
           secondWeekFrequencyData[5],
           secondWeekFrequencyData[6]);
-       barGroup3 = makeGroupData(
+      barGroup3 = makeGroupData(
           2,
           thirdWeekFrequencyData[0],
           thirdWeekFrequencyData[1],
@@ -520,7 +613,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           thirdWeekFrequencyData[4],
           thirdWeekFrequencyData[5],
           thirdWeekFrequencyData[6]);
-       barGroup4 = makeGroupData(
+      barGroup4 = makeGroupData(
           3,
           fourthWeekFrequencyData[0],
           fourthWeekFrequencyData[1],
@@ -531,15 +624,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           fourthWeekFrequencyData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeGroupData(
-            4,
-            fifthWeekFrequencyData[0],
-            fifthWeekFrequencyData[1],
-            fifthWeekFrequencyData[2],
-            0,
-            0,
-            0,
-            0);
+        barGroup5 = makeGroupData(4, fifthWeekFrequencyData[0],
+            fifthWeekFrequencyData[1], fifthWeekFrequencyData[2], 0, 0, 0, 0);
       }
 
       if (totalDaysInCurrentMonth > 28) {
@@ -550,7 +636,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
 
       rawBarGroups = items;
       showingBarGroups = rawBarGroups;
-    }else{
+    } else {
       multipleFirstFrequencyListData = widget
           .editGraphViewFilterModel
           .recordsTrendsDataModel
@@ -564,9 +650,9 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           .headacheSecond
           .frequency;
 
-      firstWeekFrequencyData= [];
-      secondWeekFrequencyData= [];
-      thirdWeekFrequencyData= [];
+      firstWeekFrequencyData = [];
+      secondWeekFrequencyData = [];
+      thirdWeekFrequencyData = [];
       fourthWeekFrequencyData = [];
       fifthWeekFrequencyData = [];
 
@@ -590,9 +676,9 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           month = currentMonth.toString();
         }
         DateTime dateTime =
-        DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
         var firstIntensityData = multipleFirstFrequencyListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (firstIntensityData != null) {
           setAllWeekIntensityData(i, firstIntensityData.value.toDouble());
@@ -600,7 +686,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           setAllWeekIntensityData(i, 0);
         }
         var secondIntensityData = multipleSecondFrequencyListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (secondIntensityData != null) {
           setAllMultipleWeekDisabilityData(
@@ -708,7 +794,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
 
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
-    }
+  }
 
   void setAllWeekIntensityData(int i, double intensityData) {
     if (i <= 7) {
@@ -727,6 +813,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       fifthWeekFrequencyData.add(intensityData);
     }
   }
+
   List<Widget> getDotText() {
     List<Widget> widgetListData = [];
     List<TrendsFilterModel> dotTextModelDataList = [];
@@ -788,16 +875,19 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
           children: _getDots(dotTextModelDataList[i]),
         ),
       ));
-      widgetListData.add(SizedBox(height: 14,));
+      widgetListData.add(SizedBox(
+        height: 14,
+      ));
     }
     return widgetListData;
   }
+
   List<Widget> _getDots(TrendsFilterModel trendsFilterModel) {
     List<Widget> dotsList = [];
 
     for (int i = 1;
-    i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
-    i++) {
+        i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
+        i++) {
       var dotData = trendsFilterModel.occurringDateList
           .firstWhere((element) => element.day == i, orElse: () => null);
 
@@ -816,6 +906,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     }
     return dotsList;
   }
+
   void setAllMultipleWeekDisabilityData(int i, double intensityData) {
     if (i <= 7) {
       multipleFirstWeekFrequencyData.add(intensityData);
@@ -833,6 +924,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       multipleFifthWeekFrequencyData.add(intensityData);
     }
   }
+
   BarChartGroupData makeMultipleGroupData(
       int x,
       double firstMultipleHeadache1,
@@ -852,7 +944,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache1, secondMultipleHeadache1),
-        rodStackItems: setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -860,7 +953,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache2, secondMultipleHeadache2),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -868,8 +962,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache3, secondMultipleHeadache3),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache3, secondMultipleHeadache3)
-        ,
+        rodStackItems:
+            setRodStack(firstMultipleHeadache3, secondMultipleHeadache3),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -877,7 +971,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache4, secondMultipleHeadache4),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -885,7 +980,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache5, secondMultipleHeadache5),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -893,7 +989,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache6, secondMultipleHeadache6),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -901,13 +998,15 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache7, secondMultipleHeadache7),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
       ),
     ]);
   }
+
   List<BarChartRodStackItem> setRodStack(
       double firstMultipleHeadache1, double secondMultipleHeadache1) {
     var maxValue, minValue = 0.0;
@@ -924,7 +1023,8 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     ];
   }
 
-  double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {
+  double setAxisValue(
+      double firstMultipleHeadache1, double secondMultipleHeadache1) {
     var maxValue;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
       maxValue = firstMultipleHeadache1;
@@ -932,5 +1032,19 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
       maxValue = secondMultipleHeadache1;
     }
     return maxValue;
+  }
+
+  Color setHeadacheColor() {
+    if (firstWeekFrequencyData.length > 0 &&
+        multipleFirstWeekFrequencyData.length > 0) {
+      if (firstWeekFrequencyData[0] >= multipleFirstWeekFrequencyData[0]) {
+        headacheColorChanged = true;
+        return Constant.otherHeadacheColor;
+      } else {
+        headacheColorChanged = false;
+        return Constant.migraineColor;
+      }
+    } else
+      return Colors.transparent;
   }
 }

@@ -61,6 +61,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   List<double> fourthWeekDisabilityData = [];
   List<double> fifthWeekDisabilityData = [];
 
+  bool headacheColorChanged = false;
+
   @override
   void initState() {
     super.initState();
@@ -123,7 +125,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                             textStyle: TextStyle(
                                 color: Color(0xffCAD7BF),
                                 fontFamily: 'JostRegular',
-                                fontSize: 12))),
+                                fontSize: 10))),
                     barTouchData: BarTouchData(
                       enabled: true,
                       touchTooltipData: BarTouchTooltipData(
@@ -190,7 +192,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                         getTextStyles: (value) => const TextStyle(
                             color: Color(0xffCAD7BF),
                             fontFamily: 'JostRegular',
-                            fontSize: 11),
+                            fontSize: 10),
                         margin: 2,
                         getTitles: (double value) {
                           switch (value.toInt()) {
@@ -218,7 +220,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                         getTextStyles: (value) => const TextStyle(
                             color: Color(0xffCAD7BF),
                             fontFamily: 'JostRegular',
-                            fontSize: 11),
+                            fontSize: 10),
                         margin: 10,
                         reservedSize: 10,
                         /* getTitles: (value) {
@@ -364,7 +366,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -430,6 +432,73 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                       fontFamily: Constant.jostRegular),
                 ),
               ],
+            ),
+            Visibility(
+              visible: widget.editGraphViewFilterModel
+                  .headacheTypeRadioButtonSelected !=
+                  Constant.viewSingleHeadache,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: setHeadacheColor(),
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
             SizedBox(
               height: 20,
@@ -537,12 +606,18 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
   Color setToolTipColor() {
     if (clickedValue != null) {
-      if (clickedValue > 1 && clickedValue <= 2) {
-        return Constant.mildTriggerColor;
-      } else if (clickedValue > 2 && clickedValue <= 3) {
-        return Constant.moderateTriggerColor;
-      } else
-        return Constant.severeTriggerColor;
+      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+        if (clickedValue == 1) {
+          return Constant.mildTriggerColor;
+        } else if (clickedValue > 1 && clickedValue <= 3) {
+          return Constant.moderateTriggerColor;
+        } else
+          return Constant.severeTriggerColor;
+
+      }else{
+        return Constant.migraineColor;
+      }
+
     }
     return Colors.transparent;
   }
@@ -1042,5 +1117,25 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
       ),
     ]);
+  }
+  setToolTipTextColor() {
+    if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+      return Colors.white;
+    }else{
+      return Colors.black;
+    }
+  }
+
+  Color setHeadacheColor() {
+    if(firstWeekDisabilityData.length > 0  && multipleFirstWeekDisabilityData.length> 0) {
+      if (firstWeekDisabilityData[0] >= multipleFirstWeekDisabilityData[0]) {
+        headacheColorChanged = true;
+        return Constant.otherHeadacheColor;
+      } else{
+        headacheColorChanged = false;
+        return Constant.migraineColor;
+      }
+
+    }else return Colors.transparent;
   }
 }
