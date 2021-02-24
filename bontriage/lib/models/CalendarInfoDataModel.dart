@@ -1,4 +1,3 @@
-
 class CalendarInfoDataModel {
   List<Headache> headache;
   List<Headache> triggers;
@@ -6,7 +5,12 @@ class CalendarInfoDataModel {
   List<Headache> behaviours;
   List<Headache> logDayNote;
 
-  CalendarInfoDataModel({this.headache, this.triggers,this.medication,this.behaviours,this.logDayNote});
+  CalendarInfoDataModel(
+      {this.headache,
+      this.triggers,
+      this.medication,
+      this.behaviours,
+      this.logDayNote});
 
   CalendarInfoDataModel.fromJson(Map<String, dynamic> json) {
     if (json['headache'] != null) {
@@ -71,6 +75,7 @@ class Headache {
   String updatedAt;
   String calendarEntryAt;
   String eventType;
+  bool isMigraine;
   List<MobileEventDetails1> mobileEventDetails;
 
   Headache(
@@ -80,6 +85,7 @@ class Headache {
       this.updatedAt,
       this.calendarEntryAt,
       this.eventType,
+      this.isMigraine,
       this.mobileEventDetails});
 
   Headache.fromJson(Map<String, dynamic> json) {
@@ -89,6 +95,7 @@ class Headache {
     updatedAt = json['updated_at'];
     calendarEntryAt = json['calendar_entry_at'];
     eventType = json['event_type'];
+    isMigraine = json['is_migraine'];
     if (json['mobile_event_details'] != null) {
       mobileEventDetails = new List<MobileEventDetails1>();
       json['mobile_event_details'].forEach((v) {
@@ -105,6 +112,7 @@ class Headache {
     data['updated_at'] = this.updatedAt;
     data['calendar_entry_at'] = this.calendarEntryAt;
     data['event_type'] = this.eventType;
+    data['is_migraine'] = this.isMigraine;
     if (this.mobileEventDetails != null) {
       data['mobile_event_details'] =
           this.mobileEventDetails.map((v) => v.toJson()).toList();

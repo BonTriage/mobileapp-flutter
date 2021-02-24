@@ -546,7 +546,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = int.tryParse(userFrequency.answer);
-      userFrequencyValue = 31-userFrequencyValue ~/ (31 / baseMaxValue);
+      userFrequencyValue = (31-userFrequencyValue) ~/ (31 / baseMaxValue);
 
     }
     var userDuration = selectedAnswerListData.firstWhere(

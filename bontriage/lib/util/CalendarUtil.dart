@@ -51,6 +51,7 @@ class CalendarUtil {
                 (element) {
               if (int.parse(element.selectedDay) - 1 == i) {
                 selectedDayHeadacheIntensity.intensityValue = element.intensityValue;
+                selectedDayHeadacheIntensity.isMigraine = element.isMigraine;
                 return true;
               }
               return false;

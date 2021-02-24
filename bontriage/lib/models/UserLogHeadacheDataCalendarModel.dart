@@ -22,4 +22,5 @@ class SelectedDayHeadacheIntensity {
   String questionTag;
   String intensityValue;
   String selectedDay;
+  bool isMigraine  = false;
 }

@@ -584,20 +584,25 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         .recordsCompareCompassAxesResultModel.currentAxes;
     print(recordsOverTimeCompassModel);
     var userFrequency = currentMonthCompassAxesListData.firstWhere(
-        (intensityElement) => intensityElement.name == Constant.frequency,
+        (frequencyElement) => frequencyElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      userFrequencyValue =
-          userFrequency.value ~/ (userFrequency.max / baseMaxValue);
+     // userFrequencyValue = userFrequency.value ~/ (userFrequency.max / baseMaxValue);
+      userFrequencyValue = (userFrequency.value * baseMaxValue).round();
+      if(userFrequencyValue > 10){
+        userFrequencyValue = 10;
+      }else{
+        userFrequencyValue = userFrequencyValue;
+      }
     } else {
       userFrequencyValue = 0;
     }
     var userDuration = currentMonthCompassAxesListData.firstWhere(
-        (intensityElement) => intensityElement.name == Constant.duration,
+        (durationElement) => durationElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
-      userDurationValue =
-          userDuration.value ~/ (userDuration.max / baseMaxValue);
+    // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
+      userDurationValue = (userDuration.value *baseMaxValue) ~/ userDuration.max ;
     } else {
       userDurationValue = 0;
     }
@@ -605,17 +610,22 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
-      userIntensityValue =
-          userIntensity.value ~/ (userIntensity.max / baseMaxValue);
+     // userIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
+      userIntensityValue = (userIntensity.value * baseMaxValue) ~/ userIntensity.max;
     } else {
       userIntensityValue = 0;
     }
     var userDisability = currentMonthCompassAxesListData.firstWhere(
-        (intensityElement) => intensityElement.name == Constant.disability,
+        (disabilityElement) => disabilityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
-      userDisabilityValue =
-          userDisability.value ~/ (userDisability.max / baseMaxValue);
+     // userDisabilityValue =  userDisability.value ~/ (userDisability.max / baseMaxValue);
+      userDisabilityValue =  (userDisability.value * baseMaxValue)~/ userDisability.max;
+      if(userDisabilityValue >10){
+        userDisabilityValue = 10;
+      }else{
+        userDisabilityValue = userDisabilityValue;
+      }
     } else {
       userDisabilityValue = 0;
     }

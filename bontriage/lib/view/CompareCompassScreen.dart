@@ -57,11 +57,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   int userFirstLoggedCompassScoreData = 0;
   String lastSelectedHeadacheName;
 
-
   DateTime firstLoggedSignUpData = DateTime.now();
 
   List<TextSpan> _getBubbleTextSpans() {
-
     List<TextSpan> list = [];
     list.add(TextSpan(
         text: 'Your first logged Headache score was ',
@@ -78,10 +76,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-
         text:
             ' in ${Utils.getMonthName(firstLoggedSignUpData.month)} ${firstLoggedSignUpData.year}. Tap the Compass to view $monthName $currentYear  ',
-
         style: TextStyle(
             height: 1.2,
             fontSize: 14,
@@ -121,7 +117,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     print('init state of compare compass');
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
           () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
@@ -222,8 +217,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: Container(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 3, horizontal: 30),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 3, horizontal: 30),
                             decoration: BoxDecoration(
                               color: Constant.compassMyHeadacheTextColor,
                               borderRadius: BorderRadius.circular(20),
@@ -617,11 +612,15 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     List<Axes> recordsCompareCompassAxesListData = recordsCompassAxesResultModel
         .recordsCompareCompassAxesResultModel.currentAxes;
     var userFrequency = recordsCompareCompassAxesListData.firstWhere(
-        (intensityElement) => intensityElement.name == Constant.frequency,
+        (frequencyElement) => frequencyElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      userMonthlyFrequencyValue =
-          userFrequency.value ~/ (userFrequency.max / baseMaxValue);
+      userMonthlyFrequencyValue = (userFrequency.value * baseMaxValue).round();
+      if (userMonthlyFrequencyValue > 10) {
+        userMonthlyFrequencyValue = 10;
+      } else {
+        userMonthlyFrequencyValue = userMonthlyFrequencyValue;
+      }
     } else {
       userMonthlyFrequencyValue = 0;
     }
@@ -629,8 +628,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
+      //userMonthlyDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
       userMonthlyDurationValue =
-          userDuration.value ~/ (userDuration.max / baseMaxValue);
+          (userDuration.value * baseMaxValue) ~/ userDuration.max;
     } else {
       userMonthlyDurationValue = 0;
     }
@@ -638,8 +638,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
+      // userMonthlyIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
       userMonthlyIntensityValue =
-          userIntensity.value ~/ (userIntensity.max / baseMaxValue);
+          (userIntensity.value * baseMaxValue) ~/ userIntensity.max;
     } else {
       userMonthlyIntensityValue = 0;
     }
@@ -647,8 +648,14 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
+      // userMonthlyDisabilityValue = userDisability.value ~/ (userDisability.max / baseMaxValue);
       userMonthlyDisabilityValue =
-          userDisability.value ~/ (userDisability.max / baseMaxValue);
+          (userDisability.value * baseMaxValue) ~/ userDisability.max;
+      if (userMonthlyDisabilityValue > 10) {
+        userMonthlyDisabilityValue = 10;
+      } else {
+        userMonthlyDisabilityValue = userMonthlyDisabilityValue;
+      }
     } else {
       userMonthlyDisabilityValue = 0;
     }
@@ -668,8 +675,14 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userOverTimeFrequency != null) {
-      userOvertimeFrequencyValue = userOverTimeFrequency.value ~/
-          (userOverTimeFrequency.max / baseMaxValue);
+      // userOvertimeFrequencyValue = userOverTimeFrequency.value ~/(userOverTimeFrequency.max / baseMaxValue);
+      userOvertimeFrequencyValue =
+          (userOverTimeFrequency.value * baseMaxValue).round();
+      if (userOvertimeFrequencyValue > 10) {
+        userOvertimeFrequencyValue = 10;
+      } else {
+        userOvertimeFrequencyValue = userOvertimeFrequencyValue;
+      }
     } else {
       userOvertimeFrequencyValue = 0;
     }
@@ -677,8 +690,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userOvertimeDuration != null) {
-      userOverTimeDurationValue = userOvertimeDuration.value ~/
-          (userOvertimeDuration.max / baseMaxValue);
+      // userOverTimeDurationValue = userOvertimeDuration.value ~/(userOvertimeDuration.max / baseMaxValue);
+      userOverTimeDurationValue = (userOvertimeDuration.value * baseMaxValue) ~/
+          userOvertimeDuration.max;
     } else {
       userOverTimeDurationValue = 0;
     }
@@ -686,8 +700,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userOverTimeIntensity != null) {
-      userOverTimeIntensityValue = userOverTimeIntensity.value ~/
-          (userOverTimeIntensity.max / baseMaxValue);
+      //  userOverTimeIntensityValue = userOverTimeIntensity.value ~/(userOverTimeIntensity.max / baseMaxValue);
+      userOverTimeIntensityValue =
+          (userOverTimeIntensity.value * baseMaxValue) ~/
+              userOverTimeIntensity.max;
     } else {
       userOverTimeIntensityValue = 0;
     }
@@ -695,8 +711,15 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userOverTimeDisability != null) {
-      userOverTimeDisabilityValue = userOverTimeDisability.value ~/
-          (userOverTimeDisability.max / baseMaxValue);
+      // userOverTimeDisabilityValue = userOverTimeDisability.value ~/(userOverTimeDisability.max / baseMaxValue);
+      userOverTimeDisabilityValue =
+          (userOverTimeDisability.value * baseMaxValue) ~/
+              userOverTimeDisability.max;
+      if (userOverTimeDisabilityValue > 10) {
+        userOverTimeDisabilityValue = 10;
+      } else {
+        userOverTimeDisabilityValue = userOverTimeDisabilityValue;
+      }
     } else {
       userOverTimeDisabilityValue = 0;
     }

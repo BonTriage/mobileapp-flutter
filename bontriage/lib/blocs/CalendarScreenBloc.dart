@@ -97,8 +97,7 @@ class CalendarScreenBloc {
         if (response != null && response is CalendarInfoDataModel) {
           print(response);
           userMonthTriggersData.clear();
-          UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel =
-              setAllCalendarDataInToModel(response, userProfileInfoData.userId);
+          UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel =  setAllCalendarDataInToModel(response, userProfileInfoData.userId);
           triggersDataSink.add(userMonthTriggersData);
           calendarDataSink.add(userLogHeadacheDataCalendarModel);
           networkDataSink.add(Constant.success);
@@ -147,6 +146,7 @@ class CalendarScreenBloc {
       if(userSelectedHeadacheDayIntensityData != null){
         SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity = SelectedDayHeadacheIntensity();
         _selectedDayHeadacheIntensity.selectedDay = _dateTime.day.toString();
+        _selectedDayHeadacheIntensity.isMigraine = element.isMigraine;
         var severityValue = element.mobileEventDetails.firstWhere(
                 (element) => element.questionTag == Constant.severityTag,
             orElse: () => null);
@@ -158,6 +158,7 @@ class CalendarScreenBloc {
       }else{
         SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity = SelectedDayHeadacheIntensity();
         _selectedDayHeadacheIntensity.selectedDay = _dateTime.day.toString();
+        _selectedDayHeadacheIntensity.isMigraine = element.isMigraine;
         var severityValue = element.mobileEventDetails.firstWhere(
                 (element) => element.questionTag == Constant.severityTag,
             orElse: () => null);

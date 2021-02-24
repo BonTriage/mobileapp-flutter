@@ -50,7 +50,7 @@ class DateWidget extends StatelessWidget {
             ),
             setTriggersViewOne(calendarType, triggersListData.length),
             setTriggersViewTwo(calendarType, triggersListData.length),
-            setTriggersViewThree(calendarType,triggersListData.length),
+            setTriggersViewThree(calendarType, triggersListData.length),
             Visibility(
               visible: calendarType == 0 ? false : calendarType == 2,
               child: Container(
@@ -87,12 +87,16 @@ class DateWidget extends StatelessWidget {
   BoxDecoration setDateViewWidget(int calendarDateViewType) {
     if (calendarDateViewType == 0) {
       return BoxDecoration(
-          color: Constant.chatBubbleGreen,
+          color: selectedDayHeadacheIntensity.isMigraine
+              ? Constant.migraineColor
+              : Constant.chatBubbleGreen,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isCurrentDate()
-                ? Constant.currentDateColor
-                : Constant.chatBubbleGreen,
+            color: (selectedDayHeadacheIntensity.isMigraine)
+                ? Constant.migraineColor
+                : isCurrentDate()
+                    ? Constant.currentDateColor
+                    : Constant.chatBubbleGreen,
             width: 2,
           ));
     } else if (calendarDateViewType == 1) {
