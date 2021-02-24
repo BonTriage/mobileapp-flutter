@@ -231,10 +231,10 @@ class _TimeSectionState extends State<TimeSection>
   }
 
   void _onEndTimeSelected(DateTime dateTime) {
-    //DateTime currentDateTime = DateTime.now();
+    DateTime currentDateTime = DateTime.now();
     dateTime = DateTime(_selectedEndDateAndTime.year, _selectedEndDateAndTime.month, _selectedEndDateAndTime.day, dateTime.hour, dateTime.minute, 0, 0);
-    if (dateTime.isAfter(_selectedStartDate) ||
-        dateTime.isAtSameMomentAs(_selectedStartDate)) {
+    if ((dateTime.isAfter(_selectedStartDate) ||
+        dateTime.isAtSameMomentAs(_selectedStartDate)) && (dateTime.isBefore(currentDateTime) || dateTime.isAtSameMomentAs(currentDateTime))) {
       setState(() {
         if (_selectedEndDate == null) {
           /*Duration duration = _selectedStartDate.difference(dateTime);

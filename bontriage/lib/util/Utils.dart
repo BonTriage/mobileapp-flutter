@@ -264,7 +264,7 @@ class Utils {
         }
         break;
       case Constant.QuestionLocationType:
-        if (selectedAnswerList != null) {
+        /*if (selectedAnswerList != null) {
           SelectedAnswers selectedAnswersData = selectedAnswerList.firstWhere(
               (element) => element.questionTag == questions.tag,
               orElse: () => null);
@@ -272,7 +272,8 @@ class Utils {
               selectedAnswersData.answer.trim().isNotEmpty;
         } else {
           return false;
-        }
+        }*/
+        return true;
         break;
       case Constant.QuestionInfoType:
         return true;

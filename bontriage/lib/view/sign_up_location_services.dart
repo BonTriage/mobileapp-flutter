@@ -49,12 +49,11 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
       SelectedAnswers selectedAnswers = widget.selectedAnswerListData.firstWhere((model) => model.questionTag == widget.question.tag, orElse: () => null);
 
       if(selectedAnswers != null) {
-        _locationServicesSwitchState = selectedAnswers.answer.toLowerCase() == 'true';
+        _locationServicesSwitchState = selectedAnswers.answer.isNotEmpty;
+      } else {
+        widget.selectedAnswerCallBack(widget.question.tag, Constant.blankString);
       }
     }
-
-    widget.selectedAnswerCallBack(
-        widget.question.tag, _locationServicesSwitchState.toString());
   }
 
   @override
@@ -151,12 +150,12 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
       List<String> latLngList = [];
       latLngList.add(position.latitude.toString());
       latLngList.add(position.longitude.toString());
-      widget.selectedAnswerCallBack(widget.question.tag,
-          jsonEncode(latLngList));
+      widget.selectedAnswerCallBack(widget.question.tag, jsonEncode(latLngList));
     } else {
       setState(() {
         _locationServicesSwitchState = false;
-        widget.removeSelectedAnswerCallback(widget.question.tag);
+        widget.selectedAnswerCallBack(widget.question.tag, Constant.blankString);
+        //widget.removeSelectedAnswerCallback(widget.question.tag);
         _isCheckingLocation = false;
       });
     }
