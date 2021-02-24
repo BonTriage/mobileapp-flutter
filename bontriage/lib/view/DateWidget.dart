@@ -87,12 +87,12 @@ class DateWidget extends StatelessWidget {
   BoxDecoration setDateViewWidget(int calendarDateViewType) {
     if (calendarDateViewType == 0) {
       return BoxDecoration(
-          color: selectedDayHeadacheIntensity.isMigraine
+          color: ((selectedDayHeadacheIntensity != null ) ? selectedDayHeadacheIntensity.isMigraine ?? false : false)
               ? Constant.migraineColor
               : Constant.chatBubbleGreen,
           shape: BoxShape.circle,
           border: Border.all(
-            color: (selectedDayHeadacheIntensity.isMigraine)
+            color: ((selectedDayHeadacheIntensity != null ) ? selectedDayHeadacheIntensity.isMigraine ?? false : false)
                 ? Constant.migraineColor
                 : isCurrentDate()
                     ? Constant.currentDateColor
