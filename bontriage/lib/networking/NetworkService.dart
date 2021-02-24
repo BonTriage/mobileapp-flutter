@@ -26,6 +26,7 @@ class NetworkService{
       } else if (requestMethod == RequestMethod.DELETE) {
         response = await client.delete(url, headers: RequestHeader().createRequestHeaders());
       }
+      print('Url???$url');
       return  getApiResponse(response);
     } on SocketException {
       return NoInternetConnection("Please connect to internet");
@@ -33,6 +34,7 @@ class NetworkService{
   }
 
   dynamic getApiResponse(http.Response response){
+    print('StatusCode????${response.statusCode}');
     switch(response.statusCode) {
       case 200:
       case 201:

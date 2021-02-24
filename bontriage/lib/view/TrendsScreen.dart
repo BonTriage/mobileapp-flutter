@@ -54,6 +54,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   List<TrendsFilterModel> triggersListData = [];
 
   String secondSelectedHeadacheName;
+  bool _isInitiallyServiceHit = false;
 
   @override
   void initState() {
@@ -74,6 +75,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    _isInitiallyServiceHit = false;
   }
 
   @override
@@ -434,13 +436,37 @@ class _TrendsScreenState extends State<TrendsScreen> {
       String selectedAnotherHeadacheName,
       bool isMultipleHeadacheSelected) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int currentPositionOfTabBar =
-        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    int recordTabBarPosition =
-        sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+    String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
+    String updateTrendsData = sharedPreferences.getString(Constant.updateTrendsData) ?? Constant.blankString;
 
-    if (currentPositionOfTabBar == 1 && recordTabBarPosition == 2) {
+    if(!_isInitiallyServiceHit && currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
+      _isInitiallyServiceHit = true;
       _recordsTrendsScreenBloc.initNetworkStreamController();
+      print('show api loader 16');
+      widget.showApiLoaderCallback(_recordsTrendsScreenBloc.networkDataStream,
+              () {
+            _recordsTrendsScreenBloc.enterSomeDummyDataToStream();
+            _recordsTrendsScreenBloc.fetchAllHeadacheListData(
+                firstDayOfTheCurrentMonth,
+                lastDayOfTheCurrentMonth,
+                selectedHeadacheName,
+                Constant.blankString,
+                false);
+          });
+      print(
+          'Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
+      _recordsTrendsScreenBloc.fetchAllHeadacheListData(
+          firstDayOfTheCurrentMonth,
+          lastDayOfTheCurrentMonth,
+          selectedHeadacheName,
+          Constant.blankString,
+          false);
+    } else if (currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty && updateTrendsData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateTrendsData);
+      _recordsTrendsScreenBloc.initNetworkStreamController();
+      print('show api loader 15');
       widget.showApiLoaderCallback(_recordsTrendsScreenBloc.networkDataStream,
           () {
         _recordsTrendsScreenBloc.enterSomeDummyDataToStream();

@@ -668,6 +668,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (resultFromActionSheet != null) {
       selectedHeadacheName = resultFromActionSheet.toString();
       _recordsCompassScreenBloc.initNetworkStreamController();
+      print('show api loader 12');
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
               () {
             _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();

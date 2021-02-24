@@ -590,7 +590,7 @@ class Constant {
       'updateCalendarIntensityData';
   static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
   static const String updateCompareCompassData = 'updateCompareCompassData';
-
+  static const String updateTrendsData = 'updateTrendsData';
 
   //tutorial text
   static const String meScreenTutorial1 =

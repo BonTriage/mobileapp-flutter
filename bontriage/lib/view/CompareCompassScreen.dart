@@ -844,7 +844,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     if (resultFromActionSheet != null) {
       selectedHeadacheName = resultFromActionSheet.toString();
       _recordsCompassScreenBloc.initNetworkStreamController();
-
+      print('show api loader 14');
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
           () {
         _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
@@ -867,14 +867,14 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     String isTrendsClicked =
         sharedPreferences.getString(Constant.isViewTrendsClicked) ??
             Constant.blankString;
-    String updateOverTimeCompassData =
-        sharedPreferences.getString(Constant.updateOverTimeCompassData) ??
+    String updateCompareCompassData =
+        sharedPreferences.getString(Constant.updateCompareCompassData) ??
             Constant.blankString;
 
     if (isSeeMoreClicked.isEmpty &&
         isTrendsClicked.isEmpty &&
-        updateOverTimeCompassData == Constant.trueString) {
-      sharedPreferences.remove(Constant.updateOverTimeCompassData);
+        updateCompareCompassData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateCompareCompassData);
       _dateTime = DateTime.now();
       currentMonth = _dateTime.month;
       currentYear = _dateTime.year;
