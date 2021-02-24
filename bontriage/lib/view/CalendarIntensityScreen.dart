@@ -52,8 +52,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
 
+    
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      print('show api loader 4');
       _showApiLoaderDialog();
     });
     _callApiService();
@@ -80,6 +80,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
   @override
   void didUpdateWidget(CalendarIntensityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('did update widget of calendar intensity screen');
     _updateCalendarData();
   }
 
@@ -661,6 +662,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
 
     if (isViewTrendsClicked.isEmpty) {
       _calendarScreenBloc.initNetworkStreamController();
+      print('show api loader 4');
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
         _callApiService();
@@ -687,12 +689,12 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
       lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
           currentMonth, currentYear, totalDaysInCurrentMonth);
 
-      print('show api loader 10');
       int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
       int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
 
       if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
         _calendarScreenBloc.initNetworkStreamController();
+        print('show api loader 10');
         widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
           _calendarScreenBloc.enterSomeDummyDataToStreamController();
           requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
