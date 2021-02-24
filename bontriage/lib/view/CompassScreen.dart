@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompareCompassScreen.dart';
@@ -23,17 +25,32 @@ class _CompassScreenState extends State<CompassScreen> {
   List<Widget> pageViewWidgetList;
   int currentIndex = 0;
 
+  StreamController<dynamic> _initPageViewStreamController;
+
+  StreamSink<dynamic> get initPageViewSink =>
+      _initPageViewStreamController.sink;
+
+  Stream<dynamic> get initPageViewStream =>
+      _initPageViewStreamController.stream;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
+    _initPageViewStreamController = StreamController<dynamic>();
   }
 
   @override
   void didUpdateWidget(CompassScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     getCurrentPositionOfTabBar();
+  }
+
+  @override
+  void dispose() {
+    _initPageViewStreamController?.close();
+    super.dispose();
   }
 
   @override
@@ -116,7 +133,29 @@ class _CompassScreenState extends State<CompassScreen> {
               ],
             ),
             Expanded(
-              child: PageView.builder(
+              child: StreamBuilder<dynamic>(
+                stream: initPageViewStream,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    return PageView.builder(
+                      itemBuilder: (context, index) {
+                        return pageViewWidgetList[index];
+                      },
+                      controller: _pageController,
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      reverse: false,
+                      itemCount: pageViewWidgetList.length,
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),/*PageView.builder(
                 itemBuilder: (context, index) {
                   return pageViewWidgetList[index];
                 },
@@ -129,7 +168,7 @@ class _CompassScreenState extends State<CompassScreen> {
                 },
                 reverse: false,
                 itemCount: pageViewWidgetList.length,
-              ),
+              ),*/
             ),
 
           ],
@@ -151,12 +190,17 @@ class _CompassScreenState extends State<CompassScreen> {
     }
     print(currentPositionOfTabBar);
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 1) {
-      setState(() {
+      /*setState(() {
         pageViewWidgetList = [
           OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
           CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
         ];
-      });
+      });*/
+      pageViewWidgetList = [
+        OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
+        CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
+      ];
+      initPageViewSink.add('Data');
     }
   }
 }

@@ -30,12 +30,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Stream<dynamic> get refreshCalendarDataStream =>
       _refreshCalendarDataStreamController.stream;
 
+  StreamController<dynamic> _initPageViewStreamController;
+
+  StreamSink<dynamic> get initPageViewSink =>
+      _initPageViewStreamController.sink;
+
+  Stream<dynamic> get initPageViewStream =>
+      _initPageViewStreamController.stream;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
     pageViewWidgetList = [Container()];
     _refreshCalendarDataStreamController = StreamController<dynamic>.broadcast();
+    _initPageViewStreamController = StreamController<dynamic>();
   }
 
   @override
@@ -48,6 +57,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void dispose() {
     _refreshCalendarDataStreamController?.close();
+    _initPageViewStreamController?.close();
     super.dispose();
   }
 
@@ -129,7 +139,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
             Expanded(
-              child: PageView.builder(
+              child: StreamBuilder<dynamic>(
+                stream: initPageViewStream,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    return PageView.builder(
+                      itemBuilder: (context, index) {
+                        return pageViewWidgetList[index];
+                      },
+                      controller: _pageController,
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      reverse: false,
+                      itemCount: pageViewWidgetList.length,
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              )/*PageView.builder(
                 itemBuilder: (context, index) {
                   return pageViewWidgetList[index];
                 },
@@ -142,7 +174,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 },
                 reverse: false,
                 itemCount: pageViewWidgetList.length,
-              ),
+              ),*/
             ),
           ],
         ),
@@ -154,12 +186,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
     if (currentPositionOfTabBar == 1 && pageViewWidgetList.length != 2) {
-     setState(() {
+     //setState(() {
        pageViewWidgetList = [
          CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
          CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
        ];
-     });
+     //});
+      initPageViewSink.add('data');
     }
   }
 }

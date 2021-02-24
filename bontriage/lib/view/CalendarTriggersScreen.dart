@@ -99,7 +99,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-  //  getCurrentPositionOfTabBar();
+    getCurrentPositionOfTabBar();
   }
 
   @override
