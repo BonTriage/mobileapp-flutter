@@ -768,7 +768,11 @@ class _SignUpSecondStepCompassResultState
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = userFrequency.value.toInt();
-      userFrequencyValue = (31-userFrequencyValue) ~/ (31 / baseMaxValue);
+      if(userFrequencyValue == 0){
+        userFrequencyValue = 0;
+      }else {
+        userFrequencyValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+      }
     }
     var userDuration = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
