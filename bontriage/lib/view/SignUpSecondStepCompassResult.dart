@@ -762,7 +762,7 @@ class _SignUpSecondStepCompassResultState
 
   void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {
     int baseMaxValue = 10;
-    var userFrequency = recordsCompassAxesResultModel.previousAxes.firstWhere(
+    var userFrequency = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
         intensityElement.name == 'Frequency',
         orElse: () => null);
@@ -770,7 +770,7 @@ class _SignUpSecondStepCompassResultState
       userFrequencyValue = userFrequency.value.toInt();
       userFrequencyValue = (31-userFrequencyValue) ~/ (31 / baseMaxValue);
     }
-    var userDuration = recordsCompassAxesResultModel.previousAxes.firstWhere(
+    var userDuration = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
             intensityElement.name == 'Duration',
         orElse: () => null);
@@ -787,14 +787,14 @@ class _SignUpSecondStepCompassResultState
       userDurationValue =
           userDurationValue ~/ (userMaxDurationValue / baseMaxValue);
     }
-    var userIntensity = recordsCompassAxesResultModel.previousAxes.firstWhere(
+    var userIntensity = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
         intensityElement.name == 'Intensity',
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue = userIntensity.value.toInt();
     }
-    var userDisability = recordsCompassAxesResultModel.previousAxes.firstWhere(
+    var userDisability = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
         intensityElement.name == 'Disability',
         orElse: () => null);
