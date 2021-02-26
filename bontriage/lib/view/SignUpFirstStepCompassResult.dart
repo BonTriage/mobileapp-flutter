@@ -121,7 +121,6 @@ class _SignUpFirstStepCompassResultState
       "D",
     ];
 
-
     if (!_animationController.isAnimating) {
       _animationController.reset();
       _animationController.forward();
@@ -553,8 +552,13 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userFrequency != null) {
       userFrequencyValue = int.tryParse(userFrequency.answer);
-      _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
-      userFrequencyValue = (31-userFrequencyValue) ~/ (31 / baseMaxValue);
+      if (userFrequencyValue == 0) {
+        _compassTutorialModel.currentMonthFrequency = 0;
+        userFrequencyValue = 0;
+      } else {
+        _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
+        userFrequencyValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+      }
     }
     var userDuration = selectedAnswerListData.firstWhere(
         (intensityElement) =>
@@ -593,7 +597,8 @@ class _SignUpFirstStepCompassResultState
       userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
 
-    print('Frequency???${userFrequency.answer}Duration???${userDuration.answer}Intensity???${userIntensity.answer}Disability???${userDisability.answer}');
+    print(
+        'Frequency???${userFrequency.answer}Duration???${userDuration.answer}Intensity???${userIntensity.answer}Disability???${userDisability.answer}');
     setState(() {
       // Intensity,Duration,Disability,Frequency
       /*  1. 16  last 3 month  1
