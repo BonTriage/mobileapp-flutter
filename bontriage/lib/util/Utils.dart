@@ -492,7 +492,8 @@ class Utils {
 
     currentDate = firstDayDateTime.toUtc().toIso8601String();
     List<String> splitString = currentDate.split('.');
-    return '${splitString[0]}Z';
+    print('Current Date??????${splitString[0]}Z');
+    return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
 
   /// Current Date with Time
@@ -509,8 +510,10 @@ class Utils {
         _dateTime.second);
 
     currentDate = firstDayDateTime.toUtc().toIso8601String();
+    print('');
     List<String> splitString = currentDate.split('.');
-    return '${splitString[0]}Z';
+    //return '${splitString[0]}Z';
+    return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
 
   ///This method is used to return scroll physics based on the platform
