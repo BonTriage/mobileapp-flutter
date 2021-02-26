@@ -218,7 +218,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                       currentIndex = currentIndex + 1;
                                       _pageController.animateToPage(
                                           currentIndex,
-                                          duration: Duration(microseconds: 300),
+                                          duration: Duration(milliseconds: 300),
                                           curve: Curves.easeIn);
                                     });
                                   }
@@ -372,7 +372,6 @@ class _TrendsScreenState extends State<TrendsScreen> {
                   );
                 }
               } else if (snapshot.hasError) {
-                Utils.closeApiLoaderDialog(context);
                 return NetworkErrorScreen(
                   errorMessage: snapshot.error.toString(),
                   tapToRetryFunction: () {
@@ -441,7 +440,9 @@ class _TrendsScreenState extends State<TrendsScreen> {
     String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
     String updateTrendsData = sharedPreferences.getString(Constant.updateTrendsData) ?? Constant.blankString;
 
-    if(/*!_isInitiallyServiceHit &&*/currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
+    print(_isInitiallyServiceHit);
+
+    if(!_isInitiallyServiceHit && currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
       _isInitiallyServiceHit = true;
       _recordsTrendsScreenBloc.initNetworkStreamController();
       print('show api loader 16');
@@ -496,6 +497,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.editGraphViewBottomSheet, _editGraphViewFilterModel);
     if (resultFromActionSheet == Constant.success) {
+      _isInitiallyServiceHit = false;
       if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
           Constant.viewSingleHeadache) {
         selectedHeadacheName =
@@ -602,7 +604,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
     _editGraphViewFilterModel.numberOfDaysInMonth = totalDaysInCurrentMonth;
   }
 
-  void _updateTrendsData() {
+  void _updateTrendsData() async {
+    _isInitiallyServiceHit = false;
     _dateTime = _editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
