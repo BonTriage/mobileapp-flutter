@@ -98,11 +98,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 150,
-                      ),
                       Text(
-                          'You didn\'t add any headache yet. So please\nadd any headache to see your Compass data.',
+                          'We noticed you didn’t log any  headache yet. So please\nadd any headache to see your Trends data.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               height: 1.3,
@@ -412,7 +409,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
         editGraphViewFilterModel: _editGraphViewFilterModel,
         updateTrendsDataCallback: _updateTrendsData,
       ),
-      TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel),
+      TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel,updateTrendsDataCallback: _updateTrendsData),
     ];
   }
 
@@ -489,7 +486,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   }
 
   void navigateToHeadacheStartScreen() async {
-    // await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+     await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
   }
 
   void openEditGraphViewBottomSheet() async {

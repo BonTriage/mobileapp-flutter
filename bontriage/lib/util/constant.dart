@@ -620,6 +620,11 @@ class Constant {
 
   static const String editGraphViewBottomSheet = 'editGraphViewBottomSheet';
 
+
+  static final int highBarColorIntensity = 2;
+  static final int lowBarColorIntensity = 0;
+  static final int mediumBarIntensity = 1;
+
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
@@ -665,6 +670,7 @@ class Constant {
   static Color moderateTriggerColor = Color(0xfff69946);
   static Color severeTriggerColor = Color(0xffEB5757);
   static Color migraineColor = Color(0xffB8E1FF);
+  static Color lightDurationColor = Color(0xF2ffffff);
 
   static Color otherHeadacheColor = Color(0xff177D5A);
 

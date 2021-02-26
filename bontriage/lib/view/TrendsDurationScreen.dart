@@ -1,20 +1,25 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/EditGraphViewFilterModel.dart';
+import 'package:mobile/models/RecordsTrendsDataModel.dart';
+import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'DateTimePicker.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 
-
 class TrendsDurationScreen extends StatefulWidget {
-
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
 
-  const TrendsDurationScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
+  const TrendsDurationScreen(
+      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
+
   @override
   _TrendsDurationScreenState createState() => _TrendsDurationScreenState();
 }
@@ -40,6 +45,30 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
 
   bool isClicked = false;
 
+  List<Ity> durationListData = [];
+  List<Data> multipleFirstIntensityListData = [];
+  List<Data> multipleSecondIntensityListData = [];
+  List<BarChartGroupData> items;
+  List<TrendsDurationColorModel> firstWeekDurationData = [];
+  List<TrendsDurationColorModel> secondWeekDurationData = [];
+  List<TrendsDurationColorModel> thirdWeekDurationData = [];
+  List<TrendsDurationColorModel> fourthWeekDurationData = [];
+  List<TrendsDurationColorModel> fifthWeekDurationData = [];
+
+/*  List<double> multipleFirstWeekIntensityData = [];
+  List<double> multipleSecondWeekIntensityData = [];
+  List<double> multipleThirdWeekIntensityData = [];
+  List<double> multipleFourthWeekIntensityData = [];
+  List<double> multipleFifthWeekIntensityData = [];*/
+
+  BarChartGroupData barGroup2;
+  BarChartGroupData barGroup1;
+  BarChartGroupData barGroup3;
+  BarChartGroupData barGroup4;
+  BarChartGroupData barGroup5;
+
+  double axesMaxValue = 60;
+
   @override
   void initState() {
     super.initState();
@@ -53,28 +82,13 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
-
-    final barGroup1 = makeGroupData(0, 60, 0, 0, 0, 0, 45, 0);
-    final barGroup2 = makeGroupData(1, 0, 12, 0, 0, 45, 40, 0);
-    final barGroup3 = makeGroupData(2, 0, 45, 24, 0, 0, 34, 0);
-    final barGroup4 = makeGroupData(3, 0, 12, 46, 0, 30, 0, 9);
-
-
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-    ];
-
-    rawBarGroups = items;
-
-    showingBarGroups = rawBarGroups;
+    setDurationValuesData();
   }
 
   @override
   void didUpdateWidget(covariant TrendsDurationScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('in did update widget of trends intensity screen');
     _dateTime = widget.editGraphViewFilterModel.selectedDateTime;
     currentMonth = _dateTime.month;
     currentYear = _dateTime.year;
@@ -85,6 +99,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    setDurationValuesData();
   }
 
   @override
@@ -97,16 +112,15 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             SizedBox(
               height: 20,
             ),
-
-
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                width: totalDaysInCurrentMonth <= 28 ? 350:420,
+                width: totalDaysInCurrentMonth <= 28 ? 350 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: BarChart(
                   BarChartData(
-                    maxY: 60,
+                    maxY:
+                        axesMaxValue + ((axesMaxValue / 10).round()).toDouble(),
                     minY: 0,
                     groupsSpace: 10,
                     axisTitleData: FlAxisTitleData(
@@ -123,11 +137,12 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                       touchTooltipData: BarTouchTooltipData(
                           tooltipBgColor: setToolTipColor(),
                           tooltipPadding:
-                          EdgeInsets.symmetric(horizontal: 13, vertical: 1),
+                              EdgeInsets.symmetric(horizontal: 13, vertical: 1),
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay =
+                                '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
@@ -169,7 +184,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                     gridData: FlGridData(
                       show: true,
                       drawVerticalLine: true,
-                      checkToShowHorizontalLine: (value) => value % 10 == 0,
+                      checkToShowHorizontalLine: (value) =>
+                          value % (axesMaxValue / 10).round() == 0,
                       getDrawingHorizontalLine: (value) {
                         if (value == 0) {
                           return FlLine(
@@ -212,25 +228,10 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             fontFamily: 'JostRegular',
                             fontSize: 10),
                         margin: 10,
+                        interval: ((axesMaxValue / 10).round()).toDouble(),
                         reservedSize: 11,
                         getTitles: (value) {
-                          if (value == 0) {
-                            return '0';
-                          } else if (value == 10) {
-                            return '10';
-                          } else if (value == 20) {
-                            return '20';
-                          } else if (value == 30) {
-                            return '30';
-                          } else if (value == 40) {
-                            return '40';
-                          } else if (value == 50) {
-                            return '50';
-                          } else if (value == 60) {
-                            return '60';
-                          }else {
-                            return '';
-                          }
+                          return setLeftAxisTitlesValue(value);
                         },
                       ),
                     ),
@@ -241,8 +242,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             ),
             Visibility(
               visible:
-              widget.editGraphViewFilterModel.whichOtherFactorSelected !=
-                  Constant.noneRadioButtonText,
+                  widget.editGraphViewFilterModel.whichOtherFactorSelected !=
+                      Constant.noneRadioButtonText,
               child: Column(
                 children: [
                   SizedBox(
@@ -264,7 +265,6 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Column(
-
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
                         ),
@@ -283,7 +283,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month - 1);
+                        DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
                     _onStartDateSelected(dateTime);
                   },
@@ -317,7 +317,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                 GestureDetector(
                   onTap: () {
                     DateTime dateTime =
-                    DateTime(_dateTime.year, _dateTime.month + 1);
+                        DateTime(_dateTime.year, _dateTime.month + 1);
                     Duration duration = dateTime.difference(DateTime.now());
                     if (duration.inSeconds < 0) {
                       _dateTime = dateTime;
@@ -341,61 +341,60 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             SizedBox(
               height: 10,
             ),
-
           ],
         ),
       ),
     );
   }
 
-  BarChartGroupData makeGroupData(int x, double y1, double y2, double y3,
-      double y4, double y5, double y6, double y7) {
+  BarChartGroupData makeGroupData(int x, TrendsDurationColorModel y1, TrendsDurationColorModel y2, TrendsDurationColorModel y3,
+      TrendsDurationColorModel y4, TrendsDurationColorModel y5, TrendsDurationColorModel y6, TrendsDurationColorModel y7) {
     return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
       BarChartRodData(
-        y: y1,
-        colors: setBarChartColor(y1),
-        width:  width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y2,
-        colors: setBarChartColor(y2),
-        width:  width,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
-      ),
-      BarChartRodData(
-        y: y3,
-        colors: setBarChartColor(y3),
+        y: y1.durationValue,
+        colors: setBarChartColor(y1.durationColorIntensity),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
-        y: y4,
-        colors: setBarChartColor(y4),
+        y: y2.durationValue,
+        colors: setBarChartColor(y2.durationColorIntensity),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
-        y: y5,
-        colors: setBarChartColor(y5),
+        y: y3.durationValue,
+        colors: setBarChartColor(y3.durationColorIntensity),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
-        y: y6,
-        colors: setBarChartColor(y6),
+        y: y4.durationValue,
+        colors: setBarChartColor(y4.durationColorIntensity),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
-        y: y7,
-        colors: setBarChartColor(y7),
+        y: y5.durationValue,
+        colors: setBarChartColor(y5.durationColorIntensity),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y6.durationValue,
+        colors: setBarChartColor(y6.durationColorIntensity),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
+      ),
+      BarChartRodData(
+        y: y7.durationValue,
+        colors: setBarChartColor(y7.durationColorIntensity),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(3), topRight: Radius.circular(3)),
@@ -414,9 +413,9 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         ),
         context: context,
         builder: (context) => DateTimePicker(
-          cupertinoDatePickerMode: cupertinoDatePickerMode,
-          onDateTimeSelected: _getDateTimeCallbackFunction(0),
-        ));
+              cupertinoDatePickerMode: cupertinoDatePickerMode,
+              onDateTimeSelected: _getDateTimeCallbackFunction(0),
+            ));
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -444,12 +443,15 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   }
 
   Color setToolTipColor() {
-
     return Constant.migraineColor;
   }
 
-  List<Color> setBarChartColor(double barChartValue) {
+  List<Color> setBarChartColor(int barChartValue) {
+    if(barChartValue == 2) {
       return [Constant.migraineColor];
+    }else if(barChartValue == 1){
+      return [Constant.lightDurationColor];
+    }else  return [Constant.transparentColor];
   }
 
   List<Widget> getDotText() {
@@ -513,16 +515,19 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
           children: _getDots(dotTextModelDataList[i]),
         ),
       ));
-      widgetListData.add(SizedBox(height: 14,));
+      widgetListData.add(SizedBox(
+        height: 14,
+      ));
     }
     return widgetListData;
   }
+
   List<Widget> _getDots(TrendsFilterModel trendsFilterModel) {
     List<Widget> dotsList = [];
 
     for (int i = 1;
-    i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
-    i++) {
+        i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
+        i++) {
       var dotData = trendsFilterModel.occurringDateList
           .firstWhere((element) => element.day == i, orElse: () => null);
 
@@ -541,4 +546,160 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
     }
     return dotsList;
   }
+
+  void setDurationValuesData() {
+    if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+        Constant.viewSingleHeadache) {
+      durationListData = widget
+          .editGraphViewFilterModel.recordsTrendsDataModel.headache.duration;
+      firstWeekDurationData = [];
+      secondWeekDurationData = [];
+      thirdWeekDurationData = [];
+      fourthWeekDurationData = [];
+      fifthWeekDurationData = [];
+      List durationValueDate = [];
+      int remainingHeadacheDurationValue = 0;
+
+      for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
+        String date;
+        String month;
+        if (i < 10) {
+          date = '0$i';
+        } else {
+          date = i.toString();
+        }
+        if (currentMonth < 10) {
+          month = '0$currentMonth';
+        } else {
+          month = currentMonth.toString();
+        }
+        DateTime dateTime =
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+        var intensityData = durationListData.firstWhere(
+            (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (intensityData != null) {
+          durationValueDate.add(intensityData.value);
+          if (intensityData.value > 24) {
+            remainingHeadacheDurationValue = (intensityData.value - 24).round();
+          } else {
+            remainingHeadacheDurationValue = 0;
+          }
+          setAllWeekDurationData(i, intensityData.value.toDouble(),Constant.highBarColorIntensity);
+        } else if (remainingHeadacheDurationValue > 0) {
+          if (remainingHeadacheDurationValue <= 24) {
+            setAllWeekDurationData(
+                i, remainingHeadacheDurationValue.toDouble(),Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue = 0;
+          } else {
+            setAllWeekDurationData(i, 24,Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue =
+                remainingHeadacheDurationValue - 24;
+          }
+        }else{
+          setAllWeekDurationData(i, 0,Constant.lowBarColorIntensity);
+        }
+      }
+      try {
+        if (durationValueDate.length > 0) {
+          axesMaxValue = durationValueDate
+              .reduce((curr, next) => curr > next ? curr : next);
+          print('Maximum ListData Value $axesMaxValue');
+        }
+      } catch (Exception) {
+        print('Maximum ListData Value $Exception');
+      }
+
+      print(
+          'AllIntensityListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
+
+      barGroup1 = makeGroupData(
+          0,
+          firstWeekDurationData[0],
+          firstWeekDurationData[1],
+          firstWeekDurationData[2],
+          firstWeekDurationData[3],
+          firstWeekDurationData[4],
+          firstWeekDurationData[5],
+          firstWeekDurationData[6]);
+      barGroup2 = makeGroupData(
+          1,
+          secondWeekDurationData[0],
+          secondWeekDurationData[1],
+          secondWeekDurationData[2],
+          secondWeekDurationData[3],
+          secondWeekDurationData[4],
+          secondWeekDurationData[5],
+          secondWeekDurationData[6]);
+      barGroup3 = makeGroupData(
+          2,
+          thirdWeekDurationData[0],
+          thirdWeekDurationData[1],
+          thirdWeekDurationData[2],
+          thirdWeekDurationData[3],
+          thirdWeekDurationData[4],
+          thirdWeekDurationData[5],
+          thirdWeekDurationData[6]);
+      barGroup4 = makeGroupData(
+          3,
+          fourthWeekDurationData[0],
+          fourthWeekDurationData[1],
+          fourthWeekDurationData[2],
+          fourthWeekDurationData[3],
+          fourthWeekDurationData[4],
+          fourthWeekDurationData[5],
+          fourthWeekDurationData[6]);
+
+      if (totalDaysInCurrentMonth > 28) {
+        barGroup5 = makeGroupData(
+          4,
+          fifthWeekDurationData[0],
+          fifthWeekDurationData[1],
+          fifthWeekDurationData[2],
+          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+        );
+      }
+      if (totalDaysInCurrentMonth > 28) {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
+      } else {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4];
+      }
+
+      rawBarGroups = items;
+      showingBarGroups = rawBarGroups;
+    }
+  }
+
+  void setAllWeekDurationData(int i, double durationData, int durationColorIntensity) {
+    if (i <= 7) {
+      firstWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 7 && i <= 14) {
+      secondWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 14 && i <= 21) {
+      thirdWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 21 && i <= 28) {
+      fourthWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 28) {
+      fifthWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+  }
+
+  String setLeftAxisTitlesValue(double value) {
+    if (value % (axesMaxValue / 10).round() == 0) {
+      return '${value.toInt()}';
+    } else
+      return '0';
+  }
+}
+class TrendsDurationColorModel {
+  double durationValue;
+  int durationColorIntensity;
+  TrendsDurationColorModel({this.durationValue,this.durationColorIntensity});
 }

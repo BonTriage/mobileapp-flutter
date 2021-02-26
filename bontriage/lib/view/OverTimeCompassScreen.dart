@@ -157,7 +157,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                       height: 150,
                     ),
                     Text(
-                        'You didn\'t add any headache yet. So please\nadd any headache to see your Compass data.',
+                        'We noticed you didn’t log any  headache yet. So please\nadd any headache to see your Compass data.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             height: 1.3,
@@ -602,7 +602,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         orElse: () => null);
     if (userDuration != null) {
     // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
-      userDurationValue = (userDuration.value *baseMaxValue) ~/ userDuration.max ;
+      userDurationValue = (userDuration.value *baseMaxValue).round() ;
+      if(userDurationValue >10){
+        userDurationValue = 10;
+      }else{
+        userDurationValue = userDurationValue;
+      }
     } else {
       userDurationValue = 0;
     }

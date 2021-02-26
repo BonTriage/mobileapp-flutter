@@ -151,7 +151,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                       height: 150,
                     ),
                     Text(
-                        'You didn\'t add any headache yet. So please\nadd any headache to see your Compass data.',
+                        'We noticed you didn’t log any  headache yet. So please\nadd any headache to see your Compass data.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             height: 1.3,
@@ -629,8 +629,12 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         orElse: () => null);
     if (userDuration != null) {
       //userMonthlyDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
-      userMonthlyDurationValue =
-          (userDuration.value * baseMaxValue) ~/ userDuration.max;
+      userMonthlyDurationValue = (userDuration.value * baseMaxValue).round();
+      if (userMonthlyDurationValue > 10) {
+        userMonthlyDurationValue = 10;
+      } else {
+        userMonthlyDurationValue = userMonthlyDurationValue;
+      }
     } else {
       userMonthlyDurationValue = 0;
     }
@@ -691,8 +695,13 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         orElse: () => null);
     if (userOvertimeDuration != null) {
       // userOverTimeDurationValue = userOvertimeDuration.value ~/(userOvertimeDuration.max / baseMaxValue);
-      userOverTimeDurationValue = (userOvertimeDuration.value * baseMaxValue) ~/
-          userOvertimeDuration.max;
+      userOverTimeDurationValue =
+          (userOvertimeDuration.value * baseMaxValue).round();
+      if (userOverTimeDurationValue > 10) {
+        userOverTimeDurationValue = 10;
+      } else {
+        userOverTimeDurationValue = userOverTimeDurationValue;
+      }
     } else {
       userOverTimeDurationValue = 0;
     }
