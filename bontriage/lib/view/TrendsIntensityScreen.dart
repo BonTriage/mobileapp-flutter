@@ -113,10 +113,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               height: 20,
             ),
             SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20),
               scrollDirection: Axis.horizontal,
               child: Container(
                 width: totalDaysInCurrentMonth <= 28 ? 340 : 420,
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: BarChart(
                   BarChartData(
                     maxY: 10,

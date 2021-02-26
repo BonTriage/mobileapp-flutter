@@ -198,7 +198,8 @@ class TriggerDatum {
   List<String> triggers1;
 
   factory TriggerDatum.fromJson(Map<String, dynamic> json) => TriggerDatum(
-    triggers1: List<String>.from(json["triggers1"].map((x) => x)),
+    triggers1: (json["triggers1"] is String)? [json["triggers1"]]: List<String>.from(json["triggers1"].map((x) => x)),
+
   );
 
   Map<String, dynamic> toJson() => {
