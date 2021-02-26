@@ -69,10 +69,11 @@ class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
     await SignUpOnBoardProviders.db.deleteAllTableData();
     //Navigator.pop(context);
     //SystemNavigator.pop() does not work in Apple in alternative we can use exit(0) but it feels like the app got crashed and Apple may suspend your app because it's against Apple Human Interface guidelines to exit the app programmatically.
-    if (Platform.isAndroid) {
+    /*if (Platform.isAndroid) {
       SystemNavigator.pop();
     } else {
       exit(0);
-    }
+    }*/
+    Navigator.pushReplacementNamed(context, Constant.welcomeStartAssessmentScreenRouter);
   }
 }

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/util/TutorialsSliderDots.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CustomScrollBar.dart';
 
 class SecondStepCompassResultTutorials extends StatefulWidget {
-  @override
-  _SecondStepCompassResultTutorialsState createState() =>
-      _SecondStepCompassResultTutorialsState();
+  final CompassTutorialModel compassTutorialModel;
 
   final int tutorialsIndex;
 
-  const SecondStepCompassResultTutorials({Key key, this.tutorialsIndex})
+  const SecondStepCompassResultTutorials({Key key, this.compassTutorialModel, this.tutorialsIndex})
       : super(key: key);
+
+  @override
+  _SecondStepCompassResultTutorialsState createState() =>
+      _SecondStepCompassResultTutorialsState();
 }
 
 class _SecondStepCompassResultTutorialsState
@@ -22,6 +25,16 @@ class _SecondStepCompassResultTutorialsState
 
   PageController _pageController;
   List<ScrollController> _scrollControllerList;
+
+  TextStyle _normalTextStyle = TextStyle(
+      color: Constant.locationServiceGreen,
+      fontSize: 14,
+      fontFamily: Constant.jostRegular,);
+
+  TextStyle _valueTextStyle = TextStyle(
+      color: Constant.addCustomNotificationTextColor,
+      fontSize: 14,
+      fontFamily: Constant.jostRegular);
 
   Widget _getThreeDotsWidget() {
     return Row(
@@ -45,42 +58,167 @@ class _SecondStepCompassResultTutorialsState
       Text(
         Constant.compassTextView,
         textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Constant.chatBubbleGreen,
-            fontSize: 14,
-            fontFamily: Constant.jostMedium),
+        style: _normalTextStyle
       ),
-      Text(
-        Constant.compassTextView,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Constant.chatBubbleGreen,
-            fontSize: 14,
-            fontFamily: Constant.jostMedium),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Intensity is defined as how much pain you experience with each headache. It is measured on a ',
+                  style: _normalTextStyle,
+                ),
+                TextSpan(
+                  text: 'scale of 1-10.',
+                  style: _valueTextStyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20,),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Your average intensity in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
+                  style: _normalTextStyle
+                ),
+                TextSpan(
+                  text: '${widget.compassTutorialModel.currentMonthIntensity}.',
+                  style: _valueTextStyle,
+                ),
+                TextSpan(
+                  children: _getPreviousMonthIntensitySpan()
+                ),
+              ]
+            ),
+          ),
+        ],
       ),
-      Text(
-        Constant.compassTextView,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Constant.chatBubbleGreen,
-            fontSize: 14,
-            fontFamily: Constant.jostMedium),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: 'Disability is defined by how much your headache prevents you from doing the things you normally do. It is measured on a ',
+                    style: _normalTextStyle
+                ),
+                TextSpan(
+                  text: 'scale of 0-4.',
+                  style: _valueTextStyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20,),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Your average disability in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: '${widget.compassTutorialModel.currentMonthDisability}.',
+                    style: _valueTextStyle,
+                  ),
+                  TextSpan(
+                      children: _getPreviousMonthDisabilitySpan()
+                  ),
+                ]
+            ),
+          ),
+        ],
       ),
-      Text(
-        Constant.compassTextView,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Constant.chatBubbleGreen,
-            fontSize: 14,
-            fontFamily: Constant.jostMedium),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: 'Frequency is defined by how many headaches you experience per month. It is measured on a ',
+                    style: _normalTextStyle
+                ),
+                TextSpan(
+                  text: _getFrequencyScale(),
+                  style: _valueTextStyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20,),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Your average frequency in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: '${widget.compassTutorialModel.currentMonthFrequency} ${_getFrequencyUnit()}.',
+                    style: _valueTextStyle,
+                  ),
+                  TextSpan(
+                      children: _getPreviousMonthFrequencySpan()
+                  ),
+                ]
+            ),
+          ),
+        ],
       ),
-      Text(
-        Constant.compassTextView,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Constant.chatBubbleGreen,
-            fontSize: 14,
-            fontFamily: Constant.jostMedium),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: 'Duration refers to how long your headache persists. It is measured on a ',
+                    style: _normalTextStyle
+                ),
+                TextSpan(
+                  text: 'scale of hours.',
+                  style: _valueTextStyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20,),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Your average duration in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: _getDurationValue(widget.compassTutorialModel.currentMonthDuration)/*'${widget.compassTutorialModel.currentMonthDuration} hours.'*/,
+                    style: _valueTextStyle,
+                  ),
+                  TextSpan(
+                      children: _getPreviousMonthDurationSpan()
+                  ),
+                ]
+            ),
+          ),
+        ],
       ),
     ];
 
@@ -206,5 +344,231 @@ class _SecondStepCompassResultTutorialsState
       element?.dispose();
     });
     super.dispose();
+  }
+
+  List<TextSpan> _getPreviousMonthIntensitySpan() {
+    List<TextSpan> textSpanList = [];
+
+    if(widget.compassTutorialModel.previousMonthIntensity == null) {
+      textSpanList.add(
+        TextSpan(
+          text: '',
+        ),
+      );
+    } else {
+      textSpanList.add(
+        TextSpan(
+          text: ' This is ',
+          style: _normalTextStyle
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+          text: _getComparisonText(widget.compassTutorialModel.currentMonthIntensity, widget.compassTutorialModel.previousMonthIntensity),
+          style: _valueTextStyle,
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+          text: 'from ${widget.compassTutorialModel.previousMonthIntensity} in the previous month.',
+          style: _normalTextStyle
+        ),
+      );
+    }
+
+    return textSpanList;
+  }
+
+  List<TextSpan> _getPreviousMonthDurationSpan() {
+    List<TextSpan> textSpanList = [];
+
+    if(widget.compassTutorialModel.previousMonthDuration == null) {
+      textSpanList.add(
+        TextSpan(
+          text: '',
+        ),
+      );
+    } else {
+      textSpanList.add(
+        TextSpan(
+            text: ' This is ',
+            style: _normalTextStyle
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+          text: _getComparisonText(widget.compassTutorialModel.currentMonthDuration, widget.compassTutorialModel.previousMonthDuration),
+          style: _valueTextStyle,
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+            text: 'from ${widget.compassTutorialModel.previousMonthDuration} hours in the previous month.',
+            style: _normalTextStyle
+        ),
+      );
+    }
+
+    return textSpanList;
+  }
+
+  List<TextSpan> _getPreviousMonthDisabilitySpan() {
+    List<TextSpan> textSpanList = [];
+
+    if(widget.compassTutorialModel.previousMonthIntensity == null) {
+      textSpanList.add(
+        TextSpan(
+          text: '',
+        ),
+      );
+    } else {
+      textSpanList.add(
+        TextSpan(
+            text: ' This is ',
+            style: _normalTextStyle
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+          text: _getComparisonText(widget.compassTutorialModel.currentMonthDisability, widget.compassTutorialModel.previousMonthDisability),
+          style: _valueTextStyle,
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+            text: 'from ${widget.compassTutorialModel.previousMonthDisability} in the previous month.',
+            style: _normalTextStyle
+        ),
+      );
+    }
+
+    return textSpanList;
+  }
+
+  List<TextSpan> _getPreviousMonthFrequencySpan() {
+    List<TextSpan> textSpanList = [];
+
+    if(widget.compassTutorialModel.previousMonthIntensity == null) {
+      textSpanList.add(
+        TextSpan(
+          text: '',
+        ),
+      );
+    } else {
+      textSpanList.add(
+        TextSpan(
+            text: ' This is ',
+            style: _normalTextStyle
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+          text: _getComparisonText(widget.compassTutorialModel.currentMonthFrequency, widget.compassTutorialModel.previousMonthFrequency),
+          style: _valueTextStyle,
+        ),
+      );
+      textSpanList.add(
+        TextSpan(
+            text: 'from ${widget.compassTutorialModel.previousMonthFrequency} days in the previous month.',
+            style: _normalTextStyle
+        ),
+      );
+    }
+
+    return textSpanList;
+  }
+
+  String _getComparisonText(int currentMonthValue, int previousMonthValue) {
+    if(currentMonthValue == previousMonthValue) {
+      return 'Same ';
+    } else if (previousMonthValue < currentMonthValue) {
+      return 'Up ';
+    } else {
+      return 'Down ';
+    }
+  }
+
+  ///This method is used to return the display time format for the headache time
+  /// Short Time
+  /// Medium Time
+  /// Long Time
+  String _getDisplayTime(int totalTime) {
+    int hours = totalTime ~/ 60;
+    int minute = totalTime % 60;
+
+    if (hours < 10) {
+      if (minute < 10) {
+        return '$hours:0$minute h';
+      } else {
+        return '$hours:$minute h';
+      }
+    } else if (hours < 24) {
+      if (minute < 10) {
+        return '${hours}h 0${minute}m';
+      } else {
+        return '${hours}h ${minute}m';
+      }
+    } else {
+      int days = (hours == 24) ? 1 : hours ~/ 24;
+      hours = hours % 24;
+      if (minute < 10) {
+        if(days > 1)
+          return '$days days,\n$hours:0$minute h';
+        else
+          return '$days day,\n$hours:0$minute h';
+      } else {
+        if(days > 1)
+          return '$days days,\n$hours:$minute h';
+        else
+          return '$days day,\n$hours:$minute h';
+      }
+    }
+  }
+
+  String _getFrequencyScale() {
+    if(widget.compassTutorialModel.isFromOnBoard) {
+      return 'scale of 0-31 days.';
+    } else {
+      return 'number of times headache occurred in a month.';
+    }
+  }
+
+  String _getFrequencyUnit() {
+    if(widget.compassTutorialModel.isFromOnBoard) {
+      return 'days';
+    } else {
+      return 'times';
+    }
+  }
+
+  String _getDurationValue(int currentMonthDuration) {
+    String duration = '';
+
+    if(currentMonthDuration > 72) {
+      int days = currentMonthDuration ~/ 24;
+      int hours = currentMonthDuration % 24;
+
+      if(days == 1) {
+        if(hours == 1) {
+          duration = '$days day $hours hour.';
+        } else {
+          duration = '$days day $hours hours.';
+        }
+      } else {
+        if(hours == 1) {
+          duration = '$days days $hours hour.';
+        } else {
+          duration = '$days days $hours hours.';
+        }
+      }
+    } else {
+      if(currentMonthDuration == 1) {
+        duration = '$currentMonthDuration hour.';
+      } else {
+        duration = '$currentMonthDuration hours.';
+      }
+    }
+
+    return duration;
   }
 }
