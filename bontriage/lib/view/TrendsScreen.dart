@@ -98,14 +98,17 @@ class _TrendsScreenState extends State<TrendsScreen> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                          'We noticed you didn’t log any  headache yet. So please\nadd any headache to see your Trends data.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              height: 1.3,
-                              fontSize: 18,
-                              fontFamily: Constant.jostRegular,
-                              color: Constant.chatBubbleGreen)),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                            'We noticed you didn’t log any  headache yet. So please add any headache to see your Trends data.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                height: 1.3,
+                                fontSize: 14,
+                                fontFamily: Constant.jostRegular,
+                                color: Constant.chatBubbleGreen)),
+                      ),
                       SizedBox(
                         height: 20,
                       ),
