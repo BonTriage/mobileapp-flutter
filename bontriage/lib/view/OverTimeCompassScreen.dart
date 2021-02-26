@@ -157,19 +157,20 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
             if (snapshot.hasData) {
               if (snapshot.data == Constant.noHeadacheData) {
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 150,
+                    SizedBox(height: 150,),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                          'We noticed you didn’t log any  headache yet. So please add any headache to see your Compass data.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              height: 1.3,
+                              fontSize: 14,
+                              fontFamily: Constant.jostRegular,
+                              color: Constant.chatBubbleGreen)),
                     ),
-                    Text(
-                        'We noticed you didn’t log any  headache yet. So please\nadd any headache to see your Compass data.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            height: 1.3,
-                            fontSize: 18,
-                            fontFamily: Constant.jostRegular,
-                            color: Constant.chatBubbleGreen)),
                     SizedBox(
                       height: 20,
                     ),

@@ -1,5 +1,5 @@
 class CompassTutorialModel {
-  DateTime currentDateTime;
+  DateTime currentDateTime = DateTime.now();
   int previousMonthIntensity;
   int currentMonthIntensity;
   int previousMonthDisability;
@@ -13,13 +13,13 @@ class CompassTutorialModel {
   CompassTutorialModel({
     this.currentDateTime,
     this.previousMonthIntensity,
-    this.currentMonthIntensity,
+    this.currentMonthIntensity = 0,
     this.previousMonthDisability,
-    this.currentMonthDisability,
+    this.currentMonthDisability = 0,
     this.previousMonthFrequency,
-    this.currentMonthFrequency,
+    this.currentMonthFrequency = 0,
     this.previousMonthDuration,
-    this.currentMonthDuration,
+    this.currentMonthDuration = 0,
     this.isFromOnBoard = false,
   });
 }

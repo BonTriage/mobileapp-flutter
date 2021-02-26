@@ -670,7 +670,7 @@ class Constant {
   static Color moderateTriggerColor = Color(0xfff69946);
   static Color severeTriggerColor = Color(0xffEB5757);
   static Color migraineColor = Color(0xffB8E1FF);
-  static Color lightDurationColor = Color(0xF2ffffff);
+  static Color lightDurationColor = Color(0xA6B8E1FF);
 
   static Color otherHeadacheColor = Color(0xff177D5A);
 
