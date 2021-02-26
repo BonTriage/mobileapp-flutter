@@ -117,6 +117,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           _dateTime = dateTime;
                           _onStartDateSelected(dateTime);
                         },
+                        behavior: HitTestBehavior.translucent,
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Image(
@@ -134,6 +135,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           _openDatePickerBottomSheet(
                               CupertinoDatePickerMode.date);
                         },
+                        behavior: HitTestBehavior.translucent,
                         child: Text(
                           monthName + " " + currentYear.toString(),
                           style: TextStyle(
@@ -146,6 +148,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         width: 30,
                       ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: () {
                           DateTime dateTime =
                           DateTime(_dateTime.year, _dateTime.month + 1);

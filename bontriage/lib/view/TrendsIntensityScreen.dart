@@ -302,9 +302,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               children: [
                 GestureDetector(
                   onTap: () {
-                    DateTime dateTime =
-                        DateTime(_dateTime.year, _dateTime.month - 1);
+                    DateTime dateTime = DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
+                    print('clicked');
                     _onStartDateSelected(dateTime);
                   },
                   child: Padding(
@@ -338,6 +338,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
+                    print("clicked");
                     Duration duration = dateTime.difference(DateTime.now());
                     if (duration.inSeconds < 0) {
                       _dateTime = dateTime;

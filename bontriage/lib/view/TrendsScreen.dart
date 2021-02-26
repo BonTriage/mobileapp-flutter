@@ -438,7 +438,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
     String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
     String updateTrendsData = sharedPreferences.getString(Constant.updateTrendsData) ?? Constant.blankString;
 
-    if(!_isInitiallyServiceHit && currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
+    if(/*!_isInitiallyServiceHit &&*/currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
       _isInitiallyServiceHit = true;
       _recordsTrendsScreenBloc.initNetworkStreamController();
       print('show api loader 16');
