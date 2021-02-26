@@ -83,6 +83,7 @@ class SignUpScreenBloc {
       } else {
         apiResponse = Constant.success;
         userProfileInfoModel = UserProfileInfoModel.fromJson(jsonDecode(response));
+        userProfileInfoModel.profileName = userProfileInfoModel.firstName;
         var loggedInUserInformationData = await SignUpOnBoardProviders.db.insertUserProfileInfo(userProfileInfoModel);
         print(loggedInUserInformationData);
       }
