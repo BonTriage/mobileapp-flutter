@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
@@ -535,14 +536,14 @@ class Utils {
   ///This method is used to show compass tutorial dialog.
   ///@param context: build context of the screen
   ///@param indexValue: 0 for compass, 1 for Intensity, 2 for Disability, 3 for Frequency, and 4 for Duration.
-  static Future<void> showCompassTutorialDialog(BuildContext context, int indexValue) async {
+  static Future<void> showCompassTutorialDialog(BuildContext context, int indexValue, {CompassTutorialModel compassTutorialModel}) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue),
+          content: SecondStepCompassResultTutorials(tutorialsIndex: indexValue, compassTutorialModel: compassTutorialModel,),
         );
       },
     );

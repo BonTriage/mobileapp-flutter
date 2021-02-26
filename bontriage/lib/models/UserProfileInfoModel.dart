@@ -17,6 +17,7 @@ class UserProfileInfoModel {
     this.firstName,
     this.lastName,
     this.notificationKey,
+    this.profileName,
   });
 
   String userId;
@@ -28,6 +29,7 @@ class UserProfileInfoModel {
   String firstName;
   String lastName;
   String notificationKey;
+  String profileName;
 
   factory UserProfileInfoModel.fromJson(Map<String, dynamic> json) =>
       UserProfileInfoModel(
@@ -42,6 +44,7 @@ class UserProfileInfoModel {
         firstName: json["firstName"],
         lastName: json["lastName"],
         notificationKey: json["notificationKey"],
+        profileName: json['profileName'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,5 +57,6 @@ class UserProfileInfoModel {
         "firstName": firstName,
         "lastName": lastName,
         "notificationKey": notificationKey,
+        'profileName': profileName,
       };
 }

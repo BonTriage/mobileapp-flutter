@@ -27,6 +27,8 @@ class MoreMyProfileBloc {
   UserProfileInfoModel userProfileInfoModel;
   List<SelectedAnswers> profileSelectedAnswerList;
 
+  ResponseModel _responseModel;
+
   int profileId;
 
   MoreMyProfileBloc() {
@@ -59,6 +61,7 @@ class MoreMyProfileBloc {
 
             networkSink.add(Constant.success);
             myProfileSink.add(response);
+            _responseModel = response;
           } else {
             myProfileSink.addError(Exception(Constant.somethingWentWrong));
             networkSink.addError(Exception(Constant.somethingWentWrong));
@@ -95,6 +98,15 @@ class MoreMyProfileBloc {
               profileSelectedAnswerList.add(SelectedAnswers(questionTag: Constant.profileGenderTag, answer: ''));
 
             _updateUserProfileInfoInDatabase();
+
+            if(_responseModel != null) {
+              response.headacheList = _responseModel.headacheList;
+              response.medicationValues = _responseModel.medicationValues;
+              response.triggerValues = _responseModel.triggerValues;
+              response.triggerMedicationValues = _responseModel.triggerMedicationValues;
+
+              _responseModel = response;
+            }
 
             networkSink.add(Constant.success);
             myProfileSink.add(response);
@@ -135,7 +147,7 @@ class MoreMyProfileBloc {
       if(nameSelectedAnswer != null && ageSelectedAnswer != null && sexSelectedAnswer != null) {
         if(nameSelectedAnswer.answer.isNotEmpty && ageSelectedAnswer.answer.isNotEmpty && sexSelectedAnswer.answer.isNotEmpty) {
           userProfileInfoModel
-              ..firstName = nameSelectedAnswer.answer
+              ..profileName = nameSelectedAnswer.answer
               ..age = ageSelectedAnswer.answer
               ..sex = sexSelectedAnswer.answer;
 

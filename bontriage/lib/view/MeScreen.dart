@@ -611,7 +611,7 @@ class _MeScreenState extends State<MeScreen>
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     setState(() {
-      userName = userProfileInfoData.firstName;
+      userName = userProfileInfoData.profileName;
     });
   }
 

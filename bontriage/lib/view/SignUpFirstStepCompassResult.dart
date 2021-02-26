@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
@@ -44,10 +45,16 @@ class _SignUpFirstStepCompassResultState
   String userScoreData = '0';
 
   List<int> ticks;
+  CompassTutorialModel _compassTutorialModel;
 
   @override
   void initState() {
     super.initState();
+
+    _compassTutorialModel = CompassTutorialModel();
+    _compassTutorialModel.isFromOnBoard = true;
+
+    _compassTutorialModel.currentDateTime = DateTime.now();
 
     userCompassAxesData = [
       [0, 0, 0, 0]
@@ -260,7 +267,7 @@ class _SignUpFirstStepCompassResultState
                             quarterTurns: 3,
                             child: GestureDetector(
                               onTap: () {
-                                Utils.showCompassTutorialDialog(context, 3);
+                                Utils.showCompassTutorialDialog(context, 3, compassTutorialModel: _compassTutorialModel);
                               },
                               child: Text(
                                 "Frequency",
@@ -276,7 +283,7 @@ class _SignUpFirstStepCompassResultState
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 1);
+                                  Utils.showCompassTutorialDialog(context, 1, compassTutorialModel: _compassTutorialModel);
                                 },
                                 child: Text(
                                   "Intensity",
@@ -340,7 +347,7 @@ class _SignUpFirstStepCompassResultState
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Utils.showCompassTutorialDialog(context, 2);
+                                  Utils.showCompassTutorialDialog(context, 2, compassTutorialModel: _compassTutorialModel);
                                 },
                                 child: Text(
                                   "Disability",
@@ -356,7 +363,7 @@ class _SignUpFirstStepCompassResultState
                             quarterTurns: 1,
                             child: GestureDetector(
                               onTap: () {
-                                Utils.showCompassTutorialDialog(context, 4);
+                                Utils.showCompassTutorialDialog(context, 4, compassTutorialModel: _compassTutorialModel);
                               },
                               child: Text(
                                 "Duration",
@@ -546,8 +553,10 @@ class _SignUpFirstStepCompassResultState
     if (userFrequency != null) {
       userFrequencyValue = int.tryParse(userFrequency.answer);
       if (userFrequencyValue == 0) {
+        _compassTutorialModel.currentMonthFrequency = 0;
         userFrequencyValue = 0;
       } else {
+        _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
         userFrequencyValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
       }
     }
@@ -558,6 +567,7 @@ class _SignUpFirstStepCompassResultState
     if (userDuration != null) {
       int userMaxDurationValue;
       userDurationValue = int.tryParse(userDuration.answer);
+      _compassTutorialModel.currentMonthDuration = userDurationValue;
       if (userDurationValue <= 1) {
         userMaxDurationValue = 1;
       } else if (userDurationValue > 1 && userDurationValue <= 24) {
@@ -574,6 +584,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userIntensity != null) {
       userIntensityValue = int.tryParse(userIntensity.answer);
+      _compassTutorialModel.currentMonthIntensity = userIntensityValue;
       //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
     }
     var userDisability = selectedAnswerListData.firstWhere(
@@ -582,6 +593,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userDisability != null) {
       userDisabilityValue = int.tryParse(userDisability.answer);
+      _compassTutorialModel.currentMonthDisability = userDisabilityValue;
       userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
 
