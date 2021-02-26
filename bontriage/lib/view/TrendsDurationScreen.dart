@@ -120,7 +120,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                 child: BarChart(
                   BarChartData(
                     maxY:
-                        axesMaxValue + ((axesMaxValue / 10).round()).toDouble(),
+                        axesMaxValue + ((axesMaxValue / 10).ceil()).toDouble(),
                     minY: 0,
                     groupsSpace: 10,
                     axisTitleData: FlAxisTitleData(
@@ -184,8 +184,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                     gridData: FlGridData(
                       show: true,
                       drawVerticalLine: true,
-                      checkToShowHorizontalLine: (value) =>
-                          value % (axesMaxValue / 10).round() == 0,
+                      checkToShowHorizontalLine: (value) => value % (axesMaxValue / 10).ceil() == 0,
                       getDrawingHorizontalLine: (value) {
                         if (value == 0) {
                           return FlLine(
@@ -228,7 +227,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             fontFamily: 'JostRegular',
                             fontSize: 10),
                         margin: 10,
-                        interval: ((axesMaxValue / 10).round()).toDouble(),
+                        interval: ((axesMaxValue / 10).ceil()).toDouble(),
                         reservedSize: 11,
                         getTitles: (value) {
                           return setLeftAxisTitlesValue(value);
@@ -575,17 +574,17 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         }
         DateTime dateTime =
             DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
-        var intensityData = durationListData.firstWhere(
+        var durationData = durationListData.firstWhere(
             (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
-        if (intensityData != null) {
-          durationValueDate.add(intensityData.value);
-          if (intensityData.value > 24) {
-            remainingHeadacheDurationValue = (intensityData.value - 24).round();
+        if (durationData != null) {
+          durationValueDate.add(durationData.value);
+          if (durationData.value > 24) {
+            remainingHeadacheDurationValue = (durationData.value - 24).round();
           } else {
             remainingHeadacheDurationValue = 0;
           }
-          setAllWeekDurationData(i, intensityData.value.toDouble(),Constant.highBarColorIntensity);
+          setAllWeekDurationData(i, durationData.value.toDouble(),Constant.highBarColorIntensity);
         } else if (remainingHeadacheDurationValue > 0) {
           if (remainingHeadacheDurationValue <= 24) {
             setAllWeekDurationData(
@@ -692,7 +691,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   }
 
   String setLeftAxisTitlesValue(double value) {
-    if (value % (axesMaxValue / 10).round() == 0) {
+    if (value % (axesMaxValue / 10).ceil() == 0) {
       return '${value.toInt()}';
     } else
       return '0';
