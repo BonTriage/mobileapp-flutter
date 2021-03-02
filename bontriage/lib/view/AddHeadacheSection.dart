@@ -43,6 +43,7 @@ class AddHeadacheSection extends StatefulWidget {
   final CurrentUserHeadacheModel currentUserHeadacheModel;
   final bool isFromRecordsScreen;
   final String uiHints;
+  final DateTime selectedDateTime;
 
   AddHeadacheSection(
       {Key key,
@@ -67,7 +68,8 @@ class AddHeadacheSection extends StatefulWidget {
       this.currentUserHeadacheModel,
       this.doubleTapSelectedAnswer,
       this.isFromRecordsScreen = false,
-      this.uiHints})
+      this.uiHints,
+      this.selectedDateTime})
       : super(key: key);
 
   @override
@@ -91,6 +93,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   String previousMedicationTag;
   List<SelectedAnswers> selectedAnswerListOfTriggers = [];
   List<List<String>> _additionalMedicationDosage = [];
+  DateTime _selectedDateTime;
 
   ///Method to get section widget
   Widget _getSectionWidget() {
@@ -774,6 +777,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             orElse: () => null);
 
         DateTime _medicationDateTime = DateTime.now();
+
+        /*if(_selectedDateTime != null)
+          _medicationDateTime = DateTime(_medicationDateTime.year, _medicationDateTime.month, _medicationDateTime.day, _selectedDateTime.);*/
 
         try {
           _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]).toLocal();
@@ -1586,6 +1592,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   @override
   void initState() {
     super.initState();
+
+    _selectedDateTime = widget.selectedDateTime;
+
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 

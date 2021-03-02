@@ -180,154 +180,173 @@ class CalendarHeadacheLogDayDetailsBloc {
       userHeadacheLogDayDetailsModel.headacheLogDayListData
           .add(headacheWidgetData);
 
-    response.behaviours.forEach((element) {
-      RecordWidgetData logDaySleepWidgetData = RecordWidgetData();
-      logDaySleepWidgetData.logDayListData = LogDayData();
+    response.behaviours.asMap().forEach((index, element) {
+      if(index == 0) {
+        RecordWidgetData logDaySleepWidgetData = RecordWidgetData();
+        logDaySleepWidgetData.logDayListData = LogDayData();
 
-      var behaviourPreSleepData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag == Constant.behaviourPreSleepTag,
-          orElse: () => null);
-      var behaviourSleepData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag == Constant.behaviourSleepTag,
-          orElse: () => null);
-      var behaviourMealData = element.mobileEventDetails.firstWhere(
-          (mobileEventElement) =>
-              mobileEventElement.questionTag == Constant.behaviourPreMealTag,
-          orElse: () => null);
+        var behaviourPreSleepData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.behaviourPreSleepTag,
+            orElse: () => null);
+        var behaviourSleepData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.behaviourSleepTag,
+            orElse: () => null);
+        var behaviourMealData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.behaviourPreMealTag,
+            orElse: () => null);
 
-      if (behaviourPreSleepData != null) {
-        String titleInfo = behaviourPreSleepData.value;
-        if (titleInfo.toLowerCase() == "yes") {
-          titleInfo = 'Had a good sleep';
-        }
-        if (behaviourSleepData != null) {
-          List<String> formattedValues = behaviourSleepData.value?.split("%@");
-          if (formattedValues != null) {
-            formattedValues.forEach((sleepElement) {
-              titleInfo = '$titleInfo, $sleepElement';
-            });
+        if (behaviourPreSleepData != null) {
+          String titleInfo = behaviourPreSleepData.value;
+          if (titleInfo.toLowerCase() == "yes") {
+            titleInfo = 'Had a good sleep';
           }
-        }
-        logDaySleepWidgetData.logDayListData.titleInfo = titleInfo;
-        logDaySleepWidgetData.logDayListData.titleName = "Sleep";
-        logDaySleepWidgetData.imagePath = Constant.sleepIcon;
-      }
-      userHeadacheLogDayDetailsModel.headacheLogDayListData
-          .add(logDaySleepWidgetData);
-
-      RecordWidgetData logDayMealWidgetData = RecordWidgetData();
-      logDayMealWidgetData.logDayListData = LogDayData();
-      if (behaviourMealData != null) {
-        String titleMealInfo = behaviourMealData.value;
-        if (titleMealInfo.toLowerCase() == "yes") {
-          titleMealInfo = 'Regular Meal Times';
-        } else {
-          titleMealInfo = 'No Meal';
-        }
-        logDayMealWidgetData.imagePath = Constant.mealIcon;
-        logDayMealWidgetData.logDayListData.titleName = "Meal";
-        logDayMealWidgetData.logDayListData.titleInfo = titleMealInfo;
-      }
-
-      userHeadacheLogDayDetailsModel.headacheLogDayListData
-          .add(logDayMealWidgetData);
-      userHeadacheLogDayDetailsModel.isDayLogged = true;
-    });
-
-    response.medication.forEach((element) {
-      if(element.mobileEventDetails.length >0){
-        RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
-        logDayMedicationWidgetData.logDayListData = LogDayData();
-
-        var medicationData = element.mobileEventDetails.firstWhere(
-                (mobileEventElement) =>
-            mobileEventElement.questionTag == Constant.logDayMedicationTag,
-            orElse: () => null);
-
-        var medicationTimeData = element.mobileEventDetails.firstWhere(
-                (mobileEventElement) =>
-            mobileEventElement.questionTag == Constant.administeredTag,
-            orElse: () => null);
-
-        var medicationDosageData = element.mobileEventDetails.firstWhere(
-                (mobileEventElement) =>
-                mobileEventElement.questionTag.contains(Constant.dotDosage),
-            orElse: () => null);
-
-        if (medicationData != null) {
-          String titleInfo = medicationData.value;
-          if (medicationDosageData != null && medicationTimeData != null) {
-            List<String> formattedValues = medicationDosageData.value?.split("%@");
-            List<String> medicationTimeValues = medicationTimeData.value?.split("%@");
-            if (formattedValues != null && medicationTimeValues != null) {
-              String medicationDosage = '';
-              formattedValues.asMap().forEach((index, medicationElement) {
-                if (medicationDosage.isEmpty) {
-                  DateTime medicationDateTime;
-
-                  try {
-                    medicationDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
-                  } catch (e) {
-                    print(e);
-                  }
-
-                  if(medicationDateTime != null) {
-                    medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
-                  } else {
-                    medicationDosage = '$medicationElement';
-                  }
-                } else {
-                  DateTime medDateTime;
-
-                  try {
-                    medDateTime = DateTime.parse(medicationTimeValues[index]).toLocal();
-                  } catch (e) {
-                    print(e);
-                  }
-
-                  if(medDateTime != null) {
-                    medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
-                  } else {
-                    medicationDosage = '$medicationDosage, $medicationElement';
-                  }
-                }
+          if (behaviourSleepData != null) {
+            List<String> formattedValues = behaviourSleepData.value?.split(
+                "%@");
+            if (formattedValues != null) {
+              formattedValues.forEach((sleepElement) {
+                titleInfo = '$titleInfo, $sleepElement';
               });
-              if(medicationDosage.isEmpty) {
-                titleInfo = '$titleInfo';
-              }else titleInfo = '$titleInfo\n($medicationDosage)';
             }
           }
-          logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+          logDaySleepWidgetData.logDayListData.titleInfo = titleInfo;
+          logDaySleepWidgetData.logDayListData.titleName = "Sleep";
+          logDaySleepWidgetData.imagePath = Constant.sleepIcon;
+        }
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDaySleepWidgetData);
+
+        RecordWidgetData logDayMealWidgetData = RecordWidgetData();
+        logDayMealWidgetData.logDayListData = LogDayData();
+        if (behaviourMealData != null) {
+          String titleMealInfo = behaviourMealData.value;
+          if (titleMealInfo.toLowerCase() == "yes") {
+            titleMealInfo = 'Regular Meal Times';
+          } else {
+            titleMealInfo = 'No Meal';
+          }
+          logDayMealWidgetData.imagePath = Constant.mealIcon;
+          logDayMealWidgetData.logDayListData.titleName = "Meal";
+          logDayMealWidgetData.logDayListData.titleInfo = titleMealInfo;
         }
 
-        logDayMedicationWidgetData.logDayListData.titleName = Constant.medication;
-        logDayMedicationWidgetData.imagePath = Constant.pillIcon;
         userHeadacheLogDayDetailsModel.headacheLogDayListData
-            .add(logDayMedicationWidgetData);
+            .add(logDayMealWidgetData);
         userHeadacheLogDayDetailsModel.isDayLogged = true;
       }
     });
 
-    response.triggers.forEach((element) {
-      if(element.mobileEventDetails.length >0) {
-        RecordWidgetData logDayTriggersWidgetData = RecordWidgetData();
-        logDayTriggersWidgetData.logDayListData = LogDayData();
-        var triggersElement = element.mobileEventDetails.firstWhere(
-                (mobileEventElement) =>
-            mobileEventElement.questionTag == Constant.triggersTag,
-            orElse: () => null);
-        String triggersValues = triggersElement.value;
-        List<String> formattedValues = triggersValues.split("%@");
-        logDayTriggersWidgetData.logDayListData.titleInfo =
-            formattedValues.toString();
-        logDayTriggersWidgetData.logDayListData.titleName = 'Triggers';
+    response.medication.asMap().forEach((index, element) {
+      if(index == 0) {
+        if (element.mobileEventDetails.length > 0) {
+          RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
+          logDayMedicationWidgetData.logDayListData = LogDayData();
 
-        logDayTriggersWidgetData.imagePath = Constant.pillIcon;
-        userHeadacheLogDayDetailsModel.headacheLogDayListData
-            .add(logDayTriggersWidgetData);
-        userHeadacheLogDayDetailsModel.isDayLogged = true;
+          var medicationData = element.mobileEventDetails.firstWhere(
+                  (mobileEventElement) =>
+              mobileEventElement.questionTag == Constant.logDayMedicationTag,
+              orElse: () => null);
+
+          var medicationTimeData = element.mobileEventDetails.firstWhere(
+                  (mobileEventElement) =>
+              mobileEventElement.questionTag == Constant.administeredTag,
+              orElse: () => null);
+
+          var medicationDosageData = element.mobileEventDetails.firstWhere(
+                  (mobileEventElement) =>
+                  mobileEventElement.questionTag.contains(Constant.dotDosage),
+              orElse: () => null);
+
+          if (medicationData != null) {
+            String titleInfo = medicationData.value;
+            if (medicationDosageData != null && medicationTimeData != null) {
+              List<String> formattedValues = medicationDosageData.value?.split(
+                  "%@");
+              List<String> medicationTimeValues = medicationTimeData.value
+                  ?.split("%@");
+              if (formattedValues != null && medicationTimeValues != null) {
+                String medicationDosage = '';
+                formattedValues.asMap().forEach((index, medicationElement) {
+                  if (medicationDosage.isEmpty) {
+                    DateTime medicationDateTime;
+
+                    try {
+                      medicationDateTime =
+                          DateTime.parse(medicationTimeValues[index]).toLocal();
+                    } catch (e) {
+                      print(e);
+                    }
+
+                    if (medicationDateTime != null) {
+                      medicationDosage =
+                      '$medicationElement at ${Utils.getTimeInAmPmFormat(
+                          medicationDateTime.hour, medicationDateTime.minute)}';
+                    } else {
+                      medicationDosage = '$medicationElement';
+                    }
+                  } else {
+                    DateTime medDateTime;
+
+                    try {
+                      medDateTime =
+                          DateTime.parse(medicationTimeValues[index]).toLocal();
+                    } catch (e) {
+                      print(e);
+                    }
+
+                    if (medDateTime != null) {
+                      medicationDosage =
+                      '$medicationDosage, $medicationElement at ${Utils
+                          .getTimeInAmPmFormat(
+                          medDateTime.hour, medDateTime.minute)}';
+                    } else {
+                      medicationDosage =
+                      '$medicationDosage, $medicationElement';
+                    }
+                  }
+                });
+                if (medicationDosage.isEmpty) {
+                  titleInfo = '$titleInfo';
+                } else
+                  titleInfo = '$titleInfo\n($medicationDosage)';
+              }
+            }
+            logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+          }
+
+          logDayMedicationWidgetData.logDayListData.titleName =
+              Constant.medication;
+          logDayMedicationWidgetData.imagePath = Constant.pillIcon;
+          userHeadacheLogDayDetailsModel.headacheLogDayListData
+              .add(logDayMedicationWidgetData);
+          userHeadacheLogDayDetailsModel.isDayLogged = true;
+        }
+      }
+    });
+
+    response.triggers.asMap().forEach((index, element) {
+      if(index == 0) {
+        if (element.mobileEventDetails.length > 0) {
+          RecordWidgetData logDayTriggersWidgetData = RecordWidgetData();
+          logDayTriggersWidgetData.logDayListData = LogDayData();
+          var triggersElement = element.mobileEventDetails.firstWhere(
+                  (mobileEventElement) =>
+              mobileEventElement.questionTag == Constant.triggersTag,
+              orElse: () => null);
+          String triggersValues = triggersElement.value;
+          List<String> formattedValues = triggersValues.split("%@");
+          logDayTriggersWidgetData.logDayListData.titleInfo =
+              formattedValues.toString();
+          logDayTriggersWidgetData.logDayListData.titleName = 'Triggers';
+
+          logDayTriggersWidgetData.imagePath = Constant.alcoholIcon;
+          userHeadacheLogDayDetailsModel.headacheLogDayListData
+              .add(logDayTriggersWidgetData);
+          userHeadacheLogDayDetailsModel.isDayLogged = true;
+        }
       }
     });
 
