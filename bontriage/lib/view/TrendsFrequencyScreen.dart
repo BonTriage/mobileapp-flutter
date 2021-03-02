@@ -107,6 +107,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Container(
                 width: totalDaysInCurrentMonth <= 28 ? 350 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
