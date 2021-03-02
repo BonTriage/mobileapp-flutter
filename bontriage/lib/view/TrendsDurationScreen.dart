@@ -111,6 +111,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Container(
                 width: totalDaysInCurrentMonth <= 28 ? 350 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -212,6 +213,11 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                               return 'Week 3';
                             case 3:
                               return 'Week 4';
+                            case 4:
+                              if (totalDaysInCurrentMonth > 28) {
+                                return 'Week 5';
+                              }
+                              return '';
                             default:
                               return '';
                           }

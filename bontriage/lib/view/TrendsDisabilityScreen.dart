@@ -109,6 +109,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Container(
                 width: totalDaysInCurrentMonth <= 28 ? 350:420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -205,7 +206,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                             case 3:
                               return 'Week 4';
                             case 4:
-                              return 'Fr';
+                              return 'Week 5';
                             case 5:
                               return 'St';
                             case 6:

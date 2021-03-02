@@ -106,6 +106,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     super.build(context);
     return SingleChildScrollView(
       child: Container(
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -114,6 +115,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Container(
                 width: totalDaysInCurrentMonth <= 28 ? 340 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
