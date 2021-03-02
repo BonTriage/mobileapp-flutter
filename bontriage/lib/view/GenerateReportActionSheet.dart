@@ -12,6 +12,7 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

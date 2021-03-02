@@ -599,7 +599,7 @@ class Utils {
     );
   }
 
-  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent) async{
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle]) async{
     var result = await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -607,7 +607,7 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ConfirmationDialog(dialogContent: dialogContent,),
+          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,),
         );
       },
     );

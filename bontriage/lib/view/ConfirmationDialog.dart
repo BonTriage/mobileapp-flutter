@@ -4,8 +4,9 @@ import 'package:mobile/util/constant.dart';
 
 class ConfirmationDialog extends StatefulWidget {
   final String dialogContent;
+  final String dialogTitle;
 
-  const ConfirmationDialog({Key key, @required this.dialogContent}) : super(key: key);
+  const ConfirmationDialog({Key key, @required this.dialogContent, this.dialogTitle}) : super(key: key);
 
   @override
   _ConfirmationDialogState createState() => _ConfirmationDialogState();
@@ -39,7 +40,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Alert!',
+                            widget.dialogTitle ?? 'Alert!',
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Constant.chatBubbleGreen,
