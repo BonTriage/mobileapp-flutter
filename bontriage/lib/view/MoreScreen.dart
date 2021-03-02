@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -149,14 +150,20 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   ///This method is used to log out from the app and redirecting to the welcome start assessment screen
-  void _logOutFromApp() async{
-    try {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.clear();
-      await SignUpOnBoardProviders.db.deleteAllTableData();
-      widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter,null);
-    } catch(e) {
-      print(e);
+  void _logOutFromApp() async {
+    var result = await Utils.showConfirmationDialog(context, 'Are you sure want to log out?');
+    if(result == 'Yes') {
+      try {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+        sharedPreferences.clear();
+        sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume);
+        sharedPreferences.setBool(Constant.tutorialsState, true);
+        await SignUpOnBoardProviders.db.deleteAllTableData();
+        widget.navigateToOtherScreenCallback(Constant.welcomeStartAssessmentScreenRouter, null);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

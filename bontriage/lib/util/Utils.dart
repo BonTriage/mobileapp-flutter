@@ -10,6 +10,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/ConfirmationDialog.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
@@ -142,7 +143,11 @@ class Utils {
     }
 
     if (hrs < 10) {
-      hrsString = '0$hrs';
+      if(hrs == 0) {
+        hrsString = '12';
+      } else {
+        hrsString = '0$hrs';
+      }
     } else {
       hrsString = hrs.toString();
     }
@@ -592,5 +597,21 @@ class Utils {
           );
         }
     );
+  }
+
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent) async{
+    var result = await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ConfirmationDialog(dialogContent: dialogContent,),
+        );
+      },
+    );
+
+    return result;
   }
 }
