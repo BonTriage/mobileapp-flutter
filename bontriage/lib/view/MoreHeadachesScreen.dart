@@ -3,6 +3,7 @@ import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
 import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
@@ -150,6 +151,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           onTap: () {
                             _openDeleteHeadacheActionSheet();
                           },
+                          behavior: HitTestBehavior.translucent,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -207,12 +209,19 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   void _openDeleteHeadacheActionSheet() async {
     var resultOfActionSheet = await widget.openActionSheetCallback(Constant.deleteHeadacheTypeActionSheet, null);
     if(resultOfActionSheet == Constant.deleteHeadacheType) {
-      _bloc.initNetworkStreamController();
-      widget.showApiLoaderCallback(_bloc.networkStream, () {
-        _bloc.networkSink.add(Constant.loading);
-        _bloc.callDeleteHeadacheTypeService(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
-      });
-      _bloc.callDeleteHeadacheTypeService(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
+      var result = await Utils.showConfirmationDialog(context, 'Are you sure want to delete this headache type?');
+      if(result == 'Yes') {
+        _bloc.initNetworkStreamController();
+        widget.showApiLoaderCallback(_bloc.networkStream, () {
+          _bloc.networkSink.add(Constant.loading);
+          _bloc.callDeleteHeadacheTypeService(
+              widget.moreHeadacheScreenArgumentModel.headacheTypeData
+                  .valueNumber);
+        });
+        _bloc.callDeleteHeadacheTypeService(
+            widget.moreHeadacheScreenArgumentModel.headacheTypeData
+                .valueNumber);
+      }
     }
   }
 

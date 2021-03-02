@@ -159,6 +159,9 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
     String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
 
     if(isSeeMoreClicked == Constant.trueString) {
+      Future.delayed(Duration(seconds: 2), () {
+        sharedPreferences.remove(Constant.isSeeMoreClicked);
+      });
       _tabController.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.linear);
       setState(() {
         print('set state 1');

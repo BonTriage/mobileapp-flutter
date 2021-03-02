@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsCompassScreenBloc.dart';
 import 'package:mobile/models/CompassTutorialModel.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsCompareCompassModel.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -62,6 +64,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   CompassTutorialModel _compassTutorialModelFirstLogged;
 
   DateTime firstLoggedSignUpData = DateTime.now();
+
+  CurrentUserHeadacheModel currentUserHeadacheModel;
 
   List<TextSpan> _getBubbleTextSpans() {
     List<TextSpan> list = [];
@@ -143,6 +147,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   void didUpdateWidget(covariant CompareCompassScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     print('didUpdateWidget of compare compass');
+    _getUserCurrentHeadacheData();
     _updateCompassData();
   }
 
@@ -180,7 +185,11 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            navigateToHeadacheStartScreen();
+                            if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+                              _navigateToAddHeadacheScreen();
+                            } else {
+                              _navigateUserToHeadacheLogScreen();
+                            }
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -1008,6 +1017,54 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       return _compassTutorialModelFirstLogged;
     } else {
       return _compassTutorialModelMonthly;
+    }
+  }
+
+  void _navigateToAddHeadacheScreen() async{
+    DateTime currentDateTime = DateTime.now();
+    DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    currentUserHeadacheModel.isOnGoing = false;
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+
+    await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    _getUserCurrentHeadacheData();
+  }
+
+  void _navigateUserToHeadacheLogScreen() async {
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    CurrentUserHeadacheModel currentUserHeadacheModel;
+
+    if (userProfileInfoData != null)
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    if (currentUserHeadacheModel == null) {
+      await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+    }
+    else {
+      if(currentUserHeadacheModel.isOnGoing) {
+        await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
+      } else
+        await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    }
+    _getUserCurrentHeadacheData();
+  }
+
+  Future<void> _getUserCurrentHeadacheData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
   }
 }

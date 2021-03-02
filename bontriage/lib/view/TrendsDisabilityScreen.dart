@@ -727,7 +727,30 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           fourthWeekDisabilityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeGroupData(
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekDisabilityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekDisabilityData[0],
+            fifthWeekDisabilityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else {
+          barGroup5 = makeGroupData(
             4,
             fifthWeekDisabilityData[0],
             fifthWeekDisabilityData[1],
@@ -735,7 +758,9 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
             0,
             0,
             0,
-            0);
+            0,
+          );
+        }
       }
 
       if (totalDaysInCurrentMonth > 28) {
@@ -878,23 +903,61 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           multipleFourthWeekDisabilityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeMultipleGroupData(
-          4,
-          fifthWeekDisabilityData[0],
-          fifthWeekDisabilityData[1],
-          fifthWeekDisabilityData[2],
-          0,
-          0,
-          0,
-          0,
-          multipleFifthWeekDisabilityData[0],
-          multipleFifthWeekDisabilityData[1],
-          multipleFifthWeekDisabilityData[2],
-          0,
-          0,
-          0,
-          0,
-        );
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekDisabilityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekDisabilityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekDisabilityData[0],
+            fifthWeekDisabilityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekDisabilityData[0],
+            multipleFifthWeekDisabilityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekDisabilityData[0],
+            fifthWeekDisabilityData[1],
+            fifthWeekDisabilityData[2],
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekDisabilityData[0],
+            multipleFifthWeekDisabilityData[1],
+            multipleFifthWeekDisabilityData[2],
+            0,
+            0,
+            0,
+            0,
+          );
+        }
       }
     }
     if (totalDaysInCurrentMonth > 28) {

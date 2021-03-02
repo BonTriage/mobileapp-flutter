@@ -1,4 +1,3 @@
-import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpOnBoardFirstStepBloc.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
@@ -10,7 +9,6 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
-import 'package:mobile/view/ApiLoaderScreen.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import '../util/constant.dart';
 import 'NetworkErrorScreen.dart';
@@ -79,6 +77,7 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
   void dispose() {
     // TODO: implement dispose
     _pageController.dispose();
+    signUpBoardFirstStepBloc.dispose();
     super.dispose();
   }
 

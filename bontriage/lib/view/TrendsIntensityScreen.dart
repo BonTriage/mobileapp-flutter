@@ -820,16 +820,40 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           fourthWeekIntensityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeGroupData(
-          4,
-          fifthWeekIntensityData[0],
-          fifthWeekIntensityData[1],
-          fifthWeekIntensityData[2],
-          0,
-          0,
-          0,
-          0,
-        );
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            fifthWeekIntensityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            fifthWeekIntensityData[1],
+            fifthWeekIntensityData[2],
+            0,
+            0,
+            0,
+            0,
+          );
+        }
       }
       if (totalDaysInCurrentMonth > 28) {
         items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
@@ -846,6 +870,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           .recordsTrendsMultipleHeadacheDataModel
           .headacheFirst
           .severity;
+
       multipleSecondIntensityListData = widget
           .editGraphViewFilterModel
           .recordsTrendsDataModel
@@ -970,23 +995,61 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           multipleFourthWeekIntensityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeMultipleGroupData(
-          4,
-          fifthWeekIntensityData[0],
-          fifthWeekIntensityData[1],
-          fifthWeekIntensityData[2],
-          0,
-          0,
-          0,
-          0,
-          multipleFifthWeekIntensityData[0],
-          multipleFifthWeekIntensityData[1],
-          multipleFifthWeekIntensityData[2],
-          0,
-          0,
-          0,
-          0,
-        );
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekIntensityData[0],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            fifthWeekIntensityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekIntensityData[0],
+            multipleFifthWeekIntensityData[1],
+            0,
+            0,
+            0,
+            0,
+            0,
+          );
+        } else {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekIntensityData[0],
+            fifthWeekIntensityData[1],
+            fifthWeekIntensityData[2],
+            0,
+            0,
+            0,
+            0,
+            multipleFifthWeekIntensityData[0],
+            multipleFifthWeekIntensityData[1],
+            multipleFifthWeekIntensityData[2],
+            0,
+            0,
+            0,
+            0,
+          );
+        }
       }
     }
     if (totalDaysInCurrentMonth > 28) {

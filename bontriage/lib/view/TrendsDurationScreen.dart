@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -656,16 +653,40 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
           fourthWeekDurationData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        barGroup5 = makeGroupData(
-          4,
-          fifthWeekDurationData[0],
-          fifthWeekDurationData[1],
-          fifthWeekDurationData[2],
-          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-          TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-        );
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekDurationData[0],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekDurationData[0],
+            fifthWeekDurationData[1],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        } else {
+          barGroup5 = makeGroupData(
+            4,
+            fifthWeekDurationData[0],
+            fifthWeekDurationData[1],
+            fifthWeekDurationData[2],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        }
       }
       if (totalDaysInCurrentMonth > 28) {
         items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];

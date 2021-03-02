@@ -1,9 +1,11 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsTrendsScreenBloc.dart';
+import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
@@ -46,6 +48,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
   String lastDayOfTheCurrentMonth;
   EditGraphViewFilterModel _editGraphViewFilterModel;
 
+  CurrentUserHeadacheModel currentUserHeadacheModel;
+
   var lastSelectedHeadacheName;
   List<TrendsFilterModel> behavioursListData = [];
 
@@ -81,8 +85,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
   @override
   void didUpdateWidget(TrendsScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('in did update widget of trends screen');
+    _getUserCurrentHeadacheData();
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName, "", false);
+  }
+
+  @override
+  void dispose() {
+    _recordsTrendsScreenBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,7 +129,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
                         children: [
                           BouncingWidget(
                             onPressed: () {
-                              navigateToHeadacheStartScreen();
+                              if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+                                _navigateToAddHeadacheScreen();
+                              } else {
+                                _navigateUserToHeadacheLogScreen();
+                              }
+                              //navigateToHeadacheStartScreen();
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -442,7 +459,10 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
     print(_isInitiallyServiceHit);
 
+    print(isSeeMoreClicked);
+
     if(!_isInitiallyServiceHit && currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty) {
+      sharedPreferences.remove(Constant.updateTrendsData);
       _isInitiallyServiceHit = true;
       _recordsTrendsScreenBloc.initNetworkStreamController();
       print('show api loader 16');
@@ -453,8 +473,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                 firstDayOfTheCurrentMonth,
                 lastDayOfTheCurrentMonth,
                 selectedHeadacheName,
-                Constant.blankString,
-                false);
+                selectedAnotherHeadacheName,
+                isMultipleHeadacheSelected);
           });
       print(
           'Start Day: $firstDayOfTheCurrentMonth ????? LastDay: $lastDayOfTheCurrentMonth');
@@ -462,8 +482,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
           firstDayOfTheCurrentMonth,
           lastDayOfTheCurrentMonth,
           selectedHeadacheName,
-          Constant.blankString,
-          false);
+          selectedAnotherHeadacheName,
+          isMultipleHeadacheSelected);
     } else if (currentPositionOfTabBar == 1 && recordTabBarPosition == 2 && isSeeMoreClicked.isEmpty && updateTrendsData == Constant.trueString) {
       sharedPreferences.remove(Constant.updateTrendsData);
       _recordsTrendsScreenBloc.initNetworkStreamController();
@@ -509,14 +529,10 @@ class _TrendsScreenState extends State<TrendsScreen> {
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
             selectedHeadacheName, '', false);
       } else {
-        selectedHeadacheName =
-            _editGraphViewFilterModel.compareHeadacheTypeSelected1;
-        secondSelectedHeadacheName =
-            _editGraphViewFilterModel.compareHeadacheTypeSelected2;
-        _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,
-            duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName, secondSelectedHeadacheName, true);
+        selectedHeadacheName = _editGraphViewFilterModel.compareHeadacheTypeSelected1;
+        secondSelectedHeadacheName = _editGraphViewFilterModel.compareHeadacheTypeSelected2;
+        _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex, duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth, selectedHeadacheName, secondSelectedHeadacheName, true);
       }
     }
     print(resultFromActionSheet);
@@ -621,7 +637,55 @@ class _TrendsScreenState extends State<TrendsScreen> {
           selectedHeadacheName, '', false);
     } else {
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-          selectedHeadacheName, '', true);
+          selectedHeadacheName, secondSelectedHeadacheName, true);
+    }
+  }
+
+  void _navigateToAddHeadacheScreen() async{
+    DateTime currentDateTime = DateTime.now();
+    DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    currentUserHeadacheModel.isOnGoing = false;
+    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+
+    await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    _getUserCurrentHeadacheData();
+  }
+
+  void _navigateUserToHeadacheLogScreen() async {
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    CurrentUserHeadacheModel currentUserHeadacheModel;
+
+    if (userProfileInfoData != null)
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    if (currentUserHeadacheModel == null) {
+      await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
+    }
+    else {
+      if(currentUserHeadacheModel.isOnGoing) {
+        await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
+      } else
+        await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    }
+    _getUserCurrentHeadacheData();
+  }
+
+  Future<void> _getUserCurrentHeadacheData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
   }
 }

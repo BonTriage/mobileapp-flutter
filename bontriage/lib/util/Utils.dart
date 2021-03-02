@@ -10,6 +10,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
+import 'package:mobile/view/ConfirmationDialog.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
@@ -142,7 +143,11 @@ class Utils {
     }
 
     if (hrs < 10) {
-      hrsString = '0$hrs';
+      if(hrs == 0) {
+        hrsString = '12';
+      } else {
+        hrsString = '0$hrs';
+      }
     } else {
       hrsString = hrs.toString();
     }
@@ -492,7 +497,8 @@ class Utils {
 
     currentDate = firstDayDateTime.toUtc().toIso8601String();
     List<String> splitString = currentDate.split('.');
-    return '${splitString[0]}Z';
+    print('Current Date??????${splitString[0]}Z');
+    return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
 
   /// Current Date with Time
@@ -509,8 +515,10 @@ class Utils {
         _dateTime.second);
 
     currentDate = firstDayDateTime.toUtc().toIso8601String();
+    print('');
     List<String> splitString = currentDate.split('.');
-    return '${splitString[0]}Z';
+    //return '${splitString[0]}Z';
+    return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
 
   ///This method is used to return scroll physics based on the platform
@@ -589,5 +597,21 @@ class Utils {
           );
         }
     );
+  }
+
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent) async{
+    var result = await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ConfirmationDialog(dialogContent: dialogContent,),
+        );
+      },
+    );
+
+    return result;
   }
 }

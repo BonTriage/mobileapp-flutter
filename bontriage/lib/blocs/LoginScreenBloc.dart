@@ -55,6 +55,8 @@ class LoginScreenBloc {
             userProfileInfoModel =
                 UserProfileInfoModel.fromJson(jsonDecode(response));
             await _deleteAllUserData();
+            await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
+            await SignUpOnBoardProviders.db.deleteTableUserProgress();
             var selectedAnswerListData = await SignUpOnBoardProviders.db
                 .insertUserProfileInfo(userProfileInfoModel);
             print(selectedAnswerListData);

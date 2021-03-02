@@ -368,8 +368,20 @@ class SignUpOnBoardProviders {
     );
   }
 
+  Future<void> deleteTableQuestionnaires() async {
+    final db = await database;
+    await db.delete(TABLE_QUESTIONNAIRES);
+  }
+
+  Future<void> deleteTableUserProgress() async {
+    final db = await database;
+    await db.delete(TABLE_USER_PROGRESS);
+  }
+
   Future<void> insertUserCurrentHeadacheData(CurrentUserHeadacheModel currentUserHeadacheModel) async{
     final db = await database;
+    await deleteUserCurrentHeadacheData();
+
     List<Map> currentHeadacheData = [];
     try {
       currentHeadacheData = await db.rawQuery(
