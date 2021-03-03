@@ -142,7 +142,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                                     (rod.y.toInt()).toString() +
                                     ' Days',
                                 TextStyle(
-                                    color: Colors.black,
+                                    color: setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
                                     fontSize: 12));
                           },
@@ -540,7 +540,11 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
   }
 
   Color setToolTipColor() {
-    return Constant.migraineColor;
+    if(clickedValue != null){
+      if(clickedValue > 0){
+        return Constant.migraineColor;
+      }else return Colors.transparent;
+    }else return Colors.transparent;
   }
 
 //3315662,4d7483,658c9f,82aac0,99c1db
@@ -1118,4 +1122,14 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
     } else
       return Colors.transparent;
   }
+
+  setToolTipTextColor() {
+    if (clickedValue != null) {
+      if (clickedValue == 0) {
+        return Colors.transparent;
+      } else
+        return Colors.black;
+    }
+  }
+
 }

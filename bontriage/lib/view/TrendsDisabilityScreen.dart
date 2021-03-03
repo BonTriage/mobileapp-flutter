@@ -13,14 +13,16 @@ class TrendsDisabilityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
 
-  const TrendsDisabilityScreen({Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
+  const TrendsDisabilityScreen(
+      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
       : super(key: key);
 
   @override
   _TrendsDisabilityScreenState createState() => _TrendsDisabilityScreenState();
 }
 
-class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with AutomaticKeepAliveClientMixin {
+class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
+    with AutomaticKeepAliveClientMixin {
   DateTime _dateTime;
   int currentMonth;
   int currentYear;
@@ -42,7 +44,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   List<Data> multipleFirstDisabilityListData = [];
   List<Data> multipleSecondDisabilityListData = [];
   List<BarChartGroupData> items;
-
 
   List<double> multipleFirstWeekDisabilityData = [];
   List<double> multipleSecondWeekDisabilityData = [];
@@ -79,6 +80,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
     setDisabilityValuesData();
   }
+
   @override
   void didUpdateWidget(covariant TrendsDisabilityScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -111,7 +113,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Container(
-                width: totalDaysInCurrentMonth <= 28 ? 350:420,
+                width: totalDaysInCurrentMonth <= 28 ? 350 : 420,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: BarChart(
                   BarChartData(
@@ -136,14 +138,15 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                           tooltipRoundedRadius: 20,
                           tooltipBottomMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            String weekDay = '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
+                            String weekDay =
+                                '${Utils.getShortMonthName(_dateTime.month)} ${(groupIndex * 7) + rodIndex + 1}';
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
                                     (rod.y.toInt()).toString() +
                                     '/4 Dis.',
                                 TextStyle(
-                                    color: Colors.black,
+                                    color: setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
                                     fontSize: 12));
                           },
@@ -250,8 +253,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
             ),
             Visibility(
               visible:
-              widget.editGraphViewFilterModel.whichOtherFactorSelected !=
-                  Constant.noneRadioButtonText,
+                  widget.editGraphViewFilterModel.whichOtherFactorSelected !=
+                      Constant.noneRadioButtonText,
               child: Column(
                 children: [
                   SizedBox(
@@ -273,7 +276,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                         child: Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Column(
-
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
                         ),
@@ -283,7 +285,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                 ],
               ),
             ),
-           /* Column(
+            /* Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
@@ -369,74 +371,79 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
             SizedBox(
               height: 15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.mildTriggerColor,
-                    shape: BoxShape.rectangle,
+            Visibility(
+              visible: widget.editGraphViewFilterModel
+                      .headacheTypeRadioButtonSelected ==
+                  Constant.viewSingleHeadache,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.mildTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
                   ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Mild',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.moderateTriggerColor,
-                    shape: BoxShape.rectangle,
+                  SizedBox(
+                    width: 10,
                   ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Moderate',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-                SizedBox(
-                  width: 14,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Constant.severeTriggerColor,
-                    shape: BoxShape.rectangle,
+                  Text(
+                    'Mild',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
                   ),
-                  height: 13,
-                  width: 13,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Severe',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Constant.locationServiceGreen,
-                      fontFamily: Constant.jostRegular),
-                ),
-              ],
+                  SizedBox(
+                    width: 14,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.moderateTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Moderate',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
+                  ),
+                  SizedBox(
+                    width: 14,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Constant.severeTriggerColor,
+                      shape: BoxShape.rectangle,
+                    ),
+                    height: 13,
+                    width: 13,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Severe',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Constant.locationServiceGreen,
+                        fontFamily: Constant.jostRegular),
+                  ),
+                ],
+              ),
             ),
             Visibility(
               visible: widget.editGraphViewFilterModel
-                  .headacheTypeRadioButtonSelected !=
+                      .headacheTypeRadioButtonSelected !=
                   Constant.viewSingleHeadache,
               child: Padding(
                 padding: const EdgeInsets.only(left: 60),
@@ -457,7 +464,15 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  0
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[0]
+                                  .text
+                              : '',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -476,7 +491,9 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
+                            color: headacheColorChanged
+                                ? Constant.migraineColor
+                                : Constant.otherHeadacheColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -486,7 +503,15 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  1
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[1]
+                                  .text
+                              : '',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -607,18 +632,19 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
   Color setToolTipColor() {
     if (clickedValue != null) {
-      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+      if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+          Constant.viewSingleHeadache) {
         if (clickedValue == 1) {
           return Constant.mildTriggerColor;
         } else if (clickedValue > 1 && clickedValue <= 3) {
           return Constant.moderateTriggerColor;
-        } else
+        } else if (clickedValue == 4) {
           return Constant.severeTriggerColor;
-
-      }else{
+        } else
+          return Colors.transparent;
+      } else {
         return Constant.migraineColor;
       }
-
     }
     return Colors.transparent;
   }
@@ -653,7 +679,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
   void setDisabilityValuesData() {
     if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
         Constant.viewSingleHeadache) {
-      disabilityListData = widget.editGraphViewFilterModel.recordsTrendsDataModel.headache.disability;
+      disabilityListData = widget
+          .editGraphViewFilterModel.recordsTrendsDataModel.headache.disability;
 
       firstWeekDisabilityData = [];
       secondWeekDisabilityData = [];
@@ -669,16 +696,16 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
         } else {
           date = i.toString();
         }
-        if(currentMonth <10){
+        if (currentMonth < 10) {
           month = '0$currentMonth';
-        }else{
+        } else {
           month = currentMonth.toString();
         }
 
         DateTime dateTime =
-        DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
         var disabilityData = disabilityListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (disabilityData != null) {
           setAllWeekDisabilityData(i, disabilityData.value.toDouble());
@@ -687,9 +714,10 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
         }
       }
 
-      print('AllDisabilityListData $firstWeekDisabilityData $secondWeekDisabilityData $thirdWeekDisabilityData $fourthWeekDisabilityData');
+      print(
+          'AllDisabilityListData $firstWeekDisabilityData $secondWeekDisabilityData $thirdWeekDisabilityData $fourthWeekDisabilityData');
 
-       barGroup1 = makeGroupData(
+      barGroup1 = makeGroupData(
           0,
           firstWeekDisabilityData[0],
           firstWeekDisabilityData[1],
@@ -698,7 +726,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           firstWeekDisabilityData[4],
           firstWeekDisabilityData[5],
           firstWeekDisabilityData[6]);
-       barGroup2 = makeGroupData(
+      barGroup2 = makeGroupData(
           1,
           secondWeekDisabilityData[0],
           secondWeekDisabilityData[1],
@@ -707,7 +735,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           secondWeekDisabilityData[4],
           secondWeekDisabilityData[5],
           secondWeekDisabilityData[6]);
-       barGroup3 = makeGroupData(
+      barGroup3 = makeGroupData(
           2,
           thirdWeekDisabilityData[0],
           thirdWeekDisabilityData[1],
@@ -716,7 +744,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           thirdWeekDisabilityData[4],
           thirdWeekDisabilityData[5],
           thirdWeekDisabilityData[6]);
-       barGroup4 = makeGroupData(
+      barGroup4 = makeGroupData(
           3,
           fourthWeekDisabilityData[0],
           fourthWeekDisabilityData[1],
@@ -727,7 +755,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           fourthWeekDisabilityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        if(totalDaysInCurrentMonth == 29) {
+        if (totalDaysInCurrentMonth == 29) {
           barGroup5 = makeGroupData(
             4,
             fifthWeekDisabilityData[0],
@@ -771,8 +799,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
       rawBarGroups = items;
       showingBarGroups = rawBarGroups;
-
-    }else{
+    } else {
       multipleFirstDisabilityListData = widget
           .editGraphViewFilterModel
           .recordsTrendsDataModel
@@ -787,8 +814,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           .disability;
 
       firstWeekDisabilityData = [];
-      secondWeekDisabilityData= [];
-      thirdWeekDisabilityData= [];
+      secondWeekDisabilityData = [];
+      thirdWeekDisabilityData = [];
       fourthWeekDisabilityData = [];
       fifthWeekDisabilityData = [];
 
@@ -812,9 +839,9 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           month = currentMonth.toString();
         }
         DateTime dateTime =
-        DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+            DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
         var firstIntensityData = multipleFirstDisabilityListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (firstIntensityData != null) {
           setAllWeekDisabilityData(i, firstIntensityData.value.toDouble());
@@ -822,7 +849,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           setAllWeekDisabilityData(i, 0);
         }
         var secondIntensityData = multipleSecondDisabilityListData.firstWhere(
-                (element) => element.date.isAtSameMomentAs(dateTime),
+            (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
         if (secondIntensityData != null) {
           setAllMultipleWeekDisabilityData(
@@ -903,7 +930,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           multipleFourthWeekDisabilityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        if(totalDaysInCurrentMonth == 29) {
+        if (totalDaysInCurrentMonth == 29) {
           barGroup5 = makeMultipleGroupData(
             4,
             fifthWeekDisabilityData[0],
@@ -968,8 +995,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
 
     rawBarGroups = items;
     showingBarGroups = rawBarGroups;
-    }
-
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -1035,16 +1061,19 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
           children: _getDots(dotTextModelDataList[i]),
         ),
       ));
-      widgetListData.add(SizedBox(height: 14,));
+      widgetListData.add(SizedBox(
+        height: 14,
+      ));
     }
     return widgetListData;
   }
+
   List<Widget> _getDots(TrendsFilterModel trendsFilterModel) {
     List<Widget> dotsList = [];
 
     for (int i = 1;
-    i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
-    i++) {
+        i <= widget.editGraphViewFilterModel.numberOfDaysInMonth;
+        i++) {
       var dotData = trendsFilterModel.occurringDateList
           .firstWhere((element) => element.day == i, orElse: () => null);
 
@@ -1080,7 +1109,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
     ];
   }
 
-  double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {
+  double setAxisValue(
+      double firstMultipleHeadache1, double secondMultipleHeadache1) {
     var maxValue;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
       maxValue = firstMultipleHeadache1;
@@ -1107,6 +1137,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       multipleFifthWeekDisabilityData.add(intensityData);
     }
   }
+
   BarChartGroupData makeMultipleGroupData(
       int x,
       double firstMultipleHeadache1,
@@ -1126,7 +1157,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
     return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache1, secondMultipleHeadache1),
-        rodStackItems: setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1134,7 +1166,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache2, secondMultipleHeadache2),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1142,8 +1175,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache3, secondMultipleHeadache3),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache3, secondMultipleHeadache3)
-        ,
+        rodStackItems:
+            setRodStack(firstMultipleHeadache3, secondMultipleHeadache3),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1151,7 +1184,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache4, secondMultipleHeadache4),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1159,7 +1193,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache5, secondMultipleHeadache5),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1167,7 +1202,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache6, secondMultipleHeadache6),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -1175,31 +1211,45 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen> with Au
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache7, secondMultipleHeadache7),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
       ),
     ]);
   }
+
   setToolTipTextColor() {
-    if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
-      return Colors.white;
-    }else{
-      return Colors.black;
+    if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+        Constant.viewSingleHeadache) {
+      if (clickedValue != null) {
+        if (clickedValue == 0) {
+          return Colors.transparent;
+        } else
+          return Colors.white;
+      }
+    } else {
+      if (clickedValue != null) {
+        if (clickedValue == 0) {
+          return Colors.transparent;
+        } else
+          return Colors.black;
+      }
     }
   }
 
   Color setHeadacheColor() {
-    if(firstWeekDisabilityData.length > 0  && multipleFirstWeekDisabilityData.length> 0) {
+    if (firstWeekDisabilityData.length > 0 &&
+        multipleFirstWeekDisabilityData.length > 0) {
       if (firstWeekDisabilityData[0] >= multipleFirstWeekDisabilityData[0]) {
         headacheColorChanged = true;
         return Constant.otherHeadacheColor;
-      } else{
+      } else {
         headacheColorChanged = false;
         return Constant.migraineColor;
       }
-
-    }else return Colors.transparent;
+    } else
+      return Colors.transparent;
   }
 }

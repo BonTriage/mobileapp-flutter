@@ -688,8 +688,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           return Constant.mildTriggerColor;
         } else if (clickedValue >= 4 && clickedValue <= 7) {
           return Constant.moderateTriggerColor;
-        } else
+        }else if(clickedValue >= 8 && clickedValue == 10)
           return Constant.severeTriggerColor;
+        else return Colors.transparent;
+
       }else{
         return Constant.migraineColor;
       }
@@ -703,8 +705,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       return [Constant.mildTriggerColor];
     } else if (barChartValue >= 4 && barChartValue <= 7) {
       return [Constant.moderateTriggerColor];
-    } else
+    } else if(barChartValue >= 8 && barChartValue == 10)
       return [Constant.severeTriggerColor];
+    else return [Colors.transparent];
   }
 
   void setAllWeekIntensityData(int i, double intensityData) {
@@ -1199,10 +1202,21 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
  }
 
   setToolTipTextColor() {
-      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
-         return Colors.white;
-      }else{
-        return Colors.black;
+    if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+        Constant.viewSingleHeadache) {
+      if (clickedValue != null) {
+        if (clickedValue == 0) {
+          return Colors.transparent;
+        } else
+          return Colors.white;
       }
+    } else {
+      if (clickedValue != null) {
+        if (clickedValue == 0) {
+          return Colors.transparent;
+        } else
+          return Colors.black;
+      }
+    }
   }
 }

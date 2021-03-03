@@ -52,11 +52,11 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   List<TrendsDurationColorModel> fourthWeekDurationData = [];
   List<TrendsDurationColorModel> fifthWeekDurationData = [];
 
-/*  List<double> multipleFirstWeekIntensityData = [];
-  List<double> multipleSecondWeekIntensityData = [];
-  List<double> multipleThirdWeekIntensityData = [];
-  List<double> multipleFourthWeekIntensityData = [];
-  List<double> multipleFifthWeekIntensityData = [];*/
+  List<TrendsDurationColorModel> multipleFirstWeekDurationData = [];
+  List<TrendsDurationColorModel> multipleSecondWeekDurationData = [];
+  List<TrendsDurationColorModel> multipleThirdWeekDurationData = [];
+  List<TrendsDurationColorModel> multipleFourthWeekDurationData = [];
+  List<TrendsDurationColorModel> multipleFifthWeekDurationData = [];
 
   BarChartGroupData barGroup2;
   BarChartGroupData barGroup1;
@@ -65,6 +65,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   BarChartGroupData barGroup5;
 
   double axesMaxValue = 60;
+
+  bool headacheColorChanged = false;
 
   @override
   void initState() {
@@ -147,7 +149,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                                     (rod.y.toInt()).toString() +
                                     ' hours',
                                 TextStyle(
-                                    color: Colors.black,
+                                    color:  setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
                                     fontSize: 12));
                           },
@@ -340,8 +342,75 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                 ),
               ],
             ),
+            Visibility(
+              visible: widget.editGraphViewFilterModel
+                  .headacheTypeRadioButtonSelected !=
+                  Constant.viewSingleHeadache,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: setHeadacheColor(),
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
+                            shape: BoxShape.rectangle,
+                          ),
+                          height: 13,
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
           ],
         ),
@@ -445,7 +514,20 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
   }
 
   Color setToolTipColor() {
-    return Constant.migraineColor;
+    if(clickedValue != null){
+      if(clickedValue > 0){
+        return Constant.migraineColor;
+      }else return Colors.transparent;
+    }else return Colors.transparent;
+  }
+
+  setToolTipTextColor() {
+    if (clickedValue != null) {
+      if (clickedValue == 0) {
+        return Colors.transparent;
+      } else
+        return Colors.black;
+    }
   }
 
   List<Color> setBarChartColor(int barChartValue) {
@@ -696,6 +778,236 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
 
       rawBarGroups = items;
       showingBarGroups = rawBarGroups;
+    }else {
+      multipleFirstIntensityListData = widget
+          .editGraphViewFilterModel
+          .recordsTrendsDataModel
+          .recordsTrendsMultipleHeadacheDataModel
+          .headacheFirst
+          .severity;
+
+      multipleSecondIntensityListData = widget
+          .editGraphViewFilterModel
+          .recordsTrendsDataModel
+          .recordsTrendsMultipleHeadacheDataModel
+          .headacheSecond
+          .severity;
+
+      firstWeekDurationData = [];
+      secondWeekDurationData = [];
+      thirdWeekDurationData = [];
+      fourthWeekDurationData = [];
+      fifthWeekDurationData = [];
+
+      multipleFirstWeekDurationData = [];
+      multipleSecondWeekDurationData = [];
+      multipleThirdWeekDurationData = [];
+      multipleFourthWeekDurationData = [];
+      multipleFifthWeekDurationData = [];
+
+      List durationValueDate = [];
+      int remainingHeadacheDurationValue = 0;
+
+      for (int i = 1; i <= totalDaysInCurrentMonth; i++) {
+        String date;
+        String month;
+        if (i < 10) {
+          date = '0$i';
+        } else {
+          date = i.toString();
+        }
+        if (currentMonth < 10) {
+          month = '0$currentMonth';
+        } else {
+          month = currentMonth.toString();
+        }
+        DateTime dateTime =
+        DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
+        var durationData = durationListData.firstWhere(
+                (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (durationData != null) {
+          durationValueDate.add(durationData.value);
+          if (durationData.value > 24) {
+            remainingHeadacheDurationValue = (durationData.value - 24).round();
+          } else {
+            remainingHeadacheDurationValue = 0;
+          }
+          setAllWeekDurationData(i, durationData.value.toDouble(),Constant.highBarColorIntensity);
+        } else if (remainingHeadacheDurationValue > 0) {
+          if (remainingHeadacheDurationValue <= 24) {
+            setAllWeekDurationData(
+                i, remainingHeadacheDurationValue.toDouble(),Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue = 0;
+          } else {
+            setAllWeekDurationData(i, 24,Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue =
+                remainingHeadacheDurationValue - 24;
+          }
+        }else{
+          setAllWeekDurationData(i, 0,Constant.lowBarColorIntensity);
+        }
+        var secondIntensityData = multipleSecondIntensityListData.firstWhere(
+                (element) => element.date.isAtSameMomentAs(dateTime),
+            orElse: () => null);
+        if (secondIntensityData != null) {
+          durationValueDate.add(secondIntensityData.value);
+          if (secondIntensityData.value > 24) {
+            remainingHeadacheDurationValue = (secondIntensityData.value - 24).round();
+          } else {
+            remainingHeadacheDurationValue = 0;
+          }
+          setAllMultipleWeekDurationData(i, secondIntensityData.value.toDouble(),Constant.highBarColorIntensity);
+        } else if (remainingHeadacheDurationValue > 0) {
+          if (remainingHeadacheDurationValue <= 24) {
+            setAllMultipleWeekDurationData(
+                i, remainingHeadacheDurationValue.toDouble(),Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue = 0;
+          } else {
+            setAllMultipleWeekDurationData(i, 24,Constant.mediumBarIntensity);
+            remainingHeadacheDurationValue =
+                remainingHeadacheDurationValue - 24;
+          }
+        }else{
+          setAllMultipleWeekDurationData(i, 0,Constant.lowBarColorIntensity);
+        }
+      }
+      print(
+          'AllIntensityListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
+
+      print(
+          'AllIntensityListData $multipleFirstWeekDurationData $multipleSecondWeekDurationData $multipleThirdWeekDurationData $multipleFourthWeekDurationData');
+
+      barGroup1 = makeMultipleGroupData(
+          0,
+          firstWeekDurationData[0],
+          firstWeekDurationData[1],
+          firstWeekDurationData[2],
+          firstWeekDurationData[3],
+          firstWeekDurationData[4],
+          firstWeekDurationData[5],
+          firstWeekDurationData[6],
+          multipleFirstWeekDurationData[0],
+          multipleFirstWeekDurationData[1],
+          multipleFirstWeekDurationData[2],
+          multipleFirstWeekDurationData[3],
+          multipleFirstWeekDurationData[4],
+          multipleFirstWeekDurationData[5],
+          multipleFirstWeekDurationData[6]);
+      barGroup2 = makeMultipleGroupData(
+          1,
+          secondWeekDurationData[0],
+          secondWeekDurationData[1],
+          secondWeekDurationData[2],
+          secondWeekDurationData[3],
+          secondWeekDurationData[4],
+          secondWeekDurationData[5],
+          secondWeekDurationData[6],
+          multipleSecondWeekDurationData[0],
+          multipleSecondWeekDurationData[1],
+          multipleSecondWeekDurationData[2],
+          multipleSecondWeekDurationData[3],
+          multipleSecondWeekDurationData[4],
+          multipleSecondWeekDurationData[5],
+          multipleSecondWeekDurationData[6]);
+      barGroup3 = makeMultipleGroupData(
+          2,
+          thirdWeekDurationData[0],
+          thirdWeekDurationData[1],
+          thirdWeekDurationData[2],
+          thirdWeekDurationData[3],
+          thirdWeekDurationData[4],
+          thirdWeekDurationData[5],
+          thirdWeekDurationData[6],
+          multipleThirdWeekDurationData[0],
+          multipleThirdWeekDurationData[1],
+          multipleThirdWeekDurationData[2],
+          multipleThirdWeekDurationData[3],
+          multipleThirdWeekDurationData[4],
+          multipleThirdWeekDurationData[5],
+          multipleThirdWeekDurationData[6]);
+      barGroup4 = makeMultipleGroupData(
+          3,
+          fourthWeekDurationData[0],
+          fourthWeekDurationData[1],
+          fourthWeekDurationData[2],
+          fourthWeekDurationData[3],
+          fourthWeekDurationData[4],
+          fourthWeekDurationData[5],
+          fourthWeekDurationData[6],
+          multipleFourthWeekDurationData[0],
+          multipleFourthWeekDurationData[1],
+          multipleFourthWeekDurationData[2],
+          multipleFourthWeekDurationData[3],
+          multipleFourthWeekDurationData[4],
+          multipleFourthWeekDurationData[5],
+          multipleFourthWeekDurationData[6]);
+
+      if (totalDaysInCurrentMonth > 28) {
+        if(totalDaysInCurrentMonth == 29) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            multipleFifthWeekDurationData[0],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        } else if (totalDaysInCurrentMonth == 30) {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekDurationData[0],
+            fifthWeekDurationData[1],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        } else {
+          barGroup5 = makeMultipleGroupData(
+            4,
+            fifthWeekDurationData[0],
+            fifthWeekDurationData[1],
+            fifthWeekDurationData[2],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+          );
+        }
+      }
+      if (totalDaysInCurrentMonth > 28) {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
+      } else {
+        items = [barGroup1, barGroup2, barGroup3, barGroup4];
+      }
+
+      rawBarGroups = items;
+      showingBarGroups = rawBarGroups;
     }
   }
 
@@ -717,11 +1029,146 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
     }
   }
 
+
+  void setAllMultipleWeekDurationData(int i , double durationData , int durationColorIntensity){
+    if (i <= 7) {
+      multipleFirstWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 7 && i <= 14) {
+      multipleSecondWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 14 && i <= 21) {
+      multipleThirdWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 21 && i <= 28) {
+      multipleFourthWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+    if (i > 28) {
+      multipleFifthWeekDurationData.add(TrendsDurationColorModel(durationValue: durationData,durationColorIntensity: durationColorIntensity));
+    }
+
+  }
+
+  BarChartGroupData makeMultipleGroupData(
+      int x,
+      TrendsDurationColorModel firstMultipleHeadache1,
+      TrendsDurationColorModel firstMultipleHeadache2,
+      TrendsDurationColorModel firstMultipleHeadache3,
+      TrendsDurationColorModel firstMultipleHeadache4,
+      TrendsDurationColorModel firstMultipleHeadache5,
+      TrendsDurationColorModel firstMultipleHeadache6,
+      TrendsDurationColorModel firstMultipleHeadache7,
+      TrendsDurationColorModel secondMultipleHeadache1,
+      TrendsDurationColorModel secondMultipleHeadache2,
+      TrendsDurationColorModel secondMultipleHeadache3,
+      TrendsDurationColorModel secondMultipleHeadache4,
+      TrendsDurationColorModel secondMultipleHeadache5,
+      TrendsDurationColorModel secondMultipleHeadache6,
+      TrendsDurationColorModel secondMultipleHeadache7) {
+    return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache1.durationValue, secondMultipleHeadache1.durationValue),
+        rodStackItems: setRodStack(firstMultipleHeadache1.durationValue, secondMultipleHeadache1.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache2.durationValue, secondMultipleHeadache2.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache2.durationValue, secondMultipleHeadache2.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache3.durationValue, secondMultipleHeadache3.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache3.durationValue, secondMultipleHeadache3.durationValue)
+        ,
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache4.durationValue, secondMultipleHeadache4.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache4.durationValue, secondMultipleHeadache4.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache5.durationValue, secondMultipleHeadache5.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache5.durationValue, secondMultipleHeadache5.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache6.durationValue, secondMultipleHeadache6.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache6.durationValue, secondMultipleHeadache6.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+      BarChartRodData(
+        y: setAxisValue(firstMultipleHeadache7.durationValue, secondMultipleHeadache7.durationValue),
+        colors: [Colors.transparent],
+        rodStackItems: setRodStack(firstMultipleHeadache7.durationValue, secondMultipleHeadache7.durationValue),
+        width: width,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+      ),
+    ]);
+  }
+
+  List<BarChartRodStackItem> setRodStack(
+      double firstMultipleHeadache1, double secondMultipleHeadache1) {
+    var maxValue, minValue = 0.0;
+    if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
+      maxValue = firstMultipleHeadache1;
+      minValue = secondMultipleHeadache1;
+    } else {
+      minValue = firstMultipleHeadache1;
+      maxValue = secondMultipleHeadache1;
+    }
+    return [
+      BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
+      BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
+    ];
+  }
+
+  double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {
+    var maxValue;
+    if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
+      maxValue = firstMultipleHeadache1;
+    } else {
+      maxValue = secondMultipleHeadache1;
+    }
+    return maxValue;
+  }
+
   String setLeftAxisTitlesValue(double value) {
     if (value % (axesMaxValue / 10).ceil() == 0) {
       return '${value.toInt()}';
     } else
       return '0';
+  }
+
+  Color setHeadacheColor() {
+    if(firstWeekDurationData.length > 0  && multipleFirstWeekDurationData.length> 0) {
+      if (firstWeekDurationData[0].durationValue >= multipleFirstWeekDurationData[0].durationValue) {
+        headacheColorChanged = true;
+        return Constant.otherHeadacheColor;
+      } else{
+        headacheColorChanged = false;
+        return Constant.migraineColor;
+      }
+
+    }else return Colors.transparent;
   }
 }
 class TrendsDurationColorModel {

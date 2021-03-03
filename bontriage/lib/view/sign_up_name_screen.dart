@@ -84,6 +84,8 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
           child: TextField(
+            maxLength: 40,
+            
             textCapitalization: TextCapitalization.sentences,
             onEditingComplete: () {
               widget.selectedAnswerCallBack(
