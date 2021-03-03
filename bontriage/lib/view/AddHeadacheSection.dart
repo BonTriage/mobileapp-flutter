@@ -252,7 +252,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       (element) => element.questionTag == 'administered',
                   orElse: () => null);
               if (selectedAnswers != null) {
-                DateTime dateTime = DateTime.parse(selectedAnswers.answer).toLocal();
+                DateTime dateTime = DateTime.parse(selectedAnswers.answer);
                 _medicineTimeList[whichMedicationItemSelected][0] = Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
               }
             }
@@ -782,7 +782,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           _medicationDateTime = DateTime(_medicationDateTime.year, _medicationDateTime.month, _medicationDateTime.day, _selectedDateTime.);*/
 
         try {
-          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]).toLocal();
+          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]);
         } catch(e) {
           print(e.toString());
         }
@@ -1276,7 +1276,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(_numberOfDosageAddedList[whichMedicationItemSelected], (index) {
           try {
-            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]).toLocal();
+            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]);
           } catch(e) {
             print(e.toString());
           }

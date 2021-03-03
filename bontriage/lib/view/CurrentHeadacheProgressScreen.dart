@@ -35,7 +35,7 @@ class _CurrentHeadacheProgressScreenState
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now().toUtc();
+    _dateTime = DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now()));
 
     _currentHeadacheProgressBloc = CurrentHeadacheProgressBloc();
 
@@ -387,7 +387,7 @@ class _CurrentHeadacheProgressScreenState
     try {
       _currentUserHeadacheModel = currentUserHeadacheModel;
       DateTime dateTime = DateTime.parse(currentUserHeadacheModel.selectedDate);
-      _storedDateTime = dateTime.toLocal();
+      _storedDateTime = dateTime;
       Duration duration = _dateTime.difference(dateTime);
 
       /*if(duration.inDays.abs() < 3) {
@@ -438,7 +438,7 @@ class _CurrentHeadacheProgressScreenState
       _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
     }*/
 
-    _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    _currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
     //await SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
 
     Navigator.pushNamed(context,

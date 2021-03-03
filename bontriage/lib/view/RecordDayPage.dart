@@ -3,6 +3,7 @@ import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/LogDayScreenArgumentModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class RecordDayPage extends StatefulWidget {
@@ -409,9 +410,9 @@ class _RecordDayPageState extends State<RecordDayPage>
           CurrentUserHeadacheModel(
               userId: userProfileInfoData.userId,
               isOnGoing: false,
-              selectedDate: dateTime.toUtc().toIso8601String(),
+              selectedDate: Utils.getDateTimeInUtcFormat(dateTime),
               isFromRecordScreen: true,
-              selectedEndDate: endDateTime.toUtc().toIso8601String(),
+              selectedEndDate: Utils.getDateTimeInUtcFormat(endDateTime),
               headacheId: widget.onGoingHeadacheId
           );
 

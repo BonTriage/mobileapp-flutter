@@ -52,14 +52,16 @@ class MoreMyProfileRepository {
 
   Future<String>_getProfileDataPayload(List<SelectedAnswers> selectedAnswers) async {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
+
+    DateTime dateTime = DateTime.now();
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType = Constant.profileEventType;
     if (userProfileInfoData != null)
       signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());
-    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(dateTime);
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       selectedAnswers.forEach((model) {
@@ -67,7 +69,7 @@ class MoreMyProfileRepository {
             MobileEventDetails(
                 questionTag: model.questionTag,
                 questionJson: "",
-                updatedAt: "2020-10-08T08:18:21Z",
+                updatedAt: Utils.getDateTimeInUtcFormat(dateTime),
                 value: [model.answer]));
       });
     } catch (e) {

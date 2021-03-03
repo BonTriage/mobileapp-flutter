@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class DateWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class DateWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Duration duration = weekDateData.difference(DateTime.now());
+                Duration duration = weekDateData.difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
                 if (duration.inSeconds <= 0)
                   navigateToOtherScreenCallback(
                       Constant.onCalendarHeadacheLogDayDetailsScreenRouter,

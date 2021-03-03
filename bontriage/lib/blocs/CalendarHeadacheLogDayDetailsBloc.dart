@@ -147,7 +147,7 @@ class CalendarHeadacheLogDayDetailsBloc {
           if(headacheStartTimeData != null) {
             DateTime startDataTime = DateTime.tryParse(headacheStartTimeData.value);
             if(startDataTime != null) {
-              startDataTime = startDataTime.toLocal();
+              startDataTime = startDataTime;
               headacheInfo = '$headacheInfo\nStart Time: ${Utils.getTimeInAmPmFormat(startDataTime.hour, startDataTime.minute)}';
             }
           }
@@ -275,7 +275,7 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     try {
                       medicationDateTime =
-                          DateTime.parse(medicationTimeValues[index]).toLocal();
+                          DateTime.parse(medicationTimeValues[index]);
                     } catch (e) {
                       print(e);
                     }
@@ -292,7 +292,7 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     try {
                       medDateTime =
-                          DateTime.parse(medicationTimeValues[index]).toLocal();
+                          DateTime.parse(medicationTimeValues[index]);
                     } catch (e) {
                       print(e);
                     }

@@ -645,14 +645,14 @@ class _TrendsScreenState extends State<TrendsScreen> {
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
 
-    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     currentUserHeadacheModel.isOnGoing = false;
-    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    currentUserHeadacheModel.selectedEndDate =  Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();

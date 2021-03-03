@@ -9,6 +9,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/NetworkService.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class WelcomeOnBoardProfileRepository {
@@ -68,10 +69,12 @@ class WelcomeOnBoardProfileRepository {
       SignUpOnBoardSelectedAnswersModel signUpOnBoardSelectedAnswersModel) {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
         SignUpOnBoardAnswersRequestModel();
+    DateTime dateTime = DateTime.now();
+
     signUpOnBoardAnswersRequestModel.eventType = "profile";
     signUpOnBoardAnswersRequestModel.userId = 4551;
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
-    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(dateTime);
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
@@ -79,7 +82,7 @@ class WelcomeOnBoardProfileRepository {
             MobileEventDetails(
                 questionTag: model.questionTag,
                 questionJson: "",
-                updatedAt: "2020-10-08T08:18:21Z",
+                updatedAt: Utils.getDateTimeInUtcFormat(dateTime),
                 value: [model.answer]));
       });
     } catch (e) {

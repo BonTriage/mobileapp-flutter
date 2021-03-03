@@ -57,10 +57,10 @@ class _TimeSectionState extends State<TimeSection>
 
     if (widget.currentUserHeadacheModel != null) {
       try {
-        _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate).toLocal();
+        _selectedStartDate = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
         _selectedStartDate = DateTime(_selectedStartDate.year, _selectedStartDate.month, _selectedStartDate.day, _selectedStartDate.hour, _selectedStartDate.minute, 0, 0);
         if(!widget.currentUserHeadacheModel.isOnGoing) {
-          _selectedEndDate = DateTime.tryParse(widget.currentUserHeadacheModel.selectedEndDate).toLocal();
+          _selectedEndDate = DateTime.tryParse(widget.currentUserHeadacheModel.selectedEndDate);
           _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0);
           _selectedEndTime = _selectedEndDate;
           _selectedEndDateAndTime = _selectedEndDate;
@@ -559,7 +559,7 @@ class _TimeSectionState extends State<TimeSection>
                           "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
                     widget.currentUserHeadacheModel
                       ..isOnGoing = false
-                      ..selectedEndDate = _selectedEndDate.toUtc().toIso8601String();
+                      ..selectedEndDate = Utils.getDateTimeInUtcFormat(_selectedEndDate);
 
                     //this condition is put because we don't want to update headache data in db when user comes from record screen
                     /*if(!(widget.currentUserHeadacheModel.isFromRecordScreen ?? false))
