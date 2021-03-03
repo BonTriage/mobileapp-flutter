@@ -66,6 +66,9 @@ class SignUpOnBoardThirdStepRepository {
           signUpOnBoardSelectedAnswersModel) async {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
         SignUpOnBoardAnswersRequestModel();
+
+    DateTime dateTime = DateTime.now();
+
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType =
@@ -74,8 +77,8 @@ class SignUpOnBoardThirdStepRepository {
       signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     else
       signUpOnBoardAnswersRequestModel.userId = 4214;
-    signUpOnBoardAnswersRequestModel.calendarEntryAt = "2020-10-08T08:17:51Z";
-    signUpOnBoardAnswersRequestModel.updatedAt = "2020-10-08T08:18:21Z";
+    signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+    signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(dateTime);
     signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
     try {
       signUpOnBoardSelectedAnswersModel.selectedAnswers.forEach((model) {
@@ -88,14 +91,14 @@ class SignUpOnBoardThirdStepRepository {
                 MobileEventDetails(
                     questionTag: model.questionTag,
                     questionJson: "",
-                    updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                    updatedAt: Utils.getDateTimeInUtcFormat(dateTime),
                     value: valuesList));
           } else {
             signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
                 MobileEventDetails(
                     questionTag: model.questionTag,
                     questionJson: "",
-                    updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                    updatedAt: Utils.getDateTimeInUtcFormat(dateTime),
                     value: [model.answer]));
           }
         } on FormatException catch(e) {
@@ -105,7 +108,7 @@ class SignUpOnBoardThirdStepRepository {
               MobileEventDetails(
                   questionTag: model.questionTag,
                   questionJson: "",
-                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                  updatedAt: Utils.getDateTimeInUtcFormat(dateTime),
                   value: [model.answer]));
         }
       });

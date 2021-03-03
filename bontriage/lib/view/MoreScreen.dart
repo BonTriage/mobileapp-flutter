@@ -151,7 +151,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   ///This method is used to log out from the app and redirecting to the welcome start assessment screen
   void _logOutFromApp() async {
-    var result = await Utils.showConfirmationDialog(context, 'Are you sure want to log out?');
+    var result = await Utils.showConfirmationDialog(context, 'Are you sure want to log out?', 'Logout?');
     if(result == 'Yes') {
       try {
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

@@ -442,11 +442,48 @@ class Utils {
   }
 
   static String getDateTimeInUtcFormat(DateTime dateTime) {
-    String dateTimeIsoString = dateTime
+    /*String dateTimeIsoString = dateTime
         .toUtc()
         .toIso8601String();
-    List<String> splitedString = dateTimeIsoString.split('.');
-    return '${splitedString[0]}Z';
+    List<String> splitedString = dateTimeIsoString.split('.');*/
+
+    String year, month, date, hour, minute, second;
+
+    year = dateTime.year.toString();
+
+    if(dateTime.month < 10) {
+      month = '0${dateTime.month}';
+    } else {
+      month = dateTime.month.toString();
+    }
+
+    if(dateTime.day < 10) {
+      date = '0${dateTime.day}';
+    } else {
+      date = dateTime.day.toString();
+    }
+
+    if(dateTime.hour < 10) {
+      hour = '0${dateTime.hour}';
+    } else {
+      hour = dateTime.hour.toString();
+    }
+
+    if(dateTime.minute < 10) {
+      minute = '0${dateTime.minute}';
+    } else {
+      minute = dateTime.minute.toString();
+    }
+
+    if(dateTime.second < 10) {
+      second = '0${dateTime.second}';
+    } else {
+      second = dateTime.second.toString();
+    }
+
+    print('$year-$month-${date}T$hour:$minute:${second}Z');
+
+    return '$year-$month-${date}T$hour:$minute:${second}Z';
   }
 
   static void showTriggerSelectionDialog(BuildContext context) {
@@ -485,7 +522,7 @@ class Utils {
   /// Current Date with Time
   static firstDateWithCurrentMonthAndTimeInUTC(
       int currentMonth, int currentYear, int totalDaysInCurrentMonth) {
-    String currentDate;
+    //String currentDate;
     DateTime _dateTime = DateTime.now();
     DateTime firstDayDateTime = DateTime(
         currentYear,
@@ -495,16 +532,16 @@ class Utils {
         _dateTime.minute,
         _dateTime.second);
 
-    currentDate = firstDayDateTime.toUtc().toIso8601String();
+    /*currentDate = firstDayDateTime.toUtc().toIso8601String();
     List<String> splitString = currentDate.split('.');
-    print('Current Date??????${splitString[0]}Z');
+    print('Current Date??????${splitString[0]}Z');*/
     return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
 
   /// Current Date with Time
   static lastDateWithCurrentMonthAndTimeInUTC(
       int currentMonth, int currentYear, int totalDaysInCurrentMonth) {
-    String currentDate;
+    //String currentDate;
     DateTime _dateTime = DateTime.now();
     DateTime firstDayDateTime = DateTime(
         currentYear,
@@ -514,9 +551,9 @@ class Utils {
         _dateTime.minute,
         _dateTime.second);
 
-    currentDate = firstDayDateTime.toUtc().toIso8601String();
+    /*currentDate = firstDayDateTime.toUtc().toIso8601String();
     print('');
-    List<String> splitString = currentDate.split('.');
+    List<String> splitString = currentDate.split('.');*/
     //return '${splitString[0]}Z';
     return '${firstDayDateTime.year}-${firstDayDateTime.month}-${firstDayDateTime.day}T00:00:00Z';
   }
@@ -599,7 +636,7 @@ class Utils {
     );
   }
 
-  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent) async{
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle]) async{
     var result = await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -607,7 +644,7 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ConfirmationDialog(dialogContent: dialogContent,),
+          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,),
         );
       },
     );

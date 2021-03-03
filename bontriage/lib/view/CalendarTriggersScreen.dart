@@ -168,7 +168,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       onTap: () {
                         DateTime dateTime =
                             DateTime(_dateTime.year, _dateTime.month + 1);
-                        Duration duration = dateTime.difference(DateTime.now());
+                        Duration duration = dateTime.difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
                         if (duration.inSeconds < 0) {
                           _dateTime = dateTime;
                           _onStartDateSelected(dateTime);

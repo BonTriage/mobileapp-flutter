@@ -40,6 +40,12 @@ class _CalendarHeadacheLogDayDetailsScreenState
   }
 
   @override
+  void dispose() {
+    calendarHeadacheLogDayDetailsBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(

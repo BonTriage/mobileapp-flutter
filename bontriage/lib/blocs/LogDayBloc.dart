@@ -231,7 +231,7 @@ class LogDayBloc {
             selectedValuesList = [];
 
             medicationSelectedDataModel.selectedMedicationDateList.forEach((dateElement) {
-              selectedValuesList.add(DateTime.parse(dateElement).toUtc().toIso8601String());
+              selectedValuesList.add(Utils.getDateTimeInUtcFormat(DateTime.parse(dateElement)));
             });
 
             medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));

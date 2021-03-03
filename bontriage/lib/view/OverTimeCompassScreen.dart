@@ -620,15 +620,13 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         orElse: () => null);
     if (userDuration != null) {
     // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
-      userDurationValue = (userDuration.value *baseMaxValue).round() ;
+      _compassTutorialModel.currentMonthDuration = userDuration.total.round();
+      userDurationValue = (userDuration.value * baseMaxValue).round() ;
       if(userDurationValue > 10){
         userDurationValue = 10;
-      }else{
+      }else {
         userDurationValue = userDurationValue;
-
       }
-      _compassTutorialModel.currentMonthDuration = (userDuration.total).round();
-
     } else {
       userDurationValue = 0;
       _compassTutorialModel.currentMonthDuration = 0;
@@ -653,10 +651,11 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDisabilityValue =  (userDisability.value * baseMaxValue)~/ userDisability.max;
       if(userDisabilityValue >10){
         userDisabilityValue = 10;
-      }else{
+      }else {
         userDisabilityValue = userDisabilityValue;
       }
     } else {
+      _compassTutorialModel.currentMonthDisability = 0;
       userDisabilityValue = 0;
     }
 
@@ -917,14 +916,14 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
 
-    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     currentUserHeadacheModel.isOnGoing = false;
-    currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
+    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();

@@ -26,7 +26,7 @@ class CalendarUtil {
   List<Widget> drawMonthCalendar(
       {int yy = 2020, int mm = 1, int dd = 1, bool drawCurrentMonth = false}) {
     List<Widget> monthData = [];
-    List<int> currentWeekConsData = [];
+    List<CurrentWeekConsData> currentWeekConsData = [];
     var _firstDateOfMonth = DateTime.utc(yy, mm, dd);
     var daysInMonth = Utils.daysInCurrentMonth(mm, yy);
     var weekDay =
@@ -62,26 +62,26 @@ class CalendarUtil {
       if (n < weekDay || n > daysInMonth + weekDay) {
         monthData.add(Container());
       } else {
-        if ((currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
+        if ((currentWeekConsData[i].widgetType == 0 || currentWeekConsData[i].widgetType == 1) &&
             (n + 1) % 7 != 0) {
 
           var j = i + 1;
           if (j < daysInMonth &&
-              (currentWeekConsData[i] == 0) &&
-              (currentWeekConsData[j] == 0)) {
+              (currentWeekConsData[i].widgetType == 0) &&
+              (currentWeekConsData[j].widgetType == 0) && _checkForConsecutiveHeadacheId(currentWeekConsData[i], currentWeekConsData[j])) {
             monthData.add(ConsecutiveSelectedDateWidget(
                 weekDateData:_firstDateOfMonth,
                 calendarType:calenderType,
-                calendarDateViewType:currentWeekConsData[i],
+                calendarDateViewType:currentWeekConsData[i].widgetType,
                 triggersListData:triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
           } else {
             monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
-                calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
+                calendarType:calenderType,calendarDateViewType: currentWeekConsData[i].widgetType,triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
           }
           i++;
         } else {
           monthData.add(DateWidget(weekDateData:_firstDateOfMonth,
-              calendarType:calenderType,calendarDateViewType: currentWeekConsData[i],triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
+              calendarType:calenderType,calendarDateViewType: currentWeekConsData[i].widgetType,triggersListData: triggersListData,userMonthTriggersListData:userMonthTriggersListData,selectedDayHeadacheIntensity: selectedDayHeadacheIntensity,navigateToOtherScreenCallback: navigateToOtherScreenCallback,));
 
           i++;
         }
@@ -96,13 +96,25 @@ class CalendarUtil {
 // 0- Headache Data
   // 1- LogDay Data
   // 2- No Headache and No Log
-  void filterSelectedLogAndHeadacheDayList(daysInMonth, List<int> currentWeekConsData) {
+  void filterSelectedLogAndHeadacheDayList(daysInMonth, List<CurrentWeekConsData> currentWeekConsDataList) {
       for (int i = 0; i < daysInMonth; i++) {
         var userCalendarData = userLogHeadacheDataCalendarModel
             .addHeadacheListData
             .firstWhere((element) {
           if (int.parse(element.selectedDay) - 1 == i) {
-            currentWeekConsData.add(0);
+            CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+            currentWeekConsData.widgetType = 0;
+            currentWeekConsData.eventIdList = [];
+
+            print(element.headacheListData);
+
+            if(element.headacheListData != null) {
+              element.headacheListData.forEach((headacheElement) {
+                print('in here');
+                currentWeekConsData.eventIdList.add(headacheElement.id);
+              });
+            }
+            currentWeekConsDataList.add(currentWeekConsData);
             return true;
           }
           return false;
@@ -111,12 +123,18 @@ class CalendarUtil {
           userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere(
                   (element) {
                 if (int.parse(element.selectedDay) - 1 == i) {
-                  currentWeekConsData.add(1);
+                  CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+                  currentWeekConsData.widgetType = 1;
+                  currentWeekConsData.eventIdList = [];
+                  currentWeekConsDataList.add(currentWeekConsData);
                   return true;
                 }
                 return false;
               }, orElse: () {
-            currentWeekConsData.add(2);
+            CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+            currentWeekConsData.widgetType = 2;
+            currentWeekConsData.eventIdList = [];
+            currentWeekConsDataList.add(currentWeekConsData);
             return null;
           });
         }
@@ -124,6 +142,30 @@ class CalendarUtil {
       }
 
 
-    print(currentWeekConsData);
+    print(currentWeekConsDataList);
   }
+
+  bool _checkForConsecutiveHeadacheId(CurrentWeekConsData currentWeekConsData1, CurrentWeekConsData currentWeekConsData2) {
+    bool isSatisfied = false;
+
+    for (int i = 0; i < currentWeekConsData1.eventIdList.length; i++) {
+      int eventId = currentWeekConsData1.eventIdList[i];
+
+      var eventIdElement = currentWeekConsData2.eventIdList.firstWhere((element) => element == eventId, orElse: () => null);
+
+      if(eventIdElement != null) {
+        isSatisfied = true;
+        break;
+      }
+    }
+
+    return isSatisfied;
+  }
+}
+
+class CurrentWeekConsData {
+  int widgetType;
+  List<int> eventIdList;
+
+  CurrentWeekConsData({this.widgetType, this.eventIdList});
 }

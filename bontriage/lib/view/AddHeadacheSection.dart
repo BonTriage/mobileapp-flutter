@@ -43,6 +43,7 @@ class AddHeadacheSection extends StatefulWidget {
   final CurrentUserHeadacheModel currentUserHeadacheModel;
   final bool isFromRecordsScreen;
   final String uiHints;
+  final DateTime selectedDateTime;
 
   AddHeadacheSection(
       {Key key,
@@ -67,7 +68,8 @@ class AddHeadacheSection extends StatefulWidget {
       this.currentUserHeadacheModel,
       this.doubleTapSelectedAnswer,
       this.isFromRecordsScreen = false,
-      this.uiHints})
+      this.uiHints,
+      this.selectedDateTime})
       : super(key: key);
 
   @override
@@ -91,6 +93,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   String previousMedicationTag;
   List<SelectedAnswers> selectedAnswerListOfTriggers = [];
   List<List<String>> _additionalMedicationDosage = [];
+  DateTime _selectedDateTime;
 
   ///Method to get section widget
   Widget _getSectionWidget() {
@@ -249,7 +252,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       (element) => element.questionTag == 'administered',
                   orElse: () => null);
               if (selectedAnswers != null) {
-                DateTime dateTime = DateTime.parse(selectedAnswers.answer).toLocal();
+                DateTime dateTime = DateTime.parse(selectedAnswers.answer);
                 _medicineTimeList[whichMedicationItemSelected][0] = Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
               }
             }
@@ -775,8 +778,11 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
         DateTime _medicationDateTime = DateTime.now();
 
+        /*if(_selectedDateTime != null)
+          _medicationDateTime = DateTime(_medicationDateTime.year, _medicationDateTime.month, _medicationDateTime.day, _selectedDateTime.);*/
+
         try {
-          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]).toLocal();
+          _medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][0]);
         } catch(e) {
           print(e.toString());
         }
@@ -1270,7 +1276,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(_numberOfDosageAddedList[whichMedicationItemSelected], (index) {
           try {
-            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]).toLocal();
+            medicationDateTime = DateTime.parse(_medicineTimeList[whichMedicationItemSelected][index + 1]);
           } catch(e) {
             print(e.toString());
           }
@@ -1586,6 +1592,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   @override
   void initState() {
     super.initState();
+
+    _selectedDateTime = widget.selectedDateTime;
+
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 

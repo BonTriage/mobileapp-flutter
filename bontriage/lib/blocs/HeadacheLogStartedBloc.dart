@@ -1,7 +1,10 @@
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 
 class HeadacheLogStartedBloc {
+
+  ///This method is used to store headache data into DB
   Future<CurrentUserHeadacheModel>
       storeHeadacheDetailsIntoLocalDatabase() async {
     var userProfileInfoData =
@@ -18,7 +21,7 @@ class HeadacheLogStartedBloc {
       DateTime dateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
       currentUserHeadacheModel = CurrentUserHeadacheModel(
           userId: userProfileInfoData.userId,
-          selectedDate: dateTime.toUtc().toIso8601String(),
+          selectedDate: Utils.getDateTimeInUtcFormat(dateTime),
           isOnGoing: true);
       await SignUpOnBoardProviders.db
           .insertUserCurrentHeadacheData(currentUserHeadacheModel);

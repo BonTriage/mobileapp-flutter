@@ -138,10 +138,22 @@ class CalendarScreenBloc {
   void setCalendarHeadacheData(List<Headache> headache,
       UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel) {
     headache.forEach((element) {
-      SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
-      _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
-      DateTime _dateTime = DateTime.parse(element.calendarEntryAt).toLocal();
-      _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
+
+      DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
+
+      var userSelectedHeadacheDayData =  userLogHeadacheDataCalendarModel.addHeadacheListData.firstWhere((intensityElementData) => intensityElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
+
+      if(userSelectedHeadacheDayData == null) {
+        SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
+        _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
+        _selectedHeadacheLogDate.headacheListData = [element];
+        _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();
+        userLogHeadacheDataCalendarModel.addHeadacheListData.add(_selectedHeadacheLogDate);
+      } else {
+        userSelectedHeadacheDayData.headacheListData.add(element);
+      }
+
+
       var userSelectedHeadacheDayIntensityData =  userLogHeadacheDataCalendarModel.addHeadacheIntensityListData.firstWhere((intensityElementData) => intensityElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
       if(userSelectedHeadacheDayIntensityData != null){
         SelectedDayHeadacheIntensity _selectedDayHeadacheIntensity = SelectedDayHeadacheIntensity();
@@ -168,10 +180,7 @@ class CalendarScreenBloc {
           _selectedDayHeadacheIntensity.intensityValue = "0";
         }
         userLogHeadacheDataCalendarModel.addHeadacheIntensityListData.add(_selectedDayHeadacheIntensity);
-        userLogHeadacheDataCalendarModel.addHeadacheListData.add(_selectedHeadacheLogDate);
       }
-
-
     });
   }
 
@@ -184,7 +193,7 @@ class CalendarScreenBloc {
       triggers.forEach((element) {
         SelectedHeadacheLogDate _selectedHeadacheLogDate =  SelectedHeadacheLogDate();
         _selectedHeadacheLogDate.formattedDate = element.calendarEntryAt;
-        DateTime _dateTime = DateTime.parse(element.calendarEntryAt).toLocal();
+        DateTime _dateTime = DateTime.parse(element.calendarEntryAt);
         var userSelectedHeadacheDayTriggersData =  userLogHeadacheDataCalendarModel.addTriggersListData.firstWhere((triggersElementData) => triggersElementData.selectedDay == _dateTime.day.toString(),orElse: ()=> null);
            if(userSelectedHeadacheDayTriggersData != null){
              _selectedHeadacheLogDate.selectedDay = _dateTime.day.toString();

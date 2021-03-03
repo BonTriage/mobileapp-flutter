@@ -719,6 +719,7 @@ class Constant {
   static String migraineIcon = 'images/migraine_icon.png';
   static String mealIcon = 'images/meal_icon.png';
   static String pillIcon = 'images/pill_icon.png';
+  static String alcoholIcon = 'images/alcohol_icon.png';
   static String sleepIcon = 'images/sleep_icon.png';
   static String waterDropIcon = 'images/water_drop_icon.png';
   static String weatherIcon = 'images/weather_icon.png';
