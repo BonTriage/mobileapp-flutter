@@ -688,7 +688,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           return Constant.mildTriggerColor;
         } else if (clickedValue >= 4 && clickedValue <= 7) {
           return Constant.moderateTriggerColor;
-        }else if(clickedValue >= 8 && clickedValue == 10)
+        }else if(clickedValue >7)
           return Constant.severeTriggerColor;
         else return Colors.transparent;
 
@@ -705,9 +705,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       return [Constant.mildTriggerColor];
     } else if (barChartValue >= 4 && barChartValue <= 7) {
       return [Constant.moderateTriggerColor];
-    } else if(barChartValue >= 8 && barChartValue == 10)
+    } else if(barChartValue >7) {
       return [Constant.severeTriggerColor];
-    else return [Colors.transparent];
+    } else return [Colors.transparent];
   }
 
   void setAllWeekIntensityData(int i, double intensityData) {
