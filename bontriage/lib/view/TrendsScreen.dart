@@ -1,4 +1,5 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsTrendsScreenBloc.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
@@ -21,12 +22,14 @@ class TrendsScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
   const TrendsScreen(
       {Key key,
       this.showApiLoaderCallback,
       this.navigateToOtherScreenCallback,
-      this.openActionSheetCallback})
+      this.openActionSheetCallback,
+      this.openDatePickerCallback})
       : super(key: key);
 
   @override
@@ -419,16 +422,19 @@ class _TrendsScreenState extends State<TrendsScreen> {
       TrendsIntensityScreen(
         editGraphViewFilterModel: _editGraphViewFilterModel,
         updateTrendsDataCallback: _updateTrendsData,
+        openDatePickerCallback: widget.openDatePickerCallback,
       ),
       TrendsDisabilityScreen(
         editGraphViewFilterModel: _editGraphViewFilterModel,
         updateTrendsDataCallback: _updateTrendsData,
+        openDatePickerCallback: widget.openDatePickerCallback,
       ),
       TrendsFrequencyScreen(
         editGraphViewFilterModel: _editGraphViewFilterModel,
         updateTrendsDataCallback: _updateTrendsData,
+        openDatePickerCallback: widget.openDatePickerCallback,
       ),
-      TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel,updateTrendsDataCallback: _updateTrendsData),
+      TrendsDurationScreen(editGraphViewFilterModel: _editGraphViewFilterModel,updateTrendsDataCallback: _updateTrendsData, openDatePickerCallback: widget.openDatePickerCallback,),
     ];
   }
 

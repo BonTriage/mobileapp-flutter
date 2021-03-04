@@ -19,12 +19,14 @@ class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
   const OverTimeCompassScreen(
       {Key key,
       this.openActionSheetCallback,
       this.showApiLoaderCallback,
-      this.navigateToOtherScreenCallback})
+      this.navigateToOtherScreenCallback,
+      this.openDatePickerCallback})
       : super(key: key);
 
   @override
@@ -532,8 +534,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
-      CupertinoDatePickerMode cupertinoDatePickerMode) {
-    showModalBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) async {
+    /*showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -543,7 +545,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         builder: (context) => DateTimePicker(
               cupertinoDatePickerMode: cupertinoDatePickerMode,
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));
+            ));*/
+
+    var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+
+    if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
+      _onStartDateSelected(resultFromActionSheet);
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -556,7 +563,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    setState(() {
+    //setState(() {
       totalDaysInCurrentMonth =
           Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
       firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
@@ -577,7 +584,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       });
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
           selectedHeadacheName);
-    });
+    //});
   }
 
   void requestService(String firstDayOfTheCurrentMonth,

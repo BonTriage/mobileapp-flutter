@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
@@ -31,8 +32,9 @@ class TabNavigator extends StatelessWidget {
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
 
   final Function(Questions questions, Function(int) selectedAnswerCallback) openTriggerMedicationActionSheetCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
-  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback});
+  TabNavigator({this.navigatorKey, this.root, this.openActionSheetCallback,this.navigateToOtherScreenCallback, this.openTriggerMedicationActionSheetCallback, this.showApiLoaderCallback, this.getButtonsGlobalKeyCallback, this.openDatePickerCallback});
 
 
   Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
@@ -80,6 +82,7 @@ class TabNavigator extends StatelessWidget {
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
             showApiLoaderCallback: showApiLoaderCallback,
             openActionSheetCallback: openActionSheetCallback,
+            openDatePickerCallback: openDatePickerCallback,
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {
