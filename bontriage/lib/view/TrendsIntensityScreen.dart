@@ -14,9 +14,10 @@ import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
   const TrendsIntensityScreen(
-      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback})
+      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback, this.openDatePickerCallback})
       : super(key: key);
 
   @override
@@ -643,8 +644,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
-      CupertinoDatePickerMode cupertinoDatePickerMode) {
-    showModalBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) async {
+    /*showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -654,7 +655,11 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
         builder: (context) => DateTimePicker(
               cupertinoDatePickerMode: cupertinoDatePickerMode,
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));
+            ));*/
+    var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+
+    if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
+      _onStartDateSelected(resultFromActionSheet);
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {

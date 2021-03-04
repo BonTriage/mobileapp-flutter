@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompareCompassScreen.dart';
@@ -11,9 +12,10 @@ class CompassScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
   final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
   const CompassScreen(
-      {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback})
+      {Key key, this.showApiLoaderCallback, this.navigateToOtherScreenCallback, this.openActionSheetCallback, this.openDatePickerCallback})
       : super(key: key);
 
   @override
@@ -197,8 +199,8 @@ class _CompassScreenState extends State<CompassScreen> {
         ];
       });*/
       pageViewWidgetList = [
-        OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
-        CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
+        OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback, openDatePickerCallback: widget.openDatePickerCallback,),
+        CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback, openDatePickerCallback: widget.openDatePickerCallback,),
       ];
       initPageViewSink.add('Data');
     }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassScreen.dart';
@@ -8,11 +9,11 @@ import 'CalendarScreen.dart';
 class RecordScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Function(Stream, Function) showApiLoaderCallback;
-  final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
-  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
-
-  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.openActionSheetCallback}) : super(key: key);
+  const RecordScreen({Key key, this.onPush, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.openActionSheetCallback, this.openDatePickerCallback}) : super(key: key);
 
   @override
   _RecordScreenState createState() => _RecordScreenState();
@@ -34,7 +35,6 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
   @override
   void didUpdateWidget(RecordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    //getTabPosition();
     _checkIfAnyButtonClicked();
   }
 
@@ -129,18 +129,21 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
         return CalendarScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+          openDatePickerCallback: widget.openDatePickerCallback,
         );
       case 1:
         return CompassScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
           openActionSheetCallback: widget.openActionSheetCallback,
+          openDatePickerCallback: widget.openDatePickerCallback,
         );
       default:
         return TrendsScreen(
           showApiLoaderCallback: widget.showApiLoaderCallback,
           openActionSheetCallback: widget.openActionSheetCallback,
           navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+          openDatePickerCallback: widget.openDatePickerCallback,
         );
     }
   }

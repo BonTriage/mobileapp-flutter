@@ -5,8 +5,10 @@ import 'package:mobile/util/constant.dart';
 class DateTimePicker extends StatefulWidget {
   final CupertinoDatePickerMode cupertinoDatePickerMode;
   final Function(DateTime) onDateTimeSelected;
+  final DateTime initialDateTime;
+  final bool isFromHomeScreen;
 
-  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode, @required this.onDateTimeSelected}) : super(key: key);
+  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode, @required this.onDateTimeSelected, this.initialDateTime, this.isFromHomeScreen = false}) : super(key: key);
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
@@ -19,7 +21,12 @@ class _DateTimePickerState extends State<DateTimePicker> {
   @override
   void initState() {
     super.initState();
-    _dateTime = DateTime.now();
+
+    if(widget.initialDateTime == null) {
+      _dateTime = DateTime.now();
+    } else {
+      _dateTime = widget.initialDateTime;
+    }
     _selectedDateTime = _dateTime;
   }
 
@@ -57,8 +64,9 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       padding: const EdgeInsets.only(top: 10, right: 15),
                       child: GestureDetector(
                         onTap: () {
-                          widget.onDateTimeSelected(_selectedDateTime);
-                          Navigator.pop(context);
+                          if(!widget.isFromHomeScreen)
+                            widget.onDateTimeSelected(_selectedDateTime);
+                          Navigator.pop(context, _selectedDateTime);
                         },
                         child: Text(
                           'Done',
@@ -85,8 +93,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
                           backgroundColor: Colors.transparent,
                           mode: widget.cupertinoDatePickerMode,
                           use24hFormat: false,
-                          maximumDate: (widget.cupertinoDatePickerMode != CupertinoDatePickerMode.time) ? _dateTime : null,
-                          maximumYear: _dateTime.year,
+                          maximumDate: (widget.cupertinoDatePickerMode != CupertinoDatePickerMode.time) ? DateTime.now() : null,
+                          maximumYear: DateTime.now().year,
                           onDateTimeChanged: (dateTime) {
                             _selectedDateTime = dateTime;
                           },

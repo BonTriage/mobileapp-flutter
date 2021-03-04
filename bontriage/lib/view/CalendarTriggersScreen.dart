@@ -18,8 +18,9 @@ class CalendarTriggersScreen extends StatefulWidget {
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
   final StreamSink<dynamic> refreshCalendarDataSink;
   final Stream<dynamic> refreshCalendarDataStream;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
-  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.refreshCalendarDataSink, this.refreshCalendarDataStream}): super(key: key);
+  const CalendarTriggersScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.refreshCalendarDataSink, this.refreshCalendarDataStream, this.openDatePickerCallback}): super(key: key);
 
   @override
   _CalendarTriggersScreenState createState() => _CalendarTriggersScreenState();
@@ -124,174 +125,322 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                 SizedBox(
                   height: 5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        DateTime dateTime =
-                            DateTime(_dateTime.year, _dateTime.month - 1);
-                        _dateTime = dateTime;
-                        _onStartDateSelected(dateTime);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Image(
-                          image: AssetImage(Constant.backArrow),
-                          width: 17,
-                          height: 17,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        _openDatePickerBottomSheet(
-                            CupertinoDatePickerMode.date);
-                      },
-                      child: Text(
-                        monthName + " " + currentYear.toString(),
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 15,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        DateTime dateTime =
-                            DateTime(_dateTime.year, _dateTime.month + 1);
-                        Duration duration = dateTime.difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
-                        if (duration.inSeconds < 0) {
-                          _dateTime = dateTime;
-                          _onStartDateSelected(dateTime);
-                        } else {
-                          ///To:Do
-                          print("Not Allowed");
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Image(
-                          image: AssetImage(Constant.nextArrow),
-                          width: 17,
-                          height: 17,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Table(
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    TableRow(children: [
-                      Center(
-                        child: Text(
-                          'Su',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'M',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Tu',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'W',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Th',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'F',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Sa',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Constant.locationServiceGreen,
-                              fontFamily: Constant.jostMedium),
-                        ),
-                      ),
-                    ]),
-                  ],
-                ),
-                Container(
-                  height: 290,
-                  child: StreamBuilder<dynamic>(
-                      stream: _calendarScreenBloc.calendarDataStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          setCurrentMonthData(
-                              snapshot.data, currentMonth, currentYear);
-                          return GridView.count(
-                              crossAxisCount: 7,
-                              padding: EdgeInsets.all(4.0),
-                              childAspectRatio: 8.0 / 9.0,
-                              children: currentMonthData.map((e) {
-                                return e;
-                              }).toList());
-                        } else if (snapshot.hasError) {
-                          Utils.closeApiLoaderDialog(context);
-                          return NetworkErrorScreen(
-                            errorMessage: snapshot.error.toString(),
-                            tapToRetryFunction: () {
-                              _calendarScreenBloc
-                                  .enterSomeDummyDataToStreamController();
-                              requestService(firstDayOfTheCurrentMonth,
-                                  lastDayOfTheCurrentMonth);
-                            },
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                ),
+                StreamBuilder<dynamic>(
+                    stream: _calendarScreenBloc.calendarDataStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        setCurrentMonthData(
+                            snapshot.data, currentMonth, currentYear);
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    DateTime dateTime =
+                                    DateTime(_dateTime.year, _dateTime.month - 1);
+                                    _dateTime = dateTime;
+                                    _onStartDateSelected(dateTime);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image(
+                                      image: AssetImage(Constant.backArrow),
+                                      width: 17,
+                                      height: 17,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    _openDatePickerBottomSheet(
+                                        CupertinoDatePickerMode.date);
+                                    //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+                                  },
+                                  child: Text(
+                                    monthName + " " + currentYear.toString(),
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    DateTime dateTime =
+                                    DateTime(_dateTime.year, _dateTime.month + 1);
+                                    Duration duration = dateTime.difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
+                                    if (duration.inSeconds < 0) {
+                                      _dateTime = dateTime;
+                                      _onStartDateSelected(dateTime);
+                                    } else {
+                                      ///To:Do
+                                      print("Not Allowed");
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image(
+                                      image: AssetImage(Constant.nextArrow),
+                                      width: 17,
+                                      height: 17,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Table(
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              children: [
+                                TableRow(children: [
+                                  Center(
+                                    child: Text(
+                                      'Su',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'M',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Tu',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'W',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Th',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'F',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Sa',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                            Container(
+                              height: 290,
+                              child: GridView.count(
+                                  crossAxisCount: 7,
+                                  padding: EdgeInsets.all(4.0),
+                                  childAspectRatio: 8.0 / 9.0,
+                                  children: currentMonthData.map((e) {
+                                    return e;
+                                  }).toList()),
+                            ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        Utils.closeApiLoaderDialog(context);
+                        return NetworkErrorScreen(
+                          errorMessage: snapshot.error.toString(),
+                          tapToRetryFunction: () {
+                            _calendarScreenBloc
+                                .enterSomeDummyDataToStreamController();
+                            requestService(firstDayOfTheCurrentMonth,
+                                lastDayOfTheCurrentMonth);
+                          },
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    DateTime dateTime =
+                                    DateTime(_dateTime.year, _dateTime.month - 1);
+                                    _dateTime = dateTime;
+                                    _onStartDateSelected(dateTime);
+                                  },
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image(
+                                      image: AssetImage(Constant.backArrow),
+                                      width: 17,
+                                      height: 17,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _openDatePickerBottomSheet(
+                                        CupertinoDatePickerMode.date);
+                                    //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+                                  },
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Text(
+                                    monthName + " " + currentYear.toString(),
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    DateTime dateTime =
+                                    DateTime(_dateTime.year, _dateTime.month + 1);
+                                    Duration duration = dateTime.difference(DateTime.now());
+                                    if (duration.inSeconds < 0) {
+                                      _dateTime = dateTime;
+                                      _onStartDateSelected(dateTime);
+                                    } else {
+                                      ///To:Do
+                                      print("Not Allowed");
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image(
+                                      image: AssetImage(Constant.nextArrow),
+                                      width: 17,
+                                      height: 17,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Table(
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              children: [
+                                TableRow(children: [
+                                  Center(
+                                    child: Text(
+                                      'Su',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'M',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Tu',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'W',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Th',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'F',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Sa',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                            Container(height: 290,),
+                          ],
+                        );
+                      }
+                    }),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 10),
                   child: Row(
@@ -570,8 +719,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
-      CupertinoDatePickerMode cupertinoDatePickerMode) {
-    showModalBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode) async {
+    /*showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -581,7 +730,11 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         builder: (context) => DateTimePicker(
               cupertinoDatePickerMode: cupertinoDatePickerMode,
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));
+            ));*/
+    var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+
+    if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
+      _onStartDateSelected(resultFromActionSheet);
   }
 
   Function _getDateTimeCallbackFunction(int whichPickerClicked) {
@@ -594,7 +747,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    setState(() {
+    //setState(() {
       userMonthTriggersListModel = [];
       totalDaysInCurrentMonth =
           Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
@@ -615,7 +768,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       });
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-    });
+    //});
   }
 
   @override

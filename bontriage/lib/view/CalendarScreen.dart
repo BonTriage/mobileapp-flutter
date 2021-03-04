@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CalendarIntensityScreen.dart';
@@ -10,8 +11,9 @@ import 'CalendarTriggersScreen.dart';
 class CalendarScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
+  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
 
-  const CalendarScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback}) : super(key: key);
+  const CalendarScreen({Key key, this.showApiLoaderCallback,this.navigateToOtherScreenCallback, this.openDatePickerCallback}) : super(key: key);
 
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
@@ -188,8 +190,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     if (currentPositionOfTabBar == 1 && pageViewWidgetList.length != 2) {
      //setState(() {
        pageViewWidgetList = [
-         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
-         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink,),
+         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink, openDatePickerCallback: widget.openDatePickerCallback,),
+         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink, openDatePickerCallback: widget.openDatePickerCallback,),
        ];
      //});
       initPageViewSink.add('data');

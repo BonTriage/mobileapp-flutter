@@ -16,6 +16,7 @@ import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'DateTimePicker.dart';
 import 'EditGraphViewBottomSheet.dart';
 import 'SignUpBottomSheet.dart';
 
@@ -186,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _openTriggersMedicationActionSheet,
         showApiLoaderCallback: showApiLoader,
         getButtonsGlobalKeyCallback: getButtonsGlobalKey,
+        openDatePickerCallback: _openDatePickerBottomSheet,
       ),
     );
   }
@@ -343,4 +345,25 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
   }
+
+  /// @param cupertinoDatePickerMode: for time and date mode selection
+  Future<DateTime> _openDatePickerBottomSheet(
+      CupertinoDatePickerMode cupertinoDatePickerMode, Function dateTimeCallbackFunction, DateTime initialDateTime) async {
+    var resultFromActionSheet = await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => DateTimePicker(
+          cupertinoDatePickerMode: cupertinoDatePickerMode,
+          onDateTimeSelected: dateTimeCallbackFunction,
+          initialDateTime: initialDateTime,
+          isFromHomeScreen: true,
+        ));
+
+    return resultFromActionSheet;
+  }
+
 }
