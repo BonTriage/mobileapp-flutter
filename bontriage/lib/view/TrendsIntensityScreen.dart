@@ -488,9 +488,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: headacheColorChanged
-                                ? Constant.migraineColor
-                                : Constant.otherHeadacheColor,
+                            color: headacheColorChanged? Constant.otherHeadacheColor: Constant.migraineColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -1228,12 +1226,19 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   Color setHeadacheColor() {
     if (firstWeekIntensityData.length > 0 &&
         multipleFirstWeekIntensityData.length > 0) {
-      if (firstWeekIntensityData[0] >= multipleFirstWeekIntensityData[0]) {
+        var firstHeadacheWeekMaxValue = firstWeekIntensityData
+            .reduce((curr, next) => curr > next ? curr : next);
+        print('Maximum ListData Value $firstHeadacheWeekMaxValue');
+
+        var secondHeadacheWeekMaxValue = multipleFirstWeekIntensityData
+            .reduce((curr, next) => curr > next ? curr : next);
+        print('Maximum ListData Value $secondHeadacheWeekMaxValue');
+      if (firstHeadacheWeekMaxValue >= secondHeadacheWeekMaxValue) {
         headacheColorChanged = true;
-        return Constant.otherHeadacheColor;
+        return Constant.migraineColor;
       } else {
         headacheColorChanged = false;
-        return Constant.migraineColor;
+        return Constant.otherHeadacheColor;
       }
     } else
       return Colors.transparent;
