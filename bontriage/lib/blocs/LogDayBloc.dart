@@ -488,28 +488,33 @@ class LogDayBloc {
         selectedAnswerElement.questionTag == Constant.behaviourPreMealTag ||
         selectedAnswerElement.questionTag == Constant.administeredTag ||
         selectedAnswerElement.questionTag == Constant.triggersTag) {
-        SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag /*&& doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer*/, orElse: () => null);
-        if(doubleTappedSelectedAnswer != null) {
-          if(doubleTappedSelectedAnswer.questionTag != Constant.administeredTag) {
-            if(doubleTappedSelectedAnswer.answer == selectedAnswerElement.answer) {
-              selectedAnswerElement.isDoubleTapped = true;
-            }
-          } else {
-            print(selectedAnswerElement);
-            if(selectedAnswerElement.answer.isNotEmpty && doubleTappedSelectedAnswer.answer.isNotEmpty) {
-              MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(doubleTappedSelectedAnswer.answer));
-              MedicationSelectedDataModel medicationSelectedDataModel1 = MedicationSelectedDataModel.fromJson(jsonDecode(selectedAnswerElement.answer));
-              if(medicationSelectedDataModel != null && medicationSelectedDataModel1 != null && !medicationSelectedDataModel.isNewlyAdded && !medicationSelectedDataModel1.isNewlyAdded) {
-                if(medicationSelectedDataModel.selectedMedicationIndex == medicationSelectedDataModel1.selectedMedicationIndex) {
-                  medicationSelectedDataModel1.isDoubleTapped = true;
-                  selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+        var doubleTapSelectedAnswerList = doubleTappedSelectedAnswerList.where((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag /*&& doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer*/);
+        //SelectedAnswers doubleTappedSelectedAnswer = doubleTappedSelectedAnswerList.firstWhere((doubleTappedSelectedAnswerElement) => doubleTappedSelectedAnswerElement.questionTag == selectedAnswerElement.questionTag /*&& doubleTappedSelectedAnswerElement.answer == selectedAnswerElement.answer*/, orElse: () => null);
+        if(doubleTapSelectedAnswerList != null) {
+          doubleTapSelectedAnswerList.forEach((doubleTappedSelectedAnswer) {
+            if(doubleTappedSelectedAnswer != null) {
+              if(doubleTappedSelectedAnswer.questionTag != Constant.administeredTag) {
+                if(doubleTappedSelectedAnswer.answer == selectedAnswerElement.answer) {
+                  selectedAnswerElement.isDoubleTapped = true;
                 }
-              } else if((medicationSelectedDataModel.isNewlyAdded && medicationSelectedDataModel1.isNewlyAdded && (medicationSelectedDataModel.newlyAddedMedicationName == medicationSelectedDataModel1.newlyAddedMedicationName))){
-                medicationSelectedDataModel1.isDoubleTapped = true;
-                selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+              } else {
+                print(selectedAnswerElement);
+                if(selectedAnswerElement.answer.isNotEmpty && doubleTappedSelectedAnswer.answer.isNotEmpty) {
+                  MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(doubleTappedSelectedAnswer.answer));
+                  MedicationSelectedDataModel medicationSelectedDataModel1 = MedicationSelectedDataModel.fromJson(jsonDecode(selectedAnswerElement.answer));
+                  if(medicationSelectedDataModel != null && medicationSelectedDataModel1 != null && !medicationSelectedDataModel.isNewlyAdded && !medicationSelectedDataModel1.isNewlyAdded) {
+                    if(medicationSelectedDataModel.selectedMedicationIndex == medicationSelectedDataModel1.selectedMedicationIndex) {
+                      medicationSelectedDataModel1.isDoubleTapped = true;
+                      selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+                    }
+                  } else if((medicationSelectedDataModel.isNewlyAdded && medicationSelectedDataModel1.isNewlyAdded && (medicationSelectedDataModel.newlyAddedMedicationName == medicationSelectedDataModel1.newlyAddedMedicationName))){
+                    medicationSelectedDataModel1.isDoubleTapped = true;
+                    selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+                  }
+                }
               }
             }
-          }
+          });
         }
       }
     });

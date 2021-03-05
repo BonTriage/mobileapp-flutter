@@ -100,6 +100,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('in did update widget of calendar trigger screen');
     getCurrentPositionOfTabBar();
   }
 
@@ -780,6 +781,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
     String isSeeMoreClicked = sharedPreferences.getString(Constant.isSeeMoreClicked) ?? Constant.blankString;
     String isTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
     String updateCalendarTriggerData = sharedPreferences.getString(Constant.updateCalendarTriggerData) ?? Constant.blankString;
+
+    print('isSeeMoreClicked?????$isSeeMoreClicked???isViewTrends?????$isSeeMoreClicked???updateCalendarTriggerData?????$updateCalendarTriggerData');
 
     if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateCalendarTriggerData == Constant.trueString) {
       sharedPreferences.remove(Constant.updateCalendarTriggerData);

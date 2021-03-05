@@ -203,7 +203,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   }
 
   String _getInfoText() {
-    return 'Based on what you entered, it looks like your ${widget.moreHeadacheScreenArgumentModel.headacheTypeData.text} could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
+    return 'Based on what you entered, it looks like your ${widget.moreHeadacheScreenArgumentModel.headacheTypeData.text} could potentially be considered by doctors to be a ${widget.moreHeadacheScreenArgumentModel.headacheTypeData.isMigraine ? 'Migraine' : 'Headache'}. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
   }
 
   void _openDeleteHeadacheActionSheet() async {

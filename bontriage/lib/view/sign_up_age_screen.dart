@@ -86,8 +86,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
       widget.selectedAnswerCallBack(
           widget.currentTag, widget.sliderValue.toInt().toString());
 
-    _minLabel = widget.sliderMinValue.toInt().toString();
-    _maxLabel = widget.sliderMaxValue.toInt().toString();
+    _minText = widget.sliderMinValue.toInt().toString();
+    _maxText = widget.sliderMaxValue.toInt().toString();
     _initLabelValues();
   }
 

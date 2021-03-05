@@ -101,5 +101,8 @@ class _SplashState extends State<Splash> {
     sharedPreferences.remove(Constant.updateCalendarIntensityData);
     sharedPreferences.remove(Constant.updateOverTimeCompassData);
     sharedPreferences.remove(Constant.updateCompareCompassData);
+    sharedPreferences.remove(Constant.updateTrendsData);
+    sharedPreferences.remove(Constant.isSeeMoreClicked);
+    sharedPreferences.remove(Constant.isViewTrendsClicked);
   }
 }
