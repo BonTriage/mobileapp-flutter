@@ -834,29 +834,31 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     String updateCalendarIntensityData = sharedPreferences.getString(Constant.updateCalendarIntensityData) ?? Constant.blankString;
 
     if(isSeeMoreClicked.isEmpty && isTrendsClicked.isEmpty && updateCalendarIntensityData == Constant.trueString) {
-      sharedPreferences.remove(Constant.updateCalendarIntensityData);
-      currentMonth = _dateTime.month;
-      currentYear = _dateTime.year;
-      monthName = Utils.getMonthName(currentMonth);
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(currentMonth, currentYear);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          currentMonth, currentYear, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          currentMonth, currentYear, totalDaysInCurrentMonth);
+      Future.delayed(Duration(seconds: 4), () {
+        sharedPreferences.remove(Constant.updateCalendarIntensityData);
+        currentMonth = _dateTime.month;
+        currentYear = _dateTime.year;
+        monthName = Utils.getMonthName(currentMonth);
+        totalDaysInCurrentMonth =
+            Utils.daysInCurrentMonth(currentMonth, currentYear);
+        firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, 1);
+        lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+            currentMonth, currentYear, totalDaysInCurrentMonth);
 
-      int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-      int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
+        int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+        int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
 
-      if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
-        _calendarScreenBloc.initNetworkStreamController();
-        print('show api loader 10');
-        widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
-          _calendarScreenBloc.enterSomeDummyDataToStreamController();
-          requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
-        });
-      }
-      _callApiService();
+        if(currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
+          _calendarScreenBloc.initNetworkStreamController();
+          print('show api loader 10');
+          widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
+            _calendarScreenBloc.enterSomeDummyDataToStreamController();
+            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
+          });
+        }
+        _callApiService();
+      });
     }
   }
 

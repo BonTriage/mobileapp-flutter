@@ -96,12 +96,12 @@ class _LogDayScreenState extends State<LogDayScreen>
 
     selectedAnswers = _logDayBloc.getSelectedAnswerList(doubleTappedSelectedAnswerList);
 
-    if (widget.logDayScreenArgumentModel == null ||
+    /*if (widget.logDayScreenArgumentModel == null ||
         (widget.logDayScreenArgumentModel != null &&
-            !widget.logDayScreenArgumentModel.isFromRecordScreen)) {
+            !widget.logDayScreenArgumentModel.isFromRecordScreen)) {*/
       if (selectedAnswers.length == 0)
         selectedAnswers = doubleTappedSelectedAnswerList;
-    }
+    //}
   }
 
   @override
