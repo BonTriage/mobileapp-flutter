@@ -139,6 +139,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
             selectedHeadacheName);
       });
     });
+    _removeDataFromSharedPreference();
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);
 
@@ -1071,5 +1072,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
       currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
+  }
+
+  void _removeDataFromSharedPreference() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove(Constant.updateOverTimeCompassData);
   }
 }

@@ -57,6 +57,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _showApiLoaderDialog();
     });
+    _removeDataFromSharedPreference();
     _callApiService();
 
     widget.refreshCalendarDataStream.listen((event) {

@@ -67,6 +67,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
         currentMonth, currentYear, 1);
     lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
         currentMonth, currentYear, totalDaysInCurrentMonth);
+    _removeDataFromSharedPreference();
     callAPIService();
 
     widget.refreshCalendarDataStream.listen((event) {
@@ -820,8 +821,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
 
   void callAPIService() async {
     //try {
-      SharedPreferences sharedPreferences = await SharedPreferences
-          .getInstance();
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
       int recordTabBarPosition = sharedPreferences.getInt(Constant.recordTabNavigatorState);
       String isViewTrendsClicked = sharedPreferences.getString(Constant.isViewTrendsClicked) ?? Constant.blankString;
@@ -836,8 +836,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
             });
           }
         });
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
       }
+      requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth);
     //} catch(e) {
       //print(e);
     //}

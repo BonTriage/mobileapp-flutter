@@ -91,7 +91,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
     print('in did update widget of trends screen');
     _getUserCurrentHeadacheData();
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-        selectedHeadacheName, "", false);
+        selectedHeadacheName, secondSelectedHeadacheName ?? Constant.blankString, secondSelectedHeadacheName != null);
   }
 
   @override
@@ -526,6 +526,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
       _isInitiallyServiceHit = false;
       if (_editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
           Constant.viewSingleHeadache) {
+        secondSelectedHeadacheName = null;
         selectedHeadacheName =
             _editGraphViewFilterModel.singleTypeHeadacheSelected;
         _pageController.animateToPage(_editGraphViewFilterModel.currentTabIndex,

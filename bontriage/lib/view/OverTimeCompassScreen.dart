@@ -142,6 +142,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     print('init state of overTime compass');
     _recordsCompassScreenBloc.initNetworkStreamController();
     _showApiLoaderDialog();
+    _removeDataFromSharedPreference();
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);
     _compassTutorialModel.currentDateTime = _dateTime;
@@ -965,5 +966,11 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
       currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
+  }
+
+
+  void _removeDataFromSharedPreference() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove(Constant.updateOverTimeCompassData);
   }
 }
