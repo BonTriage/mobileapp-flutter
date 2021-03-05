@@ -5,19 +5,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
+import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
+import 'package:mobile/models/TrendsFilterModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'DateTimePicker.dart';
-import 'package:mobile/models/TrendsFilterModel.dart';
-import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
   final Function updateTrendsDataCallback;
-  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
+  final Future<DateTime> Function(CupertinoDatePickerMode, Function, DateTime)
+      openDatePickerCallback;
 
   const TrendsIntensityScreen(
-      {Key key, this.editGraphViewFilterModel, this.updateTrendsDataCallback, this.openDatePickerCallback})
+      {Key key,
+      this.editGraphViewFilterModel,
+      this.updateTrendsDataCallback,
+      this.openDatePickerCallback})
       : super(key: key);
 
   @override
@@ -107,7 +110,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     super.build(context);
     return SingleChildScrollView(
       child: Container(
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -305,7 +307,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               children: [
                 GestureDetector(
                   onTap: () {
-                    DateTime dateTime = DateTime(_dateTime.year, _dateTime.month - 1);
+                    DateTime dateTime =
+                        DateTime(_dateTime.year, _dateTime.month - 1);
                     _dateTime = dateTime;
                     print('clicked');
                     _onStartDateSelected(dateTime);
@@ -458,7 +461,15 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  0
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[0]
+                                  .text
+                              : '',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -477,7 +488,9 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
+                            color: headacheColorChanged
+                                ? Constant.migraineColor
+                                : Constant.otherHeadacheColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -487,7 +500,15 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  1
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[1]
+                                  .text
+                              : '',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -585,7 +606,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     return BarChartGroupData(barsSpace: 2.5, x: x, barRods: [
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache1, secondMultipleHeadache1),
-        rodStackItems: setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache1, secondMultipleHeadache1),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -593,7 +615,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache2, secondMultipleHeadache2),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache2, secondMultipleHeadache2),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -601,8 +624,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache3, secondMultipleHeadache3),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache3, secondMultipleHeadache3)
-        ,
+        rodStackItems:
+            setRodStack(firstMultipleHeadache3, secondMultipleHeadache3),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -610,7 +633,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache4, secondMultipleHeadache4),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache4, secondMultipleHeadache4),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -618,7 +642,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache5, secondMultipleHeadache5),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache5, secondMultipleHeadache5),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -626,7 +651,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache6, secondMultipleHeadache6),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache6, secondMultipleHeadache6),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -634,7 +660,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       BarChartRodData(
         y: setAxisValue(firstMultipleHeadache7, secondMultipleHeadache7),
         colors: [Colors.transparent],
-        rodStackItems: setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
+        rodStackItems:
+            setRodStack(firstMultipleHeadache7, secondMultipleHeadache7),
         width: width,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(2), topRight: Radius.circular(2)),
@@ -656,9 +683,12 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               cupertinoDatePickerMode: cupertinoDatePickerMode,
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
             ));*/
-    var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+    var resultFromActionSheet = await widget.openDatePickerCallback(
+        CupertinoDatePickerMode.date,
+        _getDateTimeCallbackFunction(0),
+        _dateTime);
 
-    if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
+    if (resultFromActionSheet != null && resultFromActionSheet is DateTime)
       _onStartDateSelected(resultFromActionSheet);
   }
 
@@ -688,19 +718,19 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   Color setToolTipColor() {
     if (clickedValue != null) {
-      if(widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected == Constant.viewSingleHeadache){
+      if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
+          Constant.viewSingleHeadache) {
         if (clickedValue > 1 && clickedValue <= 3) {
           return Constant.mildTriggerColor;
         } else if (clickedValue >= 4 && clickedValue <= 7) {
           return Constant.moderateTriggerColor;
-        }else if(clickedValue >7)
+        } else if (clickedValue > 7)
           return Constant.severeTriggerColor;
-        else return Colors.transparent;
-
-      }else{
+        else
+          return Colors.transparent;
+      } else {
         return Constant.migraineColor;
       }
-
     }
     return Colors.transparent;
   }
@@ -710,9 +740,10 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       return [Constant.mildTriggerColor];
     } else if (barChartValue >= 4 && barChartValue <= 7) {
       return [Constant.moderateTriggerColor];
-    } else if(barChartValue >7) {
+    } else if (barChartValue > 7) {
       return [Constant.severeTriggerColor];
-    } else return [Colors.transparent];
+    } else
+      return [Colors.transparent];
   }
 
   void setAllWeekIntensityData(int i, double intensityData) {
@@ -828,7 +859,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           fourthWeekIntensityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        if(totalDaysInCurrentMonth == 29) {
+        if (totalDaysInCurrentMonth == 29) {
           barGroup5 = makeGroupData(
             4,
             fifthWeekIntensityData[0],
@@ -1003,7 +1034,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
           multipleFourthWeekIntensityData[6]);
 
       if (totalDaysInCurrentMonth > 28) {
-        if(totalDaysInCurrentMonth == 29) {
+        if (totalDaysInCurrentMonth == 29) {
           barGroup5 = makeMultipleGroupData(
             4,
             fifthWeekIntensityData[0],
@@ -1183,28 +1214,30 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     ];
   }
 
-  double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {
+  double setAxisValue(
+      double firstMultipleHeadache1, double secondMultipleHeadache1) {
     var maxValue;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
-    maxValue = firstMultipleHeadache1;
+      maxValue = firstMultipleHeadache1;
     } else {
-    maxValue = secondMultipleHeadache1;
+      maxValue = secondMultipleHeadache1;
     }
     return maxValue;
   }
 
- Color setHeadacheColor() {
-   if(firstWeekIntensityData.length > 0  && multipleFirstWeekIntensityData.length> 0) {
-     if (firstWeekIntensityData[0] >= multipleFirstWeekIntensityData[0]) {
-       headacheColorChanged = true;
-       return Constant.otherHeadacheColor;
-     } else{
-       headacheColorChanged = false;
-       return Constant.migraineColor;
-     }
-
-   }else return Colors.transparent;
- }
+  Color setHeadacheColor() {
+    if (firstWeekIntensityData.length > 0 &&
+        multipleFirstWeekIntensityData.length > 0) {
+      if (firstWeekIntensityData[0] >= multipleFirstWeekIntensityData[0]) {
+        headacheColorChanged = true;
+        return Constant.otherHeadacheColor;
+      } else {
+        headacheColorChanged = false;
+        return Constant.migraineColor;
+      }
+    } else
+      return Colors.transparent;
+  }
 
   setToolTipTextColor() {
     if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
