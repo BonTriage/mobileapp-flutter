@@ -141,7 +141,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                                 weekDay +
                                     '\n' +
                                     (rod.y.toInt()).toString() +
-                                    ' Days',
+                                    ' Times',
                                 TextStyle(
                                     color: setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
