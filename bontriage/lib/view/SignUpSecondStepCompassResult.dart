@@ -230,6 +230,7 @@ class _SignUpSecondStepCompassResultState
                                             child: Padding(
                                               padding: const EdgeInsets.only(right: 10),
                                               child: RichText(
+                                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                 text: TextSpan(
                                                   children: _getBubbleTextSpans(),
                                                 ),
@@ -264,6 +265,7 @@ class _SignUpSecondStepCompassResultState
                                     },
                                     child: Text(
                                       "Frequency",
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 14,
@@ -280,6 +282,7 @@ class _SignUpSecondStepCompassResultState
                                       },
                                       child: Text(
                                         "Intensity",
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                             color: Color(0xffafd794),
                                             fontSize: 14,
@@ -309,6 +312,7 @@ class _SignUpSecondStepCompassResultState
                                                   child: Center(
                                                     child: Text(
                                                       _userScoreData,
+                                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                       style: TextStyle(
                                                           color: Color(0xff0E1712),
                                                           fontSize: 14,
@@ -336,6 +340,7 @@ class _SignUpSecondStepCompassResultState
                                       },
                                       child: Text(
                                         "Disability",
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                             color: Color(0xffafd794),
                                             fontSize: 14,
@@ -352,6 +357,7 @@ class _SignUpSecondStepCompassResultState
                                     },
                                     child: Text(
                                       "Duration",
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 14,
@@ -377,6 +383,7 @@ class _SignUpSecondStepCompassResultState
                                     },
                                     child: Text(
                                       "Frequency",
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 14,
@@ -393,6 +400,7 @@ class _SignUpSecondStepCompassResultState
                                       },
                                       child: Text(
                                         "Intensity",
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                             color: Color(0xffafd794),
                                             fontSize: 14,
@@ -430,6 +438,7 @@ class _SignUpSecondStepCompassResultState
                                                   child: Center(
                                                     child: Text(
                                                       '0',
+                                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                       style: TextStyle(
                                                           color: Color(0xff0E1712),
                                                           fontSize: 14,
@@ -457,6 +466,7 @@ class _SignUpSecondStepCompassResultState
                                       },
                                       child: Text(
                                         "Disability",
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                             color: Color(0xffafd794),
                                             fontSize: 14,
@@ -473,6 +483,7 @@ class _SignUpSecondStepCompassResultState
                                     },
                                     child: Text(
                                       "Duration",
+                                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 14,
@@ -507,6 +518,7 @@ class _SignUpSecondStepCompassResultState
                         ),
                         Text(
                           userHeadacheName,
+                          textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                           style: TextStyle(
                               color: Constant.locationServiceGreen,
                               fontSize: 11,
@@ -543,6 +555,7 @@ class _SignUpSecondStepCompassResultState
                                 child: Center(
                                   child: Text(
                                     Constant.back,
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 14,
@@ -587,6 +600,7 @@ class _SignUpSecondStepCompassResultState
                               child: Center(
                                 child: Text(
                                   Constant.next,
+                                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
@@ -607,6 +621,7 @@ class _SignUpSecondStepCompassResultState
                     child: Center(
                       child: Text(
                         Constant.or,
+                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 13,
@@ -621,6 +636,7 @@ class _SignUpSecondStepCompassResultState
                     child: Center(
                       child: Text(
                         Constant.viewDetailedReport,
+                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 13,

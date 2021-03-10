@@ -503,6 +503,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: RichText(
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor,
                             text: TextSpan(
                               children: _getBubbleTextSpans(),
                             ),

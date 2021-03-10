@@ -1,3 +1,5 @@
+import 'package:mobile/util/constant.dart';
+
 class AppException implements Exception {
   final _message;
   final _prefix;
@@ -27,7 +29,7 @@ class InvalidInputException extends AppException {
 }
 
 class ServerResponseException extends AppException{
-  ServerResponseException([String message]) : super(message, "Server Error: ");
+  ServerResponseException([String message]) : super(message ?? Constant.blankString, "Server Error");
 }
 
 class NoInternetConnection extends AppException{

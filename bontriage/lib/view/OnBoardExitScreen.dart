@@ -21,8 +21,6 @@ class OnBoardExitScreen extends StatefulWidget {
 }
 
 class _OnBoardExitScreenState extends State<OnBoardExitScreen> {
-  //TODO: Generate a separate list for text to speech
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -69,15 +69,19 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(top: 80),
-                        child: Text(
-                          Constant.signUp,
-                          style: TextStyle(
-                              color: Constant.chatBubbleGreen,
-                              fontSize: 24,
-                              fontFamily: Constant.jostMedium),
+                        child: Center(
+                          child: Text(
+                            Constant.signUp,
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 24,
+                                fontFamily: Constant.jostMedium),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -85,6 +89,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       ),
                       Text(
                         Constant.secureMigraineMentorAccount,
+                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Constant.chatBubbleGreen,
@@ -154,6 +159,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 Constant.email,
+                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: Constant.jostRegular,
@@ -230,6 +236,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 Constant.password,
+                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: Constant.jostRegular,
@@ -244,7 +251,9 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                         visible: _isShowAlert,
                         child: Container(
                           margin: EdgeInsets.only(left: 20, right: 10),
-                          child: Row(
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.start,
                             children: [
                               Image(
                                 image: AssetImage(Constant.warningPink),
@@ -256,6 +265,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               ),
                               Text(
                                 _errorMsg,
+                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Constant.pinkTriggerColor,
@@ -288,10 +298,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             ),
                           ),
                           Expanded(
-                            child: Row(
+                            child: Wrap(
                               children: [
                                 Text(
                                   "I agree to the ",
+                                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                       height: 1.3,
                                       fontFamily: Constant.jostRegular,
@@ -305,6 +316,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   behavior: HitTestBehavior.translucent,
                                   child: Text(
                                     "Terms & Condition",
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                         height: 1.3,
                                         fontFamily: Constant.jostRegular,
@@ -315,6 +327,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                 ),
                                 Text(
                                   " and ",
+                                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                       height: 1.3,
                                       fontFamily: Constant.jostRegular,
@@ -328,6 +341,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   behavior: HitTestBehavior.translucent,
                                   child: Text(
                                     "Privacy Policy",
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                         height: 1.3,
                                         fontFamily: Constant.jostRegular,
@@ -400,13 +414,16 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               },
                             ),
                           ),
-                          Text(
-                            Constant.emailFromMigraineMentor,
-                            style: TextStyle(
-                                height: 1.3,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: 12,
-                                color: Constant.chatBubbleGreen),
+                          Expanded(
+                            child: Text(
+                              Constant.emailFromMigraineMentor,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              style: TextStyle(
+                                  height: 1.3,
+                                  fontFamily: Constant.jostRegular,
+                                  fontSize: 12,
+                                  color: Constant.chatBubbleGreen),
+                            ),
                           ),
                         ],
                       ),
@@ -426,6 +443,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           ),
                           child: Text(
                             Constant.signUp,
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                             style: TextStyle(
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.bubbleChatTextView,
@@ -440,6 +458,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             padding: const EdgeInsets.only(top: 5),
                             child: Text(
                               Constant.or,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                               style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostRegular,
@@ -455,6 +474,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               },
                               child: Text(
                                 Constant.signIn,
+                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     color: Constant.chatBubbleGreen,
                                     fontFamily: Constant.jostBold,
@@ -469,17 +489,20 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Utils.navigateToExitScreen(context);
-                        },
-                        child: Text(
-                          Constant.cancel,
-                          style: TextStyle(
-                              color: Constant.chatBubbleGreen,
-                              fontSize: 16,
-                              fontFamily: Constant.jostRegular,
-                              decoration: TextDecoration.underline),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Utils.navigateToExitScreen(context);
+                          },
+                          child: Text(
+                            Constant.cancel,
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 16,
+                                fontFamily: Constant.jostRegular,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                       ),
                       SizedBox(

@@ -124,6 +124,7 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
           children: [
             Text(
               Constant.selectAllThatApply,
+              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               style: TextStyle(
                   fontSize: 13,
                   fontFamily: Constant.jostMedium,
@@ -178,6 +179,7 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                                 horizontal: 20, vertical: 10),
                             child: Text(
                               widget.selectOptionList[index].text,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: _getOptionTextColor(index),

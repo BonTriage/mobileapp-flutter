@@ -135,7 +135,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                       for (var i = 0; i < widget.question.values.length; i++)
                         if (widget.question.values[i].isSelected)
                           Chip(
-                            label: Text(widget.question.values[i].text),
+                            label: Text(widget.question.values[i].text,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
                             backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                             deleteIcon: IconButton(
                               icon: new Image.asset('images/cross.png'),
@@ -246,6 +247,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                   Container(
                     child: Text(
                       Constant.searchYourType,
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                       style: TextStyle(
                           color: Constant.selectTextColor,
                           fontSize: 14,
@@ -357,6 +359,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                       },
                       child: Text(
                         "Done",
+                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: Constant.jostRegular,
@@ -454,6 +457,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                                       horizontal: 10, vertical: 15),
                                   child: Text(
                                     widget.question.values[index].text,
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: _getOptionTextColor(index),

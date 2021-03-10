@@ -11,7 +11,7 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  Timer timer;
+  Timer _timer;
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _SplashState extends State<Splash> {
   @override
   void dispose() {
     try {
-      timer.cancel();
+      _timer.cancel();
     } catch (e) {
       print(e);
     }
@@ -31,29 +31,36 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                image: AssetImage(Constant.splashCompass),
-                width: 78,
-                height: 78,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                Constant.migraineMentor,
-                style: TextStyle(
-                    color: Constant.splashTextColor,
-                    fontSize: 22,
-                    fontFamily: Constant.jostRegular),
-              ),
-            ],
+      resizeToAvoidBottomInset: false,
+      body: MediaQuery(
+        data: mediaQueryData.copyWith(
+            textScaleFactor: 1.0
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  image: AssetImage(Constant.splashCompass),
+                  width: 78,
+                  height: 78,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  Constant.migraineMentor,
+                  style: TextStyle(
+                      color: Constant.splashTextColor,
+                      fontSize: 22,
+                      fontFamily: Constant.jostRegular),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -70,24 +77,24 @@ class _SplashState extends State<Splash> {
 
     _removeKeysFromSharedPreference(sharedPreferences);
     if(userAlreadyLoggedIn != null && userAlreadyLoggedIn) {
-      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 2), (timer) {
         Navigator.pushReplacementNamed(context, Constant.homeRouter);
         timer.cancel();
       });
     } else {
       if (isTutorialsHasSeen != null && isTutorialsHasSeen) {
-        timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        _timer = Timer.periodic(Duration(seconds: 3), (timer) {
           Navigator.pushReplacementNamed(context, Constant.welcomeStartAssessmentScreenRouter);
           timer.cancel();
         });
       } else {
         if (userAlreadyLoggedIn == null || !userAlreadyLoggedIn) {
-          timer = Timer.periodic(Duration(seconds: 2), (timer) {
+          _timer = Timer.periodic(Duration(seconds: 2), (timer) {
             Navigator.pushReplacementNamed(context, Constant.welcomeScreenRouter);
             timer.cancel();
           });
         } else {
-          timer = Timer.periodic(Duration(seconds: 2), (timer) {
+          _timer = Timer.periodic(Duration(seconds: 2), (timer) {
             Navigator.pushReplacementNamed(context, Constant.homeRouter);
             timer.cancel();
           });

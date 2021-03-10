@@ -21,7 +21,6 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       const oneSec = const Duration(milliseconds: 800);
@@ -130,13 +129,13 @@ class _SignUpOnBoardPersonalizedHeadacheCompassState
                   child: Text(
                     Constant.personalizedHeadacheCompass,
                     textAlign: TextAlign.center,
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 16,
                         fontFamily: Constant.jostMedium),
                   ),
                 ),
-
                 SizedBox(height: 60),
                 Center(
                   child: Container(

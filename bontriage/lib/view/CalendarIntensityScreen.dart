@@ -427,10 +427,12 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                     height: 5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 15, right: 10),
+                    margin: EdgeInsets.only(left: 0, right: 10),
                     child: Column(
                       children: [
-                        Row(
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Container(
                               decoration: BoxDecoration(
@@ -479,7 +481,9 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           height: 4,
                         ),
-                        Row(
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Container(
                               decoration: BoxDecoration(
@@ -519,6 +523,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                 child: Center(
                                   child: Text(
                                     'i',
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.0),
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Constant.locationServiceGreen,
@@ -551,147 +556,151 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
             ),
             Container(
               margin: EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Constant.mildTriggerColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Constant.mildTriggerColor,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          height: 8,
+                          width: 16,
                         ),
-                        height: 8,
-                        width: 16,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Mild',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                      SizedBox(
-                        width: 44,
-                      ),
-                      Text(
-                        'Headache score between',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '1 - 3',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 7,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Constant.moderateTriggerColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5),
+                        SizedBox(
+                          width: 10,
                         ),
-                        height: 8,
-                        width: 16,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Moderate',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                      SizedBox(
-                        width: 13,
-                      ),
-                      Text(
-                        'Headache score between',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '4 - 7',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 7,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Constant.severeTriggerColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5),
+                        Text(
+                          'Mild',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
                         ),
-                        height: 8,
-                        width: 16,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Severe',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      Text(
-                        'Headache score',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '8 to 10',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Constant.locationServiceGreen,
-                            fontFamily: Constant.jostMedium),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
+                        SizedBox(
+                          width: 44,
+                        ),
+                        Text(
+                          'Headache score between',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '1 - 3',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 7,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Constant.moderateTriggerColor,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          height: 8,
+                          width: 16,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Moderate',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
+                        ),
+                        SizedBox(
+                          width: 13,
+                        ),
+                        Text(
+                          'Headache score between',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '4 - 7',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 7,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Constant.severeTriggerColor,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          height: 8,
+                          width: 16,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Severe',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Text(
+                          'Headache score',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '8 to 10',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Constant.locationServiceGreen,
+                              fontFamily: Constant.jostMedium),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
             )
           ],

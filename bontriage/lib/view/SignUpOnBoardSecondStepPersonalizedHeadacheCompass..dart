@@ -130,6 +130,7 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
                   margin: EdgeInsets.only(top: 120),
                   child: Text(
                     Constant.personalizedHeadacheCompass,
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,

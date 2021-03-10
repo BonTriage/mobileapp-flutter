@@ -174,6 +174,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     children: [
                                       Text(
                                         _minText,
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -185,6 +186,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                       ),
                                       Text(
                                         _minLabel,
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -199,6 +201,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     children: [
                                       Text(
                                         _maxText,
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -210,6 +213,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                       ),
                                       Text(
                                         _maxLabel,
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -238,6 +242,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     child: Center(
                                       child: Text(
                                         sliderValue.toInt().toString(),
+                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -251,6 +256,7 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                   ),
                                   Text(
                                     _label,
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Constant.chatBubbleGreen,
@@ -272,43 +278,6 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
         ),
       ),
     );
-  }
-
-
-  String _getMaxText() {
-    if (widget.currentTag == Constant.headacheTypicalTag ||
-        widget.currentTag == Constant.headacheNumberTag)
-      return '${widget.maxText}+';
-    return widget.maxText;
-  }
-  String _getLabelText() {
-    if(widget.currentTag == Constant.profileAgeTag)
-      return Constant.yearsOld;
-    else if (widget.currentTag == Constant.headacheFreeTag)
-      return Constant.days;
-    else if (widget.currentTag == Constant.headacheTypicalTag)
-      return Constant.hours;
-    return '${widget.labelText}';
-  }
-
-  String _getMinTextLabel() {
-    if(widget.currentTag == Constant.headacheDisabledTag)
-      return Constant.noneAtALL;
-    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
-      return Constant.mild;
-    return (widget.minTextLabel == null)
-        ? Constant.min
-        : widget.minTextLabel;
-  }
-
-  String _getMaxTextLabel() {
-    if (widget.currentTag == Constant.headacheDisabledTag)
-      return Constant.totalDisability;
-    else if (widget.currentTag == Constant.headacheTypicalBadPainTag)
-      return Constant.veryPainful;
-    return (widget.maxTextLabel == null)
-        ? Constant.max
-        : widget.maxTextLabel;
   }
 
   void _initLabelValues() {

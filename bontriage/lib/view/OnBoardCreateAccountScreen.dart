@@ -13,7 +13,6 @@ class _OnBoardCreateAccountState extends State<OnBoardCreateAccount> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Utils.saveUserProgress(0, Constant.createAccountEventStep);
   }

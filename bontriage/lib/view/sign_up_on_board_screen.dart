@@ -46,10 +46,10 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
   bool _isButtonClicked = false;
   bool _isAlreadyDataFiltered = false;
+  MediaQueryData mediaQueryData;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentQuestionListData.add(Questions());
     welcomeOnBoardProfileBloc = WelcomeOnBoardProfileBloc();
@@ -69,13 +69,11 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
   @override
   void didUpdateWidget(SignUpOnBoardScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _pageController.dispose();
     welcomeOnBoardProfileBloc.dispose();
     super.dispose();
@@ -83,6 +81,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -208,7 +207,7 @@ class _SignUpOnBoardScreenState extends State<SignUpOnBoardScreen> {
                   sliderMaxValue: element.max.toDouble(),
                   minText: element.min.toString(),
                   maxText: element.max.toString(),
-                  labelText: "",
+                  labelText: Constant.blankString,
                   currentTag: element.tag,
                   selectedAnswerListData:
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,

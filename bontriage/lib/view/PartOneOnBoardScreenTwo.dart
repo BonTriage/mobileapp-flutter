@@ -75,7 +75,6 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _pageController.dispose();
     signUpBoardFirstStepBloc.dispose();
     super.dispose();
@@ -83,7 +82,6 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     signUpBoardFirstStepBloc = SignUpBoardFirstStepBloc();
@@ -99,102 +97,105 @@ class _PartOneOnBoardScreenStateTwo extends State<PartOneOnBoardScreenTwo> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Constant.backgroundColor,
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-            child: StreamBuilder<dynamic>(
-          stream: signUpBoardFirstStepBloc.albumDataStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (!isAlreadyDataFiltered) {
-                Utils.closeApiLoaderDialog(context);
-                addFilteredQuestionListData(snapshot.data);
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  OnBoardChatBubble(
-                    isEndOfOnBoard: isEndOfOnBoard,
-                    chatBubbleText:
-                        _pageViewWidgetList[_currentPageIndex].questions,
-                    closeButtonFunction: () {
-                      Utils.navigateToExitScreen(context);
-                    },
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Expanded(
-                      child: PageView.builder(
-                    controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _pageViewWidgetList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _pageViewWidgetList[index].questionsWidget;
-                    },
-                  )),
-                  OnBoardBottomButtons(
-                    progressPercent: _progressPercent,
-                    backButtonFunction: () {
-                      _onBackPressed();
-                    },
-                    currentIndex: _currentPageIndex,
-                    nextButtonFunction: () {
-                      if(!_isButtonClicked) {
-                        _isButtonClicked = true;
-                        if (Utils.validationForOnBoard(
-                            signUpOnBoardSelectedAnswersModel.selectedAnswers,
-                            currentQuestionListData[_currentPageIndex])) {
-                          setState(() {
-                            double stepOneProgress = 1 /
-                                _pageViewWidgetList.length;
+        body: MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+          ),
+          child: SafeArea(
+              child: StreamBuilder<dynamic>(
+            stream: signUpBoardFirstStepBloc.albumDataStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (!isAlreadyDataFiltered) {
+                  Utils.closeApiLoaderDialog(context);
+                  addFilteredQuestionListData(snapshot.data);
+                }
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OnBoardChatBubble(
+                      isEndOfOnBoard: isEndOfOnBoard,
+                      chatBubbleText:
+                          _pageViewWidgetList[_currentPageIndex].questions,
+                      closeButtonFunction: () {
+                        Utils.navigateToExitScreen(context);
+                      },
+                    ),
+                    Expanded(
+                        child: PageView.builder(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _pageViewWidgetList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _pageViewWidgetList[index].questionsWidget;
+                      },
+                    )),
+                    OnBoardBottomButtons(
+                      progressPercent: _progressPercent,
+                      backButtonFunction: () {
+                        _onBackPressed();
+                      },
+                      currentIndex: _currentPageIndex,
+                      nextButtonFunction: () {
+                        if(!_isButtonClicked) {
+                          _isButtonClicked = true;
+                          if (Utils.validationForOnBoard(
+                              signUpOnBoardSelectedAnswersModel.selectedAnswers,
+                              currentQuestionListData[_currentPageIndex])) {
+                            setState(() {
+                              double stepOneProgress = 1 /
+                                  _pageViewWidgetList.length;
 
-                            if (_progressPercent == 1) {
-                              sendToNextScreen();
-                            } else {
-                              _currentPageIndex++;
+                              if (_progressPercent == 1) {
+                                sendToNextScreen();
+                              } else {
+                                _currentPageIndex++;
 
-                              if (_currentPageIndex !=
-                                  _pageViewWidgetList.length - 1)
-                                _progressPercent += stepOneProgress;
-                              else {
-                                _progressPercent = 1;
+                                if (_currentPageIndex !=
+                                    _pageViewWidgetList.length - 1)
+                                  _progressPercent += stepOneProgress;
+                                else {
+                                  _progressPercent = 1;
+                                }
+
+                                _pageController.animateToPage(_currentPageIndex,
+                                    duration: Duration(milliseconds: 1),
+                                    curve: Curves.easeIn);
                               }
-
-                              _pageController.animateToPage(_currentPageIndex,
-                                  duration: Duration(milliseconds: 1),
-                                  curve: Curves.easeIn);
-                            }
-                            getCurrentQuestionTag(_currentPageIndex);
+                              getCurrentQuestionTag(_currentPageIndex);
+                            });
+                          }
+                          Future.delayed(Duration(milliseconds: 350), () {
+                            _isButtonClicked = false;
                           });
                         }
-                        Future.delayed(Duration(milliseconds: 350), () {
-                          _isButtonClicked = false;
-                        });
-                      }
-                    },
-                    onBoardPart: 1,
-                  )
-                ],
-              );
-            } else if (snapshot.hasError) {
-              Utils.closeApiLoaderDialog(context);
-              return NetworkErrorScreen(
-                errorMessage: snapshot.error.toString(),
-                tapToRetryFunction: () {
-                  Utils.showApiLoaderDialog(context);
-                  requestService();
-                },
-              );
-            }else {
-              return Container();
-            }
-          },
-        )),
+                      },
+                      onBoardPart: 1,
+                    )
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                Utils.closeApiLoaderDialog(context);
+                return NetworkErrorScreen(
+                  errorMessage: snapshot.error.toString(),
+                  tapToRetryFunction: () {
+                    Utils.showApiLoaderDialog(context);
+                    requestService();
+                  },
+                );
+              }else {
+                return Container();
+              }
+            },
+          )),
+        ),
       ),
     );
   }

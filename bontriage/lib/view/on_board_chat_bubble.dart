@@ -110,6 +110,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
             child: RichText(
+              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                 children: widget.textSpanList,
               ),
@@ -130,6 +131,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
             physics: BouncingScrollPhysics(),
             child: Text(
               widget.chatBubbleText,
+              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: Constant.jostRegular,
@@ -147,6 +149,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
 
   @override
   Widget build(BuildContext context) {
+    //MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

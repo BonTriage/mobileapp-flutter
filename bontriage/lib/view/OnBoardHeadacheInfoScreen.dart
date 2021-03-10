@@ -16,35 +16,40 @@ class _OnBoardHeadacheInfoScreenState extends State<OnBoardHeadacheInfoScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Utils.saveUserProgress(0, Constant.headacheInfoEventStep);
   }
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        body: OnBoardInformationScreen(
-          bubbleChatTextSpanList: [
-            TextSpan(
-                text: Constant.letsBeginBySeeing,
-                style: TextStyle(
-                    height: 1.3,
-                    fontSize: 15,
-                    fontFamily: Constant.jostRegular,
-                    color: Constant.bubbleChatTextView))
-          ],
-          isShowNextButton: true,
-          chatText: Constant.letsBeginBySeeing,
-          nextButtonFunction: () {
-            sendToNextScreen();
-          },
-          isShowSecondBottomButton: false,
-          closeButtonFunction: () {
-            Utils.navigateToExitScreen(context);
-          },
+        body: MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor)
+          ),
+          child: OnBoardInformationScreen(
+            bubbleChatTextSpanList: [
+              TextSpan(
+                  text: Constant.letsBeginBySeeing,
+                  style: TextStyle(
+                      height: 1.3,
+                      fontSize: 15,
+                      fontFamily: Constant.jostRegular,
+                      color: Constant.bubbleChatTextView))
+            ],
+            isShowNextButton: true,
+            chatText: Constant.letsBeginBySeeing,
+            nextButtonFunction: () {
+              sendToNextScreen();
+            },
+            isShowSecondBottomButton: false,
+            closeButtonFunction: () {
+              Utils.navigateToExitScreen(context);
+            },
+          ),
         ),
       ),
     );

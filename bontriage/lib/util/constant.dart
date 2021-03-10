@@ -694,6 +694,8 @@ class Constant {
   static const Color compareCompassChartFirstLoggedValueColor = Color(0x007E00CB);
   static  Color barTutorialsTapColor =Color.fromARGB(255,202, 215, 191);
 
+  static const double minTextScaleFactor = 0.8;
+  static const double maxTextScaleFactor = 1.2;
 
   //images
   static String userAvatar = 'images/user_avatar.png';

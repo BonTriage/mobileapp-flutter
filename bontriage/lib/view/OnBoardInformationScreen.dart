@@ -174,6 +174,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                         child: FadeTransition(
                           opacity: _animationController,
                           child: RichText(
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                             text: TextSpan(
                               children: widget.bubbleChatTextSpanList,
                             ),
@@ -207,6 +208,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                         child: Center(
                           child: Text(
                             Constant.next,
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 14,
@@ -241,6 +243,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           child: Center(
                             child: Text(
                               widget.bottomButtonText ?? Constant.blankString,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 15,
@@ -277,6 +280,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           child: Center(
                             child: Text(
                               widget.secondBottomButtonText ?? Constant.blankString,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 15,

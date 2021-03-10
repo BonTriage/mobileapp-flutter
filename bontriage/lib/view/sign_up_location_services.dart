@@ -89,6 +89,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
               children: [
                 Text(
                   Constant.enableLocationServices,
+                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                   style: TextStyle(
                     fontSize: 16,
                     color: Constant.chatBubbleGreen,
@@ -124,6 +125,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
             ),
             Text(
               Constant.enableLocationRecommended,
+              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               style: TextStyle(
                   height: 1.3,
                   fontSize: 16,

@@ -58,7 +58,8 @@ class _SecondStepCompassResultTutorialsState
       Text(
         Constant.compassTextView,
         textAlign: TextAlign.center,
-        style: _normalTextStyle
+        style: _normalTextStyle,
+        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
       ),
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,6 +67,7 @@ class _SecondStepCompassResultTutorialsState
         children: [
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
               children: [
                 TextSpan(
@@ -82,6 +84,7 @@ class _SecondStepCompassResultTutorialsState
           SizedBox(height: 20,),
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
               children: [
                 TextSpan(
@@ -106,6 +109,7 @@ class _SecondStepCompassResultTutorialsState
         children: [
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
               children: [
                 TextSpan(
@@ -122,6 +126,7 @@ class _SecondStepCompassResultTutorialsState
           SizedBox(height: 20,),
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
                 children: [
                   TextSpan(
@@ -146,6 +151,7 @@ class _SecondStepCompassResultTutorialsState
         children: [
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
               children: [
                 TextSpan(
@@ -162,6 +168,7 @@ class _SecondStepCompassResultTutorialsState
           SizedBox(height: 20,),
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
                 children: [
                   TextSpan(
@@ -186,6 +193,7 @@ class _SecondStepCompassResultTutorialsState
         children: [
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
               children: [
                 TextSpan(
@@ -202,6 +210,7 @@ class _SecondStepCompassResultTutorialsState
           SizedBox(height: 20,),
           RichText(
             textAlign: TextAlign.center,
+            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
             text: TextSpan(
                 children: [
                   TextSpan(
@@ -246,6 +255,7 @@ class _SecondStepCompassResultTutorialsState
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
                     tutorialTitleByIndex(),
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 16,

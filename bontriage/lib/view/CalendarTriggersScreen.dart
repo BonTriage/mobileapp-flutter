@@ -444,8 +444,10 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       }
                     }),
                 Container(
-                  margin: EdgeInsets.only(left: 15, right: 10),
-                  child: Row(
+                  margin: EdgeInsets.only(left: 0, right: 10),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Container(
                         decoration: BoxDecoration(

@@ -544,6 +544,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: RichText(
+                            textScaleFactor: MediaQuery.of(context).textScaleFactor,
                             text: TextSpan(
                               children: _getBubbleTextSpans(),
                             ),

@@ -28,7 +28,6 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     textEditingController = TextEditingController();
 
@@ -53,7 +52,6 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
 
   @override
   void didUpdateWidget(SignUpNameScreen oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (!_animationController.isAnimating) {
@@ -85,7 +83,6 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
         child: Center(
           child: TextField(
             maxLength: 40,
-            
             textCapitalization: TextCapitalization.sentences,
             onEditingComplete: () {
               widget.selectedAnswerCallBack(
@@ -116,6 +113,7 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Constant.chatBubbleGreen)),
               contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              counterText: '',
             ),
           ),
         ),

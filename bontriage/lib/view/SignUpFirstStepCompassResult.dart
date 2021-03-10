@@ -86,14 +86,12 @@ class _SignUpFirstStepCompassResultState
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
 
   @override
   void didUpdateWidget(SignUpFirstStepCompassResult oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
@@ -133,7 +131,7 @@ class _SignUpFirstStepCompassResultState
         _scrollController.jumpTo(0);
       });
     } catch (e) {}
-
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -233,6 +231,7 @@ class _SignUpFirstStepCompassResultState
                                               child: Text(
                                                 _bubbleTextViewList[
                                                     _buttonPressedValue],
+                                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                 style: TextStyle(
                                                     height: 1.3,
                                                     fontSize: 15,
@@ -271,6 +270,7 @@ class _SignUpFirstStepCompassResultState
                               },
                               child: Text(
                                 "Frequency",
+                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     color: Color(0xffafd794),
                                     fontSize: 14,
@@ -287,6 +287,7 @@ class _SignUpFirstStepCompassResultState
                                 },
                                 child: Text(
                                   "Intensity",
+                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 14,
@@ -324,6 +325,7 @@ class _SignUpFirstStepCompassResultState
                                             child: Center(
                                               child: Text(
                                                 userScoreData,
+                                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                 style: TextStyle(
                                                     color: Color(0xff0E1712),
                                                     fontSize: 14,
@@ -351,6 +353,7 @@ class _SignUpFirstStepCompassResultState
                                 },
                                 child: Text(
                                   "Disability",
+                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 14,
@@ -367,6 +370,7 @@ class _SignUpFirstStepCompassResultState
                               },
                               child: Text(
                                 "Duration",
+                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                 style: TextStyle(
                                     color: Color(0xffafd794),
                                     fontSize: 14,
@@ -406,6 +410,7 @@ class _SignUpFirstStepCompassResultState
                                 child: Center(
                                   child: Text(
                                     Constant.back,
+                                    textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                     style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 14,
@@ -450,6 +455,7 @@ class _SignUpFirstStepCompassResultState
                               child: Center(
                                 child: Text(
                                   Constant.next,
+                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                   style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
