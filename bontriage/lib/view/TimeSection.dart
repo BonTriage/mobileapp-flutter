@@ -631,6 +631,20 @@ class _TimeSectionState extends State<TimeSection>
   /// @param whichPickerClicked: 0 for startDate, 1 for startTime, 2 for endDate, 3 for endTime
   void _openDatePickerBottomSheet(
       CupertinoDatePickerMode cupertinoDatePickerMode, int whichPickerClicked) {
+    DateTime dateTime;
+
+    switch(whichPickerClicked) {
+      case 1:
+        dateTime = _selectedStartTime ?? DateTime.now();
+        break;
+      case 2:
+      case 3:
+        dateTime = _selectedEndDateAndTime ?? DateTime.now();
+        break;
+      default:
+        dateTime = DateTime.now();
+    }
+
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -640,6 +654,7 @@ class _TimeSectionState extends State<TimeSection>
         context: context,
         builder: (context) => DateTimePicker(
               cupertinoDatePickerMode: cupertinoDatePickerMode,
+              initialDateTime: dateTime,
               onDateTimeSelected:
                   _getDateTimeCallbackFunction(whichPickerClicked),
             ));
