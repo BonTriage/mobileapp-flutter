@@ -13,8 +13,6 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'DateTimePicker.dart';
-
 class CompareCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;

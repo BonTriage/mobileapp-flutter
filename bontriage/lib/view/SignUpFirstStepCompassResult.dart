@@ -34,6 +34,7 @@ class _SignUpFirstStepCompassResultState
   bool isVolumeOn = false;
   ScrollController _scrollController;
   bool _isButtonClicked = false;
+  bool _isVolumeClicked = false;
 
   int userFrequencyValue;
   int userDurationValue;
@@ -98,12 +99,17 @@ class _SignUpFirstStepCompassResultState
   ///Method to toggle volume on or off
   void _toggleVolume() async {
     setState(() {
+      _isVolumeClicked = true;
       isVolumeOn = !isVolumeOn;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(Constant.chatBubbleVolumeState, isVolumeOn);
     TextToSpeechRecognition.speechToText(
         Constant.welcomePersonalizedHeadacheFirstTextView);
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      _isVolumeClicked = false;
+    });
   }
 
   @override
@@ -119,18 +125,20 @@ class _SignUpFirstStepCompassResultState
       "D",
     ];
 
-    if (!_animationController.isAnimating) {
-      _animationController.reset();
-      _animationController.forward();
-    }
+    if(!_isVolumeClicked) {
+      if (!_animationController.isAnimating) {
+        _animationController.reset();
+        _animationController.forward();
+      }
 
-    try {
-      _scrollController.animateTo(1,
-          duration: Duration(milliseconds: 150), curve: Curves.easeIn);
-      Future.delayed(Duration(milliseconds: 150), () {
-        _scrollController.jumpTo(0);
-      });
-    } catch (e) {}
+      try {
+        _scrollController.animateTo(1,
+            duration: Duration(milliseconds: 150), curve: Curves.easeIn);
+        Future.delayed(Duration(milliseconds: 150), () {
+          _scrollController.jumpTo(0);
+        });
+      } catch (e) {}
+    }
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,

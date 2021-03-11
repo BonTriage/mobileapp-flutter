@@ -25,6 +25,13 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
   Offset _dotOffset;
   bool _shouldClip = false;
 
+  TextStyle _textStyle = TextStyle(
+    fontSize: 16,
+    fontFamily: Constant.jostRegular,
+    height: 1.3,
+    color: Constant.chatBubbleGreen,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -47,23 +54,13 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
       [
         TextSpan(
           text: Constant.trendsTutorialText1,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
       ],
       [
         TextSpan(
           text: 'A filled circle (',
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
         WidgetSpan(
           alignment: PlaceholderAlignment.middle,
@@ -74,23 +71,13 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
         ),
         TextSpan(
           text: ') indicates if a certain behavior, potential trigger, or medication was present on a given day.',
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
       ],
       [
         TextSpan(
           text: 'An outlined circle (',
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
         WidgetSpan(
           alignment: PlaceholderAlignment.middle,
@@ -101,34 +88,19 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
         ),
         TextSpan(
           text: ') means you did not experience that item on a given day.',
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
       ],
       [
         TextSpan(
           text: Constant.trendsTutorialText4,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
       ],
       [
         TextSpan(
           text: Constant.trendsTutorialText5,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            height: 1.3,
-            color: Constant.chatBubbleGreen,
-          ),
+          style: _textStyle,
         ),
       ],
     ];

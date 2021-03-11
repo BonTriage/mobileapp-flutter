@@ -451,7 +451,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: setHeadacheColor(),
+                            color: /*setHeadacheColor()*/Constant.otherHeadacheColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -461,7 +461,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   0
                               ? widget
@@ -469,7 +469,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                                   .recordsTrendsDataModel
                                   .headacheListModelData[0]
                                   .text
-                              : '',
+                              : ''*/
+                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -488,7 +489,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: headacheColorChanged? Constant.otherHeadacheColor: Constant.migraineColor,
+                            color: /*headacheColorChanged? Constant.otherHeadacheColor: */Constant.migraineColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -498,7 +499,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel
+                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   1
                               ? widget
@@ -506,7 +507,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                                   .recordsTrendsDataModel
                                   .headacheListModelData[1]
                                   .text
-                              : '',
+                              : ''*/
+                        widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -1202,14 +1204,22 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
       maxValue = firstMultipleHeadache1;
       minValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
+        BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
+      ];
     } else {
       minValue = firstMultipleHeadache1;
       maxValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
+        BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),
+      ];
     }
-    return [
+    /*return [
       BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
       BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
-    ];
+    ];*/
   }
 
   double setAxisValue(
