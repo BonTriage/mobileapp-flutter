@@ -78,17 +78,23 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async => false,
-      child: AnimatedSize(
-        vsync: this,
-        duration: Duration(milliseconds: 350),
-        reverseDuration: Duration(milliseconds: 350),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            _getWidget(),
-          ],
+      child: MediaQuery(
+        data: mediaQueryData.copyWith(
+          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+        ),
+        child: AnimatedSize(
+          vsync: this,
+          duration: Duration(milliseconds: 350),
+          reverseDuration: Duration(milliseconds: 350),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              _getWidget(),
+            ],
+          ),
         ),
       ),
     );

@@ -54,189 +54,11 @@ class _SecondStepCompassResultTutorialsState
     super.initState();
     _pageController = PageController(initialPage: widget.tutorialsIndex);
     currentPageIndex = widget.tutorialsIndex;
-    _pageViewWidgets = [
-      Text(
-        Constant.compassTextView,
-        textAlign: TextAlign.center,
-        style: _normalTextStyle,
-        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-      ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Intensity is defined as how much pain you experience with each headache. It is measured on a ',
-                  style: _normalTextStyle,
-                ),
-                TextSpan(
-                  text: 'scale of 1-10.',
-                  style: _valueTextStyle,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20,),
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Your average intensity in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
-                  style: _normalTextStyle
-                ),
-                TextSpan(
-                  text: '${widget.compassTutorialModel.currentMonthIntensity}.',
-                  style: _valueTextStyle,
-                ),
-                TextSpan(
-                  children: _getPreviousMonthIntensitySpan()
-                ),
-              ]
-            ),
-          ),
-        ],
-      ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: 'Disability is defined by how much your headache prevents you from doing the things you normally do. It is measured on a ',
-                    style: _normalTextStyle
-                ),
-                TextSpan(
-                  text: 'scale of 0-4.',
-                  style: _valueTextStyle,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20,),
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: 'Your average disability in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
-                      style: _normalTextStyle
-                  ),
-                  TextSpan(
-                    text: '${widget.compassTutorialModel.currentMonthDisability}.',
-                    style: _valueTextStyle,
-                  ),
-                  TextSpan(
-                      children: _getPreviousMonthDisabilitySpan()
-                  ),
-                ]
-            ),
-          ),
-        ],
-      ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: 'Frequency is defined by how many headaches you experience per month. It is measured on a ',
-                    style: _normalTextStyle
-                ),
-                TextSpan(
-                  text: _getFrequencyScale(),
-                  style: _valueTextStyle,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20,),
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: 'Your average frequency in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
-                      style: _normalTextStyle
-                  ),
-                  TextSpan(
-                    text: '${widget.compassTutorialModel.currentMonthFrequency} ${_getFrequencyUnit()}.',
-                    style: _valueTextStyle,
-                  ),
-                  TextSpan(
-                      children: _getPreviousMonthFrequencySpan()
-                  ),
-                ]
-            ),
-          ),
-        ],
-      ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: 'Duration refers to how long your headache persists. It is measured on a ',
-                    style: _normalTextStyle
-                ),
-                TextSpan(
-                  text: 'scale of hours.',
-                  style: _valueTextStyle,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20,),
-          RichText(
-            textAlign: TextAlign.center,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: 'Your average duration in ${Utils.getMonthName(widget.compassTutorialModel.currentDateTime.month)} was ',
-                      style: _normalTextStyle
-                  ),
-                  TextSpan(
-                    text: _getDurationValue(widget.compassTutorialModel.currentMonthDuration)/*'${widget.compassTutorialModel.currentMonthDuration} hours.'*/,
-                    style: _valueTextStyle,
-                  ),
-                  TextSpan(
-                      children: _getPreviousMonthDurationSpan()
-                  ),
-                ]
-            ),
-          ),
-        ],
-      ),
-    ];
-
-    _scrollControllerList =
-        List.generate(_pageViewWidgets.length, (index) => ScrollController());
   }
 
   @override
   Widget build(BuildContext context) {
+    _initPageViewWidgetList();
     return Container(
       decoration: BoxDecoration(
         color: Constant.backgroundColor,
@@ -580,5 +402,235 @@ class _SecondStepCompassResultTutorialsState
     }
 
     return duration;
+  }
+
+  void _initPageViewWidgetList() {
+    if(_pageViewWidgets == null) {
+      _pageViewWidgets = [
+        Text(
+          Constant.compassTextView,
+          textAlign: TextAlign.center,
+          style: _normalTextStyle,
+          textScaleFactor: MediaQuery
+              .of(context)
+              .textScaleFactor
+              .clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Intensity is defined as how much pain you experience with each headache. It is measured on a ',
+                    style: _normalTextStyle,
+                  ),
+                  TextSpan(
+                    text: 'scale of 1-10.',
+                    style: _valueTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'Your average intensity in ${Utils.getMonthName(
+                            widget.compassTutorialModel.currentDateTime
+                                .month)} was ',
+                        style: _normalTextStyle
+                    ),
+                    TextSpan(
+                      text: '${widget.compassTutorialModel
+                          .currentMonthIntensity}.',
+                      style: _valueTextStyle,
+                    ),
+                    TextSpan(
+                        children: _getPreviousMonthIntensitySpan()
+                    ),
+                  ]
+              ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Disability is defined by how much your headache prevents you from doing the things you normally do. It is measured on a ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: 'scale of 0-4.',
+                    style: _valueTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'Your average disability in ${Utils.getMonthName(
+                            widget.compassTutorialModel.currentDateTime
+                                .month)} was ',
+                        style: _normalTextStyle
+                    ),
+                    TextSpan(
+                      text: '${widget.compassTutorialModel
+                          .currentMonthDisability}.',
+                      style: _valueTextStyle,
+                    ),
+                    TextSpan(
+                        children: _getPreviousMonthDisabilitySpan()
+                    ),
+                  ]
+              ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Frequency is defined by how many headaches you experience per month. It is measured on a ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: _getFrequencyScale(),
+                    style: _valueTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'Your average frequency in ${Utils.getMonthName(
+                            widget.compassTutorialModel.currentDateTime
+                                .month)} was ',
+                        style: _normalTextStyle
+                    ),
+                    TextSpan(
+                      text: '${widget.compassTutorialModel
+                          .currentMonthFrequency} ${_getFrequencyUnit()}.',
+                      style: _valueTextStyle,
+                    ),
+                    TextSpan(
+                        children: _getPreviousMonthFrequencySpan()
+                    ),
+                  ]
+              ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Duration refers to how long your headache persists. It is measured on a ',
+                      style: _normalTextStyle
+                  ),
+                  TextSpan(
+                    text: 'scale of hours.',
+                    style: _valueTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            RichText(
+              textAlign: TextAlign.center,
+              textScaleFactor: MediaQuery
+                  .of(context)
+                  .textScaleFactor
+                  .clamp(
+                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'Your average duration in ${Utils.getMonthName(
+                            widget.compassTutorialModel.currentDateTime
+                                .month)} was ',
+                        style: _normalTextStyle
+                    ),
+                    TextSpan(
+                      text: _getDurationValue(widget.compassTutorialModel
+                          .currentMonthDuration) /*'${widget.compassTutorialModel.currentMonthDuration} hours.'*/,
+                      style: _valueTextStyle,
+                    ),
+                    TextSpan(
+                        children: _getPreviousMonthDurationSpan()
+                    ),
+                  ]
+              ),
+            ),
+          ],
+        ),
+      ];
+      _scrollControllerList =
+          List.generate(_pageViewWidgets.length, (index) => ScrollController());
+    }
   }
 }

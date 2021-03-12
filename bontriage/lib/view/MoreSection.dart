@@ -110,12 +110,14 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.text,
-                  style: TextStyle(
-                      color: Constant.locationServiceGreen,
-                      fontSize: 16,
-                      fontFamily: Constant.jostRegular
+                Flexible(
+                  child: Text(
+                    widget.text,
+                    style: TextStyle(
+                        color: Constant.locationServiceGreen,
+                        fontSize: 16,
+                        fontFamily: Constant.jostRegular
+                    ),
                   ),
                 ),
                 SizedBox(width: 10,),
