@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
     1: GlobalKey<NavigatorState>(),
-    2: GlobalKey<NavigatorState>(),
-    3: GlobalKey<NavigatorState>(),
+    2: GlobalKey<NavigatorState>(),/*
+    3: GlobalKey<NavigatorState>(),*/
   };
 
   @override
@@ -67,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildOffstageNavigator(0),
                 _buildOffstageNavigator(1),
+                /*_buildOffstageNavigator(2),*/
                 _buildOffstageNavigator(2),
-                _buildOffstageNavigator(3),
               ],
             ),
           ),
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 label: Constant.records,
               ),
-              BottomNavigationBarItem(
+              /*BottomNavigationBarItem(
                 icon: Image.asset(
                   Constant.discoverUnselected,
                   height: 25,
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 25,
                 ),
                 label: Constant.discover,
-              ),
+              ),*/
               BottomNavigationBarItem(
                 icon: Image.asset(
                   Constant.moreUnselected,
@@ -140,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: (index) {
               if(index != currentIndex) {
                 setState(() {
+                  print(index);
                   currentIndex = index;
                   saveCurrentIndexOfTabBar(currentIndex);
                 });
@@ -157,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return TabNavigatorRoutes.meRoot;
       case 1:
         return TabNavigatorRoutes.recordsRoot;
-      case 2:
-        return TabNavigatorRoutes.discoverRoot;
+      /*case 2:
+        return TabNavigatorRoutes.discoverRoot;*/
       default:
         return TabNavigatorRoutes.moreRoot;
     }

@@ -157,6 +157,7 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     var routeBuilders = _routeBuilders(context, null);
 
+
     return Navigator(
         key: navigatorKey,
         initialRoute: root,
