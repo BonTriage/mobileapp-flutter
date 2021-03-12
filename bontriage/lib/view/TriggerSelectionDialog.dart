@@ -56,78 +56,84 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-            decoration: BoxDecoration(
-              color: Constant.backgroundColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 20,
-                        height: 20,
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    return MediaQuery(
+      data: mediaQueryData.copyWith(
+        textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor)
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              decoration: BoxDecoration(
+                color: Constant.backgroundColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image(
+                          image: AssetImage(Constant.closeIcon),
+                          width: 20,
+                          height: 20,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Text(
-                      Constant.multipleTriggers,
-                      style: TextStyle(
-                          color: Constant.chatBubbleGreen,
-                          fontSize: 16,
-                          fontFamily: Constant.jostRegular),
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Text(
-                      Constant.selectUpTo3Triggers,
-                      style: TextStyle(
-                          color: Constant.locationServiceGreen,
-                          fontSize: 14,
-                          fontFamily: Constant.jostRegular),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Text(
+                        Constant.multipleTriggers,
+                        style: TextStyle(
+                            color: Constant.chatBubbleGreen,
+                            fontSize: 16,
+                            fontFamily: Constant.jostRegular),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: Wrap(
-                      children: _getChipWidget(),
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Text(
+                        Constant.selectUpTo3Triggers,
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontSize: 14,
+                            fontFamily: Constant.jostRegular),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Wrap(
+                        children: _getChipWidget(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

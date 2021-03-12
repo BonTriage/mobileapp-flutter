@@ -189,6 +189,10 @@ class _TimeSectionState extends State<TimeSection>
         widget.addHeadacheDateTimeDetailsData(
             "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDate));
       });
+    } else {
+      Future.delayed(Duration(milliseconds: 500), () {
+        Utils.showValidationErrorDialog(context, 'Invalid End Date.');
+      });
     }
     print(dateTime);
   }
@@ -225,6 +229,10 @@ class _TimeSectionState extends State<TimeSection>
         }
         widget.addHeadacheDateTimeDetailsData(
             "onset", Utils.getDateTimeInUtcFormat(_selectedStartTime));
+      });
+    } else {
+      Future.delayed(Duration(milliseconds: 500), () {
+        Utils.showValidationErrorDialog(context, 'Invalid Start Time.');
       });
     }
     print(dateTime);
@@ -273,6 +281,10 @@ class _TimeSectionState extends State<TimeSection>
         _selectedEndDateAndTime = _selectedEndTime;
         widget.addHeadacheDateTimeDetailsData(
             "endtime", Utils.getDateTimeInUtcFormat(_selectedEndTime));
+      });
+    } else {
+      Future.delayed(Duration(milliseconds: 500), () {
+        Utils.showValidationErrorDialog(context, 'Invalid End Time.');
       });
     }
     print(dateTime);

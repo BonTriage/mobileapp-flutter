@@ -214,7 +214,17 @@ class LogDayBloc {
             Questions selectedMedicationQuestion = questionList.firstWhere((quesElement) => quesElement.tag == 'medication', orElse: () => null);
             if(selectedMedicationQuestion != null) {
               String selectedMedicationValue = selectedMedicationQuestion.values[selectedIndex].text;
-              Questions selectedDosageQuestion = questionList.firstWhere((element) => element.precondition.contains(selectedMedicationValue), orElse: () => null);
+              Questions selectedDosageQuestion = questionList.firstWhere((element) {
+                List<String> splitConditionList = element.precondition.split('=');
+                if(splitConditionList.length == 2) {
+                  splitConditionList[0] = splitConditionList[0].trim();
+                  splitConditionList[1] = splitConditionList[1].trim();
+
+                  return (selectedMedicationValue == splitConditionList[1]);
+                } else {
+                  return false;
+                }
+              }, orElse: () => null);
               if(selectedDosageQuestion != null) {
                 medicationSelectedDataModel.selectedMedicationDosageList.forEach((dosageElement) {
                   int selectedDosageIndex = int.parse(dosageElement.toString()) - 1;

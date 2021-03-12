@@ -6,6 +6,7 @@ import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
+import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -42,7 +43,6 @@ class _MeScreenState extends State<MeScreen>
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   CurrentUserHeadacheModel currentUserHeadacheModel;
 
-  Timer _timer;
   GlobalKey _logDayGlobalKey = GlobalKey();
   GlobalKey _addHeadacheGlobalKey = GlobalKey();
 
@@ -450,11 +450,6 @@ class _MeScreenState extends State<MeScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    try {
-      _timer.cancel();
-    } catch (e) {
-      print(e);
-    }
     _calendarScreenBloc.dispose();
     super.dispose();
   }
@@ -527,7 +522,7 @@ class _MeScreenState extends State<MeScreen>
 
   void setUserWeekData(
       UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel) {
-    List<int> currentWeekConsData = [];
+    List<CurrentWeekConsData> currentWeekConsData = [];
     currentWeekListData = [];
     var _firstDayOfTheWeek =
         _dateTime.subtract(new Duration(days: _dateTime.weekday));
@@ -535,22 +530,22 @@ class _MeScreenState extends State<MeScreen>
         userLogHeadacheDataCalendarModel, _firstDayOfTheWeek);
 
     for (int i = 0; i < 7; i++) {
-      if (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) {
+      if (currentWeekConsData[i].widgetType == 0 || currentWeekConsData[i].widgetType == 1) {
         var j = i + 1;
         if (j < 7 &&
-            (currentWeekConsData[i] == 0 || currentWeekConsData[i] == 1) &&
-            (currentWeekConsData[j] == 0 || currentWeekConsData[j] == 1)) {
+            (currentWeekConsData[i].widgetType == 0) &&
+            (currentWeekConsData[j].widgetType == 0) && _checkForConsecutiveHeadacheId(currentWeekConsData[i], currentWeekConsData[j])) {
           currentWeekListData.add(ConsecutiveSelectedDateWidget(
               weekDateData: _firstDayOfTheWeek,
               calendarType: 0,
-              calendarDateViewType: currentWeekConsData[i],
+              calendarDateViewType: currentWeekConsData[i].widgetType,
               triggersListData: [],
               userMonthTriggersListData: []));
         } else {
           currentWeekListData.add(DateWidget(
               weekDateData: _firstDayOfTheWeek,
               calendarType: 0,
-              calendarDateViewType: currentWeekConsData[i],
+              calendarDateViewType: currentWeekConsData[i].widgetType,
               triggersListData: [],
               userMonthTriggersListData: []));
         }
@@ -558,7 +553,7 @@ class _MeScreenState extends State<MeScreen>
         currentWeekListData.add(DateWidget(
             weekDateData: _firstDayOfTheWeek,
             calendarType: 0,
-            calendarDateViewType: currentWeekConsData[i],
+            calendarDateViewType: currentWeekConsData[i].widgetType,
             triggersListData: [],
             userMonthTriggersListData: []));
       }
@@ -574,7 +569,7 @@ class _MeScreenState extends State<MeScreen>
   // 1- LogDay Data
   // 2- No Headache and No Log
   void filterSelectedLogAndHeadacheDayList(
-      List<int> currentWeekConsData,
+      List<CurrentWeekConsData> currentWeekConsDataList,
       UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel,
       DateTime firstDayOfTheWeek) {
     for (int i = 0; i < 7; i++) {
@@ -582,21 +577,38 @@ class _MeScreenState extends State<MeScreen>
           .addHeadacheListData
           .firstWhere((element) {
         if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
-          currentWeekConsData.add(0);
+          CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+          currentWeekConsData.widgetType = 0;
+          currentWeekConsData.eventIdList = [];
+
+          print(element.headacheListData);
+
+          if(element.headacheListData != null) {
+            element.headacheListData.forEach((headacheElement) {
+              currentWeekConsData.eventIdList.add(headacheElement.id);
+            });
+          }
+          currentWeekConsDataList.add(currentWeekConsData);
           return true;
         }
         return false;
       }, orElse: () => null);
       if (userCalendarData == null) {
         userLogHeadacheDataCalendarModel.addLogDayListData.firstWhere(
-            (element) {
-          if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
-            currentWeekConsData.add(1);
-            return true;
-          }
-          return false;
-        }, orElse: () {
-          currentWeekConsData.add(2);
+                (element) {
+              if (int.parse(element.selectedDay) == firstDayOfTheWeek.day) {
+                CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+                currentWeekConsData.widgetType = 1;
+                currentWeekConsData.eventIdList = [];
+                currentWeekConsDataList.add(currentWeekConsData);
+                return true;
+              }
+              return false;
+            }, orElse: () {
+          CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
+          currentWeekConsData.widgetType = 2;
+          currentWeekConsData.eventIdList = [];
+          currentWeekConsDataList.add(currentWeekConsData);
           return null;
         });
       }
@@ -604,7 +616,24 @@ class _MeScreenState extends State<MeScreen>
       firstDayOfTheWeek = DateTime(firstDayOfTheWeek.year,
           firstDayOfTheWeek.month, firstDayOfTheWeek.day + 1);
     }
-    print(currentWeekConsData);
+    print(currentWeekConsDataList);
+  }
+
+  bool _checkForConsecutiveHeadacheId(CurrentWeekConsData currentWeekConsData1, CurrentWeekConsData currentWeekConsData2) {
+    bool isSatisfied = false;
+
+    for (int i = 0; i < currentWeekConsData1.eventIdList.length; i++) {
+      int eventId = currentWeekConsData1.eventIdList[i];
+
+      var eventIdElement = currentWeekConsData2.eventIdList.firstWhere((element) => element == eventId, orElse: () => null);
+
+      if(eventIdElement != null) {
+        isSatisfied = true;
+        break;
+      }
+    }
+
+    return isSatisfied;
   }
 
   void _getUserProfileDetails() async {
@@ -666,7 +695,7 @@ class _MeScreenState extends State<MeScreen>
     return Constant.clickHereToFinish;
   }
 
-  void _navigateToAddHeadacheScreen() async{
+  void _navigateToAddHeadacheScreen() async {
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
 
@@ -690,7 +719,7 @@ class _MeScreenState extends State<MeScreen>
     return 'Add Headache';
   }
 
-  void _navigateToOtherScreen() async{
+  void _navigateToOtherScreen() async {
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
     } else {

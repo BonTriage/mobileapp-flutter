@@ -110,7 +110,6 @@ class CalendarUtil {
 
             if(element.headacheListData != null) {
               element.headacheListData.forEach((headacheElement) {
-                print('in here');
                 currentWeekConsData.eventIdList.add(headacheElement.id);
               });
             }

@@ -773,7 +773,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       case 'medication':
         String medName = widget.valuesList[whichMedicationItemSelected].text;
         Questions questions = widget.medicationExpandableWidgetList.firstWhere(
-            (element) => element.precondition.contains(medName),
+            (element) {
+              List<String> splitConditionList = element.precondition.split('=');
+              if(splitConditionList.length == 2) {
+                splitConditionList[0] = splitConditionList[0].trim();
+                splitConditionList[1] = splitConditionList[1].trim();
+
+                return (medName == splitConditionList[1]);
+              } else {
+                return false;
+              }
+            },
             orElse: () => null);
 
         DateTime _medicationDateTime = DateTime.now();
@@ -984,7 +994,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
                     String medName = widget.valuesList[whichMedicationItemSelected].text;
                     Questions questions1 = widget.medicationExpandableWidgetList.firstWhere(
-                            (element) => element.precondition.contains(medName),
+                            (element) {
+                              List<String> splitConditionList = element.precondition.split('=');
+                              if(splitConditionList.length == 2) {
+                                splitConditionList[0] = splitConditionList[0].trim();
+                                splitConditionList[1] = splitConditionList[1].trim();
+
+                                return (medName == splitConditionList[1]);
+                              } else {
+                                return false;
+                              }
+                            },
                         orElse: () => null);
 
                     if(questions1 != null) {
@@ -1267,7 +1287,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     if(_numberOfDosageAddedList[whichMedicationItemSelected] > 0) {
       String medName = widget.valuesList[whichMedicationItemSelected].text;
       Questions questions = widget.medicationExpandableWidgetList.firstWhere(
-              (element) => element.precondition.contains(medName),
+              (element) {
+                List<String> splitConditionList = element.precondition.split('=');
+                if(splitConditionList.length == 2) {
+                  splitConditionList[0] = splitConditionList[0].trim();
+                  splitConditionList[1] = splitConditionList[1].trim();
+
+                  return (medName == splitConditionList[1]);
+                } else {
+                  return false;
+                }
+              },
           orElse: () => null);
 
       DateTime medicationDateTime = DateTime.now();
@@ -1626,7 +1656,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       for(var i = 0; i < widget.valuesList.length; i++) {
         String medName = widget.valuesList[i].text;
         Questions questions = widget.medicationExpandableWidgetList.firstWhere(
-                (element) => element.precondition.contains(medName),
+                (element) {
+                  List<String> splitConditionList = element.precondition.split('=');
+                  if(splitConditionList.length == 2) {
+                    splitConditionList[0] = splitConditionList[0].trim();
+                    splitConditionList[1] = splitConditionList[1].trim();
+
+                    return (medName == splitConditionList[1]);
+                  } else {
+                    return false;
+                  }
+                },
             orElse: () => null);
 
         if(questions != null) {
@@ -1677,7 +1717,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         for(var i = 0; i < _numberOfDosageAddedList[whichMedicationItemSelected]; i++) {
           String medName = widget.valuesList[whichMedicationItemSelected].text;
           Questions questions = widget.medicationExpandableWidgetList.firstWhere(
-                  (element) => element.precondition.contains(medName),
+                  (element) {
+                    List<String> splitConditionList = element.precondition.split('=');
+                    if(splitConditionList.length == 2) {
+                      splitConditionList[0] = splitConditionList[0].trim();
+                      splitConditionList[1] = splitConditionList[1].trim();
+
+                      return (medName == splitConditionList[1]);
+                    } else {
+                      return false;
+                    }
+                  },
               orElse: () => null);
 
           if(questions != null) {
