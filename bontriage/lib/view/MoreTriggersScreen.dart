@@ -24,6 +24,8 @@ class MoreTriggersScreen extends StatefulWidget {
 class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTickerProviderStateMixin {
   MoreTriggerMedicationBloc _bloc;
 
+  String _initialSelectedAnswerListJson;
+
   @override
   void initState() {
     super.initState();
@@ -35,14 +37,31 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
         Navigator.pop(context, event);
       }
     });
+
+    List<SelectedAnswers> initialSelectedAnswerList = [];
+
+    _initialSelectedAnswerListJson = Constant.blankString;
+
+    if(widget.moreTriggersArgumentModel.selectedAnswerList != null && widget.moreTriggersArgumentModel.selectedAnswerList.length > 0) {
+      initialSelectedAnswerList.addAll(widget.moreTriggersArgumentModel.selectedAnswerList);
+
+      initialSelectedAnswerList.removeWhere((element) => element.questionTag == Constant.headacheMedicationsTag);
+
+      if(initialSelectedAnswerList.length > 0)
+        _initialSelectedAnswerListJson = jsonEncode(initialSelectedAnswerList);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _showSaveAndExitBottomSheet();
-        return false;
+        if(_checkIfAnyChangesMade()) {
+          _showSaveAndExitBottomSheet();
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Container(
         decoration: Constant.backgroundBoxDecoration,
@@ -64,7 +83,10 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        _showSaveAndExitBottomSheet();
+                        if(_checkIfAnyChangesMade())
+                          _showSaveAndExitBottomSheet();
+                        else
+                          Navigator.pop(context);
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(
@@ -162,5 +184,31 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
         Navigator.pop(context, resultFromActionSheet);
       }
     }
+  }
+
+  bool _checkIfAnyChangesMade() {
+    bool isChangesMade = false;
+    if(widget.moreTriggersArgumentModel.selectedAnswerList != null) {
+      List<SelectedAnswers> selectedAnswerList = [];
+
+      selectedAnswerList.addAll(widget.moreTriggersArgumentModel.selectedAnswerList);
+
+      selectedAnswerList.removeWhere((element) => element.questionTag == Constant.headacheMedicationsTag);
+
+
+      String selectedAnswerListJson = Constant.blankString;
+
+      if(selectedAnswerList.length > 0) {
+        selectedAnswerListJson = jsonEncode(selectedAnswerList);
+      }
+
+      if (_initialSelectedAnswerListJson.isEmpty) {
+        isChangesMade = selectedAnswerList.length > 0;
+      } else {
+        isChangesMade = _initialSelectedAnswerListJson != selectedAnswerListJson;
+      }
+    }
+
+    return isChangesMade;
   }
 }

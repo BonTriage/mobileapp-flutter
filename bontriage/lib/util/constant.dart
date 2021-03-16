@@ -334,6 +334,8 @@ class Constant {
   static const String headacheTypicalBadPainTag = 'headache.typicalbadpain';
   static const String headacheNumberTag = 'headache.number';
   static const String profileLocationTag = 'profile.location';
+  static const String headacheMedicationsTag = 'headache.medications';
+  static const String headacheTriggerTag = 'headache.trigger';
   static String end = 'END';
   static String tapHereToEnd = 'Headache in progress. Tap here to end.';
   static String onAScaleOf1To10 =

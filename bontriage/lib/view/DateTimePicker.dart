@@ -93,6 +93,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                           backgroundColor: Colors.transparent,
                           mode: widget.cupertinoDatePickerMode,
                           use24hFormat: false,
+                          minimumYear: 2015,
                           maximumDate: (widget.cupertinoDatePickerMode != CupertinoDatePickerMode.time) ? DateTime.now() : null,
                           maximumYear: DateTime.now().year,
                           onDateTimeChanged: (dateTime) {
