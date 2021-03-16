@@ -12,7 +12,12 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="BonTriage"
         android:icon="@drawable/app_icon"
-        android:roundIcon="@drawable/app_icon">
+        android:roundIcon="@drawable/app_icon"
+        android:usesCleartextTraffic="true">
+
+        <meta-data android:name="io.flutter.network-policy"
+            android:resource="@xml/network_security_config"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

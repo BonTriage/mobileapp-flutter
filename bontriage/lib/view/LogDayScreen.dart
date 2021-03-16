@@ -439,12 +439,7 @@ class _LogDayScreenState extends State<LogDayScreen>
   }
 
   void _showDiscardChangesBottomSheet() async {
-    var resultOfDiscardChangesBottomSheet = await showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        ),
+    var resultOfDiscardChangesBottomSheet = await showCupertinoModalPopup(
         context: context,
         builder: (context) => DiscardChangesBottomSheet());
     if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {

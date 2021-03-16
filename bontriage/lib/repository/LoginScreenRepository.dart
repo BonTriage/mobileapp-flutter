@@ -17,7 +17,7 @@ class LoginScreenRepository{
       } else {
         return response;
       }
-    } catch (Exception) {
+    } catch (e) {
       return album;
     }
   }

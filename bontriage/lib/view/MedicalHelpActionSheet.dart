@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -7,167 +8,79 @@ class MedicalHelpActionSheet extends StatefulWidget {
 }
 
 class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
+
+  TextStyle _textStyle = TextStyle(
+    fontFamily: Constant.jostRegular,
+    color: Constant.cancelBlueColor,
+    fontSize: 16
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Constant.whiteColorAlpha85
-            ),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.medicalHelp);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.medicalHelp,
-                        style: TextStyle(
-                          color: Constant.greyColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.call911);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.call911,
-                        style: TextStyle(
-                          color: Constant.deleteLogRedColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.callADoctor);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.callADoctor,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.findALocalDoctor);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.findALocalDoctor,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.openYourProviderApp);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.openYourProviderApp,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return CupertinoActionSheet(
+          title: Text(
+            Constant.medicalHelp,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: Constant.jostRegular
             ),
           ),
-          SizedBox(height: 8,),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.call911,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle.copyWith(
+                  color: Constant.deleteLogRedColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.call911);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.callADoctor,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.callADoctor);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.findALocalDoctor,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.findALocalDoctor);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.openYourProviderApp,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.openYourProviderApp);
+              },
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text(
+              Constant.cancel,
+                overflow: TextOverflow.ellipsis,
+              style: _textStyle
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context, Constant.cancel);
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
-              child: Center(
-                child: Text(
-                  Constant.cancel,
-                  style: TextStyle(
-                    color: Constant.cancelBlueColor,
-                    fontSize: 18,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 10,)
-        ],
-      ),
-    );
+          )
+      );
   }
 }

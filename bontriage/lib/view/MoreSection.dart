@@ -6,6 +6,7 @@ import 'package:mobile/models/MoreTriggerArgumentModel.dart';
 import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class MoreSection extends StatefulWidget {
@@ -103,6 +104,9 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                       isExpanded = false;
                       _animationController.reverse();
                     }
+                    break;
+                  case Constant.connectTheMigraineMentorTeam:
+                    Utils.customLaunch('mailto:support@bontriage.com');
                     break;
                 }
               }

@@ -83,6 +83,7 @@ class _MoreSupportScreenState extends State<MoreSupportScreen> {
                             navigateToOtherScreenCallback: _navigateToOtherScreen,
                           ),
                           MoreSection(
+                            currentTag: Constant.connectTheMigraineMentorTeam,
                             text: Constant.connectTheMigraineMentorTeam,
                             moreStatus: '',
                             isShowDivider: false,

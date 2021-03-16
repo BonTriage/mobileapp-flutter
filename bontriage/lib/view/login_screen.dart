@@ -328,8 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
   /// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
   /// or not then show alert to the user into the screen.
   void loginService() async {
-    var response =
-        await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
+    var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;

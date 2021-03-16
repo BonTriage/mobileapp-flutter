@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'dart:io' show Platform;
@@ -8,73 +9,40 @@ class SaveAndExitActionSheet extends StatefulWidget {
 }
 
 class _SaveAndExitActionSheetState extends State<SaveAndExitActionSheet> {
+  TextStyle _textStyle = TextStyle(
+      fontFamily: Constant.jostRegular,
+      color: Constant.cancelBlueColor,
+      fontSize: 16
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white
+    return CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text(
+              Constant.saveAndExit,
+              overflow: TextOverflow.ellipsis,
+              style: _textStyle
             ),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.saveAndExit);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.saveAndExit,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                  behavior: HitTestBehavior.translucent,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 8,),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              Navigator.pop(context, Constant.cancel);
+            onPressed: () {
+              Navigator.pop(context, Constant.saveAndExit);
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
-              child: Center(
-                child: Text(
-                  Constant.cancel,
-                  style: TextStyle(
-                    color: Constant.deleteLogRedColor,
-                    fontSize: 18,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
           ),
-          SizedBox(height: Platform.isAndroid ? 10 : 15)
         ],
-      ),
+        cancelButton: CupertinoActionSheetAction(
+          child: Text(
+              Constant.cancel,
+              overflow: TextOverflow.ellipsis,
+              style: _textStyle.copyWith(
+                color: Constant.deleteLogRedColor,
+              ),
+          ),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, Constant.cancel);
+          },
+        )
     );
   }
 }

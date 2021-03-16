@@ -20,11 +20,11 @@ class NetworkService{
     http.Response response;
     try{
       if (requestMethod == RequestMethod.GET) {
-        response = await client.get(url, headers: RequestHeader().createRequestHeaders());
+        response = await client.get(Uri.parse(url), headers: RequestHeader().createRequestHeaders());
       } else if (requestMethod == RequestMethod.POST) {
-        response = await client.post(url, headers: RequestHeader().createRequestHeaders(), body: requestBody,);
+        response = await client.post(Uri.parse(url), headers: RequestHeader().createRequestHeaders(), body: requestBody,);
       } else if (requestMethod == RequestMethod.DELETE) {
-        response = await client.delete(url, headers: RequestHeader().createRequestHeaders());
+        response = await client.delete(Uri.parse(url), headers: RequestHeader().createRequestHeaders());
       }
       print('Url???$url');
       return  getApiResponse(response);

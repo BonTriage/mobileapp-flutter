@@ -185,45 +185,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<dynamic> _openActionSheet(String actionSheetType,dynamic argument) async {
     switch (actionSheetType) {
       case Constant.medicalHelpActionSheet:
-        var resultOfActionSheet = await showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
+        var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
             builder: (context) => MedicalHelpActionSheet());
         return resultOfActionSheet;
         break;
       case Constant.generateReportActionSheet:
-        var resultOfActionSheet = await showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
+        var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
             builder: (context) => GenerateReportActionSheet());
         return resultOfActionSheet;
         break;
       case Constant.deleteHeadacheTypeActionSheet:
-        var resultOfActionSheet = await showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
+        var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
             builder: (context) => DeleteHeadacheTypeActionSheet());
         return resultOfActionSheet;
         break;
       case Constant.saveAndExitActionSheet:
-        var resultOfActionSheet = await showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
+        var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
             builder: (context) => SaveAndExitActionSheet());
         return resultOfActionSheet;

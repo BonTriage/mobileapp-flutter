@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -9,72 +10,41 @@ class DeleteHeadacheTypeActionSheet extends StatefulWidget {
 
 class _DeleteHeadacheTypeActionSheetState
     extends State<DeleteHeadacheTypeActionSheet> {
+
+  TextStyle _textStyle = TextStyle(
+      fontFamily: Constant.jostRegular,
+      color: Constant.cancelBlueColor,
+      fontSize: 16
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Constant.whiteColorAlpha85),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.deleteHeadacheType);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.deleteHeadacheType,
-                        style: TextStyle(
-                          color: Constant.deleteLogRedColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
-              child: Center(
-                child: Text(
-                  Constant.cancel,
-                  style: TextStyle(
-                    color: Constant.cancelBlueColor,
-                    fontSize: 18,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
+    return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.deleteHeadacheType,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle.copyWith(
+                  color: Constant.deleteLogRedColor,
                 ),
               ),
+              onPressed: () {
+                Navigator.pop(context, Constant.deleteHeadacheType);
+              },
             ),
-          ),
-          SizedBox(
-            height: 14,
-          ),
-        ],
-      ),
-    );
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text(
+                Constant.cancel,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context, Constant.cancel);
+            },
+          )
+      );
   }
 }

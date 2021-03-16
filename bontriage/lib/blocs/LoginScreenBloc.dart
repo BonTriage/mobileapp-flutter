@@ -34,8 +34,7 @@ class LoginScreenBloc {
           "&" +
           "password=" +
           passwordValue;
-      var response =
-          await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
+      var response = await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         loginDataSink.addError(response);
         apiResponse = response.toString();

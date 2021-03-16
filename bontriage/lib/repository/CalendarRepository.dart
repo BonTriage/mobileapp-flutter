@@ -27,8 +27,7 @@ class CalendarRepository{
   Future<dynamic> onGoingHeadacheServiceCall(String url, RequestMethod requestMethod) async {
     var onGoingHeadacheData;
     try {
-      var response =
-      await NetworkService.getRequest(url, requestMethod).serviceCall();
+      var response = await NetworkService.getRequest(url, requestMethod).serviceCall();
       if (response is AppException) {
         return response;
       } else {

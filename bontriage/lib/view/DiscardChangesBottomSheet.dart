@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -9,66 +10,42 @@ class DiscardChangesBottomSheet extends StatefulWidget {
 
 class _DiscardChangesBottomSheetState
     extends State<DiscardChangesBottomSheet> {
+  TextStyle _textStyle = TextStyle(
+      fontFamily: Constant.jostRegular,
+      color: Constant.cancelBlueColor,
+      fontSize: 16
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () {
+    return CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text(
+                'Discard Changes',
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle.copyWith(
+                  color: Constant.deleteLogRedColor,
+                )
+            ),
+            onPressed: () {
               FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pop(context, Constant.discardChanges);
             },
-            child: Container(
-              height: 45,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white),
-              child: Center(
-                child: Text(
-                  'Discard Changes',
-                  style: TextStyle(
-                    color: Constant.deleteLogRedColor,
-                    fontSize: 20,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
           ),
-          SizedBox(
-            height: 8,
-          ),
-          GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 45,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
-              child: Center(
-                child: Text(
-                  Constant.cancel,
-                  style: TextStyle(
-                    color: Constant.cancelBlueColor,
-                    fontSize: 20,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 10,),
         ],
-      ),
+        cancelButton: CupertinoActionSheetAction(
+          child: Text(
+            Constant.cancel,
+            overflow: TextOverflow.ellipsis,
+            style: _textStyle
+          ),
+          isDefaultAction: true,
+          onPressed: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            Navigator.pop(context);
+          },
+        )
     );
   }
 }

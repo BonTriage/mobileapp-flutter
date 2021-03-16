@@ -47,10 +47,12 @@ class CalendarScreenBloc {
     if(userProfileInfoData != null) {
       try{
         String url = '${WebservicePost.qaServerUrl}common/ongoingheadache/${userProfileInfoData.userId}';
+        print(url);
         var response = await _calendarRepository.onGoingHeadacheServiceCall(url, RequestMethod.GET);
         if (response is AppException) {
           networkDataSink.addError(response);
         } else {
+          print(response);
           if(response != null && response is OnGoingHeadacheDataModel) {
             if(response.isExists) {
               currentUserHeadacheModel = CurrentUserHeadacheModel();
@@ -64,10 +66,12 @@ class CalendarScreenBloc {
             }
           } else {
             networkDataSink.addError(Exception(Constant.somethingWentWrong));
+            print('67');
           }
         }
       } catch(e) {
         networkDataSink.addError(Exception(Constant.somethingWentWrong));
+        print(e);
       }
     }
     return currentUserHeadacheModel;
@@ -106,6 +110,7 @@ class CalendarScreenBloc {
     } catch (e) {
       apiResponse = Constant.somethingWentWrong;
       networkDataSink.addError(Exception(Constant.somethingWentWrong));
+      print(e);
     }
     return apiResponse;
   }

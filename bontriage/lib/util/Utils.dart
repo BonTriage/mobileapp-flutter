@@ -17,6 +17,7 @@ import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'constant.dart';
 
@@ -650,5 +651,11 @@ class Utils {
     );
 
     return result;
+  }
+
+  static void customLaunch(String command) async {
+    if(await canLaunch(command)) {
+      await launch(command);
+    }
   }
 }

@@ -6,6 +6,7 @@ class MoreNameScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
   final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
   const MoreNameScreen({Key key, @required this.selectedAnswerList, @required this.openActionSheetCallback}): super(key: key);
+
   @override
   _MoreNameScreenState createState() =>
       _MoreNameScreenState();

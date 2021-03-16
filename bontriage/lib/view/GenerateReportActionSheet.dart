@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
@@ -7,166 +8,77 @@ class GenerateReportActionSheet extends StatefulWidget {
 }
 
 class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
+
+  TextStyle _textStyle = TextStyle(
+      fontFamily: Constant.jostRegular,
+      color: Constant.cancelBlueColor,
+      fontSize: 16
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Constant.whiteColorAlpha85
-            ),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.lindaJonesPdf);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.lindaJonesPdf,
-                        style: TextStyle(
-                          color: Constant.greyColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.email);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.email,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.text);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.text,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.openYourProviderApp);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.openYourProviderApp,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 0.5,
-                  color: Constant.actionSheetDividerColor,
-                  height: 0.5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context, Constant.print);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        Constant.print,
-                        style: TextStyle(
-                          color: Constant.cancelBlueColor,
-                          fontSize: 18,
-                          fontFamily: Constant.jostRegular,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return CupertinoActionSheet(
+          title: Text(
+            Constant.lindaJonesPdf,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 18,
+                fontFamily: Constant.jostRegular
             ),
           ),
-          SizedBox(height: 8,),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.email,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.email);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.text,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.text);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.openYourProviderApp,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.openYourProviderApp);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(
+                Constant.print,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context, Constant.print);
+              },
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text(
+                Constant.cancel,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context, Constant.cancel);
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
-              child: Center(
-                child: Text(
-                  Constant.cancel,
-                  style: TextStyle(
-                    color: Constant.cancelBlueColor,
-                    fontSize: 18,
-                    fontFamily: Constant.jostRegular,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+          )
+      );
   }
 }

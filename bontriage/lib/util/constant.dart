@@ -468,7 +468,7 @@ class Constant {
   static String fileType = 'File type';
   static String pdf = 'PDF';
   static const String faq = 'FAQ';
-  static String connectTheMigraineMentorTeam =
+  static const String connectTheMigraineMentorTeam =
       'Connect the Migraine Mentor team';
   static String medicalHelp = 'Medical Help';
   static String call911 = 'Call 911';
