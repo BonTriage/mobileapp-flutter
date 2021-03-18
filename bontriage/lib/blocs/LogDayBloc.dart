@@ -122,11 +122,6 @@ class LogDayBloc {
             noteEventId = calendarInfoModel.logDayNote[0].id;
 
           print('id???$behaviorEventId???$medicationEventId???$triggerEventId???$noteEventId');
-          /*response.headache.forEach((headacheElement) {
-            headacheElement.mobileEventDetails.forEach((mobileEventDetailsElement) {
-              selectedAnswersList.add(SelectedAnswers(questionTag: mobileEventDetailsElement.questionTag, answer: mobileEventDetailsElement.value));
-            });
-          });*/
           await fetchLogDayData();
         } else {
           logDayDataSink.addError(Exception(Constant.somethingWentWrong));
@@ -415,40 +410,43 @@ class LogDayBloc {
 
         calendarInfoModel.medication.forEach((medicationElement) {
           MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel();
-          medicationElement.mobileEventDetails.forEach((medicationMobileEventDetailsElement) {
-            if(medicationMobileEventDetailsElement.questionTag == Constant.logDayMedicationTag) {
-              Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == Constant.logDayMedicationTag, orElse: () => null);
-              if(questions != null) {
-                Values medicationValue = questions.values.firstWhere((element) => element.text == medicationMobileEventDetailsElement.value, orElse: () => null);
-                if(medicationValue != null) {
-                  medicationSelectedDataModel.selectedMedicationIndex = int.tryParse(medicationValue.valueNumber) - 1;
-                  medicationSelectedDataModel.newlyAddedMedicationName = '';
-                } else {
-                  medicationSelectedDataModel.selectedMedicationIndex = questions.values.length;
-                  medicationSelectedDataModel.isNewlyAdded = true;
-                  medicationSelectedDataModel.newlyAddedMedicationName = medicationMobileEventDetailsElement.value;
-                }
-              }
-            } else if (medicationMobileEventDetailsElement.questionTag == Constant.administeredTag) {
-              List<String> dosageTimeList = medicationMobileEventDetailsElement.value.split("%@");
-              medicationSelectedDataModel.selectedMedicationDateList = dosageTimeList;
-            } else if (medicationMobileEventDetailsElement.questionTag.contains(".dosage")) {
-              List<String> dosageList = medicationMobileEventDetailsElement.value.split("%@");
-              List<String> dosageStringList = [];
-              Questions dosageQuestion = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == medicationMobileEventDetailsElement.questionTag, orElse: () => null);
-              dosageList.forEach((dosageElement) {
-                if(dosageQuestion != null) {
-                  Values dosageValue = dosageQuestion.values.firstWhere((dosageValueElement) => dosageValueElement.text == dosageElement, orElse: () => null);
-                  if(dosageValue != null) {
-                    dosageStringList.add(dosageValue.valueNumber);
+          var medicationData = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+          if(medicationData != null) {
+            medicationElement.mobileEventDetails.forEach((medicationMobileEventDetailsElement) {
+              if(medicationMobileEventDetailsElement.questionTag == Constant.logDayMedicationTag) {
+                Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == Constant.logDayMedicationTag, orElse: () => null);
+                if(questions != null) {
+                  Values medicationValue = questions.values.firstWhere((element) => element.text == medicationMobileEventDetailsElement.value, orElse: () => null);
+                  if(medicationValue != null) {
+                    medicationSelectedDataModel.selectedMedicationIndex = int.tryParse(medicationValue.valueNumber) - 1;
+                    medicationSelectedDataModel.newlyAddedMedicationName = '';
+                  } else {
+                    medicationSelectedDataModel.selectedMedicationIndex = questions.values.length;
+                    medicationSelectedDataModel.isNewlyAdded = true;
+                    medicationSelectedDataModel.newlyAddedMedicationName = medicationMobileEventDetailsElement.value;
                   }
-                } else {
-                    dosageStringList.add(dosageElement);
                 }
-              });
-              medicationSelectedDataModel.selectedMedicationDosageList = dosageStringList;
-            }
-          });
+              } else if (medicationMobileEventDetailsElement.questionTag == Constant.administeredTag) {
+                List<String> dosageTimeList = medicationMobileEventDetailsElement.value.split("%@");
+                medicationSelectedDataModel.selectedMedicationDateList = dosageTimeList;
+              } else if (medicationMobileEventDetailsElement.questionTag.contains(".dosage")) {
+                List<String> dosageList = medicationMobileEventDetailsElement.value.split("%@");
+                List<String> dosageStringList = [];
+                Questions dosageQuestion = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == medicationMobileEventDetailsElement.questionTag, orElse: () => null);
+                dosageList.forEach((dosageElement) {
+                  if(dosageQuestion != null) {
+                    Values dosageValue = dosageQuestion.values.firstWhere((dosageValueElement) => dosageValueElement.text == dosageElement, orElse: () => null);
+                    if(dosageValue != null) {
+                      dosageStringList.add(dosageValue.valueNumber);
+                    }
+                  } else {
+                    dosageStringList.add(dosageElement);
+                  }
+                });
+                medicationSelectedDataModel.selectedMedicationDosageList = dosageStringList;
+              }
+            });
+          }
           medicationSelectedDataModel.isDoubleTapped = false;
           try {
             selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));

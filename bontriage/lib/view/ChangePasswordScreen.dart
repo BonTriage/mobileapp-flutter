@@ -301,8 +301,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (responseData is String) {
       if (responseData == Constant.success) {
         _isShowAlert = false;
-        Navigator.pop(context);
-        Navigator.pop(context);
+        Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+
         Utils.navigateToHomeScreen(context, false);
       }
     }

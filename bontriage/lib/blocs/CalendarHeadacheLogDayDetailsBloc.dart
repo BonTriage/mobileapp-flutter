@@ -241,7 +241,8 @@ class CalendarHeadacheLogDayDetailsBloc {
 
     response.medication.asMap().forEach((index, element) {
       if(index == 0) {
-        if (element.mobileEventDetails.length > 0) {
+        var medicationMobileEvent = element.mobileEventDetails.firstWhere((mobileEventDetailElement) => mobileEventDetailElement.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+        if (element.mobileEventDetails.length > 0 && medicationMobileEvent != null) {
           RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
           logDayMedicationWidgetData.logDayListData = LogDayData();
 

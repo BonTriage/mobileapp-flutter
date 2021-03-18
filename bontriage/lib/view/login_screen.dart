@@ -407,7 +407,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;
-        Navigator.pop(context);
+        Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+
         Utils.navigateToHomeScreen(context, false);
       } else if (response == Constant.userNotFound) {
         _loginScreenBloc.init();
