@@ -79,6 +79,7 @@ class Constant {
 
   static const String compassScreenRouter = 'compassScreenRouter';
   static const String webViewScreenRouter = 'webViewScreenRouter';
+  static const String otpValidationScreenRouter = 'otpValidationScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";
@@ -229,6 +230,7 @@ class Constant {
   static String existingAccount = 'existing account';
   static String email = 'Email';
   static String password = 'Password';
+  static const String forgotPassword = 'Forgot Password?';
   static String continueSurvey = 'Continue Survey';
   static String continueAssessment = 'Continue Assessment';
   static String exitAndLoseProgress = 'Exit & Lose Progress';

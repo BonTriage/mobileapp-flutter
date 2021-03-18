@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -19,9 +20,47 @@ class LoginScreenBloc {
 
   Stream<dynamic> get loginDataStream => _loginStreamController.stream;
 
+  StreamController<dynamic> _forgotPasswordStreamController;
+
+  StreamSink<dynamic> get forgotPasswordStreamSink =>
+      _forgotPasswordStreamController.sink;
+
+  Stream<dynamic> get forgotPasswordStream =>
+      _forgotPasswordStreamController.stream;
+
+  StreamController<dynamic> _networkStreamController;
+
+  StreamSink<dynamic> get networkStreamSink =>
+      _networkStreamController.sink;
+
+  Stream<dynamic> get networkStream =>
+      _networkStreamController.stream;
+
   LoginScreenBloc({this.count = 0}) {
     _loginStreamController = StreamController<dynamic>();
+    _forgotPasswordStreamController = StreamController<dynamic>();
+    _networkStreamController = StreamController<dynamic>();
     _loginScreenRepository = LoginScreenRepository();
+  }
+
+  Future<void> callForgotPasswordApi(String userEmail) async {
+    try {
+      String url = '${WebservicePost.qaServerUrl}otp?email=$userEmail';
+      var response = await _loginScreenRepository.forgotPasswordServiceCall(url, RequestMethod.GET);
+      if (response is AppException) {
+        forgotPasswordStreamSink.addError(response);
+        networkStreamSink.addError(response);
+      } else {
+        if (response != null && response is ForgotPasswordModel) {
+          networkStreamSink.add(Constant.success);
+          forgotPasswordStreamSink.add(response);
+        } else {
+          networkStreamSink.addError(Exception(Constant.somethingWentWrong));
+        }
+      }
+    } catch (e) {
+      networkStreamSink.addError(Exception(Constant.somethingWentWrong));
+    }
   }
 
   getLoginOfUser(String emailValue, String passwordValue) async {
@@ -81,16 +120,29 @@ class LoginScreenBloc {
     _loginStreamController = StreamController<dynamic>();
   }
 
+  void initNetworkStreamController() {
+    _networkStreamController?.close();
+    _networkStreamController = StreamController<dynamic>();
+  }
+
   void dispose() {
     _loginStreamController?.close();
+    _forgotPasswordStreamController?.close();
+    _networkStreamController?.close();
+  }
+
+  void enterDummyDataToNetworkStream() {
+    networkStreamSink.add(Constant.loading);
   }
 
   ///This method is used to log out from the app and redirecting to the welcome start assessment screen
   Future<void> _deleteAllUserData() async {
     try {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
       sharedPreferences.clear();
+      sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume ?? false);
+      sharedPreferences.setBool(Constant.tutorialsState, true);
       await SignUpOnBoardProviders.db.deleteAllTableData();
     } catch (e) {
       print(e);

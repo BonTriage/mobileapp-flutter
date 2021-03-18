@@ -24,6 +24,7 @@ import 'package:mobile/view/OnBoardExitScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
 import 'package:mobile/view/OnBoardingSignUpScreen.dart';
+import 'package:mobile/view/OtpValidationScreen.dart';
 import 'package:mobile/view/PartOneOnBoardScreenTwo.dart';
 import 'package:mobile/view/PartThreeOnBoardScreens.dart';
 import 'package:mobile/view/PartTwoOnBoardMoveOnScreen.dart';
@@ -332,6 +333,10 @@ class MyApp extends StatelessWidget {
           case Constant.webViewScreenRouter:
             {
               return SlideFromRightPageRoute(widget: WebViewScreen(url: settings.arguments,), routeSettings: routeSettings);
+            }
+          case Constant.otpValidationScreenRouter:
+            {
+              return SlideFromRightPageRoute(widget: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,), routeSettings: routeSettings);
             }
         }
         return null;
