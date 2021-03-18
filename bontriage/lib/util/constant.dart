@@ -80,6 +80,7 @@ class Constant {
   static const String compassScreenRouter = 'compassScreenRouter';
   static const String webViewScreenRouter = 'webViewScreenRouter';
   static const String otpValidationScreenRouter = 'otpValidationScreenRouter';
+  static const String changePasswordScreenRouter = 'changePasswordScreenRouter';
 
   //strings
   static String welcomeToAurora = "Welcome to Aurora";

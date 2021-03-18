@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LoginScreenRepository.dart';
-import 'package:mobile/repository/SignUpScreenRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePasswordBloc {
   LoginScreenRepository _loginScreenRepository;
@@ -54,6 +53,16 @@ class ChangePasswordBloc {
       } else {
         apiResponse = Constant.success;
         changePasswordScreenDataSink.add(Constant.success);
+        UserProfileInfoModel userProfileInfoModel = UserProfileInfoModel();
+        userProfileInfoModel =
+            UserProfileInfoModel.fromJson(jsonDecode(response));
+        if(userProfileInfoModel.profileName == null) {
+          userProfileInfoModel.profileName = userProfileInfoModel.firstName;
+        }
+        await _deleteAllUserData();
+        await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
+        await SignUpOnBoardProviders.db.deleteTableUserProgress();
+        await SignUpOnBoardProviders.db .insertUserProfileInfo(userProfileInfoModel);
       }
     } catch (e) {
       changePasswordScreenDataSink.addError(Exception(Constant.somethingWentWrong));
@@ -74,5 +83,19 @@ class ChangePasswordBloc {
   void inItNetworkStream() {
     _changePasswordScreenStreamController?.close();
     _changePasswordScreenStreamController = StreamController<dynamic>();
+  }
+
+  ///This method is used to log out from the app and redirecting to the welcome start assessment screen
+  Future<void> _deleteAllUserData() async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      bool isVolume = sharedPreferences.getBool(Constant.chatBubbleVolumeState);
+      sharedPreferences.clear();
+      sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume ?? false);
+      sharedPreferences.setBool(Constant.tutorialsState, true);
+      await SignUpOnBoardProviders.db.deleteAllTableData();
+    } catch (e) {
+      print(e);
+    }
   }
 }

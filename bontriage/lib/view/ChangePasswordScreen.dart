@@ -297,10 +297,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void changePasswordService() async {
-    var responseData = _changePasswordBloc.sendChangePasswordData(/*widget.emailValue*/'test261@yopmail.com', passwordValue);
+    var responseData = await _changePasswordBloc.sendChangePasswordData(widget.emailValue, passwordValue);
     if (responseData is String) {
       if (responseData == Constant.success) {
         _isShowAlert = false;
+        Navigator.pop(context);
         Navigator.pop(context);
         Utils.navigateToHomeScreen(context, false);
       }

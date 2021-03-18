@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: ChangePasswordScreen(),
+      home: Splash(),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {
@@ -338,6 +338,10 @@ class MyApp extends StatelessWidget {
           case Constant.otpValidationScreenRouter:
             {
               return SlideFromRightPageRoute(widget: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,), routeSettings: routeSettings);
+            }
+          case Constant.changePasswordScreenRouter:
+            {
+              return SlideFromRightPageRoute(widget: ChangePasswordScreen(emailValue: settings.arguments), routeSettings: routeSettings);
             }
         }
         return null;

@@ -329,6 +329,9 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
       if(event != null && event is ForgotPasswordModel) {
         if(event.status == 1) {
           //Move to next screen
+          Future.delayed(Duration(milliseconds: 350), () {
+            Navigator.pushReplacementNamed(context, Constant.changePasswordScreenRouter, arguments: widget.otpValidationArgumentModel.email);
+          });
           print(Constant.success);
         } else {
           setState(() {
