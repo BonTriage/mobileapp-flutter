@@ -947,7 +947,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                     borderSide: BorderSide(
                                         color: Constant.backgroundTransparentColor, width: 1),
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 5)
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 5,)
                                 ),
                               ),
                             ),
