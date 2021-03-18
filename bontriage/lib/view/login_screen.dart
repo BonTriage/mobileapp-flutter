@@ -333,7 +333,6 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == Constant.success) {
         _isShowAlert = false;
         Navigator.pop(context);
-
         Utils.navigateToHomeScreen(context, false);
       } else if (response == Constant.userNotFound) {
         _loginScreenBloc.init();

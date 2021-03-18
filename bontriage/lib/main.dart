@@ -10,6 +10,7 @@ import 'package:mobile/view/CalendarHeadacheLogDayDetailsScreen.dart';
 import 'package:mobile/view/CalendarScreen.dart';
 import 'package:mobile/view/CalendarIntensityScreen.dart';
 import 'package:mobile/view/CalendarTriggersScreen.dart';
+import 'package:mobile/view/ChangePasswordScreen.dart';
 import 'package:mobile/view/CompassScreen.dart';
 import 'package:mobile/view/CurrentHeadacheProgressScreen.dart';
 import 'package:mobile/view/HeadacheStartedScreen.dart';
@@ -103,7 +104,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: Splash(),
+      home: ChangePasswordScreen(),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {

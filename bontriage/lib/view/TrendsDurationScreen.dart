@@ -789,14 +789,14 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
           .recordsTrendsDataModel
           .recordsTrendsMultipleHeadacheDataModel
           .headacheFirst
-          .severity;
+          .duration;
 
       multipleSecondIntensityListData = widget
           .editGraphViewFilterModel
           .recordsTrendsDataModel
           .recordsTrendsMultipleHeadacheDataModel
           .headacheSecond
-          .severity;
+          .duration;
 
       firstWeekDurationData = [];
       secondWeekDurationData = [];
@@ -828,17 +828,17 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         }
         DateTime dateTime =
         DateTime.parse('$currentYear-$month-$date 00:00:00.000Z');
-        var durationData = durationListData.firstWhere(
+        var firstDurationData = multipleFirstIntensityListData.firstWhere(
                 (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
-        if (durationData != null) {
-          durationValueDate.add(durationData.value);
-          if (durationData.value > 24) {
-            remainingHeadacheDurationValue = (durationData.value - 24).round();
+        if (firstDurationData != null) {
+          durationValueDate.add(firstDurationData.value);
+          if (firstDurationData.value > 24) {
+            remainingHeadacheDurationValue = (firstDurationData.value - 24).round();
           } else {
             remainingHeadacheDurationValue = 0;
           }
-          setAllWeekDurationData(i, durationData.value.toDouble(),Constant.highBarColorIntensity);
+          setAllWeekDurationData(i, firstDurationData.value.toDouble(),Constant.highBarColorIntensity);
         } else if (remainingHeadacheDurationValue > 0) {
           if (remainingHeadacheDurationValue <= 24) {
             setAllWeekDurationData(
@@ -852,17 +852,17 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         }else{
           setAllWeekDurationData(i, 0,Constant.lowBarColorIntensity);
         }
-        var secondIntensityData = multipleSecondIntensityListData.firstWhere(
+        var secondDurationData = multipleSecondIntensityListData.firstWhere(
                 (element) => element.date.isAtSameMomentAs(dateTime),
             orElse: () => null);
-        if (secondIntensityData != null) {
-          durationValueDate.add(secondIntensityData.value);
-          if (secondIntensityData.value > 24) {
-            remainingHeadacheDurationValue = (secondIntensityData.value - 24).round();
+        if (secondDurationData != null) {
+          durationValueDate.add(secondDurationData.value);
+          if (secondDurationData.value > 24) {
+            remainingHeadacheDurationValue = (secondDurationData.value - 24).round();
           } else {
             remainingHeadacheDurationValue = 0;
           }
-          setAllMultipleWeekDurationData(i, secondIntensityData.value.toDouble(),Constant.highBarColorIntensity);
+          setAllMultipleWeekDurationData(i, secondDurationData.value.toDouble(),Constant.highBarColorIntensity);
         } else if (remainingHeadacheDurationValue > 0) {
           if (remainingHeadacheDurationValue <= 24) {
             setAllMultipleWeekDurationData(
@@ -876,6 +876,16 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         }else{
           setAllMultipleWeekDurationData(i, 0,Constant.lowBarColorIntensity);
         }
+      }
+
+      try {
+        if (durationValueDate.length > 0) {
+          axesMaxValue = durationValueDate
+              .reduce((curr, next) => curr > next ? curr : next);
+          print('Maximum ListData Value $axesMaxValue');
+        }
+      } catch (Exception) {
+        print('Maximum ListData Value $Exception');
       }
       print(
           'AllIntensityListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
