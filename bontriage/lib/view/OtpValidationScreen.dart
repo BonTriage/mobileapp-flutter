@@ -267,7 +267,7 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
             if(index != 0)
               FocusScope.of(context).requestFocus(_focusNodeList[index - 1]);
           } else {*/
-            if(index != 3)
+            if(index != 3 && text.isNotEmpty)
               FocusScope.of(context).requestFocus(_focusNodeList[index + 1]);
           //}
         },
@@ -361,7 +361,16 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
 class OTPValidationArgumentModel {
   String email;
+  String password;
+  bool isTermConditionCheck;
+  bool isEmailMarkCheck;
   bool isFromSignUp;
 
-  OTPValidationArgumentModel({this.email, this.isFromSignUp = false});
+  OTPValidationArgumentModel({
+    this.email,
+    this.password,
+    this.isFromSignUp = false,
+    this.isEmailMarkCheck = false,
+    this.isTermConditionCheck = false,
+  });
 }

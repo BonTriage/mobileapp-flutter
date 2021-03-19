@@ -921,7 +921,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                   _updateMedicationSelectedDataModel();
                                   _storeExpandedWidgetDataIntoLocalModel();
                                 },
-                                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                 maxLength: 3,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
@@ -1435,7 +1435,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             child: Center(
                               child: Container(
                                 child: TextFormField(
-                                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                   maxLength: 3,
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,

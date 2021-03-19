@@ -353,44 +353,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               ],
                             ),
                           ),
-                          /*RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "I agree to the ",
-                                style: TextStyle(
-                                    height: 1.3,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: 12,
-                                    color: Constant.chatBubbleGreen),
-                              ),
-                              TextSpan(
-                                text: "Terms & Condition",
-                                style: TextStyle(
-                                    height: 1.3,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: 12,
-                                    decoration: TextDecoration.underline,
-                                    color: Constant.chatBubbleGreen),
-                              ),
-                              TextSpan(
-                                text: " and ",
-                                style: TextStyle(
-                                    height: 1.3,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: 12,
-                                    color: Constant.chatBubbleGreen),
-                              ),
-                              TextSpan(
-                                text: "Privacy Policy",
-                                style: TextStyle(
-                                    height: 1.3,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: 12,
-                                    decoration: TextDecoration.underline,
-                                    color: Constant.chatBubbleGreen),
-                              ),
-                            ]),
-                          ),*/
                         ],
                       ),
                       SizedBox(
@@ -430,7 +392,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           _signUpButtonClicked();
                         },
@@ -573,6 +535,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
         if (messageValue != null) {
           if (messageValue == Constant.userNotFound) {
             getAnswerDataFromDatabase();
+            /*_navigateToOtpVerifyScreen();*/
           }
         }
       } else {
@@ -610,5 +573,9 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
             context, Constant.prePartTwoOnBoardScreenRouter);
       }
     }
+  }
+
+  void _navigateToOtpVerifyScreen() {
+
   }
 }
