@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
+import 'package:mobile/view/DateRangeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MeScreenTutorial.dart';
@@ -191,9 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return resultOfActionSheet;
         break;
       case Constant.generateReportActionSheet:
+        UserProfileInfoModel userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
         var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
-            builder: (context) => GenerateReportActionSheet());
+            builder: (context) => GenerateReportActionSheet(userProfileInfoModel: userProfileInfoData,));
         return resultOfActionSheet;
         break;
       case Constant.deleteHeadacheTypeActionSheet:
@@ -206,6 +210,12 @@ class _HomeScreenState extends State<HomeScreen> {
         var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
             builder: (context) => SaveAndExitActionSheet());
+        return resultOfActionSheet;
+        break;
+      case Constant.dateRangeActionSheet:
+        var resultOfActionSheet = await showCupertinoModalPopup(
+            context: context,
+            builder: (context) => DateRangeActionSheet());
         return resultOfActionSheet;
         break;
       case Constant.compassHeadacheTypeActionSheet:

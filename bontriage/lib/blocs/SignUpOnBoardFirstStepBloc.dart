@@ -38,9 +38,7 @@ class SignUpBoardFirstStepBloc {
 // QA Url it will be change.
   fetchSignUpFirstStepData() async {
     try {
-      var signUpFirstStepData =
-          await _signUpOnBoardFirstStepRepository.serviceCall(
-              WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
+      var signUpFirstStepData = await _signUpOnBoardFirstStepRepository.serviceCall(WebservicePost.qaServerUrl + 'questionnaire', RequestMethod.POST);
       if (signUpFirstStepData is AppException) {
         signUpFirstStepDataSink.addError(signUpFirstStepData);
       } else {

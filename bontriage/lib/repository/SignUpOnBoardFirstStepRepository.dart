@@ -30,7 +30,7 @@ class SignUpOnBoardFirstStepRepository {
         SignUpOnBoardProviders.db.insertQuestionnaire(localQuestionnaire);
         return album;
       }
-    } catch (Exception) {
+    } catch (e) {
       return album;
     }
   }

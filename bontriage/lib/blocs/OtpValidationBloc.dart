@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mobile/models/ForgotPasswordModel.dart';
+import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/OtpValidationRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
@@ -44,7 +48,7 @@ class OtpValidationBloc {
     _networkStreamController = StreamController<dynamic>();
   }
 
-  Future<void> callOtpVerifyApi(String userEmail, String otp) async {
+  Future<void> callOtpVerifyApi(String userEmail, String otp, bool isFromSignUp, String password, bool isTermConditionCheck, bool isEmailMarkCheck,) async {
     try {
       String url = '${WebservicePost.qaServerUrl}otp/validate?email=$userEmail&otp=$otp';
       var response = await _repository.otpVerifyServiceCall(url, RequestMethod.GET);
@@ -53,8 +57,12 @@ class OtpValidationBloc {
         networkStreamSink.addError(response);
       } else {
         if (response != null && response is ForgotPasswordModel) {
-          networkStreamSink.add(Constant.success);
-          otpVerifyStreamSink.add(response);
+          if(!isFromSignUp) {
+            networkStreamSink.add(Constant.success);
+            otpVerifyStreamSink.add(response);
+          } else {
+            await signUpOfNewUser(userEmail, password, isTermConditionCheck, isEmailMarkCheck, response);
+          }
         } else {
           networkStreamSink.addError(Exception(Constant.somethingWentWrong));
         }
@@ -66,7 +74,7 @@ class OtpValidationBloc {
 
   Future<void> callResendOTPApi(String userEmail) async {
     try {
-      String url = '${WebservicePost.qaServerUrl}otp?email=$userEmail';
+      String url = '${WebservicePost.qaServerUrl}otp?email=$userEmail&isUserExist=false';
       var response = await _repository.otpVerifyServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         print(response);
@@ -80,6 +88,38 @@ class OtpValidationBloc {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<dynamic> signUpOfNewUser(String emailValue, String passwordValue, bool isTermConditionCheck, bool isEmailMarkCheck, ForgotPasswordModel forgotPasswordModel) async {
+    String apiResponse;
+    UserProfileInfoModel userProfileInfoModel;
+    List<SelectedAnswers> selectedAnswerListData = await SignUpOnBoardProviders.db.getAllSelectedAnswers(Constant.zeroEventStep);
+    try {
+      var response = await _repository.signUpServiceCall(
+          WebservicePost.qaServerUrl + "user/",
+          RequestMethod.POST,
+          selectedAnswerListData,
+          emailValue,
+          passwordValue,
+          isTermConditionCheck,
+          isEmailMarkCheck
+      );
+      if (response is AppException) {
+        apiResponse = response.toString();
+        networkStreamSink.addError(response);
+      } else {
+        apiResponse = Constant.success;
+        userProfileInfoModel = UserProfileInfoModel.fromJson(jsonDecode(response));
+        userProfileInfoModel.profileName = userProfileInfoModel.firstName;
+        await SignUpOnBoardProviders.db.insertUserProfileInfo(userProfileInfoModel);
+        networkStreamSink.add(Constant.success);
+        otpVerifyStreamSink.add(forgotPasswordModel);
+      }
+    } catch (e) {
+      networkStreamSink.addError(Exception(Constant.somethingWentWrong));
+      apiResponse = Constant.somethingWentWrong;
+    }
+    return apiResponse;
   }
 
   String getFormattedTime(int seconds) {

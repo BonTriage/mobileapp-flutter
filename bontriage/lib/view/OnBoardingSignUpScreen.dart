@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/OtpValidationScreen.dart';
 
 class OnBoardingSignUpScreen extends StatefulWidget {
   @override
@@ -15,16 +15,18 @@ class OnBoardingSignUpScreen extends StatefulWidget {
 
 class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   bool _isHidden = true;
-  var isTermConditionCheck = false;
-  var isEmailMarkCheck = false;
-  String emailValue;
-  String passwordValue;
+  bool _isTermConditionCheck = false;
+  bool _isEmailMarkCheck = false;
+  String _emailValue;
+  String _passwordValue;
   bool _isShowAlert = false;
-  TextEditingController emailTextEditingController;
-  TextEditingController passwordTextEditingController;
-  SignUpScreenBloc signUpScreenBloc;
-  UserProfileInfoModel userProfileInfoModel;
+  TextEditingController _emailTextEditingController;
+  TextEditingController _passwordTextEditingController;
+  SignUpScreenBloc _signUpScreenBloc;
   String _errorMsg;
+
+  FocusNode _emailFocusNode;
+  FocusNode _passwordFocusNode;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
@@ -36,19 +38,29 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   @override
   void initState() {
     super.initState();
-    emailTextEditingController = TextEditingController();
-    passwordTextEditingController = TextEditingController();
-    signUpScreenBloc = SignUpScreenBloc();
-    userProfileInfoModel = UserProfileInfoModel();
+    _emailTextEditingController = TextEditingController();
+    _passwordTextEditingController = TextEditingController();
+    _signUpScreenBloc = SignUpScreenBloc();
     Utils.saveUserProgress(0, Constant.signUpEventStep);
     _errorMsg = Constant.signUpAlertMessage;
+
+    _emailFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FocusScope.of(context).requestFocus(_emailFocusNode);
+    });
   }
 
   @override
   void dispose() {
-    emailTextEditingController.dispose();
-    passwordTextEditingController.dispose();
-    signUpScreenBloc.dispose();
+    _emailTextEditingController.dispose();
+    _passwordTextEditingController.dispose();
+    _signUpScreenBloc.dispose();
+
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -109,18 +121,15 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             Container(
                               height: 35,
                               child: TextFormField(
-                                onEditingComplete: () {
-                                  emailValue = emailTextEditingController.text;
-                                },
+                                focusNode: _emailFocusNode,
+                                textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {
-                                  emailValue = emailTextEditingController.text;
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
+                                  FocusScope.of(context).requestFocus(_passwordFocusNode);
                                 },
                                 keyboardType: TextInputType.emailAddress,
-                                controller: emailTextEditingController,
+                                controller: _emailTextEditingController,
                                 onChanged: (String value) {
-                                  emailValue = emailTextEditingController.text;
+                                  _emailValue = _emailTextEditingController.text;
                                 },
                                 style: TextStyle(
                                     fontSize: 15,
@@ -173,21 +182,18 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             Container(
                               height: 35,
                               child: TextFormField(
+                                focusNode: _passwordFocusNode,
                                 obscureText: _isHidden,
-                                onEditingComplete: () {
-                                  passwordValue =
-                                      passwordTextEditingController.text;
-                                },
                                 onFieldSubmitted: (String value) {
-                                  passwordValue =
-                                      passwordTextEditingController.text;
+                                  _passwordValue =
+                                      _passwordTextEditingController.text;
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 },
-                                controller: passwordTextEditingController,
+                                controller: _passwordTextEditingController,
                                 onChanged: (String value) {
-                                  passwordValue =
-                                      passwordTextEditingController.text;
+                                  _passwordValue =
+                                      _passwordTextEditingController.text;
                                 },
                                 style: TextStyle(
                                     fontSize: 15,
@@ -285,14 +291,14 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                 unselectedWidgetColor:
                                     Constant.editTextBoarderColor),
                             child: Checkbox(
-                              value: isTermConditionCheck,
+                              value: _isTermConditionCheck,
                               checkColor: Constant.bubbleChatTextView,
                               activeColor: Constant.chatBubbleGreen,
                               focusColor: Constant.chatBubbleGreen,
                               autofocus: true,
                               onChanged: (bool value) {
                                 setState(() {
-                                  isTermConditionCheck = value;
+                                  _isTermConditionCheck = value;
                                 });
                               },
                             ),
@@ -365,13 +371,13 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                 unselectedWidgetColor:
                                     Constant.editTextBoarderColor),
                             child: Checkbox(
-                              value: isEmailMarkCheck,
+                              value: _isEmailMarkCheck,
                               checkColor: Constant.bubbleChatTextView,
                               activeColor: Constant.chatBubbleGreen,
                               focusColor: Constant.chatBubbleGreen,
                               onChanged: (bool value) {
                                 setState(() {
-                                  isEmailMarkCheck = value;
+                                  _isEmailMarkCheck = value;
                                 });
                               },
                             ),
@@ -484,20 +490,22 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
   void _signUpButtonClicked() {
-    if (emailValue != null &&
-        passwordValue != null &&
-        Utils.validateEmail(emailValue) &&
-        passwordValue.length >= 8 &&
-        Utils.validatePassword(passwordValue) &&
-        isTermConditionCheck) {
+    _emailValue = _emailTextEditingController.text.trim();
+    _passwordValue = _passwordTextEditingController.text.trim();
+    if (_emailValue != null &&
+        _passwordValue != null &&
+        Utils.validateEmail(_emailValue) &&
+        _passwordValue.length >= 8 &&
+        Utils.validatePassword(_passwordValue) &&
+        _isTermConditionCheck) {
       _isShowAlert = false;
       checkUserAlreadySignUp();
-    } else if (!Utils.validateEmail(emailValue)) {
+    } else if (!Utils.validateEmail(_emailValue)) {
       setState(() {
         _errorMsg = Constant.signUpEmilFieldAlertMessage;
         _isShowAlert = true;
       });
-    } else if (passwordValue == null || passwordValue.length < 8 || !Utils.validatePassword(passwordValue)) {
+    } else if (_passwordValue == null || _passwordValue.length < 8 || !Utils.validatePassword(_passwordValue)) {
       setState(() {
         _errorMsg = Constant.signUpAlertMessage;
         _isShowAlert = true;
@@ -513,11 +521,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// In this method we will check if user is already registered into the application. If user already registered then we will save User basic
   /// info data in local database for further use.If not then user can SignUp from the application.
   void checkUserAlreadySignUp() {
-    signUpScreenBloc.inItNetworkStream();
+    _signUpScreenBloc.inItNetworkStream();
     Utils.showApiLoaderDialog(context,
-        networkStream: signUpScreenBloc.checkUserAlreadySignUpStream,
+        networkStream: _signUpScreenBloc.checkUserAlreadySignUpStream,
         tapToRetryFunction: () {
-      signUpScreenBloc.enterSomeDummyDataToStreamController();
+      _signUpScreenBloc.enterSomeDummyDataToStreamController();
       _callCheckUserAlreadySignUpApi();
     });
     _callCheckUserAlreadySignUpApi();
@@ -526,7 +534,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   ///This method is used to call the api of check if user already signed up or not
   void _callCheckUserAlreadySignUpApi() async {
     var signUpResponse =
-        await signUpScreenBloc.checkUserAlreadyExistsOrNot(emailValue);
+        await _signUpScreenBloc.checkUserAlreadyExistsOrNot(_emailValue);
     if (signUpResponse != null) {
       Navigator.pop(context);
       if (jsonDecode(signUpResponse)[Constant.messageTextKey] != null) {
@@ -534,8 +542,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
             jsonDecode(signUpResponse)[Constant.messageTextKey];
         if (messageValue != null) {
           if (messageValue == Constant.userNotFound) {
-            getAnswerDataFromDatabase();
-            /*_navigateToOtpVerifyScreen();*/
+            /*_getAnswerDataFromDatabase();*/
+            _navigateToOtpVerifyScreen();
           }
         }
       } else {
@@ -549,11 +557,11 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   /// This method will be use for to get User Profile data from Local database, If user didn't SignUp into the application.After We will
   /// get user Profile data from the local database then we implement SignUp Api to register user into the application.
-  void getAnswerDataFromDatabase() {
+  void _getAnswerDataFromDatabase() {
     Utils.showApiLoaderDialog(context,
-        networkStream: signUpScreenBloc.signUpOfNewUserStream,
+        networkStream: _signUpScreenBloc.signUpOfNewUserStream,
         tapToRetryFunction: () {
-      signUpScreenBloc.enterSomeDummyDataToStreamController();
+      _signUpScreenBloc.enterSomeDummyDataToStreamController();
       _callSignUpOfNewUserApi();
     });
     _callSignUpOfNewUserApi();
@@ -563,8 +571,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   void _callSignUpOfNewUserApi() async {
     var selectedAnswerListData = await SignUpOnBoardProviders.db
         .getAllSelectedAnswers(Constant.zeroEventStep);
-    var response = await signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, emailValue, passwordValue, isTermConditionCheck, isEmailMarkCheck);
+    var response = await _signUpScreenBloc.signUpOfNewUser(
+        selectedAnswerListData, _emailValue, _passwordValue, _isTermConditionCheck, _isEmailMarkCheck);
     if (response is String) {
       if (response == Constant.success) {
         Navigator.pop(context);
@@ -576,6 +584,12 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   }
 
   void _navigateToOtpVerifyScreen() {
-
+    Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(
+      email: _emailValue,
+      password: _passwordValue,
+      isTermConditionCheck: _isTermConditionCheck,
+      isEmailMarkCheck: _isEmailMarkCheck,
+      isFromSignUp: true,
+    ));
   }
 }

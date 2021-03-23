@@ -81,6 +81,7 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
   }
 
   void _showAddNoteBottomSheet() {
+    FocusScope.of(context).requestFocus(FocusNode());
     text = '';
     SelectedAnswers noteSelectedAnswer = widget.selectedAnswerList.firstWhere((element) => element.questionTag == widget.noteTag, orElse: () => null);
     if (noteSelectedAnswer != null) {

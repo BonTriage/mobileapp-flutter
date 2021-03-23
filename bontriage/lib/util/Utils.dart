@@ -110,7 +110,7 @@ class Utils {
 
   /// Method to get total no of days in the month
   static daysInCurrentMonth(int monthNum, int year) {
-    List<int> monthLength = new List(12);
+    List<int> monthLength = new List.filled(12, 1);
 
     monthLength[0] = 31;
     monthLength[2] = 31;
@@ -168,10 +168,6 @@ class Utils {
 
   static String getStringFromJson(dynamic jsonObject) {
     return jsonEncode(jsonObject);
-  }
-
-  Map<String, dynamic> _getJsonFromString(String response) {
-    return json.decode(response);
   }
 
   static void saveTutorialsState() async {
