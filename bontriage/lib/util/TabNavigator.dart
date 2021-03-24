@@ -19,6 +19,7 @@ import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSexScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
+import 'package:mobile/view/PDFScreen.dart';
 import 'package:mobile/view/RecordScreen.dart';
 
 
@@ -73,6 +74,9 @@ class TabNavigator extends StatelessWidget {
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         showApiLoaderCallback: showApiLoaderCallback,
         getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
+      ),
+      TabNavigatorRoutes.pdfScreenRoute: (context) => PDFScreen(
+        base64String: arguments,
       ),
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(

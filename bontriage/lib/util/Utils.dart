@@ -15,6 +15,7 @@ import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -653,5 +654,17 @@ class Utils {
     if(await canLaunch(command)) {
       await launch(command);
     }
+  }
+
+
+  ///Method to create a file of pdf from base64 string and save that file into the app directory.
+  ///[base64String] is the parameter of base64 string.
+  static Future<File> createFileOfPdfUrl(String base64String) async {
+    var bytes = base64Decode(base64String);
+    String filename = 'bontriage_report.pdf';
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = new File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    return file;
   }
 }

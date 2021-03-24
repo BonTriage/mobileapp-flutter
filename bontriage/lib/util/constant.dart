@@ -469,7 +469,7 @@ class Constant {
   static const String dateRange = 'Date Range';
   static String dataToInclude = 'Data to include';
   static String all = 'All';
-  static String last2Weeks = 'Last 2 weeks';
+  static const String last2Weeks = 'Last 2 weeks';
   static String fileType = 'File type';
   static String pdf = 'PDF';
   static const String faq = 'FAQ';
