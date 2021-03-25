@@ -104,7 +104,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                               currentTag: Constant.dateRange,
                               text: Constant.dateRange,
                               moreStatus: _dateRangeSelected,
-                              isShowDivider: true,
+                              isShowDivider: false,
                               navigateToOtherScreenCallback: _openActionSheet,
                             ),
                             /*MoreSection(
@@ -130,8 +130,9 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                     children: [
                       BouncingWidget(
                         onPressed: () {
+                          _userGenerateReportBloc.inItNetworkStream();
                           Utils.showApiLoaderDialog(context,
-                              networkStream: _userGenerateReportBloc.changePasswordDataStream,
+                              networkStream: _userGenerateReportBloc.userGenerateReportDataStream,
                               tapToRetryFunction: () {
                                 _userGenerateReportBloc.enterSomeDummyDataToStreamController();
                                 getUserReport();
@@ -194,7 +195,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
           _startDateTime = DateTime.now();
           _endDateTime = _startDateTime.subtract(Duration(days: 14));
       }
-      getUserReport();
+      //getUserReport();
     }
   }
 

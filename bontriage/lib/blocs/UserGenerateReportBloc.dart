@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:mobile/models/UserGenerateReportDataModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LoginScreenRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserGenerateReportBloc {
   LoginScreenRepository _loginScreenRepository;
@@ -17,16 +15,16 @@ class UserGenerateReportBloc {
   int count = 0;
   UserGenerateReportDataModel _userGenerateReportDataModel = UserGenerateReportDataModel();
 
-  StreamSink<String> get userGenerateReportDataSink =>
+  StreamSink<dynamic> get userGenerateReportDataSink =>
       _userGenerateReportStreamController.sink;
 
-  Stream<String> get changePasswordDataStream =>
+  Stream<dynamic> get userGenerateReportDataStream =>
       _userGenerateReportStreamController.stream;
 
   UserGenerateReportBloc({this.count = 0}) {
-    _userGenerateReportStreamController = StreamController<String>();
+    _userGenerateReportStreamController = StreamController<dynamic>();
 
-    _userGenerateReportStreamController = StreamController<String>();
+    _userGenerateReportStreamController = StreamController<dynamic>();
     _loginScreenRepository = LoginScreenRepository();
   }
 //http://34.222.200.187:8080/mobileapi/v0/report?mobile_user_id=4678&start_date=2021-3-24T00:00:00Z&end_date=2021-3-10T00:00:00Z
