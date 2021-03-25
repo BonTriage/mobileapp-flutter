@@ -195,6 +195,9 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
           _startDateTime = DateTime.now();
           _endDateTime = _startDateTime.subtract(Duration(days: 14));
       }
+      setState(() {
+        _dateRangeSelected = resultFromActionSheet;
+      });
       //getUserReport();
     }
   }

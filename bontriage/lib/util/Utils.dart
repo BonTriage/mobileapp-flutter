@@ -661,7 +661,7 @@ class Utils {
   ///[base64String] is the parameter of base64 string.
   static Future<File> createFileOfPdfUrl(String base64String) async {
     var bytes = base64Decode(base64String);
-    String filename = 'bontriage_report.pdf';
+    String filename = 'BonTriage_Report.pdf';
     String dir = (await getApplicationDocumentsDirectory()).path;
     File file = new File('$dir/$filename');
     await file.writeAsBytes(bytes);
