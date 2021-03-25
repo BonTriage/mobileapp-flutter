@@ -30,8 +30,7 @@ class ChangePasswordBloc {
     _loginScreenRepository = LoginScreenRepository();
   }
 
-//http://34.222.200.187:8080/mobileapi/v0/user/changepassword?email=rahul.haldhar@gmail.com&password=password
-  //http://34.222.200.187:8080/mobileapi/v0/user/changepassword?email=test261@yopmail.com&password=123456Abc
+
   /// This method will be use for implement API for to check USer Already registered in to the application or not.
   Future<dynamic> sendChangePasswordData(
       String emailValue, String passwordValue) async {
