@@ -49,7 +49,6 @@ class UserGenerateReportBloc {
       await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         userGenerateReportDataSink.addError(response);
-        apiResponse = response.toString();
         print(apiResponse.toString());
       } else {
           _userGenerateReportDataModel = UserGenerateReportDataModel.fromJson(json.decode(response));

@@ -5,6 +5,7 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MoreGenerateReportScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
@@ -130,15 +131,20 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                     children: [
                       BouncingWidget(
                         onPressed: () {
-                          _userGenerateReportBloc.inItNetworkStream();
-                          Utils.showApiLoaderDialog(context,
-                              networkStream: _userGenerateReportBloc.userGenerateReportDataStream,
-                              tapToRetryFunction: () {
-                                _userGenerateReportBloc.enterSomeDummyDataToStreamController();
-                                getUserReport();
-                              });
-                             getUserReport();
-
+                          _checkStoragePermission().then((isPermissionGranted) {
+                            if(isPermissionGranted) {
+                              _userGenerateReportBloc.inItNetworkStream();
+                              Utils.showApiLoaderDialog(context,
+                                  networkStream: _userGenerateReportBloc.userGenerateReportDataStream,
+                                  tapToRetryFunction: () {
+                                    _userGenerateReportBloc.enterSomeDummyDataToStreamController();
+                                    getUserReport();
+                                  });
+                              getUserReport();
+                            } else {
+                              print('Please allow the storage permission before use');
+                            }
+                          });
                           // widget.openActionSheetCallback(Constant.generateReportActionSheet, null);
                         },
                         child: Container(
@@ -175,25 +181,23 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
       switch (resultFromActionSheet) {
         case Constant.last2Weeks:
           _startDateTime = DateTime.now();
-          _endDateTime = _startDateTime.subtract(Duration(days: 14));
-
+          _endDateTime = _startDateTime.subtract(Duration(days: 13));
           break;
         case Constant.last4Weeks:
           _startDateTime = DateTime.now();
-          _endDateTime = _startDateTime.subtract(Duration(days: 28));
-
+          _endDateTime = _startDateTime.subtract(Duration(days: 27));
           break;
         case Constant.last2Months:
           _startDateTime = DateTime.now();
-          _endDateTime = _startDateTime.subtract(Duration(days: 60));
+          _endDateTime = _startDateTime.subtract(Duration(days: 59));
           break;
         case Constant.last3Months:
           _startDateTime = DateTime.now();
-          _endDateTime = _startDateTime.subtract(Duration(days: 90));
+          _endDateTime = _startDateTime.subtract(Duration(days: 89));
           break;
         default:
           _startDateTime = DateTime.now();
-          _endDateTime = _startDateTime.subtract(Duration(days: 14));
+          _endDateTime = _startDateTime.subtract(Duration(days: 13));
       }
       setState(() {
         _dateRangeSelected = resultFromActionSheet;
@@ -213,8 +217,18 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
         '${_endDateTime.year}-${_endDateTime.month}-${_endDateTime.day}T00:00:00Z',
         '${_startDateTime.year}-${_startDateTime.month}-${_startDateTime.day}T00:00:00Z');
     print(responseData);
-    if (responseData is String) {
+    if (responseData != null && responseData is String && responseData.isNotEmpty) {
         _navigateToPdfScreen(responseData);
     }
+  }
+
+  ///Method to get permission of the storage.
+  Future<bool> _checkStoragePermission() async {
+    var storageStatus = await Permission.storage.status;
+
+    if(!storageStatus.isGranted)
+      await Permission.storage.request();
+
+    return await Permission.storage.status.isGranted;
   }
 }
