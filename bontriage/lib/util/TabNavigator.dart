@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
@@ -43,7 +44,9 @@ class TabNavigator extends StatelessWidget {
 
     return await Navigator.push(
         context,
-        PageRouteBuilder(
+        routeName == TabNavigatorRoutes.pdfScreenRoute ? SlideFromBottomPageRoute(
+          widget: routeBuilders[routeName](context),
+        ) : PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               routeBuilders[routeName](context),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {

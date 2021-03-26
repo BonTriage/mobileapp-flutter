@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -20,6 +19,7 @@ class PDFScreen extends StatefulWidget {
 class _PDFScreenState extends State<PDFScreen> {
   String pathPDF = "";
   Future<File> pdfPath;
+  String _currentPageString = Constant.blankString;
 
   final Completer<PDFViewController> _controller = Completer<PDFViewController>();
 
@@ -27,10 +27,12 @@ class _PDFScreenState extends State<PDFScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      pdfPath = Utils.createFileOfPdfUrl(widget.base64String);
+      //pdfPath = Utils.createFileOfPdfUrl(widget.base64String);
       Utils.createFileOfPdfUrl(widget.base64String).then((value) {
-        setState(() {
-          pathPDF = value.path;
+        Future.delayed(Duration(milliseconds: 350), () {
+          setState(() {
+            pathPDF = value.path;
+          });
         });
       });
     });
@@ -105,27 +107,53 @@ class _PDFScreenState extends State<PDFScreen> {
   }
 
   Widget _getWidget() {
-    return PDFView(
-      filePath: pathPDF,
-      enableSwipe: true,
-      swipeHorizontal: true,
-      autoSpacing: false,
-      pageFling: false,
-      onRender: (_pages) {
-
-      },
-      onError: (error) {
-        print(error.toString());
-      },
-      onPageError: (page, error) {
-        print('$page: ${error.toString()}');
-      },
-      onViewCreated: (PDFViewController pdfViewController) {
-        _controller.complete(pdfViewController);
-      },
-      onPageChanged: (int page, int total) {
-        print('page change: $page/$total');
-      },
+    return Stack(
+      children: [
+        PDFView(
+          filePath: pathPDF,
+          enableSwipe: true,
+          swipeHorizontal: false,
+          autoSpacing: true,
+          pageFling: false,
+          onRender: (_pages) {
+            print(_pages);
+          },
+          onError: (error) {
+            print(error.toString());
+          },
+          onPageError: (page, error) {
+            print('$page: ${error.toString()}');
+          },
+          onViewCreated: (PDFViewController pdfViewController) {
+            _controller.complete(pdfViewController);
+          },
+          onPageChanged: (int page, int total) {
+            setState(() {
+              _currentPageString = '${page + 1}/$total';
+            });
+            //print('page change: $page/$total');
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            margin: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              borderRadius: BorderRadius.horizontal(left: Radius.circular(15), right: Radius.circular(15),)
+            ),
+            child: Text(
+              _currentPageString,
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: Constant.jostRegular,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

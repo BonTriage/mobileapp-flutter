@@ -218,7 +218,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
         '${_startDateTime.year}-${_startDateTime.month}-${_startDateTime.day}T00:00:00Z');
     print(responseData);
     if (responseData != null && responseData is String && responseData.isNotEmpty) {
-        _navigateToPdfScreen(responseData);
+      _navigateToPdfScreen(responseData);
     }
   }
 
