@@ -33,7 +33,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
     _dateRangeSelected = Constant.last2Weeks;
 
     _startDateTime = DateTime.now();
-    _endDateTime = _startDateTime.subtract(Duration(days: 14));
+    _endDateTime = _startDateTime.subtract(Duration(days: 13));
   }
 
   @override
