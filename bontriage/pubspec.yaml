@@ -39,7 +39,6 @@ dependencies:
   path: ^1.7.0
   shared_preferences: ^2.0.5
   path_provider: ^2.0.1
-  flutter_full_pdf_viewer: ^1.0.6
   share: ^2.0.1
   flutter_pdfview: ^1.0.4
   permission_handler: ^6.1.1

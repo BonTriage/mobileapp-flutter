@@ -103,6 +103,20 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  SizedBox(height: 10,),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 50,),
                   Text(
                     'OTP Verification',
