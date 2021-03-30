@@ -77,7 +77,7 @@ class SignUpOnBoardFirstStepRepository {
 
   String _getPayload() {
     return jsonEncode(<String, String>{
-      "event_type": "clinical_impression_short0",
+      "event_type": Constant.clinicalImpressionShort0,
       "mobile_user_id": "4214"
     });
   }
@@ -89,7 +89,7 @@ class SignUpOnBoardFirstStepRepository {
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
         SignUpOnBoardAnswersRequestModel();
-    signUpOnBoardAnswersRequestModel.eventType = "clinical_impression_short0";
+    signUpOnBoardAnswersRequestModel.eventType = Constant.clinicalImpression;
     signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
