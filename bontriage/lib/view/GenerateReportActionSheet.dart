@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class GenerateReportActionSheet extends StatefulWidget {
+  final UserProfileInfoModel userProfileInfoModel;
+
+  const GenerateReportActionSheet({Key key, this.userProfileInfoModel}) : super(key: key);
+
   @override
   _GenerateReportActionSheetState createState() => _GenerateReportActionSheetState();
 }
@@ -19,7 +24,7 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
   Widget build(BuildContext context) {
     return CupertinoActionSheet(
           title: Text(
-            Constant.lindaJonesPdf,
+            '${widget.userProfileInfoModel.profileName}.pdf',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 fontSize: 18,

@@ -45,7 +45,7 @@ class LoginScreenBloc {
 
   Future<void> callForgotPasswordApi(String userEmail) async {
     try {
-      String url = '${WebservicePost.qaServerUrl}otp?email=$userEmail';
+      String url = '${WebservicePost.qaServerUrl}otp?email=$userEmail&isUserExist=true';
       var response = await _loginScreenRepository.forgotPasswordServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         forgotPasswordStreamSink.addError(response);

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
@@ -19,6 +20,7 @@ import 'package:mobile/view/MoreSettingScreen.dart';
 import 'package:mobile/view/MoreSexScreen.dart';
 import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
+import 'package:mobile/view/PDFScreen.dart';
 import 'package:mobile/view/RecordScreen.dart';
 
 
@@ -42,7 +44,9 @@ class TabNavigator extends StatelessWidget {
 
     return await Navigator.push(
         context,
-        PageRouteBuilder(
+        routeName == TabNavigatorRoutes.pdfScreenRoute ? SlideFromBottomPageRoute(
+          widget: routeBuilders[routeName](context),
+        ) : PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               routeBuilders[routeName](context),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -73,6 +77,9 @@ class TabNavigator extends StatelessWidget {
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         showApiLoaderCallback: showApiLoaderCallback,
         getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
+      ),
+      TabNavigatorRoutes.pdfScreenRoute: (context) => PDFScreen(
+        base64String: arguments,
       ),
       TabNavigatorRoutes.recordsRoot: (context) =>
           RecordScreen(

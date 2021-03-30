@@ -20,7 +20,7 @@ class MoreSection extends StatefulWidget {
   final MoreTriggersArgumentModel moreTriggersArgumentModel;
   final MoreMedicationArgumentModel moreMedicationArgumentModel;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData, this.moreTriggersArgumentModel, this.moreMedicationArgumentModel}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData, this.moreTriggersArgumentModel, this.moreMedicationArgumentModel,}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -105,8 +105,11 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                       _animationController.reverse();
                     }
                     break;
-                  case Constant.connectTheMigraineMentorTeam:
+                  case Constant.contactTheMigraineMentorTeam:
                     Utils.customLaunch('mailto:support@bontriage.com');
+                    break;
+                  case Constant.dateRange:
+                    widget.navigateToOtherScreenCallback(Constant.dateRangeActionSheet, null);
                     break;
                 }
               }

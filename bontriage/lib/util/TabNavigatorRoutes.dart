@@ -21,4 +21,5 @@ class TabNavigatorRoutes {
   static const String moreMedicationsScreenRoute = 'moreMedicationsScreenRoute';
   static const String calenderRoute = 'calenderRoute';
   static const String trendsRoute = 'trendsRoute';
+  static const String pdfScreenRoute = 'pdfScreenRoute';
 }

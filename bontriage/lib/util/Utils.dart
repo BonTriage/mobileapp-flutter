@@ -15,6 +15,7 @@ import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
 import 'package:mobile/view/ValidationErrorDialog.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -110,7 +111,7 @@ class Utils {
 
   /// Method to get total no of days in the month
   static daysInCurrentMonth(int monthNum, int year) {
-    List<int> monthLength = new List(12);
+    List<int> monthLength = new List.filled(12, 1);
 
     monthLength[0] = 31;
     monthLength[2] = 31;
@@ -168,10 +169,6 @@ class Utils {
 
   static String getStringFromJson(dynamic jsonObject) {
     return jsonEncode(jsonObject);
-  }
-
-  Map<String, dynamic> _getJsonFromString(String response) {
-    return json.decode(response);
   }
 
   static void saveTutorialsState() async {
@@ -657,5 +654,17 @@ class Utils {
     if(await canLaunch(command)) {
       await launch(command);
     }
+  }
+
+
+  ///Method to create a file of pdf from base64 string and save that file into the app directory.
+  ///[base64String] is the parameter of base64 string.
+  static Future<File> createFileOfPdfUrl(String base64String) async {
+    var bytes = base64Decode(base64String);
+    String filename = 'BonTriage_Report.pdf';
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = new File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    return file;
   }
 }

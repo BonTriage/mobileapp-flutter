@@ -466,15 +466,15 @@ class Constant {
   static String twelveHourAMPM = '12 hour AM/PM';
   static const String generateReport = 'Generate Report';
   static const String support = 'Support';
-  static String dateRange = 'Date Range';
+  static const String dateRange = 'Date Range';
   static String dataToInclude = 'Data to include';
   static String all = 'All';
-  static String last2Weeks = 'Last 2 weeks';
+  static const String last2Weeks = 'Last 2 weeks';
   static String fileType = 'File type';
   static String pdf = 'PDF';
   static const String faq = 'FAQ';
-  static const String connectTheMigraineMentorTeam =
-      'Connect the Migraine Mentor team';
+  static const String contactTheMigraineMentorTeam =
+      'Contact the Migraine Mentor team';
   static String medicalHelp = 'Medical Help';
   static String call911 = 'Call 911';
   static String callADoctor = 'Call a doctor (urgent care)';
@@ -598,6 +598,9 @@ class Constant {
   static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
   static const String updateCompareCompassData = 'updateCompareCompassData';
   static const String updateTrendsData = 'updateTrendsData';
+  static const String last4Weeks = 'Last 4 weeks';
+  static const String last2Months = 'Last 2 months';
+  static const String last3Months = 'Last 3 months';
 
   //tutorial text
   static const String meScreenTutorial1 =
@@ -622,10 +625,8 @@ class Constant {
   static const String deleteHeadacheTypeActionSheet =
       'deleteHeadacheTypeActionSheet';
   static const String saveAndExitActionSheet = 'saveAndExitActionSheet';
-
-
-
   static const String editGraphViewBottomSheet = 'editGraphViewBottomSheet';
+  static const String dateRangeActionSheet = 'dateRangeActionSheet';
 
 
   static final int highBarColorIntensity = 2;

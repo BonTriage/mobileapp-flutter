@@ -26,6 +26,7 @@ import 'package:mobile/view/OnBoardHeadacheInfoScreen.dart';
 import 'package:mobile/view/OnBoardHeadacheNameScreen.dart';
 import 'package:mobile/view/OnBoardingSignUpScreen.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
+import 'package:mobile/view/PDFScreen.dart';
 import 'package:mobile/view/PartOneOnBoardScreenTwo.dart';
 import 'package:mobile/view/PartThreeOnBoardScreens.dart';
 import 'package:mobile/view/PartTwoOnBoardMoveOnScreen.dart';

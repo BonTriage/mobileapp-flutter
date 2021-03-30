@@ -28,6 +28,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   String alertMessage = '';
 
+  FocusNode passwordFocusNode;
+  FocusNode confirmPasswordFocusNode;
+
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
     setState(() {
@@ -48,6 +51,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _changePasswordBloc = ChangePasswordBloc();
     confirmPasswordTextEditingController = TextEditingController();
     passwordTextEditingController = TextEditingController();
+
+    passwordFocusNode = FocusNode();
+    confirmPasswordFocusNode = FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FocusScope.of(context).requestFocus(passwordFocusNode);
+    });
+  }
+
+  @override
+  void dispose() {
+    confirmPasswordTextEditingController.dispose();
+    passwordTextEditingController.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,46 +110,47 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
-              child: TextFormField(
-                obscureText: _isHidden,
-                onEditingComplete: () {
-                  passwordValue = passwordTextEditingController.text;
-                },
-                onFieldSubmitted: (String value) {
-                  passwordValue = passwordTextEditingController.text;
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                controller: passwordTextEditingController,
-                onChanged: (String value) {
-                  passwordValue = passwordTextEditingController.text;
-                },
-                style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
-                cursorColor: Constant.bubbleChatTextView,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  hintStyle: TextStyle(fontSize: 15, color: Colors.black),
-                  filled: true,
-                  fillColor: Constant.locationServiceGreen,
-                  suffixIcon: IconButton(
-                    onPressed: _togglePasswordVisibility,
-                    icon: Image.asset(_isHidden
-                        ? Constant.hidePassword
-                        : Constant.showPassword),
+              child: Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: _isHidden,
+                  focusNode: passwordFocusNode,
+                  textInputAction: TextInputAction.next,
+                  controller: passwordTextEditingController,
+                  onChanged: (String value) {
+                    passwordValue = passwordTextEditingController.text;
+                  },
+                  onFieldSubmitted: (text) {
+                    FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+                  },
+                  style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
+                  cursorColor: Constant.bubbleChatTextView,
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    hintStyle: TextStyle(fontSize: 15, color: Colors.black),
+                    filled: true,
+                    fillColor: Constant.locationServiceGreen,
+                    suffixIcon: IconButton(
+                      onPressed: _togglePasswordVisibility,
+                      icon: Image.asset(_isHidden
+                          ? Constant.hidePassword
+                          : Constant.showPassword),
+                    ),
+                    suffixIconConstraints: BoxConstraints(
+                      minHeight: 30,
+                      maxHeight: 35,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                            color: Constant.editTextBoarderColor, width: 1)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                            color: Constant.editTextBoarderColor, width: 1)),
                   ),
-                  suffixIconConstraints: BoxConstraints(
-                    minHeight: 30,
-                    maxHeight: 35,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      borderSide: BorderSide(
-                          color: Constant.editTextBoarderColor, width: 1)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      borderSide: BorderSide(
-                          color: Constant.editTextBoarderColor, width: 1)),
                 ),
               ),
             ),
@@ -152,49 +172,46 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
-              child: TextFormField(
-                obscureText: _isConfirmPasswordHidden,
-                onEditingComplete: () {
-                  confirmPasswordValue =
-                      confirmPasswordTextEditingController.text;
-                },
-                onFieldSubmitted: (String value) {
-                  confirmPasswordValue =
-                      confirmPasswordTextEditingController.text;
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                controller: confirmPasswordTextEditingController,
-                onChanged: (String value) {
-                  confirmPasswordValue =
-                      confirmPasswordTextEditingController.text;
-                },
-                style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
-                cursorColor: Constant.bubbleChatTextView,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  hintStyle: TextStyle(fontSize: 15, color: Colors.black),
-                  filled: true,
-                  fillColor: Constant.locationServiceGreen,
-                  suffixIcon: IconButton(
-                    onPressed: _toggleConfirmPasswordVisibility,
-                    icon: Image.asset(_isConfirmPasswordHidden
-                        ? Constant.hidePassword
-                        : Constant.showPassword),
+              child: Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: _isConfirmPasswordHidden,
+                  focusNode: confirmPasswordFocusNode,
+                  onFieldSubmitted: (String value) {
+                    _clickedChangePasswordButton();
+                  },
+                  controller: confirmPasswordTextEditingController,
+                  onChanged: (String value) {
+                    confirmPasswordValue = confirmPasswordTextEditingController.text;
+                  },
+                  style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
+                  cursorColor: Constant.bubbleChatTextView,
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    hintStyle: TextStyle(fontSize: 15, color: Colors.black),
+                    filled: true,
+                    fillColor: Constant.locationServiceGreen,
+                    suffixIcon: IconButton(
+                      onPressed: _toggleConfirmPasswordVisibility,
+                      icon: Image.asset(_isConfirmPasswordHidden
+                          ? Constant.hidePassword
+                          : Constant.showPassword),
+                    ),
+                    suffixIconConstraints: BoxConstraints(
+                      minHeight: 30,
+                      maxHeight: 35,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                            color: Constant.editTextBoarderColor, width: 1)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderSide: BorderSide(
+                            color: Constant.editTextBoarderColor, width: 1)),
                   ),
-                  suffixIconConstraints: BoxConstraints(
-                    minHeight: 30,
-                    maxHeight: 35,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      borderSide: BorderSide(
-                          color: Constant.editTextBoarderColor, width: 1)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      borderSide: BorderSide(
-                          color: Constant.editTextBoarderColor, width: 1)),
                 ),
               ),
             ),
@@ -233,7 +250,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: BouncingWidget(
                 onPressed: () {
-                  clickedChangePasswordButton();
+                  _clickedChangePasswordButton();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 8),
@@ -263,7 +280,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  void clickedChangePasswordButton() {
+  void _clickedChangePasswordButton() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    passwordValue = passwordTextEditingController.text.trim();
+    confirmPasswordValue = confirmPasswordTextEditingController.text.trim();
     if (passwordValue == null ||
         passwordValue.length < 8 ||
         !Utils.validatePassword(passwordValue)) {

@@ -19,38 +19,42 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
         return false;
       },
       child: Scaffold(
-        body: Container(
-          decoration: Constant.backgroundBoxDecoration,
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height
-              ),
-              child: SafeArea(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundColor,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
-                            },
-                            child: Image(
-                              image: AssetImage(Constant.closeIcon),
-                              width: 22,
-                              height: 22,
+        body: MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+          ),
+          child: Container(
+            decoration: Constant.backgroundBoxDecoration,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height
+                ),
+                child: SafeArea(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                    decoration: BoxDecoration(
+                      color: Constant.backgroundColor,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+                              },
+                              child: Image(
+                                image: AssetImage(Constant.closeIcon),
+                                width: 22,
+                                height: 22,
+                              ),
                             ),
                           ),
-                        ),
                         SizedBox(height: 80,),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -143,6 +147,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
           ),
         ),
       ),
+    )
     );
   }
 
