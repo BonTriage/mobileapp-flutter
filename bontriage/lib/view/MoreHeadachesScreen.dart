@@ -238,13 +238,19 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
   void _getDiagnosticAnswerList() async {
     List<SelectedAnswers> selectedAnswerList = await _bloc.fetchDiagnosticAnswers(widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber);
     if(selectedAnswerList.length > 0) {
-      Future.delayed(Duration(milliseconds: 500), () {
-        widget.navigateToOtherScreenCallback(Constant.partTwoOnBoardScreenRouter, PartTwoOnBoardArgumentModel(
+      Future.delayed(Duration(milliseconds: 500), () async {
+        var eventId = await widget.navigateToOtherScreenCallback(Constant.partTwoOnBoardScreenRouter, PartTwoOnBoardArgumentModel(
           eventId: widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber,
           selectedAnswersList: selectedAnswerList,
           argumentName: Constant.clinicalImpressionEventType,
           isFromMoreScreen: true,
         ));
+
+        print('ResultFromAssessment???$eventId');
+
+        if(eventId != null && eventId is String) {
+          widget.moreHeadacheScreenArgumentModel.headacheTypeData.valueNumber = eventId;
+        }
       });
     }
   }

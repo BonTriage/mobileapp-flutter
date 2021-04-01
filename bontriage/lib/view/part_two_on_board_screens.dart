@@ -462,17 +462,21 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
     signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
 
-    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
+    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId, widget.partTwoOnBoardArgumentModel.isFromMoreScreen ?? false);
     if (response is String) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db
             .deleteOnBoardQuestionnaireProgress(Constant.secondEventStep);
         Navigator.pop(context);
         if (_argumentName == Constant.clinicalImpressionEventType) {
-          var userHeadacheName =
-          signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere(
-                  (model) => model.questionTag == "nameClinicalImpression");
-          Navigator.pop(context, userHeadacheName.answer);
+          if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen ?? false) {
+            Navigator.pop(context, _signUpOnBoardSecondStepBloc.eventId);
+          } else {
+            var userHeadacheName = signUpOnBoardSelectedAnswersModel
+                .selectedAnswers.firstWhere((model) =>
+            model.questionTag == "nameClinicalImpression");
+            Navigator.pop(context, userHeadacheName.answer);
+          }
         } else {
           SelectedAnswers nameClinicalImpressionSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == "nameClinicalImpression", orElse: () => null);
           if(nameClinicalImpressionSelectedAnswer != null) {

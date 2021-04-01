@@ -73,10 +73,12 @@ class MoreHeadacheBloc {
               selectedAnswersList.add(SelectedAnswers(questionTag: element.questionTag, answer: element.value));
           });
         } else {
+          print(Constant.somethingWentWrong);
           networkSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch(e) {
+      print(e);
       networkSink.addError(Exception(Constant.somethingWentWrong));
     }
     return selectedAnswersList;
