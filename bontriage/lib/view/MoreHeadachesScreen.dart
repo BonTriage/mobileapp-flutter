@@ -103,11 +103,11 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                     ),
                     child: Column(
                       children: [
-                        MoreSection(
+                       /* MoreSection(
                           text: Constant.viewReport,
                           moreStatus: '',
                           isShowDivider: true,
-                        ),
+                        ),*/
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
