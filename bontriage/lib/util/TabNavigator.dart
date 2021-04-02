@@ -42,6 +42,8 @@ class TabNavigator extends StatelessWidget {
   Future<dynamic> _push(BuildContext context, String routeName, dynamic argument) async {
     var routeBuilders = _routeBuilders(context, argument);
 
+    print('RouteName???$routeName');
+
     return await Navigator.push(
         context,
         routeName == TabNavigatorRoutes.pdfScreenRoute ? SlideFromBottomPageRoute(
@@ -127,6 +129,7 @@ class TabNavigator extends StatelessWidget {
         moreHeadacheScreenArgumentModel: arguments,
         showApiLoaderCallback: showApiLoaderCallback,
         navigateToOtherScreenCallback: navigateToOtherScreenCallback,
+        onPush: _push,
       ),
       TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
       TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(
@@ -164,14 +167,16 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     var routeBuilders = _routeBuilders(context, null);
 
-
     return Navigator(
         key: navigatorKey,
         initialRoute: root,
         onGenerateRoute: (routeSettings) {
           print('Route name ${routeSettings.name}');
           return MaterialPageRoute(
-              builder: (context) => routeBuilders[routeSettings.name](context));
-        });
+              builder: (context) => routeBuilders[routeSettings.name](context),
+              settings: RouteSettings(name: routeSettings.name),
+          );
+        },
+    );
   }
 }

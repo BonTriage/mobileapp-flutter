@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpSecondStepCompassBloc.dart';
 import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:mobile/models/UserGenerateReportDataModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CustomScrollBar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
@@ -85,6 +88,8 @@ class _SignUpSecondStepCompassResultState
       });
       _bloc.fetchFirstLoggedScoreData();
     });
+
+    _listenToViewReportStream();
   }
 
   @override
@@ -634,14 +639,23 @@ class _SignUpSecondStepCompassResultState
                   ),
                   Container(
                     child: Center(
-                      child: Text(
-                        Constant.viewDetailedReport,
-                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 13,
-                            decoration: TextDecoration.underline,
-                            fontFamily: Constant.jostMedium),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _checkStoragePermission().then((value) {
+                            if(value)
+                              _getUserReport();
+                          });
+                        },
+                        child: Text(
+                          Constant.viewDetailedReport,
+                          textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          style: TextStyle(
+                              color: Constant.locationServiceGreen,
+                              fontSize: 13,
+                              decoration: TextDecoration.underline,
+                              fontFamily: Constant.jostMedium),
+                        ),
                       ),
                     ),
                   )
@@ -854,8 +868,7 @@ class _SignUpSecondStepCompassResultState
           userFrequencyValue, userDurationValue);
   }
 
-  void setCompassDataScore(int userIntensityValue, int userDisabilityValue,
-      int userFrequencyValue, int userDurationValue) {
+  void setCompassDataScore(int userIntensityValue, int userDisabilityValue, int userFrequencyValue, int userDurationValue) {
     int userMaxDurationValue;
     var intensityScore = userIntensityValue / 10 * 100.0;
     var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
@@ -873,5 +886,52 @@ class _SignUpSecondStepCompassResultState
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     _userScoreData = userTotalScore.toInt().toString();
     print('Second Step $_userScoreData');
+  }
+
+  ///Method to get permission of the storage.
+  Future<bool> _checkStoragePermission() async {
+    var storageStatus = await Permission.storage.status;
+
+    if(!storageStatus.isGranted)
+      await Permission.storage.request();
+
+    return await Permission.storage.status.isGranted;
+  }
+
+  void _getUserReport() {
+    DateTime startDateTime = DateTime.now();
+    DateTime endDateTime = startDateTime.subtract(Duration(days: 13));
+    _bloc.initNetworkStreamController();
+    Utils.showApiLoaderDialog(
+      context,
+      networkStream: _bloc.networkDataStream,
+      tapToRetryFunction: () {
+        _bloc.enterDummyDataToNetworkStream();
+        _bloc.getUserGenerateReportData(
+            '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+            '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+            userHeadacheName);
+      }
+    );
+    _bloc.getUserGenerateReportData(
+        '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+        '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+        userHeadacheName);
+  }
+
+  ///Method to listen to view report stream
+  void _listenToViewReportStream() {
+    _bloc.viewReportStream.listen((reportModel) {
+      if(reportModel is UserGenerateReportDataModel) {
+        _navigateToPdfScreen(reportModel.map.base64);
+      }
+    });
+  }
+
+  ///Method to navigate to pdf screen
+  void _navigateToPdfScreen(String base64String) {
+    Future.delayed(Duration(milliseconds: 300), () {
+      Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
+    });
   }
 }

@@ -106,7 +106,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                               text: Constant.dateRange,
                               moreStatus: _dateRangeSelected,
                               isShowDivider: false,
-                              navigateToOtherScreenCallback: _openActionSheet,
+                              navigateToOtherScreenCallback: _openDateRangeActionSheet,
                             ),
                             /*MoreSection(
                                 text: Constant.dataToInclude,
@@ -174,7 +174,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
     );
   }
 
-  void _openActionSheet(String actionSheetIdentifier, dynamic argument) async {
+  void _openDateRangeActionSheet(String actionSheetIdentifier, dynamic argument) async {
     var resultFromActionSheet = await widget.openActionSheetCallback(
         Constant.dateRangeActionSheet, null);
     if (resultFromActionSheet != null && resultFromActionSheet is String) {
