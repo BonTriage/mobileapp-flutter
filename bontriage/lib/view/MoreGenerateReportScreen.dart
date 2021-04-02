@@ -5,7 +5,7 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 
 class MoreGenerateReportScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
@@ -131,7 +131,7 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                     children: [
                       BouncingWidget(
                         onPressed: () {
-                          _checkStoragePermission().then((isPermissionGranted) {
+                          /*_checkStoragePermission().then((isPermissionGranted) {
                             if(isPermissionGranted) {
                               _userGenerateReportBloc.inItNetworkStream();
                               Utils.showApiLoaderDialog(context,
@@ -144,7 +144,15 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                             } else {
                               print('Please allow the storage permission before use');
                             }
-                          });
+                          });*/
+                          _userGenerateReportBloc.inItNetworkStream();
+                          Utils.showApiLoaderDialog(context,
+                              networkStream: _userGenerateReportBloc.userGenerateReportDataStream,
+                              tapToRetryFunction: () {
+                                _userGenerateReportBloc.enterSomeDummyDataToStreamController();
+                                getUserReport();
+                              });
+                          getUserReport();
                           // widget.openActionSheetCallback(Constant.generateReportActionSheet, null);
                         },
                         child: Container(
@@ -223,12 +231,12 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
   }
 
   ///Method to get permission of the storage.
-  Future<bool> _checkStoragePermission() async {
+  /*Future<bool> _checkStoragePermission() async {
     var storageStatus = await Permission.storage.status;
 
     if(!storageStatus.isGranted)
       await Permission.storage.request();
 
     return await Permission.storage.status.isGranted;
-  }
+  }*/
 }
