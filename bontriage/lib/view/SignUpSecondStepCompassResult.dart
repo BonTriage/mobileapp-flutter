@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpSecondStepCompassBloc.dart';
@@ -12,7 +14,6 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CustomScrollBar.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 
@@ -890,12 +891,11 @@ class _SignUpSecondStepCompassResultState
 
   ///Method to get permission of the storage.
   Future<bool> _checkStoragePermission() async {
-    var storageStatus = await Permission.storage.status;
-
-    if(!storageStatus.isGranted)
-      await Permission.storage.request();
-
-    return await Permission.storage.status.isGranted;
+    if(Platform.isAndroid) {
+      return await Constant.platform.invokeMethod('getStoragePermission');
+    } else {
+      return true;
+    }
   }
 
   void _getUserReport() {

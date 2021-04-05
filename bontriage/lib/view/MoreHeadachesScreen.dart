@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
@@ -8,7 +10,6 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MoreHeadachesScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
@@ -313,14 +314,13 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
     widget.onPush(context, TabNavigatorRoutes.pdfScreenRoute, base64String);
   }
 
-  ///Method to check storage permission
+  ///Method to get permission of the storage.
   Future<bool> _checkStoragePermission() async {
-    var storageStatus = await Permission.storage.status;
-
-    if(!storageStatus.isGranted)
-      await Permission.storage.request();
-
-    return await Permission.storage.status.isGranted;
+    if(Platform.isAndroid) {
+      return await Constant.platform.invokeMethod('getStoragePermission');
+    } else {
+      return true;
+    }
   }
 
   void _listenToViewReportStream() {

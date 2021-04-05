@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/UserGenerateReportBloc.dart';
@@ -5,7 +7,6 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MoreGenerateReportScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
@@ -224,11 +225,10 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
 
   ///Method to get permission of the storage.
   Future<bool> _checkStoragePermission() async {
-    var storageStatus = await Permission.storage.status;
-
-    if(!storageStatus.isGranted)
-      await Permission.storage.request();
-
-    return await Permission.storage.status.isGranted;
+    if(Platform.isAndroid) {
+      return await Constant.platform.invokeMethod('getStoragePermission');
+    } else {
+      return true;
+    }
   }
 }

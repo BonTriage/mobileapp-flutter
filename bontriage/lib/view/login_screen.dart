@@ -327,8 +327,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         duration: Duration(milliseconds: 300),
                         firstChild: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, Constant.welcomeStartAssessmentScreenRouter);
+                            /*Navigator.pushReplacementNamed(
+                                context, Constant.welcomeStartAssessmentScreenRouter);*/
+                            Navigator.pop(context);
                           },
                           child: Text(
                             Constant.register,

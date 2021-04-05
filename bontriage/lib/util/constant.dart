@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Constant {
   static const String splashRouter = 'splash';
@@ -390,6 +391,8 @@ class Constant {
   static String plusText = "+";
   static String clinicalImpressionEventType = "clinical_impression";
   static String welcomeOnBoardStepTwoEventType = "clinical_impression_short2";
+
+  static const platform = const MethodChannel('method_channel');
 
   static const String severityTag = "severity";
   static const String onSetTag = "onset";
