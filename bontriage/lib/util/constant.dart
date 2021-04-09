@@ -601,6 +601,7 @@ class Constant {
   static const String last4Weeks = 'Last 4 weeks';
   static const String last2Months = 'Last 2 months';
   static const String last3Months = 'Last 3 months';
+  static const String close = 'Close';
 
   //tutorial text
   static const String meScreenTutorial1 =
@@ -617,7 +618,6 @@ class Constant {
       'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
   static const String trendsTutorialText5 =
       'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
-
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

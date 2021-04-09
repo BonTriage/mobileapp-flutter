@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
@@ -282,7 +283,14 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                   Expanded(
                     child: NetworkErrorScreen(
                       errorMessage: snapshot.error.toString(),
-                      tapToRetryFunction: widget.tapToRetryFunction,
+                      tapToRetryFunction: () {
+                        if(snapshot.error is SocketException) {
+                          widget.tapToRetryFunction();
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      },
+                      isNeedToRetry: snapshot.error is SocketException,
                     ),
                   ),
                 ],

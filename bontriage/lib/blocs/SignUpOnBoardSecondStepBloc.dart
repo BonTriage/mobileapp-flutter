@@ -78,8 +78,7 @@ class SignUpOnBoardSecondStepBloc {
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
         welcomeOnBoardProfileModel.questionnaires[0].initialQuestion,
-        welcomeOnBoardProfileModel
-            .questionnaires[0].questionGroups[0].questions);
+        welcomeOnBoardProfileModel.questionnaires[0].questionGroups[0].questions);
     signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
