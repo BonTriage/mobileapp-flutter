@@ -363,13 +363,10 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// then we hit the API and save the all questions data in to the database. if not then we will fetch the all data from the local
   /// database of respective table.
   void requestService() async {
-    List<LocalQuestionnaire> localQuestionnaireData =
-        await SignUpOnBoardProviders.db
-            .getQuestionnaire(Constant.secondEventStep);
+    List<LocalQuestionnaire> localQuestionnaireData = await SignUpOnBoardProviders.db.getQuestionnaire(Constant.secondEventStep);
 
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
-      signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
-          .fetchDataFromLocalDatabase(localQuestionnaireData);
+      signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       _signUpOnBoardSecondStepBloc
           .fetchSignUpOnBoardSecondStepData(_argumentName);

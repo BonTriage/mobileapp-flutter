@@ -713,8 +713,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
 
     List<Axes> recordsOverTimeCompassAxesListData =
         recordsCompassAxesResultModel.signUpCompassAxesResultModel.signUpAxes;
+    print('CompareCompassDateFirstLogged???${recordsCompassAxesResultModel.signUpCompassAxesResultModel.calendarEntryAt}');
     firstLoggedSignUpData = DateTime.parse(recordsCompassAxesResultModel
-            .signUpCompassAxesResultModel.calendarEntryAt);
+            .signUpCompassAxesResultModel.calendarEntryAt ?? DateTime.now().toIso8601String());
 
     _compassTutorialModelFirstLogged.currentDateTime = firstLoggedSignUpData;
 
