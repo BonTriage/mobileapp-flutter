@@ -536,7 +536,7 @@ class Constant {
       'MINIMUM 8 CHARACTERS\nPLEASE INCLUDE AT LEAST 1 NUMBER\nPLEASE INCLUDE UPPER AND LOWER CASE\nLETTERS';
   static String passwordNotMatchMessage =
       'PASSWORD AND CONFIRM PASSWORD\nSHOULD BE SAME';
-  static String signUpCheckboxAlertMessage = 'PLEASE CHECK TERM AND CONDITION';
+  static String signUpCheckboxAlertMessage = 'PLEASE CHECK TERMS AND CONDITION';
   static String signUpEmilFieldAlertMessage = 'PLEASE ENTER VALID EMAIL';
 
   static String loginAlertMessage = 'Email Id or Password is invalid.';
