@@ -551,6 +551,11 @@ class _SignUpFirstStepCompassResultState
 
   void getCompassAxesFromDatabase() async {
     int baseMaxValue = 10;
+
+    var userFrequencyNormalisedValue;
+    var userDurationNormalisedValue;
+    var userDisabilityNormalisedValue;
+
     List<LocalQuestionnaire> localQuestionnaireData =
         await SignUpOnBoardProviders.db
             .getQuestionnaire(Constant.firstEventStep);
@@ -564,14 +569,19 @@ class _SignUpFirstStepCompassResultState
         (frequencyElement) =>
             frequencyElement.questionTag == Constant.headacheFreeTag,
         orElse: () => null);
+
     if (userFrequency != null) {
+      ///freq = 2
       userFrequencyValue = int.tryParse(userFrequency.answer);
       if (userFrequencyValue == 0) {
-        _compassTutorialModel.currentMonthFrequency = 0;
-        userFrequencyValue = 0;
+        _compassTutorialModel.currentMonthFrequency = 31 - userFrequencyValue;
+        userFrequencyNormalisedValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        userFrequencyValue = 31 - userFrequencyValue;
       } else {
         _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
-        userFrequencyValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        userFrequencyNormalisedValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        ///userNormalizedFreq = 9
+        userFrequencyValue = (31 - userFrequencyValue);
       }
     }
     var userDuration = selectedAnswerListData.firstWhere(
@@ -580,6 +590,7 @@ class _SignUpFirstStepCompassResultState
         orElse: () => null);
     if (userDuration != null) {
       int userMaxDurationValue;
+      ///duration = 3
       userDurationValue = int.tryParse(userDuration.answer);
       _compassTutorialModel.currentMonthDuration = userDurationValue;
       if (userDurationValue <= 1) {
@@ -589,14 +600,16 @@ class _SignUpFirstStepCompassResultState
       } else if (userDurationValue > 24 && userDurationValue <= 72) {
         userMaxDurationValue = 72;
       }
-      userDurationValue =
+      userDurationNormalisedValue =
           userDurationValue ~/ (userMaxDurationValue / baseMaxValue);
+      ///userNormalisedDuration = 1.25 = 1
     }
     var userIntensity = selectedAnswerListData.firstWhere(
         (intensityElement) =>
             intensityElement.questionTag == Constant.headacheTypicalBadPainTag,
         orElse: () => null);
     if (userIntensity != null) {
+      ///intensity = 1
       userIntensityValue = int.tryParse(userIntensity.answer);
       _compassTutorialModel.currentMonthIntensity = userIntensityValue;
       //userFrequencyValue = userFrequencyValue ~/ (90 / baseMaxValue);
@@ -606,9 +619,10 @@ class _SignUpFirstStepCompassResultState
             intensityElement.questionTag == Constant.headacheDisabledTag,
         orElse: () => null);
     if (userDisability != null) {
+      ///disability = 0
       userDisabilityValue = int.tryParse(userDisability.answer);
       _compassTutorialModel.currentMonthDisability = userDisabilityValue;
-      userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
+      userDisabilityNormalisedValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
 
     print(
@@ -622,9 +636,9 @@ class _SignUpFirstStepCompassResultState
       userCompassAxesData = [
         [
           userIntensityValue,
-          userDurationValue,
-          userDisabilityValue,
-          userFrequencyValue
+          userDurationNormalisedValue,
+          userDisabilityNormalisedValue,
+          userFrequencyNormalisedValue,
         ]
       ];
       print('First Step Compass Axes $userCompassAxesData');
@@ -636,9 +650,9 @@ class _SignUpFirstStepCompassResultState
   void setCompassDataScore(int userIntensityValue, int userDisabilityValue,
       int userFrequencyValue, int userDurationValue) {
     int userMaxDurationValue;
-    var intensityScore = userIntensityValue / 10 * 100.0;
-    var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
-    var frequencyScore = userFrequencyValue.toInt() / 30 * 100.0;
+    var intensityScore = userIntensityValue / 10 * 100.0;  ///10
+    var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0; ///0
+    var frequencyScore = userFrequencyValue.toInt() / 31 * 100.0; ///93.54
     if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
     } else if (userDurationValue > 1 && userDurationValue <= 24) {
@@ -647,10 +661,12 @@ class _SignUpFirstStepCompassResultState
       userMaxDurationValue = 72;
     }
     var durationScore =
-        userDurationValue.toInt() / userMaxDurationValue * 100.0;
+        userDurationValue.toInt() / userMaxDurationValue * 100.0; ///12.5
+    print('intensityScore???$intensityScore???disabilityScore???$disabilityScore???frequencyScore???$frequencyScore???durationScore???$durationScore');
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
-    userScoreData = userTotalScore.round().toString();
+    print('userTotalScore???$userTotalScore');
+    userScoreData = userTotalScore.round().toString();///29
     print('First Step User ScoreData$userScoreData');
   }
 }

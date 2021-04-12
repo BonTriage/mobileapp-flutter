@@ -786,18 +786,26 @@ class _SignUpSecondStepCompassResultState
   void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {
     _compassTutorialModel.currentDateTime = DateTime.tryParse(recordsCompassAxesResultModel.calendarEntryAt);
     int baseMaxValue = 10;
+
+    var userFrequencyNormalisedValue;
+    var userDurationNormalisedValue;
+    var userDisabilityNormalisedValue;
+
     var userFrequency = recordsCompassAxesResultModel.signUpAxes.firstWhere(
             (intensityElement) =>
         intensityElement.name == 'Frequency',
         orElse: () => null);
+
     if (userFrequency != null) {
       userFrequencyValue = userFrequency.value.toInt();
       if(userFrequencyValue == 0){
-        _compassTutorialModel.currentMonthFrequency = 0;
-        userFrequencyValue = 0;
+        _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
+        userFrequencyNormalisedValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        userFrequencyValue = 31 - userFrequencyValue;
       }else {
-        _compassTutorialModel.currentMonthFrequency = (31-userFrequencyValue);
-        userFrequencyValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        _compassTutorialModel.currentMonthFrequency = (31 - userFrequencyValue);
+        userFrequencyNormalisedValue = (31 - userFrequencyValue) ~/ (31 / baseMaxValue);
+        userFrequencyValue = (31 - userFrequencyValue);
       }
     }
     var userDuration = recordsCompassAxesResultModel.signUpAxes.firstWhere(
@@ -815,7 +823,7 @@ class _SignUpSecondStepCompassResultState
       } else if (userDurationValue > 24 && userDurationValue <= 72) {
         userMaxDurationValue = 72;
       }
-      userDurationValue =
+      userDurationNormalisedValue =
           userDurationValue ~/ (userMaxDurationValue / baseMaxValue);
     }
     var userIntensity = recordsCompassAxesResultModel.signUpAxes.firstWhere(
@@ -833,7 +841,7 @@ class _SignUpSecondStepCompassResultState
     if (userDisability != null) {
       userDisabilityValue = userDisability.value.toInt();
       _compassTutorialModel.currentMonthDisability = userDisabilityValue;
-      userDisabilityValue = userDisabilityValue ~/ (4 / baseMaxValue);
+      userDisabilityNormalisedValue = userDisabilityValue ~/ (4 / baseMaxValue);
     }
     print('Frequency???${userFrequency.value}Duration???${userDuration.value}Intensity???${userIntensity.value}Disability???${userDisability.value}');
       // Intensity,Duration,Disability,Frequency
@@ -844,9 +852,9 @@ class _SignUpSecondStepCompassResultState
       data = [
         [
           userIntensityValue,
-          userDurationValue,
-          userDisabilityValue,
-          userFrequencyValue
+          userDurationNormalisedValue,
+          userDisabilityNormalisedValue,
+          userFrequencyNormalisedValue
         ]
       ];
       print('Second Step Compass Data: $data');
@@ -859,7 +867,7 @@ class _SignUpSecondStepCompassResultState
     int userMaxDurationValue;
     var intensityScore = userIntensityValue / 10 * 100.0;
     var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
-    var frequencyScore = userFrequencyValue.toInt() / 30 * 100.0;
+    var frequencyScore = userFrequencyValue.toInt() / 31 * 100.0;
     if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
     } else if (userDurationValue > 1 && userDurationValue <= 24) {
@@ -869,9 +877,11 @@ class _SignUpSecondStepCompassResultState
     }
     var durationScore =
         userDurationValue.toInt() / userMaxDurationValue * 100.0;
+    print('intensityScore???$intensityScore???disabilityScore???$disabilityScore???frequencyScore???$frequencyScore???durationScore???$durationScore');
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
-    _userScoreData = userTotalScore.toInt().toString();
-    print('Second Step $_userScoreData');
+    print('userTotalScore???$userTotalScore');
+    _userScoreData = userTotalScore.round().toString();
+    print('First Step User ScoreData$_userScoreData');
   }
 }
