@@ -67,7 +67,7 @@ class _StateSignUpOnBoardBubbleTextView
             text: 'Welcome to',
             style: _textStyle),
         TextSpan(
-            text: ' MigraineMentor! ',
+            text: ' MigraineMentor ',
             style: _highlightedTextStyle),
         TextSpan(
             text: Constant.welcomeMigraineMentorTextView,
