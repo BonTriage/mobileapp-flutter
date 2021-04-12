@@ -1,14 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/MoreHeadachesBloc.dart';
 import 'package:mobile/models/MoreHeadacheScreenArgumentModel.dart';
 import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserGenerateReportDataModel.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreHeadachesScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Function(BuildContext, String, dynamic) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final MoreHeadacheScreenArgumentModel moreHeadacheScreenArgumentModel;
   final Function(Stream, Function) showApiLoaderCallback;
@@ -32,6 +36,7 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
     _bloc = MoreHeadacheBloc();
 
     _listenToDeleteHeadacheStream();
+    _listenToViewReportStream();
   }
 
   @override
@@ -104,9 +109,17 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                     child: Column(
                       children: [
                         MoreSection(
+                          currentTag: Constant.viewReport,
                           text: Constant.viewReport,
                           moreStatus: '',
                           isShowDivider: true,
+                          viewReportClickedCallback: () {
+                            _checkStoragePermission().then((value) {
+                              if(value) {
+                                _openDateRangeActionSheet(Constant.dateRangeActionSheet, null);
+                              }
+                            });
+                          },
                         ),
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
@@ -253,5 +266,74 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
         }
       });
     }
+  }
+
+  void _openDateRangeActionSheet(String actionSheetIdentifier, dynamic argument) async {
+    DateTime startDateTime, endDateTime;
+    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.dateRangeActionSheet, null);
+    if (resultFromActionSheet != null && resultFromActionSheet is String) {
+      switch (resultFromActionSheet) {
+        case Constant.last2Weeks:
+          startDateTime = DateTime.now();
+          endDateTime = startDateTime.subtract(Duration(days: 13));
+          break;
+        case Constant.last4Weeks:
+          startDateTime = DateTime.now();
+          endDateTime = startDateTime.subtract(Duration(days: 27));
+          break;
+        case Constant.last2Months:
+          startDateTime = DateTime.now();
+          endDateTime = startDateTime.subtract(Duration(days: 59));
+          break;
+        case Constant.last3Months:
+          startDateTime = DateTime.now();
+          endDateTime = startDateTime.subtract(Duration(days: 89));
+          break;
+        default:
+          startDateTime = DateTime.now();
+          endDateTime = startDateTime.subtract(Duration(days: 13));
+      }
+     _getUserReport(startDateTime, endDateTime);
+    }
+  }
+
+  void _getUserReport(DateTime startDateTime, DateTime endDateTime) {
+    _bloc.initNetworkStreamController();
+    widget.showApiLoaderCallback(
+      _bloc.networkStream,
+        () {
+          _bloc.enterDummyDataToNetworkStream();
+          _bloc.getUserGenerateReportData(
+              '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+              '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+              widget.moreHeadacheScreenArgumentModel.headacheTypeData.text);
+        }
+    );
+    _bloc.getUserGenerateReportData(
+        '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+        '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+        widget.moreHeadacheScreenArgumentModel.headacheTypeData.text);
+  }
+
+  ///Method to navigate to pdf screen
+  void _navigateToPdfScreen(String base64String) {
+    widget.onPush(context, TabNavigatorRoutes.pdfScreenRoute, base64String);
+  }
+
+  ///Method to get permission of the storage.
+  Future<bool> _checkStoragePermission() async {
+    if(Platform.isAndroid) {
+      return await Constant.platform.invokeMethod('getStoragePermission');
+    } else {
+      return true;
+    }
+  }
+
+  void _listenToViewReportStream() {
+    _bloc.viewReportStream.listen((reportModel) {
+      if(reportModel is UserGenerateReportDataModel) {
+        _navigateToPdfScreen(reportModel.map.base64);
+      }
+    });
   }
 }

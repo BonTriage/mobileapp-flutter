@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mobile/animations/ScaleInPageRoute.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
@@ -343,6 +344,10 @@ class MyApp extends StatelessWidget {
           case Constant.changePasswordScreenRouter:
             {
               return SlideFromRightPageRoute(widget: ChangePasswordScreen(emailValue: settings.arguments), routeSettings: routeSettings);
+            }
+          case TabNavigatorRoutes.pdfScreenRoute:
+            {
+              return SlideFromBottomPageRoute(widget: PDFScreen(base64String: settings.arguments), routeSettings: routeSettings);
             }
         }
         return null;

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Constant {
   static const String splashRouter = 'splash';
@@ -392,6 +393,8 @@ class Constant {
   static String clinicalImpressionEventType = "clinical_impression";
   static String welcomeOnBoardStepTwoEventType = "clinical_impression_short2";
 
+  static const platform = const MethodChannel('method_channel');
+
   static const String severityTag = "severity";
   static const String onSetTag = "onset";
   static const String disabilityTag = "disability";
@@ -619,6 +622,19 @@ class Constant {
       'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
   static const String trendsTutorialText5 =
       'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
+
+  static const String faqQuestion1 = 'What is the Migraine Compass Score?';
+  static const String faqQuestion2 = 'What does it mean if a patient\'s Migraine Compass score is decreasing?';
+  static const String faqQuestion3 = 'What is the difference between Log Day and Add Headache?';
+  static const String faqQuestion4 = 'Why do I need to log every day on the app?';
+  static const String faqQuestion5 = 'Is the headache name in the app the same as the actual medical diagnosis?';
+
+  static const String faqAnswer1 = 'A person’s Migraine Compass Score is generated based on\ni. Intensity\nii. Disability\niii. Duration\niv. Frequency\n\nThese parameters are used by headache specialists to measure and diagnosing headaches and migraines.';
+  static const String faqAnswer2 = 'When a patient’s intensity, disability, duration or frequency of headaches are decreasing, it contributes to a lower compass score. This means the overall patient\'s quality of health is improving with the overall decrease in the migraine compass score.';
+  static const String faqAnswer3 = 'Log Day refers to user entering their overall activities in a day such as meals, exercise and sleep. Whereas "Add Headache" requires the user adding details to the headache such as the intensity, duration etc.';
+  static const String faqAnswer4 = 'It is most desirable to log every day so that the app can better track your overall health.';
+  static const String faqAnswer5 = 'No. The headache name is a user defined such as a "Red wine headache" to indicate the headache that started after a red wine.';
+
 
   //Action Sheet Identifier
   static const String medicalHelpActionSheet = 'medicalHelpActionSheet';

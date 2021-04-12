@@ -82,13 +82,14 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                   Container(
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
-                      maxLength: 100,
+                      maxLength: 400,
+
                       focusNode: _focusNode,
                       controller: _textEditingController,
-                      maxLines: 3,
+                      maxLines: 5,
                       onChanged: (value) {
-                        if(value.length > 100) {
-                          _textEditingController.text = value.substring(0, 100);
+                        if(value.length > 400) {
+                          _textEditingController.text = value.substring(0, 400);
                           _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: _textEditingController.text.length));
                         }
                       },
