@@ -187,6 +187,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     } else {
                                       ///To:Do
                                       print("Not Allowed");
+                                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                     }
                                   },
                                   child: Padding(
@@ -352,6 +353,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     } else {
                                       ///To:Do
                                       print("Not Allowed");
+                                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                     }
                                   },
                                   child: Padding(

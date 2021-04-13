@@ -606,6 +606,7 @@ class Constant {
   static const String last2Months = 'Last 2 months';
   static const String last3Months = 'Last 3 months';
   static const String close = 'Close';
+  static const String beyondDateErrorMessage = 'You cannot go beyond the current month.';
 
   //tutorial text
   static const String meScreenTutorial1 =

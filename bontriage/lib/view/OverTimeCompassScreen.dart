@@ -283,6 +283,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                       width: 1)),
                               child: Center(
                                 child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     Utils.showCompassTutorialDialog(context, 0, compassTutorialModel: _compassTutorialModel);
                                   },
@@ -477,6 +478,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               } else {
                                 ///To:Do
                                 print("Not Allowed");
+                                Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                               }
                             },
                             child: Padding(

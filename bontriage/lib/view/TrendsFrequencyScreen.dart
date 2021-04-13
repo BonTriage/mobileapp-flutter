@@ -338,6 +338,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(
