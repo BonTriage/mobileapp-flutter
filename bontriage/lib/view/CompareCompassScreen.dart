@@ -711,6 +711,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         userOverTimeIntensityValue,
         userOverTimeDisabilityValue;
 
+    int userOvertimeNormalisedFrequencyValue,
+        userOverTimeNormalisedDurationValue,
+        userOverTimeNormalisedDisabilityValue;
+
     List<Axes> recordsOverTimeCompassAxesListData =
         recordsCompassAxesResultModel.signUpCompassAxesResultModel.signUpAxes;
     firstLoggedSignUpData = DateTime.parse(recordsCompassAxesResultModel
@@ -723,33 +727,34 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         orElse: () => null);
     if (userOverTimeFrequency != null) {
       // userOvertimeFrequencyValue = userOverTimeFrequency.value ~/(userOverTimeFrequency.max / baseMaxValue);
-      _compassTutorialModelFirstLogged.currentMonthFrequency = userOverTimeFrequency.value.round();
-      userOvertimeFrequencyValue =
-          (userOverTimeFrequency.value * baseMaxValue).round();
-      if (userOvertimeFrequencyValue > 10) {
+      _compassTutorialModelFirstLogged.currentMonthFrequency = (userOverTimeFrequency.max - userOverTimeFrequency.value).round();
+      userOvertimeNormalisedFrequencyValue = (userOverTimeFrequency.max - userOverTimeFrequency.value).round() ~/ (userOverTimeFrequency.max / baseMaxValue);
+      userOvertimeFrequencyValue = (userOverTimeFrequency.max - userOverTimeFrequency.value).round();
+      /*if (userOvertimeFrequencyValue > 10) {
         userOvertimeFrequencyValue = 10;
       } else {
         userOvertimeFrequencyValue = userOvertimeFrequencyValue;
-      }
+      }*/
     } else {
-      _compassTutorialModelFirstLogged.currentMonthFrequency = 0;
-      userOvertimeFrequencyValue = 0;
+      _compassTutorialModelFirstLogged.currentMonthFrequency = 31;
+      userOvertimeNormalisedFrequencyValue= 10;
+      userOvertimeFrequencyValue = 31;
     }
     var userOvertimeDuration = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userOvertimeDuration != null) {
       // userOverTimeDurationValue = userOvertimeDuration.value ~/(userOvertimeDuration.max / baseMaxValue);
-      userOverTimeDurationValue = (userOvertimeDuration.value * baseMaxValue).round();
-      if (userOverTimeDurationValue > 10) {
+      userOverTimeNormalisedDurationValue = userOvertimeDuration.value ~/ (userOvertimeDuration.max / 10);
+      userOverTimeDurationValue = userOvertimeDuration.value.round();
+      /*if (userOverTimeDurationValue > 10) {
         userOverTimeDurationValue = 10;
       } else {
         userOverTimeDurationValue = userOverTimeDurationValue;
-      }
-
-      _compassTutorialModelFirstLogged.currentMonthDuration = (userOvertimeDuration.value / 72).round();
-
+      }*/
+      _compassTutorialModelFirstLogged.currentMonthDuration = (userOvertimeDuration.value / userOvertimeDuration.max).round();
     } else {
+      userOverTimeNormalisedDisabilityValue = 0;
       userOverTimeDurationValue = 0;
       _compassTutorialModelFirstLogged.currentMonthDuration = 0;
     }
@@ -759,9 +764,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     if (userOverTimeIntensity != null) {
       //  userOverTimeIntensityValue = userOverTimeIntensity.value ~/(userOverTimeIntensity.max / baseMaxValue);
       _compassTutorialModelFirstLogged.currentMonthIntensity = userOverTimeIntensity.value.round();
-      userOverTimeIntensityValue =
-          (userOverTimeIntensity.value * baseMaxValue) ~/
-              userOverTimeIntensity.max;
+      userOverTimeIntensityValue = (userOverTimeIntensity.value).round();
     } else {
       userOverTimeIntensityValue = 0;
       _compassTutorialModelFirstLogged.currentMonthIntensity = 0;
@@ -775,21 +778,19 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       userOverTimeDisabilityValue =
           (userOverTimeDisability.value * baseMaxValue) ~/
               userOverTimeDisability.max;
-      if (userOverTimeDisabilityValue > 10) {
-        userOverTimeDisabilityValue = 10;
-      } else {
-        userOverTimeDisabilityValue = userOverTimeDisabilityValue;
-      }
+      userOverTimeNormalisedDisabilityValue = userOverTimeDisability.value ~/ (userOverTimeDisability.max / baseMaxValue);
+      userOverTimeDisabilityValue = userOverTimeDisability.value.round();
     } else {
       _compassTutorialModelFirstLogged.currentMonthDisability = 0;
       userOverTimeDisabilityValue = 0;
+      userOverTimeNormalisedDisabilityValue = 0;
     }
     compassAxesData = [
       [
         userOverTimeIntensityValue,
-        userOverTimeDurationValue,
-        userOverTimeDisabilityValue,
-        userOvertimeFrequencyValue
+        userOverTimeNormalisedDurationValue,
+        userOverTimeNormalisedDisabilityValue,
+        userOvertimeNormalisedFrequencyValue
       ],
       [
         userMonthlyIntensityValue,
@@ -842,8 +843,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       durationScore = 0;
     }
 
-    var userTotalScore =
-        (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
+    var userTotalScore = (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userMonthlyCompassScoreData = userTotalScore.round();
     print(userMonthlyCompassScoreData);
   }
@@ -868,7 +868,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     }
     if (userOverTimeFrequency != null) {
       frequencyScore =
-          userOverTimeFrequency.value / userOverTimeFrequency.max * 100.0;
+      (31 - userOverTimeFrequency.value) / userOverTimeFrequency.max * 100.0;
     } else {
       frequencyScore = 0;
     }
@@ -879,9 +879,12 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       durationScore = 0;
     }
 
+    print('intensityScore???$intensityScore???disabilityScore???$disabilityScore???frequencyScore???$frequencyScore???durationScore???$durationScore');
+
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userFirstLoggedCompassScoreData = userTotalScore.round();
+    print('userTotalScore???$userFirstLoggedCompassScoreData');
     print(userFirstLoggedCompassScoreData);
   }
 

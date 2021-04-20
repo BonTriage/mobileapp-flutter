@@ -29,7 +29,9 @@ class _PrePartTwoOnBoardScreenState extends State<PrePartTwoOnBoardScreen> {
     Utils.saveUserProgress(0, Constant.prePartTwoEventStep);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getFirstStepUserDataFromLocalDatabase();
+      Future.delayed(Duration(milliseconds: 150), () {
+        getFirstStepUserDataFromLocalDatabase();
+      });
     });
   }
 

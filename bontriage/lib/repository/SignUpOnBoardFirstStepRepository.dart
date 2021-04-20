@@ -113,11 +113,11 @@ class SignUpOnBoardFirstStepRepository {
   Future<String> _setUserZeroStepSignUpPayload(
       SignUpOnBoardSelectedAnswersModel
       signUpOnBoardSelectedAnswersModel) async {
-    var userProfileInfoData =
-    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel =
     SignUpOnBoardAnswersRequestModel();
     signUpOnBoardAnswersRequestModel.eventType = "profile";
+    print('userProfileInfoData????$userProfileInfoData');
     signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());;
     signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());

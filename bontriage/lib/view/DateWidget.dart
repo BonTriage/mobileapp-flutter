@@ -35,6 +35,8 @@ class DateWidget extends StatelessWidget {
                   navigateToOtherScreenCallback(
                       Constant.onCalendarHeadacheLogDayDetailsScreenRouter,
                       weekDateData);
+                else
+                  Utils.showValidationErrorDialog(context, 'Invalid date selected.');
               },
               child: Container(
                 height: 28,

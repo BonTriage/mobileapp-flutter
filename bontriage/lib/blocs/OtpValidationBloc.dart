@@ -57,11 +57,12 @@ class OtpValidationBloc {
         networkStreamSink.addError(response);
       } else {
         if (response != null && response is ForgotPasswordModel) {
-          if(!isFromSignUp) {
+
+          if(isFromSignUp && response.status == 1)
+            await signUpOfNewUser(userEmail, password, isTermConditionCheck, isEmailMarkCheck, response);
+          else {
             networkStreamSink.add(Constant.success);
             otpVerifyStreamSink.add(response);
-          } else {
-            await signUpOfNewUser(userEmail, password, isTermConditionCheck, isEmailMarkCheck, response);
           }
         } else {
           networkStreamSink.addError(Exception(Constant.somethingWentWrong));

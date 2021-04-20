@@ -13,7 +13,6 @@ class AddNoteBottomSheet extends StatefulWidget {
 }
 
 class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
-
   TextEditingController _textEditingController;
   FocusNode _focusNode;
 
@@ -87,10 +86,11 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                       controller: _textEditingController,
                       maxLines: 5,
                       onChanged: (value) {
-                        if(value.length > 400) {
+                        /*if(value.length > 400) {
+                          value = _textEditingController.text;
                           _textEditingController.text = value.substring(0, 400);
                           _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: _textEditingController.text.length));
-                        }
+                        }*/
                       },
                       onFieldSubmitted: (value) {
                         widget.addNoteCallback(_textEditingController.text);
@@ -103,6 +103,9 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                           color: Constant.unselectedTextColor),
                       cursorColor: Constant.unselectedTextColor,
                       textAlign: TextAlign.start,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(400, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),
+                      ],
                       decoration: InputDecoration(
                         counterStyle: TextStyle(
                           fontSize: 14,
@@ -111,7 +114,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 5, horizontal: 10),
-                        hintText: 'Add A Note...',
+                        hintText: 'Add a note...',
                         hintStyle: TextStyle(
                             fontSize: 15,
                             color: Constant.unselectedTextColor,

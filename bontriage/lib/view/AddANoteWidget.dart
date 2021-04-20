@@ -10,14 +10,15 @@ class AddANoteWidget extends StatefulWidget {
   final String noteTag;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const AddANoteWidget({Key key, this.selectedAnswerList, this.scaffoldKey, this.noteTag}): super(key: key);
+  const AddANoteWidget(
+      {Key key, this.selectedAnswerList, this.scaffoldKey, this.noteTag})
+      : super(key: key);
 
   @override
   _AddANoteWidgetState createState() => _AddANoteWidgetState();
 }
 
 class _AddANoteWidgetState extends State<AddANoteWidget> {
-
   String text;
 
   @override
@@ -34,8 +35,7 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
           _showAddNoteBottomSheet();
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: _getNoteWidget(),
         ),
       ),
@@ -43,47 +43,63 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
   }
 
   Widget _getNoteWidget() {
-    SelectedAnswers headacheNoteSelectedAnswer = widget.selectedAnswerList.firstWhere((element) => element.questionTag == widget.noteTag, orElse: () => null);
+    SelectedAnswers headacheNoteSelectedAnswer = widget.selectedAnswerList
+        .firstWhere((element) => element.questionTag == widget.noteTag,
+            orElse: () => null);
     if (headacheNoteSelectedAnswer == null) {
       return Text(
         Constant.addANote,
         style: TextStyle(
           fontSize: 16,
-          color: Constant
-              .addCustomNotificationTextColor,
+          color: Constant.addCustomNotificationTextColor,
           fontFamily: Constant.jostRegular,
           fontWeight: FontWeight.w500,
         ),
       );
     } else {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.edit,
-            color: Constant.addCustomNotificationTextColor,
-            size: 16,
-          ),
-          SizedBox(width: 5,),
-          Text(
-            Constant.viewEditNote,
-            style: TextStyle(
-              fontSize: 16,
-              color: Constant
-                  .addCustomNotificationTextColor,
-              fontFamily: Constant.jostRegular,
-              fontWeight: FontWeight.w500,
+      if (headacheNoteSelectedAnswer.answer.trim().isNotEmpty) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.edit,
+              color: Constant.addCustomNotificationTextColor,
+              size: 16,
             ),
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              Constant.viewEditNote,
+              style: TextStyle(
+                fontSize: 16,
+                color: Constant.addCustomNotificationTextColor,
+                fontFamily: Constant.jostRegular,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        );
+      } else {
+        return Text(
+          Constant.addANote,
+          style: TextStyle(
+            fontSize: 16,
+            color: Constant.addCustomNotificationTextColor,
+            fontFamily: Constant.jostRegular,
+            fontWeight: FontWeight.w500,
           ),
-        ],
-      );
+        );
+      }
     }
   }
 
   void _showAddNoteBottomSheet() {
     FocusScope.of(context).requestFocus(FocusNode());
     text = '';
-    SelectedAnswers noteSelectedAnswer = widget.selectedAnswerList.firstWhere((element) => element.questionTag == widget.noteTag, orElse: () => null);
+    SelectedAnswers noteSelectedAnswer = widget.selectedAnswerList.firstWhere(
+        (element) => element.questionTag == widget.noteTag,
+        orElse: () => null);
     if (noteSelectedAnswer != null) {
       text = noteSelectedAnswer.answer ?? '';
     }
@@ -92,22 +108,25 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
         context: context,
         isScrollControlled: true,
         builder: (context) => AddNoteBottomSheet(
-          text: text,
-          addNoteCallback: (note) {
-            if(note != null) {
-              if(note is String) {
-                if(note.trim() != '') {
-                  SelectedAnswers noteSelectedAnswer = widget.selectedAnswerList.firstWhere((element) => element.questionTag == widget.noteTag, orElse: () => null);
-                  if (noteSelectedAnswer == null)
-                    widget.selectedAnswerList.add(SelectedAnswers(questionTag: widget.noteTag, answer: note));
-                  else
-                    noteSelectedAnswer.answer = note;
+              text: text,
+              addNoteCallback: (note) {
+                if (note != null) {
+                  if (note is String) {
+                    note = note.trim();
+                    SelectedAnswers noteSelectedAnswer =
+                        widget.selectedAnswerList.firstWhere(
+                            (element) => element.questionTag == widget.noteTag,
+                            orElse: () => null);
+                    if (noteSelectedAnswer == null)
+                      widget.selectedAnswerList.add(SelectedAnswers(
+                          questionTag: widget.noteTag, answer: note));
+                    else
+                      noteSelectedAnswer.answer = note;
 
-                  setState(() {});
+                    setState(() {});
+                  }
                 }
-              }
-            }
-          },
-        ));
+              },
+            ));
   }
 }

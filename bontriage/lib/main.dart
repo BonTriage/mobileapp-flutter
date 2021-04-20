@@ -124,7 +124,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
             }
           case Constant.signUpRouter:
             {
@@ -179,7 +179,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
             }
           case Constant.onBoardingScreenSignUpRouter:
             {
@@ -342,7 +342,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.changePasswordScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: ChangePasswordScreen(emailValue: settings.arguments), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: ChangePasswordScreen(changePasswordArgumentModel: settings.arguments), routeSettings: routeSettings);
             }
         }
         return null;

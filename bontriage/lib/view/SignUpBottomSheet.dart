@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomScrollBar.dart';
 
 class SignUpBottomSheet extends StatefulWidget {
   final Questions question;
@@ -25,10 +26,16 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
     with TickerProviderStateMixin {
   AnimationController _animationController;
   List<String> _valuesSelectedList = [];
+  ScrollController _scrollController;
+
+  bool _isShowScrollBar = false;
+  GlobalKey _chipsKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController = ScrollController();
 
     _animationController = AnimationController(
       vsync: this,
@@ -109,6 +116,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
   @override
   void dispose() {
     _animationController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -123,36 +131,42 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
           ConstrainedBox(
             constraints: BoxConstraints(maxHeight: 100),
             child: Container(
+              key: _chipsKey,
               margin: EdgeInsets.symmetric(horizontal: 30),
               child: AnimatedSize(
                 vsync: this,
                 duration: Duration(milliseconds: 350),
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Wrap(
-                    spacing: 20,
-                    children: <Widget>[
-                      for (var i = 0; i < widget.question.values.length; i++)
-                        if (widget.question.values[i].isSelected)
-                          Chip(
-                            label: Text(widget.question.values[i].text,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
-                            backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
-                            deleteIcon: IconButton(
-                              icon: new Image.asset('images/cross.png'),
-                              onPressed: () {
-                                setState(() {
-                                  widget.question.values[i].isSelected = false;
-                                });
-                                _valuesSelectedList.remove(
-                                    widget.question.values[i].text);
-                                widget.selectAnswerCallback(
-                                    widget.question, _valuesSelectedList);
-                              },
+                child: CustomScrollBar(
+                  isAlwaysShown: true,
+                  controller: _scrollController,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: BouncingScrollPhysics(),
+                    child: Wrap(
+                      spacing: 20,
+                      children: <Widget>[
+                        for (var i = 0; i < widget.question.values.length; i++)
+                          if (widget.question.values[i].isSelected)
+                            Chip(
+                              label: Text(widget.question.values[i].text,
+                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
+                              backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
+                              deleteIcon: IconButton(
+                                icon: new Image.asset('images/cross.png'),
+                                onPressed: () {
+                                  setState(() {
+                                    widget.question.values[i].isSelected = false;
+                                  });
+                                  _valuesSelectedList.remove(
+                                      widget.question.values[i].text);
+                                  widget.selectAnswerCallback(
+                                      widget.question, _valuesSelectedList);
+                                },
+                              ),
+                              onDeleted: () {},
                             ),
-                            onDeleted: () {},
-                          ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -208,6 +222,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                         question: widget.question,
                         isFromMoreScreen: widget.isFromMoreScreen,
                         selectedAnswerCallback: (index) {
+                          print('hello');
                           Values value = widget.question.values[index];
                           if (value.isSelected) {
                             if(!value.isValid) {
@@ -275,6 +290,19 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
         ],
       ),
     );
+  }
+
+  bool _getIsAlwaysShownValue() {
+    try {
+      RenderBox chipRenderBox = _chipsKey.currentContext.findRenderObject();
+      Size chipSize = chipRenderBox.size;
+
+      print('ChipsHeight???${chipSize.height}');
+
+      return chipSize.height >= 96;
+    } catch(e) {
+      return true;
+    }
   }
 }
 
@@ -374,7 +402,6 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                   height: 35,
                   margin: EdgeInsets.only(left: 10, right: 10, top: 0),
                   child: TextField(
-
                     onChanged: (searchText) {
                       if (searchText
                           .trim()
@@ -391,7 +418,21 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                                 Values(text: searchText, isNewlyAdded: true));
                             _isExtraDataAdded = true;
                           } else {
-                            widget.question.values.last.text = searchText;
+                            if(widget.question.values.last.isSelected) {
+                              widget.question.values.add(
+                                  Values(text: searchText, isNewlyAdded: true));
+                            } else {
+                              widget.question.values.last.text = searchText;
+                            }
+                          }
+                        } else {
+                          if(_isExtraDataAdded) {
+                            if(!valueData.isNewlyAdded) {
+                              widget.question.values.removeLast();
+                              _isExtraDataAdded = false;
+                            } else {
+                              widget.question.values.last.text = searchText;
+                            }
                           }
                         }
                       }

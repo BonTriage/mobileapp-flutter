@@ -6,6 +6,10 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
+  final bool isFromSignUp;
+
+  const LoginScreen({Key key, this.isFromSignUp = false}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -135,18 +139,18 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   hintStyle:
-                                      TextStyle(fontSize: 15, color: Colors.black),
+                                  TextStyle(fontSize: 15, color: Colors.black),
                                   filled: true,
                                   fillColor: Constant.locationServiceGreen,
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
+                                      BorderRadius.all(Radius.circular(30)),
                                       borderSide: BorderSide(
                                           color: Constant.editTextBoarderColor,
                                           width: 1)),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
+                                      BorderRadius.all(Radius.circular(30)),
                                       borderSide: BorderSide(
                                           color: Constant.editTextBoarderColor,
                                           width: 1)),
@@ -212,18 +216,18 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                           maxHeight: 35,
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(30)),
-                                            borderSide: BorderSide(
-                                                color: Constant.editTextBoarderColor,
-                                                width: 1),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                              color: Constant.editTextBoarderColor,
+                                              width: 1),
                                         ),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(30)),
-                                            borderSide: BorderSide(
-                                                color: Constant.editTextBoarderColor,
-                                                width: 1),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(30)),
+                                          borderSide: BorderSide(
+                                              color: Constant.editTextBoarderColor,
+                                              width: 1),
                                         ),
                                       ),
                                     ),
@@ -321,26 +325,27 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         height: 10,
                       ),
                       AnimatedCrossFade(
-                        crossFadeState: !_isForgotPasswordClicked
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                        duration: Duration(milliseconds: 300),
-                        firstChild: GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, Constant.welcomeStartAssessmentScreenRouter);
-                          },
-                          child: Text(
-                            Constant.register,
-                            style: TextStyle(
-                                color: Constant.chatBubbleGreen,
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium,
-                                decoration: TextDecoration.underline),
+                          crossFadeState: !_isForgotPasswordClicked
+                              ? CrossFadeState.showFirst
+                              : CrossFadeState.showSecond,
+                          duration: Duration(milliseconds: 300),
+                          firstChild: GestureDetector(
+                            onTap: () {
+                              /*Navigator.pushReplacementNamed(
+                                context, Constant.welcomeStartAssessmentScreenRouter);*/
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              Constant.register,
+                              style: TextStyle(
+                                  color: Constant.chatBubbleGreen,
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium,
+                                  decoration: TextDecoration.underline),
 
+                            ),
                           ),
-                        ),
-                        secondChild: GestureDetector(
+                          secondChild: GestureDetector(
                             onTap: () {
                               FocusScope.of(context).requestFocus(FocusNode());
                               setState(() {
@@ -360,7 +365,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                   decoration: TextDecoration.underline),
 
                             ),
-                        )
+                          )
                       ),
                     ],
                   ),
@@ -386,9 +391,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       Utils.showApiLoaderDialog(context,
           networkStream: _loginScreenBloc.loginDataStream,
           tapToRetryFunction: () {
-        _loginScreenBloc.enterSomeDummyDataToStream();
-        _loginService();
-      });
+            _loginScreenBloc.enterSomeDummyDataToStream();
+            _loginService();
+          });
       _loginService();
     } else {
       setState(() {
@@ -407,7 +412,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;
-        Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+        if(widget.isFromSignUp) {
+          Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
+        } else {
+          Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+        }
 
         Utils.navigateToHomeScreen(context, false);
       } else if (response == Constant.userNotFound) {
@@ -452,7 +461,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       if(event != null && event is ForgotPasswordModel) {
         if(event.status == 1) {
           Future.delayed(Duration(milliseconds: 350), () {
-            Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: emailTextEditingController.text.trim()));
+            Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: emailTextEditingController.text.trim(), isForgotPasswordFromSignUp: widget.isFromSignUp ?? false));
           });
         } else {
           setState(() {

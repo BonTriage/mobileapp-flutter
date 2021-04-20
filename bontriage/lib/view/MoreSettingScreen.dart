@@ -86,10 +86,10 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                             currentTag: Constant.locationServices,
                             text: Constant.locationServices,
                             moreStatus: Constant.allowed,
-                            isShowDivider: true,
+                            isShowDivider: false,
                             navigateToOtherScreenCallback: _navigateToOtherScreen,
                           ),
-                          MoreSection(
+                          /*MoreSection(
                             text: Constant.appleWatch,
                             moreStatus: Constant.notSetUp,
                             isShowDivider: true,
@@ -111,7 +111,7 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                                 color: Constant.addCustomNotificationTextColor
                               ),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),

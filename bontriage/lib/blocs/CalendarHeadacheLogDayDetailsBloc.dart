@@ -282,8 +282,8 @@ class CalendarHeadacheLogDayDetailsBloc {
                     }
 
                     if (medicationDateTime != null) {
-                      medicationDosage =
-                      '$medicationElement at ${Utils.getTimeInAmPmFormat(
+                      medicationElement = _getMedicationDosageUnit(medicationElement);
+                      medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(
                           medicationDateTime.hour, medicationDateTime.minute)}';
                     } else {
                       medicationDosage = '$medicationElement';
@@ -299,6 +299,7 @@ class CalendarHeadacheLogDayDetailsBloc {
                     }
 
                     if (medDateTime != null) {
+                      medicationElement = _getMedicationDosageUnit(medicationElement);
                       medicationDosage =
                       '$medicationDosage, $medicationElement at ${Utils
                           .getTimeInAmPmFormat(
@@ -393,5 +394,12 @@ class CalendarHeadacheLogDayDetailsBloc {
         return '$days day,$hours:$minute hrs';
       }
     }
+  }
+
+  String _getMedicationDosageUnit(String medicationDosage) {
+    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml')))
+      return '$medicationDosage mg';
+    else
+      return medicationDosage;
   }
 }

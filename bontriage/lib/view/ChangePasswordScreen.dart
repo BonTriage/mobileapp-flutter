@@ -5,9 +5,9 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  final String emailValue;
+  final ChangePasswordArgumentModel changePasswordArgumentModel;
 
-  const ChangePasswordScreen({Key key, this.emailValue}) : super(key: key);
+  const ChangePasswordScreen({Key key, this.changePasswordArgumentModel}) : super(key: key);
 
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
@@ -323,14 +323,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void changePasswordService() async {
-    var responseData = await _changePasswordBloc.sendChangePasswordData(widget.emailValue, passwordValue);
+    var responseData = await _changePasswordBloc.sendChangePasswordData(widget.changePasswordArgumentModel.emailValue, passwordValue);
     if (responseData is String) {
       if (responseData == Constant.success) {
         _isShowAlert = false;
-        Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+        if(!widget.changePasswordArgumentModel.isFromSignUp)
+          Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+        else
+          Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
 
         Utils.navigateToHomeScreen(context, false);
       }
     }
   }
+}
+
+class ChangePasswordArgumentModel {
+  String emailValue;
+  bool isFromSignUp;
+
+  ChangePasswordArgumentModel({this.emailValue, this.isFromSignUp = false});
 }

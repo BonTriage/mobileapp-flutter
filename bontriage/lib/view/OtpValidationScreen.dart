@@ -7,6 +7,7 @@ import 'package:mobile/blocs/OtpValidationBloc.dart';
 import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ChangePasswordScreen.dart';
 
 class OtpValidationScreen extends StatefulWidget {
   final OTPValidationArgumentModel otpValidationArgumentModel;
@@ -70,14 +71,16 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
   @override
   void dispose() {
-    _timer.cancel();
-    _focusNodeList.forEach((element) {
-      element.dispose();
-    });
+    if(mounted) {
+      _timer.cancel();
+      _focusNodeList.forEach((element) {
+        element.dispose();
+      });
 
-    _textEditingControllerList.forEach((element) {
-      element.dispose();
-    });
+      _textEditingControllerList.forEach((element) {
+        element.dispose();
+      });
+    }
 
     super.dispose();
   }
@@ -365,7 +368,7 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
             Future.delayed(Duration(milliseconds: 350), () {
               Navigator.pushReplacementNamed(
                   context, Constant.changePasswordScreenRouter,
-                  arguments: widget.otpValidationArgumentModel.email);
+                  arguments: ChangePasswordArgumentModel(emailValue: widget.otpValidationArgumentModel.email, isFromSignUp: widget.otpValidationArgumentModel.isForgotPasswordFromSignUp));
             });
           } else {
             Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
@@ -403,11 +406,13 @@ class OTPValidationArgumentModel {
   bool isTermConditionCheck;
   bool isEmailMarkCheck;
   bool isFromSignUp;
+  bool isForgotPasswordFromSignUp;
 
   OTPValidationArgumentModel({
     this.email,
     this.password,
     this.isFromSignUp = false,
+    this.isForgotPasswordFromSignUp = false,
     this.isEmailMarkCheck = false,
     this.isTermConditionCheck = false,
   });

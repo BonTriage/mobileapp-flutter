@@ -241,7 +241,7 @@ class Constant {
       'Until you complete the assessment, your personalized headache profile will be incomplete. Without a complete profile, MigraineMentor can’t create a predictive model, and won’t be able to alert you when you are at risk for headaches or suggest steps to avoid them.';
   static String letsBeginBySeeing =
       'Let’s begin by seeing what your headaches look like by creating a Compass Diagram of your most problematic headache. Just answer a few questions and you will see your headache like a headache specialist does.';
-  static String searchYourType = 'Search or Type your own';
+  static String searchYourType = 'Search or type your own';
   static String suspectTriggerYourHeadache =
       'Which of the following do you suspect trigger your headaches?';
   static String followingMedications =
@@ -353,7 +353,7 @@ class Constant {
       'On a scale of 1- 10, how much disability are you experienciing as result of this headache?';
   static String noneAtALL = 'NONE AT\nALL';
   static String totalDisability = 'TOTAL\nDISABILITY';
-  static String addANote = '+ Add a Note';
+  static String addANote = '+ Add a note';
   static String at = 'at';
   static String tapHereIfInProgress =
       'Tap here if headache is still in progress.';

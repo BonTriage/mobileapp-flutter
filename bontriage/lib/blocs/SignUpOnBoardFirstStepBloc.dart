@@ -58,6 +58,7 @@ class SignUpBoardFirstStepBloc {
         }
       }
     } catch (e) {
+      print(e);
       signUpFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       //  signUpFirstStepDataSink.add("Error");
     }
@@ -87,11 +88,14 @@ class SignUpBoardFirstStepBloc {
           return await sendSignUpFirstStepData1(signUpOnBoardSelectedAnswersModel);
         } else {
           sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
+          print('else1');
         }
       }
     } catch (e) {
       sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
+      print('error2');
+      print(e);
     }
     return apiResponse;
   }
@@ -114,12 +118,15 @@ class SignUpBoardFirstStepBloc {
         if(signUpFirstStepData != null) {
           apiResponse = Constant.success;
         } else {
+          print('else1');
           sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
       sendFirstStepDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
+      print('error2');
+      print(e);
     }
     return apiResponse;
   }
