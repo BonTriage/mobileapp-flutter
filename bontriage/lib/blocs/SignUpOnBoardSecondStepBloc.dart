@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:mobile/models/LocalQuestionnaire.dart';
+import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSecondStepModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/networking/AppException.dart';
@@ -16,6 +17,8 @@ class SignUpOnBoardSecondStepBloc {
   StreamController<dynamic>
       __signUpOnBoardSecondStepRepositoryDataStreamController;
   int count = 0;
+
+  String eventId;
 
   StreamSink<dynamic> get signUpOnBoardSecondStepDataSink =>
       __signUpOnBoardSecondStepRepositoryDataStreamController.sink;
@@ -75,8 +78,7 @@ class SignUpOnBoardSecondStepBloc {
         json.decode(localQuestionnaireEventData.questionnaires));
     var filterQuestionsListData = LinearListFilter.getQuestionSeries(
         welcomeOnBoardProfileModel.questionnaires[0].initialQuestion,
-        welcomeOnBoardProfileModel
-            .questionnaires[0].questionGroups[0].questions);
+        welcomeOnBoardProfileModel.questionnaires[0].questionGroups[0].questions);
     signUpOnBoardSecondStepDataSink.add(filterQuestionsListData);
 
     return SignUpOnBoardSelectedAnswersModel.fromJson(
@@ -90,7 +92,7 @@ class SignUpOnBoardSecondStepBloc {
 
   sendSignUpSecondStepData(
       SignUpOnBoardSelectedAnswersModel
-          signUpOnBoardSelectedAnswersModel, String eventId) async {
+          signUpOnBoardSelectedAnswersModel, String eventId, bool isFromMoreScreen) async {
     String response;
     try {
       var signUpSecondStepData;
@@ -114,6 +116,10 @@ class SignUpOnBoardSecondStepBloc {
       } else {
         print(signUpSecondStepData);
         if(signUpSecondStepData != null) {
+          if(isFromMoreScreen) {
+            var responseModelList = ResponseModel.fromJson(jsonDecode(signUpSecondStepData));
+            this.eventId = responseModelList.id.toString();
+          }
           response = Constant.success;
         } else {
           sendSecondStepDataSink.addError(Exception(Constant.somethingWentWrong));

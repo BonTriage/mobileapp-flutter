@@ -655,6 +655,7 @@ class _SignUpFirstStepCompassResultState
     var frequencyScore = userFrequencyValue.toInt() / 31 * 100.0; ///93.54
     if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
+
     } else if (userDurationValue > 1 && userDurationValue <= 24) {
       userMaxDurationValue = 24;
     } else if (userDurationValue > 24 && userDurationValue <= 72) {
@@ -669,4 +670,5 @@ class _SignUpFirstStepCompassResultState
     userScoreData = userTotalScore.round().toString();///29
     print('First Step User ScoreData$userScoreData');
   }
+
 }

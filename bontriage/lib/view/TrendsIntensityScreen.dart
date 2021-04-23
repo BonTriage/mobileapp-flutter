@@ -352,6 +352,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(
@@ -720,7 +721,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     if (clickedValue != null) {
       if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
           Constant.viewSingleHeadache) {
-        if (clickedValue > 1 && clickedValue <= 3) {
+        if (clickedValue >= 1 && clickedValue <= 3) {
           return Constant.mildTriggerColor;
         } else if (clickedValue >= 4 && clickedValue <= 7) {
           return Constant.moderateTriggerColor;
@@ -736,7 +737,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   }
 
   List<Color> setBarChartColor(double barChartValue) {
-    if (barChartValue > 1 && barChartValue <= 3) {
+    if (barChartValue >= 1 && barChartValue <= 3) {
       return [Constant.mildTriggerColor];
     } else if (barChartValue >= 4 && barChartValue <= 7) {
       return [Constant.moderateTriggerColor];

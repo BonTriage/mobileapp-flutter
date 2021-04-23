@@ -30,7 +30,7 @@ class MoreTriggerMedicationRepository {
 
   Future<String> _createPayload(List<SelectedAnswers> selectedAnswersList) async {
     SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
-    signUpOnBoardAnswersRequestModel.eventType = Constant.clinicalImpressionShort3;
+    signUpOnBoardAnswersRequestModel.eventType = Constant.clinicalImpression;
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);

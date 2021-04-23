@@ -223,7 +223,16 @@ class _MoreGenderScreenState
         Navigator.pop(context);
       }
     } else {
-      Navigator.pop(context);
+      if(_currentSelectedValue != null) {
+        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
+        if (result != null) {
+          if (result == Constant.saveAndExit) {
+            _selectedAnswers.answer = _currentSelectedValue;
+          }
+          Navigator.pop(context, result == Constant.saveAndExit);
+        }
+      } else
+        Navigator.pop(context);
     }
   }
 }

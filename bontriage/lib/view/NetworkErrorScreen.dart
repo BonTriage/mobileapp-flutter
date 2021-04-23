@@ -5,8 +5,9 @@ import 'package:mobile/util/constant.dart';
 class NetworkErrorScreen extends StatefulWidget {
   final String errorMessage;
   final Function tapToRetryFunction;
+  final bool isNeedToRetry;
 
-  const NetworkErrorScreen({Key key, this.errorMessage, this.tapToRetryFunction}) : super(key: key);
+  const NetworkErrorScreen({Key key, this.errorMessage, this.tapToRetryFunction, this.isNeedToRetry = true}) : super(key: key);
   @override
   _NetworkErrorScreenState createState() => _NetworkErrorScreenState();
 }
@@ -47,7 +48,7 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
                 color: Constant.chatBubbleGreen,
               ),
               child: Text(
-                Constant.tapToRetry,
+                widget.isNeedToRetry ? Constant.tapToRetry : Constant.close,
                 style: TextStyle(
                     color: Constant.bubbleChatTextView,
                     fontSize: 14,

@@ -355,6 +355,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(

@@ -170,6 +170,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       } else {
                                         ///To:Do
                                         print("Not Allowed");
+                                        Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                       }
                                     },
                                     child: Padding(
@@ -332,6 +333,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       } else {
                                         ///To:Do
                                         print("Not Allowed");
+                                        Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                       }
                                     },
                                     child: Padding(

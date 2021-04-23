@@ -146,6 +146,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   currentIndex = index;
                   saveCurrentIndexOfTabBar(currentIndex);
                 });
+              } else {
+                int lastIndex = navigatorKey.length - 1;
+                if(index == lastIndex) {
+                  Navigator.popUntil(navigatorKey[index].currentContext, ModalRoute.withName(TabNavigatorRoutes.moreRoot));
+                }
               }
             },
           ),

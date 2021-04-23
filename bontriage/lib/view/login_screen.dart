@@ -342,7 +342,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                   fontSize: 14,
                                   fontFamily: Constant.jostMedium,
                                   decoration: TextDecoration.underline),
-
                             ),
                           ),
                           secondChild: GestureDetector(

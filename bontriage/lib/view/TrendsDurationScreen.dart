@@ -330,6 +330,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(

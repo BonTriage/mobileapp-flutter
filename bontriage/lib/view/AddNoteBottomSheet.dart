@@ -82,6 +82,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
                       maxLength: 400,
+
                       focusNode: _focusNode,
                       controller: _textEditingController,
                       maxLines: 5,
