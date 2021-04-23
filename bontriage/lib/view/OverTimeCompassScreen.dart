@@ -598,8 +598,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         selectedHeadacheName);
   }
 
-  void setCompassAxesData(
-      RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
+  void setCompassAxesData(RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
     int userDisabilityValue,
         userFrequencyValue,
         userDurationValue,

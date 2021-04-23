@@ -9,9 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name=".Application"
         android:label="BonTriage"
         android:icon="@drawable/app_icon"
         android:roundIcon="@drawable/app_icon"
@@ -19,6 +18,10 @@
 
         <meta-data android:name="io.flutter.network-policy"
             android:resource="@xml/network_security_config"/>
+
+        <!--<meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="2" />-->
 
         <activity
             android:name=".MainActivity"
@@ -48,6 +51,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!--This below intent filter is for testing-->
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

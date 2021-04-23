@@ -42,6 +42,8 @@ dependencies:
   share: ^2.0.1
   flutter_pdfview: ^1.0.4
   permission_handler: ^6.1.1
+  firebase_messaging: ^9.1.2
+  firebase_core: ^1.0.4
 
 dev_dependencies:
   flutter_test:

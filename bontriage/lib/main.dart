@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/animations/ScaleInPageRoute.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
@@ -59,12 +62,31 @@ import 'view/SignUpOnBoardSplash.dart';
 import 'view/Splash.dart';
 import 'view/sign_up_on_board_screen.dart';
 
-void main() {
+void main() async {
   Paint.enableDithering = true;
 
   ///Uncomment the below code when providing the build to tester for automation.
   //enableFlutterDriverExtension();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print('Got a message whilst in the background app!');
+  print('Message data: ${message.data}');
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+
+    Utils.saveDataInSharedPreference('notification_data', message.data.toString());
+
+    //Utils.showValidationErrorDialog(context, 'From Background ${message.data.toString()}');
+  }
 }
 
 Map<int, Color> color =
