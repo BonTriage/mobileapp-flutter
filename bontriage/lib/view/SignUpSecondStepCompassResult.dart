@@ -910,7 +910,15 @@ class _SignUpSecondStepCompassResultState
 
   void _getUserReport() {
     DateTime startDateTime = DateTime.now();
-    DateTime endDateTime = startDateTime.subtract(Duration(days: 13));
+    DateTime endDateTime;
+
+    startDateTime = DateTime(startDateTime.year, startDateTime.month, 1);
+
+    int totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(startDateTime.month, startDateTime.month);
+
+    endDateTime = DateTime(startDateTime.year, startDateTime.month, totalDaysInCurrentMonth);
+
     _bloc.initNetworkStreamController();
     Utils.showApiLoaderDialog(
       context,
@@ -918,14 +926,14 @@ class _SignUpSecondStepCompassResultState
       tapToRetryFunction: () {
         _bloc.enterDummyDataToNetworkStream();
         _bloc.getUserGenerateReportData(
-            '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
             '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+            '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
             userHeadacheName);
       }
     );
     _bloc.getUserGenerateReportData(
-        '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
         '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+        '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
         userHeadacheName);
   }
 
