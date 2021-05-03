@@ -218,9 +218,25 @@ class _HomeScreenState extends State<HomeScreen> {
         return resultOfActionSheet;
         break;
       case Constant.dateRangeActionSheet:
-        var resultOfActionSheet = await showCupertinoModalPopup(
+        /*var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
-            builder: (context) => DateRangeActionSheet());
+            builder: (context) => DateRangeActionSheet());*/
+        DateTime initialDateTime = DateTime(argument.year, argument.month, 1);
+        DateTime miniDateTime = DateTime(DateTime.now().year, DateTime.now().month - 2, 1);
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => DateTimePicker(
+              cupertinoDatePickerMode: CupertinoDatePickerMode.date,
+              onDateTimeSelected: null,
+              initialDateTime: initialDateTime,
+              miniDateTime: miniDateTime,
+              isFromHomeScreen: true,
+            ));
         return resultOfActionSheet;
         break;
       case Constant.compassHeadacheTypeActionSheet:

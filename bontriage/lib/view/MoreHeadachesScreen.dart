@@ -29,6 +29,8 @@ class MoreHeadachesScreen extends StatefulWidget {
 class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
 
   MoreHeadacheBloc _bloc;
+  int _totalDaysInCurrentMonth;
+
 
   @override
   void initState() {
@@ -270,8 +272,17 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
 
   void _openDateRangeActionSheet(String actionSheetIdentifier, dynamic argument) async {
     DateTime startDateTime, endDateTime;
-    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.dateRangeActionSheet, null);
-    if (resultFromActionSheet != null && resultFromActionSheet is String) {
+
+    startDateTime = DateTime.now();
+    startDateTime = DateTime(startDateTime.year, startDateTime.month, 1);
+
+    _totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(startDateTime.month, startDateTime.month);
+
+    endDateTime = DateTime(startDateTime.year, startDateTime.month, _totalDaysInCurrentMonth);
+
+    var resultFromActionSheet = await widget.openActionSheetCallback(Constant.dateRangeActionSheet, startDateTime);
+    /*if (resultFromActionSheet != null && resultFromActionSheet is String) {
       switch (resultFromActionSheet) {
         case Constant.last2Weeks:
           startDateTime = DateTime.now();
@@ -294,6 +305,15 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
           endDateTime = startDateTime.subtract(Duration(days: 13));
       }
      _getUserReport(startDateTime, endDateTime);
+    }*/
+    if(resultFromActionSheet != null && resultFromActionSheet is DateTime) {
+      startDateTime = DateTime(resultFromActionSheet.year, resultFromActionSheet.month, 1);
+
+      _totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(resultFromActionSheet.month, resultFromActionSheet.month);
+
+      endDateTime = DateTime(startDateTime.year, startDateTime.month, _totalDaysInCurrentMonth);
+      _getUserReport(endDateTime, startDateTime);
     }
   }
 

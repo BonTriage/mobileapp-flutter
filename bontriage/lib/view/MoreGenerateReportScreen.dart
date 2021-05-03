@@ -26,15 +26,27 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
   DateTime _startDateTime;
   DateTime _endDateTime;
   UserGenerateReportBloc _userGenerateReportBloc;
+  int _totalDaysInCurrentMonth;
 
   @override
   void initState() {
     super.initState();
-    _userGenerateReportBloc = UserGenerateReportBloc();
-    _dateRangeSelected = Constant.last2Weeks;
-
     _startDateTime = DateTime.now();
-    _endDateTime = _startDateTime.subtract(Duration(days: 13));
+
+    _userGenerateReportBloc = UserGenerateReportBloc();
+    //_dateRangeSelected = Constant.last2Weeks;
+
+    _startDateTime = DateTime(_startDateTime.year, _startDateTime.month, 1);
+
+    _totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(_startDateTime.month, _startDateTime.month);
+
+    _endDateTime = DateTime(_startDateTime.year, _startDateTime.month, _totalDaysInCurrentMonth);
+
+    _dateRangeSelected = '${Utils.getShortMonthName(_startDateTime.month)}, ${_startDateTime.year}';
+
+    /*_startDateTime = DateTime.now();
+    _endDateTime = _startDateTime.subtract(Duration(days: 13));*/
   }
 
   @override
@@ -176,9 +188,10 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
   }
 
   void _openDateRangeActionSheet(String actionSheetIdentifier, dynamic argument) async {
+    print('GenerateReportStartTime????$_startDateTime');
     var resultFromActionSheet = await widget.openActionSheetCallback(
-        Constant.dateRangeActionSheet, null);
-    if (resultFromActionSheet != null && resultFromActionSheet is String) {
+        Constant.dateRangeActionSheet, _startDateTime);
+    /*if (resultFromActionSheet != null && resultFromActionSheet is String) {
       switch (resultFromActionSheet) {
         case Constant.last2Weeks:
           _startDateTime = DateTime.now();
@@ -204,6 +217,18 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
         _dateRangeSelected = resultFromActionSheet;
       });
       //getUserReport();
+    }*/
+    if(resultFromActionSheet != null && resultFromActionSheet is DateTime) {
+      _startDateTime = DateTime(resultFromActionSheet.year, resultFromActionSheet.month, 1);
+
+      _totalDaysInCurrentMonth =
+          Utils.daysInCurrentMonth(resultFromActionSheet.month, resultFromActionSheet.month);
+
+      _endDateTime = DateTime(_startDateTime.year, _startDateTime.month, _totalDaysInCurrentMonth);
+
+      setState(() {
+        _dateRangeSelected = '${Utils.getShortMonthName(_startDateTime.month)}, ${_startDateTime.year}';
+      });
     }
   }
 
@@ -214,9 +239,12 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
 
 //$year-$month-${date}T$hour:$minute:${second}Z
   void getUserReport() async {
-    var responseData = await _userGenerateReportBloc.getUserGenerateReportData(
+    /*var responseData = await _userGenerateReportBloc.getUserGenerateReportData(
         '${_endDateTime.year}-${_endDateTime.month}-${_endDateTime.day}T00:00:00Z',
-        '${_startDateTime.year}-${_startDateTime.month}-${_startDateTime.day}T00:00:00Z');
+        '${_startDateTime.year}-${_startDateTime.month}-${_startDateTime.day}T00:00:00Z');*/
+    var responseData = await _userGenerateReportBloc.getUserGenerateReportData(
+        '${_startDateTime.year}-${_startDateTime.month}-${_startDateTime.day}T00:00:00Z',
+        '${_endDateTime.year}-${_endDateTime.month}-${_endDateTime.day}T00:00:00Z');
     print(responseData);
     if (responseData != null && responseData is String && responseData.isNotEmpty) {
       _navigateToPdfScreen(responseData);
