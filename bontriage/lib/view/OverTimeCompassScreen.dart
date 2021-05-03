@@ -114,7 +114,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   @override
   void initState() {
     super.initState();
-    ticks = [0, 2, 4, 6, 8, 10];
+    ticks = [2, 4, 6, 8, 10];
 
     _compassTutorialModel = CompassTutorialModel();
 
@@ -361,8 +361,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                             ),
                                             Center(
                                               child: Container(
-                                                width: 36,
-                                                height: 36,
+                                                width: 38,
+                                                height: 38,
                                                 child: Center(
                                                   child: Text(
                                                     userCurrentMonthScoreData !=
@@ -632,7 +632,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userDuration != null) {
     // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
       _compassTutorialModel.currentMonthDuration = userDuration.total.round();
-      userDurationValue = (userDuration.value * baseMaxValue).round() ;
+      userDurationValue = (userDuration.value * baseMaxValue).round() ; //0
       if(userDurationValue > 10){
         userDurationValue = 10;
       }else {
@@ -648,7 +648,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userIntensity != null) {
      // userIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
       _compassTutorialModel.currentMonthIntensity = userIntensity.value.round();
-      userIntensityValue = (userIntensity.value * baseMaxValue) ~/ userIntensity.max;
+      userIntensityValue = (userIntensity.value * baseMaxValue) ~/ userIntensity.max; //10
     } else {
       userIntensityValue = 0;
       _compassTutorialModel.currentMonthIntensity = 0;
@@ -659,7 +659,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userDisability != null) {
      // userDisabilityValue =  userDisability.value ~/ (userDisability.max / baseMaxValue);
       _compassTutorialModel.currentMonthDisability = userDisability.value.round();
-      userDisabilityValue =  (userDisability.value * baseMaxValue)~/ userDisability.max;
+      userDisabilityValue =  (userDisability.value * baseMaxValue)~/ userDisability.max; //10
       if(userDisabilityValue >10){
         userDisabilityValue = 10;
       }else {
@@ -678,6 +678,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         userFrequencyValue
       ]
     ];
+
+    print('OvertimeCompassAxesData????$compassAxesData');
 
     if (currentMonthCompassAxesListData.length > 0) {
       setCurrentMonthCompassDataScore(
@@ -750,25 +752,30 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     var intensityScore, disabilityScore, frequencyScore, durationScore;
     if (userIntensityValue.value != null) {
       intensityScore =
-          userIntensityValue.value / userIntensityValue.max * 100.0;
+          userIntensityValue.value / userIntensityValue.max * 100.0; //44
     } else {
       intensityScore = 0;
     }
     if (userDisabilityValue.value != null) {
       disabilityScore =
-          userDisabilityValue.value / userDisabilityValue.max * 100.0;
+          userDisabilityValue.value / userDisabilityValue.max * 100.0; //88
     } else {
       disabilityScore = 0;
     }
     if (userFrequencyValue.value != null) {
       frequencyScore =
-          userFrequencyValue.value / userFrequencyValue.max * 100.0;
+          userFrequencyValue.value /*/ userFrequencyValue.max*/ * 100.0; //~100
+
+      if(frequencyScore > 100)
+        frequencyScore = 100;
     } else {
       frequencyScore = 0;
     }
     if (userDurationValue.value != null) {
       durationScore =
-          userDurationValue.value / userDurationValue.max * 100.0;
+          userDurationValue.value /*/ userDurationValue.max*/ * 100.0;  //0
+      if(durationScore > 100)
+        durationScore = 100;
     } else {
       durationScore = 0;
     }

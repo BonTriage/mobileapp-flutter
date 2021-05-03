@@ -126,7 +126,7 @@ class _MoreNameScreenState
                         ),
                       ),
                     ),
-                    SizedBox(height: 40,),
+                    SizedBox(height: 20,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(

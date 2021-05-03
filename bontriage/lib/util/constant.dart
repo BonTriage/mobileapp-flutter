@@ -118,10 +118,10 @@ class Constant {
   static String migraineMentorHelpTextView =
       'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
   static String compassDiagramTextView =
-      'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better';
+      'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better.';
 
   static String welcomePersonalizedHeadacheFirstTextView =
-      'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better';
+      'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better.';
 
   static String welcomePersonalizedHeadacheSecondStepFirstTextView =
       'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app.';
@@ -291,7 +291,7 @@ class Constant {
   static String disability = 'Disability';
   static String duration = 'Duration';
   static String compassTextView =
-      'This is graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+      'This graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
   static String doubleTapAnItem =
       'Double tap an item to keep it pre-selected for next time you come back to enter a log.';
   static String sleep = 'Sleep';
@@ -541,8 +541,7 @@ class Constant {
       'PASSWORD AND CONFIRM PASSWORD\nSHOULD BE SAME';
   static String signUpCheckboxAlertMessage = 'PLEASE CHECK TERMS AND CONDITION';
   static String signUpEmilFieldAlertMessage = 'PLEASE ENTER VALID EMAIL';
-
-  static String loginAlertMessage = 'Email Id or Password is invalid.';
+  static String loginAlertMessage = 'Email or Password is invalid.';
   static String userNotFound = 'User Not Found';
   static String messageTextKey = 'message_text';
   static String loading = 'Loading...';

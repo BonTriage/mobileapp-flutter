@@ -249,6 +249,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       //This code is to two remove the infoClinicalImpression tag from clinical_impression event
       questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
 
+      if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen)
+        questionListData.removeWhere((element) => element.tag == 'nameClinicalImpression');
+
       currentQuestionListData = questionListData;
       print(jsonEncode(currentQuestionListData));
       questionListData.forEach((element) {
@@ -456,6 +459,15 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
       if(selectedAnswer != null)
         selectedAnswersList.add(selectedAnswer);
     });
+
+    if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen) {
+      SelectedAnswers nameClinicalImpressionAnswer = signUpOnBoardSelectedAnswersModel
+          .selectedAnswers.firstWhere((element) =>
+      element.questionTag == 'nameClinicalImpression', orElse: () => null);
+
+      if(nameClinicalImpressionAnswer != null)
+        selectedAnswersList.add(nameClinicalImpressionAnswer);
+    }
 
     signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
 

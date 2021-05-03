@@ -104,7 +104,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
 
     _compassTutorialModelFirstLogged.isFromOnBoard = true;
 
-    ticks = [0, 2, 4, 6, 8, 10];
+    ticks = [2, 4, 6, 8, 10];
 
     features = [
       "A",
@@ -348,8 +348,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                           ),
                                           Center(
                                             child: Container(
-                                              width: 36,
-                                              height: 36,
+                                              width: 38,
+                                              height: 38,
                                               child: Center(
                                                 child: Text(
                                                   isMonthTapSelected
@@ -737,9 +737,9 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
         userOvertimeFrequencyValue = userOvertimeFrequencyValue;
       }*/
     } else {
-      _compassTutorialModelFirstLogged.currentMonthFrequency = 31;
-      userOvertimeNormalisedFrequencyValue= 10;
-      userOvertimeFrequencyValue = 31;
+      _compassTutorialModelFirstLogged.currentMonthFrequency = 0;
+      userOvertimeNormalisedFrequencyValue= 0;
+      userOvertimeFrequencyValue = 0;
     }
     var userOvertimeDuration = recordsOverTimeCompassAxesListData.firstWhere(
         (intensityElement) => intensityElement.name == Constant.duration,
@@ -755,7 +755,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       }*/
       _compassTutorialModelFirstLogged.currentMonthDuration = (userOvertimeDuration.value / userOvertimeDuration.max).round();
     } else {
-      userOverTimeNormalisedDisabilityValue = 0;
+      userOverTimeNormalisedDurationValue = 0;
       userOverTimeDurationValue = 0;
       _compassTutorialModelFirstLogged.currentMonthDuration = 0;
     }
@@ -786,10 +786,11 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       userOverTimeDisabilityValue = 0;
       userOverTimeNormalisedDisabilityValue = 0;
     }
+
     compassAxesData = [
       [
         userOverTimeIntensityValue,
-        userOverTimeNormalisedDurationValue,
+        userOverTimeNormalisedDurationValue ?? 0,
         userOverTimeNormalisedDisabilityValue,
         userOvertimeNormalisedFrequencyValue
       ],
@@ -833,13 +834,18 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     }
     if (userFrequencyValue.value != null) {
       frequencyScore =
-          userFrequencyValue.value / userFrequencyValue.max * 100.0;
+          userFrequencyValue.value /*/ userFrequencyValue.max*/ * 100.0;
+
+          if(frequencyScore > 100)
+            frequencyScore = 100;
     } else {
       frequencyScore = 0;
     }
 
     if (userDurationValue.value != null) {
-      durationScore = userDurationValue.value / userDurationValue.max * 100.0;
+      durationScore = userDurationValue.value /*/ userDurationValue.max*/ * 100.0;
+      if(durationScore > 100)
+        durationScore = 100;
     } else {
       durationScore = 0;
     }

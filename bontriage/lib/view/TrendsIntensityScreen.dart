@@ -272,12 +272,12 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               child: Column(
                 children: [
                   SizedBox(
-                    height: 5,
+                    height: 18,
                   ),
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 5),
+                        padding: const EdgeInsets.only(left: 5, top: 10),
                         child: Container(
                           width: 60,
                           child: Column(
@@ -288,7 +288,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
@@ -1186,7 +1186,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       if (i > 2) {
         break;
       }
-      widgetListData.add(Padding(
+      widgetListData.add(Container(
         padding: const EdgeInsets.only(left: 5, right: 10),
         child: Row(
           children: _getDots(dotTextModelDataList[i]),

@@ -39,13 +39,11 @@ class NetworkService{
     switch(response.statusCode) {
       case 200:
       case 201:
+      case 404:
+      case 401:
         return response.body;
       case 400:
         return BadRequestException();
-      case 401:
-        return UnauthorisedException();
-      case 404:
-        return response.body;
       case 500:
         return ServerResponseException();
       default:

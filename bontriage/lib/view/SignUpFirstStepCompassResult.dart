@@ -114,7 +114,7 @@ class _SignUpFirstStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
-    ticks = [0, 2, 4, 6, 8, 10];
+    ticks = [2, 4, 6, 8, 10];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
@@ -328,8 +328,8 @@ class _SignUpFirstStepCompassResultState
                                         ),
                                         Center(
                                           child: Container(
-                                            width: 36,
-                                            height: 36,
+                                            width: 38,
+                                            height: 38,
                                             child: Center(
                                               child: Text(
                                                 userScoreData,

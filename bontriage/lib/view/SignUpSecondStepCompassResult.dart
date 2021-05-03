@@ -117,7 +117,7 @@ class _SignUpSecondStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [0, 2, 4, 6, 8, 10];
+    const ticks = [2, 4, 6, 8, 10];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
@@ -313,8 +313,8 @@ class _SignUpSecondStepCompassResultState
                                               ),
                                               Center(
                                                 child: Container(
-                                                  width: 36,
-                                                  height: 36,
+                                                  width: 38,
+                                                  height: 38,
                                                   child: Center(
                                                     child: Text(
                                                       _userScoreData,

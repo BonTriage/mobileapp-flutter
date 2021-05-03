@@ -323,6 +323,8 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   String searchText = '';
   bool _isExtraDataAdded = false;
 
+  bool _isDoneButtonClicked = false;
+
   Color _getOptionTextColor(int index) {
     if (widget.question.values[index].isSelected) {
       return Constant.bubbleChatTextView;
@@ -383,6 +385,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: (){
+                        _isDoneButtonClicked = true;
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -523,5 +526,21 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _removeLastCustomValue();
+    super.dispose();
+  }
+
+  void _removeLastCustomValue() {
+    if(_isExtraDataAdded && !_isDoneButtonClicked) {
+      Values lastValue = widget.question.values.last;
+
+      if(lastValue.isNewlyAdded && !lastValue.isSelected) {
+        widget.question.values.removeLast();
+      }
+    }
   }
 }
