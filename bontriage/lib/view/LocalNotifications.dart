@@ -495,7 +495,7 @@ class _HomePageState extends State<HomePage> {
                   PaddedRaisedButton(
                     buttonText: 'Show full-screen notification',
                     onPressed: () async {
-                      await _showFullScreenNotification();
+                    //  await _showFullScreenNotification();
                     },
                   ),
                   PaddedRaisedButton(
@@ -575,7 +575,7 @@ class _HomePageState extends State<HomePage> {
         payload: 'item x');
   }
 
-  Future<void> _showFullScreenNotification() async {
+ /* Future<void> _showFullScreenNotification() async {
     await showDialog(
         context: context,
         child: AlertDialog(
@@ -615,7 +615,7 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ));
-  }
+  }*/
 
   Future<void> _showNotificationWithNoBody() async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =

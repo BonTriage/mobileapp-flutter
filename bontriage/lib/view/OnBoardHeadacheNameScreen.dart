@@ -18,7 +18,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constant.backgroundColor,
       body: SafeArea(
         child: Column(
