@@ -19,6 +19,7 @@ import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayNoHeadacheScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
+import 'package:mobile/view/MoreNotificationScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
@@ -107,7 +108,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: Splash(),
+      home: Scaffold(body : MoreNotificationScreen()),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {

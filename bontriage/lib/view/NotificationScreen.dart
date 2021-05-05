@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/models/LocalNotificationModel.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/NotificationSection.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -12,8 +17,13 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen>
     with TickerProviderStateMixin {
   bool _locationServicesSwitchState = false;
+  StreamController<dynamic> _localNotificationStreamController;
 
-  bool isTimerLayoutOpen = false;
+  StreamSink<dynamic> get localNotificationDataSink =>
+      _localNotificationStreamController.sink;
+
+  Stream<dynamic> get localNotificationDataStream =>
+      _localNotificationStreamController.stream;
 
   var isAddedCustomNotification = false;
 
@@ -21,12 +31,23 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   String customNotificationValue = "";
 
+  bool isCustomTimerLayoutOpen = false;
+  List<LocalNotificationModel> allNotificationListData = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _localNotificationStreamController = StreamController<dynamic>.broadcast();
     textEditingController = TextEditingController();
     Utils.saveUserProgress(0, Constant.notificationEventStep);
+    getNotificationListData();
+  }
+
+  @override
+  void dispose() {
+    _localNotificationStreamController?.close();
+    super.dispose();
+
   }
 
   @override
@@ -55,8 +76,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                           width: 26,
                           height: 26,
                         ),
-                        ),
-                      ],
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -94,147 +115,38 @@ class _NotificationScreenState extends State<NotificationScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                Constant.dailyLog,
-                                style: TextStyle(
-                                    color: Constant.locationServiceGreen,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  openTimerLayout();
-                                },
-                                child: Row(
-                                  children: <Widget>[
-                                    Text(
-                                      'Daily, 8:00 PM',
-                                      style: TextStyle(
-                                          color: Constant.notificationTextColor,
-                                          fontSize: 16,
-                                          fontFamily: Constant.jostRegular),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Image(
-                                      image: AssetImage(isTimerLayoutOpen
-                                          ? Constant.notificationDownArrow
-                                          : Constant.rightArrow),
-                                      width: 16,
-                                      height: 16,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
+                          NotificationSection(
+                              notificationId: 0,
+                              notificationName: 'Daily Log',
+                              allNotificationListData: allNotificationListData,
+                              localNotificationDataStream:
+                                  localNotificationDataStream),
+                          SizedBox(height: 5),
+                          NotificationSection(
+                            notificationId: 1,
+                            allNotificationListData: allNotificationListData,
+                            notificationName: 'Medication',
+                            localNotificationDataStream:
+                                localNotificationDataStream,
                           ),
                           SizedBox(
                             height: 5,
                           ),
-                          AnimatedSize(
-                            vsync: this,
-                            duration: Duration(milliseconds: 350),
-                            child: Visibility(
-                              visible: isTimerLayoutOpen,
-                              child: Container(
-                                child: NotificationTimer(),
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Constant.locationServiceGreen,
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                Constant.medication,
-                                style: TextStyle(
-                                    color: Constant.locationServiceGreen,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Daily, 2:30 PM',
-                                    style: TextStyle(
-                                        color: Constant.notificationTextColor,
-                                        fontSize: 16,
-                                        fontFamily: Constant.jostRegular),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Image(
-                                    image: AssetImage(Constant.rightArrow),
-                                    width: 16,
-                                    height: 16,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
+                          NotificationSection(
+                              notificationId: 2,
+                              notificationName: 'Exercise',
+                              allNotificationListData: allNotificationListData,
+                              localNotificationDataStream:
+                                  localNotificationDataStream),
                           SizedBox(
                             height: 5,
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Constant.locationServiceGreen,
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                Constant.exercise,
-                                style: TextStyle(
-                                    color: Constant.locationServiceGreen,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'off',
-                                    style: TextStyle(
-                                        color: Constant.notificationTextColor,
-                                        fontSize: 16,
-                                        fontFamily: Constant.jostRegular),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Image(
-                                    image: AssetImage(Constant.rightArrow),
-                                    width: 16,
-                                    height: 16,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Constant.locationServiceGreen,
-                          ),
-                          SizedBox(
-                            height: 10,
                           ),
                           Visibility(
                             visible: !isAddedCustomNotification,
                             child: GestureDetector(
                               onTap: () {
-                                openCustomNotificationDialog(context);
+                                openCustomNotificationDialog(
+                                    context, allNotificationListData);
                               },
                               child: Text(
                                 Constant.addCustomNotification,
@@ -248,70 +160,15 @@ class _NotificationScreenState extends State<NotificationScreen>
                           ),
                           Visibility(
                             visible: isAddedCustomNotification,
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        customNotificationValue,
-                                        style: TextStyle(
-                                            color: Constant.locationServiceGreen,
-                                            fontSize: 14,
-                                            fontFamily: Constant.jostMedium),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          openTimerLayout();
-                                        },
-                                        child: Row(
-                                          children: <Widget>[
-                                            Text(
-                                              'Daily, 8:00 PM',
-                                              style: TextStyle(
-                                                  color: Constant
-                                                      .notificationTextColor,
-                                                  fontSize: 16,
-                                                  fontFamily:
-                                                      Constant.jostRegular),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Image(
-                                              image: AssetImage(isTimerLayoutOpen
-                                                  ? Constant.notificationDownArrow
-                                                  : Constant.rightArrow),
-                                              width: 16,
-                                              height: 16,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  AnimatedSize(
-                                    vsync: this,
-                                    duration: Duration(milliseconds: 350),
-                                    child: Visibility(
-                                      visible: isTimerLayoutOpen,
-                                      child: Container(
-                                        child: NotificationTimer(),
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                    thickness: 1,
-                                    color: Constant.locationServiceGreen,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            child: NotificationSection(
+                                notificationId: 3,
+                                allNotificationListData:
+                                    allNotificationListData,
+                                notificationName: customNotificationValue,
+                                isNotificationTimerOpen:
+                                    isAddedCustomNotification,
+                                localNotificationDataStream:
+                                    localNotificationDataStream),
                           ),
                           SizedBox(
                             height: 30,
@@ -320,8 +177,10 @@ class _NotificationScreenState extends State<NotificationScreen>
                             padding: EdgeInsets.symmetric(horizontal: 30),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context,
-                                    Constant.postNotificationOnBoardRouter);
+                                localNotificationDataSink.add('Clicked');
+                                saveAllNotification();
+                                /*   Navigator.pushReplacementNamed(context,
+                                    Constant.postNotificationOnBoardRouter);*/
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 13),
@@ -356,7 +215,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   border: Border.all(
-                                      width: 1, color: Constant.chatBubbleGreen),
+                                      width: 1,
+                                      color: Constant.chatBubbleGreen),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Center(
@@ -387,17 +247,9 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  void openTimerLayout() {
-    setState(() {
-      if (isTimerLayoutOpen) {
-        isTimerLayoutOpen = false;
-      } else {
-        isTimerLayoutOpen = true;
-      }
-    });
-  }
-
-  void openCustomNotificationDialog(BuildContext context) {
+  void openCustomNotificationDialog(BuildContext context,
+      List<LocalNotificationModel> allNotificationListData) {
+    DateTime _selectedDateTime = DateTime.now();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -500,7 +352,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                               mode: CupertinoDatePickerMode.time,
                               use24hFormat: false,
                               onDateTimeChanged: (dateTime) {
-                                //     _selectedDateTime = dateTime;
+                                _selectedDateTime = dateTime;
                               },
                             ),
                           ),
@@ -514,7 +366,16 @@ class _NotificationScreenState extends State<NotificationScreen>
                             onTap: () {
                               setState(() {
                                 isAddedCustomNotification = true;
+                                LocalNotificationModel localNotificationModel =
+                                    LocalNotificationModel();
+                                localNotificationModel.isCustomNotificationAdded = true;
+                                localNotificationModel.notificationName =
+                                    customNotificationValue;
 
+                                localNotificationModel.notificationTime =
+                                    _selectedDateTime.toIso8601String();
+                                allNotificationListData
+                                    .add(localNotificationModel);
                               });
                               Navigator.pop(context);
                             },
@@ -569,5 +430,36 @@ class _NotificationScreenState extends State<NotificationScreen>
         );
       },
     );
+  }
+
+ /* void openTimerLayout() {
+    setState(() {
+      if (isCustomTimerLayoutOpen) {
+        isCustomTimerLayoutOpen = false;
+      } else {
+        isCustomTimerLayoutOpen = true;
+      }
+    });
+  }*/
+
+  /// this Method will be use for to get all notification data from the DB. If user has set any Local notifications from
+  /// this screen.
+  void getNotificationListData() async {
+    var notificationListData =
+    await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    if (notificationListData != null) {
+      setState(() {
+        _locationServicesSwitchState = true;
+        allNotificationListData = notificationListData;
+      });
+    }
+  }
+
+  /// This Method will be use for save the all Notification Data for the any alarm set by User.
+  void saveAllNotification() {
+    Future.delayed(Duration(milliseconds: 300), () {
+      SignUpOnBoardProviders.db
+          .insertUserNotifications(allNotificationListData);
+    });
   }
 }
