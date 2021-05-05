@@ -614,7 +614,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       if(isNewlyAdded && isSelected) {
         if(_additionalMedicationDosage[whichMedicationItemSelected].length < _numberOfDosageAddedList[whichMedicationItemSelected] + 1) {
           for (var i = 0; i < _numberOfDosageAddedList[whichMedicationItemSelected] + 1; i++) {
-            _additionalMedicationDosage[whichMedicationItemSelected].add('25 mg');
+            _additionalMedicationDosage[whichMedicationItemSelected].add('50 mg');
           }
         }
       }
@@ -670,7 +670,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
 
     if(!isSelected) {
-      Questions triggerExpandableQuestionObj = widget.triggerExpandableWidgetList.firstWhere((element) => element.precondition.contains(valueText), orElse: () => null);
+      Questions triggerExpandableQuestionObj = widget.triggerExpandableWidgetList.firstWhere((element) => element.precondition.toLowerCase().contains(valueText.toLowerCase()), orElse: () => null);
       if(triggerExpandableQuestionObj != null)
         widget.selectedAnswers.removeWhere((element) => element.questionTag == triggerExpandableQuestionObj.tag);
     }
@@ -881,78 +881,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     child: Row(
                       children: [
                         Container(
-                          /*width: 50,
-                          height: 30,*/
                           decoration: BoxDecoration(
                             color: Constant.backgroundTransparentColor,
                             borderRadius: BorderRadius.circular(5)
                           ),
                           child: Center(
-                            child: /*Container(
-                              child: TextFormField(
-                                initialValue: (_additionalMedicationDosage[whichMedicationItemSelected].length >= 1) ? _additionalMedicationDosage[whichMedicationItemSelected][0].replaceAll(' mg', '') : '25',
-                                onChanged: (value) {
-                                  if(value.trim().isEmpty) {
-                                    SelectedAnswers dosageSelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == '${widget.valuesList[whichMedicationItemSelected].text}_custom.dosage', orElse: () => null);
-                                    if(dosageSelectedAnswer != null) {
-                                      List<String> selectedValuesList = (json.decode(dosageSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                                      if(selectedValuesList != null && selectedValuesList.length >= 1) {
-                                        selectedValuesList[0] = '25 mg';
-                                      }
-                                    }
-                                    if(_additionalMedicationDosage[whichMedicationItemSelected].length >= 1) {
-                                      _additionalMedicationDosage[whichMedicationItemSelected][0] = '25 mg';
-                                    } else {
-                                      _additionalMedicationDosage[whichMedicationItemSelected].add('25 mg');
-                                    }
-                                  } else {
-                                    SelectedAnswers dosageSelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == '${widget.valuesList[whichMedicationItemSelected].text}_custom.dosage', orElse: () => null);
-                                    if(dosageSelectedAnswer != null) {
-                                      List<String> selectedValuesList = (json.decode(dosageSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                                      if(selectedValuesList != null && selectedValuesList.length >= 1) {
-                                        selectedValuesList[0] = '${value.trim()} mg';
-                                      }
-                                    }
-                                    if(_additionalMedicationDosage[whichMedicationItemSelected].length >= 1) {
-                                      _additionalMedicationDosage[whichMedicationItemSelected][0] = '${value.trim()} mg';
-                                    } else {
-                                      _additionalMedicationDosage[whichMedicationItemSelected].add('${value.trim()} mg');
-                                    }
-                                  }
-                                  _updateMedicationSelectedDataModel();
-                                  _storeExpandedWidgetDataIntoLocalModel();
-                                },
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                maxLength: 3,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Constant.splashColor,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: Platform.isAndroid ? 14 : 15),
-                                cursorColor: Constant.chatBubbleGreen,
-                                buildCounter: (BuildContext context, { int currentLength, int maxLength, bool isFocused }) => null,
-                                decoration: InputDecoration(
-                                  hintText: '25',
-                                  hintStyle: TextStyle(
-                                      color: Constant.splashColor,
-                                      fontFamily: Constant.jostRegular,
-                                      fontSize: Platform.isAndroid ? 14 : 15),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                                    borderSide: BorderSide(
-                                        color: Constant.backgroundTransparentColor, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                                    borderSide: BorderSide(
-                                        color: Constant.backgroundTransparentColor, width: 1),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 5,)
-                                ),
-                              ),
-                            ),*/
-                            GestureDetector(
+                            child: GestureDetector(
                               onTap: () {
                                 _showMedicationDosagePicker(0);
                               },
@@ -1103,7 +1037,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         bool isSelected =
             widget.valuesList[whichTriggerItemSelected].isSelected;
         Questions questions = widget.triggerExpandableWidgetList.firstWhere(
-            (element) => element.precondition.contains(triggerName),
+            (element) => element.precondition.toLowerCase().contains(triggerName.toLowerCase()),
             orElse: () => null);
         String questionTag = (questions == null) ? '' : questions.tag;
         TriggerWidgetModel triggerWidgetModel = _triggerWidgetList.firstWhere(
@@ -1396,7 +1330,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       _medicationDosageList[whichMedicationItemSelected].removeAt(index + 1);
                       try {
                         _additionalMedicationDosage[whichMedicationItemSelected]
-                            .removeAt(index);
+                            .removeAt(index + 1);
                       } catch(e) {
                         print(e);
                       }
@@ -1449,84 +1383,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       child: Row(
                         children: [
                           Container(
-                            /*width: 50,
-                            height: 30,*/
                             decoration: BoxDecoration(
                                 color: Constant.backgroundTransparentColor,
                                 borderRadius: BorderRadius.circular(5)
                             ),
                             child: Center(
-                              child: /*Container(
-                                child: TextFormField(
-                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                  maxLength: 3,
-                                  keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
-                                  initialValue: (_additionalMedicationDosage[whichMedicationItemSelected].length >= index + 2) ? _additionalMedicationDosage[whichMedicationItemSelected][index + 1].replaceAll(' mg', '') : '25',
-                                  onChanged: (value) {
-                                    if(value.trim().isEmpty) {
-                                      *//*SelectedAnswers dosageSelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == '${widget.valuesList[whichMedicationItemSelected].text}_custom.dosage', orElse: () => null);
-                                      if(dosageSelectedAnswer != null) {
-                                        List<String> selectedValuesList = (json.decode(dosageSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                                        if(selectedValuesList != null && selectedValuesList.length >= index + 2) {
-                                          selectedValuesList[index + 1] = '25 mg';
-                                        } else {
-                                          selectedValuesList.add('25 mg');
-                                        }
-                                        dosageSelectedAnswer.answer = jsonEncode(selectedValuesList);
-                                      }*//*
-                                      if(_additionalMedicationDosage[whichMedicationItemSelected].length >= index + 2) {
-                                        _additionalMedicationDosage[whichMedicationItemSelected][index + 1] = '25 mg';
-                                      } else {
-                                        _additionalMedicationDosage[whichMedicationItemSelected].add('25 mg');
-                                      }
-                                    } else {
-                                      *//*SelectedAnswers dosageSelectedAnswer = widget.selectedAnswers.firstWhere((element) => element.questionTag == '${widget.valuesList[whichMedicationItemSelected].text}_custom.dosage', orElse: () => null);
-                                      if(dosageSelectedAnswer != null) {
-                                        List<String> selectedValuesList = (json.decode(dosageSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                                        if(selectedValuesList != null && selectedValuesList.length >= index + 2) {
-                                          selectedValuesList[index + 1] = '${value.trim()} mg';
-                                        } else {
-                                          selectedValuesList.add('25 mg');
-                                        }
-                                        dosageSelectedAnswer.answer = jsonEncode(selectedValuesList);
-                                      }*//*
-                                      if(_additionalMedicationDosage[whichMedicationItemSelected].length >= index + 2) {
-                                        _additionalMedicationDosage[whichMedicationItemSelected][index + 1] = '${value.trim()} mg';
-                                      } else {
-                                        _additionalMedicationDosage[whichMedicationItemSelected].add('${value.trim()} mg');
-                                      }
-                                    }
-                                    _updateMedicationSelectedDataModel();
-                                    _storeExpandedWidgetDataIntoLocalModel();
-                                  },
-                                  style: TextStyle(
-                                      color: Constant.splashColor,
-                                      fontFamily: Constant.jostRegular,
-                                      fontSize: Platform.isAndroid ? 14 : 15),
-                                  cursorColor: Constant.chatBubbleGreen,
-                                  buildCounter: (BuildContext context, { int currentLength, int maxLength, bool isFocused }) => null,
-                                  decoration: InputDecoration(
-                                    hintText: '25',
-                                      hintStyle: TextStyle(
-                                          color: Constant.splashColor,
-                                          fontFamily: Constant.jostRegular,
-                                          fontSize: Platform.isAndroid ? 14 : 15),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                                        borderSide: BorderSide(
-                                            color: Constant.backgroundTransparentColor, width: 1),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                                        borderSide: BorderSide(
-                                            color: Constant.backgroundTransparentColor, width: 1),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 5)
-                                  ),
-                                ),
-                              ),*/
-                              GestureDetector(
+                              child: GestureDetector(
                                 onTap: () {
                                   _showMedicationDosagePicker(index + 1);
                                 },
@@ -1547,24 +1409,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10,),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Constant.backgroundTransparentColor,
-                                borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              child: Text(
-                                'mg',
-                                style: TextStyle(
-                                    color: Constant.splashColor,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: Platform.isAndroid ? 14 : 15),
                               ),
                             ),
                           ),
