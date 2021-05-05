@@ -10,7 +10,7 @@ class LocalNotificationModel {
       this.notificationTime,
       this.notificationType,
       this.userId,
-      this.isCustomNotificationAdded});
+      this.isCustomNotificationAdded = false});
 
   factory LocalNotificationModel.fromJson(Map<String, dynamic> json) =>
       LocalNotificationModel(

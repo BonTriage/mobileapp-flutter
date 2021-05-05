@@ -108,7 +108,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: Scaffold(body : MoreNotificationScreen()),
+      home: Scaffold(body : NotificationScreen()),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {

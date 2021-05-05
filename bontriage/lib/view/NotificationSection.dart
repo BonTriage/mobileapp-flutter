@@ -90,13 +90,13 @@ class _NotificationSectionState extends State<NotificationSection>
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.isCustomNotificationAdded,
+              (element) => element.isCustomNotificationAdded ?? false,
           orElse: () => null);
       if (localNotificationNameModel != null) {
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
+          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {

@@ -47,6 +47,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
 
   LocalNotificationModel localNotificationNameModel;
 
+  String customNotificationValue = '';
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +58,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     widget.localNotificationDataStream.listen((event) {
       setAllNotifications();
     });
-     setInItNotificationData();
+    setInItNotificationData();
     inItNotification();
   }
 
@@ -246,7 +248,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
       ),
     );
   }
-/// This Method will be use for initialize all android and IOs Plugin and other required variables.
+
+  /// This Method will be use for initialize all android and IOs Plugin and other required variables.
   void inItNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
@@ -258,7 +261,10 @@ class _NotificationTimerState extends State<NotificationTimer> {
             onDidReceiveLocalNotification:
                 (int id, String title, String body, String payload) async {
               didReceiveLocalNotificationSubject.add(ReceivedNotification(
-                  id: 1, title: 'BonTriage', body: 'Log Kar diya', payload: 'Log kar de na'));
+                  id: 1,
+                  title: 'BonTriage',
+                  body: 'Log Kar diya',
+                  payload: 'Reminder to log your day'));
             });
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -269,10 +275,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: notificationSelected);
   }
-/// This Method will be use to set for Daily, Weekly notification on respective notification section.
+
+  /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
-        "ChannelId", "BonTriage", 'Bhag Le na',
+        "ChannelId", "BonTriage", 'Reminder to log your day',
         importance: Importance.max);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
@@ -283,7 +290,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             0,
             "BonTriage",
-            "Log kar le na",
+            "Reminder to log your day",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else if (isWeekDaysSelected) {
@@ -293,24 +300,27 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             1,
             'BonTriage',
-            'Log Kar le na',
+            'Reminder to log your day',
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else {
         dailyNotificationLogTime = 'Off';
       }
-      var dailyLogNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'DailyLog',orElse: ()=> null);
-      if(dailyLogNotificationData != null){
+      var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
+          (element) => element.notificationName == 'DailyLog',
+          orElse: () => null);
+      if (dailyLogNotificationData != null) {
         dailyLogNotificationData.notificationName = 'DailyLog';
         dailyLogNotificationData.notificationType = dailyNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
         } else {
           print("scheduled notification at $_dateTime");
-          dailyLogNotificationData.notificationTime = "2021-05-05 16:11:00";//_dateTime.toIso8601String();
+          dailyLogNotificationData.notificationTime =
+              "2021-05-05 16:11:00"; //_dateTime.toIso8601String();
         }
-      }else{
+      } else {
         localNotificationModel.notificationName = 'DailyLog';
         localNotificationModel.notificationType = dailyNotificationLogTime;
         if (dailyNotificationLogTime == 'Off') {
@@ -326,7 +336,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             2,
             "BonTriage",
-            "Medication le le na",
+            "Reminder to log your today's medications.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else if (isWeekDaysSelected) {
@@ -336,23 +346,27 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             3,
             'BonTriage',
-            'Medication Kar le na',
+            "Reminder to log your today's medications.",
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else {
         medicationNotificationLogTime = 'Off';
       }
-      var medicationNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Medication',orElse: ()=> null);
-      if(medicationNotificationData != null){
+      var medicationNotificationData = widget.allNotificationListData
+          .firstWhere((element) => element.notificationName == 'Medication',
+              orElse: () => null);
+      if (medicationNotificationData != null) {
         medicationNotificationData.notificationName = 'Medication';
-        medicationNotificationData.notificationType = medicationNotificationLogTime;
+        medicationNotificationData.notificationType =
+            medicationNotificationLogTime;
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
         } else {
-          medicationNotificationData.notificationTime = _dateTime.toIso8601String();
+          medicationNotificationData.notificationTime =
+              _dateTime.toIso8601String();
         }
-      }else{
+      } else {
         localNotificationModel.notificationName = 'Medication';
         localNotificationModel.notificationType = medicationNotificationLogTime;
         if (medicationNotificationLogTime == 'Off') {
@@ -368,7 +382,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
             "BonTriage",
-            "Exercise le le na",
+            "Reminder to log your today's exercise.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else if (isWeekDaysSelected) {
@@ -378,7 +392,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             5,
             'BonTriage',
-            'Exercise Kar le na',
+            "Reminder to log your today's exercise.",
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
@@ -386,17 +400,19 @@ class _NotificationTimerState extends State<NotificationTimer> {
         exerciseNotificationLogTime = 'Off';
       }
 
-
-      var exerciseNotificationData =  widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Exercise',orElse: ()=> null);
-      if(exerciseNotificationData != null){
+      var exerciseNotificationData = widget.allNotificationListData.firstWhere(
+          (element) => element.notificationName == 'Exercise',
+          orElse: () => null);
+      if (exerciseNotificationData != null) {
         exerciseNotificationData.notificationName = 'Exercise';
         exerciseNotificationData.notificationType = exerciseNotificationLogTime;
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
         } else {
-          exerciseNotificationData.notificationTime = _dateTime.toIso8601String();
+          exerciseNotificationData.notificationTime =
+              _dateTime.toIso8601String();
         }
-      }else{
+      } else {
         localNotificationModel.notificationName = 'Exercise';
         localNotificationModel.notificationType = exerciseNotificationLogTime;
         if (exerciseNotificationLogTime == 'Off') {
@@ -409,10 +425,17 @@ class _NotificationTimerState extends State<NotificationTimer> {
     } else {
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
+        var customNotificationData = widget.allNotificationListData.firstWhere(
+            (element) => element.isCustomNotificationAdded ?? false,
+            orElse: () => null);
+        if (customNotificationData != null) {
+          customNotificationValue = customNotificationData.notificationName;
+        }
+
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
             "BonTriage",
-            "Custom Notification le le na",
+            customNotificationValue,
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else if (isWeekDaysSelected) {
@@ -422,15 +445,17 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             5,
             'BonTriage',
-            'Custom Notification Kar le na',
+            customNotificationValue,
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else {
         customNotificationLogTime = 'Off';
       }
-     var customNotificationData =  widget.allNotificationListData.firstWhere((element) => element.isCustomNotificationAdded,orElse: ()=> null);
-      if(customNotificationData != null){
+      var customNotificationData = widget.allNotificationListData.firstWhere(
+          (element) => element.isCustomNotificationAdded?? false,
+          orElse: () => null);
+      if (customNotificationData != null) {
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
@@ -438,13 +463,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
           customNotificationData.notificationTime = _dateTime.toIso8601String();
         }
       }
-
     }
   }
 
   Future onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
-
     print("onDidReceiveLocalNotification");
 
     var androidDetails = AndroidNotificationDetails(
@@ -452,7 +475,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         importance: Importance.max);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
-    NotificationDetails(android: androidDetails, iOS: iosDetails);
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         2,
         "BonTriage",
@@ -460,7 +483,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
         Time(_selectedHour, _selectedMinute),
         notificationDetails);
   }
-/// This Method will be use for Delete Notification from respective Notification Section.
+
+  /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -482,7 +506,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
       ),
     );
   }
-/// This Method will be use for to set Daily, Weekly Notifications on respective Notifications Section.
+
+  /// This Method will be use for to set Daily, Weekly Notifications on respective Notifications Section.
   void setAllNotifications() async {
     if (isDailySelected) {
       whichButtonSelected = 'Daily';
@@ -502,11 +527,12 @@ class _NotificationTimerState extends State<NotificationTimer> {
     }
     await notificationSelected("");
   }
-/// This Method will be use for to set all UI related data whatever user has saved last time on the current screen.
+
+  /// This Method will be use for to set all UI related data whatever user has saved last time on the current screen.
   void setInItNotificationData() {
     if (widget.selectedNotification == 0) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'DailyLog',
+          (element) => element.notificationName == 'DailyLog',
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {
@@ -527,7 +553,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
     } else if (widget.selectedNotification == 1) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'Medication',
+          (element) => element.notificationName == 'Medication',
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {
@@ -548,7 +574,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
     } else if (widget.selectedNotification == 2) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'Exercise',
+          (element) => element.notificationName == 'Exercise',
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {
@@ -569,11 +595,12 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationType == 'Custom',
+          (element) => element.notificationType == 'Custom',
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {
-        _dateTime =  DateTime.tryParse(localNotificationNameModel.notificationTime);
+        _dateTime =
+            DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
       }
