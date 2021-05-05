@@ -252,9 +252,9 @@ class _NotificationTimerState extends State<NotificationTimer> {
         AndroidInitializationSettings('app_icon');
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
-            requestAlertPermission: false,
-            requestBadgePermission: false,
-            requestSoundPermission: false,
+            requestAlertPermission: true,
+            requestBadgePermission: true,
+            requestSoundPermission: true,
             onDidReceiveLocalNotification:
                 (int id, String title, String body, String payload) async {
               didReceiveLocalNotificationSubject.add(ReceivedNotification(
@@ -307,7 +307,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (customNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
         } else {
-          dailyLogNotificationData.notificationTime = _dateTime.toIso8601String();
+          print("scheduled notification at $_dateTime");
+          dailyLogNotificationData.notificationTime = "2021-05-05 16:11:00";//_dateTime.toIso8601String();
         }
       }else{
         localNotificationModel.notificationName = 'DailyLog';
@@ -443,6 +444,9 @@ class _NotificationTimerState extends State<NotificationTimer> {
 
   Future onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
+
+    print("onDidReceiveLocalNotification");
+
     var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Bhag Le na',
         importance: Importance.max);
