@@ -61,7 +61,7 @@ class _WelcomeStartAssessmentScreenState
                               width: 10,
                             ),
                             Text(
-                              Constant.migraineMentor,
+                              '${Constant.migraineMentor}\u2122',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Constant.chatBubbleGreen,

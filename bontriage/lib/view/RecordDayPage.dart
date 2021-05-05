@@ -172,7 +172,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           height: 5,
         ),
         Text(
-          'Add info to better personalize your experience',
+          'Add info to better personalize your experience.',
           style: TextStyle(
               fontSize: 18,
               color: Constant.chatBubbleGreen60Alpha,

@@ -680,17 +680,14 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 30,
                         ),
                         Text(
-                          'Headache score',
+                          'Headache score ',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
                               fontFamily: Constant.jostRegular),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
                         Text(
-                          '8 to 10',
+                          'between 8 - 10',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,

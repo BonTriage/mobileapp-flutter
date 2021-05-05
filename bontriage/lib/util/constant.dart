@@ -108,20 +108,20 @@ class Constant {
   static String enableLocationRecommended =
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String welcomeMigraineMentorTextView =
-      '\nUnlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+      '\nUnlike other migraine trackers, relaxation, exercise, or triggers based apps. MigraineMentor is like having a headache expert in your pocket.';
 
   static String welcomeMigraineMentorBubbleTextView =
-      'Welcome to MigraineMentor to Unlike other migraine trackers, relaxation exercise, or triggers-based apps, MigraineMentor is like having a headache expert in your pocket.';
+      'Welcome to MigraineMentor! Unlike other migraine trackers, relaxation, exercise, or triggers based apps. MigraineMentor is like having a headache expert in your pocket.';
   static String answeringTheNextBubbleTextView =
       'MigraineMentor can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If this is what you’re looking for, and are willing to put in a little time and effort, you’ve come to the right app.';
 
   static String migraineMentorHelpTextView =
-      'can help you diagnose your headache type, learn how to manage your headache, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
+      'can help you diagnose your headache type, learn how to manage your headaches, and assess whether you are on the right track with your treatment, lifestyle, and prevention. If that\'s what you\'re looking for, and are willing to put in a little time and effort, you\'ve come to the right app.';
   static String compassDiagramTextView =
       'Surprised\'? This is your Compass Diagram, and the number in the middle is your current Headache Score. The lower the number, the better.';
 
   static String welcomePersonalizedHeadacheFirstTextView =
-      'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score-the lower the number, the better.';
+      'Welcome to your personalized Headache Compass! The number you see in the middle is your current Headache Score (the lower the number, the better).';
 
   static String welcomePersonalizedHeadacheSecondStepFirstTextView =
       'Based on what you entered, it looks like your Red Wine Headache could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app.';
@@ -133,10 +133,10 @@ class Constant {
       'Your Compass is generated based on intensity, duration, disability, frequency - the four main parameters that headache specialists evaluate when diagnosing migraines and headache.';
 
   static String welcomePersonalizedHeadacheFourthTextView =
-      'As you get better at managing your headache, you will learn to use the compass to see the impact of different measures like exposure to a possible trigger or starting a new medications.';
+      'As you get better at managing your headache, you will learn to use the compass to see the impact of exposure to a possible triggers or starting new medications.';
 
   static String welcomePersonalizedHeadacheFifthTextView =
-      'To learn more about each measurement, try clicking on any labels of the below.';
+      'To learn more about the characteristics of your headaches, tap any of the Compass dimensions displayed below.';
 
   static String startAssessment = 'Start Assessment';
   static String letsStarted = 'Let\'s get started!';
@@ -291,9 +291,9 @@ class Constant {
   static String disability = 'Disability';
   static String duration = 'Duration';
   static String compassTextView =
-      'This graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Every person’s compass shape is unique and changes as you manage your headaches.\n\nTap on titles of the variables to read more about them.';
+      'This graph is your Compass\n\nThe shape of it is determined by your headache’s specific characteristics. Each person\'s compass shape is unique -- yours will change as you manage your headaches with Migraine Mentor.\n\nTap on each point of the Compass to learn about a specific dimension of your headaches.';
   static String doubleTapAnItem =
-      'Double tap an item to keep it pre-selected for next time you come back to enter a log.';
+      'Double tap an item to keep it pre-selected for the next time you come back to enter a log.';
   static String sleep = 'Sleep';
   static String howFeelWakingUp = 'How did you feel waking up this morning?';
   static String energizedRefreshed = 'Energized\n& refreshed';
@@ -629,11 +629,11 @@ class Constant {
   static const String faqQuestion4 = 'Why do I need to log every day on the app?';
   static const String faqQuestion5 = 'Is the headache name in the app the same as the actual medical diagnosis?';
 
-  static const String faqAnswer1 = 'A person’s Migraine Compass Score is generated based on\ni. Intensity\nii. Disability\niii. Duration\niv. Frequency\n\nThese parameters are used by headache specialists to measure and diagnosing headaches and migraines.';
-  static const String faqAnswer2 = 'When a patient’s intensity, disability, duration or frequency of headaches are decreasing, it contributes to a lower compass score. This means the overall patient\'s quality of health is improving with the overall decrease in the migraine compass score.';
-  static const String faqAnswer3 = 'Log Day refers to user entering their overall activities in a day such as meals, exercise and sleep. Whereas "Add Headache" requires the user adding details to the headache such as the intensity, duration etc.';
-  static const String faqAnswer4 = 'It is most desirable to log every day so that the app can better track your overall health.';
-  static const String faqAnswer5 = 'No. The headache name is a user defined such as a "Red wine headache" to indicate the headache that started after a red wine.';
+  static const String faqAnswer1 = 'A person\'s Migraine Compass Score is generated based on\ni. Intensity\nii. Disability\niii. Duration\niv. Frequency\n\nThese parameters are used by headache specialists to evaluate and diagnose headaches and migraines.';
+  static const String faqAnswer2 = 'When a patient’s intensity, disability, duration or frequency of headaches are decreasing, it contributes to a lower compass score. This means the patient\'s overall quality of health is improving with the overall decrease in the migraine compass score.';
+  static const String faqAnswer3 = 'Log Day refers to the user entering their overall activities in a day such as meals, exercise and sleep. Whereas "Add Headache" requires the user to add details about the headache such as the intensity, duration etc.';
+  static const String faqAnswer4 = 'Using Migraine Mentor daily will allow the app to better track your overall health.';
+  static const String faqAnswer5 = 'No. The headache name is user defined (e.g. a "Red wine headache" to indicate the headache that started after drinking red wine).';
 
 
   //Action Sheet Identifier
@@ -653,7 +653,7 @@ class Constant {
   //Dimensions
   static final double screenHorizontalPadding = 25;
   static final double chatBubbleHorizontalPadding = 30;
-  static const double chatBubbleMaxHeight = 78;
+  static const double chatBubbleMaxHeight = 85;
   static const double chatBubbleCompassResultMaxHeight = 80;
 
   //decorations

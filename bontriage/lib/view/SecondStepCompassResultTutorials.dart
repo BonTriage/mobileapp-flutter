@@ -92,13 +92,14 @@ class _SecondStepCompassResultTutorialsState
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
-                        width: 20,
-                        height: 20,
+                        width: 22,
+                        height: 22,
                       ),
                     ),
                   ],

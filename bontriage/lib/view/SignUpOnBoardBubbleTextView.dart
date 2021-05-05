@@ -67,24 +67,29 @@ class _StateSignUpOnBoardBubbleTextView
             text: 'Welcome to',
             style: _textStyle),
         TextSpan(
-            text: ' MigraineMentor ',
-            style: _highlightedTextStyle),
+            text: ' MigraineMentor. ',
+            style: _highlightedTextStyle,
+        ),
         TextSpan(
             text: Constant.welcomeMigraineMentorTextView,
-            style: _textStyle)
+            style: _textStyle,
+        )
       ],
       [
         TextSpan(
-            text: 'MigraineMentor! ',
-            style: _highlightedTextStyle),
+            text: 'MigraineMentor ',
+            style: _highlightedTextStyle,
+        ),
         TextSpan(
             text: Constant.migraineMentorHelpTextView,
-            style: _textStyle)
+            style: _textStyle,
+        )
       ],
       [
         TextSpan(
             text: Constant.letsStarted,
-            style: _textStyle)
+            style: _textStyle,
+        ),
       ]
     ];
   }
