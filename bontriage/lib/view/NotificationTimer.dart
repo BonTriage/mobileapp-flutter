@@ -12,12 +12,14 @@ class NotificationTimer extends StatefulWidget {
   final Function(String) selectedTimerValue;
   final Stream localNotificationDataStream;
   final List<LocalNotificationModel> allNotificationListData;
+  final Function customNotification;
 
   NotificationTimer(
       {Key key,
       this.selectedNotification,
       this.selectedTimerValue,
       this.localNotificationDataStream,
+      this.customNotification,
       this.allNotificationListData})
       : super(key: key);
 
@@ -226,15 +228,19 @@ class _NotificationTimerState extends State<NotificationTimer> {
                     isWeekDaysSelected = false;
                     isDailySelected = false;
                     isOffSelected = false;
-                    if (widget.selectedNotification == 0) {
-                      _deleteNotificationChannel(0);
+                    if (widget.selectedNotification == 3) {
+                      widget.customNotification();
                     } else {
-                      _deleteNotificationChannel(1);
+                      if (widget.selectedNotification == 0) {
+                        _deleteNotificationChannel(0);
+                      } else {
+                        _deleteNotificationChannel(1);
+                      }
                     }
                   });
                 },
                 child: Text(
-                  'Delete',
+                  setDeleteOrEditText(),
                   style: TextStyle(
                       color: Constant.addCustomNotificationTextColor,
                       fontSize: 14,
@@ -453,7 +459,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         customNotificationLogTime = 'Off';
       }
       var customNotificationData = widget.allNotificationListData.firstWhere(
-          (element) => element.isCustomNotificationAdded?? false,
+          (element) => element.isCustomNotificationAdded ?? false,
           orElse: () => null);
       if (customNotificationData != null) {
         customNotificationData.notificationType = customNotificationLogTime;
@@ -491,7 +497,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.deleteNotificationChannel(channelId.toString());
 
-    await showDialog<void>(
+    /*await showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Deleted'),
@@ -504,7 +510,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
           ),
         ],
       ),
-    );
+    );*/
   }
 
   /// This Method will be use for to set Daily, Weekly Notifications on respective Notifications Section.
@@ -615,5 +621,12 @@ class _NotificationTimerState extends State<NotificationTimer> {
         }
       }
     }
+  }
+
+  String setDeleteOrEditText() {
+    if (widget.selectedNotification == 3) {
+      return 'Edit';
+    } else
+      return 'Delete';
   }
 }

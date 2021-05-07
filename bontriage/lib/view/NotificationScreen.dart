@@ -162,6 +162,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                             visible: isAddedCustomNotification,
                             child: NotificationSection(
                                 notificationId: 3,
+                                customNotification: (){
+                                  openCustomNotificationDialog(context, allNotificationListData);
+                                },
                                 allNotificationListData:
                                     allNotificationListData,
                                 notificationName: customNotificationValue,
@@ -366,6 +369,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                             onTap: () {
                               setState(() {
                                 isAddedCustomNotification = true;
+                                allNotificationListData.clear();
                                 LocalNotificationModel localNotificationModel =
                                     LocalNotificationModel();
                                 localNotificationModel.isCustomNotificationAdded = true;

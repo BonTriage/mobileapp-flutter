@@ -201,6 +201,9 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             Visibility(
                               visible: isAlreadyAddedCustomNotification,
                               child: NotificationSection(
+                                customNotification: (){
+                                  openCustomNotificationDialog(context, allNotificationListData);
+                                },
                                   notificationId: 3,
                                   allNotificationListData:
                                       allNotificationListData,
@@ -346,8 +349,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             },
                             controller: textEditingController,
                             onChanged: (String value) {
-                              customNotificationValue =
-                                  textEditingController.text;
+                              customNotificationValue = textEditingController.text;
                               //print(value);
                             },
                             style: TextStyle(
@@ -406,8 +408,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             onTap: () {
                               setState(() {
                                 isAddedCustomNotification = true;
+                                isAlreadyAddedCustomNotification = true;
                                 LocalNotificationModel localNotificationModel =
                                     LocalNotificationModel();
+                                allNotificationListData.clear();
                                 localNotificationModel
                                     .isCustomNotificationAdded = true;
                                 localNotificationModel.notificationName =

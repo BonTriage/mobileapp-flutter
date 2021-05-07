@@ -12,12 +12,14 @@ class NotificationSection extends StatefulWidget {
   final Stream localNotificationDataStream;
   final List<LocalNotificationModel> allNotificationListData;
   final bool isNotificationTimerOpen;
+  final Function customNotification;
 
   const NotificationSection(
       {Key key,
       this.notificationName,
       this.notificationId,
       this.localNotificationDataStream,
+        this.customNotification,
       this.allNotificationListData,this.isNotificationTimerOpen})
       : super(key: key);
 
@@ -123,7 +125,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
+          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -138,7 +140,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
+          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -153,7 +155,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
+          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -168,7 +170,7 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
+          selectedTimerValue = localNotificationNameModel.notificationType ?? 'Daily' +','
               ' ' +
               Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
         } else {
@@ -239,6 +241,7 @@ class _NotificationSectionState extends State<NotificationSection>
             visible: isDailyLogTimerLayoutOpen,
             child: Container(
               child: NotificationTimer(
+                customNotification: widget.customNotification,
                 selectedNotification: widget.notificationId,
                 allNotificationListData: widget.allNotificationListData,
                 localNotificationDataStream: widget.localNotificationDataStream,
