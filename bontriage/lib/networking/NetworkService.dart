@@ -19,12 +19,12 @@ class NetworkService{
     var client = http.Client();
 
     http.Response response;
+    print('Url???$url');
     try{
       if (requestMethod == RequestMethod.GET) {
         response = await client.get(Uri.parse(url), headers: RequestHeader().createRequestHeaders());
       } else if (requestMethod == RequestMethod.POST) {
         print('request body???$requestBody');
-        print('Url???$url');
         response = await client.post(Uri.parse(url), headers: RequestHeader().createRequestHeaders(), body: requestBody,);
       } else if (requestMethod == RequestMethod.DELETE) {
         response = await client.delete(Uri.parse(url), headers: RequestHeader().createRequestHeaders());

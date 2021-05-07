@@ -239,13 +239,16 @@ class CalendarHeadacheLogDayDetailsBloc {
       }
     });
 
+    RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
+    logDayMedicationWidgetData.logDayListData = LogDayData();
+    logDayMedicationWidgetData.logDayListData.titleName =
+        Constant.medication;
+    logDayMedicationWidgetData.logDayListData.titleInfo = Constant.blankString;
+    logDayMedicationWidgetData.imagePath = Constant.pillIcon;
+
     response.medication.asMap().forEach((index, element) {
-      if(index == 0) {
         var medicationMobileEvent = element.mobileEventDetails.firstWhere((mobileEventDetailElement) => mobileEventDetailElement.questionTag == Constant.logDayMedicationTag, orElse: () => null);
         if (element.mobileEventDetails.length > 0 && medicationMobileEvent != null) {
-          RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
-          logDayMedicationWidgetData.logDayListData = LogDayData();
-
           var medicationData = element.mobileEventDetails.firstWhere(
                   (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.logDayMedicationTag,
@@ -311,23 +314,27 @@ class CalendarHeadacheLogDayDetailsBloc {
                   }
                 });
                 if (medicationDosage.isEmpty) {
-                  titleInfo = '$titleInfo';
+                    titleInfo = '$titleInfo';
                 } else
                   titleInfo = '$titleInfo\n($medicationDosage)';
               }
             }
-            logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
-          }
 
-          logDayMedicationWidgetData.logDayListData.titleName =
-              Constant.medication;
-          logDayMedicationWidgetData.imagePath = Constant.pillIcon;
-          userHeadacheLogDayDetailsModel.headacheLogDayListData
-              .add(logDayMedicationWidgetData);
-          userHeadacheLogDayDetailsModel.isDayLogged = true;
+            if(logDayMedicationWidgetData.logDayListData.titleInfo.isEmpty)
+              logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+            else
+              logDayMedicationWidgetData.logDayListData.titleInfo = '${logDayMedicationWidgetData.logDayListData.titleInfo}\n\n$titleInfo';
+          }
         }
-      }
     });
+
+    if(response.medication != null) {
+      if(response.medication.isNotEmpty) {
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayMedicationWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
+      }
+    }
 
     response.triggers.asMap().forEach((index, element) {
       if(index == 0) {

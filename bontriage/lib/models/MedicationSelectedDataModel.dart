@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:mobile/models/QuestionsModel.dart';
+
 MedicationSelectedDataModel medicationSelectedDateModelFromJson(String str) => MedicationSelectedDataModel.fromJson(json.decode(str));
 
 String medicationSelectedDataModelToJson(MedicationSelectedDataModel data) => json.encode(data.toJson());
@@ -9,33 +11,21 @@ class MedicationSelectedDataModel {
     this.selectedMedicationIndex,
     this.selectedMedicationDateList,
     this.selectedMedicationDosageList,
-    this.isNewlyAdded = false,
-    this.newlyAddedMedicationName,
-    this.isDoubleTapped
   });
 
-  int selectedMedicationIndex;
-  List<String> selectedMedicationDateList;
-  List<String> selectedMedicationDosageList;
-  bool isNewlyAdded;
-  String newlyAddedMedicationName;
-  bool isDoubleTapped;
+  List<Values> selectedMedicationIndex;
+  List<List<String>> selectedMedicationDateList;
+  List<List<String>> selectedMedicationDosageList;
 
   factory MedicationSelectedDataModel.fromJson(Map<String, dynamic> json) => MedicationSelectedDataModel(
-    selectedMedicationIndex: json["selectedMedicationIndex"],
-    selectedMedicationDateList: List<String>.from(json["selectedMedicationDateList"].map((x) => x)),
-    selectedMedicationDosageList: List<String>.from(json["selectedMedicationDosageList"].map((x) => x)),
-    isNewlyAdded: json['isNewlyAdded'],
-    newlyAddedMedicationName: json['newlyAddedMedicationName'],
-    isDoubleTapped: json['isDoubleTapped'],
+    selectedMedicationIndex: List<Values>.from(json["selectedMedicationIndex"].map((y) => Values.fromJson(y))),
+    selectedMedicationDateList: List<List<String>>.from(json["selectedMedicationDateList"].map((x) => List<String>.from(x.map((y) => y)))),
+    selectedMedicationDosageList: List<List<String>>.from(json["selectedMedicationDosageList"].map((x) => List<String>.from(x.map((y) => y)))),
   );
 
   Map<String, dynamic> toJson() => {
-    "selectedMedicationIndex": selectedMedicationIndex,
-    "selectedMedicationDateList": List<dynamic>.from(selectedMedicationDateList.map((x) => x)),
-    "selectedMedicationDosageList": List<dynamic>.from(selectedMedicationDosageList.map((x) => x)),
-    'isNewlyAdded': isNewlyAdded,
-    'newlyAddedMedicationName': newlyAddedMedicationName,
-    'isDoubleTapped': isDoubleTapped,
+    "selectedMedicationIndex": List<dynamic>.from(selectedMedicationIndex.map((x) => x)),
+    "selectedMedicationDateList": List<dynamic>.from(selectedMedicationDateList.map((x) => List<dynamic>.from(x.map((y) => y)))),
+    "selectedMedicationDosageList": List<dynamic>.from(selectedMedicationDosageList.map((x) => List<dynamic>.from(x.map((y) => y)))),
   };
 }

@@ -110,6 +110,7 @@ class Values {
     text = json['text'];
     isSelected = (json['isSelected'] == null) ? false : json['isSelected'];
     isValid = json['is_valid'];
+    isDoubleTapped = json['isDoubleTapped'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -118,6 +119,7 @@ class Values {
     data['text'] = this.text;
     data['isSelected'] = this.isSelected;
     data['is_valid'] = isValid;
+    data['isDoubleTapped'] = isDoubleTapped;
     return data;
   }
 }

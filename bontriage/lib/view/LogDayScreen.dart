@@ -163,6 +163,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                       fontFamily: Constant.jostMedium),
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     _showDiscardChangesBottomSheet();
                                     //Navigator.pop(context);
