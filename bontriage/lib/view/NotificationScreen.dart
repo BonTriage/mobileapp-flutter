@@ -33,6 +33,7 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   bool isCustomTimerLayoutOpen = false;
   List<LocalNotificationModel> allNotificationListData = [];
+  bool isSaveButtonVisible = false;
 
   @override
   void initState() {
@@ -98,6 +99,11 @@ class _NotificationScreenState extends State<NotificationScreen>
                       onChanged: (bool state) {
                         setState(() {
                           _locationServicesSwitchState = state;
+                          if(state){
+                             isSaveButtonVisible = true;
+                          }else{
+                             isSaveButtonVisible = false;
+                          }
                           print(state);
                         });
                       },
@@ -176,28 +182,31 @@ class _NotificationScreenState extends State<NotificationScreen>
                           SizedBox(
                             height: 30,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 30),
-                            child: GestureDetector(
-                              onTap: () {
-                                localNotificationDataSink.add('Clicked');
-                                saveAllNotification();
-                                /*   Navigator.pushReplacementNamed(context,
-                                    Constant.postNotificationOnBoardRouter);*/
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 13),
-                                decoration: BoxDecoration(
-                                  color: Color(0xffafd794),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    Constant.save,
-                                    style: TextStyle(
-                                        color: Constant.bubbleChatTextView,
-                                        fontSize: 15,
-                                        fontFamily: Constant.jostMedium),
+                          Visibility(
+                            visible: isSaveButtonVisible,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  localNotificationDataSink.add('Clicked');
+                                 // saveAllNotification();
+                                  /*   Navigator.pushReplacementNamed(context,
+                                      Constant.postNotificationOnBoardRouter);*/
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 13),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffafd794),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      Constant.save,
+                                      style: TextStyle(
+                                          color: Constant.bubbleChatTextView,
+                                          fontSize: 15,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -369,7 +378,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                             onTap: () {
                               setState(() {
                                 isAddedCustomNotification = true;
-                                allNotificationListData.clear();
+                               /* allNotificationListData.clear();
                                 LocalNotificationModel localNotificationModel =
                                     LocalNotificationModel();
                                 localNotificationModel.isCustomNotificationAdded = true;
@@ -379,7 +388,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 localNotificationModel.notificationTime =
                                     _selectedDateTime.toIso8601String();
                                 allNotificationListData
-                                    .add(localNotificationModel);
+                                    .add(localNotificationModel);*/
+                                setNotificationName( textEditingController.text);
                               });
                               Navigator.pop(context);
                             },
@@ -454,16 +464,23 @@ class _NotificationScreenState extends State<NotificationScreen>
     if (notificationListData != null) {
       setState(() {
         _locationServicesSwitchState = true;
+         isSaveButtonVisible = true;
         allNotificationListData = notificationListData;
       });
     }
   }
-
-  /// This Method will be use for save the all Notification Data for the any alarm set by User.
-  void saveAllNotification() {
-    Future.delayed(Duration(milliseconds: 300), () {
-      SignUpOnBoardProviders.db
-          .insertUserNotifications(allNotificationListData);
-    });
+  setNotificationName(String notificationName) {
+    LocalNotificationModel localNotificationNameModel = allNotificationListData
+        .firstWhere(
+            (element) => element.isCustomNotificationAdded ?? false,
+        orElse: () => null);
+    if (localNotificationNameModel != null) {
+      customNotificationValue =  localNotificationNameModel.notificationName;
+      localNotificationNameModel.notificationName = notificationName;
+    }else{
+      customNotificationValue = notificationName;
+    }
   }
 }
+
+

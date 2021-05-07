@@ -33,6 +33,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   bool isAddedCustomNotification = false;
   bool isAlreadyAddedCustomNotification = false;
 
+  bool isSaveButtonVisible = false;
+
   Stream<dynamic> get localNotificationDataStream =>
       _localNotificationStreamController.stream;
   TextEditingController textEditingController;
@@ -67,7 +69,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
+            minHeight: MediaQuery
+                .of(context)
+                .size
+                .height,
           ),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -85,7 +90,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                     },
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Constant.moreBackgroundColor,
@@ -143,8 +148,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
                                 if (state) {
                                   _animationController.forward();
+                                  isSaveButtonVisible = true;
                                 } else {
                                   _animationController.reverse();
+                                   isSaveButtonVisible = false;
                                 }
                               });
                             },
@@ -163,121 +170,133 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                     sizeFactor: _animationController,
                     child: FadeTransition(
                       opacity: _animationController,
-                      child: Container(
-                        padding:
+                      child: Column(
+                        children: [
+                          Container(
+                            padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Constant.moreBackgroundColor,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            NotificationSection(
-                              notificationId: 0,
-                              notificationName: 'Daily Log',
-                              localNotificationDataStream:
-                                  localNotificationDataStream,
-                              allNotificationListData: allNotificationListData,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Constant.moreBackgroundColor,
                             ),
-                            SizedBox(height: 5),
-                            NotificationSection(
-                              notificationId: 1,
-                              localNotificationDataStream:
-                                  localNotificationDataStream,
-                              allNotificationListData: allNotificationListData,
-                              notificationName: 'Medication',
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            NotificationSection(
-                              notificationId: 2,
-                              notificationName: 'Exercise',
-                              localNotificationDataStream:
-                                  localNotificationDataStream,
-                              allNotificationListData: allNotificationListData,
-                            ),
-                            Visibility(
-                              visible: isAlreadyAddedCustomNotification,
-                              child: NotificationSection(
-                                customNotification: (){
-                                  openCustomNotificationDialog(context, allNotificationListData);
-                                },
-                                  notificationId: 3,
-                                  allNotificationListData:
-                                      allNotificationListData,
-                                  notificationName: customNotificationValue,
-                                  isNotificationTimerOpen:
-                                      isAddedCustomNotification,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                NotificationSection(
+                                  notificationId: 0,
+                                  notificationName: 'Daily Log',
                                   localNotificationDataStream:
+                                  localNotificationDataStream,
+                                  allNotificationListData: allNotificationListData,
+                                ),
+                                SizedBox(height: 5),
+                                NotificationSection(
+                                  notificationId: 1,
+                                  localNotificationDataStream:
+                                  localNotificationDataStream,
+                                  allNotificationListData: allNotificationListData,
+                                  notificationName: 'Medication',
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                NotificationSection(
+                                  notificationId: 2,
+                                  notificationName: 'Exercise',
+                                  localNotificationDataStream:
+                                  localNotificationDataStream,
+                                  allNotificationListData: allNotificationListData,
+                                ),
+                                Visibility(
+                                  visible: isAlreadyAddedCustomNotification,
+                                  child: NotificationSection(
+                                      customNotification: () {
+                                        openCustomNotificationDialog(
+                                            context, allNotificationListData);
+                                      },
+                                      notificationId: 3,
+                                      allNotificationListData:
+                                      allNotificationListData,
+                                      notificationName: customNotificationValue,
+                                      isNotificationTimerOpen:
+                                      isAddedCustomNotification,
+                                      localNotificationDataStream:
                                       localNotificationDataStream),
+                                ),
+                                Visibility(
+                                  visible: !isAlreadyAddedCustomNotification,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      openCustomNotificationDialog(
+                                          context, allNotificationListData);
+                                    },
+                                    child: Container(
+                                      child: Text(
+                                        Constant.addCustomNotification,
+                                        style: TextStyle(
+                                            color: Constant
+                                                .addCustomNotificationTextColor,
+                                            fontSize: 16,
+                                            fontFamily: Constant.jostMedium),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Visibility(
-                              visible: !isAlreadyAddedCustomNotification,
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Visibility(
+                            visible: isSaveButtonVisible,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  openCustomNotificationDialog(
-                                      context, allNotificationListData);
+                                  localNotificationDataSink.add('Clicked');
+                                  //saveAllNotification();
                                 },
                                 child: Container(
-                                  child: Text(
-                                    Constant.addCustomNotification,
-                                    style: TextStyle(
-                                        color: Constant
-                                            .addCustomNotificationTextColor,
-                                        fontSize: 16,
-                                        fontFamily: Constant.jostMedium),
+                                  padding: EdgeInsets.symmetric(vertical: 13),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffafd794),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      Constant.save,
+                                      style: TextStyle(
+                                          color: Constant.bubbleChatTextView,
+                                          fontSize: 15,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: GestureDetector(
-                      onTap: () {
-                        localNotificationDataSink.add('Clicked');
-                        //saveAllNotification();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        decoration: BoxDecoration(
-                          color: Color(0xffafd794),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            Constant.save,
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontSize: 15,
-                                fontFamily: Constant.jostMedium),
                           ),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Visibility(
+                            visible: isSaveButtonVisible,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Text(
+                                Constant.weKnowItCanBeEasy,
+                                style: TextStyle(
+                                    color: Constant.locationServiceGreen,
+                                    fontSize: 14,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      Constant.weKnowItCanBeEasy,
-                      style: TextStyle(
-                          color: Constant.locationServiceGreen,
-                          fontSize: 14,
-                          fontFamily: Constant.jostMedium),
-                    ),
-                  ),
+
                   SizedBox(
                     height: 20,
                   ),
@@ -293,6 +312,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   void openCustomNotificationDialog(BuildContext context,
       List<LocalNotificationModel> allNotificationListData) {
     DateTime _selectedDateTime = DateTime.now();
+    textEditingController.text = setInitialValue();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -347,6 +367,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             onSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
                             },
+
                             controller: textEditingController,
                             onChanged: (String value) {
                               customNotificationValue = textEditingController.text;
@@ -409,18 +430,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               setState(() {
                                 isAddedCustomNotification = true;
                                 isAlreadyAddedCustomNotification = true;
-                               /* LocalNotificationModel localNotificationModel =
-                                    LocalNotificationModel();
-                                allNotificationListData.clear();
-                                localNotificationModel
-                                    .isCustomNotificationAdded = true;
-                                localNotificationModel.notificationName =
-                                    customNotificationValue;
-
-                                localNotificationModel.notificationTime =
-                                    _selectedDateTime.toIso8601String();
-                                allNotificationListData
-                                    .add(localNotificationModel);*/
+                                setNotificationName(textEditingController.text);
                               });
                               Navigator.pop(context);
                             },
@@ -481,15 +491,16 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   /// this screen.
   void getNotificationListData() async {
     var notificationListData =
-        await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
     if (notificationListData != null) {
       setState(() {
         var customNotificationData = notificationListData.firstWhere(
-            (element) => element.isCustomNotificationAdded,
+                (element) => element.isCustomNotificationAdded,
             orElse: () => null);
         if (customNotificationData != null) {
           isAlreadyAddedCustomNotification = true;
         }
+        isSaveButtonVisible = true;
         _notificationSwitchState = true;
         allNotificationListData = notificationListData;
         _animationController.forward();
@@ -497,5 +508,26 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
     }
   }
 
-
+  setNotificationName(String notificationName) {
+    LocalNotificationModel localNotificationNameModel = allNotificationListData
+        .firstWhere(
+            (element) => element.isCustomNotificationAdded ?? false,
+        orElse: () => null);
+    if (localNotificationNameModel != null) {
+      customNotificationValue =  localNotificationNameModel.notificationName;
+      localNotificationNameModel.notificationName = notificationName;
+    }else{
+      customNotificationValue = notificationName;
+    }
+  }
+/// This Method will be use for to set initial value of custom notification edit text.
+  String setInitialValue() {
+    LocalNotificationModel localNotificationNameModel = allNotificationListData
+        .firstWhere(
+            (element) => element.isCustomNotificationAdded ?? false,
+        orElse: () => null);
+    if (localNotificationNameModel != null) {
+      return localNotificationNameModel.notificationName;
+    }else return '';
+  }
 }

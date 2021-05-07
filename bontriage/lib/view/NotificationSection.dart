@@ -55,7 +55,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null && localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -72,7 +72,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null&& localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -89,7 +89,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null&& localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -106,7 +106,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null&& localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -135,7 +135,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null && localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -152,7 +152,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null&& localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -169,7 +169,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null && localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -186,7 +186,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          if(localNotificationNameModel.notificationTime != null){
+          if(localNotificationNameModel.notificationTime != null && localNotificationNameModel.notificationType != 'Off'){
             selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
           }else{
             selectedTimerValue = 'Off';
@@ -215,9 +215,8 @@ class _NotificationSectionState extends State<NotificationSection>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                localNotificationNameModel != null
-                    ? localNotificationNameModel.notificationName
-                    : widget.notificationName,
+                setNotificationName(),
+
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontSize: 14,
@@ -259,6 +258,7 @@ class _NotificationSectionState extends State<NotificationSection>
               child: NotificationTimer(
                 customNotification: widget.customNotification,
                 selectedNotification: widget.notificationId,
+                notificationName: widget.notificationName,
                 allNotificationListData: widget.allNotificationListData,
                 localNotificationDataStream: widget.localNotificationDataStream,
                 selectedTimerValue: (userSelectedTimerValue) {
@@ -277,5 +277,17 @@ class _NotificationSectionState extends State<NotificationSection>
         ),
       ],
     );
+  }
+
+  String setNotificationName() {
+    if(widget.notificationId == 3){
+      localNotificationNameModel = widget.allNotificationListData.firstWhere(
+              (element) => element.isCustomNotificationAdded ?? false,
+          orElse: () => null);
+      if (localNotificationNameModel != null) {
+        return localNotificationNameModel.notificationName ;
+      }else return widget.notificationName;
+    }else return localNotificationNameModel != null ? localNotificationNameModel.notificationName : widget.notificationName;
+
   }
 }

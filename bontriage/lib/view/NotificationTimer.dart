@@ -13,6 +13,7 @@ class NotificationTimer extends StatefulWidget {
   final Stream localNotificationDataStream;
   final List<LocalNotificationModel> allNotificationListData;
   final Function customNotification;
+  final String notificationName;
 
   NotificationTimer(
       {Key key,
@@ -20,6 +21,7 @@ class NotificationTimer extends StatefulWidget {
       this.selectedTimerValue,
       this.localNotificationDataStream,
       this.customNotification,
+        this.notificationName,
       this.allNotificationListData})
       : super(key: key);
 
@@ -173,6 +175,13 @@ class _NotificationTimerState extends State<NotificationTimer> {
                           isOffSelected = true;
                         }
                         widget.selectedTimerValue('Off');
+                        if (widget.selectedNotification == 0) {
+                          _deleteNotificationChannel(0);
+                        } else if(widget.selectedNotification == 1) {
+                          _deleteNotificationChannel(1);
+                        }else{
+                          _deleteNotificationChannel(2);
+                        }
                       });
                     },
                     child: Text(
@@ -234,8 +243,10 @@ class _NotificationTimerState extends State<NotificationTimer> {
                     } else {
                       if (widget.selectedNotification == 0) {
                         _deleteNotificationChannel(0);
-                      } else {
+                      } else if(widget.selectedNotification == 1) {
                         _deleteNotificationChannel(1);
+                      }else{
+                        _deleteNotificationChannel(2);
                       }
                     }
                   });
@@ -428,15 +439,14 @@ class _NotificationTimerState extends State<NotificationTimer> {
         widget.allNotificationListData.add(localNotificationModel);
       }
     } else {
+      var customNotificationData = widget.allNotificationListData.firstWhere(
+              (element) => element.isCustomNotificationAdded ?? false,
+          orElse: () => null);
+      if (customNotificationData != null) {
+        customNotificationValue = customNotificationData.notificationName;
+      }
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
-        var customNotificationData = widget.allNotificationListData.firstWhere(
-            (element) => element.isCustomNotificationAdded ?? false,
-            orElse: () => null);
-        if (customNotificationData != null) {
-          customNotificationValue = customNotificationData.notificationName;
-        }
-
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
             "BonTriage",
@@ -457,9 +467,6 @@ class _NotificationTimerState extends State<NotificationTimer> {
       } else {
         customNotificationLogTime = 'Off';
       }
-      var customNotificationData = widget.allNotificationListData.firstWhere(
-          (element) => element.isCustomNotificationAdded ?? false,
-          orElse: () => null);
       if (customNotificationData != null) {
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
@@ -468,7 +475,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
           customNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
         }
       }else {
-        localNotificationModel.notificationName = "Custom";
+        localNotificationModel.notificationName = widget.notificationName?? 'Custom';
         localNotificationModel.notificationType = customNotificationLogTime;
         localNotificationModel.isCustomNotificationAdded = true;
         if (customNotificationLogTime == 'Off') {
@@ -534,10 +541,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       whichButtonSelected = 'Off';
     }
     if (isDailySelected || isWeekDaysSelected) {
-      widget.selectedTimerValue(whichButtonSelected +
-          ' ' +
-          Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute));
-
+      widget.selectedTimerValue('$whichButtonSelected, ${Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute)}');
       print('Save Ho GYa');
     } else {
       widget.selectedTimerValue(whichButtonSelected);
@@ -623,7 +627,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-          (element) => element.notificationType == 'Custom',
+          (element) => element.isCustomNotificationAdded ,
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {
