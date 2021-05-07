@@ -53,11 +53,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else if (widget.notificationId == 1) {
@@ -68,11 +70,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else if (widget.notificationId == 2) {
@@ -83,11 +87,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else {
@@ -98,11 +104,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     }
@@ -125,11 +133,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else if (widget.notificationId == 1) {
@@ -140,11 +150,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else if (widget.notificationId == 2) {
@@ -155,11 +167,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType?? 'Daily' +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     } else {
@@ -170,11 +184,13 @@ class _NotificationSectionState extends State<NotificationSection>
         dateTime =
             DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
-          selectedTimerValue = localNotificationNameModel.notificationType ?? 'Daily' +','
-              ' ' +
-              Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute);
+          selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
-          selectedTimerValue = 'Off';
+          if(localNotificationNameModel.notificationTime != null){
+            selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${localNotificationNameModel.notificationTime}';
+          }else{
+            selectedTimerValue = 'Off';
+          }
         }
       }
     }

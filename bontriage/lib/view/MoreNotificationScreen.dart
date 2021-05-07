@@ -245,7 +245,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                     child: GestureDetector(
                       onTap: () {
                         localNotificationDataSink.add('Clicked');
-                        saveAllNotification();
+                        //saveAllNotification();
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 13),
@@ -497,11 +497,5 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
     }
   }
 
-  /// This Method will be use for save the all Notification Data for the any alarm set by User.
-  void saveAllNotification() {
-    Future.delayed(Duration(milliseconds: 300), () {
-      SignUpOnBoardProviders.db
-          .insertUserNotifications(allNotificationListData);
-    });
-  }
+
 }

@@ -210,6 +210,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
                 onDateTimeChanged: (dateTime) {
                   _selectedHour = dateTime.hour;
                   _selectedMinute = dateTime.minute;
+                  _dateTime = dateTime;
                   print(_selectedHour);
                   print(_selectedMinute);
                 },
@@ -323,9 +324,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
           dailyLogNotificationData.notificationTime = "";
         } else {
           print("scheduled notification at $_dateTime");
-          dailyLogNotificationData.notificationTime =
-              "2021-05-05 16:11:00"; //_dateTime.toIso8601String();
-        }
+          dailyLogNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
+         }
       } else {
         localNotificationModel.notificationName = 'DailyLog';
         localNotificationModel.notificationType = dailyNotificationLogTime;
@@ -369,8 +369,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
         } else {
-          medicationNotificationData.notificationTime =
-              _dateTime.toIso8601String();
+          medicationNotificationData.notificationTime = Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
         }
       } else {
         localNotificationModel.notificationName = 'Medication';
@@ -415,8 +414,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
         } else {
-          exerciseNotificationData.notificationTime =
-              _dateTime.toIso8601String();
+          exerciseNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
+
         }
       } else {
         localNotificationModel.notificationName = 'Exercise';
@@ -466,10 +465,21 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
         } else {
-          customNotificationData.notificationTime = _dateTime.toIso8601String();
+          customNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
         }
+      }else {
+        localNotificationModel.notificationName = "Custom";
+        localNotificationModel.notificationType = exerciseNotificationLogTime;
+        if (exerciseNotificationLogTime == 'Off') {
+          localNotificationModel.notificationTime = "";
+        } else {
+          localNotificationModel.notificationTime = _dateTime.toIso8601String();
+        }
+        widget.allNotificationListData.add(localNotificationModel);
       }
     }
+
+
   }
 
   Future onDidReceiveLocalNotification(
@@ -532,6 +542,17 @@ class _NotificationTimerState extends State<NotificationTimer> {
       widget.selectedTimerValue(whichButtonSelected);
     }
     await notificationSelected("");
+
+    saveAllNotification();
+
+  }
+
+  /// This Method will be use for save the all Notification Data for the any alarm set by User.
+  void saveAllNotification() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      SignUpOnBoardProviders.db
+          .insertUserNotifications(widget.allNotificationListData);
+    });
   }
 
   /// This Method will be use for to set all UI related data whatever user has saved last time on the current screen.
