@@ -694,7 +694,7 @@ class _SignUpSecondStepCompassResultState
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
-          text: 'Cluster Headache.',
+          text: 'Cluster Headache. ',
           style: TextStyle(
               height: 1.3,
               fontSize: 13,
@@ -795,7 +795,7 @@ class _SignUpSecondStepCompassResultState
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     userHeadacheName = sharedPreferences.get(Constant.userHeadacheName);
     userHeadacheTextView =
-        'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app';
+        'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app';
   }
 
   void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {

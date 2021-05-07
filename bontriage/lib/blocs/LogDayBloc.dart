@@ -499,7 +499,7 @@ class LogDayBloc {
                   } else {
                     if(medicationSelectedDataModel.selectedMedicationIndex == null)
                       medicationSelectedDataModel.selectedMedicationIndex = [];
-                    medicationSelectedDataModel.selectedMedicationIndex.add(Values(valueNumber: (questions.values.length + 1).toString(), isNewlyAdded: true, isSelected: true, isDoubleTapped: false));
+                    medicationSelectedDataModel.selectedMedicationIndex.add(Values(valueNumber: (questions.values.length + 1).toString(), text: medicationMobileEventDetailsElement.value, isNewlyAdded: true, isSelected: true, isDoubleTapped: false));
                   }
                 }
               } else if (medicationMobileEventDetailsElement.questionTag == Constant.administeredTag) {

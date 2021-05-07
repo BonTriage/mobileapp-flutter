@@ -429,10 +429,10 @@ class Constant {
   static String profileCompleteThatNow = 'That\'s it for now! Thanks for using';
 
   static String profileCompleteCommentsSignedInfo =
-      'We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+      'We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan (MD), Alan Rapoport\n(MD) and the team at BonTriage';
 
   static String profileCompleteTextView =
-      'That\'s it for now! Thanks for using We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan, MD, Alan Rapoport,\nMD and the team at BonTriage';
+      'That\'s it for now! Thanks for using Migraine Mentor! We welcome (and actually read) all feedback you may have to improve this experience and help other headache-sufferers. Please send comments to info@bontriage.com. Here’s to good headache control.\n\nSigned,\nRobert Cowan (MD), Alan Rapoport\n(MD) and the team at BonTriage';
 
   static String thankYouProfile = ' Thank you!\nYour profile is complete.';
   static String daily = ' Daily';

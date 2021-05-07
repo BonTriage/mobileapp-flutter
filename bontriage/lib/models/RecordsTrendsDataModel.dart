@@ -159,15 +159,25 @@ class MedicationDatum {
     this.medication,
   });
 
-  String medication;
+  List<String> medication;
 
   factory MedicationDatum.fromJson(Map<String, dynamic> json) => MedicationDatum(
-    medication: json["medication"],
+    medication: _getMedicationList(json['medication']),
   );
 
   Map<String, dynamic> toJson() => {
-    "medication": medication,
+    "medication": List<dynamic>.from(medication.map((x) => x)),
   };
+
+  static List<String> _getMedicationList(dynamic data) {
+    List<String> medicationValueList = [];
+    if(data is String) {
+      medicationValueList.add(data);
+    } else {
+      medicationValueList = List<String>.from(data.map((x) => x));
+    }
+    return medicationValueList;
+  }
 }
 
 class Trigger {

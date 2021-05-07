@@ -1137,6 +1137,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         }
 
         String triggerName = widget.valuesList[whichTriggerItemSelected].text;
+
         bool isSelected =
             widget.valuesList[whichTriggerItemSelected].isSelected;
         Questions questions = widget.triggerExpandableWidgetList.firstWhere(
@@ -1720,8 +1721,18 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
         _medicationSelectedDataModel.selectedMedicationIndex.forEach((element) {
           Values medValue = widget.valuesList.firstWhere((element1) => element.text == element1.text, orElse: () => null);
-          int indexOfMedication = widget.valuesList.indexOf(medValue);
-          selectedMedicationIndexList.add(indexOfMedication);
+          if(medValue != null) {
+            int indexOfMedication = widget.valuesList.indexOf(medValue);
+            selectedMedicationIndexList.add(indexOfMedication);
+          } else {
+            print('in here???${widget.valuesList.length}');
+            widget.valuesList.add(Values(text: element.text, isNewlyAdded: true, valueNumber: (widget.valuesList.length + 1).toString(), isSelected: true, isDoubleTapped: element.isDoubleTapped ?? false));
+            print('in here???${widget.valuesList.length}');
+            selectedMedicationIndexList.add(widget.valuesList.length - 1);
+            _numberOfDosageAddedList.add(0);
+            _additionalMedicationDosage.add([]);
+            _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+          }
         });
 
         whichMedicationItemSelected = selectedMedicationIndexList;

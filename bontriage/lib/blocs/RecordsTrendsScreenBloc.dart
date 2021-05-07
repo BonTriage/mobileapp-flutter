@@ -74,8 +74,7 @@ class RecordsTrendsScreenBloc {
           }
           print(headacheListModelData);
         } else {
-          recordsTrendsDataSink
-              .addError(Exception(Constant.somethingWentWrong));
+          recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
           networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
@@ -126,8 +125,7 @@ class RecordsTrendsScreenBloc {
           recordsTrendsDataSink.add(_recordsTrendsDataModel);
           networkDataSink.add(Constant.success);
         } else {
-          recordsTrendsDataSink
-              .addError(Exception(Constant.somethingWentWrong));
+          recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
@@ -176,8 +174,7 @@ class RecordsTrendsScreenBloc {
           recordsTrendsDataSink.add(_recordsTrendsDataModel);
           networkDataSink.add(Constant.success);
         } else {
-          recordsTrendsDataSink
-              .addError(Exception(Constant.somethingWentWrong));
+          recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
