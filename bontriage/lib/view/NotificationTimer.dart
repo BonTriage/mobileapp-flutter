@@ -469,8 +469,9 @@ class _NotificationTimerState extends State<NotificationTimer> {
         }
       }else {
         localNotificationModel.notificationName = "Custom";
-        localNotificationModel.notificationType = exerciseNotificationLogTime;
-        if (exerciseNotificationLogTime == 'Off') {
+        localNotificationModel.notificationType = customNotificationLogTime;
+        localNotificationModel.isCustomNotificationAdded = true;
+        if (customNotificationLogTime == 'Off') {
           localNotificationModel.notificationTime = "";
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();

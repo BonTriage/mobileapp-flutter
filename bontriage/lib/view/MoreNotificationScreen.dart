@@ -409,7 +409,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               setState(() {
                                 isAddedCustomNotification = true;
                                 isAlreadyAddedCustomNotification = true;
-                                LocalNotificationModel localNotificationModel =
+                               /* LocalNotificationModel localNotificationModel =
                                     LocalNotificationModel();
                                 allNotificationListData.clear();
                                 localNotificationModel
@@ -420,7 +420,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                 localNotificationModel.notificationTime =
                                     _selectedDateTime.toIso8601String();
                                 allNotificationListData
-                                    .add(localNotificationModel);
+                                    .add(localNotificationModel);*/
                               });
                               Navigator.pop(context);
                             },
