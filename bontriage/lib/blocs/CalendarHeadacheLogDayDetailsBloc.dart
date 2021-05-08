@@ -286,8 +286,14 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     if (medicationDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
-                      medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(
-                          medicationDateTime.hour, medicationDateTime.minute)}';
+                      if(medicationElement.isNotEmpty)
+                        medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                      else {
+                        if(medicationDosage.isNotEmpty)
+                          medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                        else
+                          medicationDosage = '${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                      }
                     } else {
                       medicationDosage = '$medicationElement';
                     }
@@ -303,10 +309,14 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     if (medDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
-                      medicationDosage =
-                      '$medicationDosage, $medicationElement at ${Utils
-                          .getTimeInAmPmFormat(
-                          medDateTime.hour, medDateTime.minute)}';
+                      if(medicationElement.isNotEmpty)
+                        medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                      else {
+                        if(medicationDosage.isNotEmpty)
+                          medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                        else
+                          medicationDosage = '${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                      }
                     } else {
                       medicationDosage =
                       '$medicationDosage, $medicationElement';
@@ -329,7 +339,7 @@ class CalendarHeadacheLogDayDetailsBloc {
     });
 
     if(response.medication != null) {
-      if(response.medication.isNotEmpty) {
+      if(response.medication.isNotEmpty && logDayMedicationWidgetData.logDayListData.titleInfo.isNotEmpty) {
         userHeadacheLogDayDetailsModel.headacheLogDayListData
             .add(logDayMedicationWidgetData);
         userHeadacheLogDayDetailsModel.isDayLogged = true;
@@ -404,8 +414,12 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   String _getMedicationDosageUnit(String medicationDosage) {
-    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml')))
-      return '$medicationDosage mg';
+    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml'))) {
+      if(medicationDosage.isNotEmpty)
+        return '$medicationDosage mg';
+      else
+        return Constant.blankString;
+    }
     else
       return medicationDosage;
   }
