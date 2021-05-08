@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Constant {
   static const String splashRouter = 'splash';
@@ -804,4 +805,6 @@ class Constant {
       'https://www.bontriage.com/privacy.html';
 
   static const String notAllowed = 'Not Allowed';
+
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 }

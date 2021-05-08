@@ -33,7 +33,6 @@ class _NotificationTimerState extends State<NotificationTimer> {
   bool isDailySelected = false;
   bool isWeekDaysSelected = false;
   bool isOffSelected = false;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   DateTime _dateTime;
   int _selectedHour = 0;
   int _selectedMinute = 0;
@@ -297,7 +296,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    Constant.flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: notificationSelected);
