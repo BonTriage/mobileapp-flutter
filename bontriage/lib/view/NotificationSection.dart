@@ -194,6 +194,8 @@ class _NotificationSectionState extends State<NotificationSection>
         }
       }
     }
+
+    setState(() {});
   }
 
   @override

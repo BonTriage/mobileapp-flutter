@@ -393,6 +393,11 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_LOG_DAY);
   }
 
+  Future<void> deleteAllNotificationFromDatabase() async {
+    final db = await database;
+    await db.delete(USER_NOTIFICATION);
+  }
+
   Future<void> deleteAllTableData() async {
     final db = await database;
     await db.delete(TABLE_QUESTIONNAIRES);

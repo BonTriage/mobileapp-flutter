@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreSettingScreen extends StatefulWidget {
-  final Function(BuildContext, String, dynamic) onPush;
+  final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
 
   const MoreSettingScreen({Key key, this.onPush})
       : super(key: key);
@@ -12,6 +13,16 @@ class MoreSettingScreen extends StatefulWidget {
 }
 
 class _MoreSettingScreenState extends State<MoreSettingScreen> {
+
+  String _notificationStatus = Constant.notAllowed;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checkNotificationStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,40 +89,10 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                           MoreSection(
                             currentTag: Constant.notifications,
                             text: Constant.notifications,
-                            moreStatus: Constant.allowed,
+                            moreStatus: _notificationStatus,
                             isShowDivider: false,
                             navigateToOtherScreenCallback: _navigateToOtherScreen,
                           ),
-                          /*MoreSection(
-                            currentTag: Constant.locationServices,
-                            text: Constant.locationServices,
-                            moreStatus: Constant.allowed,
-                            isShowDivider: false,
-                            navigateToOtherScreenCallback: _navigateToOtherScreen,
-                          ),*/
-                          /*MoreSection(
-                            text: Constant.appleWatch,
-                            moreStatus: Constant.notSetUp,
-                            isShowDivider: true,
-                          ),
-                          MoreSection(
-                            text: Constant.appleHealth,
-                            moreStatus: Constant.connected,
-                            isShowDivider: true,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-
-                            },
-                            child: Text(
-                              Constant.reset,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: Constant.jostRegular,
-                                color: Constant.addCustomNotificationTextColor
-                              ),
-                            ),
-                          ),*/
                         ],
                       ),
                     ),
@@ -124,8 +105,22 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
       );
   }
 
-  void _navigateToOtherScreen(String routeName, dynamic arguments) {
-    widget.onPush(
-        context, routeName, arguments);
+  void _navigateToOtherScreen(String routeName, dynamic arguments) async {
+    await widget.onPush(context, routeName, arguments);
+    _checkNotificationStatus();
+  }
+
+  void _checkNotificationStatus() async {
+    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+
+    if(notificationListData == null || notificationListData.isEmpty) {
+      setState(() {
+        _notificationStatus = Constant.notAllowed;
+      });
+    } else {
+      setState(() {
+        _notificationStatus = Constant.allowed;
+      });
+    }
   }
 }

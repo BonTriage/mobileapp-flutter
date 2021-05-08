@@ -53,7 +53,6 @@ import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
-import 'package:mobile/view/sign_up_screen.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
@@ -127,10 +126,6 @@ class MyApp extends StatelessWidget {
           case Constant.loginRouter:
             {
               return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
-            }
-          case Constant.signUpRouter:
-            {
-              return SlideFromBottomPageRoute(widget: SignUpScreen(), routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardSplashRouter:
             {

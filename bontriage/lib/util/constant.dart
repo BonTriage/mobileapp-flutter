@@ -802,4 +802,6 @@ class Constant {
       'https://www.bontriage.com/terms-of-service.html';
   static const String privacyPolicyUrl =
       'https://www.bontriage.com/privacy.html';
+
+  static const String notAllowed = 'Not Allowed';
 }

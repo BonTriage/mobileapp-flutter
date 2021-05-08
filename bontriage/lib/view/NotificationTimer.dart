@@ -60,10 +60,19 @@ class _NotificationTimerState extends State<NotificationTimer> {
     _selectedHour = _dateTime.hour;
     _selectedMinute = _dateTime.minute;
     widget.localNotificationDataStream.listen((event) {
-      setAllNotifications();
+      if(event == 'Clicked')
+        setAllNotifications();
+      else if(event == 'CancelAll') {
+        flutterLocalNotificationsPlugin?.cancelAll();
+      }
     });
     setInItNotificationData();
     inItNotification();
+  }
+
+  @override
+  void didUpdateWidget(covariant NotificationTimer oldWidget) {
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -103,7 +112,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
                           });
                         },
                         child: Text(
-                          'daily',
+                          'Daily',
                           style: TextStyle(
                               color: Constant.chatBubbleGreen,
                               fontSize: 12,
@@ -185,7 +194,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
                       });
                     },
                     child: Text(
-                      'off',
+                      'Off',
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
                           fontSize: 12,
@@ -514,21 +523,6 @@ class _NotificationTimerState extends State<NotificationTimer> {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.deleteNotificationChannel(channelId.toString());
-
-    /*await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        content: const Text('Deleted'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );*/
   }
 
   /// This Method will be use for to set Daily, Weekly Notifications on respective Notifications Section.
@@ -549,7 +543,6 @@ class _NotificationTimerState extends State<NotificationTimer> {
     await notificationSelected("");
 
     saveAllNotification();
-
   }
 
   /// This Method will be use for save the all Notification Data for the any alarm set by User.
