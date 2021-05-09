@@ -334,10 +334,10 @@ class _NotificationTimerState extends State<NotificationTimer> {
         dailyNotificationLogTime = 'Off';
       }
       var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
-          (element) => element.notificationName == 'DailyLog',
+          (element) => element.notificationName == 'Daily Log',
           orElse: () => null);
       if (dailyLogNotificationData != null) {
-        dailyLogNotificationData.notificationName = 'DailyLog';
+        dailyLogNotificationData.notificationName = 'Daily Log';
         dailyLogNotificationData.notificationType = dailyNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
@@ -346,7 +346,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
           dailyLogNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
          }
       } else {
-        localNotificationModel.notificationName = 'DailyLog';
+        localNotificationModel.notificationName = 'Daily Log';
         localNotificationModel.notificationType = dailyNotificationLogTime;
         if (dailyNotificationLogTime == 'Off') {
           localNotificationModel.notificationTime = "";
@@ -556,7 +556,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
   void setInItNotificationData() {
     if (widget.selectedNotification == 0) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-          (element) => element.notificationName == 'DailyLog',
+          (element) => element.notificationName == 'Daily Log',
           orElse: () => null);
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationTime != null) {

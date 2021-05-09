@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
 import 'NotificationSection.dart';
@@ -152,6 +153,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                   localNotificationDataSink.add('CancelAll');
                                   SignUpOnBoardProviders.db.deleteAllNotificationFromDatabase();
                                   allNotificationListData = [];
+                                  isAlreadyAddedCustomNotification = false;
+                                  textEditingController.text = '';
                                   _animationController.reverse();
                                    isSaveButtonVisible = false;
                                 }
@@ -227,7 +230,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                       localNotificationDataStream),
                                 ),
                                 Visibility(
-                                  visible: !isAlreadyAddedCustomNotification,
+                                  visible: !isAlreadyAddedCustomNotification ,
                                   child: GestureDetector(
                                     onTap: () {
                                       openCustomNotificationDialog(
@@ -258,6 +261,9 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               child: GestureDetector(
                                 onTap: () {
                                   localNotificationDataSink.add('Clicked');
+                                  final snackBar = SnackBar(content: Text('Your notification has been saved successfully.'));
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                 // Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
                                   //saveAllNotification();
                                 },
                                 child: Container(
@@ -325,129 +331,142 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
           backgroundColor: Colors.transparent,
           content: WillPopScope(
             onWillPop: () async => false,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Constant.backgroundTransparentColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundTransparentColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isAddedCustomNotification = true;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: Image(
+                                  image: AssetImage(Constant.closeIcon),
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10, right: 10),
+                          child: TextField(
+                            maxLength: 20,
+                            onEditingComplete: () {},
+                            onSubmitted: (String value) {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
+                            controller: textEditingController,
+                            onChanged: (String value) {
+                              customNotificationValue = textEditingController.text;
+                              //print(value);
+                            },
+                            style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 15,
+                                fontFamily: Constant.jostMedium),
+                            cursorColor: Constant.chatBubbleGreen,
+                            decoration: InputDecoration(
+                              hintText: 'Tap to Title notification',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(50, 175, 215, 148),
+                                  fontSize: 15,
+                                  fontFamily: Constant.jostMedium),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Constant.chatBubbleGreen)),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Constant.chatBubbleGreen)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 80),
+                          child: GestureDetector(
                             onTap: () {
                               setState(() {
                                 isAddedCustomNotification = true;
+                                if(textEditingController.text == ''){
+                                  isAlreadyAddedCustomNotification = false;
+                                }else {
+                                  isAlreadyAddedCustomNotification = true;
+                                }
+                                setNotificationName(textEditingController.text);
                               });
                               Navigator.pop(context);
                             },
-                            child: Image(
-                              image: AssetImage(Constant.closeIcon),
-                              width: 20,
-                              height: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
-                      child: TextField(
-                        onEditingComplete: () {},
-                        onSubmitted: (String value) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        controller: textEditingController,
-                        onChanged: (String value) {
-                          customNotificationValue = textEditingController.text;
-                          //print(value);
-                        },
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 15,
-                            fontFamily: Constant.jostMedium),
-                        cursorColor: Constant.chatBubbleGreen,
-                        decoration: InputDecoration(
-                          hintText: 'Tap to Title notification',
-                          hintStyle: TextStyle(
-                              color: Color.fromARGB(50, 175, 215, 148),
-                              fontSize: 15,
-                              fontFamily: Constant.jostMedium),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Constant.chatBubbleGreen)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Constant.chatBubbleGreen)),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 80),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isAddedCustomNotification = true;
-                            isAlreadyAddedCustomNotification = true;
-                            setNotificationName(textEditingController.text);
-                          });
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Color(0xffafd794),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Center(
-                            child: Text(
-                              Constant.save,
-                              style: TextStyle(
-                                  color: Constant.bubbleChatTextView,
-                                  fontSize: 15,
-                                  fontFamily: Constant.jostMedium),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Color(0xffafd794),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  Constant.save,
+                                  style: TextStyle(
+                                      color: Constant.bubbleChatTextView,
+                                      fontSize: 15,
+                                      fontFamily: Constant.jostMedium),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 80),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(
-                            child: Text(
-                              'Delete',
-                              style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontSize: 15,
-                                  fontFamily: Constant.jostMedium),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Visibility(
+                          visible: false,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 80),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                child: Center(
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostMedium),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         );
@@ -497,6 +516,6 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
         orElse: () => null);
     if (localNotificationNameModel != null) {
       return localNotificationNameModel.notificationName;
-    }else return '';
+    }else return textEditingController.text ?? '';
   }
 }

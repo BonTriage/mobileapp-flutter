@@ -47,7 +47,7 @@ class _NotificationSectionState extends State<NotificationSection>
     DateTime dateTime;
     if (widget.notificationId == 0) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-          (element) => element.notificationName == 'DailyLog',
+          (element) => element.notificationName == 'Daily Log',
           orElse: () => null);
       if (localNotificationNameModel != null) {
         dateTime =
@@ -127,7 +127,7 @@ class _NotificationSectionState extends State<NotificationSection>
     DateTime dateTime;
     if (widget.notificationId == 0) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'DailyLog',
+              (element) => element.notificationName == 'Daily Log',
           orElse: () => null);
       if (localNotificationNameModel != null) {
         dateTime =
