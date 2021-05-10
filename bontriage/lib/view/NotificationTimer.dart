@@ -39,13 +39,13 @@ class _NotificationTimerState extends State<NotificationTimer> {
 
   String whichButtonSelected;
 
-  String dailyNotificationLogTime = "";
+  String dailyNotificationLogTime = "Off";
 
-  String medicationNotificationLogTime = "";
+  String medicationNotificationLogTime = "Off";
 
-  String exerciseNotificationLogTime = "";
+  String exerciseNotificationLogTime = "Off";
 
-  String customNotificationLogTime = "";
+  String customNotificationLogTime = "Off";
   LocalNotificationModel localNotificationModel = LocalNotificationModel();
 
   LocalNotificationModel localNotificationNameModel;
@@ -306,7 +306,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
   Future<void> notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Reminder to log your day',
-        importance: Importance.max);
+        importance: Importance.max/*, icon: 'ic_launcher', color: Colors.blue*/);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
         NotificationDetails(android: androidDetails, iOS: iosDetails);

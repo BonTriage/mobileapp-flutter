@@ -360,7 +360,7 @@ class _MeScreenState extends State<MeScreen>
                       child: Column(
                         children: [
                           Text(
-                            'Hey ''$userName''!',
+                            'Hey $userName!',
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

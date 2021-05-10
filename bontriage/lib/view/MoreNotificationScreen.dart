@@ -525,17 +525,17 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   }
 
   void requestPermissionForNotification() async{
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
    if(Platform.isIOS){
-     var permissionResult  = await firebaseMessaging.requestPermission( alert: true,
-       announcement: false,
+     var permissionResult  = await Constant.flutterLocalNotificationsPlugin
+         .resolvePlatformSpecificImplementation<
+         IOSFlutterLocalNotificationsPlugin>()
+         ?.requestPermissions(
+       alert: true,
        badge: true,
-       carPlay: false,
-       criticalAlert: false,
-       provisional: false,
        sound: true,
      );
-     if(permissionResult.authorizationStatus == AuthorizationStatus.authorized){
+
+     if(permissionResult){
        localNotificationDataSink.add('Clicked');
        final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
@@ -546,7 +546,14 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
      }else{
        Utils.showValidationErrorDialog(context, 'Please allow the notifications permission from settings.');
      }
-     print(permissionResult.authorizationStatus == AuthorizationStatus.authorized);
+   } else {
+     localNotificationDataSink.add('Clicked');
+     final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+         height: 1.3,
+         fontSize: 16,
+         fontFamily: Constant.jostRegular,
+         color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
+     ScaffoldMessenger.of(context).showSnackBar(snackBar);
    }
 
   }

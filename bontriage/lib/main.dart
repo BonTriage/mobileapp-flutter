@@ -60,7 +60,7 @@ import 'view/SignUpOnBoardSplash.dart';
 import 'view/Splash.dart';
 import 'view/sign_up_on_board_screen.dart';
 
-void main() {
+void main() async {
   Paint.enableDithering = true;
 
   ///Uncomment the below code when providing the build to tester for automation.
