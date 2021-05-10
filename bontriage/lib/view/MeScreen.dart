@@ -360,12 +360,22 @@ class _MeScreenState extends State<MeScreen>
                       child: Column(
                         children: [
                           Text(
-                            'Hey ''$userName''!''\nWhat’s been\ngoing on today?',
+                            'Hey ''$userName''!',
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.chatBubbleGreen),
+                          ),
+                          Text(
+                              '\nWhat’s been\ngoing on today?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: Constant.jostMedium,
+                                  color: Constant.chatBubbleGreen)
                           ),
                           SizedBox(
                             height: 15,

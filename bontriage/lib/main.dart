@@ -19,6 +19,7 @@ import 'package:mobile/view/HomeScreen.dart';
 import 'package:mobile/view/LogDayNoHeadacheScreen.dart';
 import 'package:mobile/view/LogDayScreen.dart';
 import 'package:mobile/view/LogDaySuccessScreen.dart';
+import 'package:mobile/view/MoreNotificationScreen.dart';
 import 'package:mobile/view/NotificationScreen.dart';
 import 'package:mobile/view/NotificationTimer.dart';
 import 'package:mobile/view/OnBoardCreateAccountScreen.dart';
@@ -52,7 +53,6 @@ import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
-import 'package:mobile/view/sign_up_screen.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: Splash(),
+      home: Scaffold(body : Splash()),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {
@@ -126,10 +126,6 @@ class MyApp extends StatelessWidget {
           case Constant.loginRouter:
             {
               return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
-            }
-          case Constant.signUpRouter:
-            {
-              return SlideFromBottomPageRoute(widget: SignUpScreen(), routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardSplashRouter:
             {

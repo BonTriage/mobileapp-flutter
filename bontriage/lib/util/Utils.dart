@@ -562,7 +562,7 @@ class Utils {
   }
 
   ///This method is used to show validation error message to the user
-  static void showValidationErrorDialog(BuildContext context, String errorMessage) {
+  static void showValidationErrorDialog(BuildContext context, String errorMessage, [String errorTitle]) {
     showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -570,7 +570,7 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ValidationErrorDialog(errorMessage: errorMessage,),
+          content: ValidationErrorDialog(errorMessage: errorMessage, errorTitle: errorTitle,),
         );
       },
     );
