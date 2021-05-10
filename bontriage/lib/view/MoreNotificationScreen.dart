@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-
+import 'package:mobile/view/LocalNotifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:app_settings/app_settings.dart';
+import 'dart:io' show Platform;
 import 'NotificationSection.dart';
 
 class MoreNotificationScreen extends StatefulWidget {
@@ -145,10 +151,11 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             onChanged: (bool state) {
                               setState(() {
                                 _notificationSwitchState = state;
-
                                 if (state) {
                                   _animationController.forward();
                                   isSaveButtonVisible = true;
+
+                               //   AppSettings.openNotificationSettings();
                                 } else {
                                   localNotificationDataSink.add('CancelAll');
                                   SignUpOnBoardProviders.db.deleteAllNotificationFromDatabase();
@@ -260,9 +267,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  localNotificationDataSink.add('Clicked');
-                                  final snackBar = SnackBar(content: Text('Your notification has been saved successfully.'));
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  requestPermissionForNotification();
+
                                  // Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
                                   //saveAllNotification();
                                 },
@@ -368,8 +374,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
                           child: TextField(
-                            maxLength: 20,
-                            onEditingComplete: () {},
+                            inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
                             onSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
                             },
@@ -517,5 +522,32 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
     if (localNotificationNameModel != null) {
       return localNotificationNameModel.notificationName;
     }else return textEditingController.text ?? '';
+  }
+
+  void requestPermissionForNotification() async{
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+   if(Platform.isIOS){
+     var permissionResult  = await firebaseMessaging.requestPermission( alert: true,
+       announcement: false,
+       badge: true,
+       carPlay: false,
+       criticalAlert: false,
+       provisional: false,
+       sound: true,
+     );
+     if(permissionResult.authorizationStatus == AuthorizationStatus.authorized){
+       localNotificationDataSink.add('Clicked');
+       final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+           height: 1.3,
+           fontSize: 16,
+           fontFamily: Constant.jostRegular,
+           color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
+       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+     }else{
+       Utils.showValidationErrorDialog(context, 'Please allow the notifications permission from settings.');
+     }
+     print(permissionResult.authorizationStatus == AuthorizationStatus.authorized);
+   }
+
   }
 }

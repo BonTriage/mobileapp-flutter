@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
@@ -315,6 +316,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
                           child: TextField(
+                            inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
                             onEditingComplete: () {},
                             onSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
