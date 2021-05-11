@@ -806,5 +806,5 @@ class Constant {
 
   static const String notAllowed = 'Not Allowed';
 
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 }

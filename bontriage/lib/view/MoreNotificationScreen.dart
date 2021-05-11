@@ -535,7 +535,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
        sound: true,
      );
 
-     if(permissionResult){
+     if(permissionResult ?? false) {
        localNotificationDataSink.add('Clicked');
        final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
