@@ -5,7 +5,8 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'LocalNotifications.dart';
+
+import '../main.dart';
 
 class NotificationTimer extends StatefulWidget {
   final int selectedNotification;
@@ -62,11 +63,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
       if(event == 'Clicked')
         setAllNotifications();
       else if(event == 'CancelAll') {
-        Constant.flutterLocalNotificationsPlugin?.cancelAll();
+        flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
     setInItNotificationData();
-    inItNotification();
+    //inItNotification();
   }
 
   @override
@@ -275,7 +276,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     );
   }
 
-  /// This Method will be use for initialize all android and IOs Plugin and other required variables.
+  /*/// This Method will be use for initialize all android and IOs Plugin and other required variables.
   void inItNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
@@ -296,10 +297,10 @@ class _NotificationTimerState extends State<NotificationTimer> {
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
-    await Constant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    Constant.flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: notificationSelected);
-  }
+  }*/
 
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> notificationSelected(String payload) async {
@@ -312,7 +313,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     if (widget.selectedNotification == 0) {
       if (isDailySelected) {
         dailyNotificationLogTime = 'Daily';
-        await Constant.flutterLocalNotificationsPlugin.showDailyAtTime(
+        await flutterLocalNotificationsPlugin.showDailyAtTime(
             0,
             "BonTriage",
             "Reminder to log your day",
@@ -322,7 +323,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         dailyNotificationLogTime = 'WeekDay';
         int weekDay = _dateTime.weekday + 1;
         weekDay = weekDay % 7;
-        await Constant.flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             1,
             'BonTriage',
             'Reminder to log your day',
@@ -357,7 +358,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     } else if (widget.selectedNotification == 1) {
       if (isDailySelected) {
         medicationNotificationLogTime = 'Daily';
-        await Constant.flutterLocalNotificationsPlugin.showDailyAtTime(
+        await flutterLocalNotificationsPlugin.showDailyAtTime(
             2,
             "BonTriage",
             "Reminder to log your today's medications.",
@@ -367,7 +368,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         medicationNotificationLogTime = 'WeekDay';
         int weekDay = _dateTime.weekday + 1;
         weekDay = weekDay % 7;
-        await Constant.flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             3,
             'BonTriage',
             "Reminder to log your today's medications.",
@@ -402,7 +403,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     } else if (widget.selectedNotification == 2) {
       if (isDailySelected) {
         exerciseNotificationLogTime = 'Daily';
-        await Constant.flutterLocalNotificationsPlugin.showDailyAtTime(
+        await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
             "BonTriage",
             "Reminder to log your today's exercise.",
@@ -412,7 +413,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         exerciseNotificationLogTime = 'WeekDay';
         int weekDay = _dateTime.weekday + 1;
         weekDay = weekDay % 7;
-        await Constant.flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             5,
             'BonTriage',
             "Reminder to log your today's exercise.",
@@ -454,7 +455,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       }
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
-        await Constant.flutterLocalNotificationsPlugin.showDailyAtTime(
+        await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
             "BonTriage",
             customNotificationValue,
@@ -464,7 +465,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         customNotificationLogTime = 'WeekDay';
         int weekDay = _dateTime.weekday + 1;
         weekDay = weekDay % 7;
-        await Constant.flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             5,
             'BonTriage',
             customNotificationValue,
@@ -507,7 +508,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
-    await Constant.flutterLocalNotificationsPlugin.showDailyAtTime(
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
         2,
         "BonTriage",
         "Medication le le na",
@@ -517,7 +518,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
 
   /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
-    await Constant.flutterLocalNotificationsPlugin
+    await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.deleteNotificationChannel(channelId.toString());

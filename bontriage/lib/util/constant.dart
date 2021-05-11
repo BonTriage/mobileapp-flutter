@@ -805,6 +805,4 @@ class Constant {
       'https://www.bontriage.com/privacy.html';
 
   static const String notAllowed = 'Not Allowed';
-
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 }

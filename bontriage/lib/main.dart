@@ -53,19 +53,82 @@ import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
 import 'view/SignUpOnBoardSplash.dart';
 import 'view/Splash.dart';
 import 'view/sign_up_on_board_screen.dart';
+import 'package:rxdart/subjects.dart';
 
-void main() async {
+/// Streams are created so that app can respond to notification-related events
+/// since the plugin is initialised in the `main` function
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+BehaviorSubject<String>();
+
+const MethodChannel platform =
+MethodChannel('dexterx.dev/flutter_local_notifications_example');
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+class ReceivedNotification {
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
+
+
+  void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initNotification();
   Paint.enableDithering = true;
 
   ///Uncomment the below code when providing the build to tester for automation.
   //enableFlutterDriverExtension();
   runApp(MyApp());
+}
+
+/// This Method will be use for initialize all android and IOs Plugin and other required variables.
+Future<void> initNotification() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('app_icon');
+  final IOSInitializationSettings initializationSettingsIOS =
+  IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      onDidReceiveLocalNotification:
+          (int id, String title, String body, String payload) async {
+        didReceiveLocalNotificationSubject.add(ReceivedNotification(
+            id: 1,
+            title: 'BonTriage',
+            body: 'Log Kar diya',
+            payload: 'Reminder to log your day'));
+      });
+  final InitializationSettings initializationSettings =
+  InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+        if (payload != null) {
+          print('notification payload: ' + payload);
+        }
+      });
 }
 
 Map<int, Color> color =
