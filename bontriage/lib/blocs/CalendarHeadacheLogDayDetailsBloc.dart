@@ -287,7 +287,10 @@ class CalendarHeadacheLogDayDetailsBloc {
                     if (medicationDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
                       if(medicationElement.isNotEmpty)
-                        medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                        if(medicationDosage.isEmpty)
+                          medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                        else
+                          medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
                       else {
                         if(medicationDosage.isNotEmpty)
                           medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
@@ -310,7 +313,10 @@ class CalendarHeadacheLogDayDetailsBloc {
                     if (medDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
                       if(medicationElement.isNotEmpty)
-                        medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                        if(medicationDosage.isEmpty)
+                          medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                        else
+                          medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
                       else {
                         if(medicationDosage.isNotEmpty)
                           medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
