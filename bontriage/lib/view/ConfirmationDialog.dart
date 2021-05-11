@@ -5,8 +5,10 @@ import 'package:mobile/util/constant.dart';
 class ConfirmationDialog extends StatefulWidget {
   final String dialogContent;
   final String dialogTitle;
+  final String negativeOption;
+  final String positiveOption;
 
-  const ConfirmationDialog({Key key, @required this.dialogContent, this.dialogTitle}) : super(key: key);
+  const ConfirmationDialog({Key key, @required this.dialogContent, this.dialogTitle,this.negativeOption,this.positiveOption}) : super(key: key);
 
   @override
   _ConfirmationDialogState createState() => _ConfirmationDialogState();
@@ -53,13 +55,16 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                   ],
                 ),
                 SizedBox(height: 10,),
-                Text(
-                  widget.dialogContent,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Constant.chatBubbleGreen,
-                    fontFamily: Constant.jostRegular,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 9),
+                  child: Text(
+                    widget.dialogContent,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Constant.chatBubbleGreen,
+                      fontFamily: Constant.jostRegular,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20,),
@@ -77,7 +82,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                           Navigator.pop(context, 'Yes');
                         },
                         child: Center(
-                          child: Text(
+                          child: Text(widget.positiveOption??
                             'Yes',
                             style: TextStyle(
                               fontFamily: Constant.jostMedium,
@@ -100,7 +105,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                           Navigator.pop(context, 'No');
                         },
                         child: Center(
-                          child: Text(
+                          child: Text(widget.negativeOption??
                             'No',
                             style: TextStyle(
                                 fontFamily: Constant.jostMedium,

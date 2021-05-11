@@ -305,7 +305,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
-        "ChannelId", "BonTriage", 'Reminder to log your day',
+        "ChannelId", "BonTriage", 'Reminder to log your day.',
         importance: Importance.max/*, icon: 'app_icon_1', color: Colors.blue*/);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =

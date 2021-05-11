@@ -576,6 +576,21 @@ class Utils {
     );
   }
 
+  ///This method is used to show  error message to the user
+  static void showIOSSettingScreenDialog(BuildContext context, String errorMessage, [String errorTitle]) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ValidationErrorDialog(errorMessage: errorMessage, errorTitle: errorTitle,),
+        );
+      },
+    );
+  }
+
   ///This method is used to show compass tutorial dialog.
   ///@param context: build context of the screen
   ///@param indexValue: 0 for compass, 1 for Intensity, 2 for Disability, 3 for Frequency, and 4 for Duration.
@@ -634,7 +649,7 @@ class Utils {
     );
   }
 
-  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle]) async{
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle,String negativeOption,String positiveOption]) async{
     var result = await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -642,7 +657,7 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,),
+          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,positiveOption: positiveOption,negativeOption: negativeOption,),
         );
       },
     );

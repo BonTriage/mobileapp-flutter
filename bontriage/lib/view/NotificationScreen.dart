@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NotificationSection.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../main.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -193,9 +197,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  localNotificationDataSink.add('Clicked');
-                                  final snackBar = SnackBar(content: Text('Your notification has been saved successfully.'));
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  requestPermissionForNotification();
                                 //  Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
                                 },
                                 child: Container(
@@ -463,6 +465,42 @@ class _NotificationScreenState extends State<NotificationScreen>
     }else{
       customNotificationValue = notificationName;
     }
+  }
+  void requestPermissionForNotification() async{
+    if(Platform.isIOS){
+      var permissionResult  = await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      if(permissionResult ?? false) {
+        localNotificationDataSink.add('Clicked');
+        final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+            height: 1.3,
+            fontSize: 16,
+            fontFamily: Constant.jostRegular,
+            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }else{
+        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage.If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
+        if(result == 'Yes'){
+          Geolocator.openAppSettings();
+        }
+      }
+    } else {
+      localNotificationDataSink.add('Clicked');
+      final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+          height: 1.3,
+          fontSize: 16,
+          fontFamily: Constant.jostRegular,
+          color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
   }
 }
 

@@ -520,7 +520,7 @@ class Constant {
   static String basedOnWhatYouEntered =
       'Based on what you entered, it looks like your [My Headache Type] could potentially be considered by doctors to be a [Clinical Type]. This is not a diagnosis, but it is an accurate clinical impression, based on your answers, of how your headache best matches up to known headache types. If you haven’t already done so, you should see a qualified medical professional for a firm diagnosis';
   static String weKnowItCanBeEasy =
-      'We know it can be easy to lose track of daily logging, and we found it works best if you let us send you a daily reminder— we recommend the late afternoon or evening.';
+      'We know it can be easy to lose track of daily logging, and we found it works best if you let us send you a daily reminder — we recommend the late afternoon or evening.';
   static String enablingLocationServices =
       'Enabling Location Services is highly recommended since it allows us to analyze environmental factors that may affect your headaches.';
   static String tapToTypeYourName = 'Tap to type your name';

@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:io' show Platform;
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-//import 'package:app_settings/app_settings.dart';
-import 'dart:io' show Platform;
+
 import '../main.dart';
 import 'NotificationSection.dart';
 
@@ -525,7 +525,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   }
 
   void requestPermissionForNotification() async{
-   if(Platform.isIOS){
+    if(Platform.isIOS){
      var permissionResult  = await flutterLocalNotificationsPlugin
          .resolvePlatformSpecificImplementation<
          IOSFlutterLocalNotificationsPlugin>()
@@ -537,14 +537,17 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
      if(permissionResult ?? false) {
        localNotificationDataSink.add('Clicked');
-       final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+            final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
            fontSize: 16,
            fontFamily: Constant.jostRegular,
            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
        ScaffoldMessenger.of(context).showSnackBar(snackBar);
      }else{
-       Utils.showValidationErrorDialog(context, 'Please allow the notifications permission from settings.');
+       var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage.If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
+       if(result == 'Yes'){
+         Geolocator.openAppSettings();
+       }
      }
    } else {
      localNotificationDataSink.add('Clicked');
