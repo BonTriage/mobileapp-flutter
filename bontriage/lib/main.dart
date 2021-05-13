@@ -116,7 +116,7 @@ Future<void> initNotification() async {
             id: 1,
             title: 'BonTriage',
             body: 'Log Kar diya',
-            payload: 'Reminder to log your day'));
+            payload: 'Reminder to log your day.'));
       });
   final InitializationSettings initializationSettings =
   InitializationSettings(

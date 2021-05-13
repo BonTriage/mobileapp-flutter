@@ -316,7 +316,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             0,
             "BonTriage",
-            "Reminder to log your day",
+            "Reminder to log your day.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       } else if (isWeekDaysSelected) {
@@ -326,7 +326,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             1,
             'BonTriage',
-            'Reminder to log your day',
+            'Reminder to log your day.',
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
