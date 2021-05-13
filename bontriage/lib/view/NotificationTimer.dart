@@ -33,7 +33,7 @@ class NotificationTimer extends StatefulWidget {
 class _NotificationTimerState extends State<NotificationTimer> {
   bool isDailySelected = false;
   bool isWeekDaysSelected = false;
-  bool isOffSelected = false;
+  bool isOffSelected = true;
   DateTime _dateTime;
   int _selectedHour = 0;
   int _selectedMinute = 0;
@@ -66,6 +66,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
+
     setInItNotificationData();
     //inItNotification();
   }
@@ -306,7 +307,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
   Future<void> notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Reminder to log your day.',
-        importance: Importance.max/*, icon: 'app_icon_1', color: Colors.blue*/);
+        importance: Importance.max, icon: 'ic_app_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
@@ -339,11 +340,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
       if (dailyLogNotificationData != null) {
         dailyLogNotificationData.notificationName = 'Daily Log';
         dailyLogNotificationData.notificationType = dailyNotificationLogTime;
-        if (customNotificationLogTime == 'Off') {
+        if (dailyNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
         } else {
           print("scheduled notification at $_dateTime");
-          dailyLogNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
+          dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
          }
       } else {
         localNotificationModel.notificationName = 'Daily Log';
@@ -388,7 +389,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
         } else {
-          medicationNotificationData.notificationTime = Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
+          medicationNotificationData.notificationTime = _dateTime.toIso8601String();
         }
       } else {
         localNotificationModel.notificationName = 'Medication';
@@ -433,8 +434,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
         } else {
-          exerciseNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
-
+          exerciseNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
       } else {
         localNotificationModel.notificationName = 'Exercise';
@@ -453,6 +453,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
       if (customNotificationData != null) {
         customNotificationValue = customNotificationData.notificationName;
       }
+
+      print('customNotificationValue???$customNotificationValue');
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
         await flutterLocalNotificationsPlugin.showDailyAtTime(
@@ -480,7 +482,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
         } else {
-          customNotificationData.notificationTime =  Utils.getTimeInAmPmFormat(_selectedHour, _selectedMinute);
+          customNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
       }else {
         localNotificationModel.notificationName = widget.notificationName?? 'Custom';
@@ -569,10 +571,22 @@ class _NotificationTimerState extends State<NotificationTimer> {
           localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
           isDailySelected = true;
+          isWeekDaysSelected = false;
+          isOffSelected = false;
+
+          whichButtonSelected = 'Daily';
         } else if (localNotificationNameModel.notificationType == 'WeekDay') {
+          isDailySelected = false;
           isWeekDaysSelected = true;
+          isOffSelected = false;
+
+          whichButtonSelected = 'WeekDay';
         } else {
+          isDailySelected = false;
+          isWeekDaysSelected = false;
           isOffSelected = true;
+
+          whichButtonSelected = 'Off';
         }
       }
     } else if (widget.selectedNotification == 1) {
@@ -590,10 +604,22 @@ class _NotificationTimerState extends State<NotificationTimer> {
           localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
           isDailySelected = true;
+          isWeekDaysSelected = false;
+          isOffSelected = false;
+
+          whichButtonSelected = 'Daily';
         } else if (localNotificationNameModel.notificationType == 'WeekDay') {
+          isDailySelected = false;
           isWeekDaysSelected = true;
+          isOffSelected = false;
+
+          whichButtonSelected = 'WeekDay';
         } else {
+          isDailySelected = false;
+          isWeekDaysSelected = false;
           isOffSelected = true;
+
+          whichButtonSelected = 'Off';
         }
       }
     } else if (widget.selectedNotification == 2) {
@@ -611,10 +637,22 @@ class _NotificationTimerState extends State<NotificationTimer> {
           localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
           isDailySelected = true;
+          isWeekDaysSelected = false;
+          isOffSelected = false;
+
+          whichButtonSelected = 'Daily';
         } else if (localNotificationNameModel.notificationType == 'WeekDay') {
+          isDailySelected = false;
           isWeekDaysSelected = true;
+          isOffSelected = false;
+
+          whichButtonSelected = 'WeekDay';
         } else {
+          isDailySelected = false;
+          isWeekDaysSelected = false;
           isOffSelected = true;
+
+          whichButtonSelected = 'Off';
         }
       }
     } else {
@@ -632,10 +670,22 @@ class _NotificationTimerState extends State<NotificationTimer> {
           localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
           isDailySelected = true;
+          isWeekDaysSelected = false;
+          isOffSelected = false;
+
+          whichButtonSelected = 'Daily';
         } else if (localNotificationNameModel.notificationType == 'WeekDay') {
+          isDailySelected = false;
           isWeekDaysSelected = true;
+          isOffSelected = false;
+
+          whichButtonSelected = 'WeekDay';
         } else {
+          isDailySelected = false;
+          isWeekDaysSelected = false;
           isOffSelected = true;
+
+          whichButtonSelected = 'Off';
         }
       }
     }

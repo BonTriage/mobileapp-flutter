@@ -544,7 +544,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
        ScaffoldMessenger.of(context).showSnackBar(snackBar);
      }else{
-       var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage.If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
+       var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage. If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
        if(result == 'Yes'){
          Geolocator.openAppSettings();
        }

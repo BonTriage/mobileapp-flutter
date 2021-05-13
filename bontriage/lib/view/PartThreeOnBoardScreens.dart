@@ -149,14 +149,13 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                           if (Utils.validationForOnBoard(
                               _signUpOnBoardSelectedAnswersModel.selectedAnswers,
                               _currentQuestionLists[_currentPageIndex])) {
-                            setState(() {
-                              double stepOneProgress =
-                                  1 / _pageViewWidgetList.length;
+                            double stepOneProgress =
+                                1 / _pageViewWidgetList.length;
 
-                              if (_progressPercent == 1) {
-                                sendUserDataAndMoveInToNextScreen();
-                                //TODO: Move to next screen
-                              } else {
+                            if (_progressPercent == 1) {
+                              sendUserDataAndMoveInToNextScreen();
+                            } else {
+                              setState(() {
                                 _currentPageIndex++;
 
                                 if (_currentPageIndex !=
@@ -171,8 +170,8 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
                                     curve: Curves.easeInOutCubic);
 
                                 _getCurrentQuestionTag(_currentPageIndex);
-                              }
-                            });
+                              });
+                            }
                           }
                           Future.delayed(Duration(milliseconds: 350), () {
                             _isButtonClicked = false;
@@ -286,6 +285,7 @@ class _PartThreeOnBoardScreensState extends State<PartThreeOnBoardScreens> {
   }
 
   void sendUserDataAndMoveInToNextScreen() async {
+    TextToSpeechRecognition.speechToText("");
     Utils.showApiLoaderDialog(
       context,
       networkStream: _signUpOnBoardThirdStepBloc.sendThirdStepDataStream,

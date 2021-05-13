@@ -883,6 +883,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         whichMedicationItemSelected.forEach((index) {
           String medName = widget.valuesList[index].text;
 
+          print('MedicationName???$medName');
+
           Questions questions = widget.medicationExpandableWidgetList.firstWhere(
                   (element) {
                 List<String> splitConditionList = element.precondition.split('=');
@@ -896,6 +898,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 }
               },
               orElse: () => null);
+
+          print('MedicationOnSelect???$questions');
 
           DateTime _medicationDateTime = DateTime.now();
 

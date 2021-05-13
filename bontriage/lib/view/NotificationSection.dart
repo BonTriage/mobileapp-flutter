@@ -61,6 +61,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else if (widget.notificationId == 1) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -78,6 +80,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else if (widget.notificationId == 2) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -95,6 +99,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -112,6 +118,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     }
   }
@@ -141,6 +149,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else if (widget.notificationId == 1) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -158,6 +168,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else if (widget.notificationId == 2) {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -175,6 +187,8 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     } else {
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
@@ -192,10 +206,10 @@ class _NotificationSectionState extends State<NotificationSection>
             selectedTimerValue = 'Off';
           }
         }
+      } else {
+        selectedTimerValue = 'Off';
       }
     }
-
-    setState(() {});
   }
 
   @override
@@ -264,6 +278,7 @@ class _NotificationSectionState extends State<NotificationSection>
                 allNotificationListData: widget.allNotificationListData,
                 localNotificationDataStream: widget.localNotificationDataStream,
                 selectedTimerValue: (userSelectedTimerValue) {
+                  print(userSelectedTimerValue);
                   setState(() {
                     isDailyLogTimerLayoutOpen = false;
                     selectedTimerValue = userSelectedTimerValue;
