@@ -22,7 +22,7 @@ class NotificationTimer extends StatefulWidget {
       this.selectedTimerValue,
       this.localNotificationDataStream,
       this.customNotification,
-        this.notificationName,
+      this.notificationName,
       this.allNotificationListData})
       : super(key: key);
 
@@ -452,6 +452,8 @@ class _NotificationTimerState extends State<NotificationTimer> {
           orElse: () => null);
       if (customNotificationData != null) {
         customNotificationValue = customNotificationData.notificationName;
+      }else{
+        customNotificationValue = widget.notificationName;
       }
 
       print('customNotificationValue???$customNotificationValue');
