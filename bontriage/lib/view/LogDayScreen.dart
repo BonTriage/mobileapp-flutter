@@ -375,6 +375,7 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void addNewWidgets(List<Questions> questionList) {
     _questionsList.addAll(questionList);
+
     if (_sectionWidgetList.length == 0) {
       if (selectedAnswers.length != 0) {
         selectedAnswers.forEach((element) {

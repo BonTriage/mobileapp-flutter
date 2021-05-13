@@ -84,7 +84,7 @@ class _MeScreenState extends State<MeScreen>
     textSpanList = [
       TextSpan(
         text:
-            'When you’re on the home screen of the app, you’ll be able to log your day by pressing the ',
+            'When you\'re on the home screen of the app, you’ll be able to log your day by pressing the ',
         style: TextStyle(
             fontSize: 16,
             fontFamily: Constant.jostRegular,
@@ -101,7 +101,7 @@ class _MeScreenState extends State<MeScreen>
         ),
       ),
       TextSpan(
-        text: ' button and log your headaches by clicking the ',
+        text: ' button and log your headache by clicking the ',
         style: TextStyle(
             fontSize: 16,
             fontFamily: Constant.jostRegular,

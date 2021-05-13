@@ -188,34 +188,38 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                               if (Utils.validationForOnBoard(
                                   signUpOnBoardSelectedAnswersModel.selectedAnswers,
                                   currentQuestionListData[_currentPageIndex])) {
-                                setState(() {
-                                  double stepOneProgress =
-                                      1 / _pageViewWidgetList.length;
-                                  if (_progressPercent == 1) {
-                                    _backQuestionIndexList.add(_currentPageIndex);
-                                    moveUserToNextScreen();
-                                  } else {
-                                    //_currentPageIndex++;
-
-                                    _backQuestionIndexList.add(_currentPageIndex);
+                                double stepOneProgress =
+                                    1 / _pageViewWidgetList.length;
+                                if (_progressPercent == 1) {
+                                  _backQuestionIndexList.add(_currentPageIndex);
+                                  moveUserToNextScreen();
+                                } else {
+                                  setState(() {
+                                    _backQuestionIndexList.add(
+                                        _currentPageIndex);
                                     _fetchQuestionTag();
 
-                                    print('QuestionTAG?????' + currentQuestionListData[_currentPageIndex].tag);
+                                    print('QuestionTAG?????' +
+                                        currentQuestionListData[_currentPageIndex]
+                                            .tag);
 
                                     if (_currentPageIndex !=
                                         _pageViewWidgetList.length - 1)
-                                      _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
+                                      _progressPercent =
+                                          (_currentPageIndex + 1) *
+                                              stepOneProgress;
                                     else {
                                       _progressPercent = 1;
                                     }
 
-                                    _pageController.animateToPage(_currentPageIndex,
+                                    _pageController.animateToPage(
+                                        _currentPageIndex,
                                         duration: Duration(milliseconds: 1),
                                         curve: Curves.easeIn);
-                                  }
-                                  if(_argumentName == Constant.clinicalImpressionShort1)
-                                    getCurrentQuestionTag(_currentPageIndex);
-                                });
+                                  });
+                                }
+                                if (_argumentName == Constant.clinicalImpressionShort1)
+                                  getCurrentQuestionTag(_currentPageIndex);
                               }
                               Future.delayed(Duration(milliseconds: 350), () {
                                 _isButtonClicked = false;

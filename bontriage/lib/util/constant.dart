@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Constant {
   static const String splashRouter = 'splash';
@@ -137,7 +136,7 @@ class Constant {
       'As you get better at managing your headache, you will learn to use the compass to see the impact of exposure to a possible triggers or starting new medications.';
 
   static String welcomePersonalizedHeadacheFifthTextView =
-      'To learn more about the characteristics of your headaches, tap any of the Compass dimensions displayed below.';
+      'To learn more about the characteristics of your headache, tap any of the Compass dimensions displayed below.';
 
   static String startAssessment = 'Start Assessment';
   static String letsStarted = 'Let\'s get started!';
@@ -212,7 +211,7 @@ class Constant {
   static String experienceTypesOfHeadaches =
       'If you experience other types of headaches, you can complete a similar assessment for them either now or later in the app.';
   static String almostReadyToHelp =
-      'We’re almost ready to help you start getting your headaches under better control. To really understand your headaches, we need to know what you have already learned about what has helped—and what has not worked or has worsened—your headaches.';
+      'We’re almost ready to help you start getting your headaches under better control. To really understand your headaches, we need to know what you have already learned about what has helped — and what has not worked or has worsened — your headaches.';
   static String quickAndEasySection =
       'For some people, this is a quick and easy section; for others, it can take some serious thinking back, but you will find it worth the effort as we move forward. There are only five more questions.';
   static String setUpNotifications = 'Set Up Notifications';
@@ -243,7 +242,7 @@ class Constant {
   static String untilYouComplete =
       'Until you complete the assessment, your personalized headache profile will be incomplete. Without a complete profile, MigraineMentor can’t create a predictive model, and won’t be able to alert you when you are at risk for headaches or suggest steps to avoid them.';
   static String letsBeginBySeeing =
-      'Let’s begin by seeing what your headaches look like by creating a Compass Diagram of your most problematic headache. Just answer a few questions and you will see your headache like a headache specialist does.';
+      'Let’s begin by seeing what your headache look like by creating a Compass Diagram of your most problematic headache. Just answer a few questions and you will see your headache like a headache specialist does.';
   static String searchYourType = 'Search or type your own';
   static String suspectTriggerYourHeadache =
       'Which of the following do you suspect trigger your headaches?';
@@ -610,7 +609,7 @@ class Constant {
 
   //tutorial text
   static const String meScreenTutorial1 =
-      'When you’re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headaches by clicking the Add Headache button.';
+      'When you\'re on the home screen of the app, you’ll be able to log your day by pressing the Log Day button and log your headache by clicking the Add Headache button.';
   static const String meScreenTutorial2 =
       'Last thing before we go — Whenever you want, you can click on Records to track information like how your Compass and Headache Score have evolved over time, the potential impact of changes in medication or lifestyle, and more! This is all based on the suggestions we have made and the steps you and your provider have taken.';
   static const String trendsTutorialText1 =

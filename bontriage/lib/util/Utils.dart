@@ -623,8 +623,12 @@ class Utils {
 
     permission = await Geolocator.checkPermission();
 
+    print('Permission???$permission');
+
     if (permission == LocationPermission.denied && permission != LocationPermission.deniedForever) {
+      print('before permission');
       permission = await Geolocator.requestPermission();
+      print('Permission???$permission');
       if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
         position = await Geolocator.getCurrentPosition();
       }

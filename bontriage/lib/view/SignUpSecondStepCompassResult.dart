@@ -948,6 +948,7 @@ class _SignUpSecondStepCompassResultState
 
   ///Method to navigate to pdf screen
   void _navigateToPdfScreen(String base64String) {
+    TextToSpeechRecognition.speechToText("");
     Future.delayed(Duration(milliseconds: 300), () {
       Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
     });
