@@ -925,7 +925,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -958,7 +958,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -974,7 +974,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   if(_medicationDosageList[index][0].values != null)
                     Container(
@@ -1028,7 +1028,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       ),
                     ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   _getAddedDosageList(index),
                   Padding(
@@ -1094,7 +1094,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                         });
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 15),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1390,7 +1390,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -1426,7 +1426,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -1472,7 +1472,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               if(_medicationDosageList[index1][index + 1].values != null)
                 Container(
@@ -1526,7 +1526,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   ),
                 ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
             ],
           );

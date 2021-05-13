@@ -307,7 +307,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
   Future<void> notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Reminder to log your day.',
-        importance: Importance.max/*, icon: 'ic_app_icon', color: Constant.chatBubbleGreen*/);
+        importance: Importance.max, icon: 'ic_app_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
