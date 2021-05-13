@@ -139,8 +139,11 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
   }
 
   Future<void> _checkLocationPermission() async {
-    if(_position == null)
+    if(_position == null) {
+      Utils.showApiLoaderDialog(context);
       _position = await Utils.determinePosition();
+      Navigator.pop(context);
+    }
 
     if(_position != null) {
       setState(() {
