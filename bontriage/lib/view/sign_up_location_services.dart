@@ -141,8 +141,26 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
   Future<void> _checkLocationPermission() async {
     if(_position == null) {
       Utils.showApiLoaderDialog(context);
-      _position = await Utils.determinePosition();
-      Navigator.pop(context);
+      /*_position = await Utils.determinePosition();
+      Navigator.pop(context);*/
+
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.openLocationSettings();
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        Navigator.pop(context);
+        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Location permissions to BonTriage. If you want to access Location, please grant permission.','Permission Required!','Not now','Allow');
+        if(result == 'Yes') {
+          Geolocator.openAppSettings();
+        }
+      } else {
+        _position = await Utils.determinePosition();
+        Navigator.pop(context);
+      }
     }
 
     if(_position != null) {
@@ -153,11 +171,6 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
       latLngList.add(_position.latitude.toString());
       latLngList.add(_position.longitude.toString());
       widget.selectedAnswerCallBack(widget.question.tag, jsonEncode(latLngList));
-    } else {
-      var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Location permissions to BonTriage. If you want to access Location, please grant permission.','Permission Required!','Not now','Allow');
-      if(result == 'Yes'){
-        Geolocator.openAppSettings();
-      }
     }
   }
 
