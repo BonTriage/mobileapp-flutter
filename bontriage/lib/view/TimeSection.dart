@@ -282,9 +282,15 @@ class _TimeSectionState extends State<TimeSection>
             "endtime", Utils.getDateTimeInUtcFormat(_selectedEndTime));
       });
     } else {
-      Future.delayed(Duration(milliseconds: 500), () {
-        Utils.showValidationErrorDialog(context, 'Invalid End Time.');
-      });
+      if(!(dateTime.isBefore(currentDateTime) || dateTime.isAtSameMomentAs(currentDateTime))) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          Utils.showValidationErrorDialog(context, 'End Time cannot be greater than the current time.');
+        });
+      } else {
+        Future.delayed(Duration(milliseconds: 500), () {
+          Utils.showValidationErrorDialog(context, 'Invalid End Time.');
+        });
+      }
     }
     print(dateTime);
   }
