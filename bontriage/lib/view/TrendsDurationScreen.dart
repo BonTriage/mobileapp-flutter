@@ -233,7 +233,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             fontFamily: 'JostRegular',
                             fontSize: 10),
                         margin: 10,
-                        interval: ((axesMaxValue / 10).ceil()).toDouble(),
+                        interval: (((axesMaxValue == 0? 60:axesMaxValue) / 10).ceil()).toDouble(),
                         reservedSize: 11,
                         getTitles: (value) {
                           return setLeftAxisTitlesValue(value);

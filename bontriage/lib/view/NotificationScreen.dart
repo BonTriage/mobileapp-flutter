@@ -479,12 +479,8 @@ class _NotificationScreenState extends State<NotificationScreen>
 
       if(permissionResult ?? false) {
         localNotificationDataSink.add('Clicked');
-        final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
-            height: 1.3,
-            fontSize: 16,
-            fontFamily: Constant.jostRegular,
-            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pushReplacementNamed(context,
+            Constant.postNotificationOnBoardRouter);
       }else{
         var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage. If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
         if(result == 'Yes'){
@@ -493,12 +489,8 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
     } else {
       localNotificationDataSink.add('Clicked');
-      final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
-          height: 1.3,
-          fontSize: 16,
-          fontFamily: Constant.jostRegular,
-          color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushReplacementNamed(context,
+          Constant.postNotificationOnBoardRouter);
     }
 
   }
