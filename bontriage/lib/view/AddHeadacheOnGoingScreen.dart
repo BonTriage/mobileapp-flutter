@@ -214,8 +214,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                                     color:
                                                         Constant.bubbleChatTextView,
                                                     fontSize: 15,
-                                                    fontFamily:
-                                                        Constant.jostMedium),
+                                                    fontFamily: Constant.jostMedium),
                                               ),
                                             ),
                                           ),
@@ -439,17 +438,37 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     }*/
 
     SelectedAnswers headacheTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.headacheTypeTag, orElse: () => null);
+    SelectedAnswers onSetSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
+    SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+
+    bool isTimeValidationSatisfied = true;
+    if(_isUserHeadacheEnded) {
+      if(onSetSelectedAnswer != null && endTimeSelectedAnswer != null) {
+        DateTime onSetDateTime = DateTime.tryParse(onSetSelectedAnswer.answer);
+        DateTime endDateTime = DateTime.tryParse(endTimeSelectedAnswer.answer);
+
+        if (onSetDateTime.isAtSameMomentAs(endDateTime))
+          isTimeValidationSatisfied = false;
+        else
+          isTimeValidationSatisfied = true;
+      }
+    }
 
     if(headacheTypeSelectedAnswer != null) {
-      Utils.showApiLoaderDialog(
-          context,
-          networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
-          tapToRetryFunction: () {
-            _addHeadacheLogBloc.enterSomeDummyData();
-            _callSendAddHeadacheLogApi();
-          }
-      );
-      _callSendAddHeadacheLogApi();
+      if(isTimeValidationSatisfied) {
+        Utils.showApiLoaderDialog(
+            context,
+            networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+            tapToRetryFunction: () {
+              _addHeadacheLogBloc.enterSomeDummyData();
+              _callSendAddHeadacheLogApi();
+            }
+        );
+        _callSendAddHeadacheLogApi();
+      } else {
+        Utils.showValidationErrorDialog(context, 'Start Time cannot be same as End Time.');
+        _isButtonClicked = false;
+      }
     } else {
       //show headacheType selection error
       print('headache type error');

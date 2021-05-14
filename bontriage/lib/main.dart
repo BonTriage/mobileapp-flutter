@@ -104,7 +104,7 @@ class ReceivedNotification {
 /// This Method will be use for initialize all android and IOs Plugin and other required variables.
 Future<void> initNotification() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('ic_app_icon');
+  AndroidInitializationSettings('app_icon');
   final IOSInitializationSettings initializationSettingsIOS =
   IOSInitializationSettings(
       requestAlertPermission: true,
