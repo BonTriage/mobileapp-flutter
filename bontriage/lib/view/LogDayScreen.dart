@@ -438,6 +438,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                   ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false
                   : false,
               uiHints: element.uiHints,
+              selectedDateTime: _logDayBloc.selectedDateTime ?? DateTime.now(),
             ),
           );
         }

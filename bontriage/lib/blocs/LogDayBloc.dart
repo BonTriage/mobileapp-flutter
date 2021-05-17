@@ -422,6 +422,40 @@ class LogDayBloc {
       signUpOnBoardAnswersRequestModelList.add(signUpOnBoardAnswersRequestModel);
     });
 
+    int lengthDiff = eventId.length - selectedAnswersList.length;
+
+    int eventIndex = selectedAnswersList.length;
+
+    if(lengthDiff > 0) {
+      for (int i = 1; i <= lengthDiff; i++) {
+        SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
+        signUpOnBoardAnswersRequestModel.eventType = eventType;
+        if (userProfileInfoData != null)
+          signUpOnBoardAnswersRequestModel.userId =
+              int.parse(userProfileInfoData.userId);
+        else
+          signUpOnBoardAnswersRequestModel.userId = 4214;
+        DateTime dateTime = DateTime.now();
+        if(selectedDateTime == null){
+          signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+        }else{
+          signUpOnBoardAnswersRequestModel.calendarEntryAt = '${selectedDateTime.year}-${selectedDateTime.month}-${selectedDateTime.day}T00:00:00Z';
+        }
+
+        signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+
+        try {
+          signUpOnBoardAnswersRequestModel.eventId = eventId[eventIndex];
+          eventIndex++;
+        } catch(e) {
+          signUpOnBoardAnswersRequestModel.eventId = null;
+        }
+        signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
+
+        signUpOnBoardAnswersRequestModelList.add(signUpOnBoardAnswersRequestModel);
+      }
+    }
+
     return signUpOnBoardAnswersRequestModelList;
   }
 

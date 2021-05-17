@@ -101,12 +101,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('in did update widget of calendar trigger screen');
+    print('In did update widget of calendar trigger screen');
     getCurrentPositionOfTabBar();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build of calendar trigger');
     super.build(context);
     return SingleChildScrollView(
       child: Column(

@@ -1147,14 +1147,18 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
       maxValue = firstMultipleHeadache1;
       minValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
+        BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
+      ];
     } else {
       minValue = firstMultipleHeadache1;
       maxValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
+        BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),
+      ];
     }
-    return [
-      BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
-      BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
-    ];
   }
 
   double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {

@@ -420,7 +420,7 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   String _getMedicationDosageUnit(String medicationDosage) {
-    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml'))) {
+    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml') || medicationDosage.contains('unit'))) {
       if(medicationDosage.isNotEmpty)
         return '$medicationDosage mg';
       else

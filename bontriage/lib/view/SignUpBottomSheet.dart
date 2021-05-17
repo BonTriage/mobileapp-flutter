@@ -137,7 +137,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                 vsync: this,
                 duration: Duration(milliseconds: 350),
                 child: CustomScrollBar(
-                  isAlwaysShown: true,
+                  isAlwaysShown: false,
                   controller: _scrollController,
                   child: SingleChildScrollView(
                     controller: _scrollController,

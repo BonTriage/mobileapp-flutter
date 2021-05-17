@@ -706,8 +706,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         _animationController.forward();
       } else {
         _animationController.reverse();
-        widget.selectedAnswers.removeWhere((element) =>
-        element.questionTag == 'administered');
+        widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
       }
 
       String valueNumber = widget.valuesList[index].valueNumber;
@@ -788,6 +787,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
   Widget _getWidget(Widget mainWidget) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -827,6 +827,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           child: FadeTransition(
               opacity: _animationController,
               child: AnimatedSize(
+                alignment: Alignment.bottomLeft,
                 vsync: this,
                 duration: Duration(milliseconds: 350),
                 child: _getOptionOnSelectWidget(),
@@ -880,7 +881,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         );
       case 'medication':
         List<Widget> widgetList = [];
-        whichMedicationItemSelected.forEach((index) {
+        whichMedicationItemSelected.reversed.forEach((index) {
           String medName = widget.valuesList[index].text;
 
           print('MedicationName???$medName');
@@ -911,7 +912,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
           widgetList.add(
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -927,35 +928,39 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   SizedBox(
                     height: 15,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        color: Constant.backgroundTransparentColor,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              _whichExpandedMedicationItemSelected = 0;
-                              _openDatePickerBottomSheet(
-                                  CupertinoDatePickerMode.time, index);
-                            },
-                            child: Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              child: Text(
-                                Utils.getTimeInAmPmFormat(_medicationDateTime.hour, _medicationDateTime.minute),
-                                style: TextStyle(
-                                    color: Constant.splashColor,
-                                    fontFamily: Constant.jostRegular,
-                                    fontSize: Platform.isAndroid ? 14 : 15),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Container(
+                            color: Constant.backgroundTransparentColor,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  _whichExpandedMedicationItemSelected = 0;
+                                  _openDatePickerBottomSheet(
+                                      CupertinoDatePickerMode.time, index);
+                                },
+                                child: Padding(
+                                  padding:
+                                  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                  child: Text(
+                                    Utils.getTimeInAmPmFormat(_medicationDateTime.hour, _medicationDateTime.minute),
+                                    style: TextStyle(
+                                        color: Constant.splashColor,
+                                        fontFamily: Constant.jostRegular,
+                                        fontSize: Platform.isAndroid ? 14 : 15),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   SizedBox(
                     height: 15,
@@ -1127,9 +1132,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               )
           );
         });
-
-        /*if(_selectedDateTime != null)
-          _medicationDateTime = DateTime(_medicationDateTime.year, _medicationDateTime.month, _medicationDateTime.day, _selectedDateTime.);*/
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1368,7 +1370,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       DateTime medicationDateTime = DateTime.now();
 
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: List.generate(_numberOfDosageAddedList[index1], (index) {
           try {
             medicationDateTime = DateTime.parse(_medicineTimeList[index1][index + 1]);
@@ -1376,7 +1378,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             print(e.toString());
           }
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -1392,38 +1394,42 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               SizedBox(
                 height: 15,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Container(
-                    color: Constant.backgroundTransparentColor,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          _whichExpandedMedicationItemSelected = index + 1;
-                          _openDatePickerBottomSheet(
-                              CupertinoDatePickerMode.time, index1);
-                        },
-                        child: Padding(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: Text(
-                            Utils.getTimeInAmPmFormat(
-                                medicationDateTime.hour,
-                                medicationDateTime
-                                    .minute),
-                            style: TextStyle(
-                                color: Constant.splashColor,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: Platform.isAndroid ? 14 : 15),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        color: Constant.backgroundTransparentColor,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              _whichExpandedMedicationItemSelected = index + 1;
+                              _openDatePickerBottomSheet(
+                                  CupertinoDatePickerMode.time, index1);
+                            },
+                            child: Padding(
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              child: Text(
+                                Utils.getTimeInAmPmFormat(
+                                    medicationDateTime.hour,
+                                    medicationDateTime
+                                        .minute),
+                                style: TextStyle(
+                                    color: Constant.splashColor,
+                                    fontFamily: Constant.jostRegular,
+                                    fontSize: Platform.isAndroid ? 14 : 15),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
               SizedBox(
                 height: 15,
@@ -1620,7 +1626,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   void initState() {
     super.initState();
 
-    _selectedDateTime = widget.selectedDateTime;
+    _selectedDateTime = widget.selectedDateTime ?? DateTime.now();
 
     _animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
@@ -1660,7 +1666,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       }
 
       for (var i = 0; i < widget.valuesList.length; i++) {
-        _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+        DateTime nowDateTime = DateTime(
+          _selectedDateTime.year,
+          _selectedDateTime.month,
+          _selectedDateTime.day,
+          DateTime.now().hour,
+          DateTime.now().minute,
+          0,
+          0,
+          0,
+        );
+        _medicineTimeList.add(List.generate(1, (index) => nowDateTime.toString()));
         _additionalMedicationDosage.add([]);
       }
 
@@ -1735,7 +1751,18 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             selectedMedicationIndexList.add(widget.valuesList.length - 1);
             _numberOfDosageAddedList.add(0);
             _additionalMedicationDosage.add([]);
-            _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+            _medicationDosageList.add(List.generate(1, (index) => Questions()));
+            DateTime nowDateTime = DateTime(
+              _selectedDateTime.year,
+              _selectedDateTime.month,
+              _selectedDateTime.day,
+              DateTime.now().hour,
+              DateTime.now().minute,
+              0,
+              0,
+              0,
+            );
+            _medicineTimeList.add(List.generate(1, (index) => nowDateTime.toString()));
           }
         });
 
@@ -1842,8 +1869,18 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         builder: (context) => DateTimePicker(
           cupertinoDatePickerMode: cupertinoDatePickerMode,
           onDateTimeSelected: (DateTime dateTime) {
+            DateTime nowDateTime = DateTime(
+              _selectedDateTime.year,
+              _selectedDateTime.month,
+              _selectedDateTime.day,
+              dateTime.hour,
+              dateTime.minute,
+              0,
+              0,
+              0,
+            );
             setState(() {
-              _medicineTimeList[index][_whichExpandedMedicationItemSelected] = dateTime.toString();
+              _medicineTimeList[index][_whichExpandedMedicationItemSelected] = nowDateTime.toString();
             });
 
             _updateMedicationSelectedDataModel();
@@ -2036,7 +2073,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             if(addMedicationResult != null && addMedicationResult is String && addMedicationResult != '') {
               setState(() {
                 widget.valuesList.insert(widget.valuesList.length - 1, Values(text: addMedicationResult, valueNumber: (widget.valuesList.length).toString(), isNewlyAdded: true));
-                _medicineTimeList.add(List.generate(1, (index) => DateTime.now().toString()));
+                DateTime nowDateTime = DateTime(
+                  _selectedDateTime.year,
+                  _selectedDateTime.month,
+                  _selectedDateTime.day,
+                  DateTime.now().hour,
+                  DateTime.now().minute,
+                  0,
+                  0,
+                  0,
+                );
+                _medicineTimeList.add(List.generate(1, (index) => nowDateTime.toString()));
                 _medicationDosageList.add(List.generate(1, (index) => Questions()));
                 _numberOfDosageAddedList.add(0);
                 _additionalMedicationDosage.add([]);

@@ -132,8 +132,8 @@ class _MeScreenState extends State<MeScreen>
   @override
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _getUserCurrentHeadacheData();
-    _getUserProfileDetails();
+    _getCurrentIndexOfTabBar();
+    print('in did update widget of me screen.');
   }
 
   @override
@@ -741,5 +741,14 @@ class _MeScreenState extends State<MeScreen>
   void _saveRecordTabBarPosition() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setInt(Constant.recordTabNavigatorState, 0);
+  }
+
+  void _getCurrentIndexOfTabBar() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if(currentPositionOfTabBar == 0) {
+      _getUserCurrentHeadacheData();
+      _getUserProfileDetails();
+    }
   }
 }

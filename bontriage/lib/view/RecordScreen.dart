@@ -35,6 +35,7 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
   @override
   void didUpdateWidget(RecordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('In Did update widget of Records Screen');
     _checkIfAnyButtonClicked();
   }
 
@@ -106,14 +107,6 @@ class _RecordScreenState extends State<RecordScreen> with SingleTickerProviderSt
         ),
       ),
     );
-  }
-
-  void getTabPosition() async {
-    /*SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int tabPosition =
-        sharedPreferences.getInt(Constant.tabNavigatorState);
-    print("TabPosition:$tabPosition");
-    print(tabPosition);*/
   }
 
   Widget _buildOffstageNavigator(int index) {

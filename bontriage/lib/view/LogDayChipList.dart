@@ -34,6 +34,18 @@ class _LogDayChipListState extends State<LogDayChipList> {
                     widget.question.values[index].isSelected = false;
                     widget.question.values[index].isDoubleTapped = false;
                   } else {
+                    if(!widget.question.values[index].isValid) {
+                      widget.question.values.forEach((element) {
+                        element.isSelected = false;
+                        element.isDoubleTapped = false;
+                      });
+                    } else {
+                      Values inValidValue = widget.question.values.firstWhere((element) => !element.isValid, orElse: () => null);
+                      if(inValidValue != null) {
+                        inValidValue.isSelected = false;
+                        inValidValue.isDoubleTapped = false;
+                      }
+                    }
                     widget.question.values[index].isSelected = true;
                   }
                 } else {
