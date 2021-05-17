@@ -298,13 +298,14 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
         controller: _textEditingControllerList[index],
         maxLength: 1,
         onChanged: (text) {
-          /*if(text.isEmpty) {
+          print('on text changed');
+          if(text.isEmpty) {
             if(index != 0)
               FocusScope.of(context).requestFocus(_focusNodeList[index - 1]);
-          } else {*/
+          } else {
             if(index != 3 && text.isNotEmpty)
               FocusScope.of(context).requestFocus(_focusNodeList[index + 1]);
-          //}
+          }
         },
         style: TextStyle(
             fontSize: 16,
