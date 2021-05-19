@@ -13,7 +13,6 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'DateTimePicker.dart';
 
 class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
@@ -432,6 +431,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: () {
                               DateTime dateTime =
                                   DateTime(_dateTime.year, _dateTime.month - 1);
@@ -467,6 +467,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                             width: 30,
                           ),
                           GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: () {
                               DateTime dateTime =
                                   DateTime(_dateTime.year, _dateTime.month + 1);
@@ -930,7 +931,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     }
   }
 
-  void _navigateToAddHeadacheScreen() async{
+  void _navigateToAddHeadacheScreen() async {
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
 

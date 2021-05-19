@@ -306,6 +306,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -341,6 +342,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
@@ -1201,17 +1203,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   List<BarChartRodStackItem> setRodStack(
       double firstMultipleHeadache1, double secondMultipleHeadache1) {
-    var maxValue, minValue = 0.0;
+    //var maxValue, minValue = 0.0;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
-      maxValue = firstMultipleHeadache1;
-      minValue = secondMultipleHeadache1;
+      /*maxValue = firstMultipleHeadache1;
+      minValue = secondMultipleHeadache1;*/
       return [
         BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
         BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
       ];
     } else {
-      minValue = firstMultipleHeadache1;
-      maxValue = secondMultipleHeadache1;
+      /*minValue = firstMultipleHeadache1;
+      maxValue = secondMultipleHeadache1;*/
       return [
         BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
         BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),

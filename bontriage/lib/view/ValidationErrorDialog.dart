@@ -59,13 +59,14 @@ class _ValidationErrorDialogState extends State<ValidationErrorDialog> {
                       Align(
                         alignment: Alignment.topRight,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             Navigator.pop(context);
                           },
                           child: Image(
                             image: AssetImage(Constant.closeIcon),
-                            width: 20,
-                            height: 20,
+                            width: 22,
+                            height: 22,
                           ),
                         ),
                       ),

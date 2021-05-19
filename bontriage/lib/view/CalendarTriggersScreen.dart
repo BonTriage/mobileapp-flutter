@@ -178,6 +178,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                   width: 30,
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     DateTime dateTime =
                                     DateTime(_dateTime.year, _dateTime.month + 1);

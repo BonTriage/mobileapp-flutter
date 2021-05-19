@@ -46,6 +46,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
             Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () {
                   widget.addNoteCallback(_textEditingController.text);
                   Navigator.pop(context, _textEditingController.text);

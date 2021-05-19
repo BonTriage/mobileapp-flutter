@@ -36,6 +36,7 @@ class AddHeadacheSection extends StatefulWidget {
   final List<Values> valuesList;
   final List<Values> chipsValuesList;
   final Function(String, String) addHeadacheDetailsData;
+  final Function(String, String) removeHeadacheTypeData;
   final Function moveWelcomeOnBoardTwoScreen;
   final String updateAtValue;
   final List<SelectedAnswers> selectedAnswers;
@@ -58,6 +59,7 @@ class AddHeadacheSection extends StatefulWidget {
         this.sleepExpandableWidgetList,
         this.medicationExpandableWidgetList,
         this.addHeadacheDetailsData,
+        this.removeHeadacheTypeData,
         this.selectedCurrentValue,
         this.updateAtValue,
         this.moveWelcomeOnBoardTwoScreen,
@@ -328,9 +330,44 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           isValuesUpdated = true;
           widget.valuesList.asMap().forEach((index, element) {
             if (element.isSelected || element.isDoubleTapped) {
-              Future.delayed(Duration(milliseconds: index * 400), () {
+              print('coming in here');
+              _animationController.forward();
+              /*Future.delayed(Duration(milliseconds: index * 400), () {
                 _onTriggerItemSelected(index);
-              });
+              });*/
+
+              SelectedAnswers selectedAnswersValue = widget.selectedAnswers.firstWhere((element1) => element1.questionTag == widget.contentType && element1.answer == element.text, orElse: () => null);
+              if(selectedAnswersValue == null)
+                widget.selectedAnswers.add(SelectedAnswers(questionTag: widget.contentType, answer: element.text));
+
+              Questions questionTriggerData = widget.triggerExpandableWidgetList
+                  .firstWhere(
+                      (element1) => element1.precondition.contains(element.text),
+                  orElse: () => null);
+              if (questionTriggerData != null) {
+                SelectedAnswers selectedAnswerTriggerData =
+                selectedAnswerListOfTriggers.firstWhere(
+                        (element1) =>
+                    element1.questionTag == questionTriggerData.tag,
+                    orElse: () => null);
+                if (selectedAnswerTriggerData != null) {
+                  SelectedAnswers selectedAnswerData = widget.selectedAnswers
+                      .firstWhere(
+                          (element1) =>
+                      element1.questionTag ==
+                          selectedAnswerTriggerData.questionTag,
+                      orElse: () => null);
+                  if (selectedAnswerData == null) {
+                    widget.selectedAnswers.add(SelectedAnswers(
+                        questionTag: selectedAnswerTriggerData.questionTag,
+                        answer: selectedAnswerTriggerData.answer));
+                  } else {
+                    selectedAnswerData.answer = selectedAnswerTriggerData.answer;
+                  }
+                }
+              }
+
+              _generateTriggerWidgetList(index);
             }
           });
         }
@@ -349,9 +386,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   void _onHeadacheTypeItemSelected(int index) {
     if (widget.valuesList[index].text == Constant.plusText) {
       widget.moveWelcomeOnBoardTwoScreen();
-    } else
-      widget.addHeadacheDetailsData(
-          widget.contentType, widget.valuesList[index].text);
+    } else {
+      Values headacheTypeValue = widget.valuesList[index];
+      if(headacheTypeValue.isSelected) {
+        widget.addHeadacheDetailsData(widget.contentType, headacheTypeValue.text);
+      } else {
+        widget.removeHeadacheTypeData(widget.contentType, headacheTypeValue.text);
+      }
+    }
   }
 
   void _onHeadacheIntensitySelected(String currentTag, String currentValue) {
@@ -1142,199 +1184,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           _triggerWidgetList = [];
         }
 
-        String triggerName = widget.valuesList[whichTriggerItemSelected].text;
-
-        bool isSelected =
-            widget.valuesList[whichTriggerItemSelected].isSelected;
-        Questions questions = widget.triggerExpandableWidgetList.firstWhere(
-                (element) => element.precondition.toLowerCase().contains(triggerName.toLowerCase()),
-            orElse: () => null);
-        String questionTag = (questions == null) ? '' : questions.tag;
-        TriggerWidgetModel triggerWidgetModel = _triggerWidgetList.firstWhere(
-                (element) => element.questionTag == questionTag,
-            orElse: () => null);
-
-        String selectedTriggerValue;
-        SelectedAnswers selectedAnswerTriggerData = selectedAnswerListOfTriggers
-            .firstWhere((element) => element.questionTag == questionTag,
-            orElse: () => null);
-        if (selectedAnswerTriggerData != null) {
-          selectedTriggerValue = selectedAnswerTriggerData.answer;
-        }
-
-        if (triggerWidgetModel == null) {
-          if (questions == null) {
-            _triggerWidgetList
-                .add(TriggerWidgetModel(questionTag: "", widget: Container()));
-          } else {
-            switch (questions.questionType) {
-              case 'number':
-                _triggerWidgetList.add(TriggerWidgetModel(
-                    questionTag: questions.tag,
-                    widget: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            questions.helpText,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: Platform.isAndroid ? 14 : 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        SignUpAgeScreen(
-                          currentTag: questions.tag,
-                          sliderValue: (selectedTriggerValue != null)
-                              ? double.parse(selectedTriggerValue)
-                              : questions.min.toDouble(),
-                          sliderMinValue: questions.min.toDouble(),
-                          sliderMaxValue: questions.max.toDouble(),
-                          minText: questions.min.toString(),
-                          maxText: questions.max.toString(),
-                          labelText: '',
-                          isAnimate: false,
-                          horizontalPadding: 0,
-                          onValueChangeCallback: onValueChangedCallback,
-                          uiHints: questions.uiHints,
-                        ),
-                      ],
-                    )));
-                break;
-              case 'text':
-                _triggerWidgetList.add(TriggerWidgetModel(
-                    questionTag: questions.tag,
-                    widget: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            questions.helpText,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: Platform.isAndroid ? 14 : 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: TextFormField(
-                            minLines: 5,
-                            maxLines: 6,
-                            textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.done,
-                            onChanged: (text) {
-                              onValueChangedCallback(questionTag, text.trim());
-                            },
-                            initialValue: (selectedTriggerValue != null)
-                                ? selectedTriggerValue
-                                : '',
-                            style: TextStyle(
-                                fontSize: Platform.isAndroid ? 14 : 15,
-                                fontFamily: Constant.jostMedium,
-                                color: Constant.unselectedTextColor),
-                            cursorColor: Constant.unselectedTextColor,
-                            textAlign: TextAlign.start,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              hintText: Constant.tapToType,
-                              hintStyle: TextStyle(
-                                  fontSize: Platform.isAndroid ? 14 : 15,
-                                  color: Constant.unselectedTextColor,
-                                  fontFamily: Constant.jostRegular),
-                              filled: true,
-                              fillColor: Constant.backgroundTransparentColor,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(3)),
-                                borderSide: BorderSide(
-                                    color: Constant.backgroundTransparentColor,
-                                    width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(3)),
-                                borderSide: BorderSide(
-                                    color: Constant.backgroundTransparentColor,
-                                    width: 1),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )));
-                break;
-              case 'multi':
-                try {
-                  if (selectedTriggerValue != null) {
-                    Questions questionTrigger =
-                    Questions.fromJson(jsonDecode(selectedTriggerValue));
-                    questions = questionTrigger;
-                    print(questionTrigger);
-                  }
-                } catch (e) {
-                  print(e.toString());
-                }
-                _triggerWidgetList.add(TriggerWidgetModel(
-                    questionTag: questions.tag,
-                    widget: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            questions.helpText,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: Platform.isAndroid ? 14 : 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                            height: 30,
-                            child: LogDayChipList(
-                              question: questions,
-                              onSelectCallback: onValueChangedCallback,
-                            )),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )));
-                break;
-              default:
-                _triggerWidgetList.add(TriggerWidgetModel(
-                    questionTag: questions.tag, widget: Container()));
-            }
-          }
-        } else {
-          if (!isSelected) {
-            _triggerWidgetList.remove(triggerWidgetModel);
-            selectedAnswerListOfTriggers
-                .removeWhere((element) => element.questionTag == questionTag);
-          }
-        }
+        _generateTriggerWidgetList(whichTriggerItemSelected);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(_triggerWidgetList.length,
@@ -1919,7 +1769,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       }
     });
 
-    _medicationSelectedDataModel = MedicationSelectedDataModel(
+    _medicationSelectedDataModel = MedicationSelectedDataModel (
       selectedMedicationIndex: selectedMedicationValueList,
       selectedMedicationDateList: selectedMedicationDateList,
       selectedMedicationDosageList: selectedMedicationDosageList,
@@ -2030,7 +1880,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           if (element.isSelected) {
             Questions questionTriggerData = widget.triggerExpandableWidgetList
                 .firstWhere(
-                    (element1) => element1.precondition.contains(element.text),
+                    (element1) => element1.precondition.toLowerCase().contains(element.text.toLowerCase()),
                 orElse: () => null);
             if (questionTriggerData != null) {
               SelectedAnswers selectedAnswerTriggerData =
@@ -2135,6 +1985,202 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
       setState(() {
 
       });
+    }
+  }
+
+  void _generateTriggerWidgetList(int whichTriggerItemSelected) {
+    String triggerName = widget.valuesList[whichTriggerItemSelected].text;
+
+    bool isSelected =
+        widget.valuesList[whichTriggerItemSelected].isSelected;
+    Questions questions = widget.triggerExpandableWidgetList.firstWhere(
+            (element) => element.precondition.toLowerCase().contains(triggerName.toLowerCase()),
+        orElse: () => null);
+    String questionTag = (questions == null) ? '' : questions.tag;
+    TriggerWidgetModel triggerWidgetModel = _triggerWidgetList.firstWhere(
+            (element) => element.questionTag == questionTag,
+        orElse: () => null);
+
+    String selectedTriggerValue;
+    SelectedAnswers selectedAnswerTriggerData = selectedAnswerListOfTriggers
+        .firstWhere((element) => element.questionTag == questionTag,
+        orElse: () => null);
+    if (selectedAnswerTriggerData != null) {
+      selectedTriggerValue = selectedAnswerTriggerData.answer;
+    }
+
+    if (triggerWidgetModel == null) {
+      if (questions == null) {
+        _triggerWidgetList
+            .add(TriggerWidgetModel(questionTag: "", widget: Container()));
+      } else {
+        switch (questions.questionType) {
+          case 'number':
+            _triggerWidgetList.add(TriggerWidgetModel(
+                questionTag: questions.tag,
+                widget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        questions.helpText,
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: Platform.isAndroid ? 14 : 15,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SignUpAgeScreen(
+                      currentTag: questions.tag,
+                      sliderValue: (selectedTriggerValue != null)
+                          ? double.parse(selectedTriggerValue)
+                          : questions.min.toDouble(),
+                      sliderMinValue: questions.min.toDouble(),
+                      sliderMaxValue: questions.max.toDouble(),
+                      minText: questions.min.toString(),
+                      maxText: questions.max.toString(),
+                      labelText: '',
+                      isAnimate: false,
+                      horizontalPadding: 0,
+                      onValueChangeCallback: onValueChangedCallback,
+                      uiHints: questions.uiHints,
+                    ),
+                  ],
+                )));
+            break;
+          case 'text':
+            _triggerWidgetList.add(TriggerWidgetModel(
+                questionTag: questions.tag,
+                widget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        questions.helpText,
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: Platform.isAndroid ? 14 : 15,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: TextFormField(
+                        minLines: 5,
+                        maxLines: 6,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (text) {
+                          onValueChangedCallback(questionTag, text.trim());
+                        },
+                        initialValue: (selectedTriggerValue != null)
+                            ? selectedTriggerValue
+                            : '',
+                        style: TextStyle(
+                            fontSize: Platform.isAndroid ? 14 : 15,
+                            fontFamily: Constant.jostMedium,
+                            color: Constant.unselectedTextColor),
+                        cursorColor: Constant.unselectedTextColor,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          hintText: Constant.tapToType,
+                          hintStyle: TextStyle(
+                              fontSize: Platform.isAndroid ? 14 : 15,
+                              color: Constant.unselectedTextColor,
+                              fontFamily: Constant.jostRegular),
+                          filled: true,
+                          fillColor: Constant.backgroundTransparentColor,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(3)),
+                            borderSide: BorderSide(
+                                color: Constant.backgroundTransparentColor,
+                                width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(3)),
+                            borderSide: BorderSide(
+                                color: Constant.backgroundTransparentColor,
+                                width: 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                )));
+            break;
+          case 'multi':
+            try {
+              if (selectedTriggerValue != null) {
+                Questions questionTrigger =
+                Questions.fromJson(jsonDecode(selectedTriggerValue));
+                questions = questionTrigger;
+                print(questionTrigger);
+              }
+            } catch (e) {
+              print(e.toString());
+            }
+            _triggerWidgetList.add(TriggerWidgetModel(
+                questionTag: questions.tag,
+                widget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        questions.helpText,
+                        style: TextStyle(
+                            color: Constant.locationServiceGreen,
+                            fontFamily: Constant.jostRegular,
+                            fontSize: Platform.isAndroid ? 14 : 15,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 30,
+                        child: LogDayChipList(
+                          question: questions,
+                          onSelectCallback: onValueChangedCallback,
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                )));
+            break;
+          default:
+            _triggerWidgetList.add(TriggerWidgetModel(
+                questionTag: questions.tag, widget: Container()));
+        }
+      }
+    } else {
+      if (!isSelected) {
+        _triggerWidgetList.remove(triggerWidgetModel);
+        selectedAnswerListOfTriggers
+            .removeWhere((element) => element.questionTag == questionTag);
+      }
     }
   }
 }

@@ -292,6 +292,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -326,6 +327,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);

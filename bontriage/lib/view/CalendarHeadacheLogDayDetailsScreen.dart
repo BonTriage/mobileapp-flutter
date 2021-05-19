@@ -92,6 +92,7 @@ class _CalendarHeadacheLogDayDetailsScreenState
                           Align(
                             alignment: Alignment.topRight,
                             child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 Navigator.pop(context, isDataUpdated);
                               },

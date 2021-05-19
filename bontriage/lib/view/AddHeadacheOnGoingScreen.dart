@@ -137,6 +137,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                     fontFamily: Constant.jostMedium),
                               ),
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
                                     _showDiscardChangesBottomSheet();
@@ -341,6 +342,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
+          removeHeadacheTypeData: (tag, headacheType) {
+            if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
+              signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == tag);
+            }
+          },
         currentUserHeadacheModel: _currentUserHeadacheModel,
         uiHints: element.uiHints,
       ));

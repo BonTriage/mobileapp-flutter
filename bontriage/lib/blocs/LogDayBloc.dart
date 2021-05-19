@@ -259,37 +259,7 @@ class LogDayBloc {
           } catch(e) {
             print(e);
           }
-        } /*else {
-          if(element.questionTag.contains('custom')) {
-            medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: element.answer));
-          } else {
-            SelectedAnswers medicationSelectedAnswer = medicationSelectedAnswerList.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
-            if(medicationSelectedAnswer == null) {
-              try {
-                int selectedIndex = int.parse(element.answer.toString()) - 1;
-                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-                if(questions != null) {
-                  selectedValuesList.add(questions.values[selectedIndex].text);
-                  medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
-                }
-              } catch(e) {
-                print(e);
-              }
-            } else {
-              try {
-                selectedValuesList = (json.decode(medicationSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                int selectedIndex = int.parse(element.answer.toString()) - 1;
-                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-                if(questions != null) {
-                  selectedValuesList.add(questions.values[selectedIndex].text);
-                  medicationSelectedAnswer.answer = jsonEncode(selectedValuesList);
-                }
-              } catch(e) {
-                print(e);
-              }
-            }
-          }
-        }*/
+        }
       } else if(element.questionTag.contains('triggers1')) {
         if (element.questionTag != 'triggers1.travel' && element.questionTag != 'triggers1') {
           SelectedAnswers triggersSelectedAnswer = triggerSelectedAnswerList

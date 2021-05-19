@@ -75,6 +75,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 1) {
                       setState(() {
@@ -110,6 +111,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   width: 60,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 0) {
                       setState(() {

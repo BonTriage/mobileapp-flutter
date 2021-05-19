@@ -31,6 +31,7 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
     return Align(
       alignment: Alignment.centerLeft,
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () {
           _showAddNoteBottomSheet();
         },

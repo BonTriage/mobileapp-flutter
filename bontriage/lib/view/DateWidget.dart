@@ -29,12 +29,16 @@ class DateWidget extends StatelessWidget {
         child: Stack(
           children: [
             GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () {
-                Duration duration = weekDateData.difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
-                if (duration.inSeconds <= 0)
-                  navigateToOtherScreenCallback(
-                      Constant.onCalendarHeadacheLogDayDetailsScreenRouter,
-                      weekDateData);
+                if(navigateToOtherScreenCallback != null) {
+                  Duration duration = weekDateData.difference(DateTime.tryParse(
+                      Utils.getDateTimeInUtcFormat(DateTime.now())));
+                  if (duration.inSeconds <= 0)
+                    navigateToOtherScreenCallback(
+                        Constant.onCalendarHeadacheLogDayDetailsScreenRouter,
+                        weekDateData);
+                }
                 else
                   Utils.showValidationErrorDialog(context, 'Invalid date selected.');
               },

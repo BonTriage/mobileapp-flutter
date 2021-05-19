@@ -67,6 +67,7 @@ class _CompassScreenState extends State<CompassScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 1) {
                       setState(() {
@@ -102,6 +103,7 @@ class _CompassScreenState extends State<CompassScreen> {
                   width: 60,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 0) {
                       setState(() {

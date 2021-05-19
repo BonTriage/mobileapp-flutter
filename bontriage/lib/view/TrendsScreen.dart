@@ -194,6 +194,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if (currentIndex != 0) {
                                     setState(() {
@@ -232,6 +233,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 width: 60,
                               ),
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if (currentIndex != 3) {
                                     setState(() {

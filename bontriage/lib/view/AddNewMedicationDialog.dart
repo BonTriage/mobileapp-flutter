@@ -71,6 +71,7 @@ class _AddNewMedicationDialogState extends State<AddNewMedicationDialog> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: () {
                           Navigator.pop(context);
                         },
