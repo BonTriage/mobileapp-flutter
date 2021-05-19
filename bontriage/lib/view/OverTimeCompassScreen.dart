@@ -18,7 +18,8 @@ class OverTimeCompassScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
-  final Future<DateTime> Function (CupertinoDatePickerMode, Function, DateTime) openDatePickerCallback;
+  final Future<DateTime> Function(CupertinoDatePickerMode, Function, DateTime)
+      openDatePickerCallback;
 
   const OverTimeCompassScreen(
       {Key key,
@@ -60,6 +61,16 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   String headacheDownOrUp = '';
   String increaseOrDecrease = '';
 
+  double currentIntensityValue = 0;
+  double currentDisabilityValue = 0;
+  double currentFrequencyValue = 0;
+  double currentDurationValue = 0;
+
+  double previousIntensityValue = 0;
+  double previousDisabilityValue = 0;
+  double previousFrequencyValue = 0;
+  double previousDurationValue = 0;
+
   CompassTutorialModel _compassTutorialModel;
 
   List<TextSpan> _getBubbleTextSpans() {
@@ -100,7 +111,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.chatBubbleGreen)));
     list.add(TextSpan(
-        text: '$increaseOrDecrease in Frequency.',
+        text: '$increaseOrDecrease',
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
@@ -166,7 +177,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 150,),
+                    SizedBox(
+                      height: 150,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
@@ -186,7 +199,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                       children: [
                         BouncingWidget(
                           onPressed: () {
-                            if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
+                            if (currentUserHeadacheModel != null &&
+                                currentUserHeadacheModel.isOnGoing) {
                               _navigateToAddHeadacheScreen();
                             } else {
                               _navigateUserToHeadacheLogScreen();
@@ -221,6 +235,16 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                   selectedHeadacheName = headacheListModelData[0].text;
                 }
                 setCompassAxesData(snapshot.data);
+                if (userPreviousMonthScoreData < userCurrentMonthScoreData) {
+                  headacheDownOrUp = 'up';
+                  setTextValue(1);
+                } else if (userPreviousMonthScoreData > userCurrentMonthScoreData) {
+                  headacheDownOrUp = 'down';
+                  setTextValue(0);
+                } else {
+                  headacheDownOrUp = 'same';
+                  setTextValue(2);
+                }
                 return Container(
                   child: Column(
                     children: [
@@ -241,8 +265,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: Container(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 3, horizontal: 30),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 3, horizontal: 30),
                             decoration: BoxDecoration(
                               color: Constant.compassMyHeadacheTextColor,
                               borderRadius: BorderRadius.circular(20),
@@ -267,7 +291,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                           GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
-                              Utils.showCompassTutorialDialog(context, 0, compassTutorialModel: _compassTutorialModel);
+                              Utils.showCompassTutorialDialog(context, 0,
+                                  compassTutorialModel: _compassTutorialModel);
                             },
                             child: Container(
                               alignment: Alignment.topRight,
@@ -284,7 +309,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(context, 0, compassTutorialModel: _compassTutorialModel);
+                                    Utils.showCompassTutorialDialog(context, 0,
+                                        compassTutorialModel:
+                                            _compassTutorialModel);
                                   },
                                   child: Text(
                                     'i',
@@ -304,7 +331,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                 quarterTurns: 3,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(context, 3, compassTutorialModel: _compassTutorialModel);
+                                    Utils.showCompassTutorialDialog(context, 3,
+                                        compassTutorialModel:
+                                            _compassTutorialModel);
                                   },
                                   child: Text(
                                     "Frequency",
@@ -321,7 +350,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                   GestureDetector(
                                     onTap: () {
                                       Utils.showCompassTutorialDialog(
-                                          context, 1, compassTutorialModel: _compassTutorialModel);
+                                          context, 1,
+                                          compassTutorialModel:
+                                              _compassTutorialModel);
                                     },
                                     child: Text(
                                       "Intensity",
@@ -366,7 +397,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                   child: Text(
                                                     userCurrentMonthScoreData !=
                                                             null
-                                                        ? userCurrentMonthScoreData.toString()
+                                                        ? userCurrentMonthScoreData
+                                                            .toString()
                                                         : '0',
                                                     style: TextStyle(
                                                         color:
@@ -393,7 +425,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                   GestureDetector(
                                     onTap: () {
                                       Utils.showCompassTutorialDialog(
-                                          context, 2, compassTutorialModel: _compassTutorialModel);
+                                          context, 2,
+                                          compassTutorialModel:
+                                              _compassTutorialModel);
                                     },
                                     child: Text(
                                       "Disability",
@@ -409,7 +443,9 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                 quarterTurns: 1,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Utils.showCompassTutorialDialog(context, 4, compassTutorialModel: _compassTutorialModel);
+                                    Utils.showCompassTutorialDialog(context, 4,
+                                        compassTutorialModel:
+                                            _compassTutorialModel);
                                   },
                                   child: Text(
                                     "Duration",
@@ -479,7 +515,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               } else {
                                 ///To:Do
                                 print("Not Allowed");
-                                Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
+                                Utils.showValidationErrorDialog(
+                                    context, Constant.beyondDateErrorMessage);
                               }
                             },
                             child: Padding(
@@ -506,7 +543,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: RichText(
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                            textScaleFactor:
+                                MediaQuery.of(context).textScaleFactor,
                             text: TextSpan(
                               children: _getBubbleTextSpans(),
                             ),
@@ -552,9 +590,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
               onDateTimeSelected: _getDateTimeCallbackFunction(0),
             ));*/
 
-    var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
+    var resultFromActionSheet = await widget.openDatePickerCallback(
+        CupertinoDatePickerMode.date,
+        _getDateTimeCallbackFunction(0),
+        _dateTime);
 
-    if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
+    if (resultFromActionSheet != null && resultFromActionSheet is DateTime)
       _onStartDateSelected(resultFromActionSheet);
   }
 
@@ -569,26 +610,26 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
 
   void _onStartDateSelected(DateTime dateTime) {
     //setState(() {
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
-      monthName = Utils.getMonthName(dateTime.month);
-      currentYear = dateTime.year;
-      currentMonth = dateTime.month;
-      _dateTime = dateTime;
-      _recordsCompassScreenBloc.initNetworkStreamController();
-      Utils.showApiLoaderDialog(context,
-          networkStream: _recordsCompassScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-        _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-            selectedHeadacheName);
-      });
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+    monthName = Utils.getMonthName(dateTime.month);
+    currentYear = dateTime.year;
+    currentMonth = dateTime.month;
+    _dateTime = dateTime;
+    _recordsCompassScreenBloc.initNetworkStreamController();
+    Utils.showApiLoaderDialog(context,
+        networkStream: _recordsCompassScreenBloc.networkDataStream,
+        tapToRetryFunction: () {
+      _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
           selectedHeadacheName);
+    });
+    requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+        selectedHeadacheName);
     //});
   }
 
@@ -615,12 +656,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (frequencyElement) => frequencyElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-     // userFrequencyValue = userFrequency.value ~/ (userFrequency.max / baseMaxValue);
+      // userFrequencyValue = userFrequency.value ~/ (userFrequency.max / baseMaxValue);
       _compassTutorialModel.currentMonthFrequency = userFrequency.total.round();
       userFrequencyValue = (userFrequency.value * baseMaxValue).round();
-      if(userFrequencyValue > 10){
+      if (userFrequencyValue > 10) {
         userFrequencyValue = 10;
-      }else{
+      } else {
         userFrequencyValue = userFrequencyValue;
       }
     } else {
@@ -631,12 +672,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (durationElement) => durationElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
-    // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
+      // userDurationValue = userDuration.value ~/ (userDuration.max / baseMaxValue);
       _compassTutorialModel.currentMonthDuration = userDuration.total.round();
-      userDurationValue = (userDuration.value * baseMaxValue).round() ; //0
-      if(userDurationValue > 10){
+      userDurationValue = (userDuration.value * baseMaxValue).round(); //0
+      if (userDurationValue > 10) {
         userDurationValue = 10;
-      }else {
+      } else {
         userDurationValue = userDurationValue;
       }
     } else {
@@ -647,9 +688,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
-     // userIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
+      // userIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
       _compassTutorialModel.currentMonthIntensity = userIntensity.value.round();
-      userIntensityValue = (userIntensity.value * baseMaxValue) ~/ userIntensity.max; //10
+      userIntensityValue =
+          (userIntensity.value * baseMaxValue) ~/ userIntensity.max; //10
     } else {
       userIntensityValue = 0;
       _compassTutorialModel.currentMonthIntensity = 0;
@@ -658,12 +700,14 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (disabilityElement) => disabilityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
-     // userDisabilityValue =  userDisability.value ~/ (userDisability.max / baseMaxValue);
-      _compassTutorialModel.currentMonthDisability = userDisability.value.round();
-      userDisabilityValue =  (userDisability.value * baseMaxValue)~/ userDisability.max; //10
-      if(userDisabilityValue >10){
+      // userDisabilityValue =  userDisability.value ~/ (userDisability.max / baseMaxValue);
+      _compassTutorialModel.currentMonthDisability =
+          userDisability.value.round();
+      userDisabilityValue =
+          (userDisability.value * baseMaxValue) ~/ userDisability.max; //10
+      if (userDisabilityValue > 10) {
         userDisabilityValue = 10;
-      }else {
+      } else {
         userDisabilityValue = userDisabilityValue;
       }
     } else {
@@ -686,6 +730,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       setCurrentMonthCompassDataScore(
           userIntensity, userDisability, userFrequency, userDuration);
     } else {
+      currentIntensityValue = 0;
+      currentDisabilityValue = 0;
+      currentFrequencyValue = 0;
+      currentDurationValue = 0;
       userCurrentMonthScoreData = 0;
     }
 
@@ -713,11 +761,11 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       _recordsCompassScreenBloc.initNetworkStreamController();
       print('show api loader 12');
       widget.showApiLoaderCallback(_recordsCompassScreenBloc.networkDataStream,
-              () {
-            _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
-            requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
-                selectedHeadacheName);
-          });
+          () {
+        _recordsCompassScreenBloc.enterSomeDummyDataToStreamController();
+        requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
+            selectedHeadacheName);
+      });
       requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
           selectedHeadacheName);
       print(resultFromActionSheet);
@@ -751,6 +799,11 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       Axes userFrequencyValue,
       Axes userDurationValue) {
     var intensityScore, disabilityScore, frequencyScore, durationScore;
+    currentIntensityValue = userIntensityValue.value;
+    currentDisabilityValue = userDisabilityValue.value;
+    currentFrequencyValue = userFrequencyValue.value;
+    currentDurationValue = userDurationValue.value;
+
     if (userIntensityValue.value != null) {
       intensityScore =
           userIntensityValue.value / userIntensityValue.max * 100.0; //44
@@ -767,21 +820,20 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       frequencyScore =
           userFrequencyValue.value /*/ userFrequencyValue.max*/ * 100.0; //~100
 
-      if(frequencyScore > 100)
-        frequencyScore = 100;
+      if (frequencyScore > 100) frequencyScore = 100;
     } else {
       frequencyScore = 0;
     }
     if (userDurationValue.value != null) {
       durationScore =
-          userDurationValue.value /*/ userDurationValue.max*/ * 100.0;  //0
-      if(durationScore > 100)
-        durationScore = 100;
+          userDurationValue.value /*/ userDurationValue.max*/ * 100.0; //0
+      if (durationScore > 100) durationScore = 100;
     } else {
       durationScore = 0;
     }
 
-    print('IntensityScore????$intensityScore????DisabilityScore????$disabilityScore????FrequencyScore????$frequencyScore????DurationScore????$durationScore');
+    print(
+        'IntensityScore????$intensityScore????DisabilityScore????$disabilityScore????FrequencyScore????$frequencyScore????DurationScore????$durationScore');
     var userTotalScore =
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userCurrentMonthScoreData = userTotalScore.round();
@@ -842,7 +894,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      _compassTutorialModel.previousMonthFrequency = userFrequency.total.round();
+      _compassTutorialModel.previousMonthFrequency =
+          userFrequency.total.round();
       userFrequencyValue =
           userFrequency.value ~/ (userFrequency.max / baseMaxValue);
     } else {
@@ -852,7 +905,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.duration,
         orElse: () => null);
     if (userDuration != null) {
-      _compassTutorialModel.previousMonthDuration = (userDuration.total).round();
+      _compassTutorialModel.previousMonthDuration =
+          (userDuration.total).round();
       userDurationValue =
           userDuration.value ~/ (userDuration.max / baseMaxValue);
     } else {
@@ -862,7 +916,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.intensity,
         orElse: () => null);
     if (userIntensity != null) {
-      _compassTutorialModel.previousMonthIntensity = userIntensity.value.round();
+      _compassTutorialModel.previousMonthIntensity =
+          userIntensity.value.round();
       userIntensityValue =
           userIntensity.value ~/ (userIntensity.max / baseMaxValue);
     } else {
@@ -872,7 +927,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.disability,
         orElse: () => null);
     if (userDisability != null) {
-      _compassTutorialModel.previousMonthDisability = userDisability.value.round();
+      _compassTutorialModel.previousMonthDisability =
+          userDisability.value.round();
       userDisabilityValue =
           userDisability.value ~/ (userDisability.max / baseMaxValue);
     } else {
@@ -882,6 +938,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       setPreviousMonthCompassDataScore(
           userIntensity, userDisability, userFrequency, userDuration);
     } else {
+      previousIntensityValue = 0;
+      previousDisabilityValue = 0;
+      previousFrequencyValue = 0;
+      previousDurationValue = 0;
       userPreviousMonthScoreData = 0;
     }
   }
@@ -892,6 +952,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       Axes userFrequencyValue,
       Axes userDurationValue) {
     var intensityScore, disabilityScore, frequencyScore, durationScore;
+
+    previousIntensityValue = userIntensityValue.value;
+    previousDisabilityValue = userDisabilityValue.value;
+    previousFrequencyValue = userFrequencyValue.value;
+    previousDurationValue = userDurationValue.value;
+
     if (userIntensityValue.value != null) {
       intensityScore =
           userIntensityValue.value / userIntensityValue.max * 100.0;
@@ -911,8 +977,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       frequencyScore = 0;
     }
     if (userDurationValue.value != null) {
-      durationScore =
-          userDurationValue.value / userDurationValue.max * 100.0;
+      durationScore = userDurationValue.value / userDurationValue.max * 100.0;
     } else {
       durationScore = 0;
     }
@@ -922,48 +987,58 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     userPreviousMonthScoreData = userTotalScore.round();
     print(userPreviousMonthScoreData);
 
-    if (userPreviousMonthScoreData > userCurrentMonthScoreData) {
-      headacheDownOrUp = 'down';
-      increaseOrDecrease = 'decrease';
-    } else {
-      headacheDownOrUp = 'up';
-      increaseOrDecrease = 'increase';
-    }
   }
 
   void _navigateToAddHeadacheScreen() async {
     DateTime currentDateTime = DateTime.now();
-    DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
+    DateTime endHeadacheDateTime = DateTime(
+        currentDateTime.year,
+        currentDateTime.month,
+        currentDateTime.day,
+        currentDateTime.hour,
+        currentDateTime.minute,
+        0,
+        0,
+        0);
 
-    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
+    currentUserHeadacheModel.selectedEndDate =
+        Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+    currentUserHeadacheModel = await SignUpOnBoardProviders.db
+        .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     currentUserHeadacheModel.isOnGoing = false;
-    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
+    currentUserHeadacheModel.selectedEndDate =
+        Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
-    await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+    await widget.navigateToOtherScreenCallback(
+        Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();
   }
 
   void _navigateUserToHeadacheLogScreen() async {
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     CurrentUserHeadacheModel currentUserHeadacheModel;
 
     if (userProfileInfoData != null)
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db
+          .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
     if (currentUserHeadacheModel == null) {
-      await widget.navigateToOtherScreenCallback(Constant.headacheStartedScreenRouter, null);
-    }
-    else {
-      if(currentUserHeadacheModel.isOnGoing) {
-        await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
+      await widget.navigateToOtherScreenCallback(
+          Constant.headacheStartedScreenRouter, null);
+    } else {
+      if (currentUserHeadacheModel.isOnGoing) {
+        await widget.navigateToOtherScreenCallback(
+            Constant.currentHeadacheProgressScreenRouter, null);
       } else
-        await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
+        await widget.navigateToOtherScreenCallback(
+            Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     }
     _getUserCurrentHeadacheData();
   }
@@ -971,17 +1046,54 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   Future<void> _getUserCurrentHeadacheData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    int currentPositionOfTabBar =
+        sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    var userProfileInfoData =
+        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
-    if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+    if (currentPositionOfTabBar == 1 && userProfileInfoData != null) {
+      currentUserHeadacheModel = await SignUpOnBoardProviders.db
+          .getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
   }
-
 
   void _removeDataFromSharedPreference() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.remove(Constant.updateOverTimeCompassData);
+  }
+
+//'$increaseOrDecrease in Frequency.
+  setTextValue(int predicateId) {
+    if (predicateId == 0) {
+      if (currentIntensityValue < previousIntensityValue) {
+        increaseOrDecrease = 'decrease in Intensity.';
+      } else if (currentDisabilityValue < previousDisabilityValue) {
+        increaseOrDecrease = 'decrease in Disability.';
+      } else if (currentFrequencyValue < previousFrequencyValue) {
+        increaseOrDecrease = 'decrease in Frequency.';
+      } else {
+        increaseOrDecrease = 'decrease in Duration.';
+      }
+    }else if (predicateId == 1) {
+      if (currentIntensityValue > previousIntensityValue) {
+        increaseOrDecrease = 'increase in Intensity.';
+      } else if (currentDisabilityValue > previousDisabilityValue) {
+        increaseOrDecrease = 'increase in Disability.';
+      } else if (currentFrequencyValue > previousFrequencyValue) {
+        increaseOrDecrease = 'increase in Frequency.';
+      } else {
+        increaseOrDecrease = 'increase in Duration.';
+      }
+    }else{
+      if (currentIntensityValue == previousIntensityValue) {
+        increaseOrDecrease = 'neither increase or decrease in Intensity.';
+      } else if (currentDisabilityValue == previousDisabilityValue) {
+        increaseOrDecrease = 'neither increase or decrease in Disability.';
+      } else if (currentFrequencyValue == previousFrequencyValue) {
+        increaseOrDecrease = 'neither increase or decrease in Frequency.';
+      } else {
+        increaseOrDecrease = 'neither increase or decrease in Duration.';
+      }
+    }
   }
 }
