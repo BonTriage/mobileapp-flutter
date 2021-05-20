@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
-import 'package:mobile/view/NotificationTimer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -118,32 +117,35 @@ class _MoreScreenState extends State<MoreScreen> {
               Expanded(
                 child: Container(),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  BouncingWidget(
-                    onPressed: () {
-                      //_showDeleteLogOptionBottomSheet();
-                      widget.openActionSheetCallback(
-                          Constant.medicalHelpActionSheet, null);
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Constant.chatBubbleGreen),
-                      child: Text(
-                        'I need medical help',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Constant.bubbleChatTextView,
-                          fontFamily: Constant.jostMedium,
+              Visibility(
+                visible: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    BouncingWidget(
+                      onPressed: () {
+                        //_showDeleteLogOptionBottomSheet();
+                        widget.openActionSheetCallback(
+                            Constant.medicalHelpActionSheet, null);
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Constant.chatBubbleGreen),
+                        child: Text(
+                          'I need medical help',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Constant.bubbleChatTextView,
+                            fontFamily: Constant.jostMedium,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,

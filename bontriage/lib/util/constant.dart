@@ -470,7 +470,7 @@ class Constant {
   static String twelveHourAMPM = '12 hour AM/PM';
   static const String generateReport = 'Generate Report';
   static const String support = 'Support';
-  static const String dateRange = 'Date Range';
+  static const String dateRange = 'Selected Month';
   static String dataToInclude = 'Data to include';
   static String all = 'All';
   static const String last2Weeks = 'Last 2 weeks';
