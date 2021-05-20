@@ -164,7 +164,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                                 clickedValue = response.spot.spot.y.toInt();
                                 if (response.touchInput is FlLongPressEnd ||
                                     response.touchInput is FlPanEnd) {
-                                  isClicked = true;
+                                    isClicked = true;
                                 }
                               });
                             }
