@@ -318,6 +318,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
                           child: TextField(
+                            maxLength: 20,
                             inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
                             onEditingComplete: () {},
                             onSubmitted: (String value) {

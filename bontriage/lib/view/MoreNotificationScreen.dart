@@ -374,6 +374,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
                           child: TextField(
+                            maxLength: 20,
                             inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
                             onSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
