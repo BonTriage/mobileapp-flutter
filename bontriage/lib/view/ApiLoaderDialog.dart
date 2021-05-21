@@ -212,7 +212,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data == Constant.success) {
-              Future.delayed(Duration(milliseconds: 200), () {
+              Future.delayed(Duration(milliseconds: 0), () {
                 try {
                   _popDialog();
                 } catch (e) {}
@@ -285,13 +285,16 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                     child: NetworkErrorScreen(
                       errorMessage: snapshot.error.toString(),
                       tapToRetryFunction: () {
-                        if(snapshot.error is NoInternetConnection) {
+                        widget.tapToRetryFunction();
+                       /* if(snapshot.error is NoInternetConnection) {
                           widget.tapToRetryFunction();
                         } else {
                           Navigator.pop(context);
-                        }
+                        }*/
                       },
-                      isNeedToRetry: snapshot.error is NoInternetConnection,
+
+                      
+                      isNeedToRetry: true,
                     ),
                   ),
                 ],
@@ -358,7 +361,6 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
     if (!isPopped) {
       bool mayBePop = await Navigator.maybePop(context);
       isPopped = true;
-
       print("may be pop $mayBePop");
       if (mayBePop) {
         Navigator.pop(context);

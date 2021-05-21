@@ -161,7 +161,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                       ),
                     ],
                   );
-                } else {
+                } else if(snapshot.data is RecordsTrendsDataModel) {
                   recordsTrendsDataModel = snapshot.data;
                   if (selectedHeadacheName == null) {
                     List<HeadacheListDataModel> headacheListModelData =
@@ -378,17 +378,10 @@ class _TrendsScreenState extends State<TrendsScreen> {
                       ),
                     ],
                   );
+                }else {
+                  return Container();
                 }
-              } else if (snapshot.hasError) {
-                return NetworkErrorScreen(
-                  errorMessage: snapshot.error.toString(),
-                  tapToRetryFunction: () {
-                    Utils.showApiLoaderDialog(context);
-                    /* requestService(firstDayOfTheCurrentMonth,
-                      lastDayOfTheCurrentMonth, selectedHeadacheName);*/
-                  },
-                );
-              } else {
+              }else {
                 return Container();
               }
             }),

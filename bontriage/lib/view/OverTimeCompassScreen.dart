@@ -228,7 +228,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                     ),
                   ],
                 );
-              } else {
+              } else if(snapshot.data is RecordsOverTimeCompassModel) {
                 _compassTutorialModel.currentDateTime = _dateTime;
                 if (selectedHeadacheName == null) {
                   List<HeadacheListDataModel> headacheListModelData =
@@ -558,18 +558,10 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                     ],
                   ),
                 );
+              }else {
+                return Container();
               }
-            } else if (snapshot.hasError) {
-              Utils.closeApiLoaderDialog(context);
-              return NetworkErrorScreen(
-                errorMessage: snapshot.error.toString(),
-                tapToRetryFunction: () {
-                  Utils.showApiLoaderDialog(context);
-                  requestService(firstDayOfTheCurrentMonth,
-                      lastDayOfTheCurrentMonth, selectedHeadacheName);
-                },
-              );
-            } else {
+            }  else {
               return Container();
             }
           }),
