@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
@@ -284,13 +285,13 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                     child: NetworkErrorScreen(
                       errorMessage: snapshot.error.toString(),
                       tapToRetryFunction: () {
-                        if(snapshot.error is SocketException) {
+                        if(snapshot.error is NoInternetConnection) {
                           widget.tapToRetryFunction();
                         } else {
                           Navigator.pop(context);
                         }
                       },
-                      isNeedToRetry: snapshot.error is SocketException,
+                      isNeedToRetry: snapshot.error is NoInternetConnection,
                     ),
                   ),
                 ],
