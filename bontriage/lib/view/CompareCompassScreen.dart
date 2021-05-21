@@ -215,6 +215,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                   ],
                 );
               } else {
+                _compassTutorialModelMonthly.currentDateTime = _dateTime;
                 if (selectedHeadacheName == null) {
                   List<HeadacheListDataModel> headacheListModelData =
                       snapshot.data.headacheListDataModel;

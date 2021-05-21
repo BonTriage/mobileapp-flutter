@@ -229,6 +229,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                   ],
                 );
               } else {
+                _compassTutorialModel.currentDateTime = _dateTime;
                 if (selectedHeadacheName == null) {
                   List<HeadacheListDataModel> headacheListModelData =
                       snapshot.data.headacheListDataModel;
