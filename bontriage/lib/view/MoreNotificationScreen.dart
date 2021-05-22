@@ -538,6 +538,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
      if(permissionResult ?? false) {
        localNotificationDataSink.add('Clicked');
+       Future.delayed(Duration(milliseconds: 500), () {
+         SignUpOnBoardProviders.db
+          .insertUserNotifications(allNotificationListData);
+       });
             final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
            fontSize: 16,
@@ -552,6 +556,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
      }
    } else {
      localNotificationDataSink.add('Clicked');
+     Future.delayed(Duration(milliseconds: 500), () {
+       SignUpOnBoardProviders.db
+           .insertUserNotifications(allNotificationListData);
+     });
      final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
          height: 1.3,
          fontSize: 16,

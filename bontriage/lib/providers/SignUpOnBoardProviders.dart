@@ -116,6 +116,7 @@ class SignUpOnBoardProviders {
   }
 
   Future<void> insertUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+    print('insertUserNotifications1');
     final db = await database;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION where $USER_ID = ${userProfileInfoData.userId}');
@@ -123,8 +124,8 @@ class SignUpOnBoardProviders {
     if (userInfoListData.length == 0){
    // var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
    // if(notificationListData == null || notificationListData.length == 0){
-      Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId,NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
-      await db.insert(USER_NOTIFICATION,localNotificationMap);
+      Map<String, dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+      await db.insert(USER_NOTIFICATION, localNotificationMap);
     }else{
       updateUserNotifications(localNotificationListData);
     }
@@ -133,7 +134,7 @@ class SignUpOnBoardProviders {
   void updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
     final db = await database;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId,NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+    Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
     await db.update(
       USER_NOTIFICATION,
       localNotificationMap,
