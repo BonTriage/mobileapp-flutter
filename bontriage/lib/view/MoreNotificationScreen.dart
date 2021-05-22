@@ -485,7 +485,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   void getNotificationListData() async {
     var notificationListData =
     await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
-    if (notificationListData != null) {
+    if (notificationListData != null && notificationListData.length >0) {
       setState(() {
         var customNotificationData = notificationListData.firstWhere(
                 (element) => element.isCustomNotificationAdded,

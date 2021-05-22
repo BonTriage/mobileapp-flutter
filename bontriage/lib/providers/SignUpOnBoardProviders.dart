@@ -118,9 +118,12 @@ class SignUpOnBoardProviders {
   Future<void> insertUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
     final db = await database;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
-    if(notificationListData == null || notificationListData.length == 0){
-      Map<String,dynamic> localNotificationMap = {USER_ID:'4451',NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION where $USER_ID = ${userProfileInfoData.userId}');
+
+    if (userInfoListData.length == 0){
+   // var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+   // if(notificationListData == null || notificationListData.length == 0){
+      Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId,NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
       await db.insert(USER_NOTIFICATION,localNotificationMap);
     }else{
       updateUserNotifications(localNotificationListData);
@@ -130,19 +133,20 @@ class SignUpOnBoardProviders {
   void updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
     final db = await database;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    Map<String,dynamic> localNotificationMap = {USER_ID:'4451',NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+    Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId,NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
     await db.update(
       USER_NOTIFICATION,
       localNotificationMap,
       where: "$USER_ID = ?",
-      whereArgs: ['4451'],
+      whereArgs: [userProfileInfoData.userId],
     );
   }
 
   Future<List<LocalNotificationModel>> getAllLocalNotificationsData() async {
     final db = await database;
     List<LocalNotificationModel> localNotificationListData;
-    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION');
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION where $USER_ID = ${userProfileInfoData.userId}');
     if (userInfoListData.length != 0)
      localNotificationListData =  List<LocalNotificationModel>.from(jsonDecode(userInfoListData[0][NOTIFICATION_JSON]).map((x) => LocalNotificationModel.fromJson(x)));
     return localNotificationListData;

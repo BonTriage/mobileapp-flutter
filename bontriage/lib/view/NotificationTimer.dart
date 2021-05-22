@@ -342,6 +342,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         dailyLogNotificationData.notificationType = dailyNotificationLogTime;
         if (dailyNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
+          widget.allNotificationListData.remove(dailyLogNotificationData);
         } else {
           print("scheduled notification at $_dateTime");
           dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
@@ -354,7 +355,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
-        widget.allNotificationListData.add(localNotificationModel);
+        if(dailyNotificationLogTime != 'Off') {
+          widget.allNotificationListData.add(localNotificationModel);
+        }else{
+          widget.allNotificationListData.remove(localNotificationModel);
+        }
       }
     } else if (widget.selectedNotification == 1) {
       if (isDailySelected) {
@@ -388,6 +393,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
             medicationNotificationLogTime;
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
+          widget.allNotificationListData.remove(medicationNotificationData);
         } else {
           medicationNotificationData.notificationTime = _dateTime.toIso8601String();
         }
@@ -399,7 +405,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
-        widget.allNotificationListData.add(localNotificationModel);
+        if(medicationNotificationLogTime != 'Off') {
+          widget.allNotificationListData.add(localNotificationModel);
+        }else{
+          widget.allNotificationListData.remove(localNotificationModel);
+        }
       }
     } else if (widget.selectedNotification == 2) {
       if (isDailySelected) {
@@ -433,6 +443,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         exerciseNotificationData.notificationType = exerciseNotificationLogTime;
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
+          widget.allNotificationListData.remove(exerciseNotificationData);
         } else {
           exerciseNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
@@ -444,7 +455,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
-        widget.allNotificationListData.add(localNotificationModel);
+        if(exerciseNotificationLogTime != 'Off') {
+          widget.allNotificationListData.add(localNotificationModel);
+               }else{
+          widget.allNotificationListData.remove(localNotificationModel);
+        }
       }
     } else {
       var customNotificationData = widget.allNotificationListData.firstWhere(
@@ -483,6 +498,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
+          widget.allNotificationListData.remove(customNotificationData);
         } else {
           customNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
@@ -495,7 +511,11 @@ class _NotificationTimerState extends State<NotificationTimer> {
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
-        widget.allNotificationListData.add(localNotificationModel);
+        if(customNotificationLogTime != 'Off') {
+          widget.allNotificationListData.add(localNotificationModel);
+        }else{
+          widget.allNotificationListData.remove(localNotificationModel);
+        }
       }
     }
 

@@ -301,7 +301,7 @@ class _NotificationSectionState extends State<NotificationSection>
       localNotificationNameModel = widget.allNotificationListData.firstWhere(
               (element) => element.isCustomNotificationAdded ?? false,
           orElse: () => null);
-      if (localNotificationNameModel != null) {
+      if (localNotificationNameModel != null && localNotificationNameModel.notificationName.isNotEmpty) {
         return localNotificationNameModel.notificationName ;
       }else return widget.notificationName;
     }else return localNotificationNameModel != null ? localNotificationNameModel.notificationName : widget.notificationName;
