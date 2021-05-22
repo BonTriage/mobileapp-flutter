@@ -892,6 +892,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userFrequencyValue =
           userFrequency.value ~/ (userFrequency.max / baseMaxValue);
     } else {
+      _compassTutorialModel.previousMonthFrequency = 0;
       userFrequencyValue = 0;
     }
     var userDuration = previousMonthCompassAxesListData.firstWhere(
@@ -903,6 +904,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDurationValue =
           userDuration.value ~/ (userDuration.max / baseMaxValue);
     } else {
+      _compassTutorialModel.previousMonthDuration = 0;
       userDurationValue = 0;
     }
     var userIntensity = previousMonthCompassAxesListData.firstWhere(
@@ -914,6 +916,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userIntensityValue =
           userIntensity.value ~/ (userIntensity.max / baseMaxValue);
     } else {
+      _compassTutorialModel.previousMonthIntensity = 0;
       userIntensityValue = 0;
     }
     var userDisability = previousMonthCompassAxesListData.firstWhere(
@@ -925,6 +928,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       userDisabilityValue =
           userDisability.value ~/ (userDisability.max / baseMaxValue);
     } else {
+      _compassTutorialModel.previousMonthDisability = 0;
       userDisabilityValue = 0;
     }
     if (previousMonthCompassAxesListData.length > 0) {
