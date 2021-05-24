@@ -619,7 +619,7 @@ class Constant {
   static const String trendsTutorialText3 =
       'An outlined circle () means you did not experience that item on a given day.';
   static const String trendsTutorialText4 =
-      'For instance, you can see that on Sep 10, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
+      'For instance, you can see that on arrow, this person got 20+ minutes of exercise, but did not have regular meals, and did not get good sleep.';
   static const String trendsTutorialText5 =
       'You can use this information to track how certain behaviors, triggers, or medications may affect different characteristics of your headaches!';
 
