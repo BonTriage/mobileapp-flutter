@@ -480,6 +480,9 @@ class _NotificationScreenState extends State<NotificationScreen>
 
       if(permissionResult ?? false) {
         localNotificationDataSink.add('Clicked');
+        Future.delayed(Duration(milliseconds: 500), () {
+          SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+        });
         Navigator.pushReplacementNamed(context,
             Constant.postNotificationOnBoardRouter);
       }else{
@@ -490,6 +493,9 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
     } else {
       localNotificationDataSink.add('Clicked');
+      Future.delayed(Duration(milliseconds: 500), () {
+        SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+      });
       Navigator.pushReplacementNamed(context,
           Constant.postNotificationOnBoardRouter);
     }

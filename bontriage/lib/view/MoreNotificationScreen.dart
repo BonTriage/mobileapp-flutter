@@ -525,7 +525,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
     }else return textEditingController.text ?? '';
   }
 
-  void requestPermissionForNotification() async{
+  void requestPermissionForNotification() async {
     if(Platform.isIOS){
      var permissionResult  = await flutterLocalNotificationsPlugin
          .resolvePlatformSpecificImplementation<
