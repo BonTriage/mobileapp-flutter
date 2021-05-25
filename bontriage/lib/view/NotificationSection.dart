@@ -270,7 +270,6 @@ class _NotificationSectionState extends State<NotificationSection>
             children: <Widget>[
               Text(
                 setNotificationName(),
-
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontSize: 14,
@@ -522,7 +521,7 @@ class _NotificationSectionState extends State<NotificationSection>
           orElse: () => null);
       if (localNotificationNameModel != null && localNotificationNameModel.notificationName.isNotEmpty) {
         return localNotificationNameModel.notificationName ;
-      }else return widget.notificationName;
+      }else return widget.notificationName.isNotEmpty ? widget.notificationName :'Custom';
     }else return localNotificationNameModel != null ? localNotificationNameModel.notificationName : widget.notificationName;
 
   }

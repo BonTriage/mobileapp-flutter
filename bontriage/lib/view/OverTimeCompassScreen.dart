@@ -10,7 +10,6 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -887,8 +886,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      _compassTutorialModel.previousMonthFrequency =
-          userFrequency.total.round();
+      _compassTutorialModel.previousMonthFrequency =    userFrequency.total.round();
       userFrequencyValue =
           userFrequency.value ~/ (userFrequency.max / baseMaxValue);
     } else {
