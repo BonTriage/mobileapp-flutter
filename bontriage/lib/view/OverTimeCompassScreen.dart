@@ -810,7 +810,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     }
     if (userFrequencyValue.value != null) {
       frequencyScore =
-          userFrequencyValue.value /*/ userFrequencyValue.max*/ * 100.0; //~100
+          userFrequencyValue.value * 100.0; //~100
 
       if (frequencyScore > 100) frequencyScore = 100;
     } else {
@@ -818,7 +818,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     }
     if (userDurationValue.value != null) {
       durationScore =
-          userDurationValue.value /*/ userDurationValue.max*/ * 100.0; //0
+          userDurationValue.value * 100.0; //0
       if (durationScore > 100) durationScore = 100;
     } else {
       durationScore = 0;
@@ -871,8 +871,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         Constant.headacheStartedScreenRouter, null);
   }
 
-  void setPreviousMonthAxesData(
-      RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
+  void setPreviousMonthAxesData(RecordsOverTimeCompassModel recordsOverTimeCompassModel) {
     int userDisabilityValue,
         userFrequencyValue,
         userDurationValue,
@@ -886,9 +885,14 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityElement) => intensityElement.name == Constant.frequency,
         orElse: () => null);
     if (userFrequency != null) {
-      _compassTutorialModel.previousMonthFrequency =    userFrequency.total.round();
-      userFrequencyValue =
-          userFrequency.value ~/ (userFrequency.max / baseMaxValue);
+      _compassTutorialModel.previousMonthFrequency =
+          userFrequency.total.round();
+      userFrequencyValue = (userFrequency.value * baseMaxValue).round();
+      if (userFrequencyValue > 10) {
+        userFrequencyValue = 10;
+      } else {
+        userFrequencyValue = userFrequencyValue;
+      }
     } else {
       _compassTutorialModel.previousMonthFrequency = 0;
       userFrequencyValue = 0;
@@ -899,8 +903,12 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userDuration != null) {
       _compassTutorialModel.previousMonthDuration =
           (userDuration.total).round();
-      userDurationValue =
-          userDuration.value ~/ (userDuration.max / baseMaxValue);
+      userDurationValue = (userDuration.value * baseMaxValue).round(); //0
+      if (userDurationValue > 10) {
+        userDurationValue = 10;
+      } else {
+        userDurationValue = userDurationValue;
+      }
     } else {
       _compassTutorialModel.previousMonthDuration = 0;
       userDurationValue = 0;
@@ -911,8 +919,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userIntensity != null) {
       _compassTutorialModel.previousMonthIntensity =
           userIntensity.value.round();
-      userIntensityValue =
-          userIntensity.value ~/ (userIntensity.max / baseMaxValue);
+      userIntensityValue = userIntensity.value ~/ (userIntensity.max / baseMaxValue);
     } else {
       _compassTutorialModel.previousMonthIntensity = 0;
       userIntensityValue = 0;
@@ -923,15 +930,13 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     if (userDisability != null) {
       _compassTutorialModel.previousMonthDisability =
           userDisability.value.round();
-      userDisabilityValue =
-          userDisability.value ~/ (userDisability.max / baseMaxValue);
+      userDisabilityValue = userDisability.value ~/ (userDisability.max / baseMaxValue);
     } else {
       _compassTutorialModel.previousMonthDisability = 0;
       userDisabilityValue = 0;
     }
     if (previousMonthCompassAxesListData.length > 0) {
-      setPreviousMonthCompassDataScore(
-          userIntensity, userDisability, userFrequency, userDuration);
+      setPreviousMonthCompassDataScore(userIntensity, userDisability, userFrequency, userDuration);
     } else {
       previousIntensityValue = 0;
       previousDisabilityValue = 0;
@@ -966,13 +971,14 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
       disabilityScore = 0;
     }
     if (userFrequencyValue.value != null) {
-      frequencyScore =
-          userFrequencyValue.value / userFrequencyValue.max * 100.0;
+      frequencyScore = userFrequencyValue.value * 100.0; //~100
+      if (frequencyScore > 100) frequencyScore = 100;
     } else {
       frequencyScore = 0;
     }
     if (userDurationValue.value != null) {
-      durationScore = userDurationValue.value / userDurationValue.max * 100.0;
+      durationScore = userDurationValue.value * 100.0; //0
+      if (durationScore > 100) durationScore = 100;
     } else {
       durationScore = 0;
     }
@@ -981,7 +987,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userPreviousMonthScoreData = userTotalScore.round();
     print(userPreviousMonthScoreData);
-
   }
 
   void _navigateToAddHeadacheScreen() async {
