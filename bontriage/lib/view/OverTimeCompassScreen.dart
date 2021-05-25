@@ -988,7 +988,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
         (intensityScore + disabilityScore + frequencyScore + durationScore) / 4;
     userPreviousMonthScoreData = userTotalScore.round();
     print(userPreviousMonthScoreData);
-
   }
 
   void _navigateToAddHeadacheScreen() async {
