@@ -160,11 +160,14 @@ class _NotificationSectionState extends State<NotificationSection>
         selectedTimerValue = 'Off';
       }
     }
+
+    print('checkBoolValue???$isDailySelected');
   }
 
   @override
   void didUpdateWidget(NotificationSection oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _setInItNotificationData();
     if(widget.isNotificationTimerOpen != null) {
       isDailyLogTimerLayoutOpen = widget.isNotificationTimerOpen;
     }else{
@@ -565,33 +568,18 @@ class _NotificationSectionState extends State<NotificationSection>
       _selectedTimerValueFunc(whichButtonSelected);
     }
     await _notificationSelected("");
-
-    _saveAllNotification();
-  }
-
-  /// This Method will be use for save the all Notification Data for the any alarm set by User.
-  void _saveAllNotification() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      /*SignUpOnBoardProviders.db
-          .insertUserNotifications(widget.allNotificationListData);*/
-    });
   }
 
   /// This Method will be use for to set all UI related data whatever user has saved last time on the current screen.
   void _setInItNotificationData() {
     if (widget.notificationId == 0) {
-      localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'Daily Log',
-          orElse: () => null);
-      if (localNotificationNameModel != null &&
-          localNotificationNameModel.notificationTime != null) {
-        _dateTime =
-            DateTime.tryParse(localNotificationNameModel.notificationTime);
+      localNotificationNameModel = widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Daily Log', orElse: () => null);
+      if (localNotificationNameModel != null && localNotificationNameModel.notificationTime != null) {
+        _dateTime = DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
       }
-      if (localNotificationNameModel != null &&
-          localNotificationNameModel.notificationType != null) {
+      if (localNotificationNameModel != null && localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
           isDailySelected = true;
           isWeekDaysSelected = false;
@@ -718,7 +706,7 @@ class _NotificationSectionState extends State<NotificationSection>
   Future<void> _notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Reminder to log your day.',
-        importance: Importance.max, icon: 'app_icon_1', color: Constant.chatBubbleGreen);
+        importance: Importance.max, icon: 'notification_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
     var notificationDetails =
     NotificationDetails(android: androidDetails, iOS: iosDetails);
@@ -754,6 +742,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (dailyNotificationLogTime == 'Off') {
           dailyLogNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(dailyLogNotificationData);
+          _deleteNotificationChannel(0);
         } else {
           print("scheduled notification at $_dateTime");
           dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
@@ -771,6 +760,7 @@ class _NotificationSectionState extends State<NotificationSection>
           widget.allNotificationListData.add(localNotificationModel);
         }else{
           widget.allNotificationListData.remove(localNotificationModel);
+          _deleteNotificationChannel(0);
         }
       }
     } else if (widget.notificationId == 1) {
@@ -806,6 +796,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(medicationNotificationData);
+          _deleteNotificationChannel(1);
         } else {
           medicationNotificationData.notificationTime = _dateTime.toIso8601String();
         }
@@ -822,6 +813,7 @@ class _NotificationSectionState extends State<NotificationSection>
           widget.allNotificationListData.add(localNotificationModel);
         }else{
           widget.allNotificationListData.remove(localNotificationModel);
+          _deleteNotificationChannel(1);
         }
       }
     } else if (widget.notificationId == 2) {
@@ -857,6 +849,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(exerciseNotificationData);
+          _deleteNotificationChannel(2);
         } else {
           exerciseNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
@@ -872,6 +865,7 @@ class _NotificationSectionState extends State<NotificationSection>
         if(exerciseNotificationLogTime != 'Off') {
           widget.allNotificationListData.add(localNotificationModel);
         }else{
+          _deleteNotificationChannel(2);
           widget.allNotificationListData.remove(localNotificationModel);
         }
       }
@@ -912,6 +906,7 @@ class _NotificationSectionState extends State<NotificationSection>
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
+          _deleteNotificationChannel(3);
           widget.allNotificationListData.remove(customNotificationData);
         } else {
           customNotificationData.notificationTime =  _dateTime.toIso8601String();
@@ -923,6 +918,7 @@ class _NotificationSectionState extends State<NotificationSection>
         localNotificationModel.isCustomNotificationAdded = true;
         if (customNotificationLogTime == 'Off') {
           localNotificationModel.notificationTime = "";
+          _deleteNotificationChannel(3);
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
@@ -930,6 +926,7 @@ class _NotificationSectionState extends State<NotificationSection>
           widget.allNotificationListData.add(localNotificationModel);
         }else{
           widget.allNotificationListData.remove(localNotificationModel);
+          _deleteNotificationChannel(3);
         }
       }
     }

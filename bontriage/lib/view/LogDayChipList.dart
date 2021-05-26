@@ -17,6 +17,37 @@ class LogDayChipList extends StatefulWidget {
 }
 
 class _LogDayChipListState extends State<LogDayChipList> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    print('MedicationDosageTag???${widget.question.tag}');
+
+    Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
+
+    if(selectedValueObj == null) {
+      widget.question.values.first.isSelected = true;
+
+      widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LogDayChipList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    print('MedicationDosageTag???${widget.question.tag}');
+
+    Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
+
+    if(selectedValueObj == null) {
+      widget.question.values.first.isSelected = true;
+
+      widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

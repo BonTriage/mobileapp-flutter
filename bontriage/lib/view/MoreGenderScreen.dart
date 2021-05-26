@@ -32,7 +32,9 @@ class _MoreGenderScreenState
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
 
-    _currentSelectedValue = _valuesList[0].text;
+    //_currentSelectedValue = _valuesList[0].text;
+
+    _currentSelectedValue = Constant.blankString;
 
     if(widget.selectedAnswerList != null) {
       _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);

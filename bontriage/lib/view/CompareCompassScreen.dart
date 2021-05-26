@@ -719,10 +719,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       if (userMonthlyDisabilityValue > 10) {
         userMonthlyDisabilityValue = 10;
       } else {
-        _compassTutorialModelMonthly.currentMonthDisability = 0;
         userMonthlyDisabilityValue = userMonthlyDisabilityValue;
       }
     } else {
+      _compassTutorialModelMonthly.currentMonthDisability = 0;
       userMonthlyDisabilityValue = 0;
     }
 
