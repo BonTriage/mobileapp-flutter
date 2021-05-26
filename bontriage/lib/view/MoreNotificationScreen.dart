@@ -228,8 +228,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                             context, allNotificationListData);
                                       },
                                       notificationId: 3,
-                                      allNotificationListData:
-                                      allNotificationListData,
+                                      allNotificationListData: allNotificationListData,
                                       notificationName: customNotificationValue,
                                       isNotificationTimerOpen:
                                       isAddedCustomNotification,
@@ -483,8 +482,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   /// this Method will be use for to get all notification data from the DB. If user has set any Local notifications from
   /// this screen.
   void getNotificationListData() async {
-    var notificationListData =
-    await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
     if (notificationListData != null && notificationListData.length >0) {
       setState(() {
         var customNotificationData = notificationListData.firstWhere(

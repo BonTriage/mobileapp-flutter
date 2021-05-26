@@ -88,12 +88,16 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            widget.moreHeadacheScreenArgumentModel.headacheTypeData.text,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontSize: 16,
-                                fontFamily: Constant.jostRegular),
+                          Expanded(
+                            child: Text(
+                              widget.moreHeadacheScreenArgumentModel.headacheTypeData.text,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostRegular,
+                              ),
+                            ),
                           ),
                         ],
                       ),

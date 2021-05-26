@@ -236,7 +236,8 @@ class _SecondStepCompassResultTutorialsState
       );
       textSpanList.add(
         TextSpan(
-            text: 'from ${widget.compassTutorialModel.previousMonthDuration} hours in the previous month.',
+            text: 'from ${_getDurationValue(widget.compassTutorialModel
+                .previousMonthDuration)} in the previous month.',
             style: _normalTextStyle
         ),
       );

@@ -262,8 +262,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 _animationController.forward();
               } else {
                 _animationController.reverse();
-                widget.selectedAnswers.removeWhere((element) =>
-                element.questionTag == 'administered');
+                widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
               }
 
               String valueNumber = widget.valuesList[medicationIndex].valueNumber;
@@ -536,14 +535,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               orElse: () => null);
 
           if (selectedAnswers == null) {
-            widget.selectedAnswers.add(SelectedAnswers(
-                questionTag: 'administered',
-                answer: medicationSelectedDataModelToJson(
-                    _medicationSelectedDataModel)));
-
+            if(_medicationSelectedDataModel != null) {
+              if(_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+                widget.selectedAnswers.add(SelectedAnswers(questionTag: 'administered', answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+            }
           } else {
-            selectedAnswers.answer =
-                medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+            if(_medicationSelectedDataModel != null) {
+              if (_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+                selectedAnswers.answer = medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+              else
+                widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
+            }
           }
         } else {
           if(_medicationSelectedDataModel.selectedMedicationIndex.isEmpty)
@@ -588,16 +590,19 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   (element) => element.questionTag == 'administered',
               orElse: () => null);
           if (selectedAnswers == null) {
-            widget.doubleTapSelectedAnswer.add(SelectedAnswers(
-                questionTag: 'administered',
-                answer: medicationSelectedDataModelToJson(
-                    medicationSelectedDataModel)));
-
-            print('MedicationDataDoubleTappedSave???${widget.doubleTapSelectedAnswer.last.answer}');
+            if(_medicationSelectedDataModel != null) {
+              if(_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+                widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'administered', answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+            }
+            //print('MedicationDataDoubleTappedSave???${widget.doubleTapSelectedAnswer.last.answer}');
           } else {
-            selectedAnswers.answer =
-                medicationSelectedDataModelToJson(medicationSelectedDataModel);
-            print('MedicationDataDoubleTappedSave???${selectedAnswers.answer}');
+            if(_medicationSelectedDataModel != null) {
+              if (_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+                selectedAnswers.answer = medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+              else
+                widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == 'administered');
+            }
+            //print('MedicationDataDoubleTappedSave???${selectedAnswers.answer}');
           }
         } else {
           MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(jsonEncode(_medicationSelectedDataModel)));
@@ -925,8 +930,6 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         List<Widget> widgetList = [];
         whichMedicationItemSelected.reversed.forEach((index) {
           String medName = widget.valuesList[index].text;
-
-          print('MedicationName???$medName');
 
           Questions questions = widget.medicationExpandableWidgetList.firstWhere(
                   (element) {
@@ -1846,12 +1849,17 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 (element) => element.questionTag == 'administered',
             orElse: () => null);
         if (selectedAnswers == null) {
-          widget.selectedAnswers.add(SelectedAnswers(
-              questionTag: 'administered',
-              answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+          if(_medicationSelectedDataModel != null) {
+            if(_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+              widget.selectedAnswers.add(SelectedAnswers(questionTag: 'administered', answer: medicationSelectedDataModelToJson(_medicationSelectedDataModel)));
+          }
         } else {
-          selectedAnswers.answer =
-              medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+          if(_medicationSelectedDataModel != null) {
+            if (_medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty)
+              selectedAnswers.answer = medicationSelectedDataModelToJson(_medicationSelectedDataModel);
+            else
+              widget.selectedAnswers.removeWhere((element) => element.questionTag == 'administered');
+          }
         }
 
         if (previousMedicationTag != null) {

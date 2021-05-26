@@ -171,6 +171,10 @@ class RecordsTrendsScreenBloc {
           _recordsTrendsDataModel.recordsTrendsMultipleHeadacheDataModel = RecordsTrendsMultipleHeadacheDataModel.fromJson(jsonDecode(response));
           apiResponse = Constant.success;
           _recordsTrendsDataModel.headacheListModelData = headacheDataList;
+
+          _recordsTrendsDataModel.behaviors = _recordsTrendsDataModel.recordsTrendsMultipleHeadacheDataModel.behaviors;
+          _recordsTrendsDataModel.medication = _recordsTrendsDataModel.recordsTrendsMultipleHeadacheDataModel.medication;
+          _recordsTrendsDataModel.triggers = _recordsTrendsDataModel.recordsTrendsMultipleHeadacheDataModel.triggers;
           recordsTrendsDataSink.add(_recordsTrendsDataModel);
           networkDataSink.add(Constant.success);
         } else {
