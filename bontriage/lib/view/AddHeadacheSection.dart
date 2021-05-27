@@ -1918,7 +1918,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
   }
 
-  void _openAddNewMedicationDialog() async{
+  void _openAddNewMedicationDialog() async {
     /*var addMedicationResult = await */showBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(

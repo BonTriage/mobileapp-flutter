@@ -303,7 +303,7 @@ class _SecondStepCompassResultTutorialsState
       );
       textSpanList.add(
         TextSpan(
-            text: 'from ${widget.compassTutorialModel.previousMonthFrequency} days in the previous month.',
+            text: 'from ${widget.compassTutorialModel.previousMonthFrequency} times in the previous month.',
             style: _normalTextStyle
         ),
       );
