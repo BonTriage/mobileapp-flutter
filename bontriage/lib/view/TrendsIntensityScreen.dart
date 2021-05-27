@@ -543,49 +543,49 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
         colors: setBarChartColor(y1),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y2,
         colors: setBarChartColor(y2),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y3,
         colors: setBarChartColor(y3),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y4,
         colors: setBarChartColor(y4),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y5,
         colors: setBarChartColor(y5),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y6,
         colors: setBarChartColor(y6),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y7,
         colors: setBarChartColor(y7),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
     ]);
   }

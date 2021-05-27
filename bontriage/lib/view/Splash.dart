@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/CheckVersionUpdateBloc.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
+import 'package:mobile/models/VersionUpdateModel.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -13,11 +18,11 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   Timer _timer;
+  CheckVersionUpdateBloc _checkVersionUpdateBloc;
 
   @override
   void initState() {
     super.initState();
-    getTutorialsState();
   }
 
   @override
@@ -77,7 +82,7 @@ class _SplashState extends State<Splash> {
   void getTutorialsState() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isTutorialsHasSeen =
-        sharedPreferences.getBool(Constant.tutorialsState);
+    sharedPreferences.getBool(Constant.tutorialsState);
     var userAlreadyLoggedIn =
     sharedPreferences.getBool(Constant.userAlreadyLoggedIn);
 
@@ -117,5 +122,35 @@ class _SplashState extends State<Splash> {
     sharedPreferences.remove(Constant.updateTrendsData);
     sharedPreferences.remove(Constant.isSeeMoreClicked);
     sharedPreferences.remove(Constant.isViewTrendsClicked);
+  }
+
+  /// This method will be use for to check critical update from server.So if get critical update from server. So
+  /// we will show a popup to the user. if it's nt then we move to user into Home Screen.
+  void checkCriticalVersionUpdate() async {
+    VersionUpdateModel responseData = await _checkVersionUpdateBloc
+        .checkVersionUpdateData();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    int appVersionNumber = int.tryParse(packageInfo.version.replaceAll('.', ''));
+    if (Platform.isAndroid) {
+      int serverVersionNumber = int.tryParse(
+          responseData.androidVersion.replaceAll('.', ''));
+      if (serverVersionNumber > appVersionNumber &&
+          responseData.androidCritical) {
+        Utils.showCriticalUpdateDialog(
+            context, responseData.androidBuildDetails);
+      } else {
+        getTutorialsState();
+      }
+    } else {
+      int serverVersionNumber = int.tryParse(
+          responseData.androidVersion.replaceAll('.', ''));
+      if (serverVersionNumber > appVersionNumber &&
+          responseData.iosCritical) {
+        Utils.showCriticalUpdateDialog(
+            context, responseData.androidBuildDetails);
+      } else {
+        getTutorialsState();
+      }
+    }
   }
 }

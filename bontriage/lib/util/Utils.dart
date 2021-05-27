@@ -11,6 +11,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
 import 'package:mobile/view/ConfirmationDialog.dart';
+import 'package:mobile/view/CriticalUpdateVersionDialog.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
@@ -571,6 +572,21 @@ class Utils {
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
           content: ValidationErrorDialog(errorMessage: errorMessage, errorTitle: errorTitle,),
+        );
+      },
+    );
+  }
+
+  ///This method is used to show Critical update  popup to the user
+  static void showCriticalUpdateDialog(BuildContext context,String errorMessage,) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: CriticalUpdateVersionDialog(errorMessage: errorMessage),
         );
       },
     );
