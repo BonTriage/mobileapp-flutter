@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+//import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:share/share.dart';
@@ -20,8 +21,9 @@ class _PDFScreenState extends State<PDFScreen> {
   String pathPDF = "";
   Future<File> pdfPath;
   String _currentPageString = Constant.blankString;
+  PDFDocument document;
 
-  final Completer<PDFViewController> _controller = Completer<PDFViewController>();
+  //final Completer<PDFViewController> _controller = Completer<PDFViewController>();
 
   @override
   void initState() {
@@ -29,11 +31,12 @@ class _PDFScreenState extends State<PDFScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //pdfPath = Utils.createFileOfPdfUrl(widget.base64String);
       Utils.createFileOfPdfUrl(widget.base64String).then((value) {
-        Future.delayed(Duration(milliseconds: 350), () {
+        /*Future.delayed(Duration(milliseconds: 350), () {
           setState(() {
             pathPDF = value.path;
           });
-        });
+        });*/
+        _getPdfDocument(value);
       });
     });
   }
@@ -93,7 +96,7 @@ class _PDFScreenState extends State<PDFScreen> {
             ),
           ),
           Expanded(
-            child: pathPDF.isNotEmpty ? _getWidget() : Container(),
+            child: pathPDF.isNotEmpty ? _getWidget()/*Container()*/ : Container(),
           ),
         ],
       ),
@@ -107,6 +110,24 @@ class _PDFScreenState extends State<PDFScreen> {
   }
 
   Widget _getWidget() {
+    return PDFViewer(
+      document: document,
+      showNavigation: false,
+      showPicker: false,
+      lazyLoad: false,
+      scrollDirection: Axis.vertical,
+    );
+  }
+
+  void _getPdfDocument(File file) async{
+    document = await PDFDocument.fromFile(file);
+
+    setState(() {
+      pathPDF = file.path;
+    });
+  }
+
+  /*Widget _getWidget() {
     return Stack(
       children: [
         PDFView(
@@ -155,5 +176,5 @@ class _PDFScreenState extends State<PDFScreen> {
         )
       ],
     );
-  }
+  }*/
 }

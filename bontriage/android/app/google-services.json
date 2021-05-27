@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "564280065480",
+    "project_id": "bontriage-71c9d",
+    "storage_bucket": "bontriage-71c9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564280065480:android:191f50f2aec95cdb5014fd",
+        "android_client_info": {
+          "package_name": "com.bontriage.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564280065480-bv2b08fmaqpmp6n6hciv13v6rr5fipkp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyXnSvqbDlk80aHDIo-XOlS3X3Y_Cs33g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564280065480-bv2b08fmaqpmp6n6hciv13v6rr5fipkp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
