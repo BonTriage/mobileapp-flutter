@@ -1682,17 +1682,26 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             }
           }
 
-          if(_medicationSelectedDataModel.selectedMedicationDosageList[key].length > 0) {
+          try {
+            if (_medicationSelectedDataModel.selectedMedicationDosageList[key]
+                .length > 0) {
               //if(index == 0) {
-              _medicationSelectedDataModel.selectedMedicationDosageList[key].asMap().forEach((index, value) {
-                  try {
-                    int selectedValueIndex = int.parse(value) - 1;
-                    _medicationDosageList[selectedMedicationIndex][index].values[selectedValueIndex].isSelected = true;
-                  } catch(e) {
-                    print(e.toString());
-                    _additionalMedicationDosage[selectedMedicationIndex].add(value);
-                  }
-                });
+              _medicationSelectedDataModel.selectedMedicationDosageList[key]
+                  .asMap()
+                  .forEach((index, value) {
+                try {
+                  int selectedValueIndex = int.parse(value) - 1;
+                  _medicationDosageList[selectedMedicationIndex][index]
+                      .values[selectedValueIndex].isSelected = true;
+                } catch (e) {
+                  print(e.toString());
+                  _additionalMedicationDosage[selectedMedicationIndex].add(
+                      value);
+                }
+              });
+            }
+          } catch(e) {
+            print(e);
           }
         });
       }
@@ -1927,38 +1936,58 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void _openAddNewMedicationDialog() async {
-    /*var addMedicationResult = await */showBottomSheet(
+    var addMedicationResult = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
+        isScrollControlled: true,
         builder: (context) => AddNewMedicationDialog(
           onSubmitClickedCallback: (addMedicationResult) {
-            if(addMedicationResult != null && addMedicationResult is String && addMedicationResult != '') {
-              setState(() {
-                widget.valuesList.insert(widget.valuesList.length - 1, Values(text: addMedicationResult, valueNumber: (widget.valuesList.length).toString(), isNewlyAdded: true));
-                DateTime nowDateTime = DateTime(
-                  _selectedDateTime.year,
-                  _selectedDateTime.month,
-                  _selectedDateTime.day,
-                  DateTime.now().hour,
-                  DateTime.now().minute,
-                  0,
-                  0,
-                  0,
-                );
-                _medicineTimeList.add(List.generate(1, (index) => nowDateTime.toString()));
-                _medicationDosageList.add(List.generate(1, (index) => Questions()));
-                _numberOfDosageAddedList.add(0);
-                _additionalMedicationDosage.add([]);
-                widget.medicationExpandableWidgetList.add(Questions(precondition: ''));
-              });
-            }
+
           },
         )
     );
+
+    if(addMedicationResult != null && addMedicationResult is String && addMedicationResult != '') {
+      Values medValue = widget.valuesList.firstWhere((element) => element.text.toLowerCase() == addMedicationResult.toLowerCase().trim(), orElse: () => null);
+      if(medValue == null) {
+        setState(() {
+          widget.valuesList.insert(widget.valuesList.length - 1, Values(
+              text: addMedicationResult.trim(),
+              valueNumber: (widget.valuesList.length).toString(),
+              isNewlyAdded: true));
+          DateTime nowDateTime = DateTime(
+            _selectedDateTime.year,
+            _selectedDateTime.month,
+            _selectedDateTime.day,
+            DateTime
+                .now()
+                .hour,
+            DateTime
+                .now()
+                .minute,
+            0,
+            0,
+            0,
+          );
+          _medicineTimeList.add(
+              List.generate(1, (index) => nowDateTime.toString()));
+          _medicationDosageList.add(
+              List.generate(1, (index) => Questions()));
+          _numberOfDosageAddedList.add(0);
+          _additionalMedicationDosage.add([]);
+          widget.medicationExpandableWidgetList.add(
+              Questions(precondition: ''));
+        });
+      } else {
+        Future.delayed(Duration(milliseconds: 900), (){
+          Utils.showValidationErrorDialog(context, 'Medication already added.');
+        });
+      }
+    }
   }
 
   ///Method to update double tap selected answers list
