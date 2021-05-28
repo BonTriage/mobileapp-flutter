@@ -55,6 +55,8 @@ class _SignUpSecondStepCompassResultState
     [0, 0, 0, 0]
   ];
 
+  bool _isPdfScreenOpened = false;
+
   @override
   void initState() {
     super.initState();
@@ -117,8 +119,9 @@ class _SignUpSecondStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
+    print('inbuild func');
     const ticks = [2, 4, 6, 8, 10];
-    if (!isEndOfOnBoard && isVolumeOn)
+    if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened)
       TextToSpeechRecognition.speechToText(
           bubbleChatTextView[_buttonPressedValue]);
     var features = [
@@ -948,9 +951,13 @@ class _SignUpSecondStepCompassResultState
 
   ///Method to navigate to pdf screen
   void _navigateToPdfScreen(String base64String) {
+    _isPdfScreenOpened = true;
     TextToSpeechRecognition.speechToText("");
-    Future.delayed(Duration(milliseconds: 300), () {
-      Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
+    Future.delayed(Duration(milliseconds: 300), () async {
+      await Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
+      Future.delayed(Duration(milliseconds: 300), () {
+        _isPdfScreenOpened = false;
+      });
     });
   }
 }
