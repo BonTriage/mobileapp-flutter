@@ -31,7 +31,6 @@ class CheckVersionUpdateBloc {
 //https://mobileapp.bontriage.com/mobileapi/v0/app/details/VERSION
   /// This method will be use for implement API for to check app build version is updated or not from the backend.
   Future<dynamic> checkVersionUpdateData() async {
-    String apiResponse;
     try {
       String url = WebservicePost.qaServerUrl +
           'app/details/VERSION';

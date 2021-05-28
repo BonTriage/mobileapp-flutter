@@ -23,6 +23,8 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
+    _checkVersionUpdateBloc = CheckVersionUpdateBloc();
+    checkCriticalVersionUpdate();
   }
 
   @override
@@ -48,10 +50,7 @@ class _SplashState extends State<Splash> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
-              onTap: () {
-                getTutorialsState();
-              },
-              child: Row(
+                           child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image(
@@ -127,8 +126,7 @@ class _SplashState extends State<Splash> {
   /// This method will be use for to check critical update from server.So if get critical update from server. So
   /// we will show a popup to the user. if it's nt then we move to user into Home Screen.
   void checkCriticalVersionUpdate() async {
-    VersionUpdateModel responseData = await _checkVersionUpdateBloc
-        .checkVersionUpdateData();
+    VersionUpdateModel responseData = await _checkVersionUpdateBloc.checkVersionUpdateData();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     int appVersionNumber = int.tryParse(packageInfo.version.replaceAll('.', ''));
     if (Platform.isAndroid) {
