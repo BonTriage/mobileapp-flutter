@@ -149,7 +149,15 @@ class _SplashState extends State<Splash> {
           Utils.showCriticalUpdateDialog(
               context, responseData.androidBuildDetails);
         } else {
-          getTutorialsState();
+          int serverVersionNumber = int.tryParse(
+              responseData.androidVersion.replaceAll('.', ''));
+          if (serverVersionNumber > appVersionNumber &&
+              responseData.iosCritical) {
+            Utils.showCriticalUpdateDialog(
+                context, responseData.androidBuildDetails);
+          } else {
+            getTutorialsState();
+          }
         }
       }
     }
@@ -158,7 +166,6 @@ class _SplashState extends State<Splash> {
   void _listenToNetworkStreamController() {
     _checkVersionUpdateBloc.networkStream.listen((event) {
       if(event is String && event != null && event.isNotEmpty) {
-        print('Event listen');
         final snackBar = SnackBar(content: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onVerticalDragStart: (_) => debugPrint("no can do!"),
@@ -167,7 +174,7 @@ class _SplashState extends State<Splash> {
               fontSize: 16,
               fontFamily: Constant.jostRegular,
               color: Colors.black)),
-        ),
+          ),
           backgroundColor: Constant.chatBubbleGreen,
           duration: Duration(days: 3),
           action: SnackBarAction(
@@ -175,9 +182,6 @@ class _SplashState extends State<Splash> {
             onPressed: () {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 _checkCriticalVersionUpdate();
-                //Future.delayed(Duration(milliseconds: 1000), () {
-
-                //});
             },
           ),
         );

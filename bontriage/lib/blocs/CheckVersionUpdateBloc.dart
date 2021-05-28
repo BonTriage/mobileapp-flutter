@@ -40,7 +40,6 @@ class CheckVersionUpdateBloc {
 //https://mobileapp.bontriage.com/mobileapi/v0/app/details/VERSION
   /// This method will be use for implement API for to check app build version is updated or not from the backend.
   Future<dynamic> checkVersionUpdateData() async {
-    String apiResponse;
     try {
       String url = '${WebservicePost.qaServerUrl}app/details/VERSION';
       var response = await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
@@ -61,18 +60,9 @@ class CheckVersionUpdateBloc {
     return versionUpdateModel;
   }
 
-  void enterSomeDummyDataToStreamController() {
-    checkVersionUpdateDataSink.add(Constant.loading);
-  }
-
   void dispose() {
     _checkVersionUpdateStreamController?.close();
     _checkVersionStreamController?.close();
     _networkStreamController?.close();
   }
-
-  /*void initNetworkStream() {
-    _networkStreamController?.close();
-    _networkStreamController = StreamController<dynamic>();
-  }*/
 }
