@@ -471,13 +471,19 @@ class LogDayBloc {
         calendarInfoModel.behaviours.forEach((behaviorElement) {
           behaviorElement.mobileEventDetails.forEach((behaviorMobileEventDetailsElement) {
             Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == behaviorMobileEventDetailsElement.questionTag, orElse: () => null);
-
-            String value = behaviorMobileEventDetailsElement.value;
-            List<String> valuesList = value.split("%@");
-            valuesList.forEach((valueElement) {
-              Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
-              selectedAnswerList.add(SelectedAnswers(questionTag: behaviorMobileEventDetailsElement.questionTag, answer: selectedValues.valueNumber, isDoubleTapped: false));
-            });
+            if(questions != null) {
+              String value = behaviorMobileEventDetailsElement.value;
+              List<String> valuesList = value.split("%@");
+              valuesList.forEach((valueElement) {
+                Values selectedValues = questions.values.firstWhere((
+                    element) => valueElement == element.text,
+                    orElse: () => null);
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: behaviorMobileEventDetailsElement.questionTag,
+                    answer: selectedValues.valueNumber,
+                    isDoubleTapped: false));
+              });
+            }
           });
         });
 
@@ -485,6 +491,49 @@ class LogDayBloc {
         medicationSelectedDataModel.selectedMedicationIndex = [];
         medicationSelectedDataModel.selectedMedicationDosageList = [];
         medicationSelectedDataModel.selectedMedicationDateList = [];
+
+        List<Headache> medicationElementList = [];
+
+
+        for (int index = 0; index < calendarInfoModel.medication.length; index++) {
+          var medicationElement = calendarInfoModel.medication[index];
+          var medicationData = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+          if(medicationData != null) {
+            for (int i = index + 1; i < calendarInfoModel.medication.length; i++) {
+              var medicationElement1 = calendarInfoModel.medication[i];
+              var medicationData1 = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+              if(medicationData1 != null && medicationData1.value == medicationData.value) {
+                medicationElementList.add(medicationElement1);
+                var administeredData = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+                if(administeredData != null) {
+                  var administeredData1 = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+                  if(administeredData1 != null) {
+                    administeredData1.value = '${administeredData1.value}%@${administeredData.value}';
+                  }
+                }
+
+                var dosageData = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag.contains(".dosage"), orElse: () => null);
+
+                if(dosageData != null) {
+                  var dosageData1 = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag.contains(".dosage"), orElse: () => null);
+                  if(dosageData1 != null) {
+                    dosageData1.value = '${dosageData1.value}%@${dosageData.value}';
+                  }
+                }
+                //calendarInfoModel.medication.remove(medicationElement1);
+              }
+            }
+            medicationElementList.forEach((element) {
+              calendarInfoModel.medication.remove(element);
+            });
+          }
+        }
+
+        /*medicationElementList.forEach((element) {
+          calendarInfoModel.medication.remove(element);
+        });*/
+
+        print('MedicationLength???${calendarInfoModel.medication.length}');
 
         calendarInfoModel.medication.forEach((medicationElement) {
           var medicationData = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
@@ -497,9 +546,13 @@ class LogDayBloc {
                   if(medicationValue != null) {
                     if(medicationSelectedDataModel.selectedMedicationIndex == null)
                       medicationSelectedDataModel.selectedMedicationIndex = [];
-                    medicationSelectedDataModel.selectedMedicationIndex.add(medicationValue);
-                    medicationSelectedDataModel.selectedMedicationIndex.last.isSelected = true;
-                    medicationSelectedDataModel.selectedMedicationIndex.last.isDoubleTapped = false;
+
+                    Values medicationIndexValue = medicationSelectedDataModel.selectedMedicationIndex.firstWhere((element) => element == medicationValue, orElse: () => null);
+                    //if(medicationIndexValue == null) {
+                      medicationSelectedDataModel.selectedMedicationIndex.add(medicationValue);
+                      medicationSelectedDataModel.selectedMedicationIndex.last.isSelected = true;
+                      medicationSelectedDataModel.selectedMedicationIndex.last.isDoubleTapped = false;
+                    //}
                   } else {
                     if(medicationSelectedDataModel.selectedMedicationIndex == null)
                       medicationSelectedDataModel.selectedMedicationIndex = [];
@@ -541,7 +594,9 @@ class LogDayBloc {
 
         if(medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty) {
           try {
-            selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
+            SelectedAnswers medicationSelectedAnswer = selectedAnswerList.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+            if(medicationSelectedAnswer == null)
+              selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
           } catch (e) {
             print(e);
           }
@@ -550,25 +605,48 @@ class LogDayBloc {
         calendarInfoModel.triggers.forEach((triggerElement) {
           triggerElement.mobileEventDetails.forEach((triggerMobileEventDetailElement) {
             Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == triggerMobileEventDetailElement.questionTag, orElse: () => null);
-            if(triggerMobileEventDetailElement.questionTag == Constant.triggersTag) {
-              List<String> triggersSelectedValues = triggerMobileEventDetailElement.value.split("%@");
-              triggersSelectedValues.forEach((valueElement) {
-                Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
-                selectedAnswerList.add(SelectedAnswers(questionTag: triggerMobileEventDetailElement.questionTag, answer: selectedValues.valueNumber, isDoubleTapped: false));
-              });
-            } else if (questions.questionType == Constant.QuestionMultiType) {
-              List<String> selectedValues = triggerMobileEventDetailElement.value.split("%@");
-              selectedValues.forEach((selectedValueElement) {
-                Values values = questions.values.firstWhere((element) => element.text == selectedValueElement, orElse: () => null);
-                if(values != null) {
-                  values.isSelected = true;
-                }
-              });
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: jsonEncode(questions.toJson()), isDoubleTapped: false));
-            } else if (questions.questionType == Constant.QuestionNumberType) {
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: triggerMobileEventDetailElement.value, isDoubleTapped: false));
-            } else if (questions.questionType == Constant.QuestionTextType) {
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: triggerMobileEventDetailElement.value, isDoubleTapped: false));
+            if(questions != null) {
+              if (triggerMobileEventDetailElement.questionTag ==
+                  Constant.triggersTag) {
+                List<
+                    String> triggersSelectedValues = triggerMobileEventDetailElement
+                    .value.split("%@");
+                triggersSelectedValues.forEach((valueElement) {
+                  Values selectedValues = questions.values.firstWhere((
+                      element) => valueElement == element.text,
+                      orElse: () => null);
+                  selectedAnswerList.add(SelectedAnswers(
+                      questionTag: triggerMobileEventDetailElement.questionTag,
+                      answer: selectedValues.valueNumber,
+                      isDoubleTapped: false));
+                });
+              } else if (questions.questionType == Constant.QuestionMultiType) {
+                List<String> selectedValues = triggerMobileEventDetailElement
+                    .value.split("%@");
+                selectedValues.forEach((selectedValueElement) {
+                  Values values = questions.values.firstWhere((
+                      element) => element.text == selectedValueElement,
+                      orElse: () => null);
+                  if (values != null) {
+                    values.isSelected = true;
+                  }
+                });
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: jsonEncode(questions.toJson()),
+                    isDoubleTapped: false));
+              } else
+              if (questions.questionType == Constant.QuestionNumberType) {
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: triggerMobileEventDetailElement.value,
+                    isDoubleTapped: false));
+              } else if (questions.questionType == Constant.QuestionTextType) {
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: triggerMobileEventDetailElement.value,
+                    isDoubleTapped: false));
+              }
             }
           });
         });

@@ -354,7 +354,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       .firstWhere(
                           (element1) =>
                       element1.questionTag ==
-                          selectedAnswerTriggerData.questionTag,
+                          selectedAnswerTriggerData.questionTag && element1.answer == selectedAnswerTriggerData.answer,
                       orElse: () => null);
                   if (selectedAnswerData == null) {
                     widget.selectedAnswers.add(SelectedAnswers(
@@ -444,7 +444,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if(doubleTapSelectedAnswer == null)
           widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
-        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag && element.answer == selectedAnswer, orElse: () => null);
         if (selectedAnswerObj == null) {
           widget.selectedAnswers.add(
               SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
@@ -517,8 +517,13 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           List<Values> values = widget.sleepExpandableWidgetList[0].values;
           values.forEach((element) {
             if (element.isSelected) {
-              widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
-              widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+              SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element1) => element1.questionTag == 'behavior.sleep' && element1.answer == element.valueNumber, orElse: () => null);
+              if (selectedAnswers == null)
+                widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+
+              SelectedAnswers doubleTapSelectedAnswer = widget.doubleTapSelectedAnswer.firstWhere((element1) => element1.questionTag == 'behavior.sleep' && element1.answer == element.valueNumber, orElse: () => null);
+              if (doubleTapSelectedAnswer == null)
+                widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
             }
           });
         } else {
@@ -723,6 +728,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
     if (preCondition.contains(text) && isSelected) {
       _animationController.forward();
+      _storeExpandedWidgetDataIntoLocalModel();
     } else {
       _animationController.reverse();
       widget.selectedAnswers.removeWhere((element) => element.questionTag == widget.sleepExpandableWidgetList[0].tag);
@@ -1787,12 +1793,12 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           widget.selectedAnswers.add(SelectedAnswers(questionTag: widget.contentType, answer: selectedAnswer));
       } else {
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
-                (element) => element.questionTag == widget.contentType,
+                (element) => element.questionTag == widget.contentType && element.answer == selectedAnswer,
             orElse: () => null);
         if (selectedAnswerObj == null) {
+          widget.selectedAnswers.removeWhere((element1) => element1.questionTag == widget.contentType);
           widget.selectedAnswers.add(
-              SelectedAnswers(
-                  questionTag: widget.contentType, answer: selectedAnswer));
+              SelectedAnswers(questionTag: widget.contentType, answer: selectedAnswer));
         } else {
           selectedAnswerObj.answer = selectedAnswer;
         }
@@ -1835,7 +1841,9 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
 
           values.forEach((element) {
             if (element.isSelected) {
-              widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
+              SelectedAnswers selectedAnswers = widget.selectedAnswers.firstWhere((element1) => element1.questionTag == 'behavior.sleep' && element1.answer == element.valueNumber, orElse: () => null);
+              if(selectedAnswers == null)
+                widget.selectedAnswers.add(SelectedAnswers(questionTag: 'behavior.sleep', answer: element.valueNumber));
             }
           });
         } else {
@@ -1901,7 +1909,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     .firstWhere(
                         (element1) =>
                     element1.questionTag ==
-                        selectedAnswerTriggerData.questionTag,
+                        selectedAnswerTriggerData.questionTag && element1.answer == selectedAnswerTriggerData.answer,
                     orElse: () => null);
                 if (selectedAnswerData == null) {
                   widget.selectedAnswers.add(SelectedAnswers(

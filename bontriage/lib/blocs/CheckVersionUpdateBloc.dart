@@ -21,10 +21,19 @@ class CheckVersionUpdateBloc {
 
   StreamController<dynamic> _checkVersionStreamController;
 
-  CheckVersionUpdateBloc({this.count = 0}) {
+  StreamController<dynamic> _networkStreamController;
+
+  StreamSink<dynamic> get networkSink =>
+      _networkStreamController.sink;
+
+  Stream<dynamic> get networkStream =>
+      _networkStreamController.stream;
+
+  CheckVersionUpdateBloc() {
     _checkVersionUpdateStreamController = StreamController<String>();
 
     _checkVersionStreamController = StreamController<dynamic>();
+    _networkStreamController = StreamController<dynamic>.broadcast();
     _loginScreenRepository = LoginScreenRepository();
   }
 
@@ -33,17 +42,20 @@ class CheckVersionUpdateBloc {
   Future<dynamic> checkVersionUpdateData() async {
     String apiResponse;
     try {
-      String url = WebservicePost.qaServerUrl +
-          'app/details/VERSION';
+      String url = '${WebservicePost.qaServerUrl}app/details/VERSION';
       var response = await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
-        checkVersionUpdateDataSink.addError(response);
+        //checkVersionUpdateDataSink.addError(response);
+        _networkStreamController.add(response.toString());
       } else {
-        if( response is String)
+        if(response is String)
           versionUpdateModel = VersionUpdateModel.fromJson(json.decode(response));
+        else
+          _networkStreamController.add(Exception(Constant.somethingWentWrong).toString());
       }
     } catch (e) {
-      checkVersionUpdateDataSink.addError(Exception(Constant.somethingWentWrong));
+      _networkStreamController.add(Exception(Constant.somethingWentWrong).toString());
+      //checkVersionUpdateDataSink.addError(Exception(Constant.somethingWentWrong));
       print(e.toString());
     }
     return versionUpdateModel;
@@ -56,12 +68,11 @@ class CheckVersionUpdateBloc {
   void dispose() {
     _checkVersionUpdateStreamController?.close();
     _checkVersionStreamController?.close();
+    _networkStreamController?.close();
   }
 
-  void inItNetworkStream() {
-    _checkVersionStreamController?.close();
-    _checkVersionStreamController = StreamController<dynamic>();
-  }
-
-
+  /*void initNetworkStream() {
+    _networkStreamController?.close();
+    _networkStreamController = StreamController<dynamic>();
+  }*/
 }

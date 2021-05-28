@@ -82,11 +82,11 @@ class _LogDayChipListState extends State<LogDayChipList> {
                 } else {
                   widget.question.values.asMap().forEach((key, value) {
                     if (key == index) {
-                      if (value.isSelected) {
-                        value.isSelected = false;
-                        value.isDoubleTapped = false;
-                      } else {
+                      if (!value.isSelected) {
                         value.isSelected = true;
+                        //value.isDoubleTapped = false;
+                      } else {
+                        //value.isSelected = true;
                       }
                     } else {
                       value.isSelected = false;

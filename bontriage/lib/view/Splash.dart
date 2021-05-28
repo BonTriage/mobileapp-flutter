@@ -23,11 +23,15 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
+    _checkVersionUpdateBloc = CheckVersionUpdateBloc();
+    _listenToNetworkStreamController();
+    _checkCriticalVersionUpdate();
   }
 
   @override
   void dispose() {
     try {
+      _checkVersionUpdateBloc.dispose();
       _timer.cancel();
     } catch (e) {
       print(e);
@@ -47,30 +51,25 @@ class _SplashState extends State<Splash> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
-                getTutorialsState();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(
-                    image: AssetImage(Constant.splashCompass),
-                    width: 78,
-                    height: 78,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    Constant.migraineMentor,
-                    style: TextStyle(
-                        color: Constant.splashTextColor,
-                        fontSize: 22,
-                        fontFamily: Constant.jostRegular),
-                  ),
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  image: AssetImage(Constant.splashCompass),
+                  width: 78,
+                  height: 78,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  Constant.migraineMentor,
+                  style: TextStyle(
+                      color: Constant.splashTextColor,
+                      fontSize: 22,
+                      fontFamily: Constant.jostRegular),
+                ),
+              ],
             ),
           ),
         ),
@@ -126,31 +125,64 @@ class _SplashState extends State<Splash> {
 
   /// This method will be use for to check critical update from server.So if get critical update from server. So
   /// we will show a popup to the user. if it's nt then we move to user into Home Screen.
-  void checkCriticalVersionUpdate() async {
-    VersionUpdateModel responseData = await _checkVersionUpdateBloc
-        .checkVersionUpdateData();
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    int appVersionNumber = int.tryParse(packageInfo.version.replaceAll('.', ''));
-    if (Platform.isAndroid) {
-      int serverVersionNumber = int.tryParse(
-          responseData.androidVersion.replaceAll('.', ''));
-      if (serverVersionNumber > appVersionNumber &&
-          responseData.androidCritical) {
-        Utils.showCriticalUpdateDialog(
-            context, responseData.androidBuildDetails);
+  void _checkCriticalVersionUpdate() async {
+    VersionUpdateModel responseData = await _checkVersionUpdateBloc.checkVersionUpdateData();
+    if(responseData != null) {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      int appVersionNumber = int.tryParse(
+          packageInfo.version.replaceAll('.', ''));
+      if (Platform.isAndroid) {
+        int serverVersionNumber = int.tryParse(
+            responseData.androidVersion.replaceAll('.', ''));
+        if (serverVersionNumber > appVersionNumber &&
+            responseData.androidCritical) {
+          Utils.showCriticalUpdateDialog(
+              context, responseData.androidBuildDetails);
+        } else {
+          getTutorialsState();
+        }
       } else {
-        getTutorialsState();
-      }
-    } else {
-      int serverVersionNumber = int.tryParse(
-          responseData.androidVersion.replaceAll('.', ''));
-      if (serverVersionNumber > appVersionNumber &&
-          responseData.iosCritical) {
-        Utils.showCriticalUpdateDialog(
-            context, responseData.androidBuildDetails);
-      } else {
-        getTutorialsState();
+        int serverVersionNumber = int.tryParse(
+            responseData.androidVersion.replaceAll('.', ''));
+        if (serverVersionNumber > appVersionNumber &&
+            responseData.iosCritical) {
+          Utils.showCriticalUpdateDialog(
+              context, responseData.androidBuildDetails);
+        } else {
+          getTutorialsState();
+        }
       }
     }
+  }
+
+  void _listenToNetworkStreamController() {
+    _checkVersionUpdateBloc.networkStream.listen((event) {
+      if(event is String && event != null && event.isNotEmpty) {
+        print('Event listen');
+        final snackBar = SnackBar(content: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onVerticalDragStart: (_) => debugPrint("no can do!"),
+          child: Text(event,style: TextStyle(
+              height: 1.3,
+              fontSize: 16,
+              fontFamily: Constant.jostRegular,
+              color: Colors.black)),
+        ),
+          backgroundColor: Constant.chatBubbleGreen,
+          duration: Duration(days: 3),
+          action: SnackBarAction(
+            label: 'Retry',
+            onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                _checkCriticalVersionUpdate();
+                //Future.delayed(Duration(milliseconds: 1000), () {
+
+                //});
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
   }
 }

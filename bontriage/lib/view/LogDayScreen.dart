@@ -245,6 +245,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                                           Constant.logDayNoteTag,
                                                           answer: Constant
                                                               .blankString));
+
                                                 _onSubmitClicked();
                                               } else {
                                                 Utils.showValidationErrorDialog(
