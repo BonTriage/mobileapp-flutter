@@ -45,15 +45,19 @@ class CheckVersionUpdateBloc {
       var response = await _loginScreenRepository.loginServiceCall(url, RequestMethod.GET);
       if (response is AppException) {
         //checkVersionUpdateDataSink.addError(response);
-        _networkStreamController.add(response.toString());
+        if(response is NoInternetConnection){
+          networkSink.add('No Internet Connection.');
+        }else{
+          networkSink.add(Constant.somethingWentWrong);
+        }
       } else {
         if(response is String)
           versionUpdateModel = VersionUpdateModel.fromJson(json.decode(response));
         else
-          _networkStreamController.add(Exception(Constant.somethingWentWrong).toString());
+          networkSink.add(Constant.somethingWentWrong);
       }
     } catch (e) {
-      _networkStreamController.add(Exception(Constant.somethingWentWrong).toString());
+      networkSink.add(Constant.somethingWentWrong);
       //checkVersionUpdateDataSink.addError(Exception(Constant.somethingWentWrong));
       print(e.toString());
     }
