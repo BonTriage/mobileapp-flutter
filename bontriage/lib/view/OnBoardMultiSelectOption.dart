@@ -63,13 +63,10 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
           orElse: () => null);
       if (selectedAnswers != null) {
         try {
-          _valuesSelectedList =
-              (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<
-                  String>();
+          _valuesSelectedList = (jsonDecode(selectedAnswers.answer) as List<dynamic>).cast<String>();
+
           _valuesSelectedList.forEach((element) {
-            Values value = widget.selectOptionList
-                .firstWhere((valueElement) =>
-            valueElement.text == element, orElse: () => null);
+            Values value = widget.selectOptionList.firstWhere((valueElement) => valueElement.text == element, orElse: () => null);
 
             if (value != null)
               value.isSelected = true;

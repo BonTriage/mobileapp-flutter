@@ -444,6 +444,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if(doubleTapSelectedAnswer == null)
           widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
       } else {
+        widget.selectedAnswers.removeWhere((element) => element.questionTag == widget.contentType);
         SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == currentTag && element.answer == selectedAnswer, orElse: () => null);
         if (selectedAnswerObj == null) {
           widget.selectedAnswers.add(
@@ -452,6 +453,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           selectedAnswerObj.answer = selectedAnswer;
         }
 
+        widget.doubleTapSelectedAnswer.removeWhere((element) => element.questionTag == widget.contentType);
         SelectedAnswers doubleTapSelectedAnswerObj = widget.doubleTapSelectedAnswer.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
         if (doubleTapSelectedAnswerObj == null) {
           widget.doubleTapSelectedAnswer.add(SelectedAnswers(questionTag: currentTag, answer: selectedAnswer));
@@ -1056,6 +1058,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                 child: Center(
                                   child: GestureDetector(
                                     onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
                                       _showMedicationDosagePicker(0, index);
                                     },
                                     child: Container(
@@ -1801,9 +1804,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         if(selectedAnswersValue == null)
           widget.selectedAnswers.add(SelectedAnswers(questionTag: widget.contentType, answer: selectedAnswer));
       } else {
-        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
-                (element) => element.questionTag == widget.contentType && element.answer == selectedAnswer,
-            orElse: () => null);
+        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere((element) => element.questionTag == widget.contentType && element.answer == selectedAnswer, orElse: () => null);
         if (selectedAnswerObj == null) {
           widget.selectedAnswers.removeWhere((element1) => element1.questionTag == widget.contentType);
           widget.selectedAnswers.add(
@@ -1826,13 +1827,14 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           widget.selectedAnswers.remove(element);
         });
       } else {
-        SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
+        /*SelectedAnswers selectedAnswerObj = widget.selectedAnswers.firstWhere(
                 (element) => element.questionTag == widget.contentType,
             orElse: () => null);
 
         if (selectedAnswerObj != null) {
           widget.selectedAnswers.remove(selectedAnswerObj);
-        }
+        }*/
+        widget.selectedAnswers.removeWhere((element1) => element1.questionTag == widget.contentType);
       }
     }
   }
@@ -1936,6 +1938,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void _openAddNewMedicationDialog() async {
+    FocusScope.of(context).requestFocus(FocusNode());
     var addMedicationResult = await showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(

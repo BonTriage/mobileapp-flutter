@@ -227,18 +227,12 @@ class _LogDayScreenState extends State<LogDayScreen>
                                         BouncingWidget(
                                           onPressed: () {
                                             FocusScope.of(context).requestFocus(FocusNode());
+
                                             if (!_isButtonClicked) {
                                               _isButtonClicked = true;
                                               if (selectedAnswers.length > 0) {
-                                                SelectedAnswers
-                                                logDayNoteSelectedAnswer =
-                                                selectedAnswers.firstWhere(
-                                                        (element) =>
-                                                    element.questionTag ==
-                                                        Constant.logDayNoteTag,
-                                                    orElse: () => null);
-                                                if (logDayNoteSelectedAnswer ==
-                                                    null)
+                                                SelectedAnswers logDayNoteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == Constant.logDayNoteTag, orElse: () => null);
+                                                if (logDayNoteSelectedAnswer == null)
                                                   selectedAnswers.add(
                                                       SelectedAnswers(
                                                           questionTag:
@@ -246,7 +240,22 @@ class _LogDayScreenState extends State<LogDayScreen>
                                                           answer: Constant
                                                               .blankString));
 
-                                                _onSubmitClicked();
+                                                if(selectedAnswers.length == 1) {
+                                                  if(selectedAnswers.first.questionTag == Constant.logDayNoteTag) {
+                                                    if(selectedAnswers.first.answer.trim().isEmpty) {
+                                                      Utils.showValidationErrorDialog(context, Constant.selectAtLeastOneOptionLogDayError);
+                                                      _isButtonClicked = false;
+                                                    } else {
+                                                      _onSubmitClicked();
+                                                    }
+                                                  } else {
+                                                    _onSubmitClicked();
+                                                  }
+                                                } else {
+                                                  _onSubmitClicked();
+                                                }
+
+                                                //_onSubmitClicked();
                                               } else {
                                                 Utils.showValidationErrorDialog(
                                                     context,

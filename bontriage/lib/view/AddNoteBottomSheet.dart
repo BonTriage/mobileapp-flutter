@@ -49,7 +49,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   widget.addNoteCallback(_textEditingController.text);
-                  Navigator.pop(context, _textEditingController.text);
+                  Navigator.pop(context, _textEditingController.text.trim());
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 10, right: 10),

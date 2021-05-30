@@ -175,7 +175,7 @@ class LogDayBloc {
     return response;
   }
 
-  Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async{
+  Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
     LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
@@ -475,9 +475,7 @@ class LogDayBloc {
               String value = behaviorMobileEventDetailsElement.value;
               List<String> valuesList = value.split("%@");
               valuesList.forEach((valueElement) {
-                Values selectedValues = questions.values.firstWhere((
-                    element) => valueElement == element.text,
-                    orElse: () => null);
+                Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
                 selectedAnswerList.add(SelectedAnswers(
                     questionTag: behaviorMobileEventDetailsElement.questionTag,
                     answer: selectedValues.valueNumber,
