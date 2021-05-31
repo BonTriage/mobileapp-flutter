@@ -567,10 +567,10 @@ class _TimeSectionState extends State<TimeSection>
                             "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
                       }*/
                       _selectedEndDate = DateTime.now();
+                      _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0, 0);
                       _selectedEndTime = _selectedEndDate;
                       _selectedEndDateAndTime = _selectedEndDate;
-                      widget.addHeadacheDateTimeDetailsData(
-                          "endtime", Utils.getDateTimeInUtcFormat(DateTime.now()));
+                      widget.addHeadacheDateTimeDetailsData("endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
                     } else
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));

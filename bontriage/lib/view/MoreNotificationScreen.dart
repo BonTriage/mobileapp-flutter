@@ -233,7 +233,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                       isNotificationTimerOpen:
                                       isAddedCustomNotification,
                                       localNotificationDataStream:
-                                      localNotificationDataStream),
+                                      localNotificationDataStream,),
                                 ),
                                 Visibility(
                                   visible: !isAlreadyAddedCustomNotification ,
@@ -505,8 +505,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
             (element) => element.isCustomNotificationAdded ?? false,
         orElse: () => null);
     if (localNotificationNameModel != null) {
-      customNotificationValue =  localNotificationNameModel.notificationName;
       localNotificationNameModel.notificationName = notificationName;
+      customNotificationValue =  notificationName;
     }else{
       customNotificationValue = notificationName;
     }

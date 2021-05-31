@@ -59,6 +59,8 @@ class _NotificationSectionState extends State<NotificationSection>
 
   String customNotificationValue = '';
 
+  //String customNotificationName = 'Custom';
+
 
   @override
   void initState() {
@@ -175,12 +177,9 @@ class _NotificationSectionState extends State<NotificationSection>
     }
     DateTime dateTime;
     if (widget.notificationId == 0) {
-      localNotificationNameModel = widget.allNotificationListData.firstWhere(
-              (element) => element.notificationName == 'Daily Log',
-          orElse: () => null);
+      localNotificationNameModel = widget.allNotificationListData.firstWhere((element) => element.notificationName == 'Daily Log', orElse: () => null);
       if (localNotificationNameModel != null) {
-        dateTime =
-            DateTime.tryParse(localNotificationNameModel.notificationTime);
+        dateTime = DateTime.tryParse(localNotificationNameModel.notificationTime);
         if (dateTime != null) {
           selectedTimerValue = '${localNotificationNameModel.notificationType ?? 'Daily'}, ${Utils.getTimeInAmPmFormat(dateTime.hour, dateTime.minute)}';
         } else {
@@ -255,6 +254,7 @@ class _NotificationSectionState extends State<NotificationSection>
 
   @override
   Widget build(BuildContext context) {
+    //print('NotificationId????${widget.notificationId}????TimerValue????$selectedTimerValue');
     return Column(
       children: [
         GestureDetector(
@@ -523,8 +523,12 @@ class _NotificationSectionState extends State<NotificationSection>
               (element) => element.isCustomNotificationAdded ?? false,
           orElse: () => null);
       if (localNotificationNameModel != null && localNotificationNameModel.notificationName.isNotEmpty) {
-        return localNotificationNameModel.notificationName ;
-      }else return widget.notificationName.isNotEmpty ? widget.notificationName :'Custom';
+        print('CustomNotificationName1????${localNotificationNameModel.notificationName}');
+        return localNotificationNameModel.notificationName;
+      }else{
+        print('CustomNotificationName2????${widget.notificationName.isNotEmpty ? widget.notificationName :'Custom'}');
+        return widget.notificationName.isNotEmpty ? widget.notificationName :'Custom';
+      }
     }else return localNotificationNameModel != null ? localNotificationNameModel.notificationName : widget.notificationName;
 
   }
@@ -567,6 +571,7 @@ class _NotificationSectionState extends State<NotificationSection>
     } else {
       _selectedTimerValueFunc(whichButtonSelected);
     }
+
     await _notificationSelected("");
   }
 
@@ -700,6 +705,9 @@ class _NotificationSectionState extends State<NotificationSection>
         }
       }
     }
+
+    _selectedHour = _dateTime.hour;
+    _selectedMinute = _dateTime.minute;
   }
 
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
@@ -924,7 +932,7 @@ class _NotificationSectionState extends State<NotificationSection>
         }
         if(customNotificationLogTime != 'Off') {
           widget.allNotificationListData.add(localNotificationModel);
-        }else{
+        }else {
           widget.allNotificationListData.remove(localNotificationModel);
           _deleteNotificationChannel(3);
         }

@@ -461,8 +461,8 @@ class _NotificationScreenState extends State<NotificationScreen>
             (element) => element.isCustomNotificationAdded ?? false,
         orElse: () => null);
     if (localNotificationNameModel != null) {
-      customNotificationValue =  localNotificationNameModel.notificationName;
       localNotificationNameModel.notificationName = notificationName;
+      customNotificationValue =  notificationName;
     }else{
       customNotificationValue = notificationName;
     }

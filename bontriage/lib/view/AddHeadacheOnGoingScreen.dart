@@ -448,15 +448,24 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
 
     bool isTimeValidationSatisfied = true;
+    String errorMessage = '';
     if(_isUserHeadacheEnded) {
       if(onSetSelectedAnswer != null && endTimeSelectedAnswer != null) {
         DateTime onSetDateTime = DateTime.tryParse(onSetSelectedAnswer.answer);
         DateTime endDateTime = DateTime.tryParse(endTimeSelectedAnswer.answer);
 
-        if (onSetDateTime.isAtSameMomentAs(endDateTime))
+        print('Onset???$onSetDateTime\nEndtime???$endDateTime');
+
+        if (onSetDateTime.isAtSameMomentAs(endDateTime)) {
+          errorMessage = 'Start Time cannot be same as End Time.';
           isTimeValidationSatisfied = false;
-        else
+        }
+        else if(onSetDateTime.isAfter(endDateTime)) {
+          errorMessage = 'Start Time cannot be greater than End Time.';
+          isTimeValidationSatisfied = false;
+        } else {
           isTimeValidationSatisfied = true;
+        }
       }
     }
 
@@ -472,7 +481,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         );
         _callSendAddHeadacheLogApi();
       } else {
-        Utils.showValidationErrorDialog(context, 'Start Time cannot be same as End Time.');
+        Utils.showValidationErrorDialog(context, errorMessage);
         _isButtonClicked = false;
       }
     } else {
