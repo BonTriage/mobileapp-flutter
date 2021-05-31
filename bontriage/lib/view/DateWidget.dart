@@ -32,8 +32,10 @@ class DateWidget extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if(navigateToOtherScreenCallback != null) {
-                  Duration duration = weekDateData.difference(DateTime.tryParse(
-                      Utils.getDateTimeInUtcFormat(DateTime.now())));
+                  Duration duration = DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData)).difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
+                  print('WeekData????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData))}');
+                  print('NowDateTime????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now()))}');
+                  print('Duration???${duration.inSeconds}');
                   if (duration.inSeconds <= 0)
                     navigateToOtherScreenCallback(
                         Constant.onCalendarHeadacheLogDayDetailsScreenRouter,

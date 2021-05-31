@@ -40,8 +40,8 @@ dependencies:
   shared_preferences: ^2.0.5
   path_provider: ^2.0.1
   share: ^2.0.1
-  #flutter_pdfview: ^1.0.4
-  advance_pdf_viewer: ^2.0.0
+  flutter_pdfview: ^1.0.4
+  #advance_pdf_viewer: any
   flutter_local_notifications: ^5.0.0+3
   package_info_plus: ^1.0.1
   rxdart: ^0.27.0
