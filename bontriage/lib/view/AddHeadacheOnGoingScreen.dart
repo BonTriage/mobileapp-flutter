@@ -502,6 +502,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       prefs.setString(Constant.updateOverTimeCompassData, 'true');
       prefs.setString(Constant.updateCompareCompassData, 'true');
       prefs.setString(Constant.updateTrendsData, 'true');
+      prefs.setString(Constant.updateMeScreenData, 'true');
       Navigator.pop(context);
       if(!_isFromRecordScreen) {
         if(_isUserHeadacheEnded) {

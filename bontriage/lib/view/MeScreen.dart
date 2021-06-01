@@ -135,6 +135,7 @@ class _MeScreenState extends State<MeScreen>
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     _getCurrentIndexOfTabBar();
+    _updateMeScreenData();
     print('in did update widget of me screen.');
   }
 
@@ -387,9 +388,10 @@ class _MeScreenState extends State<MeScreen>
                             children: [
                               BouncingWidget(
                                 key: _logDayGlobalKey,
-                                onPressed: () {
-                                  widget.navigateToOtherScreenCallback(
+                                onPressed: () async {
+                                 await widget.navigateToOtherScreenCallback(
                                       Constant.logDayScreenRouter, null);
+                                 _updateMeScreenData();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -509,6 +511,7 @@ class _MeScreenState extends State<MeScreen>
         await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     }
     _getUserCurrentHeadacheData();
+    _updateMeScreenData();
   }
 
   void requestService(
@@ -722,6 +725,8 @@ class _MeScreenState extends State<MeScreen>
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();
+
+    _updateMeScreenData();
   }
 
   String _getHeadacheButtonText() {
@@ -751,6 +756,18 @@ class _MeScreenState extends State<MeScreen>
     if(currentPositionOfTabBar == 0) {
       _getUserCurrentHeadacheData();
       _getUserProfileDetails();
+    }
+  }
+
+  void _updateMeScreenData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    
+    String updateMeScreenData = sharedPreferences.getString(Constant.updateMeScreenData);
+
+    if(currentPositionOfTabBar == 0 && updateMeScreenData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateMeScreenData);
+      await _calendarScreenBloc.fetchCalendarTriggersData(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
     }
   }
 }

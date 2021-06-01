@@ -595,6 +595,7 @@ class Constant {
   static const String minLabel1 = 'minlabel';
   static const String maxLabel1 = 'maxlabel';
   static const String label = 'label';
+  static const String updateMeScreenData = 'updateMeScreenData';
   static const String updateCalendarTriggerData = 'updateCalendarTriggerData';
   static const String updateCalendarIntensityData =
       'updateCalendarIntensityData';

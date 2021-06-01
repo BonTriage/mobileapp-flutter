@@ -122,6 +122,7 @@ class _SplashState extends State<Splash> {
     sharedPreferences.remove(Constant.updateTrendsData);
     sharedPreferences.remove(Constant.isSeeMoreClicked);
     sharedPreferences.remove(Constant.isViewTrendsClicked);
+    sharedPreferences.remove(Constant.updateMeScreenData);
   }
 
   /// This method will be use for to check critical update from server.So if get critical update from server. So

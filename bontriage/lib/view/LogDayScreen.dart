@@ -511,6 +511,7 @@ class _LogDayScreenState extends State<LogDayScreen>
         prefs.setString(Constant.updateCalendarIntensityData, 'true');
         prefs.setString(Constant.updateOverTimeCompassData, 'true');
         prefs.setString(Constant.updateCompareCompassData, 'true');
+        prefs.setString(Constant.updateMeScreenData, 'true');
         Navigator.pop(context);
 
         if (widget.logDayScreenArgumentModel == null) {
