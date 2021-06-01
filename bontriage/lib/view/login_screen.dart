@@ -131,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                 onChanged: (String value) {
                                   emailValue = emailTextEditingController.text;
                                 },
+                                keyboardType: TextInputType.emailAddress,
                                 style: TextStyle(
                                     fontSize: 15, fontFamily: Constant.jostMedium),
                                 cursorColor: Constant.bubbleChatTextView,

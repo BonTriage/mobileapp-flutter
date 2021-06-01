@@ -129,32 +129,22 @@ class _SplashState extends State<Splash> {
     VersionUpdateModel responseData = await _checkVersionUpdateBloc.checkVersionUpdateData();
     if(responseData != null) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      int appVersionNumber = int.tryParse(
-          packageInfo.version.replaceAll('.', ''));
+      int appVersionNumber = int.tryParse(packageInfo.version.replaceAll('.', ''));
       if (Platform.isAndroid) {
-        int serverVersionNumber = int.tryParse(
-            responseData.androidVersion.replaceAll('.', ''));
-        if (serverVersionNumber > appVersionNumber &&
-            responseData.androidCritical) {
-          Utils.showCriticalUpdateDialog(
-              context, responseData.androidBuildDetails);
+        int serverVersionNumber = int.tryParse(responseData.androidVersion.replaceAll('.', ''));
+        if (serverVersionNumber > appVersionNumber && responseData.androidCritical) {
+          Utils.showCriticalUpdateDialog(context, responseData.androidBuildDetails);
         } else {
           getTutorialsState();
         }
       } else {
-        int serverVersionNumber = int.tryParse(
-            responseData.androidVersion.replaceAll('.', ''));
-        if (serverVersionNumber > appVersionNumber &&
-            responseData.iosCritical) {
-          Utils.showCriticalUpdateDialog(
-              context, responseData.androidBuildDetails);
+        int serverVersionNumber = int.tryParse(responseData.iosVersion.replaceAll('.', ''));
+        if (serverVersionNumber > appVersionNumber && responseData.iosCritical) {
+          Utils.showCriticalUpdateDialog(context, responseData.description);
         } else {
-          int serverVersionNumber = int.tryParse(
-              responseData.androidVersion.replaceAll('.', ''));
-          if (serverVersionNumber > appVersionNumber &&
-              responseData.iosCritical) {
-            Utils.showCriticalUpdateDialog(
-                context, responseData.androidBuildDetails);
+          int serverVersionNumber = int.tryParse(responseData.iosVersion.replaceAll('.', ''));
+          if (serverVersionNumber > appVersionNumber && responseData.iosCritical) {
+            Utils.showCriticalUpdateDialog(context, responseData.description);
           } else {
             getTutorialsState();
           }

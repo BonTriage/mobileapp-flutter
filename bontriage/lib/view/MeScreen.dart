@@ -64,12 +64,14 @@ class _MeScreenState extends State<MeScreen>
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
 
-    var currentWeekDate =
-        _dateTime.subtract(new Duration(days: _dateTime.weekday));
+    var currentWeekDate = _dateTime.subtract(new Duration(days: _dateTime.weekday));
+    debugPrint('CurrentWeekDate????$currentWeekDate');
     firstDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, currentWeekDate.day);
+        currentWeekDate.month, currentWeekDate.year, currentWeekDate.day);
+
+    var currentWeekLastDate = currentWeekDate.add(Duration(days: 6));
     lastDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, currentWeekDate.day + 6);
+        currentWeekLastDate.month, currentWeekLastDate.year, currentWeekLastDate.day);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
