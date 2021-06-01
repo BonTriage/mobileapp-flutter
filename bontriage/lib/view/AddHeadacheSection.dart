@@ -1406,9 +1406,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
   }
 
   void onValueChangedCallback(String currentTag, String value) {
-    SelectedAnswers selectedAnswersObj = selectedAnswerListOfTriggers
-        .firstWhere((element) => element.questionTag == currentTag,
-        orElse: () => null);
+    SelectedAnswers selectedAnswersObj = selectedAnswerListOfTriggers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
     if (selectedAnswersObj != null) {
       selectedAnswersObj.answer = value;
     } else {
@@ -1910,24 +1908,50 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     (element1) => element1.precondition.toLowerCase().contains(element.text.toLowerCase()),
                 orElse: () => null);
             if (questionTriggerData != null) {
-              SelectedAnswers selectedAnswerTriggerData =
-              selectedAnswerListOfTriggers.firstWhere(
-                      (element1) =>
-                  element1.questionTag == questionTriggerData.tag,
-                  orElse: () => null);
-              if (selectedAnswerTriggerData != null) {
-                SelectedAnswers selectedAnswerData = widget.selectedAnswers
-                    .firstWhere(
+              if(questionTriggerData.tag != 'triggers1.travel') {
+                SelectedAnswers selectedAnswerTriggerData =
+                selectedAnswerListOfTriggers.firstWhere(
                         (element1) =>
-                    element1.questionTag ==
-                        selectedAnswerTriggerData.questionTag && element1.answer == selectedAnswerTriggerData.answer,
+                    element1.questionTag == questionTriggerData.tag,
                     orElse: () => null);
-                if (selectedAnswerData == null) {
-                  widget.selectedAnswers.add(SelectedAnswers(
-                      questionTag: selectedAnswerTriggerData.questionTag,
-                      answer: selectedAnswerTriggerData.answer));
-                } else {
-                  selectedAnswerData.answer = selectedAnswerTriggerData.answer;
+                if (selectedAnswerTriggerData != null) {
+                  SelectedAnswers selectedAnswerData = widget.selectedAnswers
+                      .firstWhere(
+                          (element1) =>
+                      element1.questionTag ==
+                          selectedAnswerTriggerData.questionTag &&
+                          element1.answer == selectedAnswerTriggerData.answer,
+                      orElse: () => null);
+                  if (selectedAnswerData == null) {
+                    widget.selectedAnswers.add(SelectedAnswers(
+                        questionTag: selectedAnswerTriggerData.questionTag,
+                        answer: selectedAnswerTriggerData.answer));
+                  } else {
+                    selectedAnswerData.answer =
+                        selectedAnswerTriggerData.answer;
+                  }
+                }
+              } else {
+                SelectedAnswers selectedAnswerTriggerData =
+                selectedAnswerListOfTriggers.firstWhere(
+                        (element1) =>
+                    element1.questionTag == questionTriggerData.tag,
+                    orElse: () => null);
+                if (selectedAnswerTriggerData != null) {
+                  SelectedAnswers selectedAnswerData = widget.selectedAnswers
+                      .firstWhere(
+                          (element1) =>
+                      element1.questionTag ==
+                          selectedAnswerTriggerData.questionTag,
+                      orElse: () => null);
+                  if (selectedAnswerData == null) {
+                    widget.selectedAnswers.add(SelectedAnswers(
+                        questionTag: selectedAnswerTriggerData.questionTag,
+                        answer: selectedAnswerTriggerData.answer));
+                  } else {
+                    selectedAnswerData.answer =
+                        selectedAnswerTriggerData.answer;
+                  }
                 }
               }
             }
@@ -1947,10 +1971,13 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
         ),
         context: context,
         isScrollControlled: true,
-        builder: (context) => AddNewMedicationDialog(
-          onSubmitClickedCallback: (addMedicationResult) {
+        builder: (context) => Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: AddNewMedicationDialog(
+            onSubmitClickedCallback: (addMedicationResult) {
 
-          },
+            },
+          ),
         )
     );
 

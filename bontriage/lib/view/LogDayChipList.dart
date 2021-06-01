@@ -22,29 +22,38 @@ class _LogDayChipListState extends State<LogDayChipList> {
   void initState() {
     super.initState();
 
-    print('MedicationDosageTag???${widget.question.tag}');
+    if(widget.question.tag.contains('.dosage')) {
+      Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
 
-    Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
+      if(selectedValueObj == null) {
+        widget.question.values.first.isSelected = true;
 
-    if(selectedValueObj == null) {
-      widget.question.values.first.isSelected = true;
-
-      widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+        widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+      }
     }
+
+    widget.question.values.forEach((element) {
+      if(element.isSelected) {
+        print('${widget.question.tag}????${element.text}');
+      }
+    });
   }
 
   @override
   void didUpdateWidget(covariant LogDayChipList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    print('MedicationDosageTag???${widget.question.tag}');
+    //print('MedicationDosageTag???${widget.question.tag}');
 
-    Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
 
-    if(selectedValueObj == null) {
-      widget.question.values.first.isSelected = true;
+    if(widget.question.tag.contains('.dosage')) {
+      Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
 
-      widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+      if(selectedValueObj == null) {
+        widget.question.values.first.isSelected = true;
+
+        widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+      }
     }
   }
 

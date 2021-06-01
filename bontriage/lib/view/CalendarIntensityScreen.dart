@@ -588,7 +588,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 44,
                         ),
                         Text(
-                          'Headache score between',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -634,7 +634,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 13,
                         ),
                         Text(
-                          'Headache score between',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -680,7 +680,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 30,
                         ),
                         Text(
-                          'Headache score between',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,

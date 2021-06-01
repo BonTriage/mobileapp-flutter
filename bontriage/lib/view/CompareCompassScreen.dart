@@ -86,7 +86,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
         text:
-            ' in ${Utils.getMonthName(firstLoggedSignUpData.month)} ${firstLoggedSignUpData.year}. Tap the Compass to view $monthName $currentYear  ',
+            ' in ${Utils.getMonthName(firstLoggedSignUpData.month)} ${firstLoggedSignUpData.year}. Tap the Compass axes to view $monthName $currentYear.',
         style: TextStyle(
             height: 1.2,
             fontSize: 14,
