@@ -74,9 +74,9 @@ class BehaviorDatum {
   String behaviorPresleep;
 
   factory BehaviorDatum.fromJson(Map<String, dynamic> json) => BehaviorDatum(
-    behaviorPreexercise: json["behavior.preexercise"] == null ? null : json["behavior.preexercise"],
-    behaviorPremeal: json["behavior.premeal"] == null ? null : json["behavior.premeal"],
-    behaviorPresleep: json["behavior.presleep"] == null ? null : json["behavior.presleep"],
+    behaviorPreexercise: json["behavior.preexercise"] == null ? null : (json["behavior.preexercise"] is List<dynamic> ? json["behavior.preexercise"][0] : json["behavior.preexercise"]),
+    behaviorPremeal: json["behavior.premeal"] == null ? null : (json["behavior.premeal"] is List<dynamic> ? json["behavior.premeal"][0] : json["behavior.premeal"]),
+    behaviorPresleep: json["behavior.presleep"] == null ? null : (json["behavior.presleep"] is List<dynamic> ? json["behavior.presleep"][0] : json["behavior.presleep"]),
   );
 
   Map<String, dynamic> toJson() => {

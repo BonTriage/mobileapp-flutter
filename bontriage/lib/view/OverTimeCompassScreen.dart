@@ -59,6 +59,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   int userPreviousMonthScoreData = 0;
   String headacheDownOrUp = '';
   String increaseOrDecrease = '';
+  //String anOra = '';
 
   double currentIntensityValue = 0;
   double currentDisabilityValue = 0;
@@ -103,7 +104,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
             fontFamily: Constant.jostRegular,
             color: Constant.addCustomNotificationTextColor)));
     list.add(TextSpan(
-        text: ' last month. This was primarily due to an ',
+        text: ' last month. This was primarily due to ',
         style: TextStyle(
             height: 1.3,
             fontSize: 14,
@@ -182,7 +183,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                          'We noticed you didn’t log any  headache yet. So please add any headache to see your Compass data.',
+                          'We noticed you didn’t log any headache yet. So please add any headache to see your Compass data.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               height: 1.3,
@@ -236,12 +237,15 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                 }
                 setCompassAxesData(snapshot.data);
                 if (userPreviousMonthScoreData < userCurrentMonthScoreData) {
+                  //anOra = 'an';
                   headacheDownOrUp = 'up';
                   setTextValue(1);
                 } else if (userPreviousMonthScoreData > userCurrentMonthScoreData) {
+                  //anOra = 'a';
                   headacheDownOrUp = 'down';
                   setTextValue(0);
                 } else {
+                  //anOra = 'a';
                   headacheDownOrUp = 'same';
                   setTextValue(2);
                 }

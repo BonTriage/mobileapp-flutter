@@ -111,6 +111,7 @@ class RecordsTrendsScreenBloc {
           url, RequestMethod.GET);
       if (response is AppException) {
         recordsTrendsDataSink.addError(response);
+        networkDataSink.addError(Exception(Constant.somethingWentWrong));
         apiResponse = response.toString();
       } else {
         if (response != null) {
@@ -118,18 +119,21 @@ class RecordsTrendsScreenBloc {
           if (_recordsTrendsDataModel.headacheListModelData.length > 0) {
             headacheDataList = _recordsTrendsDataModel.headacheListModelData;
           }
-          _recordsTrendsDataModel =
-              RecordsTrendsDataModel.fromJson(jsonDecode(response));
+          _recordsTrendsDataModel = RecordsTrendsDataModel.fromJson(jsonDecode(response));
           apiResponse = Constant.success;
           _recordsTrendsDataModel.headacheListModelData = headacheDataList;
           recordsTrendsDataSink.add(_recordsTrendsDataModel);
           networkDataSink.add(Constant.success);
         } else {
+          print('here 1');
           recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
+      print('here 2');
       recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
@@ -179,10 +183,12 @@ class RecordsTrendsScreenBloc {
           networkDataSink.add(Constant.success);
         } else {
           recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+          networkDataSink.addError(Exception(Constant.somethingWentWrong));
         }
       }
     } catch (e) {
       recordsTrendsDataSink.addError(Exception(Constant.somethingWentWrong));
+      networkDataSink.addError(Exception(Constant.somethingWentWrong));
       apiResponse = Constant.somethingWentWrong;
     }
     return apiResponse;
