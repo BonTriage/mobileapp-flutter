@@ -125,7 +125,7 @@ class Ity {
 
   factory Ity.fromJson(Map<String, dynamic> json) => Ity(
     date: DateTime.parse(json["date"]),
-    value: double.parse(json["value"].toString()),
+    value: double.parse(json["value"].toString()).roundToDouble(),
   );
 
   Map<String, dynamic> toJson() => {
