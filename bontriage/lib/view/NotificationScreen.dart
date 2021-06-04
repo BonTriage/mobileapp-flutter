@@ -445,15 +445,32 @@ class _NotificationScreenState extends State<NotificationScreen>
   /// this Method will be use for to get all notification data from the DB. If user has set any Local notifications from
   /// this screen.
   void getNotificationListData() async {
-    var notificationListData =
-    await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
-    if (notificationListData != null) {
-      setState(() {
-        _locationServicesSwitchState = true;
-         isSaveButtonVisible = true;
-        allNotificationListData = notificationListData;
-      });
+    if (Platform.isIOS) {
+      var permissionResult = await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      if (permissionResult ?? true) {
+        setState(() {
+          _locationServicesSwitchState = true;
+          isSaveButtonVisible = true;
+        });
+      }
+    }else{
+      var notificationListData =  await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+      if (notificationListData != null) {
+        setState(() {
+          _locationServicesSwitchState = true;
+          isSaveButtonVisible = true;
+          allNotificationListData = notificationListData;
+        });
+      }
     }
+
   }
   setNotificationName(String notificationName) {
     LocalNotificationModel localNotificationNameModel = allNotificationListData
