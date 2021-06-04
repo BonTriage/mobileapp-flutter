@@ -601,6 +601,7 @@ class Constant {
       'updateCalendarIntensityData';
   static const String updateOverTimeCompassData = 'updateOverTimeCompassData';
   static const String updateCompareCompassData = 'updateCompareCompassData';
+  static const String isNotificationInitiallyAdded = 'isNotificationInitiallyAdded';
   static const String updateTrendsData = 'updateTrendsData';
   static const String last4Weeks = 'Last 4 weeks';
   static const String last2Months = 'Last 2 months';

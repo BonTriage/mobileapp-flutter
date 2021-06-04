@@ -4,7 +4,7 @@ import 'package:mobile/util/constant.dart';
 
 class MoreNameScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
-  final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
   const MoreNameScreen({Key key, @required this.selectedAnswerList, @required this.openActionSheetCallback}): super(key: key);
 
   @override

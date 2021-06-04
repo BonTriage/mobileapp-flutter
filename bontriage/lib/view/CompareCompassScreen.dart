@@ -782,8 +782,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
       } else {
         userOverTimeDurationValue = userOverTimeDurationValue;
       }*/
-      _compassTutorialModelFirstLogged.currentMonthDuration =
-          (userOvertimeDuration.value / userOvertimeDuration.max).round();
+      _compassTutorialModelFirstLogged.currentMonthDuration = userOvertimeDuration.value.round();
+          //(userOvertimeDuration.value / userOvertimeDuration.max).round();
     } else {
       userOverTimeNormalisedDurationValue = 0;
       userOverTimeDurationValue = 0;
