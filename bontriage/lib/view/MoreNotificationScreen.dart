@@ -561,6 +561,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
        ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
      }else{
+       _isClickedOnSaveAndExit = false;
        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage. If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
        if(result == 'Yes'){
          Geolocator.openAppSettings();
@@ -585,7 +586,6 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
   Future<void> _openSaveAndExitActionSheet() async {
     var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
-
     if(result == Constant.saveAndExit) {
       _isClickedOnSaveAndExit = true;
       requestPermissionForNotification();

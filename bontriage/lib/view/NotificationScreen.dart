@@ -455,7 +455,7 @@ class _NotificationScreenState extends State<NotificationScreen>
         badge: true,
         sound: true,
       );
-      if (permissionResult ?? true) {
+      if (permissionResult ?? false) {
         setState(() {
           _locationServicesSwitchState = true;
           isSaveButtonVisible = true;
