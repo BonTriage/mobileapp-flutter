@@ -16,9 +16,9 @@ import '../main.dart';
 import 'NotificationSection.dart';
 
 class MoreNotificationScreen extends StatefulWidget {
-  final Function(BuildContext, String) onPush;
+  final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
 
-  const MoreNotificationScreen({Key key, this.onPush}) : super(key: key);
+  const MoreNotificationScreen({Key key, this.openActionSheetCallback}) : super(key: key);
 
   @override
   _MoreNotificationScreenState createState() => _MoreNotificationScreenState();
@@ -40,6 +40,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
   bool isAlreadyAddedCustomNotification = false;
 
   bool isSaveButtonVisible = false;
+
+  bool _isClickedOnSaveAndExit = false;
 
   Stream<dynamic> get localNotificationDataStream =>
       _localNotificationStreamController.stream;
@@ -69,252 +71,259 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: Constant.backgroundBoxDecoration,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery
-                .of(context)
-                .size
-                .height,
-          ),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+    return WillPopScope(
+      onWillPop: () async {
+        _openSaveAndExitActionSheet();
+        return false;
+      },
+      child: Container(
+        decoration: Constant.backgroundBoxDecoration,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+            ),
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        //Navigator.of(context).pop();
+                        _openSaveAndExitActionSheet();
+                      },
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Constant.moreBackgroundColor,
+                        ),
+                        child: Row(
+                          children: [
+                            Image(
+                              width: 20,
+                              height: 20,
+                              image: AssetImage(Constant.leftArrow),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              Constant.notifications,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Constant.moreBackgroundColor,
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image(
-                            width: 20,
-                            height: 20,
-                            image: AssetImage(Constant.leftArrow),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, top: 15, bottom: 15),
+                            child: Text(
+                              Constant.notifications,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium),
+                            ),
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            Constant.notifications,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontSize: 16,
-                                fontFamily: Constant.jostMedium),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Switch(
+                              value: _notificationSwitchState,
+                              onChanged: (bool state) {
+                                setState(() {
+                                  _notificationSwitchState = state;
+                                  if (state) {
+                                    _animationController.forward();
+                                    isSaveButtonVisible = true;
+
+                                 //   AppSettings.openNotificationSettings();
+                                  } else {
+                                    localNotificationDataSink.add('CancelAll');
+                                    SignUpOnBoardProviders.db.deleteAllNotificationFromDatabase();
+                                    allNotificationListData = [];
+                                    isAlreadyAddedCustomNotification = false;
+                                    textEditingController.text = '';
+                                    _animationController.reverse();
+                                     isSaveButtonVisible = false;
+                                  }
+
+                                });
+                              },
+                              activeColor: Constant.chatBubbleGreen,
+                              inactiveThumbColor: Constant.chatBubbleGreen,
+                              inactiveTrackColor: Constant.chatBubbleGreenBlue,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Constant.moreBackgroundColor,
+                    SizedBox(
+                      height: 40,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, top: 15, bottom: 15),
-                          child: Text(
-                            Constant.notifications,
-                            style: TextStyle(
-                                color: Constant.locationServiceGreen,
-                                fontSize: 16,
-                                fontFamily: Constant.jostMedium),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Switch(
-                            value: _notificationSwitchState,
-                            onChanged: (bool state) {
-                              setState(() {
-                                _notificationSwitchState = state;
-                                if (state) {
-                                  _animationController.forward();
-                                  isSaveButtonVisible = true;
-
-                               //   AppSettings.openNotificationSettings();
-                                } else {
-                                  localNotificationDataSink.add('CancelAll');
-                                  SignUpOnBoardProviders.db.deleteAllNotificationFromDatabase();
-                                  allNotificationListData = [];
-                                  isAlreadyAddedCustomNotification = false;
-                                  textEditingController.text = '';
-                                  _animationController.reverse();
-                                   isSaveButtonVisible = false;
-                                }
-
-                              });
-                            },
-                            activeColor: Constant.chatBubbleGreen,
-                            inactiveThumbColor: Constant.chatBubbleGreen,
-                            inactiveTrackColor: Constant.chatBubbleGreenBlue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  SizeTransition(
-                    sizeFactor: _animationController,
-                    child: FadeTransition(
-                      opacity: _animationController,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Constant.moreBackgroundColor,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                NotificationSection(
-                                  notificationId: 0,
-                                  notificationName: 'Daily Log',
-                                  localNotificationDataStream:
-                                  localNotificationDataStream,
-                                  allNotificationListData: allNotificationListData,
-                                ),
-                                SizedBox(height: 5),
-                                NotificationSection(
-                                  notificationId: 1,
-                                  localNotificationDataStream:
-                                  localNotificationDataStream,
-                                  allNotificationListData: allNotificationListData,
-                                  notificationName: 'Medication',
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                NotificationSection(
-                                  notificationId: 2,
-                                  notificationName: 'Exercise',
-                                  localNotificationDataStream:
-                                  localNotificationDataStream,
-                                  allNotificationListData: allNotificationListData,
-                                ),
-                                Visibility(
-                                  visible: isAlreadyAddedCustomNotification,
-                                  child: NotificationSection(
-                                      customNotification: () {
+                    SizeTransition(
+                      sizeFactor: _animationController,
+                      child: FadeTransition(
+                        opacity: _animationController,
+                        child: Column(
+                          children: [
+                            Container(
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Constant.moreBackgroundColor,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  NotificationSection(
+                                    notificationId: 0,
+                                    notificationName: 'Daily Log',
+                                    localNotificationDataStream:
+                                    localNotificationDataStream,
+                                    allNotificationListData: allNotificationListData,
+                                  ),
+                                  SizedBox(height: 5),
+                                  NotificationSection(
+                                    notificationId: 1,
+                                    localNotificationDataStream:
+                                    localNotificationDataStream,
+                                    allNotificationListData: allNotificationListData,
+                                    notificationName: 'Medication',
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  NotificationSection(
+                                    notificationId: 2,
+                                    notificationName: 'Exercise',
+                                    localNotificationDataStream:
+                                    localNotificationDataStream,
+                                    allNotificationListData: allNotificationListData,
+                                  ),
+                                  Visibility(
+                                    visible: isAlreadyAddedCustomNotification,
+                                    child: NotificationSection(
+                                        customNotification: () {
+                                          openCustomNotificationDialog(
+                                              context, allNotificationListData);
+                                        },
+                                        notificationId: 3,
+                                        allNotificationListData: allNotificationListData,
+                                        notificationName: customNotificationValue,
+                                        isNotificationTimerOpen:
+                                        isAddedCustomNotification,
+                                        localNotificationDataStream:
+                                        localNotificationDataStream,),
+                                  ),
+                                  Visibility(
+                                    visible: !isAlreadyAddedCustomNotification,
+                                    child: GestureDetector(
+                                      onTap: () {
                                         openCustomNotificationDialog(
                                             context, allNotificationListData);
                                       },
-                                      notificationId: 3,
-                                      allNotificationListData: allNotificationListData,
-                                      notificationName: customNotificationValue,
-                                      isNotificationTimerOpen:
-                                      isAddedCustomNotification,
-                                      localNotificationDataStream:
-                                      localNotificationDataStream,),
-                                ),
-                                Visibility(
-                                  visible: !isAlreadyAddedCustomNotification ,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      openCustomNotificationDialog(
-                                          context, allNotificationListData);
-                                    },
-                                    child: Container(
+                                      child: Container(
+                                        child: Text(
+                                          Constant.addCustomNotification,
+                                          style: TextStyle(
+                                              color: Constant
+                                                  .addCustomNotificationTextColor,
+                                              fontSize: 16,
+                                              fontFamily: Constant.jostMedium),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            /*Visibility(
+                              visible: isSaveButtonVisible,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    requestPermissionForNotification();
+
+                                   // Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
+                                    //saveAllNotification();
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 13),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffafd794),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Center(
                                       child: Text(
-                                        Constant.addCustomNotification,
+                                        Constant.save,
                                         style: TextStyle(
-                                            color: Constant
-                                                .addCustomNotificationTextColor,
-                                            fontSize: 16,
+                                            color: Constant.bubbleChatTextView,
+                                            fontSize: 15,
                                             fontFamily: Constant.jostMedium),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Visibility(
-                            visible: isSaveButtonVisible,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30),
-                              child: GestureDetector(
-                                onTap: () {
-                                  requestPermissionForNotification();
-
-                                 // Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
-                                  //saveAllNotification();
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 13),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffafd794),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      Constant.save,
-                                      style: TextStyle(
-                                          color: Constant.bubbleChatTextView,
-                                          fontSize: 15,
-                                          fontFamily: Constant.jostMedium),
-                                    ),
-                                  ),
+                            SizedBox(
+                              height: 20,
+                            ),*/
+                            Visibility(
+                              visible: isSaveButtonVisible,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  Constant.weKnowItCanBeEasy,
+                                  style: TextStyle(
+                                      color: Constant.locationServiceGreen,
+                                      fontSize: 14,
+                                      fontFamily: Constant.jostMedium),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Visibility(
-                            visible: isSaveButtonVisible,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                Constant.weKnowItCanBeEasy,
-                                style: TextStyle(
-                                    color: Constant.locationServiceGreen,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -536,16 +545,21 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
      if(permissionResult ?? false) {
        localNotificationDataSink.add('Clicked');
-       Future.delayed(Duration(milliseconds: 500), () {
-         SignUpOnBoardProviders.db
-          .insertUserNotifications(allNotificationListData);
+       Future.delayed(Duration(milliseconds: 500), () async {
+         await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+         if(_isClickedOnSaveAndExit) {
+           Navigator.pop(context);
+           /*Future.delayed(Duration(milliseconds: 500), () {
+             Navigator.pop(context);
+           });*/
+         }
        });
-            final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+            /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
            fontSize: 16,
            fontFamily: Constant.jostRegular,
            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+       ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
      }else{
        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage. If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
        if(result == 'Yes'){
@@ -554,17 +568,29 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
      }
    } else {
      localNotificationDataSink.add('Clicked');
-     Future.delayed(Duration(milliseconds: 500), () {
-       SignUpOnBoardProviders.db
-           .insertUserNotifications(allNotificationListData);
+     Future.delayed(Duration(milliseconds: 500), () async {
+       await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+       if(_isClickedOnSaveAndExit) {
+         Navigator.pop(context);
+       }
      });
-     final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+     /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
          height: 1.3,
          fontSize: 16,
          fontFamily: Constant.jostRegular,
          color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+     ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
    }
+  }
 
+  Future<void> _openSaveAndExitActionSheet() async {
+    var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
+
+    if(result == Constant.saveAndExit) {
+      _isClickedOnSaveAndExit = true;
+      requestPermissionForNotification();
+    } else {
+      Navigator.pop(context);
+    }
   }
 }

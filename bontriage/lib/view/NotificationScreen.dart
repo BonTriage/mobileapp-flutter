@@ -11,6 +11,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NotificationSection.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -480,7 +481,10 @@ class _NotificationScreenState extends State<NotificationScreen>
 
       if(permissionResult ?? false) {
         localNotificationDataSink.add('Clicked');
-        Future.delayed(Duration(milliseconds: 500), () {
+        Future.delayed(Duration(milliseconds: 500), () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
+
           SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
         });
         Navigator.pushReplacementNamed(context,
@@ -493,7 +497,10 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
     } else {
       localNotificationDataSink.add('Clicked');
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(Duration(milliseconds: 500), () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
+
         SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
       });
       Navigator.pushReplacementNamed(context,

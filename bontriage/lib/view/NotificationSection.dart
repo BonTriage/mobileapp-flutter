@@ -73,6 +73,12 @@ class _NotificationSectionState extends State<NotificationSection>
       if(event == 'Clicked')
         _setAllNotifications();
       else if(event == 'CancelAll') {
+        widget.allNotificationListData.clear();
+        //_setInItNotificationData();
+        isDailySelected = false;
+        isWeekDaysSelected = false;
+        isOffSelected = true;
+        _setAllNotifications();
         flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
@@ -254,7 +260,6 @@ class _NotificationSectionState extends State<NotificationSection>
 
   @override
   Widget build(BuildContext context) {
-    //print('NotificationId????${widget.notificationId}????TimerValue????$selectedTimerValue');
     return Column(
       children: [
         GestureDetector(
@@ -342,6 +347,39 @@ class _NotificationSectionState extends State<NotificationSection>
                                     } else {
                                       isDailySelected = true;
                                     }
+
+                                    /*var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
+                                            (element) => element.notificationName == 'Daily Log',
+                                        orElse: () => null);
+                                    if (dailyLogNotificationData != null) {
+                                      dailyLogNotificationData.notificationName = 'Daily Log';
+                                      dailyLogNotificationData.notificationType = 'Daily';
+                                      if (dailyNotificationLogTime == 'Off') {
+                                        dailyLogNotificationData.notificationTime = "";
+                                        widget.allNotificationListData.remove(dailyLogNotificationData);
+                                        _deleteNotificationChannel(0);
+                                        _deleteNotificationChannel(1);
+                                      } else {
+                                        print("scheduled notification at $_dateTime");
+                                        dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
+                                      }
+                                    } else {
+                                      LocalNotificationModel localNotificationModel = LocalNotificationModel();
+                                      localNotificationModel.notificationName = 'Daily Log';
+                                      localNotificationModel.notificationType = 'Daily';
+                                      if (dailyNotificationLogTime == 'Off') {
+                                        localNotificationModel.notificationTime = "";
+                                      } else {
+                                        localNotificationModel.notificationTime = _dateTime.toIso8601String();
+                                      }
+                                      if(dailyNotificationLogTime != 'Off') {
+                                        widget.allNotificationListData.add(localNotificationModel);
+                                      }else{
+                                        widget.allNotificationListData.remove(localNotificationModel);
+                                        _deleteNotificationChannel(0);
+                                        _deleteNotificationChannel(1);
+                                      }
+                                    }*/
                                   });
                                 },
                                 child: Text(
@@ -419,11 +457,19 @@ class _NotificationSectionState extends State<NotificationSection>
                                 _selectedTimerValueFunc('Off');
                                 if (widget.notificationId == 0) {
                                   _deleteNotificationChannel(0);
-                                } else if(widget.notificationId == 1) {
                                   _deleteNotificationChannel(1);
-                                }else{
+                                } else if(widget.notificationId == 1) {
                                   _deleteNotificationChannel(2);
+                                  _deleteNotificationChannel(3);
+                                }else if (widget.notificationId == 2){
+                                  _deleteNotificationChannel(4);
+                                  _deleteNotificationChannel(5);
+                                } else {
+                                  _deleteNotificationChannel(6);
+                                  _deleteNotificationChannel(7);
                                 }
+
+                                _removeNotificationDataFromList();
                               });
                             },
                             child: Text(
@@ -485,12 +531,19 @@ class _NotificationSectionState extends State<NotificationSection>
                             } else {
                               if (widget.notificationId == 0) {
                                 _deleteNotificationChannel(0);
-                              } else if(widget.notificationId == 1) {
                                 _deleteNotificationChannel(1);
-                              }else{
+                              } else if(widget.notificationId == 1) {
                                 _deleteNotificationChannel(2);
+                                _deleteNotificationChannel(3);
+                              }else if (widget.notificationId == 2){
+                                _deleteNotificationChannel(4);
+                                _deleteNotificationChannel(5);
+                              } else {
+                                _deleteNotificationChannel(6);
+                                _deleteNotificationChannel(7);
                               }
                             }
+                            _removeNotificationDataFromList();
                           });
                         },
                         child: Text(
@@ -526,8 +579,7 @@ class _NotificationSectionState extends State<NotificationSection>
         print('CustomNotificationName1????${localNotificationNameModel.notificationName}');
         return localNotificationNameModel.notificationName;
       }else{
-        print('CustomNotificationName2????${widget.notificationName.isNotEmpty ? widget.notificationName :'Custom'}');
-        return widget.notificationName.isNotEmpty ? widget.notificationName :'Custom';
+        return widget.notificationName.isNotEmpty ? widget.notificationName :'Custom Notification';
       }
     }else return localNotificationNameModel != null ? localNotificationNameModel.notificationName : widget.notificationName;
 
@@ -583,6 +635,11 @@ class _NotificationSectionState extends State<NotificationSection>
         _dateTime = DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
+        isDailySelected = false;
+        isWeekDaysSelected = false;
+        isOffSelected = true;
+
+        whichButtonSelected = 'Off';
       }
       if (localNotificationNameModel != null && localNotificationNameModel.notificationType != null) {
         if (localNotificationNameModel.notificationType == 'Daily') {
@@ -615,6 +672,12 @@ class _NotificationSectionState extends State<NotificationSection>
             DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
+
+        isDailySelected = false;
+        isWeekDaysSelected = false;
+        isOffSelected = true;
+
+        whichButtonSelected = 'Off';
       }
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationType != null) {
@@ -648,6 +711,12 @@ class _NotificationSectionState extends State<NotificationSection>
             DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
+
+        isDailySelected = false;
+        isWeekDaysSelected = false;
+        isOffSelected = true;
+
+        whichButtonSelected = 'Off';
       }
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationType != null) {
@@ -681,6 +750,12 @@ class _NotificationSectionState extends State<NotificationSection>
             DateTime.tryParse(localNotificationNameModel.notificationTime);
       } else {
         _dateTime = DateTime.now();
+
+        isDailySelected = false;
+        isWeekDaysSelected = false;
+        isOffSelected = true;
+
+        whichButtonSelected = 'Off';
       }
       if (localNotificationNameModel != null &&
           localNotificationNameModel.notificationType != null) {
@@ -713,17 +788,16 @@ class _NotificationSectionState extends State<NotificationSection>
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> _notificationSelected(String payload) async {
     var androidDetails = AndroidNotificationDetails(
-        "ChannelId", "BonTriage", 'Reminder to log your day.',
+        "ChannelId", "MigraineMentor", 'Reminder to log your day.',
         importance: Importance.max, icon: 'notification_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
-    var notificationDetails =
-    NotificationDetails(android: androidDetails, iOS: iosDetails);
+    var notificationDetails = NotificationDetails(android: androidDetails, iOS: iosDetails);
     if (widget.notificationId == 0) {
       if (isDailySelected) {
         dailyNotificationLogTime = 'Daily';
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             0,
-            "BonTriage",
+            "MigraineMentor",
             "Reminder to log your day.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
@@ -733,7 +807,7 @@ class _NotificationSectionState extends State<NotificationSection>
         weekDay = weekDay % 7;
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             1,
-            'BonTriage',
+            'MigraineMentor',
             'Reminder to log your day.',
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
@@ -751,6 +825,7 @@ class _NotificationSectionState extends State<NotificationSection>
           dailyLogNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(dailyLogNotificationData);
           _deleteNotificationChannel(0);
+          _deleteNotificationChannel(1);
         } else {
           print("scheduled notification at $_dateTime");
           dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
@@ -769,6 +844,7 @@ class _NotificationSectionState extends State<NotificationSection>
         }else{
           widget.allNotificationListData.remove(localNotificationModel);
           _deleteNotificationChannel(0);
+          _deleteNotificationChannel(1);
         }
       }
     } else if (widget.notificationId == 1) {
@@ -776,7 +852,7 @@ class _NotificationSectionState extends State<NotificationSection>
         medicationNotificationLogTime = 'Daily';
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             2,
-            "BonTriage",
+            "MigraineMentor",
             "Reminder to log your today's medications.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
@@ -786,7 +862,7 @@ class _NotificationSectionState extends State<NotificationSection>
         weekDay = weekDay % 7;
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             3,
-            'BonTriage',
+            'MigraineMentor',
             "Reminder to log your today's medications.",
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
@@ -804,7 +880,8 @@ class _NotificationSectionState extends State<NotificationSection>
         if (medicationNotificationLogTime == 'Off') {
           medicationNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(medicationNotificationData);
-          _deleteNotificationChannel(1);
+          _deleteNotificationChannel(2);
+          _deleteNotificationChannel(3);
         } else {
           medicationNotificationData.notificationTime = _dateTime.toIso8601String();
         }
@@ -821,7 +898,8 @@ class _NotificationSectionState extends State<NotificationSection>
           widget.allNotificationListData.add(localNotificationModel);
         }else{
           widget.allNotificationListData.remove(localNotificationModel);
-          _deleteNotificationChannel(1);
+          _deleteNotificationChannel(2);
+          _deleteNotificationChannel(3);
         }
       }
     } else if (widget.notificationId == 2) {
@@ -829,7 +907,7 @@ class _NotificationSectionState extends State<NotificationSection>
         exerciseNotificationLogTime = 'Daily';
         await flutterLocalNotificationsPlugin.showDailyAtTime(
             4,
-            "BonTriage",
+            "MigraineMentor",
             "Reminder to log your today's exercise.",
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
@@ -839,7 +917,7 @@ class _NotificationSectionState extends State<NotificationSection>
         weekDay = weekDay % 7;
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
             5,
-            'BonTriage',
+            'MigraineMentor',
             "Reminder to log your today's exercise.",
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
@@ -857,7 +935,8 @@ class _NotificationSectionState extends State<NotificationSection>
         if (exerciseNotificationLogTime == 'Off') {
           exerciseNotificationData.notificationTime = "";
           widget.allNotificationListData.remove(exerciseNotificationData);
-          _deleteNotificationChannel(2);
+          _deleteNotificationChannel(4);
+          _deleteNotificationChannel(5);
         } else {
           exerciseNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
@@ -873,7 +952,8 @@ class _NotificationSectionState extends State<NotificationSection>
         if(exerciseNotificationLogTime != 'Off') {
           widget.allNotificationListData.add(localNotificationModel);
         }else{
-          _deleteNotificationChannel(2);
+          _deleteNotificationChannel(4);
+          _deleteNotificationChannel(5);
           widget.allNotificationListData.remove(localNotificationModel);
         }
       }
@@ -891,8 +971,8 @@ class _NotificationSectionState extends State<NotificationSection>
       if (isDailySelected) {
         customNotificationLogTime = 'Daily';
         await flutterLocalNotificationsPlugin.showDailyAtTime(
-            4,
-            "BonTriage",
+            6,
+            "MigraineMentor",
             customNotificationValue,
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
@@ -901,8 +981,8 @@ class _NotificationSectionState extends State<NotificationSection>
         int weekDay = _dateTime.weekday + 1;
         weekDay = weekDay % 7;
         await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-            5,
-            'BonTriage',
+            7,
+            'MigraineMentor',
             customNotificationValue,
             Day(weekDay),
             Time(_selectedHour, _selectedMinute),
@@ -914,19 +994,21 @@ class _NotificationSectionState extends State<NotificationSection>
         customNotificationData.notificationType = customNotificationLogTime;
         if (customNotificationLogTime == 'Off') {
           customNotificationData.notificationTime = "";
-          _deleteNotificationChannel(3);
+          _deleteNotificationChannel(6);
+          _deleteNotificationChannel(7);
           widget.allNotificationListData.remove(customNotificationData);
         } else {
           customNotificationData.notificationTime =  _dateTime.toIso8601String();
         }
       }else {
         LocalNotificationModel localNotificationModel = LocalNotificationModel();
-        localNotificationModel.notificationName = widget.notificationName?? 'Custom';
+        localNotificationModel.notificationName = widget.notificationName?? 'Custom Notification';
         localNotificationModel.notificationType = customNotificationLogTime;
         localNotificationModel.isCustomNotificationAdded = true;
         if (customNotificationLogTime == 'Off') {
           localNotificationModel.notificationTime = "";
-          _deleteNotificationChannel(3);
+          _deleteNotificationChannel(6);
+          _deleteNotificationChannel(7);
         } else {
           localNotificationModel.notificationTime = _dateTime.toIso8601String();
         }
@@ -934,11 +1016,47 @@ class _NotificationSectionState extends State<NotificationSection>
           widget.allNotificationListData.add(localNotificationModel);
         }else {
           widget.allNotificationListData.remove(localNotificationModel);
-          _deleteNotificationChannel(3);
+          _deleteNotificationChannel(6);
+          _deleteNotificationChannel(7);
         }
       }
     }
 
 
+  }
+
+  void _removeNotificationDataFromList() {
+    if(widget.notificationId == 0) {
+      var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
+              (element) => element.notificationName == 'Daily Log',
+          orElse: () => null);
+
+      if(dailyLogNotificationData != null) {
+        widget.allNotificationListData.remove(dailyLogNotificationData);
+      }
+    } else if(widget.notificationId == 1) {
+      var medicationNotificationData = widget.allNotificationListData
+          .firstWhere((element) => element.notificationName == 'Medication', orElse: () => null);
+
+      if(medicationNotificationData != null) {
+        widget.allNotificationListData.remove(medicationNotificationData);
+      }
+    } else if(widget.notificationId == 2) {
+      var exerciseNotificationData = widget.allNotificationListData.firstWhere(
+              (element) => element.notificationName == 'Exercise',
+          orElse: () => null);
+
+      if(exerciseNotificationData != null) {
+        widget.allNotificationListData.remove(exerciseNotificationData);
+      }
+    } else if (widget.notificationId == 3) {
+      var customNotificationData = widget.allNotificationListData.firstWhere(
+              (element) => element.isCustomNotificationAdded ?? false,
+          orElse: () => null);
+
+      if(customNotificationData != null) {
+        widget.allNotificationListData.remove(customNotificationData);
+      }
+    }
   }
 }

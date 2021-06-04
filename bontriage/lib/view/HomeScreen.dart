@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
+import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/NotificationUtil.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
@@ -50,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _recordsGlobalKey = GlobalKey();
     saveCurrentIndexOfTabBar(0);
     print(Utils.getDateTimeInUtcFormat(DateTime.now()));
+
+    _insertDataIntoLocalDatabase();
   }
 
   @override
@@ -367,4 +371,54 @@ class _HomeScreenState extends State<HomeScreen> {
     return resultFromActionSheet;
   }
 
+  void _insertDataIntoLocalDatabase() async {
+    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String isNotificationInitiallyAdded = prefs.getString(Constant.isNotificationInitiallyAdded) ?? Constant.blankString;
+
+    if(notificationListData == null && isNotificationInitiallyAdded.isEmpty) {
+      prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
+      List<LocalNotificationModel> allNotificationListData = [];
+
+      DateTime currentDateTime = DateTime.now();
+
+      DateTime defaultNotificationTime = DateTime(
+        currentDateTime.year,
+        currentDateTime.month,
+        currentDateTime.day,
+        6,
+        0,
+        0,
+        0,
+        0
+      );
+
+      allNotificationListData.add(LocalNotificationModel(
+        notificationName: 'Daily Log',
+        notificationType: 'Daily',
+        notificationTime: defaultNotificationTime.toIso8601String(),
+        isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.add(LocalNotificationModel(
+          notificationName: 'Medication',
+          notificationType: 'Daily',
+          notificationTime: defaultNotificationTime.toIso8601String(),
+          isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.add(LocalNotificationModel(
+          notificationName: 'Exercise',
+          notificationType: 'Daily',
+          notificationTime: defaultNotificationTime.toIso8601String(),
+          isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.forEach((localNotificationModel) {
+        NotificationUtil.notificationSelected(localNotificationModel, defaultNotificationTime);
+      });
+
+      await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+    }
+  }
 }

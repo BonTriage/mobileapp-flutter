@@ -127,11 +127,11 @@ class SignUpOnBoardProviders {
       Map<String, dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
       await db.insert(USER_NOTIFICATION, localNotificationMap);
     }else{
-      updateUserNotifications(localNotificationListData);
+      await updateUserNotifications(localNotificationListData);
     }
   }
 
-  void updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+  Future<void> updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
     final db = await database;
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
