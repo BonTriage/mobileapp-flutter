@@ -127,13 +127,13 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
             sound: true,
           );
 
-      if (permissionResult ?? true) {
+      if (permissionResult ?? false) {
         setState(() {
-          _notificationStatus = Constant.notAllowed;
+          _notificationStatus = Constant.allowed;
         });
       } else {
         setState(() {
-          _notificationStatus = Constant.allowed;
+          _notificationStatus = Constant.notAllowed;
         });
       }
     } else {
