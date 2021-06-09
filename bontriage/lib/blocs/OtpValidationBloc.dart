@@ -12,14 +12,6 @@ import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 
 class OtpValidationBloc {
-  StreamController<int> _otpTimerStreamController;
-
-  StreamSink<int> get otpTimerStreamSink =>
-      _otpTimerStreamController.sink;
-
-  Stream<int> get otpTimerStream =>
-      _otpTimerStreamController.stream;
-
   StreamController<dynamic> _otpVerifyStreamController;
 
   StreamSink<dynamic> get otpVerifyStreamSink =>
@@ -42,7 +34,6 @@ class OtpValidationBloc {
   OtpValidationBloc() {
     _repository = OtpValidationRepository();
 
-    _otpTimerStreamController = StreamController<int>();
     _otpVerifyStreamController = StreamController<dynamic>();
 
     _networkStreamController = StreamController<dynamic>();
@@ -148,7 +139,6 @@ class OtpValidationBloc {
   }
 
   void dispose() {
-    _otpTimerStreamController?.close();
     _networkStreamController?.close();
     _otpVerifyStreamController?.close();
   }

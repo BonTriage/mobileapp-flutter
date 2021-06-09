@@ -8,6 +8,8 @@ import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChangePasswordScreen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 class OtpValidationScreen extends StatefulWidget {
   final OTPValidationArgumentModel otpValidationArgumentModel;
@@ -53,10 +55,12 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
       FocusScope.of(context).requestFocus(_focusNodeList[0]);
 
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        var otpTimerInfo = Provider.of<OTPTimerInfo>(context, listen: false);
         if(timer.tick == 30) {
           timer.cancel();
         }
-        _bloc.otpTimerStreamSink.add(timer.tick);
+
+        otpTimerInfo.updateTime(timer.tick);
       });
     });
 
@@ -194,62 +198,49 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
                     ),
                   ),
                   SizedBox(height: 30,),
-                  StreamBuilder<int>(
-                    stream: _bloc.otpTimerStream,
-                    builder: (context, snapshot) {
-                      if(snapshot.hasData) {
-                        int seconds = snapshot.data;
-                        if(seconds == 30) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Didn\'t receive OTP? ',
+                  Consumer<OTPTimerInfo>(
+                    builder: (context, data, child) {
+                      int seconds = data.getTime();
+                      if(seconds == 30) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Didn\'t receive OTP? ',
+                              style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 14,
+                                fontFamily: Constant.jostRegular,
+                              ),
+                            ),
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                _onResendButtonClicked();
+                              },
+                              child: Text(
+                                'Resend',
                                 style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 14,
+                                  decoration: TextDecoration.underline,
                                   fontFamily: Constant.jostRegular,
                                 ),
                               ),
-                              GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  _onResendButtonClicked();
-                                },
-                                child: Text(
-                                  'Resend',
-                                  style: TextStyle(
-                                    color: Constant.chatBubbleGreen,
-                                    fontSize: 14,
-                                    decoration: TextDecoration.underline,
-                                    fontFamily: Constant.jostRegular,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-                        return Text(
-                          'Resend OTP in ${_bloc.getFormattedTime(seconds)}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 14,
-                            fontFamily: Constant.jostRegular,
-                          ),
-                        );
-                      } else {
-                        return Text(
-                          'Resend OTP in 0:30',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 14,
-                            fontFamily: Constant.jostRegular,
-                          ),
+                            ),
+                          ],
                         );
                       }
-                    },
+                      return Text(
+                        'Resend OTP in ${_bloc.getFormattedTime(seconds)}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Constant.chatBubbleGreen,
+                          fontSize: 14,
+                          fontFamily: Constant.jostRegular,
+                        ),
+                      );
+                    }
                   ),
                   SizedBox(height: 30,),
                   Row(
@@ -386,13 +377,16 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
   }
 
   void _onResendButtonClicked() {
-    _bloc.otpTimerStreamSink.add(0);
+    var otpTimerInfo = Provider.of<OTPTimerInfo>(context, listen: false);
+    otpTimerInfo.updateTime(0);
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var otpTimerInfo = Provider.of<OTPTimerInfo>(context, listen: false);
       if(timer.tick == 30) {
         timer.cancel();
       }
-      _bloc.otpTimerStreamSink.add(timer.tick);
+
+      otpTimerInfo.updateTime(timer.tick);
     });
 
     FocusScope.of(context).requestFocus(FocusNode());
@@ -417,4 +411,15 @@ class OTPValidationArgumentModel {
     this.isEmailMarkCheck = false,
     this.isTermConditionCheck = false,
   });
+}
+
+class OTPTimerInfo with ChangeNotifier {
+  int _time = 0;
+
+  int getTime() => _time;
+
+  updateTime(int time) {
+    _time = time;
+    notifyListeners();
+  }
 }

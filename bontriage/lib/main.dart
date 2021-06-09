@@ -54,6 +54,7 @@ import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
@@ -401,7 +402,10 @@ class MyApp extends StatelessWidget {
             }
           case Constant.otpValidationScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: ChangeNotifierProvider(
+                create: (context) => OTPTimerInfo(),
+                child: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,),
+              ), routeSettings: routeSettings);
             }
           case Constant.changePasswordScreenRouter:
             {
