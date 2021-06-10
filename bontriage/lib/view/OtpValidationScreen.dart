@@ -28,9 +28,6 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
   Timer _timer;
 
-  bool _isShowError = false;
-  String _errorMessage = Constant.blankString;
-
   @override
   void initState() {
     super.initState();
@@ -85,13 +82,12 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
         element.dispose();
       });
     }
-
+    _bloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('otp validation build func');
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return MediaQuery(
       data: mediaQueryData.copyWith(
@@ -294,7 +290,6 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
         controller: _textEditingControllerList[index],
         maxLength: 1,
         onChanged: (text) {
-          print('on text changed');
           if(text.isEmpty) {
             if(index != 0)
               FocusScope.of(context).requestFocus(_focusNodeList[index - 1]);
@@ -334,18 +329,8 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
     var otpErrorInfoData = Provider.of<OTPErrorInfo>(context, listen: false);
 
-    if(otp.isEmpty) {
+    if(otp.isEmpty || otp.length != 4) {
       otpErrorInfoData.updateOtpErrorInfoData(true, 'Please provide the valid OTP.');
-      /*setState(() {
-        _isShowError = true;
-        _errorMessage = 'Please provide the OTP.';
-      });*/
-    } else if (otp.length != 4) {
-      otpErrorInfoData.updateOtpErrorInfoData(true, 'Please provide the valid OTP.');
-      /*setState(() {
-        _isShowError = true;
-        _errorMessage = 'Please provide valid OTP.';
-      });*/
     } else {
       _bloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(
@@ -378,11 +363,6 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
         } else {
           var otpErrorInfoData = Provider.of<OTPErrorInfo>(context, listen: false);
           otpErrorInfoData.updateOtpErrorInfoData(true, event.messageText);
-
-          /*setState(() {
-            _isShowError = true;
-            _errorMessage = event.messageText;
-          });*/
         }
       }
     });
@@ -397,7 +377,6 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
       if(timer.tick == 30) {
         timer.cancel();
       }
-
       otpTimerInfo.updateTime(timer.tick);
     });
 

@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 import 'slide_dots.dart';
 import 'WelcomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,14 +13,27 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  int currentPageIndex = 0;
-  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-
   PageController _pageController = PageController(initialPage: 0);
 
-  List<Widget> _pageViewWidgets;
+  List<Widget> _pageViewWidgets = [
+    WelcomePage(
+      headerText: Constant.welcomeToMigraineMentor,
+      imagePath: Constant.logoShadow,
+      subText: Constant.developedByATeam,
+    ),
+    WelcomePage(
+      headerText: Constant.trackRightData,
+      imagePath: Constant.chartShadow,
+      subText: Constant.mostHeadacheTracking,
+    ),
+    WelcomePage(
+      headerText: Constant.conquerYourHeadaches,
+      imagePath: Constant.notifsGreenShadow,
+      subText: Constant.withRegularUse,
+    ),
+  ];
 
-  Widget _getThreeDotsWidget() {
+  Widget _getThreeDotsWidget(int currentPageIndex) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -30,35 +44,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  String _getButtonText() {
+  String _getButtonText(int currentPageIndex) {
     if (currentPageIndex == 2)
       return Constant.getGoing;
     else
       return Constant.next;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _pageViewWidgets = [
-      WelcomePage(
-        headerText: Constant.welcomeToMigraineMentor,
-        imagePath: Constant.logoShadow,
-        subText: Constant.developedByATeam,
-      ),
-      WelcomePage(
-        headerText: Constant.trackRightData,
-        imagePath: Constant.chartShadow,
-        subText: Constant.mostHeadacheTracking,
-      ),
-      WelcomePage(
-        headerText: Constant.conquerYourHeadaches,
-        imagePath: Constant.notifsGreenShadow,
-        subText: Constant.withRegularUse,
-      ),
-    ];
   }
 
   @override
@@ -67,7 +57,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        key: scaffoldState,
         body: MediaQuery(
           data: mediaQueryData.copyWith(
             textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
@@ -83,9 +72,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       itemCount: _pageViewWidgets.length,
                       controller: _pageController,
                       onPageChanged: (currentPage) {
-                        setState(() {
-                          currentPageIndex = currentPage;
-                        });
+                        var welcomePageInfoData = Provider.of<WelcomePageInfo>(context, listen: false);
+                        welcomePageInfoData.updateCurrentPageIndex(currentPage);
                       },
                       itemBuilder: (BuildContext context, int index) {
                         return _pageViewWidgets[index];
@@ -96,15 +84,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        _getThreeDotsWidget(),
+                        Consumer<WelcomePageInfo>(
+                          builder: (context, data, child) {
+                            return _getThreeDotsWidget(data.getCurrentPageIndex());
+                          },
+                        ),
                         SizedBox(
                           height: 15,
                         ),
                         BouncingWidget(
                           onPressed: () {
+                            var welcomePageInfoData = Provider.of<WelcomePageInfo>(context, listen: false);
+                            int currentPageIndex = welcomePageInfoData.getCurrentPageIndex();
                             if (currentPageIndex != 2) {
-                              currentPageIndex++;
-                              _pageController.animateToPage(currentPageIndex,
+                              _pageController.animateToPage(currentPageIndex + 1,
                                   duration: Duration(milliseconds: 250),
                                   curve: Curves.easeIn);
                             } else {
@@ -121,12 +114,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
-                              child: Text(
-                                _getButtonText(),
-                                style: TextStyle(
-                                    color: Constant.bubbleChatTextView,
-                                    fontSize: 14,
-                                    fontFamily: Constant.jostMedium),
+                              child: Consumer<WelcomePageInfo>(
+                                builder: (context, data, child) {
+                                  return Text(
+                                    _getButtonText(data.getCurrentPageIndex()),
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontSize: 14,
+                                        fontFamily: Constant.jostMedium),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -152,11 +149,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Future<bool> _onBackPressed() async{
+    var welcomePageInfoData = Provider.of<WelcomePageInfo>(context, listen: false);
+    int currentPageIndex = welcomePageInfoData.getCurrentPageIndex();
     if(currentPageIndex == 0) {
       return true;
     } else {
-      currentPageIndex--;
-      _pageController.animateToPage(currentPageIndex, duration: Duration(milliseconds: 250), curve: Curves.easeIn);
+      _pageController.animateToPage(currentPageIndex - 1, duration: Duration(milliseconds: 250), curve: Curves.easeIn);
       return false;
     }
   }
