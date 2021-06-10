@@ -184,7 +184,13 @@ class MyApp extends StatelessWidget {
             }
           case Constant.welcomeScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: WelcomeScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                widget: ChangeNotifierProvider(
+                  create: (context) => WelcomePageInfo(),
+                  child: WelcomeScreen(),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.homeRouter:
             {
@@ -402,9 +408,18 @@ class MyApp extends StatelessWidget {
             }
           case Constant.otpValidationScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: ChangeNotifierProvider(
-                create: (context) => OTPTimerInfo(),
-                child: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,),
+              return SlideFromRightPageRoute(widget: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    create: (context) => OTPTimerInfo(),
+                  ),
+                  ChangeNotifierProvider(
+                    create: (context) => OTPErrorInfo(),
+                  ),
+                ],
+                child: OtpValidationScreen(
+                  otpValidationArgumentModel: settings.arguments,
+                ),
               ), routeSettings: routeSettings);
             }
           case Constant.changePasswordScreenRouter:

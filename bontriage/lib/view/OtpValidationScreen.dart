@@ -91,6 +91,7 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    print('otp validation build func');
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return MediaQuery(
       data: mediaQueryData.copyWith(
@@ -166,35 +167,39 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
                   AnimatedSize(
                     duration: Duration(milliseconds: 300),
                     vsync: this,
-                    child: Visibility(
-                      visible: _isShowError,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            children: [
-                              Image(
-                                image: AssetImage(Constant.warningPink),
-                                width: 22,
-                                height: 22,
+                    child: Consumer<OTPErrorInfo>(
+                      builder: (context, otpErrorInfoData, child) {
+                        return Visibility(
+                          visible: otpErrorInfoData.isShowError(),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 20),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: [
+                                  Image(
+                                    image: AssetImage(Constant.warningPink),
+                                    width: 22,
+                                    height: 22,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    otpErrorInfoData.getErrorMessage(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Constant.pinkTriggerColor,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                _errorMessage,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Constant.pinkTriggerColor,
-                                    fontFamily: Constant.jostRegular),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ),
                   SizedBox(height: 30,),
@@ -327,16 +332,20 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
     String otp = '$otp1$otp2$otp3$otp4';
 
+    var otpErrorInfoData = Provider.of<OTPErrorInfo>(context, listen: false);
+
     if(otp.isEmpty) {
-      setState(() {
+      otpErrorInfoData.updateOtpErrorInfoData(true, 'Please provide the valid OTP.');
+      /*setState(() {
         _isShowError = true;
         _errorMessage = 'Please provide the OTP.';
-      });
+      });*/
     } else if (otp.length != 4) {
-      setState(() {
+      otpErrorInfoData.updateOtpErrorInfoData(true, 'Please provide the valid OTP.');
+      /*setState(() {
         _isShowError = true;
         _errorMessage = 'Please provide valid OTP.';
-      });
+      });*/
     } else {
       _bloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(
@@ -367,10 +376,13 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
             Navigator.pushReplacementNamed(context, Constant.prePartTwoOnBoardScreenRouter);
           }
         } else {
-          setState(() {
+          var otpErrorInfoData = Provider.of<OTPErrorInfo>(context, listen: false);
+          otpErrorInfoData.updateOtpErrorInfoData(true, event.messageText);
+
+          /*setState(() {
             _isShowError = true;
             _errorMessage = event.messageText;
-          });
+          });*/
         }
       }
     });
@@ -420,6 +432,21 @@ class OTPTimerInfo with ChangeNotifier {
 
   updateTime(int time) {
     _time = time;
+    notifyListeners();
+  }
+}
+
+class OTPErrorInfo with ChangeNotifier {
+  bool _isShowError = false;
+  String _errorMessage = Constant.blankString;
+
+  bool isShowError() => _isShowError;
+  String getErrorMessage() => _errorMessage;
+
+  updateOtpErrorInfoData(bool isShowError, String errorMessage) {
+    _isShowError = isShowError;
+    _errorMessage = errorMessage;
+
     notifyListeners();
   }
 }

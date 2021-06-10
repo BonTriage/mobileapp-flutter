@@ -1,5 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mobile/util/constant.dart';
 import 'slide_dots.dart';
 import 'WelcomePage.dart';
@@ -85,7 +86,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         setState(() {
                           currentPageIndex = currentPage;
                         });
-                        print(currentPage);
                       },
                       itemBuilder: (BuildContext context, int index) {
                         return _pageViewWidgets[index];
@@ -155,11 +155,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if(currentPageIndex == 0) {
       return true;
     } else {
-      setState(() {
-        currentPageIndex--;
-        _pageController.animateToPage(currentPageIndex, duration: Duration(milliseconds: 250), curve: Curves.easeIn);
-      });
+      currentPageIndex--;
+      _pageController.animateToPage(currentPageIndex, duration: Duration(milliseconds: 250), curve: Curves.easeIn);
       return false;
     }
+  }
+}
+
+class WelcomePageInfo with ChangeNotifier {
+  int _currentPageIndex = 0;
+
+  int getCurrentPageIndex() => _currentPageIndex;
+
+  updateCurrentPageIndex(int currentIndex) {
+    _currentPageIndex = currentIndex;
+    notifyListeners();
   }
 }
