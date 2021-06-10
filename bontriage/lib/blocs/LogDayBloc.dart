@@ -176,6 +176,10 @@ class LogDayBloc {
   }
 
   Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
+    behaviorSelectedAnswerList.clear();
+    medicationSelectedAnswerList.clear();
+    triggerSelectedAnswerList.clear();
+    noteSelectedAnswer.clear();
     LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
