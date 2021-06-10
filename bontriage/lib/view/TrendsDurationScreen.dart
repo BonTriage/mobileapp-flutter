@@ -39,11 +39,11 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
 
   int touchedGroupIndex;
 
-  int clickedValue;
+  double clickedValue = 0;
 
   bool isClicked = false;
 
-  List<Ity> durationListData = [];
+  List<Ity1> durationListData = [];
   List<Data> multipleFirstIntensityListData = [];
   List<Data> multipleSecondIntensityListData = [];
   List<BarChartGroupData> items;
@@ -147,8 +147,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
-                                    (rod.y.toInt()).toString() +
-                                    ' hours',
+                                    (rod.y.toStringAsFixed(1)).toString() +
+                                    '${rod.y == 1.0 ? ' Hour':' Hours'}',
                                 TextStyle(
                                     color:  setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
@@ -161,7 +161,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           if (response.spot.spot != null) {
                             if (response.spot.spot.y != null) {
                               setState(() {
-                                clickedValue = response.spot.spot.y.toInt();
+                                clickedValue = response.spot.spot.y;
                                 if (response.touchInput is FlLongPressEnd ||
                                     response.touchInput is FlPanEnd) {
                                     isClicked = true;
