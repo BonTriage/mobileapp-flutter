@@ -9,7 +9,6 @@ class RecordsCompassRepository{
   String url;
 
   Future<dynamic> compassServiceCall(String url, RequestMethod requestMethod) async {
-    var client = http.Client();
     var album;
     try {
       var response =

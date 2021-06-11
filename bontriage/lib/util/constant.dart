@@ -747,6 +747,7 @@ class Constant {
   static String nextArrow = 'images/next_arrow.png';
   static String migraineIcon = 'images/migraine_icon.png';
   static String mealIcon = 'images/meal_icon.png';
+  static const String exerciseIcon = 'images/exercise.png';
   static String pillIcon = 'images/pill_icon.png';
   static String alcoholIcon = 'images/alcohol_icon.png';
   static String sleepIcon = 'images/sleep_icon.png';
@@ -806,4 +807,6 @@ class Constant {
       'https://www.bontriage.com/privacy.html';
 
   static const String notAllowed = 'Not Allowed';
+
+  static const String chooseDifferentHeadacheType = 'Choose a different headache name.';
 }

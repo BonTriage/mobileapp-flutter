@@ -125,6 +125,21 @@ class SignUpOnBoardFirstStepRepository {
     return jsonEncode(signUpOnBoardAnswersRequestModel);
   }
 
+  Future<dynamic> fetchHeadachesServiceCall(String url, RequestMethod requestMethod) async {
+    var album;
+    try {
+      var response =
+      await NetworkService.getRequest(url, requestMethod).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (Exception) {
+      return album;
+    }
+  }
+
   Future<String> _getPayload() async {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();

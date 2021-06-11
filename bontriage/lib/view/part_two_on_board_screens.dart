@@ -191,7 +191,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                                 double stepOneProgress =
                                     1 / _pageViewWidgetList.length;
                                 if (_progressPercent == 1) {
-                                  _backQuestionIndexList.add(_currentPageIndex);
+                                  int backQuestionIndex = _backQuestionIndexList.firstWhere((element) => element == _currentPageIndex, orElse: () => null);
+                                  if(backQuestionIndex == null)
+                                    _backQuestionIndexList.add(_currentPageIndex);
                                   moveUserToNextScreen();
                                 } else {
                                   setState(() {
@@ -291,7 +293,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
-                    selectedAnswerListData(currentTag, selectedUserAnswer);
+                    selectedAnswerListData(currentTag, selectedUserAnswer.trim());
                   },
                 )));
             break;
@@ -373,10 +375,11 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     List<LocalQuestionnaire> localQuestionnaireData = await SignUpOnBoardProviders.db.getQuestionnaire(Constant.secondEventStep);
 
     if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
+      await _signUpOnBoardSecondStepBloc.fetchAllHeadacheListData(_argumentName, false);
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
-      _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(_argumentName);
+      //_signUpOnBoardSecondStepBloc.fetchSignUpOnBoardSecondStepData(_argumentName);
+      _signUpOnBoardSecondStepBloc.fetchAllHeadacheListData(_argumentName, true);
     }
   }
 
@@ -388,7 +391,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
     if (!isDataBaseExists) {
       userProgressDataModel = await _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(_argumentName);
+          .fetchAllHeadacheListData(_argumentName, true);
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
@@ -476,7 +479,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
 
     var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId, widget.partTwoOnBoardArgumentModel.isFromMoreScreen ?? false);
-    if (response is String) {
+    if (response is String && response != null) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db
             .deleteOnBoardQuestionnaireProgress(Constant.secondEventStep);
@@ -499,6 +502,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           Navigator.pushReplacementNamed(context,
               Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
         }
+      } else {
+        Navigator.pop(context);
+        Utils.showValidationErrorDialog(context, response);
       }
     }
   }
