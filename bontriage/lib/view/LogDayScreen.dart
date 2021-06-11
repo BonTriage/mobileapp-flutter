@@ -493,11 +493,12 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void _onSubmitClicked() async {
     Utils.showApiLoaderDialog(context,
-        networkStream: _logDayBloc.sendLogDayDataStream,
-        tapToRetryFunction: () {
-      _logDayBloc.enterSomeDummyDataToStreamController();
-      _callSendLogDayDataApi();
-    });
+      networkStream: _logDayBloc.sendLogDayDataStream,
+      tapToRetryFunction: () {
+        _logDayBloc.enterSomeDummyDataToStreamController();
+        _callSendLogDayDataApi();
+      },
+    );
     _callSendLogDayDataApi();
   }
 

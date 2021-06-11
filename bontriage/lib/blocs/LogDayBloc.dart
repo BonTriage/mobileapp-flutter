@@ -706,6 +706,6 @@ class LogDayBloc {
   }
 
   void enterSomeDummyDataToStreamController() {
-    logDayDataSink.add(Constant.loading);
+    sendLogDayDataSink.add(Constant.loading);
   }
 }

@@ -37,7 +37,6 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
           orElse: () => null);
       if (selectedAnswers != null) {
         textEditingController.text = selectedAnswers.answer;
-
       }
     }
     _animationController = AnimationController(
