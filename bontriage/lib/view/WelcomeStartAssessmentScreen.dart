@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
+import 'package:flutter/foundation.dart';
 
 class WelcomeStartAssessmentScreen extends StatefulWidget {
   @override
@@ -14,11 +16,9 @@ class WelcomeStartAssessmentScreen extends StatefulWidget {
 
 class _WelcomeStartAssessmentScreenState
     extends State<WelcomeStartAssessmentScreen> {
-  bool _isUserAlreadyLoggedIn = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkUserAlreadyLoggedIn();
   }
@@ -71,7 +71,6 @@ class _WelcomeStartAssessmentScreenState
                             ),
                           ],
                         ),
-
                         SizedBox(height: 100),
                         Text(
                           Constant.conquerYourHeadaches,
@@ -116,78 +115,86 @@ class _WelcomeStartAssessmentScreenState
                         SizedBox(
                           height: 15,
                         ),
-                        Visibility(
-                          visible: _isUserAlreadyLoggedIn,
-                          child: GestureDetector(
-                            onTap: () {
-                              _moveToHomeScreen();
-                            },
-                            child: Text(
-                              Constant.cancelAssessment,
-                              style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontFamily: Constant.jostRegular,
-                                  fontSize: 15,
-                                  decoration: TextDecoration.underline,
-                                  decorationThickness: 1),
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: !_isUserAlreadyLoggedIn,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                Constant.or,
-                                style: TextStyle(
-                                  wordSpacing: 1,
-                                  color: Constant.chatBubbleGreen,
-                                  fontFamily: Constant.jostRegular,
-                                  fontSize: 15,
+                        Consumer<WelcomeStartAssessmentInfo>(
+                          builder: (context, data, child) {
+                            return Column(
+                              children: [
+                                Visibility(
+                                  visible: data.isAlreadyLoggedIn(),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _moveToHomeScreen();
+                                    },
+                                    child: Text(
+                                      Constant.cancelAssessment,
+                                      style: TextStyle(
+                                          color: Constant.chatBubbleGreen,
+                                          fontFamily: Constant.jostRegular,
+                                          fontSize: 15,
+                                          decoration: TextDecoration.underline,
+                                          decorationThickness: 1),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, Constant.loginScreenRouter, arguments: false);
-                                },
-                                child: Text(
-                                  Constant.signIn,
-                                  style: TextStyle(
-                                      color: Constant.chatBubbleGreen,
-                                      fontFamily: Constant.jostBold,
-                                      wordSpacing: 1,
-                                      fontSize: 15,
-                                      decoration: TextDecoration.underline,
-                                      decorationThickness: 1),
+                                Visibility(
+                                  visible: !data.isAlreadyLoggedIn(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        Constant.or,
+                                        style: TextStyle(
+                                          wordSpacing: 1,
+                                          color: Constant.chatBubbleGreen,
+                                          fontFamily: Constant.jostRegular,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, Constant.loginScreenRouter, arguments: false);
+                                        },
+                                        child: Text(
+                                          Constant.signIn,
+                                          style: TextStyle(
+                                              color: Constant.chatBubbleGreen,
+                                              fontFamily: Constant.jostBold,
+                                              wordSpacing: 1,
+                                              fontSize: 15,
+                                              decoration: TextDecoration.underline,
+                                              decorationThickness: 1),
+                                        ),
+                                      ),
+                                      Text(
+                                        Constant.toAn,
+                                        style: TextStyle(
+                                          color: Constant.chatBubbleGreen,
+                                          fontFamily: Constant.jostRegular,
+                                          fontSize: 15,
+                                          wordSpacing: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                Constant.toAn,
-                                style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontFamily: Constant.jostRegular,
-                                  fontSize: 15,
-                                  wordSpacing: 1,
+                                SizedBox(
+                                  height: 4,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Visibility(
-                          visible: !_isUserAlreadyLoggedIn,
-                          child: Text(
-                            Constant.existingAccount,
-                            style: TextStyle(
-                                color: Constant.chatBubbleGreen,
-                                fontFamily: Constant.jostRegular,
-                                fontSize: 15,
-                                wordSpacing: 1),
-                          ),
+                                Visibility(
+                                  visible: !data.isAlreadyLoggedIn(),
+                                  child: Text(
+                                    Constant.existingAccount,
+                                    style: TextStyle(
+                                        color: Constant.chatBubbleGreen,
+                                        fontFamily: Constant.jostRegular,
+                                        fontSize: 15,
+                                        wordSpacing: 1),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -201,21 +208,31 @@ class _WelcomeStartAssessmentScreenState
     );
   }
 
-  Future<bool> _onBackPressed() async{
+  Future<bool> _onBackPressed() async {
     return true;
   }
 
   void _checkUserAlreadyLoggedIn() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    setState(() {
-      _isUserAlreadyLoggedIn = sharedPreferences.getBool(Constant.userAlreadyLoggedIn) ?? false;
-    });
+    var welcomeStartAssessmentInfoData = Provider.of<WelcomeStartAssessmentInfo>(context, listen: false);
+    welcomeStartAssessmentInfoData.updateAlreadyLoggedIn(sharedPreferences.getBool(Constant.userAlreadyLoggedIn) ?? false);
   }
 
-  void _moveToHomeScreen() async{
+  void _moveToHomeScreen() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isProfileInComplete = sharedPreferences.getBool(Constant.isProfileInCompleteStatus) ?? false;
     Utils.navigateToHomeScreen(context, isProfileInComplete);
+  }
+}
+
+class WelcomeStartAssessmentInfo with ChangeNotifier {
+  bool _isAlreadyLoggedIn = false;
+
+  bool isAlreadyLoggedIn() => _isAlreadyLoggedIn;
+
+  updateAlreadyLoggedIn(bool isAlreadyLoggedIn) {
+    _isAlreadyLoggedIn = isAlreadyLoggedIn;
+    notifyListeners();
   }
 }

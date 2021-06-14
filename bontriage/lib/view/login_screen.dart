@@ -4,6 +4,8 @@ import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isFromSignUp;
@@ -15,26 +17,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
-  bool _isHidden = true;
-
   String emailValue;
   String passwordValue;
   TextEditingController emailTextEditingController;
   TextEditingController passwordTextEditingController;
   LoginScreenBloc _loginScreenBloc;
-  bool _isShowAlert = false;
-
-  String _errorMessage = Constant.blankString;
-
-  bool _isForgotPasswordClicked = false;
-
   AnimationController _sizeAnimationController;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
+    var passwordHiddenInfo = Provider.of<PasswordHiddenInfo>(context, listen: false);
+    passwordHiddenInfo.updateIsHidden(!passwordHiddenInfo.isHidden());
   }
 
   @override
@@ -182,55 +175,59 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                 children: [
                                   Container(
                                     height: 35,
-                                    child: TextFormField(
-                                      obscureText: _isHidden,
-                                      onEditingComplete: () {
-                                        passwordValue = passwordTextEditingController.text;
+                                    child: Consumer<PasswordHiddenInfo>(
+                                      builder: (context, data, child) {
+                                        return TextFormField(
+                                          obscureText: data.isHidden(),
+                                          onEditingComplete: () {
+                                            passwordValue = passwordTextEditingController.text;
+                                          },
+                                          onFieldSubmitted: (String value) {
+                                            passwordValue = passwordTextEditingController.text;
+                                            FocusScope.of(context).requestFocus(FocusNode());
+                                          },
+                                          controller: passwordTextEditingController,
+                                          onChanged: (String value) {
+                                            passwordValue = passwordTextEditingController.text;
+                                          },
+                                          style: TextStyle(
+                                              fontSize: 15, fontFamily: Constant.jostMedium),
+                                          cursorColor: Constant.bubbleChatTextView,
+                                          textAlign: TextAlign.start,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 20),
+                                            hintStyle:
+                                            TextStyle(fontSize: 15, color: Colors.black),
+                                            filled: true,
+                                            fillColor: Constant.locationServiceGreen,
+                                            suffixIcon: IconButton(
+                                              onPressed: _togglePasswordVisibility,
+                                              icon: Image.asset(data.isHidden()
+                                                  ? Constant.hidePassword
+                                                  : Constant.showPassword),
+                                            ),
+                                            suffixIconConstraints: BoxConstraints(
+                                              minHeight: 30,
+                                              maxHeight: 35,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.all(Radius.circular(30)),
+                                              borderSide: BorderSide(
+                                                  color: Constant.editTextBoarderColor,
+                                                  width: 1),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.all(Radius.circular(30)),
+                                              borderSide: BorderSide(
+                                                  color: Constant.editTextBoarderColor,
+                                                  width: 1),
+                                            ),
+                                          ),
+                                        );
                                       },
-                                      onFieldSubmitted: (String value) {
-                                        passwordValue = passwordTextEditingController.text;
-                                        FocusScope.of(context).requestFocus(FocusNode());
-                                      },
-                                      controller: passwordTextEditingController,
-                                      onChanged: (String value) {
-                                        passwordValue = passwordTextEditingController.text;
-                                      },
-                                      style: TextStyle(
-                                          fontSize: 15, fontFamily: Constant.jostMedium),
-                                      cursorColor: Constant.bubbleChatTextView,
-                                      textAlign: TextAlign.start,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 20),
-                                        hintStyle:
-                                        TextStyle(fontSize: 15, color: Colors.black),
-                                        filled: true,
-                                        fillColor: Constant.locationServiceGreen,
-                                        suffixIcon: IconButton(
-                                          onPressed: _togglePasswordVisibility,
-                                          icon: Image.asset(_isHidden
-                                              ? Constant.hidePassword
-                                              : Constant.showPassword),
-                                        ),
-                                        suffixIconConstraints: BoxConstraints(
-                                          minHeight: 30,
-                                          maxHeight: 35,
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                          borderSide: BorderSide(
-                                              color: Constant.editTextBoarderColor,
-                                              width: 1),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                          borderSide: BorderSide(
-                                              color: Constant.editTextBoarderColor,
-                                              width: 1),
-                                        ),
-                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -249,30 +246,34 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                 ],
                               ),
                             ),
-                            Visibility(
-                              visible: _isShowAlert,
-                              child: Container(
-                                margin: EdgeInsets.only(left: 20, right: 10, top: 10),
-                                child: Row(
-                                  children: [
-                                    Image(
-                                      image: AssetImage(Constant.warningPink),
-                                      width: 17,
-                                      height: 17,
+                            Consumer<LoginErrorInfo>(
+                              builder: (context, data, child) {
+                                return Visibility(
+                                  visible: data.isShowAlert(),
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 20, right: 10, top: 10),
+                                    child: Row(
+                                      children: [
+                                        Image(
+                                          image: AssetImage(Constant.warningPink),
+                                          width: 17,
+                                          height: 17,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          data.getErrorMessage(),
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: Constant.pinkTriggerColor,
+                                              fontFamily: Constant.jostRegular),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      _errorMessage,
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Constant.pinkTriggerColor,
-                                          fontFamily: Constant.jostRegular),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             ),
                             SizeTransition(
                               sizeFactor: _sizeAnimationController,
@@ -300,78 +301,88 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           ],
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          if(!_isForgotPasswordClicked)
-                            _clickedLoginButton();
-                          else
-                            _clickedNextButton();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
-                          decoration: BoxDecoration(
-                            color: Constant.chatBubbleGreen,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            !_isForgotPasswordClicked ? Constant.login : Constant.next,
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontSize: 14,
-                                fontFamily: Constant.jostMedium),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      AnimatedCrossFade(
-                          crossFadeState: !_isForgotPasswordClicked
-                              ? CrossFadeState.showFirst
-                              : CrossFadeState.showSecond,
-                          duration: Duration(milliseconds: 300),
-                          firstChild: GestureDetector(
-                            onTap: () {
-                              /*Navigator.pushReplacementNamed(
-                                context, Constant.welcomeStartAssessmentScreenRouter);*/
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              Constant.register,
-                              style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium,
-                                  decoration: TextDecoration.underline),
-                            ),
-                          ),
-                          secondChild: GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              setState(() {
-                                _isForgotPasswordClicked = false;
-                                _sizeAnimationController.forward();
-                                _isShowAlert = false;
-                                emailTextEditingController.text = Constant.blankString;
-                                passwordTextEditingController.text = Constant.blankString;
-                              });
-                            },
-                            child: Text(
-                              "Switch to login",
-                              style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontSize: 14,
-                                  fontFamily: Constant.jostMedium,
-                                  decoration: TextDecoration.underline),
+                      Consumer<ForgotPasswordClickedInfo>(
+                        builder: (context, data, child) {
+                          return Column(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
 
-                            ),
-                          )
+                                  if(!data.isForgotPasswordClicked())
+                                    _clickedLoginButton();
+                                  else
+                                    _clickedNextButton();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                                  decoration: BoxDecoration(
+                                    color: Constant.chatBubbleGreen,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    !data.isForgotPasswordClicked() ? Constant.login : Constant.next,
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontSize: 14,
+                                        fontFamily: Constant.jostMedium,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              AnimatedCrossFade(
+                                  crossFadeState: !data.isForgotPasswordClicked()
+                                      ? CrossFadeState.showFirst
+                                      : CrossFadeState.showSecond,
+                                  duration: Duration(milliseconds: 300),
+                                  firstChild: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      Constant.register,
+                                      style: TextStyle(
+                                          color: Constant.chatBubbleGreen,
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  ),
+                                  secondChild: GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
+
+                                      var forgotPasswordClickedInfoData = Provider.of<ForgotPasswordClickedInfo>(context, listen: false);
+                                      forgotPasswordClickedInfoData.updateForgotPasswordClicked(false);
+
+                                      var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+                                      loginErrorInfoData.updateLoginErrorInfo(false, Constant.blankString);
+
+                                      emailTextEditingController.text = Constant.blankString;
+                                      passwordTextEditingController.text = Constant.blankString;
+                                      _sizeAnimationController.forward();
+                                    },
+                                    child: Text(
+                                      "Switch to login",
+                                      style: TextStyle(
+                                          color: Constant.chatBubbleGreen,
+                                          fontSize: 14,
+                                          fontFamily: Constant.jostMedium,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  )
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
                 ],
               ),
-
             ),
           ),
         ),
@@ -387,7 +398,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         emailValue != "" &&
         passwordValue != "" &&
         Utils.validateEmail(emailValue)) {
-      _isShowAlert = false;
+      var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+      loginErrorInfoData.updateLoginErrorInfo(false, Constant.blankString);
+
       Utils.showApiLoaderDialog(context,
           networkStream: _loginScreenBloc.loginDataStream,
           tapToRetryFunction: () {
@@ -396,11 +409,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
           });
       _loginService();
     } else {
-      setState(() {
-        _isShowAlert = true;
-        _errorMessage = Constant.loginAlertMessage;
-      });
-
+      var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+      loginErrorInfoData.updateLoginErrorInfo(true, Constant.loginAlertMessage);
       /// TO:Do Show Error message
     }
   }
@@ -411,7 +421,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
     if (response is String) {
       if (response == Constant.success) {
-        _isShowAlert = false;
+        var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+        loginErrorInfoData.updateLoginErrorInfo(false, Constant.blankString);
+
         if(widget.isFromSignUp) {
           Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
         } else {
@@ -422,10 +434,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       } else if (response == Constant.userNotFound) {
         _loginScreenBloc.init();
         Navigator.pop(context);
-        setState(() {
-          _isShowAlert = true;
-          _errorMessage = Constant.loginAlertMessage;
-        });
+
+        var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+        loginErrorInfoData.updateLoginErrorInfo(true, Constant.loginAlertMessage);
       }
     }
   }
@@ -436,24 +447,16 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
   void _forgotPasswordClicked() async {
     FocusScope.of(context).requestFocus(FocusNode());
-    setState(() {
-      _isForgotPasswordClicked = true;
-      _sizeAnimationController.reverse();
-      _isShowAlert = false;
-      emailTextEditingController.text = Constant.blankString;
-      passwordTextEditingController.text = Constant.blankString;
-    });
-    /*var resultOfActionSheet = await showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => ForgotPasswordActionSheet(),
-    );
 
-    if(resultOfActionSheet != null && resultOfActionSheet is String) {
-      if(resultOfActionSheet.isNotEmpty)
-        Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: resultOfActionSheet));
-    }*/
+    var forgotPasswordClickedInfoData = Provider.of<ForgotPasswordClickedInfo>(context, listen: false);
+    forgotPasswordClickedInfoData.updateForgotPasswordClicked(true);
+
+    var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+    loginErrorInfoData.updateLoginErrorInfo(false, Constant.blankString);
+
+    emailTextEditingController.text = Constant.blankString;
+    passwordTextEditingController.text = Constant.blankString;
+    _sizeAnimationController.reverse();
   }
 
   void _listenToForgotPasswordStream() {
@@ -461,13 +464,17 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       if(event != null && event is ForgotPasswordModel) {
         if(event.status == 1) {
           Future.delayed(Duration(milliseconds: 350), () {
-            Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: emailTextEditingController.text.trim(), isForgotPasswordFromSignUp: widget.isFromSignUp ?? false));
+            Navigator.pushNamed(
+                context,
+                Constant.otpValidationScreenRouter,
+                arguments: OTPValidationArgumentModel(
+                    email: emailTextEditingController.text.trim(),
+                    isForgotPasswordFromSignUp: widget.isFromSignUp ?? false,)
+            );
           });
         } else {
-          setState(() {
-            _isShowAlert = true;
-            _errorMessage = event.messageText;
-          });
+          var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+          loginErrorInfoData.updateLoginErrorInfo(true, event.messageText);
         }
       }
     });
@@ -477,15 +484,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     String email = emailTextEditingController.text.trim();
 
     if(email != null && email.isEmpty) {
-      setState(() {
-        _isShowAlert = true;
-        _errorMessage = 'Please enter you Email.';
-      });
+      var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+      loginErrorInfoData.updateLoginErrorInfo(true, 'Please enter you Email.');
     } else if(!Utils.validateEmail(email)) {
-      setState(() {
-        _isShowAlert = true;
-        _errorMessage = 'Invalid Email Address.';
-      });
+      var loginErrorInfoData = Provider.of<LoginErrorInfo>(context, listen: false);
+      loginErrorInfoData.updateLoginErrorInfo(true, 'Invalid Email Address.');
     } else {
       _loginScreenBloc.initNetworkStreamController();
       Utils.showApiLoaderDialog(
@@ -499,5 +502,43 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       _loginScreenBloc.callForgotPasswordApi(email);
     }
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+}
+
+class PasswordHiddenInfo with ChangeNotifier {
+  bool _isHidden = false;
+
+  bool isHidden() => _isHidden;
+
+  updateIsHidden(bool isHidden) {
+    _isHidden = isHidden;
+
+    notifyListeners();
+  }
+}
+
+class ForgotPasswordClickedInfo with ChangeNotifier {
+  bool _isForgotPasswordClicked = false;
+
+  bool isForgotPasswordClicked() => _isForgotPasswordClicked;
+
+  updateForgotPasswordClicked(bool isForgotPasswordClicked) {
+    _isForgotPasswordClicked = isForgotPasswordClicked;
+    notifyListeners();
+  }
+}
+
+class LoginErrorInfo with ChangeNotifier {
+  bool _isShowAlert = false;
+  String _errorMessage = Constant.blankString;
+
+  bool isShowAlert() => _isShowAlert;
+  String getErrorMessage() => _errorMessage;
+
+  updateLoginErrorInfo(bool isShowAlert, String errorMessage) {
+    _isShowAlert = isShowAlert;
+    _errorMessage = errorMessage;
+
+    notifyListeners();
   }
 }

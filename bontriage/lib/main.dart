@@ -198,7 +198,19 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                widget: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => PasswordHiddenInfo(),
+                    ),
+                  ],
+                  child: LoginScreen(
+                    isFromSignUp: settings.arguments,
+                  ),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.signUpOnBoardSplashRouter:
             {
@@ -249,7 +261,25 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                widget: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => PasswordHiddenInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => ForgotPasswordClickedInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => LoginErrorInfo(),
+                    ),
+                  ],
+                  child: LoginScreen(
+                    isFromSignUp: settings.arguments,
+                  ),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.onBoardingScreenSignUpRouter:
             {
@@ -271,7 +301,12 @@ class MyApp extends StatelessWidget {
           case Constant.welcomeStartAssessmentScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: WelcomeStartAssessmentScreen(), routeSettings: routeSettings);
+                widget: ChangeNotifierProvider(
+                  create: (context) => WelcomeStartAssessmentInfo(),
+                  child: WelcomeStartAssessmentScreen(),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.onBoardHeadacheInfoScreenRouter:
             {
