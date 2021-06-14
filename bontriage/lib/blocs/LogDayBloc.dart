@@ -468,7 +468,7 @@ class LogDayBloc {
   }
 
   List<SelectedAnswers> getSelectedAnswerList(List<SelectedAnswers> doubleTappedSelectedAnswerList) {
-    if (selectedAnswerList == null) {
+    if (selectedAnswerList == null || selectedAnswerList.isEmpty) {
       selectedAnswerList = [];
 
       if (calendarInfoModel != null) {

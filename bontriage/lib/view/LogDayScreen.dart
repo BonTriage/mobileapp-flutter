@@ -68,11 +68,9 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void requestService() async {
     List<Map> logDayDataList;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if (userProfileInfoData != null)
-      logDayDataList =
-          await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
+      logDayDataList = await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
     else
       logDayDataList = await _logDayBloc.getAllLogDayData('4214');
     if (logDayDataList.length > 0 && selectedAnswers.length == 0) {
