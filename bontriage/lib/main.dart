@@ -196,22 +196,6 @@ class MyApp extends StatelessWidget {
             {
               return SlideFromRightPageRoute(widget: HomeScreen(homeScreenArgumentModel: settings.arguments), routeSettings: routeSettings);
             }
-          case Constant.loginRouter:
-            {
-              return SlideFromRightPageRoute(
-                widget: MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider(
-                      create: (context) => PasswordHiddenInfo(),
-                    ),
-                  ],
-                  child: LoginScreen(
-                    isFromSignUp: settings.arguments,
-                  ),
-                ),
-                routeSettings: routeSettings,
-              );
-            }
           case Constant.signUpOnBoardSplashRouter:
             {
               return SlideFromBottomPageRoute(widget: SignUpOnBoardSplash(), routeSettings: routeSettings);

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 class Constant {
   static const String splashRouter = 'splash';
   static const String homeRouter = 'home';
-  static const String loginRouter = 'login';
   static const String signUpRouter = 'signUP';
   static const String signUpOnBoardSplashRouter = 'signUpOnBoardSplash';
   static const String signUpOnBoardStartAssessmentRouter =
