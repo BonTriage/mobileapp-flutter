@@ -267,7 +267,26 @@ class MyApp extends StatelessWidget {
             }
           case Constant.onBoardingScreenSignUpRouter:
             {
-              return SlideFromRightPageRoute(widget: OnBoardingSignUpScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                widget: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => SignUpErrorInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => PasswordVisibilityInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => TermConditionInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => EmailUpdatesInfo(),
+                    ),
+                  ],
+                  child: OnBoardingSignUpScreen(),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.signUpSecondStepHeadacheResultRouter:
             {

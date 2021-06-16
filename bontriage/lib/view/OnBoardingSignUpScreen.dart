@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 class OnBoardingSignUpScreen extends StatefulWidget {
   @override
@@ -14,25 +15,19 @@ class OnBoardingSignUpScreen extends StatefulWidget {
 }
 
 class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
-  bool _isHidden = true;
-  bool _isTermConditionCheck = false;
-  bool _isEmailMarkCheck = false;
   String _emailValue;
   String _passwordValue;
-  bool _isShowAlert = false;
   TextEditingController _emailTextEditingController;
   TextEditingController _passwordTextEditingController;
   SignUpScreenBloc _signUpScreenBloc;
-  String _errorMsg;
 
   FocusNode _emailFocusNode;
   FocusNode _passwordFocusNode;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
+    var passwordVisibilityInfo = Provider.of<PasswordVisibilityInfo>(context, listen: false);
+    passwordVisibilityInfo.updateIsHidden(!passwordVisibilityInfo.isHidden());
   }
 
   @override
@@ -42,7 +37,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
     _passwordTextEditingController = TextEditingController();
     _signUpScreenBloc = SignUpScreenBloc();
     Utils.saveUserProgress(0, Constant.signUpEventStep);
-    _errorMsg = Constant.signUpAlertMessage;
 
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
@@ -66,6 +60,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('in build func of sign up screen');
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
@@ -181,57 +176,61 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             ),
                             Container(
                               height: 35,
-                              child: TextFormField(
-                                focusNode: _passwordFocusNode,
-                                obscureText: _isHidden,
-                                onFieldSubmitted: (String value) {
-                                  _passwordValue =
-                                      _passwordTextEditingController.text;
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
-                                },
-                                controller: _passwordTextEditingController,
-                                onChanged: (String value) {
-                                  _passwordValue =
-                                      _passwordTextEditingController.text;
-                                },
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: Constant.jostMedium),
-                                cursorColor: Constant.bubbleChatTextView,
-                                textAlign: TextAlign.start,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 20),
-                                  hintStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                  ),
-                                  filled: true,
-                                  fillColor: Constant.locationServiceGreen,
-                                  suffixIcon: IconButton(
-                                    onPressed: _togglePasswordVisibility,
-                                    icon: Image.asset(_isHidden
-                                        ? Constant.hidePassword
-                                        : Constant.showPassword),
-                                  ),
-                                  suffixIconConstraints: BoxConstraints(
-                                    minHeight: 30,
-                                    maxHeight: 35,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
+                              child: Consumer<PasswordVisibilityInfo>(
+                                builder: (context, data, child) {
+                                  return TextFormField(
+                                    focusNode: _passwordFocusNode,
+                                    obscureText: data.isHidden(),
+                                    onFieldSubmitted: (String value) {
+                                      _passwordValue =
+                                          _passwordTextEditingController.text;
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                    },
+                                    controller: _passwordTextEditingController,
+                                    onChanged: (String value) {
+                                      _passwordValue =
+                                          _passwordTextEditingController.text;
+                                    },
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostMedium),
+                                    cursorColor: Constant.bubbleChatTextView,
+                                    textAlign: TextAlign.start,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 20),
+                                      hintStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                      filled: true,
+                                      fillColor: Constant.locationServiceGreen,
+                                      suffixIcon: IconButton(
+                                        onPressed: _togglePasswordVisibility,
+                                        icon: Image.asset(data.isHidden()
+                                            ? Constant.hidePassword
+                                            : Constant.showPassword),
+                                      ),
+                                      suffixIconConstraints: BoxConstraints(
+                                        minHeight: 30,
+                                        maxHeight: 35,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
-                                      borderSide: BorderSide(
-                                          color: Constant.editTextBoarderColor,
-                                          width: 1)),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
+                                          borderSide: BorderSide(
+                                              color: Constant.editTextBoarderColor,
+                                              width: 1)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
-                                      borderSide: BorderSide(
-                                          color: Constant.editTextBoarderColor,
-                                          width: 1)),
-                                ),
+                                          borderSide: BorderSide(
+                                              color: Constant.editTextBoarderColor,
+                                              width: 1)),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             SizedBox(
@@ -253,33 +252,37 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           ],
                         ),
                       ),
-                      Visibility(
-                        visible: _isShowAlert,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 20, right: 10),
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            children: [
-                              Image(
-                                image: AssetImage(Constant.warningPink),
-                                width: 22,
-                                height: 22,
+                      Consumer<SignUpErrorInfo>(
+                        builder: (context, data, child) {
+                          return Visibility(
+                            visible: data.isShowAlert(),
+                            child: Container(
+                              margin: EdgeInsets.only(left: 20, right: 10),
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: [
+                                  Image(
+                                    image: AssetImage(Constant.warningPink),
+                                    width: 22,
+                                    height: 22,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    data.getErrorMessage(),
+                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Constant.pinkTriggerColor,
+                                        fontFamily: Constant.jostRegular),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                _errorMsg,
-                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Constant.pinkTriggerColor,
-                                    fontFamily: Constant.jostRegular),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: 10,
@@ -290,16 +293,19 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             data: ThemeData(
                                 unselectedWidgetColor:
                                     Constant.editTextBoarderColor),
-                            child: Checkbox(
-                              value: _isTermConditionCheck,
-                              checkColor: Constant.bubbleChatTextView,
-                              activeColor: Constant.chatBubbleGreen,
-                              focusColor: Constant.chatBubbleGreen,
-                              autofocus: true,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _isTermConditionCheck = value;
-                                });
+                            child: Consumer<TermConditionInfo>(
+                              builder: (context, data, child) {
+                                return Checkbox(
+                                  value: data.isTermConditionCheck(),
+                                  checkColor: Constant.bubbleChatTextView,
+                                  activeColor: Constant.chatBubbleGreen,
+                                  focusColor: Constant.chatBubbleGreen,
+                                  autofocus: true,
+                                  onChanged: (bool value) {
+                                    var termConditionCheck = Provider.of<TermConditionInfo>(context, listen: false);
+                                    termConditionCheck.updateIsTermConditionCheck(value);
+                                  },
+                                );
                               },
                             ),
                           ),
@@ -370,15 +376,18 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             data: ThemeData(
                                 unselectedWidgetColor:
                                     Constant.editTextBoarderColor),
-                            child: Checkbox(
-                              value: _isEmailMarkCheck,
-                              checkColor: Constant.bubbleChatTextView,
-                              activeColor: Constant.chatBubbleGreen,
-                              focusColor: Constant.chatBubbleGreen,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _isEmailMarkCheck = value;
-                                });
+                            child: Consumer<EmailUpdatesInfo>(
+                              builder: (context, data, child) {
+                                return Checkbox(
+                                  value: data.isEmailMarkCheck(),
+                                  checkColor: Constant.bubbleChatTextView,
+                                  activeColor: Constant.chatBubbleGreen,
+                                  focusColor: Constant.chatBubbleGreen,
+                                  onChanged: (bool value) {
+                                    var emailUpdatesInfo = Provider.of<EmailUpdatesInfo>(context, listen: false);
+                                    emailUpdatesInfo.updateIsEmailMarkCheck(value);
+                                  },
+                                );
                               },
                             ),
                           ),
@@ -490,31 +499,28 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
   void _signUpButtonClicked() {
+    FocusScope.of(context).requestFocus(FocusNode());
     _emailValue = _emailTextEditingController.text.trim().replaceAll(' ', Constant.blankString);
     _passwordValue = _passwordTextEditingController.text.trim();
+
+    var signUpErrorInfo = Provider.of<SignUpErrorInfo>(context, listen: false);
+
+    var termConditionInfo = Provider.of<TermConditionInfo>(context, listen: false);
+
     if (_emailValue != null &&
         _passwordValue != null &&
         Utils.validateEmail(_emailValue) &&
         _passwordValue.length >= 8 &&
         Utils.validatePassword(_passwordValue) &&
-        _isTermConditionCheck) {
-      _isShowAlert = false;
+        termConditionInfo.isTermConditionCheck()) {
+      signUpErrorInfo.updateSignUpErrorInfo(false, Constant.blankString);
       checkUserAlreadySignUp();
     } else if (!Utils.validateEmail(_emailValue)) {
-      setState(() {
-        _errorMsg = Constant.signUpEmilFieldAlertMessage;
-        _isShowAlert = true;
-      });
+      signUpErrorInfo.updateSignUpErrorInfo(true, Constant.signUpEmilFieldAlertMessage);
     } else if (_passwordValue == null || _passwordValue.length < 8 || !Utils.validatePassword(_passwordValue)) {
-      setState(() {
-        _errorMsg = Constant.signUpAlertMessage;
-        _isShowAlert = true;
-      });
+      signUpErrorInfo.updateSignUpErrorInfo(true, Constant.signUpAlertMessage);
     } else {
-      setState(() {
-        _errorMsg = Constant.signUpCheckboxAlertMessage;
-        _isShowAlert = true;
-      });
+      signUpErrorInfo.updateSignUpErrorInfo(true, Constant.signUpCheckboxAlertMessage);
     }
   }
 
@@ -533,8 +539,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   ///This method is used to call the api of check if user already signed up or not
   void _callCheckUserAlreadySignUpApi() async {
-    var signUpResponse =
-        await _signUpScreenBloc.checkUserAlreadyExistsOrNot(_emailValue);
+    var signUpResponse = await _signUpScreenBloc.checkUserAlreadyExistsOrNot(_emailValue);
     if (signUpResponse != null) {
       Navigator.pop(context);
       if (jsonDecode(signUpResponse)[Constant.messageTextKey] != null) {
@@ -542,54 +547,74 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
             jsonDecode(signUpResponse)[Constant.messageTextKey];
         if (messageValue != null) {
           if (messageValue == Constant.userNotFound) {
-            /*_getAnswerDataFromDatabase();*/
             _navigateToOtpVerifyScreen();
           }
         }
       } else {
-        _errorMsg = 'Email Already Exists!';
-        setState(() {
-          _isShowAlert = true;
-        });
-      }
-    }
-  }
-
-  /// This method will be use for to get User Profile data from Local database, If user didn't SignUp into the application.After We will
-  /// get user Profile data from the local database then we implement SignUp Api to register user into the application.
-  void _getAnswerDataFromDatabase() {
-    Utils.showApiLoaderDialog(context,
-        networkStream: _signUpScreenBloc.signUpOfNewUserStream,
-        tapToRetryFunction: () {
-      _signUpScreenBloc.enterSomeDummyDataToStreamController();
-      _callSignUpOfNewUserApi();
-    });
-    _callSignUpOfNewUserApi();
-  }
-
-  ///This method is used to call sign up of new user api
-  void _callSignUpOfNewUserApi() async {
-    var selectedAnswerListData = await SignUpOnBoardProviders.db
-        .getAllSelectedAnswers(Constant.zeroEventStep);
-    var response = await _signUpScreenBloc.signUpOfNewUser(
-        selectedAnswerListData, _emailValue, _passwordValue, _isTermConditionCheck, _isEmailMarkCheck);
-    if (response is String) {
-      if (response == Constant.success) {
-        Navigator.pop(context);
-        print(selectedAnswerListData);
-        Navigator.pushReplacementNamed(
-            context, Constant.prePartTwoOnBoardScreenRouter);
+        var signUpErrorInfo = Provider.of<SignUpErrorInfo>(context, listen: false);
+        signUpErrorInfo.updateSignUpErrorInfo(true, 'Email Already Exists!');
       }
     }
   }
 
   void _navigateToOtpVerifyScreen() {
-    Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(
+    var termConditionInfo = Provider.of<TermConditionInfo>(context, listen: false);
+    var emailUpdatedInfo = Provider.of<EmailUpdatesInfo>(context, listen: false);
+
+    Navigator.pushNamed(
+        context,
+        Constant.otpValidationScreenRouter,
+        arguments: OTPValidationArgumentModel(
       email: _emailValue,
       password: _passwordValue,
-      isTermConditionCheck: _isTermConditionCheck,
-      isEmailMarkCheck: _isEmailMarkCheck,
-      isFromSignUp: true,
-    ));
+      isTermConditionCheck: termConditionInfo.isTermConditionCheck(),
+      isEmailMarkCheck: emailUpdatedInfo.isEmailMarkCheck(),
+      isFromSignUp: true,)
+    );
+  }
+}
+
+class SignUpErrorInfo with ChangeNotifier {
+  bool _isShowAlert = false;
+  String _errorMessage = Constant.blankString;
+
+  bool isShowAlert ()=> _isShowAlert;
+  String getErrorMessage ()=> _errorMessage;
+
+  updateSignUpErrorInfo(bool isShowAlert, String errorMessage) {
+    _isShowAlert = isShowAlert;
+    _errorMessage = errorMessage;
+
+    notifyListeners();
+  }
+}
+
+class PasswordVisibilityInfo with ChangeNotifier {
+  bool _isHidden = true;
+  bool isHidden() => _isHidden;
+
+  updateIsHidden(bool isHidden) {
+    _isHidden = isHidden;
+    notifyListeners();
+  }
+}
+
+class TermConditionInfo with ChangeNotifier {
+  bool _isTermConditionCheck = false;
+  bool isTermConditionCheck() => _isTermConditionCheck;
+
+  updateIsTermConditionCheck(bool isTermConditionCheck) {
+    _isTermConditionCheck = isTermConditionCheck;
+    notifyListeners();
+  }
+}
+
+class EmailUpdatesInfo with ChangeNotifier {
+  bool _isEmailMarkCheck = false;
+  bool isEmailMarkCheck() => _isEmailMarkCheck;
+
+  updateIsEmailMarkCheck(bool isEmailMarkCheck) {
+    _isEmailMarkCheck = isEmailMarkCheck;
+    notifyListeners();
   }
 }
