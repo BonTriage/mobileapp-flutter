@@ -58,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('in build func of home screen');
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async =>
@@ -281,9 +282,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } else {
       if (routerName == Constant.welcomeStartAssessmentScreenRouter) {
-        return await Navigator.pushReplacementNamed(context, routerName,arguments: argument);
+        return await Navigator.pushNamed(context, routerName, arguments: argument);
       } else {
-        return await Navigator.pushNamed(context, routerName,arguments: argument);
+        return await Navigator.pushNamed(context, routerName, arguments: argument);
       }
     }
   }

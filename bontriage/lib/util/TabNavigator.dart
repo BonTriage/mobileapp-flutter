@@ -22,6 +22,7 @@ import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:mobile/view/PDFScreen.dart';
 import 'package:mobile/view/RecordScreen.dart';
+import 'package:provider/provider.dart';
 
 
 class TabNavigator extends StatelessWidget {
@@ -72,13 +73,25 @@ class TabNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context, dynamic arguments) {
     return {
       TabNavigatorRoutes.root: (context) {
-        print('Root name: $root');
        return Container();
       },
-      TabNavigatorRoutes.meRoot: (context) => MeScreen(
+      TabNavigatorRoutes.meRoot: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => OnBoardAssessIncompleteInfo(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => CurrentUserHeadacheInfo(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => UserNameInfo(),
+          ),
+        ],
+        child: MeScreen(
           navigateToOtherScreenCallback: navigateToOtherScreenCallback,
-        showApiLoaderCallback: showApiLoaderCallback,
-        getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
+          showApiLoaderCallback: showApiLoaderCallback,
+          getButtonsGlobalKeyCallback: getButtonsGlobalKeyCallback,
+        ),
       ),
       TabNavigatorRoutes.pdfScreenRoute: (context) => PDFScreen(
         base64String: arguments,
@@ -104,7 +117,6 @@ class TabNavigator extends StatelessWidget {
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
-
             onPush: _push,
           ),
 
@@ -169,13 +181,18 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     var routeBuilders = _routeBuilders(context, null);
 
+    debugPrint('in build func of tab navigator');
+
     return Navigator(
         key: navigatorKey,
         initialRoute: root,
         onGenerateRoute: (routeSettings) {
-          print('Route name ${routeSettings.name}');
+          debugPrint('Route name ${routeSettings.name}');
           return MaterialPageRoute(
-              builder: (context) => routeBuilders[routeSettings.name](context),
+              builder: (context) {
+                debugPrint('in material page route');
+                return routeBuilders[routeSettings.name](context);
+              },
               settings: RouteSettings(name: routeSettings.name),
           );
         },

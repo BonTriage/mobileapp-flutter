@@ -14,11 +14,18 @@ class SignUpOnBoardSplash extends StatefulWidget {
 
 class _SignUpOnBoardSplashState extends State<SignUpOnBoardSplash> {
 
-  Widget build(BuildContext context) {
-    //timeDilation = 4.0; // 1.0 means normal animation speed.
-    Future.delayed(Duration(milliseconds: 2000), () {
-      Navigator.of(context).pushReplacementNamed(Constant.signUpOnBoardBubbleTextViewRouter);
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Future.delayed(Duration(milliseconds: 2000), () {
+        Navigator.of(context).pushReplacementNamed(Constant.signUpOnBoardBubbleTextViewRouter);
+      });
     });
+  }
+
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -26,7 +33,7 @@ class _SignUpOnBoardSplashState extends State<SignUpOnBoardSplash> {
           decoration: Constant.backgroundBoxDecoration,
           child: Center(
             child: PhotoHero(
-              photo: 'images/user_avatar.png',
+              photo: Constant.userAvatar,
               width: 130.0,
             ),
           ),

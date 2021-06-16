@@ -348,8 +348,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if(_argumentName == Constant.clinicalImpressionShort1) {
       UserProgressDataModel userProgressModel =
       await SignUpOnBoardProviders.db.getUserProgress();
-      if (userProgressModel != null &&
-          userProgressModel.step == Constant.secondEventStep) {
+      if (userProgressModel != null && userProgressModel.step == Constant.secondEventStep) {
         currentScreenPosition = userProgressModel.userScreenPosition;
         if(userProgressModel.backQuestionIndexList != null && userProgressModel.backQuestionIndexList.length > 0)
           _backQuestionIndexList.addAll(userProgressModel.backQuestionIndexList);
@@ -372,7 +371,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData = await SignUpOnBoardProviders.db.getQuestionnaire(Constant.secondEventStep);
 
-    if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
+    if (localQuestionnaireData != null && localQuestionnaireData.length > 0 && _argumentName == Constant.clinicalImpressionShort1) {
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
       _signUpOnBoardSecondStepBloc

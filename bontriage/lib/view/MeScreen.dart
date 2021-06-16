@@ -10,9 +10,11 @@ import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ConsecutiveSelectedDateWidget.dart';
 import 'DateWidget.dart';
+import 'package:flutter/foundation.dart';
 
 class MeScreen extends StatefulWidget {
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
@@ -33,7 +35,6 @@ class _MeScreenState extends State<MeScreen>
   List<Widget> currentWeekListData = [];
   List<TextSpan> textSpanList;
   AnimationController _animationController;
-  bool _isOnBoardAssessmentInComplete = false;
   int currentMonth;
   int currentYear;
   String monthName;
@@ -41,12 +42,9 @@ class _MeScreenState extends State<MeScreen>
   String lastDayOfTheCurrentWeek;
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
-  CurrentUserHeadacheModel currentUserHeadacheModel;
 
   GlobalKey _logDayGlobalKey = GlobalKey();
   GlobalKey _addHeadacheGlobalKey = GlobalKey();
-
-  String userName = "";
 
   @override
   void initState() {
@@ -76,11 +74,11 @@ class _MeScreenState extends State<MeScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
         _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        print('called service 2');
+        debugPrint('called service 2');
         requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
       });
     });
-    print('called service 1');
+    debugPrint('called service 1');
     requestService(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
 
     textSpanList = [
@@ -134,13 +132,14 @@ class _MeScreenState extends State<MeScreen>
   @override
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
+    debugPrint('in did update widget of me screen');
     _getCurrentIndexOfTabBar();
     _updateMeScreenData();
-    print('in did update widget of me screen.');
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('me screen build func');
     return Container(
       child: SingleChildScrollView(
         child: Column(
@@ -164,20 +163,29 @@ class _MeScreenState extends State<MeScreen>
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            _getNotificationText(),
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontFamily: Constant.jostRegular,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14),
-                          ),
-                          Text(
-                            _getNotificationBottomText(),
-                            style: TextStyle(
-                                color: Constant.bubbleChatTextView,
-                                fontFamily: Constant.jostMedium,
-                                fontSize: 14),
+                          Consumer<CurrentUserHeadacheInfo>(
+                            builder: (context, data, child) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    _getNotificationText(data.getCurrentUserHeadacheModel()),
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontFamily: Constant.jostRegular,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14),
+                                  ),
+                                  Text(
+                                    _getNotificationBottomText(data.getCurrentUserHeadacheModel()),
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontFamily: Constant.jostMedium,
+                                        fontSize: 14),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           SizedBox(
                             height: 10,
@@ -196,8 +204,12 @@ class _MeScreenState extends State<MeScreen>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: _isOnBoardAssessmentInComplete ? 0 : 70,
+                    Consumer<OnBoardAssessIncompleteInfo>(
+                      builder: (context, data, child) {
+                        return SizedBox(
+                          height: data.isOnBoardAssessmentInComplete() ? 0 : 70,
+                        );
+                      },
                     ),
                     StreamBuilder<dynamic>(
                         stream: _calendarScreenBloc.calendarDataStream,
@@ -362,15 +374,19 @@ class _MeScreenState extends State<MeScreen>
                           )),
                       child: Column(
                         children: [
-                          Text(
-                            'Hey $userName!',
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: Constant.jostMedium,
-                                color: Constant.chatBubbleGreen),
+                          Consumer<UserNameInfo>(
+                            builder: (context, data, child) {
+                              return Text(
+                                'Hey ${data.getUserName()}!',
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: Constant.jostMedium,
+                                    color: Constant.chatBubbleGreen),
+                              );
+                            },
                           ),
                           Text(
                               '\nWhat’s been\ngoing on today?',
@@ -425,8 +441,9 @@ class _MeScreenState extends State<MeScreen>
                         BouncingWidget(
                           key: _addHeadacheGlobalKey,
                           onPressed: () {
-                            if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
-                              _navigateToAddHeadacheScreen();
+                            var currentUserHeadacheInfo = Provider.of<CurrentUserHeadacheInfo>(context, listen: false);
+                            if(currentUserHeadacheInfo.getCurrentUserHeadacheModel() != null && currentUserHeadacheInfo.getCurrentUserHeadacheModel().isOnGoing) {
+                              _navigateToAddHeadacheScreen(currentUserHeadacheInfo.getCurrentUserHeadacheModel());
                             } else {
                               _navigateUserToHeadacheLogScreen();
                             }
@@ -439,12 +456,16 @@ class _MeScreenState extends State<MeScreen>
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
-                              child: Text(
-                                _getHeadacheButtonText(),
-                                style: TextStyle(
-                                    color: Constant.bubbleChatTextView,
-                                    fontSize: 15,
-                                    fontFamily: Constant.jostMedium),
+                              child: Consumer<CurrentUserHeadacheInfo>(
+                                builder: (context, data, child) {
+                                  return Text(
+                                    _getHeadacheButtonText(data.getCurrentUserHeadacheModel()),
+                                    style: TextStyle(
+                                        color: Constant.bubbleChatTextView,
+                                        fontSize: 15,
+                                        fontFamily: Constant.jostMedium),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -470,24 +491,20 @@ class _MeScreenState extends State<MeScreen>
 
   void _checkForProfileIncomplete() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool isProfileInComplete =
-        sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
+    bool isProfileInComplete = sharedPreferences.getBool(Constant.isProfileInCompleteStatus);
 
-    print('isProfileInComplete $isProfileInComplete');
-    print('_isOnBoardAssessmentInComplete$_isOnBoardAssessmentInComplete');
+    var onBoardAssessmentInCompleteInfo = Provider.of<OnBoardAssessIncompleteInfo>(context, listen: false);
 
-    if (!_isOnBoardAssessmentInComplete && (isProfileInComplete ?? false)) {
-      print('in _checkForProfileIncomplete');
-      setState(() {
-        _isOnBoardAssessmentInComplete = isProfileInComplete;
-        if (_isOnBoardAssessmentInComplete) {
-          _animationController.forward();
-        }
-      });
+    if (!onBoardAssessmentInCompleteInfo.isOnBoardAssessmentInComplete() && (isProfileInComplete ?? false)) {
+
+      onBoardAssessmentInCompleteInfo.updateOnBoardAssessmentInComplete(isProfileInComplete);
+
+      if (onBoardAssessmentInCompleteInfo.isOnBoardAssessmentInComplete()) {
+        _animationController.forward();
+      }
     } else {
-      setState(() {
-        _animationController.reverse();
-      });
+      onBoardAssessmentInCompleteInfo.updateOnBoardAssessmentInComplete(false);
+      _animationController.reverse();
     }
   }
 
@@ -516,20 +533,19 @@ class _MeScreenState extends State<MeScreen>
 
   void requestService(
       String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
-    if(currentUserHeadacheModel == null) {
+    var currentUserHeadacheInfo = Provider.of<CurrentUserHeadacheInfo>(context, listen: false);
+    if(currentUserHeadacheInfo.getCurrentUserHeadacheModel() == null) {
       await _calendarScreenBloc.fetchUserOnGoingHeadache();
       var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
       if(userProfileInfoData != null) {
-        print('USERID???${userProfileInfoData.userId}');
         await _getUserCurrentHeadacheData();
       }
 
-      if(currentUserHeadacheModel != null) {
-        setState(() {
-          _isOnBoardAssessmentInComplete = true;
-          _animationController.forward();
-        });
+      if(currentUserHeadacheInfo.getCurrentUserHeadacheModel() != null) {
+        var onBoardAssessmentInCompleteInfo = Provider.of<OnBoardAssessIncompleteInfo>(context, listen: false);
+        onBoardAssessmentInCompleteInfo.updateOnBoardAssessmentInComplete(true);
+        _animationController.forward();
       }
     }
     await _calendarScreenBloc.fetchCalendarTriggersData(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
@@ -576,8 +592,6 @@ class _MeScreenState extends State<MeScreen>
       _firstDayOfTheWeek = DateTime(_firstDayOfTheWeek.year,
           _firstDayOfTheWeek.month, _firstDayOfTheWeek.day + 1);
     }
-
-    print(currentWeekListData);
   }
 
   // 0- Headache Data
@@ -595,8 +609,6 @@ class _MeScreenState extends State<MeScreen>
           CurrentWeekConsData currentWeekConsData = CurrentWeekConsData();
           currentWeekConsData.widgetType = 0;
           currentWeekConsData.eventIdList = [];
-
-          print(element.headacheListData);
 
           if(element.headacheListData != null) {
             element.headacheListData.forEach((headacheElement) {
@@ -631,7 +643,6 @@ class _MeScreenState extends State<MeScreen>
       firstDayOfTheWeek = DateTime(firstDayOfTheWeek.year,
           firstDayOfTheWeek.month, firstDayOfTheWeek.day + 1);
     }
-    print(currentWeekConsDataList);
   }
 
   bool _checkForConsecutiveHeadacheId(CurrentWeekConsData currentWeekConsData1, CurrentWeekConsData currentWeekConsData2) {
@@ -652,11 +663,10 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _getUserProfileDetails() async {
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-    setState(() {
-      userName = userProfileInfoData.profileName;
-    });
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+    var userNameInfo = Provider.of<UserNameInfo>(context, listen: false);
+    userNameInfo.updateUserName(userProfileInfoData.profileName);
   }
 
   Future<void> _getUserCurrentHeadacheData() async {
@@ -671,23 +681,23 @@ class _MeScreenState extends State<MeScreen>
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if(currentPositionOfTabBar == 0 && userProfileInfoData != null) {
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
-      print('currentUserHeadacheModel$currentUserHeadacheModel');
-      if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
-        setState(() {
-          _isOnBoardAssessmentInComplete = true;
-          _animationController.forward();
-        });
+      CurrentUserHeadacheModel currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+      var currentUserHeadacheInfo = Provider.of<CurrentUserHeadacheInfo>(context, listen: false);
+      currentUserHeadacheInfo.updateCurrentUserHeadacheModel(currentUserHeadacheModel);
+
+      if(currentUserHeadacheInfo.getCurrentUserHeadacheModel() != null && currentUserHeadacheInfo.getCurrentUserHeadacheModel().isOnGoing) {
+        var onBoardAssessmentInCompleteInfo = Provider.of<OnBoardAssessIncompleteInfo>(context, listen: false);
+        onBoardAssessmentInCompleteInfo.updateOnBoardAssessmentInComplete(true);
+        _animationController.forward();
       } else {
-        _isOnBoardAssessmentInComplete = false;
-        print('_checkForProfileIncomplete');
         _checkForProfileIncomplete();
       }
     }
   }
 
   ///This method is used to get text of notification banner
-  String _getNotificationText() {
+  String _getNotificationText(CurrentUserHeadacheModel currentUserHeadacheModel) {
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       DateTime startDateTime = DateTime.tryParse(currentUserHeadacheModel.selectedDate);
       if(startDateTime == null) {
@@ -703,22 +713,23 @@ class _MeScreenState extends State<MeScreen>
   }
 
   ///This method is used to get bottom text of notification banner
-  String _getNotificationBottomText() {
+  String _getNotificationBottomText(CurrentUserHeadacheModel currentUserHeadacheModel) {
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       return 'Click here to view.';
     }
     return Constant.clickHereToFinish;
   }
 
-  void _navigateToAddHeadacheScreen() async {
+  void _navigateToAddHeadacheScreen(CurrentUserHeadacheModel currentUserHeadacheModel) async {
     DateTime currentDateTime = DateTime.now();
     DateTime endHeadacheDateTime = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day, currentDateTime.hour, currentDateTime.minute, 0, 0, 0);
-
-    currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+    var currentUserHeadacheInfo = Provider.of<CurrentUserHeadacheInfo>(context, listen: false);
+    currentUserHeadacheInfo.updateCurrentUserHeadacheModel(currentUserHeadacheModel);
 
     currentUserHeadacheModel.isOnGoing = false;
     currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
@@ -729,7 +740,7 @@ class _MeScreenState extends State<MeScreen>
     _updateMeScreenData();
   }
 
-  String _getHeadacheButtonText() {
+  String _getHeadacheButtonText(CurrentUserHeadacheModel currentUserHeadacheModel) {
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       return Constant.endHeadache;
     }
@@ -737,6 +748,9 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _navigateToOtherScreen() async {
+    var currentUserHeadacheInfo = Provider.of<CurrentUserHeadacheInfo>(context, listen: false);
+    CurrentUserHeadacheModel currentUserHeadacheModel = currentUserHeadacheInfo.getCurrentUserHeadacheModel();
+
     if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
       await widget.navigateToOtherScreenCallback(Constant.currentHeadacheProgressScreenRouter, null);
     } else {
@@ -769,5 +783,36 @@ class _MeScreenState extends State<MeScreen>
       sharedPreferences.remove(Constant.updateMeScreenData);
       await _calendarScreenBloc.fetchCalendarTriggersData(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
     }
+  }
+}
+
+class OnBoardAssessIncompleteInfo with ChangeNotifier {
+  bool _isOnBoardAssessmentInComplete = false;
+  bool isOnBoardAssessmentInComplete() => _isOnBoardAssessmentInComplete;
+
+  updateOnBoardAssessmentInComplete(bool isOnBoardAssessmentInComplete) {
+    _isOnBoardAssessmentInComplete = isOnBoardAssessmentInComplete;
+    notifyListeners();
+  }
+}
+
+class CurrentUserHeadacheInfo with ChangeNotifier {
+   CurrentUserHeadacheModel _currentUserHeadacheModel;
+
+   CurrentUserHeadacheModel getCurrentUserHeadacheModel() => _currentUserHeadacheModel;
+
+   updateCurrentUserHeadacheModel(CurrentUserHeadacheModel currentUserHeadacheModel) {
+     _currentUserHeadacheModel = currentUserHeadacheModel;
+     notifyListeners();
+   }
+}
+
+class UserNameInfo with ChangeNotifier {
+  String _userName = Constant.blankString;
+  String getUserName() => _userName;
+
+  updateUserName(String userName) {
+    _userName = userName;
+    notifyListeners();
   }
 }
