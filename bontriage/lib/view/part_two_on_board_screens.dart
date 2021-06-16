@@ -374,7 +374,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   void requestService() async {
     List<LocalQuestionnaire> localQuestionnaireData = await SignUpOnBoardProviders.db.getQuestionnaire(Constant.secondEventStep);
 
-    if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
+    if (localQuestionnaireData != null && localQuestionnaireData.length > 0  && _argumentName == Constant.clinicalImpressionShort1) {
       await _signUpOnBoardSecondStepBloc.fetchAllHeadacheListData(_argumentName, false);
       signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
