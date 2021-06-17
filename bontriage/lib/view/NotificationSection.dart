@@ -1,14 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../main.dart';
-
-import 'NotificationTimer.dart';
 
 class NotificationSection extends StatefulWidget {
   final String notificationName;
@@ -595,10 +594,8 @@ class _NotificationSectionState extends State<NotificationSection>
 
   /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
-        ?.deleteNotificationChannel(channelId.toString());
+    debugPrint('ChannelId????$channelId');
+    await flutterLocalNotificationsPlugin.cancel(channelId);
   }
 
   String _setDeleteOrEditText() {

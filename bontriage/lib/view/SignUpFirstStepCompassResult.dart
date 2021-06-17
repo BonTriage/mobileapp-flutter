@@ -22,7 +22,7 @@ class SignUpFirstStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin {
+    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -83,10 +83,21 @@ class _SignUpFirstStepCompassResultState
     getCompassAxesFromDatabase();
 
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      TextToSpeechRecognition.speechToText(_bubbleTextViewList[_buttonPressedValue]);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
     super.dispose();
   }

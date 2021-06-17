@@ -24,7 +24,7 @@ class SignUpSecondStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpSecondStepCompassResultState
-    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin {
+    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin, WidgetsBindingObserver {
   SignUpSecondStepCompassBloc _bloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -64,6 +64,8 @@ class _SignUpSecondStepCompassResultState
     _compassTutorialModel = CompassTutorialModel();
     _compassTutorialModel.isFromOnBoard = true;
 
+    WidgetsBinding.instance.addObserver(this);
+
     _bloc = SignUpSecondStepCompassBloc();
     _scrollController = ScrollController();
     getUserHeadacheName();
@@ -96,6 +98,15 @@ class _SignUpSecondStepCompassResultState
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      TextToSpeechRecognition.speechToText(_bubbleTextViewList[_buttonPressedValue]);
+    }
+  }
+
+  @override
   void didUpdateWidget(SignUpSecondStepCompassResult oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
@@ -112,6 +123,7 @@ class _SignUpSecondStepCompassResultState
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
     _bloc.dispose();
     super.dispose();

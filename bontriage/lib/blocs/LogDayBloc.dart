@@ -176,6 +176,10 @@ class LogDayBloc {
   }
 
   Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
+    behaviorSelectedAnswerList.clear();
+    medicationSelectedAnswerList.clear();
+    triggerSelectedAnswerList.clear();
+    noteSelectedAnswer.clear();
     LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
@@ -464,7 +468,7 @@ class LogDayBloc {
   }
 
   List<SelectedAnswers> getSelectedAnswerList(List<SelectedAnswers> doubleTappedSelectedAnswerList) {
-    if (selectedAnswerList == null) {
+    if (selectedAnswerList == null || selectedAnswerList.isEmpty) {
       selectedAnswerList = [];
 
       if (calendarInfoModel != null) {
@@ -702,6 +706,6 @@ class LogDayBloc {
   }
 
   void enterSomeDummyDataToStreamController() {
-    logDayDataSink.add(Constant.loading);
+    sendLogDayDataSink.add(Constant.loading);
   }
 }
