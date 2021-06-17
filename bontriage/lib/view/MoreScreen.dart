@@ -166,19 +166,7 @@ class _MoreScreenState extends State<MoreScreen> {
     var result = await Utils.showConfirmationDialog(
         context, 'Are you sure want to log out?', 'Logout?');
     if (result == 'Yes') {
-      try {
-        await SignUpOnBoardProviders.db.deleteAllTableData();
-        SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        bool isVolume =
-            sharedPreferences.getBool(Constant.chatBubbleVolumeState) ?? true;
-        sharedPreferences.clear();
-        sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume);
-        sharedPreferences.setBool(Constant.tutorialsState, true);
-        flutterLocalNotificationsPlugin?.cancelAll();
-      } catch (e) {
-        print('in here $e');
-      }
+      await Utils.clearAllDataFromDatabaseAndCache();
       widget.navigateToOtherScreenCallback(
           Constant.welcomeStartAssessmentScreenRouter, null);
     }
