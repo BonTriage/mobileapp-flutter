@@ -36,7 +36,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 82,
+      height: 85,
       child: ListView.builder(
         itemCount: widget.logOptions.length,
         scrollDirection: Axis.horizontal,
@@ -121,8 +121,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   child: Container(
                     margin: EdgeInsets.only(right: 10),
                     padding: EdgeInsets.all(10),
-                    width: 72,
-                    height: 72,
+                    width: 75,
+                    height: 75,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -140,7 +140,7 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                           widget.logOptions[index].text,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: (widget.logOptions[index].text == Constant.plusText) ? 20 : 12,
                             color: (widget.logOptions[index].isSelected)
                                 ? Constant.bubbleChatTextView
                                 : Constant.locationServiceGreen,
@@ -153,8 +153,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                   ),
                 ),
                 Container(
-                  width: 71,
-                  height: 71,
+                  width: 74,
+                  height: 74,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Visibility(

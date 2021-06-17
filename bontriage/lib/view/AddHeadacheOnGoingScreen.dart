@@ -60,11 +60,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
     _isFromRecordScreen = widget.currentUserHeadacheModel.isFromRecordScreen ?? false;
 
-    try {
+    /*try {
        _dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
     } catch(e) {
       print(e.toString());
-    }
+    }*/
 
     signUpOnBoardSelectedAnswersModel.eventType = "Headache";
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
@@ -208,9 +208,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                             ),
                                             child: Center(
                                               child: Text(
-                                                _isUserHeadacheEnded
-                                                    ? Constant.submit
-                                                    : Constant.save,
+                                                Constant.save,
                                                 style: TextStyle(
                                                     color:
                                                         Constant.bubbleChatTextView,
@@ -596,6 +594,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
       else
         Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+    } else if (resultOfDiscardChangesBottomSheet == Constant.saveAndExit) {
+      if (!_isButtonClicked) {
+        _isButtonClicked = true;
+        saveDataInLocalDataBaseOrServer();
+      }
     }
   }
 }
