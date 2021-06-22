@@ -24,7 +24,7 @@ class SignUpSecondStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpSecondStepCompassResultState
-    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin {
+    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin, WidgetsBindingObserver {
   SignUpSecondStepCompassBloc _bloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -64,6 +64,8 @@ class _SignUpSecondStepCompassResultState
     _compassTutorialModel = CompassTutorialModel();
     _compassTutorialModel.isFromOnBoard = true;
 
+    WidgetsBinding.instance.addObserver(this);
+
     _bloc = SignUpSecondStepCompassBloc();
     _scrollController = ScrollController();
     getUserHeadacheName();
@@ -96,6 +98,17 @@ class _SignUpSecondStepCompassResultState
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      print('booleanvalue???$_isPdfScreenOpened');
+      if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened)
+        TextToSpeechRecognition.speechToText(bubbleChatTextView[_buttonPressedValue]);
+    }
+  }
+
+  @override
   void didUpdateWidget(SignUpSecondStepCompassResult oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
@@ -112,6 +125,7 @@ class _SignUpSecondStepCompassResultState
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
     _bloc.dispose();
     super.dispose();
@@ -121,9 +135,10 @@ class _SignUpSecondStepCompassResultState
   Widget build(BuildContext context) {
     print('inbuild func');
     const ticks = [2, 4, 6, 8, 10];
-    if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened)
-      TextToSpeechRecognition.speechToText(
-          bubbleChatTextView[_buttonPressedValue]);
+    print('_isPdfScreenOpened????$_isPdfScreenOpened');
+    if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened) {
+      TextToSpeechRecognition.speechToText(bubbleChatTextView[_buttonPressedValue]);
+    }
     var features = [
       "A",
       "B",
@@ -646,6 +661,7 @@ class _SignUpSecondStepCompassResultState
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
+                          _isPdfScreenOpened = true;
                           _checkStoragePermission().then((value) {
                             if(value)
                               _getUserReport();
@@ -799,6 +815,7 @@ class _SignUpSecondStepCompassResultState
     userHeadacheName = sharedPreferences.get(Constant.userHeadacheName);
     userHeadacheTextView =
         'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app';
+    _bubbleTextViewList[0] = userHeadacheTextView;
   }
 
   void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {
@@ -955,7 +972,7 @@ class _SignUpSecondStepCompassResultState
     TextToSpeechRecognition.speechToText("");
     Future.delayed(Duration(milliseconds: 300), () async {
       await Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
-      Future.delayed(Duration(milliseconds: 300), () {
+      Future.delayed(Duration(milliseconds: 350), () {
         _isPdfScreenOpened = false;
       });
     });

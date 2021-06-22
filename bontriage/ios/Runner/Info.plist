@@ -29,6 +29,8 @@
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Application needs your location to better diagnose your headache</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Application needs your location to better diagnose your headache</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Application needs your location to better diagnose your headache</string>
 	<key>UILaunchStoryboardName</key>

@@ -198,6 +198,11 @@ class CalendarHeadacheLogDayDetailsBloc {
             mobileEventElement.questionTag == Constant.behaviourPreMealTag,
             orElse: () => null);
 
+        var behaviourExerciseData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.behaviourPreExerciseTag,
+            orElse: () => null);
+
         if (behaviourPreSleepData != null) {
           String titleInfo = behaviourPreSleepData.value;
           if (titleInfo.toLowerCase() == "yes") {
@@ -219,6 +224,23 @@ class CalendarHeadacheLogDayDetailsBloc {
         userHeadacheLogDayDetailsModel.headacheLogDayListData
             .add(logDaySleepWidgetData);
 
+        RecordWidgetData logDayExerciseWidgetData = RecordWidgetData();
+        logDayExerciseWidgetData.logDayListData = LogDayData();
+        if (behaviourExerciseData != null) {
+          String titleBehaviorInfo = behaviourExerciseData.value;
+          /*if (titleBehaviorInfo.toLowerCase() == "yes") {
+            titleBehaviorInfo = 'Regular Meal Times';
+          } else {
+            titleBehaviorInfo = 'No Meal';
+          }*/
+          logDayExerciseWidgetData.imagePath = Constant.exerciseIcon;
+          logDayExerciseWidgetData.logDayListData.titleName = "Exercise";
+          logDayExerciseWidgetData.logDayListData.titleInfo = titleBehaviorInfo;
+        }
+
+        userHeadacheLogDayDetailsModel.headacheLogDayListData.add(logDayExerciseWidgetData);
+
+
         RecordWidgetData logDayMealWidgetData = RecordWidgetData();
         logDayMealWidgetData.logDayListData = LogDayData();
         if (behaviourMealData != null) {
@@ -235,6 +257,7 @@ class CalendarHeadacheLogDayDetailsBloc {
 
         userHeadacheLogDayDetailsModel.headacheLogDayListData
             .add(logDayMealWidgetData);
+
         userHeadacheLogDayDetailsModel.isDayLogged = true;
       }
     });

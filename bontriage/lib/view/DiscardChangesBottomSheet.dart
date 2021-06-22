@@ -22,6 +22,17 @@ class _DiscardChangesBottomSheetState
         actions: [
           CupertinoActionSheetAction(
             child: Text(
+                Constant.saveAndExit,
+                overflow: TextOverflow.ellipsis,
+                style: _textStyle,
+            ),
+            onPressed: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              Navigator.pop(context, Constant.saveAndExit);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: Text(
                 'Discard Changes',
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle.copyWith(
@@ -38,14 +49,14 @@ class _DiscardChangesBottomSheetState
           child: Text(
             Constant.cancel,
             overflow: TextOverflow.ellipsis,
-            style: _textStyle
+            style: _textStyle,
           ),
           isDefaultAction: true,
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
             Navigator.pop(context);
           },
-        )
+        ),
     );
   }
 }

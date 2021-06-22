@@ -265,7 +265,7 @@ class Constant {
   static String accurateClinicalImpression =
       'This is not a diagnosis, but it is an accurate clinical impression, based,on your answer, of how your headache best matches up to known headache types. If you haven\'t already done so, you should see a qualified medical professional for a firm diagnosis.';
   static String moreDetailedHistory =
-      'You can also provide a much more detailed history, have an opportunity to explain your headaches in greater detail, and get a more complete to take to your doctor report an BonTriage.com';
+      'You can also provide a much more detailed history, have an opportunity to explain your headaches in greater detail, and get a more complete to take to your doctor report at BonTriage.com.';
   static String viewDetailedReport = 'View detailed report';
   static String tapToType = 'Tap to type';
   static String greatWeAreDone =
@@ -746,6 +746,7 @@ class Constant {
   static String nextArrow = 'images/next_arrow.png';
   static String migraineIcon = 'images/migraine_icon.png';
   static String mealIcon = 'images/meal_icon.png';
+  static const String exerciseIcon = 'images/exercise.png';
   static String pillIcon = 'images/pill_icon.png';
   static String alcoholIcon = 'images/alcohol_icon.png';
   static String sleepIcon = 'images/sleep_icon.png';
@@ -805,4 +806,6 @@ class Constant {
       'https://www.bontriage.com/privacy.html';
 
   static const String notAllowed = 'Not Allowed';
+
+  static const String chooseDifferentHeadacheType = 'Choose a different headache name.';
 }

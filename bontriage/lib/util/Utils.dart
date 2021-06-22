@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main.dart';
 import 'constant.dart';
 
 class Utils {
@@ -396,6 +397,23 @@ class Utils {
   }
 
   void getUserInformation() {}
+
+
+  static Future<void> clearAllDataFromDatabaseAndCache() async{
+    try {
+      await SignUpOnBoardProviders.db.deleteAllTableData();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      bool isVolume =
+          sharedPreferences.getBool(Constant.chatBubbleVolumeState) ?? true;
+      sharedPreferences.clear();
+      sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume);
+      sharedPreferences.setBool(Constant.tutorialsState, true);
+      flutterLocalNotificationsPlugin?.cancelAll();
+    } catch (e) {
+      print('in here $e');
+    }
+  }
 
   ///This method is used to show api loader dialog
   ///@param context: context of the screen where the dialog will be shown
