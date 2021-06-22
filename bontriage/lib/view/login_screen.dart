@@ -58,7 +58,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('build func for login screen');
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(

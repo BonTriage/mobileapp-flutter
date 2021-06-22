@@ -369,7 +369,14 @@ class MyApp extends StatelessWidget {
           case Constant.currentHeadacheProgressScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: CurrentHeadacheProgressScreen(currentUserHeadacheModel: settings.arguments,), routeSettings: routeSettings);
+                widget: ChangeNotifierProvider(
+                  create: (context) => CurrentHeadacheTimerInfo(),
+                  child: CurrentHeadacheProgressScreen(
+                    currentUserHeadacheModel: settings.arguments,
+                  ),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case Constant.addHeadacheOnGoingScreenRouter:
             {

@@ -373,7 +373,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       } else {
         _isUserHeadacheEnded = true;
       }
-      setState(() {});
+     // setState(() {});
     }
   }
 

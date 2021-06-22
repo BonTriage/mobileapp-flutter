@@ -90,7 +90,6 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    print('build func of otp screen');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constant.backgroundColor,

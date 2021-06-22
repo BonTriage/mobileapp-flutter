@@ -63,7 +63,6 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('in build func of sign up screen');
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(

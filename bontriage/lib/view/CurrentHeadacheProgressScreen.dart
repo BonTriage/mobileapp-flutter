@@ -8,6 +8,8 @@ import 'package:mobile/blocs/CurrentHeadacheProgressBloc.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
+import 'package:provider/provider.dart';
 
 class CurrentHeadacheProgressScreen extends StatefulWidget {
   final CurrentUserHeadacheModel currentUserHeadacheModel;
@@ -23,9 +25,7 @@ class _CurrentHeadacheProgressScreenState
     extends State<CurrentHeadacheProgressScreen> {
   DateTime _dateTime;
   DateTime _storedDateTime;
-  int _totalTime = 0; //in minutes
   Timer _timer;
-  bool _isShowDayBorder = false;
   bool _isAlreadyDataFetched = false;
   CurrentHeadacheProgressBloc _currentHeadacheProgressBloc;
   CurrentUserHeadacheModel _currentUserHeadacheModel;
@@ -41,11 +41,15 @@ class _CurrentHeadacheProgressScreenState
     _currentHeadacheProgressBloc.fetchDataFromLocalDatabase(widget.currentUserHeadacheModel);
 
     _timer = Timer.periodic(Duration(minutes: 1), (timer) {
-      setState(() {
-        _totalTime++;
+      var currentHeadacheTimeInfo = Provider.of<CurrentHeadacheTimerInfo>(context, listen: false);
+      int totalTime = currentHeadacheTimeInfo.getTotalTime();
 
-        if ((_totalTime ~/ 60) > 23) _isShowDayBorder = true;
-      });
+      totalTime++;
+
+      if ((totalTime ~/ 60) > 23)
+        currentHeadacheTimeInfo.updateCurrentTimerInfo(totalTime, true);
+      else
+        currentHeadacheTimeInfo.updateCurrentTimerInfo(totalTime, false);
     });
   }
 
@@ -53,9 +57,9 @@ class _CurrentHeadacheProgressScreenState
   /// Short Time
   /// Medium Time
   /// Long Time
-  String _getDisplayTime() {
-    int hours = _totalTime ~/ 60;
-    int minute = _totalTime % 60;
+  String _getDisplayTime(int totalTime) {
+    int hours = totalTime ~/ 60;
+    int minute = totalTime % 60;
 
     if (hours < 10) {
       if (minute < 10) {
@@ -86,10 +90,10 @@ class _CurrentHeadacheProgressScreenState
     }
   }
 
-  double _getCurrentHeadacheProgressPercent() {
+  double _getCurrentHeadacheProgressPercent(int totalTime) {
     double percentValue = 0;
 
-    percentValue = ((_totalTime % (24 * 60)) / (24 * 60));
+    percentValue = ((totalTime % (24 * 60)) / (24 * 60));
     if (percentValue > 1) {
       percentValue -= 1;
     }
@@ -143,8 +147,8 @@ class _CurrentHeadacheProgressScreenState
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                              CustomTextWidget(
+                                text: '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Constant.chatBubbleGreen,
@@ -182,8 +186,8 @@ class _CurrentHeadacheProgressScreenState
                                   children: [
                                     Align(
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        Constant.yourCurrentHeadache,
+                                      child: CustomTextWidget(
+                                        text: Constant.yourCurrentHeadache,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 20,
@@ -197,61 +201,65 @@ class _CurrentHeadacheProgressScreenState
                                     Container(
                                       width: 190,
                                       height: 190,
-                                      child: Stack(
-                                        children: [
-                                          Visibility(
-                                            visible: _isShowDayBorder,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: Constant.chatBubbleGreen,
-                                                    width: 3),
-                                              ),
-                                            ),
-                                          ),
-                                          Align(
-                                              alignment: Alignment.center,
-                                              child: ClipPath(
-                                                clipper: ProgressClipper(
-                                                    percent: /*((_totalTime)/(24 * 60)) * 100)*/ _getCurrentHeadacheProgressPercent()),
+                                      child: Consumer<CurrentHeadacheTimerInfo>(
+                                        builder: (context, data, child) {
+                                          return Stack(
+                                            children: [
+                                              Visibility(
+                                                visible: data.isShowDayBorder(),
                                                 child: Container(
-                                                  width: 170,
-                                                  height: 170,
                                                   decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Constant.chatBubbleGreen
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                        color: Constant.chatBubbleGreen,
+                                                        width: 3),
                                                   ),
                                                 ),
                                               ),
-                                          ),
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              height: 120,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                gradient: LinearGradient(
-                                                    begin: Alignment.topCenter,
-                                                    end: Alignment.bottomCenter,
-                                                    colors: <Color>[
-                                                      Color(0xff0E4C47),
-                                                      Color(0xff0E232F),
-                                                    ]),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  _getDisplayTime(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: Constant.jostMedium,
-                                                      color: Constant.chatBubbleGreen),
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: ClipPath(
+                                                  clipper: ProgressClipper(
+                                                      percent: _getCurrentHeadacheProgressPercent(data.getTotalTime())),
+                                                  child: Container(
+                                                    width: 170,
+                                                    height: 170,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Constant.chatBubbleGreen
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 120,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    gradient: LinearGradient(
+                                                        begin: Alignment.topCenter,
+                                                        end: Alignment.bottomCenter,
+                                                        colors: <Color>[
+                                                          Color(0xff0E4C47),
+                                                          Color(0xff0E232F),
+                                                        ]),
+                                                  ),
+                                                  child: Center(
+                                                    child: CustomTextWidget(
+                                                      text: _getDisplayTime(data.getTotalTime()),
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontFamily: Constant.jostMedium,
+                                                          color: Constant.chatBubbleGreen),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       ),
                                     ),
                                     SizedBox(
@@ -259,8 +267,8 @@ class _CurrentHeadacheProgressScreenState
                                     ),
                                     Align(
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        Constant.started,
+                                      child: CustomTextWidget(
+                                        text: Constant.started,
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontFamily: Constant.jostMedium,
@@ -272,8 +280,8 @@ class _CurrentHeadacheProgressScreenState
                                     ),
                                     Align(
                                       alignment: Alignment.center,
-                                      child: Text(
-                                        (_storedDateTime != null) ? '${Utils.getShortMonthName(_storedDateTime.month)} ${_storedDateTime.day}, ${Utils.getTimeInAmPmFormat(_storedDateTime.hour, _storedDateTime.minute)}' : '${Utils.getShortMonthName(DateTime.now().month)} ${DateTime.now().day}, ${Utils.getTimeInAmPmFormat(DateTime.now().hour, DateTime.now().minute)}',
+                                      child: CustomTextWidget(
+                                        text: (_storedDateTime != null) ? '${Utils.getShortMonthName(_storedDateTime.month)} ${_storedDateTime.day}, ${Utils.getTimeInAmPmFormat(_storedDateTime.hour, _storedDateTime.minute)}' : '${Utils.getShortMonthName(DateTime.now().month)} ${DateTime.now().day}, ${Utils.getTimeInAmPmFormat(DateTime.now().hour, DateTime.now().minute)}',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: Constant.jostRegular,
@@ -296,8 +304,8 @@ class _CurrentHeadacheProgressScreenState
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Text(
-                                            Constant.logHeadacheError,
+                                          CustomTextWidget(
+                                            text: Constant.logHeadacheError,
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: Constant.pinkTriggerColor,
@@ -326,8 +334,8 @@ class _CurrentHeadacheProgressScreenState
                                               borderRadius: BorderRadius.circular(30),
                                             ),
                                             child: Center(
-                                              child: Text(
-                                                Constant.addEditDetails,
+                                              child: CustomTextWidget(
+                                                text: Constant.addEditDetails,
                                                 style: TextStyle(
                                                     color: Constant.chatBubbleGreen,
                                                     fontSize: 13,
@@ -356,8 +364,8 @@ class _CurrentHeadacheProgressScreenState
                                               borderRadius: BorderRadius.circular(30),
                                             ),
                                             child: Center(
-                                              child: Text(
-                                                Constant.endHeadache,
+                                              child: CustomTextWidget(
+                                                text: Constant.endHeadache,
                                                 style: TextStyle(
                                                     color: Constant.bubbleChatTextView,
                                                     fontSize: 13,
@@ -395,35 +403,17 @@ class _CurrentHeadacheProgressScreenState
       _storedDateTime = dateTime;
       Duration duration = _dateTime.difference(dateTime);
 
-      /*if(duration.inDays.abs() < 3) {
-        _totalTime = duration.inMinutes;
+      var currentHeadacheTimeInfo = Provider.of<CurrentHeadacheTimerInfo>(context, listen: false);
 
-        if(!_currentUserHeadacheModel.isOnGoing)  {
-          _timer.cancel();
-        }
-      } else {
-        _isShowErrorMessage = true;
-        _totalTime = 72 * 60;
-        _currentUserHeadacheModel.isOnGoing = false;
-        DateTime endHeadacheDateTime = DateTime.now();
-        DateTime startHeadacheDateTime = DateTime.tryParse(_currentUserHeadacheModel.selectedDate);
-        Duration duration = endHeadacheDateTime.difference(startHeadacheDateTime);
-        if(duration.inSeconds.abs() <= (72*60*60)) {
-          _currentUserHeadacheModel.selectedEndDate = endHeadacheDateTime.toUtc().toIso8601String();
-        } else {
-          _currentUserHeadacheModel.selectedEndDate = startHeadacheDateTime.add(Duration(days: 3)).toUtc().toIso8601String();
-        }
-        SignUpOnBoardProviders.db.updateUserCurrentHeadacheData(_currentUserHeadacheModel);
-        _timer.cancel();
-      }*/
-
-      _totalTime = duration.inMinutes;
+      int totalTime = duration.inMinutes;
 
       if(!_currentUserHeadacheModel.isOnGoing)  {
         _timer.cancel();
       }
 
-      _isShowDayBorder = duration.inDays >= 1;
+      bool isShowDayBorder = duration.inDays >= 1;
+
+      currentHeadacheTimeInfo.updateCurrentTimerInfo(totalTime, isShowDayBorder, false);
       _isAlreadyDataFetched = true;
     } catch(e) {
       print(e);
@@ -574,7 +564,6 @@ class GradientProgressBar extends SingleChildRenderObjectWidget {
 class GradientProgressBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..color = Constant.chatBubbleGreen;
@@ -588,5 +577,21 @@ class GradientProgressBarPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
+  }
+}
+
+class CurrentHeadacheTimerInfo with ChangeNotifier {
+  int _totalTime = 0; //in minutes
+  bool _isShowDayBorder = false;
+
+  int getTotalTime() => _totalTime;
+  bool isShowDayBorder() => _isShowDayBorder;
+
+  updateCurrentTimerInfo(int totalTime, bool isShowDayBorder, [bool shouldNotify = true]) {
+    _totalTime = totalTime;
+    _isShowDayBorder = isShowDayBorder;
+
+    if(shouldNotify)
+      notifyListeners();
   }
 }
