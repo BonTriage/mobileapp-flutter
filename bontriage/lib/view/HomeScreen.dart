@@ -11,7 +11,6 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
-import 'package:mobile/view/DateRangeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MeScreenTutorial.dart';
@@ -59,106 +58,101 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     debugPrint('in build func of home screen');
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    //MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async =>
           !await navigatorKey[currentIndex].currentState.maybePop(),
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-        ),
-        child: Scaffold(
-          body: Container(
-            decoration: Constant.backgroundBoxDecoration,
-            child: Stack(
-              children: [
-                _buildOffstageNavigator(0),
-                _buildOffstageNavigator(1),
-                /*_buildOffstageNavigator(2),*/
-                _buildOffstageNavigator(2),
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Constant.backgroundColor,
-            currentIndex: currentIndex,
-            selectedItemColor: Constant.chatBubbleGreen,
-            unselectedItemColor: Constant.unselectedTextColor,
-            selectedFontSize: 14,
-            unselectedFontSize: 14,
-            selectedLabelStyle: TextStyle(
-              fontSize: 12,
-              fontFamily: Constant.jostMedium,
-            ),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 12,
-              fontFamily: Constant.jostMedium,
-            ),
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  Constant.meUnselected,
-                  height: 25,
-                ),
-                activeIcon: Image.asset(
-                  Constant.meSelected,
-                  height: 25,
-                ),
-                label: Constant.me,
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  Constant.recordsUnselected,
-                  height: 25,
-                  key: _recordsGlobalKey,
-                ),
-                activeIcon: Image.asset(
-                  Constant.recordsSelected,
-                  height: 25,
-                ),
-                label: Constant.records,
-              ),
-              /*BottomNavigationBarItem(
-                icon: Image.asset(
-                  Constant.discoverUnselected,
-                  height: 25,
-                ),
-                activeIcon: Image.asset(
-                  Constant.discoverSelected,
-                  height: 25,
-                ),
-                label: Constant.discover,
-              ),*/
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  Constant.moreUnselected,
-                  height: 25,
-                  width: 30,
-                ),
-                activeIcon: Image.asset(
-                  Constant.moreSelected,
-                  height: 25,
-                  width: 30,
-                ),
-                label: Constant.more,
-              ),
+      child: Scaffold(
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: Stack(
+            children: [
+              _buildOffstageNavigator(0),
+              _buildOffstageNavigator(1),
+              /*_buildOffstageNavigator(2),*/
+              _buildOffstageNavigator(2),
             ],
-            onTap: (index) {
-              if(index != currentIndex) {
-                setState(() {
-                  print(index);
-                  currentIndex = index;
-                  saveCurrentIndexOfTabBar(currentIndex);
-                });
-              } else {
-                int lastIndex = navigatorKey.length - 1;
-                if(index == lastIndex) {
-                  Navigator.popUntil(navigatorKey[index].currentContext, ModalRoute.withName(TabNavigatorRoutes.moreRoot));
-                }
-              }
-            },
           ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Constant.backgroundColor,
+          currentIndex: currentIndex,
+          selectedItemColor: Constant.chatBubbleGreen,
+          unselectedItemColor: Constant.unselectedTextColor,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          selectedLabelStyle: TextStyle(
+            fontSize: 12,
+            fontFamily: Constant.jostMedium,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontSize: 12,
+            fontFamily: Constant.jostMedium,
+          ),
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                Constant.meUnselected,
+                height: 25,
+              ),
+              activeIcon: Image.asset(
+                Constant.meSelected,
+                height: 25,
+              ),
+              label: Constant.me,
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                Constant.recordsUnselected,
+                height: 25,
+                key: _recordsGlobalKey,
+              ),
+              activeIcon: Image.asset(
+                Constant.recordsSelected,
+                height: 25,
+              ),
+              label: Constant.records,
+            ),
+            /*BottomNavigationBarItem(
+              icon: Image.asset(
+                Constant.discoverUnselected,
+                height: 25,
+              ),
+              activeIcon: Image.asset(
+                Constant.discoverSelected,
+                height: 25,
+              ),
+              label: Constant.discover,
+            ),*/
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                Constant.moreUnselected,
+                height: 25,
+                width: 30,
+              ),
+              activeIcon: Image.asset(
+                Constant.moreSelected,
+                height: 25,
+                width: 30,
+              ),
+              label: Constant.more,
+            ),
+          ],
+          onTap: (index) {
+            if(index != currentIndex) {
+              setState(() {
+                print(index);
+                currentIndex = index;
+                saveCurrentIndexOfTabBar(currentIndex);
+              });
+            } else {
+              int lastIndex = navigatorKey.length - 1;
+              if(index == lastIndex) {
+                Navigator.popUntil(navigatorKey[index].currentContext, ModalRoute.withName(TabNavigatorRoutes.moreRoot));
+              }
+            }
+          },
         ),
       ),
     );

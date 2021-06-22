@@ -1,8 +1,12 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/ChangePasswordScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormField.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
+import 'package:provider/provider.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final ChangePasswordArgumentModel changePasswordArgumentModel;
@@ -14,9 +18,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  bool _isHidden = true;
-  bool _isConfirmPasswordHidden = true;
-
   String passwordValue;
   TextEditingController passwordTextEditingController;
   TextEditingController confirmPasswordTextEditingController;
@@ -24,25 +25,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   String confirmPasswordValue;
   ChangePasswordBloc _changePasswordBloc;
 
-  bool _isShowAlert = false;
-
-  String alertMessage = '';
-
   FocusNode passwordFocusNode;
   FocusNode confirmPasswordFocusNode;
 
   //Method to toggle password visibility
   void _togglePasswordVisibility() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
+    var changePasswordVisibilityInfo = Provider.of<ChangePasswordVisibilityInfo>(context, listen: false);
+    changePasswordVisibilityInfo.updateIsHidden(!changePasswordVisibilityInfo.isHidden());
   }
 
   //Method to toggle password visibility
   void _toggleConfirmPasswordVisibility() {
-    setState(() {
-      _isConfirmPasswordHidden = !_isConfirmPasswordHidden;
-    });
+    var changeConfirmPasswordVisibilityInfo = Provider.of<ChangeConfirmPasswordVisibilityInfo>(context, listen: false);
+    changeConfirmPasswordVisibilityInfo.updateIsConfirmPasswordHidden(!changeConfirmPasswordVisibilityInfo.isConfirmPasswordHidden());
   }
 
   @override
@@ -71,216 +66,219 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    //MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constant.backgroundColor,
-      body: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.minTextScaleFactor),
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 40,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 40,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: CustomTextWidget(
+                text: 'Create New Password',
+                style: TextStyle(
+                    color: Constant.chatBubbleGreen,
+                    fontSize: 18,
+                    fontFamily: Constant.jostRegular),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Create New Password',
-                  style: TextStyle(
-                      color: Constant.chatBubbleGreen,
-                      fontSize: 18,
-                      fontFamily: Constant.jostRegular),
-                ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomTextWidget(
+                text: 'New Password',
+                style: TextStyle(
+                    fontFamily: Constant.jostRegular,
+                    fontSize: 13,
+                    color: Constant.chatBubbleGreen),
               ),
-              SizedBox(
-                height: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  'New Password',
-                  style: TextStyle(
-                      fontFamily: Constant.jostRegular,
-                      fontSize: 13,
-                      color: Constant.chatBubbleGreen),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Container(
-                  height: 35,
-                  child: TextFormField(
-                    obscureText: _isHidden,
-                    focusNode: passwordFocusNode,
-                    textInputAction: TextInputAction.next,
-                    controller: passwordTextEditingController,
-                    onChanged: (String value) {
-                      passwordValue = passwordTextEditingController.text;
-                    },
-                    onFieldSubmitted: (text) {
-                      FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
-                    },
-                    style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
-                    cursorColor: Constant.bubbleChatTextView,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                      hintStyle: TextStyle(fontSize: 15, color: Colors.black),
-                      filled: true,
-                      fillColor: Constant.locationServiceGreen,
-                      suffixIcon: IconButton(
-                        onPressed: _togglePasswordVisibility,
-                        icon: Image.asset(_isHidden
-                            ? Constant.hidePassword
-                            : Constant.showPassword),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Consumer<ChangePasswordVisibilityInfo>(
+                builder: (context, data, child) {
+                  return Container(
+                    height: 35,
+                    child: CustomTextFormField(
+                      obscureText: data.isHidden(),
+                      focusNode: passwordFocusNode,
+                      textInputAction: TextInputAction.next,
+                      controller: passwordTextEditingController,
+                      onChanged: (String value) {
+                        passwordValue = passwordTextEditingController.text;
+                      },
+                      onFieldSubmitted: (text) {
+                        FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+                      },
+                      style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
+                      cursorColor: Constant.bubbleChatTextView,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                        hintStyle: TextStyle(fontSize: 15, color: Colors.black),
+                        filled: true,
+                        fillColor: Constant.locationServiceGreen,
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordVisibility,
+                          icon: Image.asset(data.isHidden()
+                              ? Constant.hidePassword
+                              : Constant.showPassword),
+                        ),
+                        suffixIconConstraints: BoxConstraints(
+                          minHeight: 30,
+                          maxHeight: 35,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderSide: BorderSide(
+                                color: Constant.editTextBoarderColor, width: 1)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderSide: BorderSide(
+                                color: Constant.editTextBoarderColor, width: 1)),
                       ),
-                      suffixIconConstraints: BoxConstraints(
-                        minHeight: 30,
-                        maxHeight: 35,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                              color: Constant.editTextBoarderColor, width: 1)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                              color: Constant.editTextBoarderColor, width: 1)),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
-              SizedBox(
-                height: 30,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomTextWidget(
+                text: 'Confirm Password',
+                style: TextStyle(
+                    fontFamily: Constant.jostRegular,
+                    fontSize: 13,
+                    color: Constant.chatBubbleGreen),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  'Confirm Password',
-                  style: TextStyle(
-                      fontFamily: Constant.jostRegular,
-                      fontSize: 13,
-                      color: Constant.chatBubbleGreen),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Container(
-                  height: 35,
-                  child: TextFormField(
-                    obscureText: _isConfirmPasswordHidden,
-                    focusNode: confirmPasswordFocusNode,
-                    onFieldSubmitted: (String value) {
-                      _clickedChangePasswordButton();
-                    },
-                    controller: confirmPasswordTextEditingController,
-                    onChanged: (String value) {
-                      confirmPasswordValue = confirmPasswordTextEditingController.text;
-                    },
-                    style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
-                    cursorColor: Constant.bubbleChatTextView,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                      hintStyle: TextStyle(fontSize: 15, color: Colors.black),
-                      filled: true,
-                      fillColor: Constant.locationServiceGreen,
-                      suffixIcon: IconButton(
-                        onPressed: _toggleConfirmPasswordVisibility,
-                        icon: Image.asset(_isConfirmPasswordHidden
-                            ? Constant.hidePassword
-                            : Constant.showPassword),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Container(
+                height: 35,
+                child: Consumer<ChangeConfirmPasswordVisibilityInfo>(
+                  builder: (context, data, child) {
+                    return CustomTextFormField(
+                      obscureText: data.isConfirmPasswordHidden(),
+                      focusNode: confirmPasswordFocusNode,
+                      onFieldSubmitted: (String value) {
+                        _clickedChangePasswordButton();
+                      },
+                      controller: confirmPasswordTextEditingController,
+                      onChanged: (String value) {
+                        confirmPasswordValue = confirmPasswordTextEditingController.text;
+                      },
+                      style: TextStyle(fontSize: 15, fontFamily: Constant.jostMedium),
+                      cursorColor: Constant.bubbleChatTextView,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                        hintStyle: TextStyle(fontSize: 15, color: Colors.black),
+                        filled: true,
+                        fillColor: Constant.locationServiceGreen,
+                        suffixIcon: IconButton(
+                          onPressed: _toggleConfirmPasswordVisibility,
+                          icon: Image.asset(data.isConfirmPasswordHidden()
+                              ? Constant.hidePassword
+                              : Constant.showPassword),
+                        ),
+                        suffixIconConstraints: BoxConstraints(
+                          minHeight: 30,
+                          maxHeight: 35,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderSide: BorderSide(
+                                color: Constant.editTextBoarderColor, width: 1)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderSide: BorderSide(
+                                color: Constant.editTextBoarderColor, width: 1)),
                       ),
-                      suffixIconConstraints: BoxConstraints(
-                        minHeight: 30,
-                        maxHeight: 35,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                              color: Constant.editTextBoarderColor, width: 1)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                              color: Constant.editTextBoarderColor, width: 1)),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Visibility(
-                visible: _isShowAlert,
-                child: Container(
-                  margin: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    children: [
-                      Image(
-                        image: AssetImage(Constant.warningPink),
-                        width: 17,
-                        height: 17,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        alertMessage,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Constant.pinkTriggerColor,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 80,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: BouncingWidget(
-                  onPressed: () {
-                    _clickedChangePasswordButton();
+                    );
                   },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Consumer<ChangePasswordErrorInfo>(
+              builder: (context, data, child) {
+                return Visibility(
+                  visible: data.isShowAlert(),
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Color(0xffafd794),
-                      borderRadius: BorderRadius.circular(30),
+                    margin: EdgeInsets.only(left: 20, right: 10),
+                    child: Row(
+                      children: [
+                        Image(
+                          image: AssetImage(Constant.warningPink),
+                          width: 17,
+                          height: 17,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        CustomTextWidget(
+                         text: data.getErrorMessage(),
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Constant.pinkTriggerColor,
+                              fontFamily: Constant.jostRegular),
+                        ),
+                      ],
                     ),
-                    child: Center(
-                      child: Text(
-                        'Change Password',
-                        textScaleFactor: MediaQuery.of(context)
-                            .textScaleFactor
-                            .clamp(Constant.minTextScaleFactor,
-                                Constant.maxTextScaleFactor),
-                        style: TextStyle(
-                            color: Constant.bubbleChatTextView,
-                            fontSize: 15,
-                            fontFamily: Constant.jostMedium),
-                      ),
+                  ),
+                );
+              },
+            ),
+            SizedBox(
+              height: 80,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: BouncingWidget(
+                onPressed: () {
+                  _clickedChangePasswordButton();
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Color(0xffafd794),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Center(
+                    child: CustomTextWidget(
+                      text: 'Change Password',
+                      style: TextStyle(
+                          color: Constant.bubbleChatTextView,
+                          fontSize: 15,
+                          fontFamily: Constant.jostMedium),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -290,28 +288,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     FocusScope.of(context).requestFocus(FocusNode());
     passwordValue = passwordTextEditingController.text.trim();
     confirmPasswordValue = confirmPasswordTextEditingController.text.trim();
+
+    var changePasswordErrorInfo = Provider.of<ChangePasswordErrorInfo>(context, listen: false);
+
     if (passwordValue == null ||
         passwordValue.length < 8 ||
         !Utils.validatePassword(passwordValue)) {
-      setState(() {
-        alertMessage = Constant.signUpAlertMessage;
-        _isShowAlert = true;
-      });
+
+      changePasswordErrorInfo.updateErrorInfo(true, Constant.signUpAlertMessage);
     } else if (confirmPasswordValue == null ||
         confirmPasswordValue.length < 8 ||
         !Utils.validatePassword(confirmPasswordValue)) {
-      setState(() {
-        alertMessage = Constant.signUpAlertMessage;
-        _isShowAlert = true;
-      });
+      changePasswordErrorInfo.updateErrorInfo(true, Constant.signUpAlertMessage);
     } else if (passwordValue != confirmPasswordValue) {
-      setState(() {
-        alertMessage = Constant.passwordNotMatchMessage;
-        _isShowAlert = true;
-      });
-
+      changePasswordErrorInfo.updateErrorInfo(true, Constant.passwordNotMatchMessage);
     } else {
-      _isShowAlert = false;
+      changePasswordErrorInfo.updateErrorInfo(false, Constant.blankString);
       Utils.showApiLoaderDialog(context,
           networkStream: _changePasswordBloc.changePasswordDataStream,
           tapToRetryFunction: () {
@@ -326,7 +318,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     var responseData = await _changePasswordBloc.sendChangePasswordData(widget.changePasswordArgumentModel.emailValue, passwordValue);
     if (responseData is String) {
       if (responseData == Constant.success) {
-        _isShowAlert = false;
+        var changePasswordErrorInfo = Provider.of<ChangePasswordErrorInfo>(context, listen: false);
+        changePasswordErrorInfo.updateErrorInfo(false, Constant.blankString);
         if(!widget.changePasswordArgumentModel.isFromSignUp)
           Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
         else
@@ -343,4 +336,40 @@ class ChangePasswordArgumentModel {
   bool isFromSignUp;
 
   ChangePasswordArgumentModel({this.emailValue, this.isFromSignUp = false});
+}
+
+class ChangePasswordVisibilityInfo with ChangeNotifier {
+  bool _isHidden = true;
+
+  bool isHidden() => _isHidden;
+
+  updateIsHidden(bool isHidden) {
+    _isHidden = isHidden;
+    notifyListeners();
+  }
+}
+
+class ChangeConfirmPasswordVisibilityInfo with ChangeNotifier {
+  bool _isConfirmPasswordHidden = true;
+
+  bool isConfirmPasswordHidden ()=> _isConfirmPasswordHidden;
+
+  updateIsConfirmPasswordHidden(bool isConfirmPasswordHidden) {
+    _isConfirmPasswordHidden = isConfirmPasswordHidden;
+    notifyListeners();
+  }
+}
+
+class ChangePasswordErrorInfo with ChangeNotifier {
+  bool _isShowAlert = false;
+  String _errorMessage = Constant.blankString;
+
+  bool isShowAlert() => _isShowAlert;
+  String getErrorMessage() => _errorMessage;
+
+  updateErrorInfo(bool isShowAlert, String errorMessage) {
+    _isShowAlert = isShowAlert;
+    _errorMessage = errorMessage;
+    notifyListeners();
+  }
 }

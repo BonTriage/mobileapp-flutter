@@ -3,6 +3,8 @@ import 'package:mobile/blocs/LoginScreenBloc.dart';
 import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormField.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('build func for login screen');
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -95,8 +98,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            Constant.migraineMentor,
+                          CustomTextWidget(
+                            text: Constant.migraineMentor,
                             style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontSize: 24,
@@ -112,16 +115,16 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           children: <Widget>[
                             Container(
                               height: 35,
-                              child: TextFormField(
+                              child: CustomTextFormField(
                                 onEditingComplete: () {
                                   emailValue = emailTextEditingController.text;
                                 },
-                                onFieldSubmitted: (String value) {
+                                onFieldSubmitted: (value) {
                                   emailValue = emailTextEditingController.text;
                                   FocusScope.of(context).requestFocus(FocusNode());
                                 },
                                 controller: emailTextEditingController,
-                                onChanged: (String value) {
+                                onChanged: (value) {
                                   emailValue = emailTextEditingController.text;
                                 },
                                 keyboardType: TextInputType.emailAddress,
@@ -156,8 +159,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                Constant.email,
+                              child: CustomTextWidget(
+                                text: Constant.email,
                                 style: TextStyle(
                                     fontFamily: Constant.jostRegular,
                                     fontSize: 13,
@@ -177,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     height: 35,
                                     child: Consumer<PasswordHiddenInfo>(
                                       builder: (context, data, child) {
-                                        return TextFormField(
+                                        return CustomTextFormField(
                                           obscureText: data.isHidden(),
                                           onEditingComplete: () {
                                             passwordValue = passwordTextEditingController.text;
@@ -235,8 +238,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Text(
-                                      Constant.password,
+                                    child: CustomTextWidget(
+                                      text: Constant.password,
                                       style: TextStyle(
                                           fontFamily: Constant.jostRegular,
                                           fontSize: 13,
@@ -262,8 +265,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text(
-                                          data.getErrorMessage(),
+                                        CustomTextWidget(
+                                          text: data.getErrorMessage(),
                                           style: TextStyle(
                                               fontSize: 13,
                                               color: Constant.pinkTriggerColor,
@@ -286,8 +289,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     onTap: () {
                                       _forgotPasswordClicked();
                                     },
-                                    child: Text(
-                                      Constant.forgotPassword,
+                                    child: CustomTextWidget(
+                                      text: Constant.forgotPassword,
                                       style: TextStyle(
                                           decoration: TextDecoration.underline,
                                           fontFamily: Constant.jostMedium,
@@ -320,8 +323,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     color: Constant.chatBubbleGreen,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Text(
-                                    !data.isForgotPasswordClicked() ? Constant.login : Constant.next,
+                                  child: CustomTextWidget(
+                                    text: !data.isForgotPasswordClicked() ? Constant.login : Constant.next,
                                     style: TextStyle(
                                         color: Constant.bubbleChatTextView,
                                         fontSize: 14,
@@ -342,8 +345,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
-                                      Constant.register,
+                                    child: CustomTextWidget(
+                                      text: Constant.register,
                                       style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontSize: 14,
@@ -365,8 +368,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                       passwordTextEditingController.text = Constant.blankString;
                                       _sizeAnimationController.forward();
                                     },
-                                    child: Text(
-                                      "Switch to login",
+                                    child: CustomTextWidget(
+                                      text: "Switch to login",
                                       style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontSize: 14,

@@ -10,6 +10,7 @@ import 'package:mobile/util/CalendarUtil.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ConsecutiveSelectedDateWidget.dart';
@@ -168,16 +169,16 @@ class _MeScreenState extends State<MeScreen>
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Text(
-                                    _getNotificationText(data.getCurrentUserHeadacheModel()),
+                                  CustomTextWidget(
+                                    text: _getNotificationText(data.getCurrentUserHeadacheModel()),
                                     style: TextStyle(
                                         color: Constant.bubbleChatTextView,
                                         fontFamily: Constant.jostRegular,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
                                   ),
-                                  Text(
-                                    _getNotificationBottomText(data.getCurrentUserHeadacheModel()),
+                                  CustomTextWidget(
+                                    text: _getNotificationBottomText(data.getCurrentUserHeadacheModel()),
                                     style: TextStyle(
                                         color: Constant.bubbleChatTextView,
                                         fontFamily: Constant.jostMedium,
@@ -232,8 +233,8 @@ class _MeScreenState extends State<MeScreen>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'THIS WEEK:',
+                                      CustomTextWidget(
+                                        text: 'THIS WEEK:',
                                         style: TextStyle(
                                             fontSize: 12,
                                             color: Constant.chatBubbleGreen,
@@ -245,8 +246,8 @@ class _MeScreenState extends State<MeScreen>
                                               null);
                                           Utils.saveDataInSharedPreference(Constant.isSeeMoreClicked, 'true');
                                         },
-                                        child: Text(
-                                          'SEE MORE >',
+                                        child: CustomTextWidget(
+                                          text: 'SEE MORE >',
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Constant.chatBubbleGreen,
@@ -264,8 +265,8 @@ class _MeScreenState extends State<MeScreen>
                                     children: [
                                       TableRow(children: [
                                         Center(
-                                          child: Text(
-                                            'Su',
+                                          child: CustomTextWidget(
+                                            text: 'Su',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -275,8 +276,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'M',
+                                          child: CustomTextWidget(
+                                            text: 'M',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -286,8 +287,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'Tu',
+                                          child: CustomTextWidget(
+                                            text: 'Tu',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -297,8 +298,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'W',
+                                          child: CustomTextWidget(
+                                            text: 'W',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -308,8 +309,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'Th',
+                                          child: CustomTextWidget(
+                                            text: 'Th',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -319,8 +320,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'F',
+                                          child: CustomTextWidget(
+                                            text: 'F',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -330,8 +331,8 @@ class _MeScreenState extends State<MeScreen>
                                           ),
                                         ),
                                         Center(
-                                          child: Text(
-                                            'Sa',
+                                          child: CustomTextWidget(
+                                            text: 'Sa',
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 color: Constant
@@ -376,8 +377,8 @@ class _MeScreenState extends State<MeScreen>
                         children: [
                           Consumer<UserNameInfo>(
                             builder: (context, data, child) {
-                              return Text(
-                                'Hey ${data.getUserName()}!',
+                              return CustomTextWidget(
+                                text: 'Hey ${data.getUserName()}!',
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -388,8 +389,8 @@ class _MeScreenState extends State<MeScreen>
                               );
                             },
                           ),
-                          Text(
-                              '\nWhat’s been\ngoing on today?',
+                          CustomTextWidget(
+                              text: '\nWhat’s been\ngoing on today?',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 18,
@@ -417,8 +418,8 @@ class _MeScreenState extends State<MeScreen>
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      'Log Day',
+                                    child: CustomTextWidget(
+                                      text: 'Log Day',
                                       style: TextStyle(
                                           color: Constant.bubbleChatTextView,
                                           fontSize: 15,
@@ -458,8 +459,8 @@ class _MeScreenState extends State<MeScreen>
                             child: Center(
                               child: Consumer<CurrentUserHeadacheInfo>(
                                 builder: (context, data, child) {
-                                  return Text(
-                                    _getHeadacheButtonText(data.getCurrentUserHeadacheModel()),
+                                  return CustomTextWidget(
+                                    text: _getHeadacheButtonText(data.getCurrentUserHeadacheModel()),
                                     style: TextStyle(
                                         color: Constant.bubbleChatTextView,
                                         fontSize: 15,

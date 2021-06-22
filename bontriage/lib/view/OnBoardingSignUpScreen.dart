@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormField.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+
+import 'CustomTextWidget.dart';
 
 class OnBoardingSignUpScreen extends StatefulWidget {
   @override
@@ -81,9 +84,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       Container(
                         margin: EdgeInsets.only(top: 80),
                         child: Center(
-                          child: Text(
-                            Constant.signUp,
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          child: CustomTextWidget(
+                            text: Constant.signUp,
                             style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontSize: 24,
@@ -94,9 +96,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        Constant.secureMigraineMentorAccount,
-                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                      CustomTextWidget(
+                        text: Constant.secureMigraineMentorAccount,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Constant.chatBubbleGreen,
@@ -115,7 +116,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           children: <Widget>[
                             Container(
                               height: 35,
-                              child: TextFormField(
+                              child: CustomTextFormField(
                                 focusNode: _emailFocusNode,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {
@@ -161,9 +162,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                Constant.email,
-                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              child: CustomTextWidget(
+                                text: Constant.email,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: Constant.jostRegular,
@@ -178,7 +178,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               height: 35,
                               child: Consumer<PasswordVisibilityInfo>(
                                 builder: (context, data, child) {
-                                  return TextFormField(
+                                  return CustomTextFormField(
                                     focusNode: _passwordFocusNode,
                                     obscureText: data.isHidden(),
                                     onFieldSubmitted: (String value) {
@@ -239,9 +239,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                Constant.password,
-                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              child: CustomTextWidget(
+                                text: Constant.password,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: Constant.jostRegular,
@@ -270,9 +269,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text(
-                                    data.getErrorMessage(),
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  CustomTextWidget(
+                                    text: data.getErrorMessage(),
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Constant.pinkTriggerColor,
@@ -312,9 +310,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           Expanded(
                             child: Wrap(
                               children: [
-                                Text(
-                                  "I agree to the ",
-                                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                CustomTextWidget(
+                                  text: "I agree to the ",
                                   style: TextStyle(
                                       height: 1.3,
                                       fontFamily: Constant.jostRegular,
@@ -326,9 +323,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                     Navigator.pushNamed(context, Constant.webViewScreenRouter, arguments: Constant.termsAndConditionUrl);
                                   },
                                   behavior: HitTestBehavior.translucent,
-                                  child: Text(
-                                    "Terms & Condition",
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  child: CustomTextWidget(
+                                    text: "Terms & Condition",
                                     style: TextStyle(
                                         height: 1.3,
                                         fontFamily: Constant.jostRegular,
@@ -337,9 +333,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                         color: Constant.chatBubbleGreen),
                                   ),
                                 ),
-                                Text(
-                                  " and ",
-                                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                CustomTextWidget(
+                                  text: " and ",
                                   style: TextStyle(
                                       height: 1.3,
                                       fontFamily: Constant.jostRegular,
@@ -351,9 +346,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                     Navigator.pushNamed(context, Constant.webViewScreenRouter, arguments: Constant.privacyPolicyUrl);
                                   },
                                   behavior: HitTestBehavior.translucent,
-                                  child: Text(
-                                    "Privacy Policy",
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  child: CustomTextWidget(
+                                    text: "Privacy Policy",
                                     style: TextStyle(
                                         height: 1.3,
                                         fontFamily: Constant.jostRegular,
@@ -392,9 +386,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             ),
                           ),
                           Expanded(
-                            child: Text(
-                              Constant.emailFromMigraineMentor,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            child: CustomTextWidget(
+                              text: Constant.emailFromMigraineMentor,
                               style: TextStyle(
                                   height: 1.3,
                                   fontFamily: Constant.jostRegular,
@@ -418,9 +411,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             color: Constant.chatBubbleGreen,
                             borderRadius: BorderRadius.circular(24),
                           ),
-                          child: Text(
-                            Constant.signUp,
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          child: CustomTextWidget(
+                            text: Constant.signUp,
                             style: TextStyle(
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.bubbleChatTextView,
@@ -433,9 +425,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              Constant.or,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            child: CustomTextWidget(
+                              text: Constant.or,
                               style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostRegular,
@@ -449,9 +440,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               onTap: () {
                                 Navigator.pushNamed(context, Constant.loginScreenRouter, arguments: true);
                               },
-                              child: Text(
-                                Constant.signIn,
-                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              child: CustomTextWidget(
+                                text: Constant.signIn,
                                 style: TextStyle(
                                     color: Constant.chatBubbleGreen,
                                     fontFamily: Constant.jostBold,
@@ -471,9 +461,8 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           onTap: () {
                             Utils.navigateToExitScreen(context);
                           },
-                          child: Text(
-                            Constant.cancel,
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          child: CustomTextWidget(
+                            text: Constant.cancel,
                             style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontSize: 16,

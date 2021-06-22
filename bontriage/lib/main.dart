@@ -462,7 +462,25 @@ class MyApp extends StatelessWidget {
             }
           case Constant.changePasswordScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: ChangePasswordScreen(changePasswordArgumentModel: settings.arguments), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                widget: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => ChangePasswordVisibilityInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => ChangeConfirmPasswordVisibilityInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => ChangePasswordErrorInfo(),
+                    ),
+                  ],
+                  child: ChangePasswordScreen(
+                    changePasswordArgumentModel: settings.arguments,
+                  ),
+                ),
+                routeSettings: routeSettings,
+              );
             }
           case TabNavigatorRoutes.pdfScreenRoute:
             {
