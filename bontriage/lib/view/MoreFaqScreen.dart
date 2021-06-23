@@ -30,8 +30,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                       Navigator.of(context).pop();
                     },
                     child: Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Constant.moreBackgroundColor,
@@ -74,7 +73,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              Constant.questionOne,
+                              Constant.faqQuestion1,
                               style: TextStyle(
                                 color: Constant.addCustomNotificationTextColor,
                                 fontSize: 16,
@@ -83,7 +82,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              Constant.anInsightfulAndWellWorded,
+                              Constant.faqAnswer1,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -101,7 +100,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              Constant.theSecondQuestion,
+                              Constant.faqQuestion2,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -110,7 +109,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              Constant.hereIsASimple,
+                              Constant.faqAnswer2,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -128,7 +127,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              Constant.whatIfMyQuestion,
+                              Constant.faqQuestion3,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -137,7 +136,61 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              Constant.aMoreComplicated,
+                              Constant.faqAnswer3,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium
+                              ),
+                            ),
+                            Divider(
+                              height: 30,
+                              thickness: 0.5,
+                              color: Constant.locationServiceGreen,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              Constant.faqQuestion4,
+                              style: TextStyle(
+                                  color: Constant.addCustomNotificationTextColor,
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium
+                              ),
+                            ),
+                            SizedBox(height: 5,),
+                            Text(
+                              Constant.faqAnswer4,
+                              style: TextStyle(
+                                  color: Constant.locationServiceGreen,
+                                  fontSize: 14,
+                                  fontFamily: Constant.jostMedium
+                              ),
+                            ),
+                            Divider(
+                              height: 30,
+                              thickness: 0.5,
+                              color: Constant.locationServiceGreen,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              Constant.faqQuestion5,
+                              style: TextStyle(
+                                  color: Constant.addCustomNotificationTextColor,
+                                  fontSize: 16,
+                                  fontFamily: Constant.jostMedium
+                              ),
+                            ),
+                            SizedBox(height: 5,),
+                            Text(
+                              Constant.faqAnswer5,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -149,6 +202,7 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height:20,),
                 ],
               ),
             ),

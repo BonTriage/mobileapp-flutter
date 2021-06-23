@@ -31,6 +31,7 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
   bool _locationServicesSwitchState;
   AnimationController _animationController;
   bool _isCheckingLocation;
+  Position _position;
 
   @override
   void initState() {
@@ -54,6 +55,10 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
         widget.selectedAnswerCallBack(widget.question.tag, Constant.blankString);
       }
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getLocationPosition();
+    });
   }
 
   @override
@@ -99,20 +104,15 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
                 CupertinoSwitch(
                   value: _locationServicesSwitchState,
                   onChanged: (bool state) {
-                    if(!_isCheckingLocation) {
-                      if (state) {
-                        setState(() {
-                          _locationServicesSwitchState = state;
-                        });
-                        _checkLocationPermission();
-                      } else {
-                        setState(() {
-                          _locationServicesSwitchState = state;
-                          /*widget.selectedAnswerCallBack(widget.question.tag,
+                    if (state) {
+                      _checkLocationPermission();
+                    } else {
+                      setState(() {
+                        _locationServicesSwitchState = state;
+                        /*widget.selectedAnswerCallBack(widget.question.tag,
                               _locationServicesSwitchState.toString());*/
-                          widget.removeSelectedAnswerCallback(widget.question.tag);
-                        });
-                      }
+                        widget.removeSelectedAnswerCallback(widget.question.tag);
+                      });
                     }
                   },
                   activeColor: Constant.chatBubbleGreen.withOpacity(0.6),
@@ -139,27 +139,44 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
   }
 
   Future<void> _checkLocationPermission() async {
-    _isCheckingLocation = true;
-    Position position = await Utils.determinePosition();
+    if(_position == null) {
+      Utils.showApiLoaderDialog(context);
+      /*_position = await Utils.determinePosition();
+      Navigator.pop(context);*/
 
-    if(position != null) {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.openLocationSettings();
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        Navigator.pop(context);
+        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Location permissions to BonTriage. If you want to access Location, please grant permission.','Permission Required!','Not now','Allow');
+        if(result == 'Yes') {
+          Geolocator.openAppSettings();
+        }
+      } else {
+        _position = await Utils.determinePosition();
+        Navigator.pop(context);
+      }
+    }
+
+    if(_position != null) {
       setState(() {
         _locationServicesSwitchState = true;
-        /*widget.selectedAnswerCallBack(widget.question.tag,
-            _locationServicesSwitchState.toString());*/
-        _isCheckingLocation = false;
       });
       List<String> latLngList = [];
-      latLngList.add(position.latitude.toString());
-      latLngList.add(position.longitude.toString());
+      latLngList.add(_position.latitude.toString());
+      latLngList.add(_position.longitude.toString());
       widget.selectedAnswerCallBack(widget.question.tag, jsonEncode(latLngList));
-    } else {
-      setState(() {
-        _locationServicesSwitchState = false;
-        widget.selectedAnswerCallBack(widget.question.tag, Constant.blankString);
-        //widget.removeSelectedAnswerCallback(widget.question.tag);
-        _isCheckingLocation = false;
-      });
     }
+  }
+
+  void _getLocationPosition() async {
+    Position position = await Utils.determinePosition();
+    print('Position????$position');
+    _position = position;
   }
 }

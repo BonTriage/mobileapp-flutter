@@ -17,6 +17,46 @@ class LogDayChipList extends StatefulWidget {
 }
 
 class _LogDayChipListState extends State<LogDayChipList> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(widget.question.tag.contains('.dosage')) {
+      Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
+
+      if(selectedValueObj == null) {
+        widget.question.values.first.isSelected = true;
+
+        widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+      }
+    }
+
+    widget.question.values.forEach((element) {
+      if(element.isSelected) {
+        print('${widget.question.tag}????${element.text}');
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant LogDayChipList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    //print('MedicationDosageTag???${widget.question.tag}');
+
+
+    if(widget.question.tag.contains('.dosage')) {
+      Values selectedValueObj = widget.question.values.firstWhere((element) => element.isSelected, orElse: () => null);
+
+      if(selectedValueObj == null) {
+        widget.question.values.first.isSelected = true;
+
+        widget.onSelectCallback(widget.question.tag, jsonEncode(widget.question));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -34,16 +74,28 @@ class _LogDayChipListState extends State<LogDayChipList> {
                     widget.question.values[index].isSelected = false;
                     widget.question.values[index].isDoubleTapped = false;
                   } else {
+                    if(!widget.question.values[index].isValid) {
+                      widget.question.values.forEach((element) {
+                        element.isSelected = false;
+                        element.isDoubleTapped = false;
+                      });
+                    } else {
+                      Values inValidValue = widget.question.values.firstWhere((element) => !element.isValid, orElse: () => null);
+                      if(inValidValue != null) {
+                        inValidValue.isSelected = false;
+                        inValidValue.isDoubleTapped = false;
+                      }
+                    }
                     widget.question.values[index].isSelected = true;
                   }
                 } else {
                   widget.question.values.asMap().forEach((key, value) {
                     if (key == index) {
-                      if (value.isSelected) {
-                        value.isSelected = false;
-                        value.isDoubleTapped = false;
-                      } else {
+                      if (!value.isSelected) {
                         value.isSelected = true;
+                        //value.isDoubleTapped = false;
+                      } else {
+                        //value.isSelected = true;
                       }
                     } else {
                       value.isSelected = false;

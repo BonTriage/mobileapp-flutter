@@ -11,6 +11,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
 import 'package:mobile/view/ConfirmationDialog.dart';
+import 'package:mobile/view/CriticalUpdateVersionDialog.dart';
 import 'package:mobile/view/SecondStepCompassResultTutorials.dart';
 import 'package:mobile/view/TrendsScreenTutorialDialog.dart';
 import 'package:mobile/view/TriggerSelectionDialog.dart';
@@ -20,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main.dart';
 import 'constant.dart';
 
 class Utils {
@@ -396,6 +398,23 @@ class Utils {
 
   void getUserInformation() {}
 
+
+  static Future<void> clearAllDataFromDatabaseAndCache() async{
+    try {
+      await SignUpOnBoardProviders.db.deleteAllTableData();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      bool isVolume =
+          sharedPreferences.getBool(Constant.chatBubbleVolumeState) ?? true;
+      sharedPreferences.clear();
+      sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume);
+      sharedPreferences.setBool(Constant.tutorialsState, true);
+      flutterLocalNotificationsPlugin?.cancelAll();
+    } catch (e) {
+      print('in here $e');
+    }
+  }
+
   ///This method is used to show api loader dialog
   ///@param context: context of the screen where the dialog will be shown
   ///@param networkStream: this variable is used to listen to the network events
@@ -562,7 +581,7 @@ class Utils {
   }
 
   ///This method is used to show validation error message to the user
-  static void showValidationErrorDialog(BuildContext context, String errorMessage) {
+  static void showValidationErrorDialog(BuildContext context, String errorMessage, [String errorTitle]) {
     showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -570,7 +589,37 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ValidationErrorDialog(errorMessage: errorMessage,),
+          content: ValidationErrorDialog(errorMessage: errorMessage, errorTitle: errorTitle,),
+        );
+      },
+    );
+  }
+
+  ///This method is used to show Critical update  popup to the user
+  static void showCriticalUpdateDialog(BuildContext context,String errorMessage,) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: CriticalUpdateVersionDialog(errorMessage: errorMessage),
+        );
+      },
+    );
+  }
+
+  ///This method is used to show  error message to the user
+  static void showIOSSettingScreenDialog(BuildContext context, String errorMessage, [String errorTitle]) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          backgroundColor: Colors.transparent,
+          content: ValidationErrorDialog(errorMessage: errorMessage, errorTitle: errorTitle,),
         );
       },
     );
@@ -608,8 +657,12 @@ class Utils {
 
     permission = await Geolocator.checkPermission();
 
+    print('Permission???$permission');
+
     if (permission == LocationPermission.denied && permission != LocationPermission.deniedForever) {
+      print('before permission');
       permission = await Geolocator.requestPermission();
+      print('Permission???$permission');
       if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
         position = await Geolocator.getCurrentPosition();
       }
@@ -634,7 +687,7 @@ class Utils {
     );
   }
 
-  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle]) async{
+  static Future<dynamic> showConfirmationDialog(BuildContext context, String dialogContent, [String dialogTitle,String negativeOption,String positiveOption]) async{
     var result = await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -642,7 +695,7 @@ class Utils {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
           backgroundColor: Colors.transparent,
-          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,),
+          content: ConfirmationDialog(dialogContent: dialogContent, dialogTitle: dialogTitle,positiveOption: positiveOption,negativeOption: negativeOption,),
         );
       },
     );

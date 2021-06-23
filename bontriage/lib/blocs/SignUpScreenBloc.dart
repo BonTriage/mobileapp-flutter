@@ -40,7 +40,7 @@ class SignUpScreenBloc {
       String url = WebservicePost.qaServerUrl +
           'user/?' +
           "email=" +
-          emailValue +
+          emailValue.trim() +
           "&" +
           "check_user_exists=1";
       var apiResponse = await _signUpScreenRepository.serviceCall(url, RequestMethod.GET);

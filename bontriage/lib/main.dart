@@ -1,11 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/animations/ScaleInPageRoute.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/animations/SlideFromRightPageRoute.dart';
 import 'package:mobile/util/Utils.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddHeadacheSuccessScreen.dart';
@@ -54,15 +57,48 @@ import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
-import 'package:mobile/view/sign_up_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
 import 'view/SignUpOnBoardSplash.dart';
 import 'view/Splash.dart';
 import 'view/sign_up_on_board_screen.dart';
+import 'package:rxdart/subjects.dart';
+
+/// Streams are created so that app can respond to notification-related events
+/// since the plugin is initialised in the `main` function
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+    BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+    BehaviorSubject<String>();
+
+const MethodChannel platform =
+    MethodChannel('dexterx.dev/flutter_local_notifications_example');
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+class ReceivedNotification {
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize Firebase.
+  await Firebase.initializeApp();
+  await initNotification();
   Paint.enableDithering = true;
 
   ///Uncomment the below code when providing the build to tester for automation.
@@ -83,24 +119,52 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
     print('Message also contained a notification: ${message.notification}');
 
-    Utils.saveDataInSharedPreference('notification_data', message.data.toString());
+    Utils.saveDataInSharedPreference(
+        'notification_data', message.data.toString());
 
     //Utils.showValidationErrorDialog(context, 'From Background ${message.data.toString()}');
   }
 }
 
-Map<int, Color> color =
-{
-  50:Constant.chatBubbleGreen,
-  100:Constant.chatBubbleGreen,
-  200:Constant.chatBubbleGreen,
-  300:Constant.chatBubbleGreen,
-  400:Constant.chatBubbleGreen,
-  500:Constant.chatBubbleGreen,
-  600:Constant.chatBubbleGreen,
-  700:Constant.chatBubbleGreen,
-  800:Constant.chatBubbleGreen,
-  900:Constant.chatBubbleGreen,
+/// This Method will be use for initialize all android and IOs Plugin and other required variables.
+Future<void> initNotification() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+  final IOSInitializationSettings initializationSettingsIOS =
+      IOSInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+          onDidReceiveLocalNotification:
+              (int id, String title, String body, String payload) async {
+            didReceiveLocalNotificationSubject.add(ReceivedNotification(
+                id: 1,
+                title: 'BonTriage',
+                body: 'Log Kar diya',
+                payload: 'Reminder to log your day.'));
+          });
+  final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      print('notification payload: ' + payload);
+    }
+  });
+}
+
+Map<int, Color> color = {
+  50: Constant.chatBubbleGreen,
+  100: Constant.chatBubbleGreen,
+  200: Constant.chatBubbleGreen,
+  300: Constant.chatBubbleGreen,
+  400: Constant.chatBubbleGreen,
+  500: Constant.chatBubbleGreen,
+  600: Constant.chatBubbleGreen,
+  700: Constant.chatBubbleGreen,
+  800: Constant.chatBubbleGreen,
+  900: Constant.chatBubbleGreen,
 };
 
 class MyApp extends StatelessWidget {
@@ -128,217 +192,276 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: MaterialColor(0xffafd794, color),
       ),
-      home: Splash(),
+      home: Scaffold(body: Splash()),
       onGenerateRoute: (settings) {
         RouteSettings routeSettings = RouteSettings(name: settings.name);
         switch (settings.name) {
           case Constant.splashRouter:
             {
-              return SlideFromBottomPageRoute(widget: Splash(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: Splash(), routeSettings: routeSettings);
             }
           case Constant.welcomeScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: WelcomeScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: WelcomeScreen(), routeSettings: routeSettings);
             }
           case Constant.homeRouter:
             {
-              return SlideFromRightPageRoute(widget: HomeScreen(homeScreenArgumentModel: settings.arguments), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget:
+                      HomeScreen(homeScreenArgumentModel: settings.arguments),
+                  routeSettings: routeSettings);
             }
           case Constant.loginRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
-            }
-          case Constant.signUpRouter:
-            {
-              return SlideFromBottomPageRoute(widget: SignUpScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: LoginScreen(
+                    isFromSignUp: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardSplashRouter:
             {
-              return SlideFromBottomPageRoute(widget: SignUpOnBoardSplash(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: SignUpOnBoardSplash(), routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardStartAssessmentRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: SignUpOnBoardStartAssessment(), routeSettings: routeSettings);
+                  widget: SignUpOnBoardStartAssessment(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpNameScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: SignUpNameScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: SignUpNameScreen(), routeSettings: routeSettings);
             }
           case Constant.signUpAgeScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: SignUpAgeScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: SignUpAgeScreen(), routeSettings: routeSettings);
             }
           case Constant.signUpLocationServiceRouter:
             {
-              return SlideFromRightPageRoute(widget: SignUpLocationServices(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: SignUpLocationServices(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardProfileQuestionRouter:
             {
-              return SlideFromBottomPageRoute(widget: SignUpOnBoardScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: SignUpOnBoardScreen(), routeSettings: routeSettings);
             }
           case Constant.signUpFirstStepHeadacheResultRouter:
             {
-              return ScaleInPageRoute(widget: SignUpFirstStepCompassResult(), routeSettings: routeSettings);
+              return ScaleInPageRoute(
+                  widget: SignUpFirstStepCompassResult(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardPersonalizedHeadacheResultRouter:
             {
               return ScaleInPageRoute(
-                  widget: SignUpOnBoardPersonalizedHeadacheCompass(), routeSettings: routeSettings);
+                  widget: SignUpOnBoardPersonalizedHeadacheCompass(),
+                  routeSettings: routeSettings);
             }
           case Constant.partTwoOnBoardScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: PartTwoOnBoardScreens(
-                    partTwoOnBoardArgumentModel: settings.arguments,
-                  ),
+                widget: PartTwoOnBoardScreens(
+                  partTwoOnBoardArgumentModel: settings.arguments,
+                ),
                 routeSettings: routeSettings,
               );
             }
           case Constant.partThreeOnBoardScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: PartThreeOnBoardScreens(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: PartThreeOnBoardScreens(),
+                  routeSettings: routeSettings);
             }
           case Constant.loginScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: LoginScreen(
+                    isFromSignUp: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
           case Constant.onBoardingScreenSignUpRouter:
             {
-              return SlideFromRightPageRoute(widget: OnBoardingSignUpScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: OnBoardingSignUpScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpSecondStepHeadacheResultRouter:
             {
-              return ScaleInPageRoute(widget: SignUpSecondStepCompassResult(), routeSettings: routeSettings);
+              return ScaleInPageRoute(
+                  widget: SignUpSecondStepCompassResult(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter:
             {
               return ScaleInPageRoute(
-                  widget: SignUpOnBoardSecondStepPersonalizedHeadacheCompass(), routeSettings: routeSettings);
+                  widget: SignUpOnBoardSecondStepPersonalizedHeadacheCompass(),
+                  routeSettings: routeSettings);
             }
           case Constant.welcomeScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: WelcomeScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: WelcomeScreen(), routeSettings: routeSettings);
             }
           case Constant.welcomeStartAssessmentScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: WelcomeStartAssessmentScreen(), routeSettings: routeSettings);
+                  widget: WelcomeStartAssessmentScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.onBoardHeadacheInfoScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: OnBoardHeadacheInfoScreen(), routeSettings: routeSettings);
+                  widget: OnBoardHeadacheInfoScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.partOneOnBoardScreenTwoRouter:
             {
-              return SlideFromRightPageRoute(widget: PartOneOnBoardScreenTwo(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: PartOneOnBoardScreenTwo(),
+                  routeSettings: routeSettings);
             }
           case Constant.onBoardCreateAccountScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: OnBoardCreateAccount(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: OnBoardCreateAccount(), routeSettings: routeSettings);
             }
           case Constant.prePartTwoOnBoardScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: PrePartTwoOnBoardScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: PrePartTwoOnBoardScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.onBoardHeadacheNameScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: OnBoardHeadacheNameScreen(), routeSettings: routeSettings);
+                  widget: OnBoardHeadacheNameScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.partTwoOnBoardMoveOnScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: PartTwoOnBoardMoveOnScreen(), routeSettings: routeSettings);
+                  widget: PartTwoOnBoardMoveOnScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.prePartThreeOnBoardScreenRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: PrePartThreeOnBoardScreen(), routeSettings: routeSettings);
+                  widget: PrePartThreeOnBoardScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardBubbleTextViewRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: SignUpOnBoardBubbleTextView(), routeSettings: routeSettings);
+                  widget: SignUpOnBoardBubbleTextView(),
+                  routeSettings: routeSettings);
             }
           case Constant.postPartThreeOnBoardRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: PostPartThreeOnBoardScreen(), routeSettings: routeSettings);
+                  widget: PostPartThreeOnBoardScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.postNotificationOnBoardRouter:
             {
               return SlideFromRightPageRoute(
-                  widget: PostNotificationOnBoardScreen(), routeSettings: routeSettings);
+                  widget: PostNotificationOnBoardScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.notificationScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: NotificationScreen(), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: NotificationScreen(), routeSettings: routeSettings);
             }
           case Constant.headacheStartedScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: HeadacheStartedScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: HeadacheStartedScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.currentHeadacheProgressScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: CurrentHeadacheProgressScreen(currentUserHeadacheModel: settings.arguments,), routeSettings: routeSettings);
+                  widget: CurrentHeadacheProgressScreen(
+                    currentUserHeadacheModel: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
           case Constant.addHeadacheOnGoingScreenRouter:
             {
               final Widget widget = AddHeadacheOnGoingScreen(
                 currentUserHeadacheModel: settings.arguments,
               );
-              return SlideFromBottomPageRoute(widget: widget, routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: widget, routeSettings: routeSettings);
             }
 
           case Constant.logDayScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: LogDayScreen(logDayScreenArgumentModel: settings.arguments), routeSettings: routeSettings);
-
+              return SlideFromBottomPageRoute(
+                  widget: LogDayScreen(
+                      logDayScreenArgumentModel: settings.arguments),
+                  routeSettings: routeSettings);
             }
           case Constant.addHeadacheSuccessScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: AddHeadacheSuccessScreen(), routeSettings: routeSettings);
+                  widget: AddHeadacheSuccessScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.logDaySuccessScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: LogDaySuccessScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: LogDaySuccessScreen(), routeSettings: routeSettings);
             }
           case Constant.profileCompleteScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: ProfileComplete(), routeSettings: routeSettings);
-
+              return SlideFromRightPageRoute(
+                  widget: ProfileComplete(), routeSettings: routeSettings);
             }
           case Constant.notificationTimerRouter:
             {
-              return SlideFromBottomPageRoute(widget: NotificationTimer(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: NotificationTimer(), routeSettings: routeSettings);
             }
           case Constant.calendarTriggersScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CalendarTriggersScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: CalendarTriggersScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.calendarSeverityScreenRouter:
             {
               return SlideFromBottomPageRoute(
-                  widget: CalendarIntensityScreen(), routeSettings: routeSettings);
+                  widget: CalendarIntensityScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.logDayNoHeadacheScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: LogDayNoHeadacheScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: LogDayNoHeadacheScreen(),
+                  routeSettings: routeSettings);
             }
           case Constant.calenderScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CalendarScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: CalendarScreen(), routeSettings: routeSettings);
             }
           case Constant.onCalendarHeadacheLogDayDetailsScreenRouter:
             {
               return SlideFromBottomPageRoute(
                   widget: CalendarHeadacheLogDayDetailsScreen(
-                dateTime: settings.arguments,
-              ), routeSettings: routeSettings);
+                    dateTime: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
 
           case Constant.onBoardExitScreenRouter:
@@ -348,23 +471,42 @@ class MyApp extends StatelessWidget {
                   widget: OnBoardExitScreen(
                       isAlreadyLoggedIn: (isUserAlreadyLoggedIn != null)
                           ? isUserAlreadyLoggedIn
-                          : false), routeSettings: routeSettings);
+                          : false),
+                  routeSettings: routeSettings);
             }
           case Constant.compassScreenRouter:
             {
-              return SlideFromBottomPageRoute(widget: CompassScreen(), routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                  widget: CompassScreen(), routeSettings: routeSettings);
             }
           case Constant.webViewScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: WebViewScreen(url: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: WebViewScreen(
+                    url: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
           case Constant.otpValidationScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: OtpValidationScreen(otpValidationArgumentModel: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: OtpValidationScreen(
+                    otpValidationArgumentModel: settings.arguments,
+                  ),
+                  routeSettings: routeSettings);
             }
           case Constant.changePasswordScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: ChangePasswordScreen(changePasswordArgumentModel: settings.arguments), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(
+                  widget: ChangePasswordScreen(
+                      changePasswordArgumentModel: settings.arguments),
+                  routeSettings: routeSettings);
+            }
+          case TabNavigatorRoutes.pdfScreenRoute:
+            {
+              return SlideFromBottomPageRoute(
+                  widget: PDFScreen(base64String: settings.arguments),
+                  routeSettings: routeSettings);
             }
         }
         return null;

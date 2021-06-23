@@ -161,7 +161,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                       ),
                     ],
                   );
-                } else {
+                } else if(snapshot.data is RecordsTrendsDataModel) {
                   recordsTrendsDataModel = snapshot.data;
                   if (selectedHeadacheName == null) {
                     List<HeadacheListDataModel> headacheListModelData =
@@ -194,6 +194,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if (currentIndex != 0) {
                                     setState(() {
@@ -232,6 +233,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 width: 60,
                               ),
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if (currentIndex != 3) {
                                     setState(() {
@@ -325,20 +327,6 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                   ),
                                 ),
                               ),
-                              /*Container(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Constant.backgroundTransparentColor,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12)),
-                      ),
-                      child: Image(
-                        image: AssetImage(Constant.lineGraph),
-                        width: 15,
-                        height: 15,
-                      ),
-                ),*/
                             ],
                           ),
                           Expanded(
@@ -390,17 +378,10 @@ class _TrendsScreenState extends State<TrendsScreen> {
                       ),
                     ],
                   );
+                }else {
+                  return Container();
                 }
-              } else if (snapshot.hasError) {
-                return NetworkErrorScreen(
-                  errorMessage: snapshot.error.toString(),
-                  tapToRetryFunction: () {
-                    Utils.showApiLoaderDialog(context);
-                    /* requestService(firstDayOfTheCurrentMonth,
-                      lastDayOfTheCurrentMonth, selectedHeadacheName);*/
-                  },
-                );
-              } else {
+              }else {
                 return Container();
               }
             }),
@@ -599,18 +580,20 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
     recordsTrendsDataModel.medication.forEach((medicationElement) {
       medicationElement.data.forEach((dataElement) {
-        var medicationDotName = medicationsListData.firstWhere(
-            (element) => element.dotName == dataElement.medication,
-            orElse: () => null);
-        if (medicationDotName == null) {
-          medicationsListData.add(TrendsFilterModel(
-              dotName: dataElement.medication,
-              occurringDateList: [medicationElement.date],
-              numberOfOccurrence: 1));
-        } else {
-          medicationDotName.occurringDateList.add(medicationElement.date);
-          medicationDotName.numberOfOccurrence++;
-        }
+        dataElement.medication.forEach((medicationDataElement) {
+          var medicationDotName = medicationsListData.firstWhere(
+                  (element) => element.dotName == medicationDataElement,
+              orElse: () => null);
+          if (medicationDotName == null) {
+            medicationsListData.add(TrendsFilterModel(
+                dotName: medicationDataElement,
+                occurringDateList: [medicationElement.date],
+                numberOfOccurrence: 1));
+          } else {
+            medicationDotName.occurringDateList.add(medicationElement.date);
+            medicationDotName.numberOfOccurrence++;
+          }
+        });
       });
     });
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/models/LocalQuestionnaire.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/UserAddHeadacheLogModel.dart';
@@ -24,6 +26,8 @@ class SignUpOnBoardProviders {
   static const String TABLE_USER_PROFILE_INFO = "userProfileInfo";
   static const String TABLE_USER_CURRENT_HEADACHE = 'userCurrentHeadache';
   static const String TABLE_TUTORIAL = 'tutorialTable';
+  static const String NOTIFICATION_JSON = 'notificationJson';
+
 
   static const String TABLE_ADD_HEADACHE = "addHeadache";
   static const String HEADACHE_TYPE = "headacheType";
@@ -38,6 +42,8 @@ class SignUpOnBoardProviders {
   static const String USER_PROFILE_INFO_MODEL = "userProfileInfoModel";
   static const String USER_CURRENT_HEADACHE_JSON = "userCurrentHeadacheJson";
   static const String TUTORIAL_ID = "tutorialId";
+
+  static const String USER_NOTIFICATION = "userNotification";
 
   //For Log Day Screen
   static const String TABLE_LOG_DAY = "tableLogDay";
@@ -96,12 +102,55 @@ class SignUpOnBoardProviders {
           "$USER_ID TEXT PRIMARY KEY,"
           "$USER_CURRENT_HEADACHE_JSON TEXT"
           ")");
+
       batch.execute("CREATE TABLE $TABLE_TUTORIAL ("
           "$TUTORIAL_ID INT(10),"
-          "$USER_ID TEXT"
+          "$USER_ID TEXT"   ")");
+
+      batch.execute("CREATE TABLE $USER_NOTIFICATION ("
+          "$USER_ID TEXT PRIMARY KEY,"
+          "$NOTIFICATION_JSON TEXT"
           ")");
       await batch.commit();
     });
+  }
+
+  Future<void> insertUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+    print('insertUserNotifications1');
+    final db = await database;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION where $USER_ID = ${userProfileInfoData.userId}');
+
+    if (userInfoListData.length == 0){
+   // var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+   // if(notificationListData == null || notificationListData.length == 0){
+      Map<String, dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+      await db.insert(USER_NOTIFICATION, localNotificationMap);
+    }else{
+      await updateUserNotifications(localNotificationListData);
+    }
+  }
+
+  Future<void> updateUserNotifications(List<LocalNotificationModel> localNotificationListData) async {
+    final db = await database;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    Map<String,dynamic> localNotificationMap = {USER_ID:userProfileInfoData.userId, NOTIFICATION_JSON:jsonEncode(localNotificationListData)};
+    await db.update(
+      USER_NOTIFICATION,
+      localNotificationMap,
+      where: "$USER_ID = ?",
+      whereArgs: [userProfileInfoData.userId],
+    );
+  }
+
+  Future<List<LocalNotificationModel>> getAllLocalNotificationsData() async {
+    final db = await database;
+    List<LocalNotificationModel> localNotificationListData;
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    List<dynamic> userInfoListData = await db.rawQuery('SELECT * FROM $USER_NOTIFICATION where $USER_ID = ${userProfileInfoData.userId}');
+    if (userInfoListData.length != 0)
+     localNotificationListData =  List<LocalNotificationModel>.from(jsonDecode(userInfoListData[0][NOTIFICATION_JSON]).map((x) => LocalNotificationModel.fromJson(x)));
+    return localNotificationListData;
   }
 
   Future<UserProgressDataModel> insertUserProgress(
@@ -349,6 +398,11 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_LOG_DAY);
   }
 
+  Future<void> deleteAllNotificationFromDatabase() async {
+    final db = await database;
+    await db.delete(USER_NOTIFICATION);
+  }
+
   Future<void> deleteAllTableData() async {
     final db = await database;
     await db.delete(TABLE_QUESTIONNAIRES);
@@ -357,6 +411,7 @@ class SignUpOnBoardProviders {
     await db.delete(TABLE_LOG_DAY);
     await db.delete(TABLE_ADD_HEADACHE);
     await db.delete(TABLE_USER_CURRENT_HEADACHE);
+    await db.delete(USER_NOTIFICATION);
   }
 
   Future<void> deleteOnBoardQuestionnaireProgress(String eventType) async {

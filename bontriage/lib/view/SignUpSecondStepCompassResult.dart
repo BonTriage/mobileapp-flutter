@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpSecondStepCompassBloc.dart';
 import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:mobile/models/UserGenerateReportDataModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
+import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -20,7 +24,7 @@ class SignUpSecondStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpSecondStepCompassResultState
-    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin {
+    extends State<SignUpSecondStepCompassResult> with TickerProviderStateMixin, WidgetsBindingObserver {
   SignUpSecondStepCompassBloc _bloc;
   bool darkMode = false;
   double numberOfFeatures = 4;
@@ -51,12 +55,16 @@ class _SignUpSecondStepCompassResultState
     [0, 0, 0, 0]
   ];
 
+  bool _isPdfScreenOpened = false;
+
   @override
   void initState() {
     super.initState();
 
     _compassTutorialModel = CompassTutorialModel();
     _compassTutorialModel.isFromOnBoard = true;
+
+    WidgetsBinding.instance.addObserver(this);
 
     _bloc = SignUpSecondStepCompassBloc();
     _scrollController = ScrollController();
@@ -85,6 +93,19 @@ class _SignUpSecondStepCompassResultState
       });
       _bloc.fetchFirstLoggedScoreData();
     });
+
+    _listenToViewReportStream();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      print('booleanvalue???$_isPdfScreenOpened');
+      if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened)
+        TextToSpeechRecognition.speechToText(bubbleChatTextView[_buttonPressedValue]);
+    }
   }
 
   @override
@@ -104,6 +125,7 @@ class _SignUpSecondStepCompassResultState
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
     _bloc.dispose();
     super.dispose();
@@ -111,10 +133,12 @@ class _SignUpSecondStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [0, 2, 4, 6, 8, 10];
-    if (!isEndOfOnBoard && isVolumeOn)
-      TextToSpeechRecognition.speechToText(
-          bubbleChatTextView[_buttonPressedValue]);
+    print('inbuild func');
+    const ticks = [2, 4, 6, 8, 10];
+    print('_isPdfScreenOpened????$_isPdfScreenOpened');
+    if (!isEndOfOnBoard && isVolumeOn && !_isPdfScreenOpened) {
+      TextToSpeechRecognition.speechToText(bubbleChatTextView[_buttonPressedValue]);
+    }
     var features = [
       "A",
       "B",
@@ -307,8 +331,8 @@ class _SignUpSecondStepCompassResultState
                                               ),
                                               Center(
                                                 child: Container(
-                                                  width: 36,
-                                                  height: 36,
+                                                  width: 38,
+                                                  height: 38,
                                                   child: Center(
                                                     child: Text(
                                                       _userScoreData,
@@ -634,14 +658,24 @@ class _SignUpSecondStepCompassResultState
                   ),
                   Container(
                     child: Center(
-                      child: Text(
-                        Constant.viewDetailedReport,
-                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 13,
-                            decoration: TextDecoration.underline,
-                            fontFamily: Constant.jostMedium),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _isPdfScreenOpened = true;
+                          _checkStoragePermission().then((value) {
+                            if(value)
+                              _getUserReport();
+                          });
+                        },
+                        child: Text(
+                          Constant.viewDetailedReport,
+                          textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          style: TextStyle(
+                              color: Constant.locationServiceGreen,
+                              fontSize: 13,
+                              decoration: TextDecoration.underline,
+                              fontFamily: Constant.jostMedium),
+                        ),
                       ),
                     ),
                   )
@@ -679,7 +713,7 @@ class _SignUpSecondStepCompassResultState
               fontFamily: Constant.jostRegular,
               color: Constant.bubbleChatTextView)));
       list.add(TextSpan(
-          text: 'Cluster Headache.',
+          text: 'Cluster Headache. ',
           style: TextStyle(
               height: 1.3,
               fontSize: 13,
@@ -780,7 +814,8 @@ class _SignUpSecondStepCompassResultState
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     userHeadacheName = sharedPreferences.get(Constant.userHeadacheName);
     userHeadacheTextView =
-        'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache.We\'ll learn more about this as you log your headache and daily habits in the app';
+        'Based on what you entered, it looks like your $userHeadacheName could potentially be considered by doctors to be a Cluster Headache. We\'ll learn more about this as you log your headache and daily habits in the app';
+    _bubbleTextViewList[0] = userHeadacheTextView;
   }
 
   void _getCompassAxesFromDatabase(RecordsCompassAxesResultModel recordsCompassAxesResultModel) async {
@@ -862,8 +897,7 @@ class _SignUpSecondStepCompassResultState
           userFrequencyValue, userDurationValue);
   }
 
-  void setCompassDataScore(int userIntensityValue, int userDisabilityValue,
-      int userFrequencyValue, int userDurationValue) {
+  void setCompassDataScore(int userIntensityValue, int userDisabilityValue, int userFrequencyValue, int userDurationValue) {
     int userMaxDurationValue;
     var intensityScore = userIntensityValue / 10 * 100.0;
     var disabilityScore = userDisabilityValue.toInt() / 4 * 100.0;
@@ -883,5 +917,64 @@ class _SignUpSecondStepCompassResultState
     print('userTotalScore???$userTotalScore');
     _userScoreData = userTotalScore.round().toString();
     print('First Step User ScoreData$_userScoreData');
+  }
+
+  ///Method to get permission of the storage.
+  Future<bool> _checkStoragePermission() async {
+    if(Platform.isAndroid) {
+      return await Constant.platform.invokeMethod('getStoragePermission');
+    } else {
+      return true;
+    }
+  }
+
+  void _getUserReport() {
+    DateTime startDateTime = DateTime.now();
+    DateTime endDateTime;
+
+    startDateTime = DateTime(startDateTime.year, startDateTime.month, 1);
+
+    int totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(startDateTime.month, startDateTime.month);
+
+    endDateTime = DateTime(startDateTime.year, startDateTime.month, totalDaysInCurrentMonth);
+
+    _bloc.initNetworkStreamController();
+    Utils.showApiLoaderDialog(
+      context,
+      networkStream: _bloc.networkDataStream,
+      tapToRetryFunction: () {
+        _bloc.enterDummyDataToNetworkStream();
+        _bloc.getUserGenerateReportData(
+            '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+            '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+            userHeadacheName);
+      }
+    );
+    _bloc.getUserGenerateReportData(
+        '${startDateTime.year}-${startDateTime.month}-${startDateTime.day}T00:00:00Z',
+        '${endDateTime.year}-${endDateTime.month}-${endDateTime.day}T00:00:00Z',
+        userHeadacheName);
+  }
+
+  ///Method to listen to view report stream
+  void _listenToViewReportStream() {
+    _bloc.viewReportStream.listen((reportModel) {
+      if(reportModel is UserGenerateReportDataModel) {
+        _navigateToPdfScreen(reportModel.map.base64);
+      }
+    });
+  }
+
+  ///Method to navigate to pdf screen
+  void _navigateToPdfScreen(String base64String) {
+    _isPdfScreenOpened = true;
+    TextToSpeechRecognition.speechToText("");
+    Future.delayed(Duration(milliseconds: 300), () async {
+      await Navigator.pushNamed(context, TabNavigatorRoutes.pdfScreenRoute, arguments: base64String);
+      Future.delayed(Duration(milliseconds: 350), () {
+        _isPdfScreenOpened = false;
+      });
+    });
   }
 }

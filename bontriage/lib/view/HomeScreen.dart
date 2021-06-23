@@ -2,9 +2,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
+import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/NotificationUtil.dart';
 import 'package:mobile/util/TabNavigator.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
@@ -71,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    _insertDataIntoLocalDatabase();
   }
 
   /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -180,6 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   currentIndex = index;
                   saveCurrentIndexOfTabBar(currentIndex);
                 });
+              } else {
+                int lastIndex = navigatorKey.length - 1;
+                if(index == lastIndex) {
+                  Navigator.popUntil(navigatorKey[index].currentContext, ModalRoute.withName(TabNavigatorRoutes.moreRoot));
+                }
               }
             },
           ),
@@ -247,9 +256,25 @@ class _HomeScreenState extends State<HomeScreen> {
         return resultOfActionSheet;
         break;
       case Constant.dateRangeActionSheet:
-        var resultOfActionSheet = await showCupertinoModalPopup(
+        /*var resultOfActionSheet = await showCupertinoModalPopup(
             context: context,
-            builder: (context) => DateRangeActionSheet());
+            builder: (context) => DateRangeActionSheet());*/
+        DateTime initialDateTime = DateTime(argument.year, argument.month, 1);
+        DateTime miniDateTime = DateTime(DateTime.now().year, DateTime.now().month - 2, 1);
+        var resultOfActionSheet = await showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+            context: context,
+            builder: (context) => DateTimePicker(
+              cupertinoDatePickerMode: CupertinoDatePickerMode.date,
+              onDateTimeSelected: null,
+              initialDateTime: initialDateTime,
+              miniDateTime: miniDateTime,
+              isFromHomeScreen: true,
+            ));
         return resultOfActionSheet;
         break;
       case Constant.compassHeadacheTypeActionSheet:
@@ -316,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
     print('Device Token Start???${await _fcm.getToken()}???End');
-    Utils.showValidationErrorDialog(context, 'Terminated App ${sharedPreferences.getString('notification_data')}');
+  //  Utils.showValidationErrorDialog(context, 'Terminated App ${sharedPreferences.getString('notification_data')}');
     sharedPreferences.remove('notification_data');
   }
 
@@ -383,4 +408,54 @@ class _HomeScreenState extends State<HomeScreen> {
     return resultFromActionSheet;
   }
 
+  void _insertDataIntoLocalDatabase() async {
+    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String isNotificationInitiallyAdded = prefs.getString(Constant.isNotificationInitiallyAdded) ?? Constant.blankString;
+
+    if(notificationListData == null && isNotificationInitiallyAdded.isEmpty) {
+      prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
+      List<LocalNotificationModel> allNotificationListData = [];
+
+      DateTime currentDateTime = DateTime.now();
+
+      DateTime defaultNotificationTime = DateTime(
+        currentDateTime.year,
+        currentDateTime.month,
+        currentDateTime.day,
+        6,
+        0,
+        0,
+        0,
+        0
+      );
+
+      allNotificationListData.add(LocalNotificationModel(
+        notificationName: 'Daily Log',
+        notificationType: 'Daily',
+        notificationTime: defaultNotificationTime.toIso8601String(),
+        isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.add(LocalNotificationModel(
+          notificationName: 'Medication',
+          notificationType: 'Daily',
+          notificationTime: defaultNotificationTime.toIso8601String(),
+          isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.add(LocalNotificationModel(
+          notificationName: 'Exercise',
+          notificationType: 'Daily',
+          notificationTime: defaultNotificationTime.toIso8601String(),
+          isCustomNotificationAdded: false
+      ));
+
+      allNotificationListData.forEach((localNotificationModel) {
+        NotificationUtil.notificationSelected(localNotificationModel, defaultNotificationTime);
+      });
+
+      await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+    }
+  }
 }

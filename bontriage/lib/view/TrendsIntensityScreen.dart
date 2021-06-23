@@ -272,12 +272,12 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               child: Column(
                 children: [
                   SizedBox(
-                    height: 5,
+                    height: 18,
                   ),
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 5),
+                        padding: const EdgeInsets.only(left: 5, top: 10),
                         child: Container(
                           width: 60,
                           child: Column(
@@ -288,7 +288,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: getDotsWidget()),
@@ -306,6 +306,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -341,6 +342,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
@@ -352,6 +354,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(
@@ -540,49 +543,49 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
         colors: setBarChartColor(y1),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y2,
         colors: setBarChartColor(y2),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y3,
         colors: setBarChartColor(y3),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y4,
         colors: setBarChartColor(y4),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y5,
         colors: setBarChartColor(y5),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y6,
         colors: setBarChartColor(y6),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
       BarChartRodData(
         y: y7,
         colors: setBarChartColor(y7),
         width: width,
         borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+            topLeft: Radius.circular(3), topRight: Radius.circular(3)),
       ),
     ]);
   }
@@ -720,7 +723,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
     if (clickedValue != null) {
       if (widget.editGraphViewFilterModel.headacheTypeRadioButtonSelected ==
           Constant.viewSingleHeadache) {
-        if (clickedValue > 1 && clickedValue <= 3) {
+        if (clickedValue >= 1 && clickedValue <= 3) {
           return Constant.mildTriggerColor;
         } else if (clickedValue >= 4 && clickedValue <= 7) {
           return Constant.moderateTriggerColor;
@@ -736,7 +739,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   }
 
   List<Color> setBarChartColor(double barChartValue) {
-    if (barChartValue > 1 && barChartValue <= 3) {
+    if (barChartValue >= 1 && barChartValue <= 3) {
       return [Constant.mildTriggerColor];
     } else if (barChartValue >= 4 && barChartValue <= 7) {
       return [Constant.moderateTriggerColor];
@@ -1185,7 +1188,7 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
       if (i > 2) {
         break;
       }
-      widgetListData.add(Padding(
+      widgetListData.add(Container(
         padding: const EdgeInsets.only(left: 5, right: 10),
         child: Row(
           children: _getDots(dotTextModelDataList[i]),
@@ -1200,17 +1203,17 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
 
   List<BarChartRodStackItem> setRodStack(
       double firstMultipleHeadache1, double secondMultipleHeadache1) {
-    var maxValue, minValue = 0.0;
+    //var maxValue, minValue = 0.0;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
-      maxValue = firstMultipleHeadache1;
-      minValue = secondMultipleHeadache1;
+      /*maxValue = firstMultipleHeadache1;
+      minValue = secondMultipleHeadache1;*/
       return [
         BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
         BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
       ];
     } else {
-      minValue = firstMultipleHeadache1;
-      maxValue = secondMultipleHeadache1;
+      /*minValue = firstMultipleHeadache1;
+      maxValue = secondMultipleHeadache1;*/
       return [
         BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
         BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),

@@ -92,13 +92,14 @@ class _SecondStepCompassResultTutorialsState
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
-                        width: 20,
-                        height: 20,
+                        width: 22,
+                        height: 22,
                       ),
                     ),
                   ],
@@ -235,7 +236,8 @@ class _SecondStepCompassResultTutorialsState
       );
       textSpanList.add(
         TextSpan(
-            text: 'from ${widget.compassTutorialModel.previousMonthDuration} hours in the previous month.',
+            text: 'from ${_getDurationValue(widget.compassTutorialModel
+                .previousMonthDuration)} in the previous month.',
             style: _normalTextStyle
         ),
       );
@@ -301,7 +303,7 @@ class _SecondStepCompassResultTutorialsState
       );
       textSpanList.add(
         TextSpan(
-            text: 'from ${widget.compassTutorialModel.previousMonthFrequency} days in the previous month.',
+            text: 'from ${widget.compassTutorialModel.previousMonthFrequency} times in the previous month.',
             style: _normalTextStyle
         ),
       );

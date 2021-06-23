@@ -188,34 +188,40 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                               if (Utils.validationForOnBoard(
                                   signUpOnBoardSelectedAnswersModel.selectedAnswers,
                                   currentQuestionListData[_currentPageIndex])) {
-                                setState(() {
-                                  double stepOneProgress =
-                                      1 / _pageViewWidgetList.length;
-                                  if (_progressPercent == 1) {
+                                double stepOneProgress =
+                                    1 / _pageViewWidgetList.length;
+                                if (_progressPercent == 1) {
+                                  int backQuestionIndex = _backQuestionIndexList.firstWhere((element) => element == _currentPageIndex, orElse: () => null);
+                                  if(backQuestionIndex == null)
                                     _backQuestionIndexList.add(_currentPageIndex);
-                                    moveUserToNextScreen();
-                                  } else {
-                                    //_currentPageIndex++;
-
-                                    _backQuestionIndexList.add(_currentPageIndex);
+                                  moveUserToNextScreen();
+                                } else {
+                                  setState(() {
+                                    _backQuestionIndexList.add(
+                                        _currentPageIndex);
                                     _fetchQuestionTag();
 
-                                    print('QuestionTAG?????' + currentQuestionListData[_currentPageIndex].tag);
+                                    print('QuestionTAG?????' +
+                                        currentQuestionListData[_currentPageIndex]
+                                            .tag);
 
                                     if (_currentPageIndex !=
                                         _pageViewWidgetList.length - 1)
-                                      _progressPercent = (_currentPageIndex + 1) * stepOneProgress;
+                                      _progressPercent =
+                                          (_currentPageIndex + 1) *
+                                              stepOneProgress;
                                     else {
                                       _progressPercent = 1;
                                     }
 
-                                    _pageController.animateToPage(_currentPageIndex,
+                                    _pageController.animateToPage(
+                                        _currentPageIndex,
                                         duration: Duration(milliseconds: 1),
                                         curve: Curves.easeIn);
-                                  }
-                                  if(_argumentName == Constant.clinicalImpressionShort1)
-                                    getCurrentQuestionTag(_currentPageIndex);
-                                });
+                                  });
+                                }
+                                if (_argumentName == Constant.clinicalImpressionShort1)
+                                  getCurrentQuestionTag(_currentPageIndex);
                               }
                               Future.delayed(Duration(milliseconds: 350), () {
                                 _isButtonClicked = false;
@@ -248,6 +254,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
     if (questionListData != null) {
       //This code is to two remove the infoClinicalImpression tag from clinical_impression event
       questionListData.removeWhere((element) => element.tag == 'infoClinicalImpression');
+
+      if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen)
+        questionListData.removeWhere((element) => element.tag == 'nameClinicalImpression');
 
       currentQuestionListData = questionListData;
       print(jsonEncode(currentQuestionListData));
@@ -284,7 +293,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
                       signUpOnBoardSelectedAnswersModel.selectedAnswers,
                   selectedAnswerCallBack: (currentTag, selectedUserAnswer) {
                     print(currentTag + selectedUserAnswer);
-                    selectedAnswerListData(currentTag, selectedUserAnswer);
+                    selectedAnswerListData(currentTag, selectedUserAnswer.trim());
                   },
                 )));
             break;
@@ -363,16 +372,14 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
   /// then we hit the API and save the all questions data in to the database. if not then we will fetch the all data from the local
   /// database of respective table.
   void requestService() async {
-    List<LocalQuestionnaire> localQuestionnaireData =
-        await SignUpOnBoardProviders.db
-            .getQuestionnaire(Constant.secondEventStep);
+    List<LocalQuestionnaire> localQuestionnaireData = await SignUpOnBoardProviders.db.getQuestionnaire(Constant.secondEventStep);
 
-    if (localQuestionnaireData != null && localQuestionnaireData.length > 0) {
-      signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc
-          .fetchDataFromLocalDatabase(localQuestionnaireData);
+    if (localQuestionnaireData != null && localQuestionnaireData.length > 0  && _argumentName == Constant.clinicalImpressionShort1) {
+      await _signUpOnBoardSecondStepBloc.fetchAllHeadacheListData(_argumentName, false);
+      signUpOnBoardSelectedAnswersModel = await _signUpOnBoardSecondStepBloc.fetchDataFromLocalDatabase(localQuestionnaireData);
     } else {
-      _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(_argumentName);
+      //_signUpOnBoardSecondStepBloc.fetchSignUpOnBoardSecondStepData(_argumentName);
+      _signUpOnBoardSecondStepBloc.fetchAllHeadacheListData(_argumentName, true);
     }
   }
 
@@ -384,7 +391,7 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
 
     if (!isDataBaseExists) {
       userProgressDataModel = await _signUpOnBoardSecondStepBloc
-          .fetchSignUpOnBoardSecondStepData(_argumentName);
+          .fetchAllHeadacheListData(_argumentName, true);
     } else {
       int userProgressDataCount = await SignUpOnBoardProviders.db
           .checkUserProgressDataAvailable(
@@ -460,19 +467,32 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
         selectedAnswersList.add(selectedAnswer);
     });
 
+    if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen) {
+      SelectedAnswers nameClinicalImpressionAnswer = signUpOnBoardSelectedAnswersModel
+          .selectedAnswers.firstWhere((element) =>
+      element.questionTag == 'nameClinicalImpression', orElse: () => null);
+
+      if(nameClinicalImpressionAnswer != null)
+        selectedAnswersList.add(nameClinicalImpressionAnswer);
+    }
+
     signUpOnBoardSelectedAnswersModel.selectedAnswers = selectedAnswersList;
 
-    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId);
-    if (response is String) {
+    var response = await _signUpOnBoardSecondStepBloc.sendSignUpSecondStepData(signUpOnBoardSelectedAnswersModel, widget.partTwoOnBoardArgumentModel.eventId, widget.partTwoOnBoardArgumentModel.isFromMoreScreen ?? false);
+    if (response is String && response != null) {
       if (response == Constant.success) {
         await SignUpOnBoardProviders.db
             .deleteOnBoardQuestionnaireProgress(Constant.secondEventStep);
         Navigator.pop(context);
         if (_argumentName == Constant.clinicalImpressionEventType) {
-          var userHeadacheName =
-          signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere(
-                  (model) => model.questionTag == "nameClinicalImpression");
-          Navigator.pop(context, userHeadacheName.answer);
+          if(widget.partTwoOnBoardArgumentModel.isFromMoreScreen ?? false) {
+            Navigator.pop(context, _signUpOnBoardSecondStepBloc.eventId);
+          } else {
+            var userHeadacheName = signUpOnBoardSelectedAnswersModel
+                .selectedAnswers.firstWhere((model) =>
+            model.questionTag == "nameClinicalImpression");
+            Navigator.pop(context, userHeadacheName.answer);
+          }
         } else {
           SelectedAnswers nameClinicalImpressionSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == "nameClinicalImpression", orElse: () => null);
           if(nameClinicalImpressionSelectedAnswer != null) {
@@ -482,6 +502,9 @@ class _PartTwoOnBoardScreensState extends State<PartTwoOnBoardScreens> {
           Navigator.pushReplacementNamed(context,
               Constant.signUpOnBoardSecondStepPersonalizedHeadacheResultRouter);
         }
+      } else {
+        Navigator.pop(context);
+        Utils.showValidationErrorDialog(context, response);
       }
     }
   }

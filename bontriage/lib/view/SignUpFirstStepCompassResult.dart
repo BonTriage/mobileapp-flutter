@@ -22,7 +22,7 @@ class SignUpFirstStepCompassResult extends StatefulWidget {
 }
 
 class _SignUpFirstStepCompassResultState
-    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin {
+    extends State<SignUpFirstStepCompassResult> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool darkMode = false;
   double numberOfFeatures = 4;
   double sliderValue = 1;
@@ -83,10 +83,21 @@ class _SignUpFirstStepCompassResultState
     getCompassAxesFromDatabase();
 
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.detached || state == AppLifecycleState.inactive){
+      TextToSpeechRecognition.stopSpeech();
+    }else if(state == AppLifecycleState.resumed){
+      TextToSpeechRecognition.speechToText(_bubbleTextViewList[_buttonPressedValue]);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
     super.dispose();
   }
@@ -114,7 +125,7 @@ class _SignUpFirstStepCompassResultState
 
   @override
   Widget build(BuildContext context) {
-    ticks = [0, 2, 4, 6, 8, 10];
+    ticks = [2, 4, 6, 8, 10];
     if (!isEndOfOnBoard && isVolumeOn)
       TextToSpeechRecognition.speechToText(
           _bubbleTextViewList[_buttonPressedValue]);
@@ -328,8 +339,8 @@ class _SignUpFirstStepCompassResultState
                                         ),
                                         Center(
                                           child: Container(
-                                            width: 36,
-                                            height: 36,
+                                            width: 38,
+                                            height: 38,
                                             child: Center(
                                               child: Text(
                                                 userScoreData,
@@ -655,6 +666,7 @@ class _SignUpFirstStepCompassResultState
     var frequencyScore = userFrequencyValue.toInt() / 31 * 100.0; ///93.54
     if (userDurationValue <= 1) {
       userMaxDurationValue = 1;
+
     } else if (userDurationValue > 1 && userDurationValue <= 24) {
       userMaxDurationValue = 24;
     } else if (userDurationValue > 24 && userDurationValue <= 72) {
@@ -669,4 +681,5 @@ class _SignUpFirstStepCompassResultState
     userScoreData = userTotalScore.round().toString();///29
     print('First Step User ScoreData$userScoreData');
   }
+
 }

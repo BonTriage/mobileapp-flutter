@@ -129,7 +129,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                                 keyboardType: TextInputType.emailAddress,
                                 controller: _emailTextEditingController,
                                 onChanged: (String value) {
-                                  _emailValue = _emailTextEditingController.text;
+                                  _emailValue = _emailTextEditingController.text.trim();
                                 },
                                 style: TextStyle(
                                     fontSize: 15,
@@ -490,7 +490,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
   /// This method will be use for to check validation of Email & Password. So if all validation is verified then we will move to
   /// this screen to next screen. If not then show alert to the user.
   void _signUpButtonClicked() {
-    _emailValue = _emailTextEditingController.text.trim();
+    _emailValue = _emailTextEditingController.text.trim().replaceAll(' ', Constant.blankString);
     _passwordValue = _passwordTextEditingController.text.trim();
     if (_emailValue != null &&
         _passwordValue != null &&

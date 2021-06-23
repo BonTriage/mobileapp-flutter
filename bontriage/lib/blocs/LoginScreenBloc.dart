@@ -7,6 +7,7 @@ import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/LoginScreenRepository.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
@@ -85,10 +86,12 @@ class LoginScreenBloc {
               if (messageValue == Constant.userNotFound) {
                 apiResponse = Constant.userNotFound;
               } else {
+
                 apiResponse = Constant.success;
               }
             }
           } else {
+            await Utils.clearAllDataFromDatabaseAndCache();
             UserProfileInfoModel userProfileInfoModel = UserProfileInfoModel();
             userProfileInfoModel =
                 UserProfileInfoModel.fromJson(jsonDecode(response));

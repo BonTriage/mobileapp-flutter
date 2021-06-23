@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
@@ -210,7 +212,7 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data == Constant.success) {
-              Future.delayed(Duration(milliseconds: 200), () {
+              Future.delayed(Duration(milliseconds: 0), () {
                 try {
                   _popDialog();
                 } catch (e) {}
@@ -282,7 +284,17 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                   Expanded(
                     child: NetworkErrorScreen(
                       errorMessage: snapshot.error.toString(),
-                      tapToRetryFunction: widget.tapToRetryFunction,
+                      tapToRetryFunction: () {
+                        widget.tapToRetryFunction();
+                       /* if(snapshot.error is NoInternetConnection) {
+                          widget.tapToRetryFunction();
+                        } else {
+                          Navigator.pop(context);
+                        }*/
+                      },
+
+
+                      isNeedToRetry: true,
                     ),
                   ),
                 ],
@@ -349,7 +361,6 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
     if (!isPopped) {
       bool mayBePop = await Navigator.maybePop(context);
       isPopped = true;
-
       print("may be pop $mayBePop");
       if (mayBePop) {
         Navigator.pop(context);

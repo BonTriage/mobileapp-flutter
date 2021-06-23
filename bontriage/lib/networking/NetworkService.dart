@@ -7,6 +7,8 @@ import 'AppException.dart';
 import 'RequestHeader.dart';
 import 'RequestMethod.dart';
 
+var client = http.Client();
+
 class NetworkService{
   String url;
   var requestMethod;
@@ -16,8 +18,11 @@ class NetworkService{
   NetworkService.getRequest(this.url,this.requestMethod);
 
   Future<dynamic> serviceCall() async {
-    var client = http.Client();
+
     http.Response response;
+    print('Url???$url');
+
+    var dateTime = DateTime.now();
     try{
       if (requestMethod == RequestMethod.GET) {
         response = await client.get(Uri.parse(url), headers: RequestHeader().createRequestHeaders());
@@ -27,11 +32,15 @@ class NetworkService{
       } else if (requestMethod == RequestMethod.DELETE) {
         response = await client.delete(Uri.parse(url), headers: RequestHeader().createRequestHeaders());
       }
-      print('Url???$url');
+      print('TimeTaken????${DateTime.now().difference(dateTime).inMilliseconds}');
       return  getApiResponse(response);
     } on SocketException {
       return NoInternetConnection("Please connect to internet");
+    } catch (e) {
+      print(e);
     }
+
+    //client.close();
   }
 
   dynamic getApiResponse(http.Response response){
@@ -39,13 +48,11 @@ class NetworkService{
     switch(response.statusCode) {
       case 200:
       case 201:
+      case 404:
+      case 401:
         return response.body;
       case 400:
         return BadRequestException();
-      case 401:
-        return UnauthorisedException();
-      case 404:
-        return response.body;
       case 500:
         return ServerResponseException();
       default:

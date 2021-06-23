@@ -282,9 +282,15 @@ class _TimeSectionState extends State<TimeSection>
             "endtime", Utils.getDateTimeInUtcFormat(_selectedEndTime));
       });
     } else {
-      Future.delayed(Duration(milliseconds: 500), () {
-        Utils.showValidationErrorDialog(context, 'Invalid End Time.');
-      });
+      if(!(dateTime.isBefore(currentDateTime) || dateTime.isAtSameMomentAs(currentDateTime))) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          Utils.showValidationErrorDialog(context, 'End Time cannot be greater than the current time.');
+        });
+      } else {
+        Future.delayed(Duration(milliseconds: 500), () {
+          Utils.showValidationErrorDialog(context, 'Invalid End Time.');
+        });
+      }
     }
     print(dateTime);
   }
@@ -561,10 +567,10 @@ class _TimeSectionState extends State<TimeSection>
                             "endtime", _selectedEndDateAndTime.toUtc().toIso8601String());
                       }*/
                       _selectedEndDate = DateTime.now();
+                      _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0, 0);
                       _selectedEndTime = _selectedEndDate;
                       _selectedEndDateAndTime = _selectedEndDate;
-                      widget.addHeadacheDateTimeDetailsData(
-                          "endtime", Utils.getDateTimeInUtcFormat(DateTime.now()));
+                      widget.addHeadacheDateTimeDetailsData("endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));
                     } else
                       widget.addHeadacheDateTimeDetailsData(
                           "endtime", Utils.getDateTimeInUtcFormat(_selectedEndDateAndTime));

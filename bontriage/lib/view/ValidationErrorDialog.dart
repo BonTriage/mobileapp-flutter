@@ -4,8 +4,9 @@ import 'package:mobile/util/constant.dart';
 
 class ValidationErrorDialog extends StatefulWidget {
   final String errorMessage;
+  final String errorTitle;
 
-  const ValidationErrorDialog({Key key, @required this.errorMessage}) : super(key: key);
+  const ValidationErrorDialog({Key key, @required this.errorMessage, this.errorTitle}) : super(key: key);
 
   @override
   _ValidationErrorDialogState createState() => _ValidationErrorDialogState();
@@ -45,7 +46,7 @@ class _ValidationErrorDialogState extends State<ValidationErrorDialog> {
                             ),
                             SizedBox(width: 5,),
                             Text(
-                              'Error!',
+                              widget.errorTitle ?? 'Error!',
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Constant.chatBubbleGreen,
@@ -58,13 +59,14 @@ class _ValidationErrorDialogState extends State<ValidationErrorDialog> {
                       Align(
                         alignment: Alignment.topRight,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             Navigator.pop(context);
                           },
                           child: Image(
                             image: AssetImage(Constant.closeIcon),
-                            width: 20,
-                            height: 20,
+                            width: 22,
+                            height: 22,
                           ),
                         ),
                       ),

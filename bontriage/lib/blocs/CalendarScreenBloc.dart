@@ -35,9 +35,9 @@ class CalendarScreenBloc {
   List<SignUpHeadacheAnswerListModel> userMonthTriggersData = [];
 
   CalendarScreenBloc({this.count = 0}) {
-    _calendarStreamController = StreamController<dynamic>();
-    _triggersStreamController = StreamController<dynamic>();
-    _networkStreamController  = StreamController<dynamic>();
+    _calendarStreamController = StreamController<dynamic>.broadcast();
+    _triggersStreamController = StreamController<dynamic>.broadcast();
+    _networkStreamController  = StreamController<dynamic>.broadcast();
     _calendarRepository = CalendarRepository();
   }
 

@@ -53,7 +53,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void didUpdateWidget(CalendarScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     getCurrentPositionOfTabBar();
-    print('in did update widget calendar screen');
+    print('In did update widget calendar screen');
   }
 
   @override
@@ -75,6 +75,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 1) {
                       setState(() {
@@ -110,6 +111,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   width: 60,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     if (currentIndex == 0) {
                       setState(() {
@@ -196,10 +198,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
      //setState(() {
-       pageViewWidgetList = [
-         CalendarTriggersScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink, openDatePickerCallback: widget.openDatePickerCallback,),
-         CalendarIntensityScreen(showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback:widget.navigateToOtherScreenCallback, refreshCalendarDataStream: refreshCalendarDataStream, refreshCalendarDataSink: refreshCalendarDataSink, openDatePickerCallback: widget.openDatePickerCallback,),
-       ];
+      if(pageViewWidgetList.length == 1) {
+        pageViewWidgetList = [
+          CalendarTriggersScreen(
+            showApiLoaderCallback: widget.showApiLoaderCallback,
+            navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+            refreshCalendarDataStream: refreshCalendarDataStream,
+            refreshCalendarDataSink: refreshCalendarDataSink,
+            openDatePickerCallback: widget.openDatePickerCallback,),
+          CalendarIntensityScreen(
+            showApiLoaderCallback: widget.showApiLoaderCallback,
+            navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,
+            refreshCalendarDataStream: refreshCalendarDataStream,
+            refreshCalendarDataSink: refreshCalendarDataSink,
+            openDatePickerCallback: widget.openDatePickerCallback,),
+        ];
+      }
      //});
       initPageViewSink.add('data');
     }

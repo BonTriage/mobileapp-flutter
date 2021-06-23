@@ -101,12 +101,13 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
   @override
   void didUpdateWidget(covariant CalendarTriggersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('in did update widget of calendar trigger screen');
+    print('In did update widget of calendar trigger screen');
     getCurrentPositionOfTabBar();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build of calendar trigger');
     super.build(context);
     return SingleChildScrollView(
       child: Column(
@@ -177,6 +178,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                   width: 30,
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     DateTime dateTime =
                                     DateTime(_dateTime.year, _dateTime.month + 1);
@@ -187,6 +189,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     } else {
                                       ///To:Do
                                       print("Not Allowed");
+                                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                     }
                                   },
                                   child: Padding(
@@ -352,6 +355,7 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     } else {
                                       ///To:Do
                                       print("Not Allowed");
+                                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                     }
                                   },
                                   child: Padding(

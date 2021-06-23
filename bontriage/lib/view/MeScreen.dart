@@ -64,12 +64,14 @@ class _MeScreenState extends State<MeScreen>
     currentYear = _dateTime.year;
     monthName = Utils.getMonthName(currentMonth);
 
-    var currentWeekDate =
-        _dateTime.subtract(new Duration(days: _dateTime.weekday));
+    var currentWeekDate = _dateTime.subtract(new Duration(days: _dateTime.weekday));
+    debugPrint('CurrentWeekDate????$currentWeekDate');
     firstDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, currentWeekDate.day);
+        currentWeekDate.month, currentWeekDate.year, currentWeekDate.day);
+
+    var currentWeekLastDate = currentWeekDate.add(Duration(days: 6));
     lastDayOfTheCurrentWeek = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-        currentMonth, currentYear, currentWeekDate.day + 6);
+        currentWeekLastDate.month, currentWeekLastDate.year, currentWeekLastDate.day);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.showApiLoaderCallback(_calendarScreenBloc.networkDataStream, () {
@@ -84,7 +86,7 @@ class _MeScreenState extends State<MeScreen>
     textSpanList = [
       TextSpan(
         text:
-            'When you’re on the home screen of the app, you’ll be able to log your day by pressing the ',
+            'When you\'re on the home screen of the app, you’ll be able to log your day by pressing the ',
         style: TextStyle(
             fontSize: 16,
             fontFamily: Constant.jostRegular,
@@ -101,7 +103,7 @@ class _MeScreenState extends State<MeScreen>
         ),
       ),
       TextSpan(
-        text: ' button and log your headaches by clicking the ',
+        text: ' button and log your headache by clicking the ',
         style: TextStyle(
             fontSize: 16,
             fontFamily: Constant.jostRegular,
@@ -132,8 +134,9 @@ class _MeScreenState extends State<MeScreen>
   @override
   void didUpdateWidget(covariant MeScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _getUserCurrentHeadacheData();
-    _getUserProfileDetails();
+    _getCurrentIndexOfTabBar();
+    _updateMeScreenData();
+    print('in did update widget of me screen.');
   }
 
   @override
@@ -360,12 +363,22 @@ class _MeScreenState extends State<MeScreen>
                       child: Column(
                         children: [
                           Text(
-                            'Hey ''$userName''!''\nWhat’s been\ngoing on today?',
+                            'Hey $userName!',
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: Constant.jostMedium,
                                 color: Constant.chatBubbleGreen),
+                          ),
+                          Text(
+                              '\nWhat’s been\ngoing on today?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: Constant.jostMedium,
+                                  color: Constant.chatBubbleGreen)
                           ),
                           SizedBox(
                             height: 15,
@@ -375,9 +388,10 @@ class _MeScreenState extends State<MeScreen>
                             children: [
                               BouncingWidget(
                                 key: _logDayGlobalKey,
-                                onPressed: () {
-                                  widget.navigateToOtherScreenCallback(
+                                onPressed: () async {
+                                 await widget.navigateToOtherScreenCallback(
                                       Constant.logDayScreenRouter, null);
+                                 _updateMeScreenData();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -497,6 +511,7 @@ class _MeScreenState extends State<MeScreen>
         await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     }
     _getUserCurrentHeadacheData();
+    _updateMeScreenData();
   }
 
   void requestService(
@@ -710,6 +725,8 @@ class _MeScreenState extends State<MeScreen>
 
     await widget.navigateToOtherScreenCallback(Constant.addHeadacheOnGoingScreenRouter, currentUserHeadacheModel);
     _getUserCurrentHeadacheData();
+
+    _updateMeScreenData();
   }
 
   String _getHeadacheButtonText() {
@@ -731,5 +748,26 @@ class _MeScreenState extends State<MeScreen>
   void _saveRecordTabBarPosition() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setInt(Constant.recordTabNavigatorState, 0);
+  }
+
+  void _getCurrentIndexOfTabBar() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    if(currentPositionOfTabBar == 0) {
+      _getUserCurrentHeadacheData();
+      _getUserProfileDetails();
+    }
+  }
+
+  void _updateMeScreenData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
+    
+    String updateMeScreenData = sharedPreferences.getString(Constant.updateMeScreenData);
+
+    if(currentPositionOfTabBar == 0 && updateMeScreenData == Constant.trueString) {
+      sharedPreferences.remove(Constant.updateMeScreenData);
+      await _calendarScreenBloc.fetchCalendarTriggersData(firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek);
+    }
   }
 }

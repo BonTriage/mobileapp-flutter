@@ -28,28 +28,33 @@ class _MigraineDaysVsHeadacheDaysDialogState extends State<MigraineDaysVsHeadach
                   Align(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Image(
                         image: AssetImage(Constant.closeIcon),
-                        width: 20,
-                        height: 20,
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      Constant.migraineDaysVsHeadacheDays,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Constant.chatBubbleGreen,
+                          fontFamily: Constant.jostMedium
                       ),
                     ),
                   ),
                   SizedBox(height: 10,),
                   Text(
-                    Constant.migraineDaysVsHeadacheDays,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Constant.chatBubbleGreen,
-                        fontFamily: Constant.jostMedium
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(
                     Constant.migraineDaysVsHeadacheDaysDialogText,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Constant.locationServiceGreen,
                         fontSize: 14,

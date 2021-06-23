@@ -52,18 +52,18 @@ class _RecordDayPageState extends State<RecordDayPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Visibility(
-            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
             child: SizedBox(
               height: 10,
             ),
           ),
           Visibility(
-            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+            visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Visibility(
-                  visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                  visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
                   child: Text(
                     'Note:',
                     style: TextStyle(
@@ -79,15 +79,17 @@ class _RecordDayPageState extends State<RecordDayPage>
                 ),
                 Flexible(
                   child: Visibility(
-                    visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null,
+                    visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
                     child: Text(
-                      widget.userHeadacheLogDayDetailsModel.logDayNote??"",
+                      widget.userHeadacheLogDayDetailsModel.logDayNote ?? Constant.blankString,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
                       style: TextStyle(
                           color: Constant
                               .addCustomNotificationTextColor,
                           fontFamily: Constant.jostRegular,
                           fontWeight: FontWeight.w500,
-                          fontSize: 14),
+                          fontSize: 14,),
                     ),
                   ),
                 )
@@ -172,7 +174,7 @@ class _RecordDayPageState extends State<RecordDayPage>
           height: 5,
         ),
         Text(
-          'Add info to better personalize your experience',
+          'Add info to better personalize your experience.',
           style: TextStyle(
               fontSize: 18,
               color: Constant.chatBubbleGreen60Alpha,

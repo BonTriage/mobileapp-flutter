@@ -6,9 +6,10 @@ class DateTimePicker extends StatefulWidget {
   final CupertinoDatePickerMode cupertinoDatePickerMode;
   final Function(DateTime) onDateTimeSelected;
   final DateTime initialDateTime;
+  final DateTime miniDateTime;
   final bool isFromHomeScreen;
 
-  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode, @required this.onDateTimeSelected, this.initialDateTime, this.isFromHomeScreen = false}) : super(key: key);
+  const DateTimePicker({Key key, @required this.cupertinoDatePickerMode, @required this.onDateTimeSelected, this.initialDateTime, this.miniDateTime, this.isFromHomeScreen = false}) : super(key: key);
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
@@ -93,7 +94,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
                           backgroundColor: Colors.transparent,
                           mode: widget.cupertinoDatePickerMode,
                           use24hFormat: false,
-                          minimumYear: 2015,
+                          minimumYear: (widget.miniDateTime != null) ? widget.miniDateTime.year : 2015,
+                          minimumDate: widget.miniDateTime,
                           maximumDate: (widget.cupertinoDatePickerMode != CupertinoDatePickerMode.time) ? DateTime.now() : null,
                           maximumYear: DateTime.now().year,
                           onDateTimeChanged: (dateTime) {

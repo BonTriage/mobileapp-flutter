@@ -115,13 +115,13 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                 child: BarChart(
                   BarChartData(
                     minY: 0,
-                    maxY: 30,
+                    maxY: 5,
                     groupsSpace: 10,
                     axisTitleData: FlAxisTitleData(
                         show: true,
                         leftTitle: AxisTitle(
                             showTitle: true,
-                            titleText: 'No. Headache Days per Month',
+                            titleText: 'Headache Frequency (Times)',
                             textStyle: TextStyle(
                                 color: Color(0xffCAD7BF),
                                 fontFamily: 'JostRegular',
@@ -175,7 +175,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                       show: true,
                       drawVerticalLine: true,
                       drawHorizontalLine: true,
-                      checkToShowHorizontalLine: (value) => value % 5 == 0,
+                      checkToShowHorizontalLine: (value) => value % 1 == 0,
                       getDrawingHorizontalLine: (value) {
                         if (value == 0) {
                           return FlLine(
@@ -230,19 +230,17 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                         getTitles: (value) {
                           if (value == 0) {
                             return '0';
+                          } else if (value == 1) {
+                            return '1';
+                          } else if (value == 2) {
+                            return '2';
+                          } else if (value == 3) {
+                            return '3';
+                          } else if (value == 4) {
+                            return '4';
                           } else if (value == 5) {
                             return '5';
-                          } else if (value == 10) {
-                            return '10';
-                          } else if (value == 15) {
-                            return '15';
-                          } else if (value == 20) {
-                            return '20';
-                          } else if (value == 25) {
-                            return '25';
-                          } else if (value == 30) {
-                            return '30';
-                          } else {
+                          }  else {
                             return '';
                           }
                         },
@@ -294,6 +292,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -328,6 +327,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
@@ -338,6 +338,7 @@ class _TrendsFrequencyScreenState extends State<TrendsFrequencyScreen> {
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(

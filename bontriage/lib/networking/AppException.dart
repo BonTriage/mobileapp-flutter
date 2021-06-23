@@ -17,15 +17,15 @@ class FetchDataException extends AppException {
 }
 
 class BadRequestException extends AppException {
-  BadRequestException([message]) : super(message, "Invalid Request: ");
+  BadRequestException([message]) : super(message ?? Constant.blankString, "Invalid Request: ");
 }
 
 class UnauthorisedException extends AppException {
-  UnauthorisedException([message]) : super(message, "Unauthorised: ");
+  UnauthorisedException([message]) : super(message ?? Constant.blankString, "Unauthorized Client Error");
 }
 
 class InvalidInputException extends AppException {
-  InvalidInputException([String message]) : super(message, "Invalid Input: ");
+  InvalidInputException([String message]) : super(message ?? Constant.blankString, "Invalid Input: ");
 }
 
 class ServerResponseException extends AppException{
@@ -33,6 +33,6 @@ class ServerResponseException extends AppException{
 }
 
 class NoInternetConnection extends AppException{
-  NoInternetConnection([String message]) : super(message, "No Internet Connection: ");
+  NoInternetConnection([String message]) : super(message ?? Constant.blankString, "No Internet Connection: ");
 }
 

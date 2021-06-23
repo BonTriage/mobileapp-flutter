@@ -173,6 +173,7 @@ class _RecordCalendarHeadacheSectionState
                                                 child: Text(
                                                   userHeadacheListData[i]
                                                       .headacheNote,
+                                                  overflow: TextOverflow.ellipsis,
                                                   maxLines: 3,
                                                   style: TextStyle(
                                                       color: Constant

@@ -45,6 +45,7 @@ class _AddHeadacheSuccessScreenState extends State<AddHeadacheSuccessScreen> {
                           Align(
                             alignment: Alignment.topRight,
                             child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
                               },

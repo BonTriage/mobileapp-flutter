@@ -170,6 +170,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       } else {
                                         ///To:Do
                                         print("Not Allowed");
+                                        Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                       }
                                     },
                                     child: Padding(
@@ -332,6 +333,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       } else {
                                         ///To:Do
                                         print("Not Allowed");
+                                        Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                                       }
                                     },
                                     child: Padding(
@@ -586,7 +588,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 44,
                         ),
                         Text(
-                          'Headache score between',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -632,7 +634,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 13,
                         ),
                         Text(
-                          'Headache score between',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -678,7 +680,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 30,
                         ),
                         Text(
-                          'Headache score',
+                          'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -688,7 +690,7 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                           width: 10,
                         ),
                         Text(
-                          '8 to 10',
+                          '8 - 10',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,

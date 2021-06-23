@@ -136,37 +136,33 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
               child: AnimatedSize(
                 vsync: this,
                 duration: Duration(milliseconds: 350),
-                child: CustomScrollBar(
-                  isAlwaysShown: false,
+                child: SingleChildScrollView(
                   controller: _scrollController,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    physics: BouncingScrollPhysics(),
-                    child: Wrap(
-                      spacing: 20,
-                      children: <Widget>[
-                        for (var i = 0; i < widget.question.values.length; i++)
-                          if (widget.question.values[i].isSelected)
-                            Chip(
-                              label: Text(widget.question.values[i].text,
-                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
-                              backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
-                              deleteIcon: IconButton(
-                                icon: new Image.asset('images/cross.png'),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.question.values[i].isSelected = false;
-                                  });
-                                  _valuesSelectedList.remove(
-                                      widget.question.values[i].text);
-                                  widget.selectAnswerCallback(
-                                      widget.question, _valuesSelectedList);
-                                },
-                              ),
-                              onDeleted: () {},
+                  physics: BouncingScrollPhysics(),
+                  child: Wrap(
+                    spacing: 20,
+                    children: <Widget>[
+                      for (var i = 0; i < widget.question.values.length; i++)
+                        if (widget.question.values[i].isSelected)
+                          Chip(
+                            label: Text(widget.question.values[i].text,
+                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
+                            backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
+                            deleteIcon: IconButton(
+                              icon: new Image.asset('images/cross.png'),
+                              onPressed: () {
+                                setState(() {
+                                  widget.question.values[i].isSelected = false;
+                                });
+                                _valuesSelectedList.remove(
+                                    widget.question.values[i].text);
+                                widget.selectAnswerCallback(
+                                    widget.question, _valuesSelectedList);
+                              },
                             ),
-                      ],
-                    ),
+                            onDeleted: () {},
+                          ),
+                    ],
                   ),
                 ),
               ),
@@ -323,6 +319,8 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
   String searchText = '';
   bool _isExtraDataAdded = false;
 
+  bool _isDoneButtonClicked = false;
+
   Color _getOptionTextColor(int index) {
     if (widget.question.values[index].isSelected) {
       return Constant.bubbleChatTextView;
@@ -383,6 +381,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: (){
+                        _isDoneButtonClicked = true;
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -523,5 +522,21 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _removeLastCustomValue();
+    super.dispose();
+  }
+
+  void _removeLastCustomValue() {
+    if(_isExtraDataAdded && !_isDoneButtonClicked) {
+      Values lastValue = widget.question.values.last;
+
+      if(lastValue.isNewlyAdded && !lastValue.isSelected) {
+        widget.question.values.removeLast();
+      }
+    }
   }
 }

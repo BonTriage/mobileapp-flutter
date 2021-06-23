@@ -311,6 +311,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -345,6 +346,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
@@ -355,6 +357,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(

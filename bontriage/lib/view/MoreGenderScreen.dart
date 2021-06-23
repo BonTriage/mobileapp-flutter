@@ -32,7 +32,9 @@ class _MoreGenderScreenState
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
 
-    _currentSelectedValue = _valuesList[0].text;
+    //_currentSelectedValue = _valuesList[0].text;
+
+    _currentSelectedValue = Constant.blankString;
 
     if(widget.selectedAnswerList != null) {
       _selectedAnswers = widget.selectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileGenderTag, orElse: () => null);
@@ -223,7 +225,16 @@ class _MoreGenderScreenState
         Navigator.pop(context);
       }
     } else {
-      Navigator.pop(context);
+      if(_currentSelectedValue != null) {
+        var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
+        if (result != null) {
+          if (result == Constant.saveAndExit) {
+            _selectedAnswers.answer = _currentSelectedValue;
+          }
+          Navigator.pop(context, result == Constant.saveAndExit);
+        }
+      } else
+        Navigator.pop(context);
     }
   }
 }

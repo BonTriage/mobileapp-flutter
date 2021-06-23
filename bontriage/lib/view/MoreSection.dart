@@ -19,8 +19,9 @@ class MoreSection extends StatefulWidget {
   final HeadacheTypeData headacheTypeData;
   final MoreTriggersArgumentModel moreTriggersArgumentModel;
   final MoreMedicationArgumentModel moreMedicationArgumentModel;
+  final Function viewReportClickedCallback;
 
-  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData, this.moreTriggersArgumentModel, this.moreMedicationArgumentModel,}) : super(key: key);
+  const MoreSection({Key key, this.text, this.moreStatus, this.isShowDivider, this.currentTag, this.navigateToOtherScreenCallback, this.selectedAnswerList, this.headacheTypeData, this.moreTriggersArgumentModel, this.moreMedicationArgumentModel, this.viewReportClickedCallback}) : super(key: key);
   @override
   _MoreSectionState createState() => _MoreSectionState();
 }
@@ -110,6 +111,9 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     break;
                   case Constant.dateRange:
                     widget.navigateToOtherScreenCallback(Constant.dateRangeActionSheet, null);
+                    break;
+                  case Constant.viewReport:
+                    widget.viewReportClickedCallback();
                     break;
                 }
               }

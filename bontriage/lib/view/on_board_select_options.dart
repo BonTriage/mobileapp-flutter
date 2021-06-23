@@ -57,17 +57,45 @@ class _OnBoardSelectOptionsState extends State<OnBoardSelectOptions>
     if (widget.selectedAnswerListData != null) {
       selectedAnswers = widget.selectedAnswerListData.firstWhere((model) => model.questionTag == widget.questionTag, orElse: () => null);
       if (selectedAnswers != null) {
-        OnBoardSelectOptionModel onBoardSelectOptionModelData = widget.selectOptionList.firstWhere((element) => element.optionText == selectedAnswers.answer, orElse: () => null);
+        OnBoardSelectOptionModel onBoardSelectOptionModelData = widget.selectOptionList.firstWhere((element) => element.optionText.toLowerCase() == selectedAnswers.answer.toLowerCase(), orElse: () => null);
         if(onBoardSelectOptionModelData != null) {
           onBoardSelectOptionModelData.isSelected = true;
         }
-        /*try {
-          int userSelectedValue = int.parse(selectedAnswers.answer);
-          selectedValue = selectedAnswers.answer;
-          widget.selectOptionList[userSelectedValue - 1].isSelected = true;
-        } catch (e) {
-          e.toString();
-        }*/
+
+        if(widget.questionTag == 'headache.number') {
+          try {
+            int headacheTimesValue = int.tryParse(selectedAnswers.answer);
+
+            if(headacheTimesValue != null) {
+              for (int i = 0; i < widget.selectOptionList.length; i++) {
+                OnBoardSelectOptionModel element = widget.selectOptionList[i];
+                List<String> splitValue = element.optionText.split('-');
+
+                if (splitValue.length > 1) {
+                  int value1 = int.tryParse(splitValue[0]);
+                  int value2 = int.tryParse(splitValue[1]);
+                  if(headacheTimesValue >= value1 && headacheTimesValue <= value2) {
+                    element.isSelected = true;
+                    widget.selectedAnswerCallBack(widget.questionTag, element.optionText);
+                    break;
+                  }
+                } else {
+                  element.isSelected = true;
+                  widget.selectedAnswerCallBack(widget.questionTag, element.optionText);
+                  break;
+                }
+              }
+            }
+          } catch (e) {
+            print(e);
+          }
+        }
+
+        OnBoardSelectOptionModel onBoardSelectOptionModelData1 = widget.selectOptionList.firstWhere((element) => element.isSelected, orElse: () => null);
+
+        if(onBoardSelectOptionModelData1 == null) {
+          widget.selectedAnswerListData.removeWhere((element) => element.questionTag == widget.questionTag);
+        }
       }
     }
 

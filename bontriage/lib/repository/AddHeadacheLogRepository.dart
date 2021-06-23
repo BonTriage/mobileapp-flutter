@@ -116,7 +116,7 @@ class AddHeadacheLogRepository{
       signUpOnBoardAnswersRequestModel.userId = 4214;
     }
 
-    if(currentUserHeadacheModel != null)
+    if (currentUserHeadacheModel != null)
       signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.tryParse(currentUserHeadacheModel.selectedDate));
     else
       signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(DateTime.now());

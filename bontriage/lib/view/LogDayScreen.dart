@@ -68,11 +68,9 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void requestService() async {
     List<Map> logDayDataList;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     if (userProfileInfoData != null)
-      logDayDataList =
-          await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
+      logDayDataList = await _logDayBloc.getAllLogDayData(userProfileInfoData.userId);
     else
       logDayDataList = await _logDayBloc.getAllLogDayData('4214');
     if (logDayDataList.length > 0 && selectedAnswers.length == 0) {
@@ -163,6 +161,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                       fontFamily: Constant.jostMedium),
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     _showDiscardChangesBottomSheet();
                                     //Navigator.pop(context);
@@ -225,34 +224,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                       children: [
                                         BouncingWidget(
                                           onPressed: () {
-                                            FocusScope.of(context).requestFocus(FocusNode());
-                                            if (!_isButtonClicked) {
-                                              _isButtonClicked = true;
-                                              if (selectedAnswers.length > 0) {
-                                                SelectedAnswers
-                                                logDayNoteSelectedAnswer =
-                                                selectedAnswers.firstWhere(
-                                                        (element) =>
-                                                    element.questionTag ==
-                                                        Constant.logDayNoteTag,
-                                                    orElse: () => null);
-                                                if (logDayNoteSelectedAnswer ==
-                                                    null)
-                                                  selectedAnswers.add(
-                                                      SelectedAnswers(
-                                                          questionTag:
-                                                          Constant.logDayNoteTag,
-                                                          answer: Constant
-                                                              .blankString));
-                                                _onSubmitClicked();
-                                              } else {
-                                                Utils.showValidationErrorDialog(
-                                                    context,
-                                                    Constant
-                                                        .selectAtLeastOneOptionLogDayError);
-                                                _isButtonClicked = false;
-                                              }
-                                            }
+                                            _onSaveButtonClicked();
                                           },
                                           child: Container(
                                             width: 110,
@@ -265,7 +237,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                                             ),
                                             child: Center(
                                               child: Text(
-                                                Constant.submit,
+                                                Constant.save,
                                                 style: TextStyle(
                                                     color:
                                                         Constant.bubbleChatTextView,
@@ -374,6 +346,7 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void addNewWidgets(List<Questions> questionList) {
     _questionsList.addAll(questionList);
+
     if (_sectionWidgetList.length == 0) {
       if (selectedAnswers.length != 0) {
         selectedAnswers.forEach((element) {
@@ -436,6 +409,7 @@ class _LogDayScreenState extends State<LogDayScreen>
                   ? widget.logDayScreenArgumentModel.isFromRecordScreen ?? false
                   : false,
               uiHints: element.uiHints,
+              selectedDateTime: _logDayBloc.selectedDateTime ?? DateTime.now(),
             ),
           );
         }
@@ -454,6 +428,8 @@ class _LogDayScreenState extends State<LogDayScreen>
       } else {
         Navigator.pop(context, false);
       }
+    } else if (resultOfDiscardChangesBottomSheet == Constant.saveAndExit) {
+      _onSaveButtonClicked();
     }
   }
 
@@ -480,11 +456,12 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   void _onSubmitClicked() async {
     Utils.showApiLoaderDialog(context,
-        networkStream: _logDayBloc.sendLogDayDataStream,
-        tapToRetryFunction: () {
-      _logDayBloc.enterSomeDummyDataToStreamController();
-      _callSendLogDayDataApi();
-    });
+      networkStream: _logDayBloc.sendLogDayDataStream,
+      tapToRetryFunction: () {
+        _logDayBloc.enterSomeDummyDataToStreamController();
+        _callSendLogDayDataApi();
+      },
+    );
     _callSendLogDayDataApi();
   }
 
@@ -498,6 +475,7 @@ class _LogDayScreenState extends State<LogDayScreen>
         prefs.setString(Constant.updateCalendarIntensityData, 'true');
         prefs.setString(Constant.updateOverTimeCompassData, 'true');
         prefs.setString(Constant.updateCompareCompassData, 'true');
+        prefs.setString(Constant.updateMeScreenData, 'true');
         Navigator.pop(context);
 
         if (widget.logDayScreenArgumentModel == null) {
@@ -514,5 +492,43 @@ class _LogDayScreenState extends State<LogDayScreen>
       }
     }
     _isButtonClicked = false;
+  }
+
+  void _onSaveButtonClicked() {
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    if (!_isButtonClicked) {
+      _isButtonClicked = true;
+      if (selectedAnswers.length > 0) {
+        SelectedAnswers logDayNoteSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == Constant.logDayNoteTag, orElse: () => null);
+        if (logDayNoteSelectedAnswer == null)
+          selectedAnswers.add(
+              SelectedAnswers(
+                  questionTag:
+                  Constant.logDayNoteTag,
+                  answer: Constant
+                      .blankString));
+
+        if(selectedAnswers.length == 1) {
+          if(selectedAnswers.first.questionTag == Constant.logDayNoteTag) {
+            if(selectedAnswers.first.answer.trim().isEmpty) {
+              Utils.showValidationErrorDialog(context, Constant.selectAtLeastOneOptionLogDayError);
+              _isButtonClicked = false;
+            } else {
+              _onSubmitClicked();
+            }
+          } else {
+            _onSubmitClicked();
+          }
+        } else {
+          _onSubmitClicked();
+        }
+      } else {
+        Utils.showValidationErrorDialog(
+            context,
+            Constant.selectAtLeastOneOptionLogDayError);
+        _isButtonClicked = false;
+      }
+    }
   }
 }

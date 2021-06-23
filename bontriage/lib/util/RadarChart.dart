@@ -276,45 +276,49 @@ class RadarChartPainter extends CustomPainter {
 
     // Painting each graph
     data.asMap().forEach((index, graph) {
-      var graphPaint = Paint()
-        ..color = graphColors[index % graphColors.length].withOpacity(0.3)
-        ..style = PaintingStyle.fill;
+      try {
+        var graphPaint = Paint()
+          ..color = graphColors[index % graphColors.length].withOpacity(0.3)
+          ..style = PaintingStyle.fill;
 
-      var graphOutlinePaint = Paint()
-        ..color = graphColors[index % graphColors.length]
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0
-        ..isAntiAlias = true;
+        var graphOutlinePaint = Paint()
+          ..color = graphColors[index % graphColors.length]
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.0
+          ..isAntiAlias = true;
 
-      // Start the graph on the initial point
-      var scaledPoint = scale * graph[0] * fraction;
-      var path = Path();
-
-      if (reverseAxis) {
-        path.moveTo(centerX, centerY - (radius * fraction - scaledPoint));
-      } else {
-        path.moveTo(centerX, centerY - scaledPoint);
-      }
-
-      graph.asMap().forEach((index, point) {
-        if (index == 0) return;
-
-        var xAngle = cos(angle * index - pi / 2);
-        var yAngle = sin(angle * index - pi / 2);
-        var scaledPoint = scale * point * fraction;
+        // Start the graph on the initial point
+        var scaledPoint = scale * graph[0] * fraction;
+        var path = Path();
 
         if (reverseAxis) {
-          path.lineTo(centerX + (radius * fraction - scaledPoint) * xAngle,
-              centerY + (radius * fraction - scaledPoint) * yAngle);
+          path.moveTo(centerX, centerY - (radius * fraction - scaledPoint));
         } else {
-          path.lineTo(
-              centerX + scaledPoint * xAngle, centerY + scaledPoint * yAngle);
+          path.moveTo(centerX, centerY - scaledPoint);
         }
-      });
 
-      path.close();
-      canvas.drawPath(path, graphPaint);
-      canvas.drawPath(path, graphOutlinePaint);
+        graph.asMap().forEach((index, point) {
+          if (index == 0) return;
+
+          var xAngle = cos(angle * index - pi / 2);
+          var yAngle = sin(angle * index - pi / 2);
+          var scaledPoint = scale * point * fraction;
+
+          if (reverseAxis) {
+            path.lineTo(centerX + (radius * fraction - scaledPoint) * xAngle,
+                centerY + (radius * fraction - scaledPoint) * yAngle);
+          } else {
+            path.lineTo(
+                centerX + scaledPoint * xAngle, centerY + scaledPoint * yAngle);
+          }
+        });
+
+        path.close();
+        canvas.drawPath(path, graphPaint);
+        canvas.drawPath(path, graphOutlinePaint);
+      } catch (e) {
+        print('Radar Chart Error');
+      }
     });
   }
 

@@ -60,11 +60,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
     _isFromRecordScreen = widget.currentUserHeadacheModel.isFromRecordScreen ?? false;
 
-    try {
+    /*try {
        _dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
     } catch(e) {
       print(e.toString());
-    }
+    }*/
 
     signUpOnBoardSelectedAnswersModel.eventType = "Headache";
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
@@ -137,6 +137,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                     fontFamily: Constant.jostMedium),
                               ),
                               GestureDetector(
+                                behavior: HitTestBehavior.translucent,
                                 onTap: () {
                                   if(signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0)
                                     _showDiscardChangesBottomSheet();
@@ -207,15 +208,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
                                             ),
                                             child: Center(
                                               child: Text(
-                                                _isUserHeadacheEnded
-                                                    ? Constant.submit
-                                                    : Constant.save,
+                                                Constant.save,
                                                 style: TextStyle(
                                                     color:
                                                         Constant.bubbleChatTextView,
                                                     fontSize: 15,
-                                                    fontFamily:
-                                                        Constant.jostMedium),
+                                                    fontFamily: Constant.jostMedium),
                                               ),
                                             ),
                                           ),
@@ -342,6 +340,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
           addHeadacheDetailsData: addSelectedHeadacheDetailsData,
           moveWelcomeOnBoardTwoScreen: moveOnWelcomeBoardSecondStepScreens,
           isHeadacheEnded: !widget.currentUserHeadacheModel.isOnGoing,
+          removeHeadacheTypeData: (tag, headacheType) {
+            if (signUpOnBoardSelectedAnswersModel.selectedAnswers.length > 0) {
+              signUpOnBoardSelectedAnswersModel.selectedAnswers.removeWhere((element) => element.questionTag == tag);
+            }
+          },
         currentUserHeadacheModel: _currentUserHeadacheModel,
         uiHints: element.uiHints,
       ));
@@ -439,17 +442,46 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
     }*/
 
     SelectedAnswers headacheTypeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.headacheTypeTag, orElse: () => null);
+    SelectedAnswers onSetSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.onSetTag, orElse: () => null);
+    SelectedAnswers endTimeSelectedAnswer = signUpOnBoardSelectedAnswersModel.selectedAnswers.firstWhere((element) => element.questionTag == Constant.endTimeTag, orElse: () => null);
+
+    bool isTimeValidationSatisfied = true;
+    String errorMessage = '';
+    if(_isUserHeadacheEnded) {
+      if(onSetSelectedAnswer != null && endTimeSelectedAnswer != null) {
+        DateTime onSetDateTime = DateTime.tryParse(onSetSelectedAnswer.answer);
+        DateTime endDateTime = DateTime.tryParse(endTimeSelectedAnswer.answer);
+
+        print('Onset???$onSetDateTime\nEndtime???$endDateTime');
+
+        if (onSetDateTime.isAtSameMomentAs(endDateTime)) {
+          errorMessage = 'Start Time cannot be same as End Time.';
+          isTimeValidationSatisfied = false;
+        }
+        else if(onSetDateTime.isAfter(endDateTime)) {
+          errorMessage = 'Start Time cannot be greater than End Time.';
+          isTimeValidationSatisfied = false;
+        } else {
+          isTimeValidationSatisfied = true;
+        }
+      }
+    }
 
     if(headacheTypeSelectedAnswer != null) {
-      Utils.showApiLoaderDialog(
-          context,
-          networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
-          tapToRetryFunction: () {
-            _addHeadacheLogBloc.enterSomeDummyData();
-            _callSendAddHeadacheLogApi();
-          }
-      );
-      _callSendAddHeadacheLogApi();
+      if(isTimeValidationSatisfied) {
+        Utils.showApiLoaderDialog(
+            context,
+            networkStream: _addHeadacheLogBloc.sendAddHeadacheLogDataStream,
+            tapToRetryFunction: () {
+              _addHeadacheLogBloc.enterSomeDummyData();
+              _callSendAddHeadacheLogApi();
+            }
+        );
+        _callSendAddHeadacheLogApi();
+      } else {
+        Utils.showValidationErrorDialog(context, errorMessage);
+        _isButtonClicked = false;
+      }
     } else {
       //show headacheType selection error
       print('headache type error');
@@ -468,6 +500,7 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
       prefs.setString(Constant.updateOverTimeCompassData, 'true');
       prefs.setString(Constant.updateCompareCompassData, 'true');
       prefs.setString(Constant.updateTrendsData, 'true');
+      prefs.setString(Constant.updateMeScreenData, 'true');
       Navigator.pop(context);
       if(!_isFromRecordScreen) {
         if(_isUserHeadacheEnded) {
@@ -561,6 +594,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);
       else
         Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+    } else if (resultOfDiscardChangesBottomSheet == Constant.saveAndExit) {
+      if (!_isButtonClicked) {
+        _isButtonClicked = true;
+        saveDataInLocalDataBaseOrServer();
+      }
     }
   }
 }

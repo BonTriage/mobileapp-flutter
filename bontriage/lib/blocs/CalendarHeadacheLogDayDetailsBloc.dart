@@ -198,6 +198,11 @@ class CalendarHeadacheLogDayDetailsBloc {
             mobileEventElement.questionTag == Constant.behaviourPreMealTag,
             orElse: () => null);
 
+        var behaviourExerciseData = element.mobileEventDetails.firstWhere(
+                (mobileEventElement) =>
+            mobileEventElement.questionTag == Constant.behaviourPreExerciseTag,
+            orElse: () => null);
+
         if (behaviourPreSleepData != null) {
           String titleInfo = behaviourPreSleepData.value;
           if (titleInfo.toLowerCase() == "yes") {
@@ -219,6 +224,23 @@ class CalendarHeadacheLogDayDetailsBloc {
         userHeadacheLogDayDetailsModel.headacheLogDayListData
             .add(logDaySleepWidgetData);
 
+        RecordWidgetData logDayExerciseWidgetData = RecordWidgetData();
+        logDayExerciseWidgetData.logDayListData = LogDayData();
+        if (behaviourExerciseData != null) {
+          String titleBehaviorInfo = behaviourExerciseData.value;
+          /*if (titleBehaviorInfo.toLowerCase() == "yes") {
+            titleBehaviorInfo = 'Regular Meal Times';
+          } else {
+            titleBehaviorInfo = 'No Meal';
+          }*/
+          logDayExerciseWidgetData.imagePath = Constant.exerciseIcon;
+          logDayExerciseWidgetData.logDayListData.titleName = "Exercise";
+          logDayExerciseWidgetData.logDayListData.titleInfo = titleBehaviorInfo;
+        }
+
+        userHeadacheLogDayDetailsModel.headacheLogDayListData.add(logDayExerciseWidgetData);
+
+
         RecordWidgetData logDayMealWidgetData = RecordWidgetData();
         logDayMealWidgetData.logDayListData = LogDayData();
         if (behaviourMealData != null) {
@@ -235,17 +257,21 @@ class CalendarHeadacheLogDayDetailsBloc {
 
         userHeadacheLogDayDetailsModel.headacheLogDayListData
             .add(logDayMealWidgetData);
+
         userHeadacheLogDayDetailsModel.isDayLogged = true;
       }
     });
 
+    RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
+    logDayMedicationWidgetData.logDayListData = LogDayData();
+    logDayMedicationWidgetData.logDayListData.titleName =
+        Constant.medication;
+    logDayMedicationWidgetData.logDayListData.titleInfo = Constant.blankString;
+    logDayMedicationWidgetData.imagePath = Constant.pillIcon;
+
     response.medication.asMap().forEach((index, element) {
-      if(index == 0) {
         var medicationMobileEvent = element.mobileEventDetails.firstWhere((mobileEventDetailElement) => mobileEventDetailElement.questionTag == Constant.logDayMedicationTag, orElse: () => null);
         if (element.mobileEventDetails.length > 0 && medicationMobileEvent != null) {
-          RecordWidgetData logDayMedicationWidgetData = RecordWidgetData();
-          logDayMedicationWidgetData.logDayListData = LogDayData();
-
           var medicationData = element.mobileEventDetails.firstWhere(
                   (mobileEventElement) =>
               mobileEventElement.questionTag == Constant.logDayMedicationTag,
@@ -283,8 +309,17 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     if (medicationDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
-                      medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(
-                          medicationDateTime.hour, medicationDateTime.minute)}';
+                      if(medicationElement.isNotEmpty)
+                        if(medicationDosage.isEmpty)
+                          medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                        else
+                          medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                      else {
+                        if(medicationDosage.isNotEmpty)
+                          medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                        else
+                          medicationDosage = '${Utils.getTimeInAmPmFormat(medicationDateTime.hour, medicationDateTime.minute)}';
+                      }
                     } else {
                       medicationDosage = '$medicationElement';
                     }
@@ -300,10 +335,17 @@ class CalendarHeadacheLogDayDetailsBloc {
 
                     if (medDateTime != null) {
                       medicationElement = _getMedicationDosageUnit(medicationElement);
-                      medicationDosage =
-                      '$medicationDosage, $medicationElement at ${Utils
-                          .getTimeInAmPmFormat(
-                          medDateTime.hour, medDateTime.minute)}';
+                      if(medicationElement.isNotEmpty)
+                        if(medicationDosage.isEmpty)
+                          medicationDosage = '$medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                        else
+                          medicationDosage = '$medicationDosage, $medicationElement at ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                      else {
+                        if(medicationDosage.isNotEmpty)
+                          medicationDosage = '$medicationDosage, ${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                        else
+                          medicationDosage = '${Utils.getTimeInAmPmFormat(medDateTime.hour, medDateTime.minute)}';
+                      }
                     } else {
                       medicationDosage =
                       '$medicationDosage, $medicationElement';
@@ -311,23 +353,27 @@ class CalendarHeadacheLogDayDetailsBloc {
                   }
                 });
                 if (medicationDosage.isEmpty) {
-                  titleInfo = '$titleInfo';
+                    titleInfo = '$titleInfo';
                 } else
                   titleInfo = '$titleInfo\n($medicationDosage)';
               }
             }
-            logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
-          }
 
-          logDayMedicationWidgetData.logDayListData.titleName =
-              Constant.medication;
-          logDayMedicationWidgetData.imagePath = Constant.pillIcon;
-          userHeadacheLogDayDetailsModel.headacheLogDayListData
-              .add(logDayMedicationWidgetData);
-          userHeadacheLogDayDetailsModel.isDayLogged = true;
+            if(logDayMedicationWidgetData.logDayListData.titleInfo.isEmpty)
+              logDayMedicationWidgetData.logDayListData.titleInfo = titleInfo;
+            else
+              logDayMedicationWidgetData.logDayListData.titleInfo = '${logDayMedicationWidgetData.logDayListData.titleInfo}\n\n$titleInfo';
+          }
         }
-      }
     });
+
+    if(response.medication != null) {
+      if(response.medication.isNotEmpty && logDayMedicationWidgetData.logDayListData.titleInfo.isNotEmpty) {
+        userHeadacheLogDayDetailsModel.headacheLogDayListData
+            .add(logDayMedicationWidgetData);
+        userHeadacheLogDayDetailsModel.isDayLogged = true;
+      }
+    }
 
     response.triggers.asMap().forEach((index, element) {
       if(index == 0) {
@@ -397,8 +443,12 @@ class CalendarHeadacheLogDayDetailsBloc {
   }
 
   String _getMedicationDosageUnit(String medicationDosage) {
-    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml')))
-      return '$medicationDosage mg';
+    if(!(medicationDosage.contains('tablet') || medicationDosage.contains('injection') || medicationDosage.contains('mg') || medicationDosage.contains('ml') || medicationDosage.contains('unit'))) {
+      if(medicationDosage.isNotEmpty)
+        return '$medicationDosage mg';
+      else
+        return Constant.blankString;
+    }
     else
       return medicationDosage;
   }

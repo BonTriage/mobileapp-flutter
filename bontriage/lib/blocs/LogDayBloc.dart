@@ -23,7 +23,7 @@ class LogDayBloc {
   StreamController<dynamic> _logDayDataStreamController;
 
   List<SelectedAnswers> behaviorSelectedAnswerList = [];
-  List<SelectedAnswers> medicationSelectedAnswerList = [];
+  List<List<SelectedAnswers>> medicationSelectedAnswerList = [];
   List<SelectedAnswers> triggerSelectedAnswerList = [];
   List<SelectedAnswers> noteSelectedAnswer = [];
 
@@ -47,7 +47,7 @@ class LogDayBloc {
   DateTime selectedDateTime;
 
   int behaviorEventId;
-  int medicationEventId;
+  List<int> medicationEventIdList = [];
   int triggerEventId;
   int noteEventId;
 
@@ -114,14 +114,18 @@ class LogDayBloc {
           calendarInfoModel = response;
           if(calendarInfoModel.behaviours.length >= 1)
             behaviorEventId = calendarInfoModel.behaviours[0].id;
-          if(calendarInfoModel.medication.length >= 1)
-            medicationEventId = calendarInfoModel.medication[0].id;
+          if(calendarInfoModel.medication.length >= 1) {
+            calendarInfoModel.medication.forEach((element) {
+              medicationEventIdList.add(element.id);
+            });
+          }
+
           if(calendarInfoModel.triggers.length >= 1)
             triggerEventId = calendarInfoModel.triggers[0].id;
           if(calendarInfoModel.logDayNote.length >= 1)
             noteEventId = calendarInfoModel.logDayNote[0].id;
 
-          print('id???$behaviorEventId???$medicationEventId???$triggerEventId???$noteEventId');
+          print('id???$behaviorEventId???$medicationEventIdList???$triggerEventId???$noteEventId');
           await fetchLogDayData();
         } else {
           logDayDataSink.addError(Exception(Constant.somethingWentWrong));
@@ -171,7 +175,11 @@ class LogDayBloc {
     return response;
   }
 
-  Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async{
+  Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
+    behaviorSelectedAnswerList.clear();
+    medicationSelectedAnswerList.clear();
+    triggerSelectedAnswerList.clear();
+    noteSelectedAnswer.clear();
     LogDaySendDataModel logDaySendDataModel = LogDaySendDataModel();
     selectedAnswers.forEach((element) {
       List<String> selectedValuesList = [];
@@ -203,75 +211,57 @@ class LogDayBloc {
         }
       } else if (element.questionTag.contains('medication') || element.questionTag.contains('administered') || element.questionTag.contains('dosage')) {
         if(element.questionTag == 'administered') {
-          MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(element.answer));
           try {
-            int selectedIndex = medicationSelectedDataModel.selectedMedicationIndex;
-            Questions selectedMedicationQuestion = questionList.firstWhere((quesElement) => quesElement.tag == 'medication', orElse: () => null);
-            if(selectedMedicationQuestion != null) {
-              String selectedMedicationValue = selectedMedicationQuestion.values[selectedIndex].text;
-              Questions selectedDosageQuestion = questionList.firstWhere((element) {
-                List<String> splitConditionList = element.precondition.split('=');
-                if(splitConditionList.length == 2) {
-                  splitConditionList[0] = splitConditionList[0].trim();
-                  splitConditionList[1] = splitConditionList[1].trim();
+            var decodedJson = jsonDecode(element.answer);
+            MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(decodedJson);
+            medicationSelectedDataModel.selectedMedicationIndex.asMap().forEach((index, selectedMedicationValue1) {
+              List<SelectedAnswers> medSelectedAnswersList = [];
+              medSelectedAnswersList.add(SelectedAnswers(questionTag: Constant.logDayMedicationTag, answer: selectedMedicationValue1.text));
+              Questions selectedMedicationQuestion = questionList.firstWhere((quesElement) => quesElement.tag == 'medication', orElse: () => null);
+              if(selectedMedicationQuestion != null) {
+                Values medValue = selectedMedicationQuestion.values.firstWhere((element) => element.text == selectedMedicationValue1.text, orElse: () => null);
+                int selectedIndex = selectedMedicationQuestion.values.indexOf(medValue);
+                String selectedMedicationValue = selectedMedicationQuestion.values[selectedIndex].text;
 
-                  return (selectedMedicationValue == splitConditionList[1]);
+                Questions selectedDosageQuestion = questionList.firstWhere((element) {
+                  List<String> splitConditionList = element.precondition.split('=');
+                  if(splitConditionList.length == 2) {
+                    splitConditionList[0] = splitConditionList[0].trim();
+                    splitConditionList[1] = splitConditionList[1].trim();
+
+                    return (selectedMedicationValue == splitConditionList[1]);
+                  } else {
+                    return false;
+                  }
+                }, orElse: () => null);
+
+                selectedValuesList = [];
+
+                if(selectedDosageQuestion != null) {
+                  medicationSelectedDataModel.selectedMedicationDosageList[index].forEach((dosageElement) {
+                    int selectedDosageIndex = int.parse(dosageElement.toString()) - 1;
+                    selectedValuesList.add(selectedDosageQuestion.values[selectedDosageIndex].text);
+                  });
+                  medSelectedAnswersList.add(SelectedAnswers(questionTag: selectedDosageQuestion.tag, answer: jsonEncode(selectedValuesList)));
                 } else {
-                  return false;
+                  medicationSelectedDataModel.selectedMedicationDosageList[index].forEach((dosageElement) {
+                    selectedValuesList.add(dosageElement);
+                  });
+                  medSelectedAnswersList.add(SelectedAnswers(questionTag: '${selectedMedicationValue}_custom.dosage', answer: jsonEncode(selectedValuesList)));
                 }
-              }, orElse: () => null);
-              if(selectedDosageQuestion != null) {
-                medicationSelectedDataModel.selectedMedicationDosageList.forEach((dosageElement) {
-                  int selectedDosageIndex = int.parse(dosageElement.toString()) - 1;
-                  selectedValuesList.add(selectedDosageQuestion.values[selectedDosageIndex].text);
+
+                selectedValuesList = [];
+
+                medicationSelectedDataModel.selectedMedicationDateList[index].forEach((dateElement) {
+                  selectedValuesList.add(Utils.getDateTimeInUtcFormat(DateTime.parse(dateElement)));
                 });
-                medicationSelectedAnswerList.add(SelectedAnswers(questionTag: selectedDosageQuestion.tag, answer: jsonEncode(selectedValuesList)));
-              } else {
-                medicationSelectedDataModel.selectedMedicationDosageList.forEach((dosageElement) {
-                  selectedValuesList.add(dosageElement);
-                });
-                medicationSelectedAnswerList.add(SelectedAnswers(questionTag: '${selectedMedicationValue}_custom.dosage', answer: jsonEncode(selectedValuesList)));
+
+                medSelectedAnswersList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
               }
-            }
-            selectedValuesList = [];
-
-            medicationSelectedDataModel.selectedMedicationDateList.forEach((dateElement) {
-              selectedValuesList.add(Utils.getDateTimeInUtcFormat(DateTime.parse(dateElement)));
+              medicationSelectedAnswerList.add(medSelectedAnswersList);
             });
-
-            medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
           } catch(e) {
             print(e);
-          }
-        } else {
-          if(element.questionTag.contains('custom')) {
-            medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: element.answer));
-          } else {
-            SelectedAnswers medicationSelectedAnswer = medicationSelectedAnswerList.firstWhere((element1) => element1.questionTag == element.questionTag, orElse: () => null);
-            if(medicationSelectedAnswer == null) {
-              try {
-                int selectedIndex = int.parse(element.answer.toString()) - 1;
-                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-                if(questions != null) {
-                  selectedValuesList.add(questions.values[selectedIndex].text);
-                  medicationSelectedAnswerList.add(SelectedAnswers(questionTag: element.questionTag, answer: jsonEncode(selectedValuesList)));
-                }
-              } catch(e) {
-                print(e);
-              }
-            } else {
-              try {
-                selectedValuesList = (json.decode(medicationSelectedAnswer.answer) as List<dynamic>).cast<String>();
-                int selectedIndex = int.parse(element.answer.toString()) - 1;
-                Questions questions = questionList.firstWhere((quesElement) => quesElement.tag == element.questionTag, orElse: () => null);
-                if(questions != null) {
-                  selectedValuesList.add(questions.values[selectedIndex].text);
-                  medicationSelectedAnswer.answer = jsonEncode(selectedValuesList);
-                }
-              } catch(e) {
-                print(e);
-              }
-            }
           }
         }
       } else if(element.questionTag.contains('triggers1')) {
@@ -349,11 +339,98 @@ class LogDayBloc {
     var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
 
     logDaySendDataModel.behaviors = _getSelectAnswerModel(behaviorSelectedAnswerList, Constant.behaviorsEventType, userProfileInfoData, behaviorEventId);
-    logDaySendDataModel.medication = _getSelectAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData, medicationEventId);
+    logDaySendDataModel.medication = _getMedicationSelectedAnswerModel(medicationSelectedAnswerList, Constant.medicationEventType, userProfileInfoData, medicationEventIdList);
     logDaySendDataModel.triggers = _getSelectAnswerModel(triggerSelectedAnswerList, Constant.triggersEventType, userProfileInfoData, triggerEventId);
     logDaySendDataModel.note = _getSelectAnswerModel(noteSelectedAnswer, Constant.noteEventType, userProfileInfoData, noteEventId);
 
     return jsonEncode(logDaySendDataModel.toJson());
+  }
+
+  List<SignUpOnBoardAnswersRequestModel> _getMedicationSelectedAnswerModel(List<List<SelectedAnswers>> selectedAnswersList, String eventType, UserProfileInfoModel userProfileInfoData, List<int> eventId) {
+    List<SignUpOnBoardAnswersRequestModel> signUpOnBoardAnswersRequestModelList = [];
+
+    selectedAnswersList.asMap().forEach((key, selectedAnswers) {
+      SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
+      signUpOnBoardAnswersRequestModel.eventType = eventType;
+      if (userProfileInfoData != null)
+        signUpOnBoardAnswersRequestModel.userId =
+            int.parse(userProfileInfoData.userId);
+      else
+        signUpOnBoardAnswersRequestModel.userId = 4214;
+      DateTime dateTime = DateTime.now();
+      if(selectedDateTime == null){
+        signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+      }else{
+        signUpOnBoardAnswersRequestModel.calendarEntryAt = '${selectedDateTime.year}-${selectedDateTime.month}-${selectedDateTime.day}T00:00:00Z';
+      }
+
+      signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+      try {
+        signUpOnBoardAnswersRequestModel.eventId = eventId[key];
+      } catch(e) {
+        signUpOnBoardAnswersRequestModel.eventId = null;
+      }
+      signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
+
+      selectedAnswers.forEach((element) {
+        try {
+          List<String> valuesList = (json.decode(element.answer) as List<dynamic>).cast<String>();
+          signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+              MobileEventDetails(
+                  questionTag: element.questionTag,
+                  /*eventId: eventId,*/
+                  questionJson: "",
+                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                  value: valuesList));
+        } on FormatException {
+          signUpOnBoardAnswersRequestModel.mobileEventDetails.add(
+              MobileEventDetails(
+                  questionTag: element.questionTag,
+                  /*eventId: eventId,*/
+                  questionJson: "",
+                  updatedAt: Utils.getDateTimeInUtcFormat(DateTime.now()),
+                  value: [element.answer]));
+        }
+      });
+
+      signUpOnBoardAnswersRequestModelList.add(signUpOnBoardAnswersRequestModel);
+    });
+
+    int lengthDiff = eventId.length - selectedAnswersList.length;
+
+    int eventIndex = selectedAnswersList.length;
+
+    if(lengthDiff > 0) {
+      for (int i = 1; i <= lengthDiff; i++) {
+        SignUpOnBoardAnswersRequestModel signUpOnBoardAnswersRequestModel = SignUpOnBoardAnswersRequestModel();
+        signUpOnBoardAnswersRequestModel.eventType = eventType;
+        if (userProfileInfoData != null)
+          signUpOnBoardAnswersRequestModel.userId =
+              int.parse(userProfileInfoData.userId);
+        else
+          signUpOnBoardAnswersRequestModel.userId = 4214;
+        DateTime dateTime = DateTime.now();
+        if(selectedDateTime == null){
+          signUpOnBoardAnswersRequestModel.calendarEntryAt = Utils.getDateTimeInUtcFormat(dateTime);
+        }else{
+          signUpOnBoardAnswersRequestModel.calendarEntryAt = '${selectedDateTime.year}-${selectedDateTime.month}-${selectedDateTime.day}T00:00:00Z';
+        }
+
+        signUpOnBoardAnswersRequestModel.updatedAt = Utils.getDateTimeInUtcFormat(DateTime.now());
+
+        try {
+          signUpOnBoardAnswersRequestModel.eventId = eventId[eventIndex];
+          eventIndex++;
+        } catch(e) {
+          signUpOnBoardAnswersRequestModel.eventId = null;
+        }
+        signUpOnBoardAnswersRequestModel.mobileEventDetails = [];
+
+        signUpOnBoardAnswersRequestModelList.add(signUpOnBoardAnswersRequestModel);
+      }
+    }
+
+    return signUpOnBoardAnswersRequestModelList;
   }
 
   SignUpOnBoardAnswersRequestModel _getSelectAnswerModel(List<SelectedAnswers> selectedAnswers, String eventType, UserProfileInfoModel userProfileInfoData, int eventId){
@@ -391,25 +468,76 @@ class LogDayBloc {
   }
 
   List<SelectedAnswers> getSelectedAnswerList(List<SelectedAnswers> doubleTappedSelectedAnswerList) {
-    if (selectedAnswerList == null) {
+    if (selectedAnswerList == null || selectedAnswerList.isEmpty) {
       selectedAnswerList = [];
 
       if (calendarInfoModel != null) {
         calendarInfoModel.behaviours.forEach((behaviorElement) {
           behaviorElement.mobileEventDetails.forEach((behaviorMobileEventDetailsElement) {
             Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == behaviorMobileEventDetailsElement.questionTag, orElse: () => null);
-
-            String value = behaviorMobileEventDetailsElement.value;
-            List<String> valuesList = value.split("%@");
-            valuesList.forEach((valueElement) {
-              Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
-              selectedAnswerList.add(SelectedAnswers(questionTag: behaviorMobileEventDetailsElement.questionTag, answer: selectedValues.valueNumber, isDoubleTapped: false));
-            });
+            if(questions != null) {
+              String value = behaviorMobileEventDetailsElement.value;
+              List<String> valuesList = value.split("%@");
+              valuesList.forEach((valueElement) {
+                Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: behaviorMobileEventDetailsElement.questionTag,
+                    answer: selectedValues.valueNumber,
+                    isDoubleTapped: false));
+              });
+            }
           });
         });
 
+        MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel();
+        medicationSelectedDataModel.selectedMedicationIndex = [];
+        medicationSelectedDataModel.selectedMedicationDosageList = [];
+        medicationSelectedDataModel.selectedMedicationDateList = [];
+
+        List<Headache> medicationElementList = [];
+
+
+        for (int index = 0; index < calendarInfoModel.medication.length; index++) {
+          var medicationElement = calendarInfoModel.medication[index];
+          var medicationData = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+          if(medicationData != null) {
+            for (int i = index + 1; i < calendarInfoModel.medication.length; i++) {
+              var medicationElement1 = calendarInfoModel.medication[i];
+              var medicationData1 = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
+              if(medicationData1 != null && medicationData1.value == medicationData.value) {
+                medicationElementList.add(medicationElement1);
+                var administeredData = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+                if(administeredData != null) {
+                  var administeredData1 = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+                  if(administeredData1 != null) {
+                    administeredData1.value = '${administeredData1.value}%@${administeredData.value}';
+                  }
+                }
+
+                var dosageData = medicationElement1.mobileEventDetails.firstWhere((element) => element.questionTag.contains(".dosage"), orElse: () => null);
+
+                if(dosageData != null) {
+                  var dosageData1 = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag.contains(".dosage"), orElse: () => null);
+                  if(dosageData1 != null) {
+                    dosageData1.value = '${dosageData1.value}%@${dosageData.value}';
+                  }
+                }
+                //calendarInfoModel.medication.remove(medicationElement1);
+              }
+            }
+            medicationElementList.forEach((element) {
+              calendarInfoModel.medication.remove(element);
+            });
+          }
+        }
+
+        /*medicationElementList.forEach((element) {
+          calendarInfoModel.medication.remove(element);
+        });*/
+
+        print('MedicationLength???${calendarInfoModel.medication.length}');
+
         calendarInfoModel.medication.forEach((medicationElement) {
-          MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel();
           var medicationData = medicationElement.mobileEventDetails.firstWhere((element) => element.questionTag == Constant.logDayMedicationTag, orElse: () => null);
           if(medicationData != null) {
             medicationElement.mobileEventDetails.forEach((medicationMobileEventDetailsElement) {
@@ -418,17 +546,28 @@ class LogDayBloc {
                 if(questions != null) {
                   Values medicationValue = questions.values.firstWhere((element) => element.text == medicationMobileEventDetailsElement.value, orElse: () => null);
                   if(medicationValue != null) {
-                    medicationSelectedDataModel.selectedMedicationIndex = int.tryParse(medicationValue.valueNumber) - 1;
-                    medicationSelectedDataModel.newlyAddedMedicationName = '';
+                    if(medicationSelectedDataModel.selectedMedicationIndex == null)
+                      medicationSelectedDataModel.selectedMedicationIndex = [];
+
+                    Values medicationIndexValue = medicationSelectedDataModel.selectedMedicationIndex.firstWhere((element) => element == medicationValue, orElse: () => null);
+                    //if(medicationIndexValue == null) {
+                      medicationSelectedDataModel.selectedMedicationIndex.add(medicationValue);
+                      medicationSelectedDataModel.selectedMedicationIndex.last.isSelected = true;
+                      medicationSelectedDataModel.selectedMedicationIndex.last.isDoubleTapped = false;
+                    //}
                   } else {
-                    medicationSelectedDataModel.selectedMedicationIndex = questions.values.length;
-                    medicationSelectedDataModel.isNewlyAdded = true;
-                    medicationSelectedDataModel.newlyAddedMedicationName = medicationMobileEventDetailsElement.value;
+                    if(medicationSelectedDataModel.selectedMedicationIndex == null)
+                      medicationSelectedDataModel.selectedMedicationIndex = [];
+                    medicationSelectedDataModel.selectedMedicationIndex.add(Values(valueNumber: (questions.values.length + 1).toString(), text: medicationMobileEventDetailsElement.value, isNewlyAdded: true, isSelected: true, isDoubleTapped: false));
                   }
                 }
               } else if (medicationMobileEventDetailsElement.questionTag == Constant.administeredTag) {
                 List<String> dosageTimeList = medicationMobileEventDetailsElement.value.split("%@");
-                medicationSelectedDataModel.selectedMedicationDateList = dosageTimeList;
+
+                if (medicationSelectedDataModel.selectedMedicationDateList == null)
+                  medicationSelectedDataModel.selectedMedicationDateList = [];
+
+                medicationSelectedDataModel.selectedMedicationDateList.add(dosageTimeList);
               } else if (medicationMobileEventDetailsElement.questionTag.contains(".dosage")) {
                 List<String> dosageList = medicationMobileEventDetailsElement.value.split("%@");
                 List<String> dosageStringList = [];
@@ -443,40 +582,73 @@ class LogDayBloc {
                     dosageStringList.add(dosageElement);
                   }
                 });
-                medicationSelectedDataModel.selectedMedicationDosageList = dosageStringList;
+
+                if (medicationSelectedDataModel.selectedMedicationDosageList == null)
+                  medicationSelectedDataModel.selectedMedicationDosageList = [];
+
+                medicationSelectedDataModel.selectedMedicationDosageList.add(dosageStringList);
               }
             });
           }
-          medicationSelectedDataModel.isDoubleTapped = false;
+        });
+
+        print(medicationSelectedDataModel);
+
+        if(medicationSelectedDataModel.selectedMedicationIndex.isNotEmpty) {
           try {
-            selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
+            SelectedAnswers medicationSelectedAnswer = selectedAnswerList.firstWhere((element) => element.questionTag == Constant.administeredTag, orElse: () => null);
+            if(medicationSelectedAnswer == null)
+              selectedAnswerList.add(SelectedAnswers(questionTag: Constant.administeredTag, answer: jsonEncode(medicationSelectedDataModel.toJson())));
           } catch (e) {
             print(e);
           }
-        });
+        }
 
         calendarInfoModel.triggers.forEach((triggerElement) {
           triggerElement.mobileEventDetails.forEach((triggerMobileEventDetailElement) {
             Questions questions = filterQuestionsListData.firstWhere((questionElement) => questionElement.tag == triggerMobileEventDetailElement.questionTag, orElse: () => null);
-            if(triggerMobileEventDetailElement.questionTag == Constant.triggersTag) {
-              List<String> triggersSelectedValues = triggerMobileEventDetailElement.value.split("%@");
-              triggersSelectedValues.forEach((valueElement) {
-                Values selectedValues = questions.values.firstWhere((element) => valueElement == element.text, orElse: () => null);
-                selectedAnswerList.add(SelectedAnswers(questionTag: triggerMobileEventDetailElement.questionTag, answer: selectedValues.valueNumber, isDoubleTapped: false));
-              });
-            } else if (questions.questionType == Constant.QuestionMultiType) {
-              List<String> selectedValues = triggerMobileEventDetailElement.value.split("%@");
-              selectedValues.forEach((selectedValueElement) {
-                Values values = questions.values.firstWhere((element) => element.text == selectedValueElement, orElse: () => null);
-                if(values != null) {
-                  values.isSelected = true;
-                }
-              });
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: jsonEncode(questions.toJson()), isDoubleTapped: false));
-            } else if (questions.questionType == Constant.QuestionNumberType) {
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: triggerMobileEventDetailElement.value, isDoubleTapped: false));
-            } else if (questions.questionType == Constant.QuestionTextType) {
-              selectedAnswerList.add(SelectedAnswers(questionTag: questions.tag, answer: triggerMobileEventDetailElement.value, isDoubleTapped: false));
+            if(questions != null) {
+              if (triggerMobileEventDetailElement.questionTag ==
+                  Constant.triggersTag) {
+                List<
+                    String> triggersSelectedValues = triggerMobileEventDetailElement
+                    .value.split("%@");
+                triggersSelectedValues.forEach((valueElement) {
+                  Values selectedValues = questions.values.firstWhere((
+                      element) => valueElement == element.text,
+                      orElse: () => null);
+                  selectedAnswerList.add(SelectedAnswers(
+                      questionTag: triggerMobileEventDetailElement.questionTag,
+                      answer: selectedValues.valueNumber,
+                      isDoubleTapped: false));
+                });
+              } else if (questions.questionType == Constant.QuestionMultiType) {
+                List<String> selectedValues = triggerMobileEventDetailElement
+                    .value.split("%@");
+                selectedValues.forEach((selectedValueElement) {
+                  Values values = questions.values.firstWhere((
+                      element) => element.text == selectedValueElement,
+                      orElse: () => null);
+                  if (values != null) {
+                    values.isSelected = true;
+                  }
+                });
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: jsonEncode(questions.toJson()),
+                    isDoubleTapped: false));
+              } else
+              if (questions.questionType == Constant.QuestionNumberType) {
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: triggerMobileEventDetailElement.value,
+                    isDoubleTapped: false));
+              } else if (questions.questionType == Constant.QuestionTextType) {
+                selectedAnswerList.add(SelectedAnswers(
+                    questionTag: questions.tag,
+                    answer: triggerMobileEventDetailElement.value,
+                    isDoubleTapped: false));
+              }
             }
           });
         });
@@ -508,16 +680,19 @@ class LogDayBloc {
               } else {
                 print(selectedAnswerElement);
                 if(selectedAnswerElement.answer.isNotEmpty && doubleTappedSelectedAnswer.answer.isNotEmpty) {
+
                   MedicationSelectedDataModel medicationSelectedDataModel = MedicationSelectedDataModel.fromJson(jsonDecode(doubleTappedSelectedAnswer.answer));
                   MedicationSelectedDataModel medicationSelectedDataModel1 = MedicationSelectedDataModel.fromJson(jsonDecode(selectedAnswerElement.answer));
-                  if(medicationSelectedDataModel != null && medicationSelectedDataModel1 != null && !medicationSelectedDataModel.isNewlyAdded && !medicationSelectedDataModel1.isNewlyAdded) {
-                    if(medicationSelectedDataModel.selectedMedicationIndex == medicationSelectedDataModel1.selectedMedicationIndex) {
-                      medicationSelectedDataModel1.isDoubleTapped = true;
-                      selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
-                    }
-                  } else if((medicationSelectedDataModel.isNewlyAdded && medicationSelectedDataModel1.isNewlyAdded && (medicationSelectedDataModel.newlyAddedMedicationName == medicationSelectedDataModel1.newlyAddedMedicationName))){
-                    medicationSelectedDataModel1.isDoubleTapped = true;
-                    selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+
+                  if(medicationSelectedDataModel != null && medicationSelectedDataModel1 != null) {
+                    medicationSelectedDataModel.selectedMedicationIndex.forEach((selectedMedicationIndexElement1) {
+                        Values medValue = medicationSelectedDataModel1.selectedMedicationIndex.firstWhere((selectedMedicationIndexElement2) =>
+                        selectedMedicationIndexElement1.text == selectedMedicationIndexElement2.text, orElse: () => null);
+                        if (medValue != null) {
+                          medValue.isDoubleTapped = true;
+                          selectedAnswerElement.answer = jsonEncode(medicationSelectedDataModel1.toJson());
+                        }
+                    });
                   }
                 }
               }
@@ -527,10 +702,10 @@ class LogDayBloc {
       }
     });
 
-    return selectedAnswerList;
+    return selectedAnswerList ?? [];
   }
 
   void enterSomeDummyDataToStreamController() {
-    logDayDataSink.add(Constant.loading);
+    sendLogDayDataSink.add(Constant.loading);
   }
 }

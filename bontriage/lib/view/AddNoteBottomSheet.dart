@@ -46,9 +46,10 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
             Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () {
                   widget.addNoteCallback(_textEditingController.text);
-                  Navigator.pop(context, _textEditingController.text);
+                  Navigator.pop(context, _textEditingController.text.trim());
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 10, right: 10),
@@ -82,6 +83,7 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
                       maxLength: 400,
+
                       focusNode: _focusNode,
                       controller: _textEditingController,
                       maxLines: 5,

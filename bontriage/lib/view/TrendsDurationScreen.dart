@@ -39,11 +39,11 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
 
   int touchedGroupIndex;
 
-  int clickedValue;
+  double clickedValue = 0;
 
   bool isClicked = false;
 
-  List<Ity> durationListData = [];
+  List<Ity1> durationListData = [];
   List<Data> multipleFirstIntensityListData = [];
   List<Data> multipleSecondIntensityListData = [];
   List<BarChartGroupData> items;
@@ -147,8 +147,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             return BarTooltipItem(
                                 weekDay +
                                     '\n' +
-                                    (rod.y.toInt()).toString() +
-                                    ' hours',
+                                    (rod.y.toStringAsFixed(1)).toString() +
+                                    '${rod.y == 1.0 ? ' Hour':' Hours'}',
                                 TextStyle(
                                     color:  setToolTipTextColor(),
                                     fontFamily: 'JostRegular',
@@ -161,10 +161,10 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           if (response.spot.spot != null) {
                             if (response.spot.spot.y != null) {
                               setState(() {
-                                clickedValue = response.spot.spot.y.toInt();
+                                clickedValue = response.spot.spot.y;
                                 if (response.touchInput is FlLongPressEnd ||
                                     response.touchInput is FlPanEnd) {
-                                  isClicked = true;
+                                    isClicked = true;
                                 }
                               });
                             }
@@ -233,7 +233,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                             fontFamily: 'JostRegular',
                             fontSize: 10),
                         margin: 10,
-                        interval: ((axesMaxValue / 10).ceil()).toDouble(),
+                        interval: (((axesMaxValue == 0? 60:axesMaxValue) / 10).ceil()).toDouble(),
                         reservedSize: 11,
                         getTitles: (value) {
                           return setLeftAxisTitlesValue(value);
@@ -286,6 +286,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month - 1);
@@ -320,6 +321,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                   width: 30,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     DateTime dateTime =
                         DateTime(_dateTime.year, _dateTime.month + 1);
@@ -330,6 +332,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                     } else {
                       ///To:Do
                       print("Not Allowed");
+                      Utils.showValidationErrorDialog(context, Constant.beyondDateErrorMessage);
                     }
                   },
                   child: Padding(
@@ -356,7 +359,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: setHeadacheColor(),
+                            color: /*setHeadacheColor()*/Constant.otherHeadacheColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -366,7 +369,16 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 0 ? widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[0].text:'',
+                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  0
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[0]
+                                  .text
+                              : ''*/
+                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -385,7 +397,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: headacheColorChanged ? Constant.migraineColor: Constant.otherHeadacheColor,
+                            color: /*headacheColorChanged? Constant.otherHeadacheColor: */Constant.migraineColor,
                             shape: BoxShape.rectangle,
                           ),
                           height: 13,
@@ -395,7 +407,16 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                           width: 10,
                         ),
                         Text(
-                          widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData.length > 1 ?widget.editGraphViewFilterModel.recordsTrendsDataModel.headacheListModelData[1].text:'',
+                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
+                                      .headacheListModelData.length >
+                                  1
+                              ? widget
+                                  .editGraphViewFilterModel
+                                  .recordsTrendsDataModel
+                                  .headacheListModelData[1]
+                                  .text
+                              : ''*/
+                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -700,7 +721,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
       }
 
       print(
-          'AllIntensityListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
+          'AllDurationListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
 
       barGroup1 = makeGroupData(
           0,
@@ -838,6 +859,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
           } else {
             remainingHeadacheDurationValue = 0;
           }
+
+          remainingHeadacheDurationValue = 0;
           setAllWeekDurationData(i, firstDurationData.value.toDouble(),Constant.highBarColorIntensity);
         } else if (remainingHeadacheDurationValue > 0) {
           if (remainingHeadacheDurationValue <= 24) {
@@ -849,6 +872,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             remainingHeadacheDurationValue =
                 remainingHeadacheDurationValue - 24;
           }
+          remainingHeadacheDurationValue = 0;
         }else{
           setAllWeekDurationData(i, 0,Constant.lowBarColorIntensity);
         }
@@ -862,6 +886,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
           } else {
             remainingHeadacheDurationValue = 0;
           }
+          remainingHeadacheDurationValue = 0;
           setAllMultipleWeekDurationData(i, secondDurationData.value.toDouble(),Constant.highBarColorIntensity);
         } else if (remainingHeadacheDurationValue > 0) {
           if (remainingHeadacheDurationValue <= 24) {
@@ -873,6 +898,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             remainingHeadacheDurationValue =
                 remainingHeadacheDurationValue - 24;
           }
+          remainingHeadacheDurationValue = 0;
         }else{
           setAllMultipleWeekDurationData(i, 0,Constant.lowBarColorIntensity);
         }
@@ -887,11 +913,9 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
       } catch (Exception) {
         print('Maximum ListData Value $Exception');
       }
-      print(
-          'AllIntensityListData $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
+      print('AllDurationData1 $firstWeekDurationData $secondWeekDurationData $thirdWeekDurationData $fourthWeekDurationData');
 
-      print(
-          'AllIntensityListData $multipleFirstWeekDurationData $multipleSecondWeekDurationData $multipleThirdWeekDurationData $multipleFourthWeekDurationData');
+      print('AllDurationData2 $multipleFirstWeekDurationData $multipleSecondWeekDurationData $multipleThirdWeekDurationData $multipleFourthWeekDurationData');
 
       barGroup1 = makeMultipleGroupData(
           0,
@@ -962,14 +986,14 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         if(totalDaysInCurrentMonth == 29) {
           barGroup5 = makeMultipleGroupData(
             4,
+            fifthWeekDurationData[0],
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             multipleFifthWeekDurationData[0],
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
@@ -987,8 +1011,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            multipleFifthWeekDurationData[0],
+            multipleFifthWeekDurationData[1],
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
@@ -1005,9 +1029,9 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
-            TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
+            multipleFifthWeekDurationData[0],
+            multipleFifthWeekDurationData[1],
+            multipleFifthWeekDurationData[2],
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
             TrendsDurationColorModel(durationValue: 0,durationColorIntensity:Constant.lowBarColorIntensity),
@@ -1020,6 +1044,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
       } else {
         items = [barGroup1, barGroup2, barGroup3, barGroup4];
       }
+
+      print('TrendsItems????$items');
 
       rawBarGroups = items;
       showingBarGroups = rawBarGroups;
@@ -1146,14 +1172,18 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
       maxValue = firstMultipleHeadache1;
       minValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
+        BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
+      ];
     } else {
       minValue = firstMultipleHeadache1;
       maxValue = secondMultipleHeadache1;
+      return [
+        BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
+        BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),
+      ];
     }
-    return [
-      BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
-      BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
-    ];
   }
 
   double setAxisValue(double firstMultipleHeadache1, double secondMultipleHeadache1) {

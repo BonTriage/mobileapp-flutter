@@ -72,7 +72,7 @@ class SignUpOnBoardThirdStepRepository {
     var userProfileInfoData =
         await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
     signUpOnBoardAnswersRequestModel.eventType =
-        Constant.clinicalImpressionShort3;
+        Constant.clinicalImpression;
     if(userProfileInfoData != null)
       signUpOnBoardAnswersRequestModel.userId = int.parse(userProfileInfoData.userId);
     else
