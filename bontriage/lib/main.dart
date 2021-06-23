@@ -44,6 +44,7 @@ import 'package:mobile/view/SignUpOnBoardSplash.dart';
 import 'package:mobile/view/SignUpOnBoardStartAssessment.dart';
 import 'package:mobile/view/SignUpSecondStepCompassResult.dart';
 import 'package:mobile/view/Splash.dart';
+import 'package:mobile/view/TimeSection.dart';
 import 'package:mobile/view/WebViewScreen.dart';
 import 'package:mobile/view/WelcomeStartAssessmentScreen.dart';
 import 'package:mobile/view/WelcomeScreen.dart';
@@ -383,7 +384,23 @@ class MyApp extends StatelessWidget {
               final Widget widget = AddHeadacheOnGoingScreen(
                 currentUserHeadacheModel: settings.arguments,
               );
-              return SlideFromBottomPageRoute(widget: widget, routeSettings: routeSettings);
+              return SlideFromBottomPageRoute(
+                widget: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => StartDateTimeInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => EndDateTimeInfo(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => EndTimeExpandedInfo(),
+                    ),
+                  ],
+                  child: widget,
+                ),
+                routeSettings: routeSettings,
+              );
             }
 
           case Constant.logDayScreenRouter:
