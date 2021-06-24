@@ -396,6 +396,9 @@ class MyApp extends StatelessWidget {
                     ChangeNotifierProvider(
                       create: (context) => EndTimeExpandedInfo(),
                     ),
+                    ChangeNotifierProvider(
+                      create: (context) => HeadacheTypeInfo(),
+                    ),
                   ],
                   child: widget,
                 ),

@@ -12,6 +12,7 @@ import 'package:mobile/models/TriggerWidgetModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddNewMedicationDialog.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
 import 'package:mobile/view/DateTimePicker.dart';
@@ -20,6 +21,8 @@ import 'package:mobile/view/MedicationDosagePicker.dart';
 import 'package:mobile/view/TimeSection.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
 import 'dart:io' show Platform;
+
+import 'package:provider/provider.dart';
 
 class AddHeadacheSection extends StatefulWidget {
   final String headerText;
@@ -120,9 +123,13 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               selectedValue.isSelected = true;
           }
         }
-        return _getWidget(CircleLogOptions(
-          logOptions: widget.valuesList,
-          onCircleItemSelected: _onHeadacheTypeItemSelected,
+        return _getWidget(Consumer<HeadacheTypeInfo>(
+          builder: (context, data, child) {
+            return CircleLogOptions(
+              logOptions: widget.valuesList,
+              onCircleItemSelected: _onHeadacheTypeItemSelected,
+            );
+          },
         ));
       case 'onset':
         return _getWidget(TimeSection(

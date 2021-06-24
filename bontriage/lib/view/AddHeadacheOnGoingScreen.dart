@@ -14,6 +14,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
+import 'package:provider/provider.dart';
 import 'DiscardChangesBottomSheet.dart';
 import 'NetworkErrorScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -387,26 +388,27 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         context, Constant.partTwoOnBoardScreenRouter,
         arguments: PartTwoOnBoardArgumentModel(argumentName: Constant.clinicalImpressionEventType));
     if (pushToScreenResult != null) {
-      setState(() {
-        if (_addHeadacheUserListData != null) {
-          Questions questions = _addHeadacheUserListData.firstWhere(
-                  (element) => element.tag == "headacheType",
+      if (_addHeadacheUserListData != null) {
+        Questions questions = _addHeadacheUserListData.firstWhere(
+                (element) => element.tag == "headacheType",
+            orElse: () => null);
+        if (questions != null) {
+          questions.values.removeLast();
+          Values values = questions.values.firstWhere(
+                  (element) => element.isSelected,
               orElse: () => null);
-          if (questions != null) {
-            questions.values.removeLast();
-            Values values = questions.values.firstWhere(
-                    (element) => element.isSelected,
-                orElse: () => null);
-            if (values != null) {
-              values.isSelected = false;
-            }
-            questions.values
-                .add(Values(text: pushToScreenResult, isSelected: true));
+          if (values != null) {
+            values.isSelected = false;
           }
-
-          addSelectedHeadacheDetailsData("headacheType", pushToScreenResult);
+          questions.values
+              .add(Values(text: pushToScreenResult, isSelected: true));
         }
-      });
+
+        addSelectedHeadacheDetailsData("headacheType", pushToScreenResult);
+
+        var headacheTypeInfo = Provider.of<HeadacheTypeInfo>(context, listen: false);
+        headacheTypeInfo.updateHeadacheTypeInfo();
+      }
     }
     print(pushToScreenResult);
   }
@@ -600,5 +602,11 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         saveDataInLocalDataBaseOrServer();
       }
     }
+  }
+}
+
+class HeadacheTypeInfo with ChangeNotifier {
+  updateHeadacheTypeInfo() {
+    notifyListeners();
   }
 }
