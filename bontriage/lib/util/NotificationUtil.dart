@@ -1,11 +1,11 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/util/constant.dart';
 
 class NotificationUtil {
   static Future<void> notificationSelected(LocalNotificationModel localNotificationModel, DateTime defaultNotificationTime) async {
-    var androidDetails = AndroidNotificationDetails(
+    /*var androidDetails = AndroidNotificationDetails(
         "ChannelId", "MigraineMentor", 'Reminder to log your day.',
         importance: Importance.max, icon: 'notification_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
@@ -84,6 +84,6 @@ class NotificationUtil {
             Time(_selectedHour, _selectedMinute),
             notificationDetails);
       }
-    }
+    }*/
   }
 }

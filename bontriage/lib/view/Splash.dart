@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+//import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CheckVersionUpdateBloc.dart';
@@ -130,27 +130,41 @@ class _SplashState extends State<Splash> {
   void _checkCriticalVersionUpdate() async {
     VersionUpdateModel responseData = await _checkVersionUpdateBloc.checkVersionUpdateData();
     if(responseData != null) {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      int appVersionNumber = int.tryParse(packageInfo.version.replaceAll('.', ''));
-      if (Platform.isAndroid) {
-        int serverVersionNumber = int.tryParse(responseData.androidVersion.replaceAll('.', ''));
-        if (serverVersionNumber > appVersionNumber && responseData.androidCritical) {
-          Utils.showCriticalUpdateDialog(context, responseData.androidBuildDetails);
-        } else {
-          getTutorialsState();
-        }
-      } else {
-        int serverVersionNumber = int.tryParse(responseData.iosVersion.replaceAll('.', ''));
-        if (serverVersionNumber > appVersionNumber && responseData.iosCritical) {
-          Utils.showCriticalUpdateDialog(context, responseData.description);
-        } else {
-          int serverVersionNumber = int.tryParse(responseData.iosVersion.replaceAll('.', ''));
-          if (serverVersionNumber > appVersionNumber && responseData.iosCritical) {
-            Utils.showCriticalUpdateDialog(context, responseData.description);
+      try {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        int appVersionNumber = int.tryParse(
+            packageInfo.version.replaceAll('.', ''));
+        if (Platform.isAndroid) {
+          int serverVersionNumber = int.tryParse(
+              responseData.androidVersion.replaceAll('.', ''));
+          if (serverVersionNumber > appVersionNumber &&
+              responseData.androidCritical) {
+            Utils.showCriticalUpdateDialog(
+                context, responseData.androidBuildDetails);
           } else {
             getTutorialsState();
           }
+        } else if (Platform.isIOS) {
+          int serverVersionNumber = int.tryParse(
+              responseData.iosVersion.replaceAll('.', ''));
+          if (serverVersionNumber > appVersionNumber &&
+              responseData.iosCritical) {
+            Utils.showCriticalUpdateDialog(context, responseData.description);
+          } else {
+            int serverVersionNumber = int.tryParse(
+                responseData.iosVersion.replaceAll('.', ''));
+            if (serverVersionNumber > appVersionNumber &&
+                responseData.iosCritical) {
+              Utils.showCriticalUpdateDialog(context, responseData.description);
+            } else {
+              getTutorialsState();
+            }
+          }
+        } else {
+          getTutorialsState();
         }
+      } catch(e) {
+        getTutorialsState();
       }
     }
   }

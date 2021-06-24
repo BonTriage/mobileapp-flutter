@@ -10,7 +10,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NotificationSection.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
@@ -447,14 +447,14 @@ class _NotificationScreenState extends State<NotificationScreen>
   /// this screen.
   void getNotificationListData() async {
     if (Platform.isIOS) {
-      var permissionResult = await flutterLocalNotificationsPlugin
+      var permissionResult = /*await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
         alert: true,
         badge: true,
         sound: true,
-      );
+      )*/false;
       if (permissionResult ?? false) {
         setState(() {
           _locationServicesSwitchState = true;
@@ -487,14 +487,14 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
   void requestPermissionForNotification() async{
     if(Platform.isIOS){
-      var permissionResult  = await flutterLocalNotificationsPlugin
+      var permissionResult  = /*await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
         alert: true,
         badge: true,
         sound: true,
-      );
+      )*/false;
 
       if(permissionResult ?? false) {
         localNotificationDataSink.add('Clicked');

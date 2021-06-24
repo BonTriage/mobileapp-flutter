@@ -409,7 +409,7 @@ class Utils {
       sharedPreferences.clear();
       sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume);
       sharedPreferences.setBool(Constant.tutorialsState, true);
-      flutterLocalNotificationsPlugin?.cancelAll();
+      //flutterLocalNotificationsPlugin?.cancelAll();
     } catch (e) {
       print('in here $e');
     }

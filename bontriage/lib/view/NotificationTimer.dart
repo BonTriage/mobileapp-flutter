@@ -4,7 +4,7 @@ import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../main.dart';
 
@@ -63,7 +63,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       if(event == 'Clicked')
         setAllNotifications();
       else if(event == 'CancelAll') {
-        flutterLocalNotificationsPlugin?.cancelAll();
+        //flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
 
@@ -305,7 +305,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
 
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> notificationSelected(String payload) async {
-    var androidDetails = AndroidNotificationDetails(
+    /*var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Reminder to log your day.',
         importance: Importance.max, icon: 'app_icon_1', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
@@ -517,7 +517,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
           widget.allNotificationListData.remove(localNotificationModel);
         }
       }
-    }
+    }*/
 
 
   }
@@ -526,7 +526,7 @@ class _NotificationTimerState extends State<NotificationTimer> {
       int id, String title, String body, String payload) async {
     print("onDidReceiveLocalNotification");
 
-    var androidDetails = AndroidNotificationDetails(
+    /*var androidDetails = AndroidNotificationDetails(
         "ChannelId", "BonTriage", 'Bhag Le na',
         importance: Importance.max);
     var iosDetails = IOSNotificationDetails();
@@ -537,15 +537,15 @@ class _NotificationTimerState extends State<NotificationTimer> {
         "BonTriage",
         "Medication le le na",
         Time(_selectedHour, _selectedMinute),
-        notificationDetails);
+        notificationDetails);*/
   }
 
   /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
-    await flutterLocalNotificationsPlugin
+   /* await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
-        ?.deleteNotificationChannel(channelId.toString());
+        ?.deleteNotificationChannel(channelId.toString());*/
   }
 
   /// This Method will be use for to set Daily, Weekly Notifications on respective Notifications Section.

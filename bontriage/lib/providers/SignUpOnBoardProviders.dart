@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';

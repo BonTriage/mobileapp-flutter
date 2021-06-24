@@ -43,12 +43,12 @@ dependencies:
   flutter_pdfview: ^1.0.4
 
   #advance_pdf_viewer: any
-  flutter_local_notifications: ^5.0.0+3
+  #flutter_local_notifications: ^5.0.0+3
   package_info_plus: ^1.0.1
   rxdart: ^0.27.0
-  firebase_core: ^1.2.0
-  firebase_crashlytics: ^2.0.4
-  firebase_messaging: ^10.0.0
+  #firebase_core: ^1.2.0
+  #firebase_crashlytics: ^2.0.4
+  #firebase_messaging: ^10.0.0
   # permission_handler: ^6.1.1
 
 

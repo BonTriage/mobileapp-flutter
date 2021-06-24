@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -118,14 +118,14 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
         await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
 
     if (Platform.isIOS) {
-      var permissionResult = await flutterLocalNotificationsPlugin
+      var permissionResult = /*await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
               IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
             alert: true,
             badge: true,
             sound: true,
-          );
+          );*/false;
 
       if (permissionResult ?? false) {
         setState(() {

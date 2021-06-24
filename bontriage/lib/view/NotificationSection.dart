@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../main.dart';
 
@@ -78,7 +78,7 @@ class _NotificationSectionState extends State<NotificationSection>
         isWeekDaysSelected = false;
         isOffSelected = true;
         _setAllNotifications();
-        flutterLocalNotificationsPlugin?.cancelAll();
+        //flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
 
@@ -595,7 +595,7 @@ class _NotificationSectionState extends State<NotificationSection>
   /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
     debugPrint('ChannelId????$channelId');
-    await flutterLocalNotificationsPlugin.cancel(channelId);
+    //await flutterLocalNotificationsPlugin.cancel(channelId);
   }
 
   String _setDeleteOrEditText() {
@@ -784,7 +784,7 @@ class _NotificationSectionState extends State<NotificationSection>
 
   /// This Method will be use to set for Daily, Weekly notification on respective notification section.
   Future<void> _notificationSelected(String payload) async {
-    var androidDetails = AndroidNotificationDetails(
+    /*var androidDetails = AndroidNotificationDetails(
         "ChannelId", "MigraineMentor", 'Reminder to log your day.',
         importance: Importance.max, icon: 'notification_icon', color: Constant.chatBubbleGreen);
     var iosDetails = IOSNotificationDetails();
@@ -1017,7 +1017,7 @@ class _NotificationSectionState extends State<NotificationSection>
           _deleteNotificationChannel(7);
         }
       }
-    }
+    }*/
 
 
   }

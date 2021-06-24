@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey _logDayGlobalKey;
   GlobalKey _addHeadacheGlobalKey;
   GlobalKey _recordsGlobalKey;
-  FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  //FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     saveCurrentIndexOfTabBar(0);
     print(Utils.getDateTimeInUtcFormat(DateTime.now()));
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    /*FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
       if (message.notification != null) {
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Message also contained a notification: ${message.notification}');
         Utils.showValidationErrorDialog(context, 'From opened app ${message.data.toString()}');
       }
-    });
+    });*/
 
     //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -340,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void saveHomePosition() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
-    print('Device Token Start???${await _fcm.getToken()}???End');
+    //print('Device Token Start???${await _fcm.getToken()}???End');
   //  Utils.showValidationErrorDialog(context, 'Terminated App ${sharedPreferences.getString('notification_data')}');
     sharedPreferences.remove('notification_data');
   }

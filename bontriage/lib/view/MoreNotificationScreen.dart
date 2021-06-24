@@ -5,7 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -534,14 +534,14 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
   void requestPermissionForNotification() async {
     if(Platform.isIOS){
-     var permissionResult  = await flutterLocalNotificationsPlugin
+     var permissionResult  = /*await flutterLocalNotificationsPlugin
          .resolvePlatformSpecificImplementation<
          IOSFlutterLocalNotificationsPlugin>()
          ?.requestPermissions(
        alert: true,
        badge: true,
        sound: true,
-     );
+     );*/false;
 
      if(permissionResult ?? false) {
        localNotificationDataSink.add('Clicked');

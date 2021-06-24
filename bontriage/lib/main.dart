@@ -1,6 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +57,7 @@ import 'package:mobile/view/sign_up_age_screen.dart';
 import 'package:mobile/view/sign_up_location_services.dart';
 import 'package:mobile/view/sign_up_name_screen.dart';
 import 'package:mobile/view/sign_up_on_board_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'util/constant.dart';
 import 'view/SignUpOnBoardBubbleTextView.dart';
@@ -77,8 +77,8 @@ final BehaviorSubject<String> selectNotificationSubject =
 const MethodChannel platform =
     MethodChannel('dexterx.dev/flutter_local_notifications_example');
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+/*final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();*/
 
 class ReceivedNotification {
   ReceivedNotification({
@@ -97,19 +97,19 @@ class ReceivedNotification {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Firebase.
-  await Firebase.initializeApp();
-  await initNotification();
+  //await Firebase.initializeApp();
+  //await initNotification();
   Paint.enableDithering = true;
 
   ///Uncomment the below code when providing the build to tester for automation.
   //enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //await Firebase.initializeApp();
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+/*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
@@ -124,10 +124,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
     //Utils.showValidationErrorDialog(context, 'From Background ${message.data.toString()}');
   }
-}
+}*/
 
 /// This Method will be use for initialize all android and IOs Plugin and other required variables.
-Future<void> initNotification() async {
+/*Future<void> initNotification() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
   final IOSInitializationSettings initializationSettingsIOS =
@@ -152,7 +152,7 @@ Future<void> initNotification() async {
       print('notification payload: ' + payload);
     }
   });
-}
+}*/
 
 Map<int, Color> color = {
   50: Constant.chatBubbleGreen,
