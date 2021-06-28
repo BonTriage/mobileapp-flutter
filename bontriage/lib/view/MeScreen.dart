@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/blocs/CalendarScreenBloc.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
@@ -42,6 +44,7 @@ class _MeScreenState extends State<MeScreen>
   CalendarScreenBloc _calendarScreenBloc;
   UserLogHeadacheDataCalendarModel userLogHeadacheDataCalendarModel;
   CurrentUserHeadacheModel currentUserHeadacheModel;
+  UserProfileInfoModel _userProfileInfoModel;
 
   GlobalKey _logDayGlobalKey = GlobalKey();
   GlobalKey _addHeadacheGlobalKey = GlobalKey();
@@ -206,133 +209,138 @@ class _MeScreenState extends State<MeScreen>
                             userLogHeadacheDataCalendarModel = snapshot.data;
                             setUserWeekData(userLogHeadacheDataCalendarModel);
                             widget.getButtonsGlobalKeyCallback(_logDayGlobalKey, _addHeadacheGlobalKey);
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Color(0xCC0E232F),
-                                borderRadius: BorderRadius.circular(20),
+                            return ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: 700,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'THIS WEEK:',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Constant.chatBubbleGreen,
-                                            fontFamily: Constant.jostMedium),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          widget.navigateToOtherScreenCallback(TabNavigatorRoutes.calenderRoute,
-                                              null);
-                                          Utils.saveDataInSharedPreference(Constant.isSeeMoreClicked, 'true');
-                                        },
-                                        child: Text(
-                                          'SEE MORE >',
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xCC0E232F),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'THIS WEEK:',
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Constant.chatBubbleGreen,
                                               fontFamily: Constant.jostMedium),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Table(
-                                    defaultVerticalAlignment:
-                                        TableCellVerticalAlignment.middle,
-                                    children: [
-                                      TableRow(children: [
-                                        Center(
+                                        GestureDetector(
+                                          onTap: () {
+                                            widget.navigateToOtherScreenCallback(TabNavigatorRoutes.calenderRoute,
+                                                null);
+                                            Utils.saveDataInSharedPreference(Constant.isSeeMoreClicked, 'true');
+                                          },
                                           child: Text(
-                                            'Su',
+                                            'SEE MORE >',
                                             style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                                fontSize: 12,
+                                                color: Constant.chatBubbleGreen,
+                                                fontFamily: Constant.jostMedium),
                                           ),
                                         ),
-                                        Center(
-                                          child: Text(
-                                            'M',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Table(
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      children: [
+                                        TableRow(children: [
+                                          Center(
+                                            child: Text(
+                                              'Su',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            'Tu',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                          Center(
+                                            child: Text(
+                                              'M',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            'W',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                          Center(
+                                            child: Text(
+                                              'Tu',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            'Th',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                          Center(
+                                            child: Text(
+                                              'W',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            'F',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                          Center(
+                                            child: Text(
+                                              'Th',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            'Sa',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Constant
-                                                    .locationServiceGreen,
-                                                fontFamily:
-                                                    Constant.jostMedium),
+                                          Center(
+                                            child: Text(
+                                              'F',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
                                           ),
-                                        ),
-                                      ]),
-                                      TableRow(children: currentWeekListData),
-                                    ],
-                                  ),
-                                ],
+                                          Center(
+                                            child: Text(
+                                              'Sa',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Constant
+                                                      .locationServiceGreen,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ]),
+                                        TableRow(children: currentWeekListData),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           } else {
@@ -492,12 +500,21 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _navigateUserToHeadacheLogScreen() async {
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(_userProfileInfoModel == null) {
+      if(!kIsWeb) {
+        _userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      } else {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+        _userProfileInfoModel = userProfileInfoModelFromJson(userInfoJson);
+      }
+    }
+    var userProfileInfoData = _userProfileInfoModel;
 
     CurrentUserHeadacheModel currentUserHeadacheModel;
 
-    if (userProfileInfoData != null)
+    if (userProfileInfoData != null && !kIsWeb)
       currentUserHeadacheModel = await SignUpOnBoardProviders.db
           .getUserCurrentHeadacheData(userProfileInfoData.userId);
 
@@ -518,7 +535,18 @@ class _MeScreenState extends State<MeScreen>
       String firstDayOfTheCurrentWeek, lastDayOfTheCurrentWeek) async {
     if(currentUserHeadacheModel == null) {
       await _calendarScreenBloc.fetchUserOnGoingHeadache();
-      var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      if(_userProfileInfoModel == null) {
+        if(!kIsWeb) {
+          _userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+        } else {
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+          _userProfileInfoModel = userProfileInfoModelFromJson(userInfoJson);
+        }
+      }
+
+      var userProfileInfoData = _userProfileInfoModel;
 
       if(userProfileInfoData != null) {
         print('USERID???${userProfileInfoData.userId}');
@@ -652,8 +680,17 @@ class _MeScreenState extends State<MeScreen>
   }
 
   void _getUserProfileDetails() async {
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(_userProfileInfoModel == null) {
+      if(!kIsWeb) {
+        _userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      } else {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+        _userProfileInfoModel = userProfileInfoModelFromJson(userInfoJson);
+      }
+    }
+    var userProfileInfoData = _userProfileInfoModel;
     setState(() {
       userName = userProfileInfoData.profileName;
     });
@@ -669,9 +706,20 @@ class _MeScreenState extends State<MeScreen>
       await widget.navigateToOtherScreenCallback(TabNavigatorRoutes.trendsRoute, null);
     }
 
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(_userProfileInfoModel == null) {
+      if(!kIsWeb) {
+        _userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      } else {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+        _userProfileInfoModel = userProfileInfoModelFromJson(userInfoJson);
+      }
+    }
+    var userProfileInfoData = _userProfileInfoModel;
     if(currentPositionOfTabBar == 0 && userProfileInfoData != null) {
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+      if(!kIsWeb)
+        currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
       print('currentUserHeadacheModel$currentUserHeadacheModel');
       if(currentUserHeadacheModel != null && currentUserHeadacheModel.isOnGoing) {
         setState(() {
@@ -716,7 +764,17 @@ class _MeScreenState extends State<MeScreen>
 
     currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    if(_userProfileInfoModel == null) {
+      if(!kIsWeb) {
+        _userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      } else {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+        _userProfileInfoModel = userProfileInfoModelFromJson(userInfoJson);
+      }
+    }
+    var userProfileInfoData = _userProfileInfoModel;
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 

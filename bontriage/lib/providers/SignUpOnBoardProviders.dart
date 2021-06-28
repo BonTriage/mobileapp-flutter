@@ -10,6 +10,7 @@ import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 
 class SignUpOnBoardProviders {
   static const String TABLE_USER_PROGRESS = "user_progress";
@@ -49,7 +50,7 @@ class SignUpOnBoardProviders {
 
   SignUpOnBoardProviders._();
 
-  static final SignUpOnBoardProviders db = SignUpOnBoardProviders._();
+  static final SignUpOnBoardProviders db = (!kIsWeb) ? SignUpOnBoardProviders._() : null;
 
   Database _database;
 

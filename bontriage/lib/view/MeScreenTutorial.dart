@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/TutorialChatBubble.dart';
@@ -188,7 +189,7 @@ class _MeScreenTutorialDialogState extends State<MeScreenTutorialDialog> with Si
                       Visibility(
                         visible: _shouldClip,
                         child: Padding(
-                          padding: EdgeInsets.only(top: _logDayOffset.dy + 40, right: _logDayOffset.dx - 20),
+                          padding: EdgeInsets.only(top: _logDayOffset.dy + 40, right: (!kIsWeb) ? _logDayOffset.dx - 20 : 50),
                           child: Row(
                             children: [
                               Expanded(

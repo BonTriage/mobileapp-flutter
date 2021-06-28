@@ -11,6 +11,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginScreenBloc {
   LoginScreenRepository _loginScreenRepository;
@@ -96,11 +97,14 @@ class LoginScreenBloc {
             userProfileInfoModel =
                 UserProfileInfoModel.fromJson(jsonDecode(response));
             await _deleteAllUserData();
-            await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
-            await SignUpOnBoardProviders.db.deleteTableUserProgress();
-            var selectedAnswerListData = await SignUpOnBoardProviders.db
-                .insertUserProfileInfo(userProfileInfoModel);
-            print(selectedAnswerListData);
+            if(!kIsWeb) {
+              await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
+              await SignUpOnBoardProviders.db.deleteTableUserProgress();
+              await SignUpOnBoardProviders.db.insertUserProfileInfo(userProfileInfoModel);
+            } else {
+              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+              sharedPreferences.setString(Constant.userInfo, userProfileInfoModelToJson(userProfileInfoModel));
+            }
             apiResponse = Constant.success;
           }
         } else {
@@ -146,7 +150,8 @@ class LoginScreenBloc {
       sharedPreferences.clear();
       sharedPreferences.setBool(Constant.chatBubbleVolumeState, isVolume ?? false);
       sharedPreferences.setBool(Constant.tutorialsState, true);
-      await SignUpOnBoardProviders.db.deleteAllTableData();
+      if(!kIsWeb)
+        await SignUpOnBoardProviders.db.deleteAllTableData();
     } catch (e) {
       print(e);
     }

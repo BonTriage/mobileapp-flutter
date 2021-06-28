@@ -1,15 +1,18 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:mobile/models/CalendarInfoDataModel.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/OnGoingHeadacheDataModel.dart';
 import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/repository/CalendarRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarScreenBloc {
   CalendarRepository _calendarRepository;
@@ -43,7 +46,15 @@ class CalendarScreenBloc {
 
   Future<CurrentUserHeadacheModel> fetchUserOnGoingHeadache() async {
     CurrentUserHeadacheModel currentUserHeadacheModel;
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     if(userProfileInfoData != null) {
       try{
         String url = '${WebservicePost.qaServerUrl}common/ongoingheadache/${userProfileInfoData.userId}';
@@ -62,7 +73,8 @@ class CalendarScreenBloc {
               currentUserHeadacheModel.headacheId = response.headaches[0].id;
               currentUserHeadacheModel.isOnGoing = true;
               currentUserHeadacheModel.isFromRecordScreen = false;
-              await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(currentUserHeadacheModel);
+              if(!kIsWeb)
+                await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(currentUserHeadacheModel);
             }
           } else {
             networkDataSink.addError(Exception(Constant.somethingWentWrong));
@@ -79,8 +91,15 @@ class CalendarScreenBloc {
 
   fetchCalendarTriggersData(String startDateValue, String endDateValue) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'calender/?' +

@@ -1,11 +1,13 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/RecordsTrendsScreenBloc.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
@@ -637,7 +639,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
     currentUserHeadacheModel.selectedEndDate = Utils.getDateTimeInUtcFormat(endHeadacheDateTime);
 
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
 
     currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
 
@@ -672,10 +683,20 @@ class _TrendsScreenState extends State<TrendsScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     int currentPositionOfTabBar = sharedPreferences.getInt(Constant.currentIndexOfTabBar);
-    var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
 
     if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
-      currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
+      if(!kIsWeb)
+        currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
   }
 }

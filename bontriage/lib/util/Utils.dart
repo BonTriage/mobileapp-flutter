@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/CompassTutorialModel.dart';
 import 'package:mobile/models/HomeScreenArgumentModel.dart';
@@ -577,7 +578,7 @@ class Utils {
 
   ///This method is used to return scroll physics based on the platform
   static ScrollPhysics getScrollPhysics() {
-    return Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics();
+    return (!kIsWeb) ? (Platform.isIOS ? BouncingScrollPhysics() : ClampingScrollPhysics()) : BouncingScrollPhysics();
   }
 
   ///This method is used to show validation error message to the user

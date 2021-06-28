@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsCompareCompassModel.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
@@ -47,8 +48,15 @@ class RecordsCompassScreenBloc {
   fetchAllHeadacheListData(String startDate, String endDate,
       bool isOverTimeCompassScreen, String headacheName) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'common/fetchheadaches/' +
@@ -108,8 +116,15 @@ class RecordsCompassScreenBloc {
   fetchOverTimeCompassAxesResult(
       String startDate, String endDate, String headacheName) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'compass/calender/?' +
@@ -151,8 +166,15 @@ class RecordsCompassScreenBloc {
   fetchCompareCompassAxesResult(
       String startDate, String endDate, String headacheName) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'compass/calender/?' +
@@ -191,8 +213,15 @@ class RecordsCompassScreenBloc {
   //http://localhost:8080/mobileapi/v0/compass/profile/4579
   fetchFirstLoggedCompassAxesResult() async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = '${WebservicePost.qaServerUrl}compass/profile/${userProfileInfoData.userId}';
       var response = await _recordsCompassRepository.compassServiceCall(

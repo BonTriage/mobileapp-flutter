@@ -19,6 +19,7 @@ import 'package:mobile/view/MeScreenTutorial.dart';
 import 'package:mobile/view/MedicalHelpActionSheet.dart';
 import 'package:mobile/view/SaveAndExitActionSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 import 'DateTimePicker.dart';
 import 'EditGraphViewBottomSheet.dart';
@@ -367,9 +368,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ///This method is used to show tutorial dialog
   void _showTutorialDialog() async {
-    bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isTutorialHasSeen = sharedPreferences.getBool(Constant.isTutorialHasSeen) ?? false;
+
+    //bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
     if(!isTutorialHasSeen) {
-      await SignUpOnBoardProviders.db.insertTutorialData(1);
+      sharedPreferences.setBool(Constant.isTutorialHasSeen, true);
+     //await SignUpOnBoardProviders.db.insertTutorialData(1);
       showGeneralDialog(
           context: context,
           barrierColor: Colors.transparent,
@@ -409,53 +414,55 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _insertDataIntoLocalDatabase() async {
-    var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String isNotificationInitiallyAdded = prefs.getString(Constant.isNotificationInitiallyAdded) ?? Constant.blankString;
+    if(!kIsWeb) {
+      var notificationListData = await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String isNotificationInitiallyAdded = prefs.getString(Constant.isNotificationInitiallyAdded) ?? Constant.blankString;
 
-    if(notificationListData == null && isNotificationInitiallyAdded.isEmpty) {
-      prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
-      List<LocalNotificationModel> allNotificationListData = [];
+      if(notificationListData == null && isNotificationInitiallyAdded.isEmpty) {
+        prefs.setString(Constant.isNotificationInitiallyAdded, Constant.trueString);
+        List<LocalNotificationModel> allNotificationListData = [];
 
-      DateTime currentDateTime = DateTime.now();
+        DateTime currentDateTime = DateTime.now();
 
-      DateTime defaultNotificationTime = DateTime(
-        currentDateTime.year,
-        currentDateTime.month,
-        currentDateTime.day,
-        6,
-        0,
-        0,
-        0,
-        0
-      );
+        DateTime defaultNotificationTime = DateTime(
+            currentDateTime.year,
+            currentDateTime.month,
+            currentDateTime.day,
+            6,
+            0,
+            0,
+            0,
+            0
+        );
 
-      allNotificationListData.add(LocalNotificationModel(
-        notificationName: 'Daily Log',
-        notificationType: 'Daily',
-        notificationTime: defaultNotificationTime.toIso8601String(),
-        isCustomNotificationAdded: false
-      ));
+        allNotificationListData.add(LocalNotificationModel(
+            notificationName: 'Daily Log',
+            notificationType: 'Daily',
+            notificationTime: defaultNotificationTime.toIso8601String(),
+            isCustomNotificationAdded: false
+        ));
 
-      allNotificationListData.add(LocalNotificationModel(
-          notificationName: 'Medication',
-          notificationType: 'Daily',
-          notificationTime: defaultNotificationTime.toIso8601String(),
-          isCustomNotificationAdded: false
-      ));
+        allNotificationListData.add(LocalNotificationModel(
+            notificationName: 'Medication',
+            notificationType: 'Daily',
+            notificationTime: defaultNotificationTime.toIso8601String(),
+            isCustomNotificationAdded: false
+        ));
 
-      allNotificationListData.add(LocalNotificationModel(
-          notificationName: 'Exercise',
-          notificationType: 'Daily',
-          notificationTime: defaultNotificationTime.toIso8601String(),
-          isCustomNotificationAdded: false
-      ));
+        allNotificationListData.add(LocalNotificationModel(
+            notificationName: 'Exercise',
+            notificationType: 'Daily',
+            notificationTime: defaultNotificationTime.toIso8601String(),
+            isCustomNotificationAdded: false
+        ));
 
-      allNotificationListData.forEach((localNotificationModel) {
-        NotificationUtil.notificationSelected(localNotificationModel, defaultNotificationTime);
-      });
+        allNotificationListData.forEach((localNotificationModel) {
+          NotificationUtil.notificationSelected(localNotificationModel, defaultNotificationTime);
+        });
 
-      await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+        await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
+      }
     }
   }
 }

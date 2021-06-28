@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/models/RecordsTrendsDataModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -10,6 +12,7 @@ import 'package:mobile/repository/RecordsTrendsRepository.dart';
 import 'package:mobile/util/WebservicePost.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RecordsTrendsScreenBloc {
   RecordsTrendsRepository _recordsTrendsRepository;
@@ -38,8 +41,15 @@ class RecordsTrendsScreenBloc {
   fetchAllHeadacheListData(
       String startDate, String endDate, String firstHeadacheName,String secondHeadacheName, bool isMultiPleHeadacheSelected) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'common/fetchheadaches/' +
@@ -91,8 +101,15 @@ class RecordsTrendsScreenBloc {
   getTrendsUserData(
       String startDate, String endDate, String headacheName) async {
     String apiResponse;
-    var userProfileInfoData =
-        await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'trends/event/?' +
@@ -141,8 +158,15 @@ class RecordsTrendsScreenBloc {
 
   getMultipleHeadacheTrendsDate(String startDate, String endDate,String firstHeadacheName,String secondHeadacheName)async{
     String apiResponse;
-    var userProfileInfoData =
-    await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    var userProfileInfoData;
+    if(!kIsWeb) {
+      userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+    } else {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String userInfoJson = sharedPreferences.getString(Constant.userInfo);
+
+      userProfileInfoData = userProfileInfoModelFromJson(userInfoJson);
+    }
     try {
       String url = WebservicePost.qaServerUrl +
           'trends/compare/?' +

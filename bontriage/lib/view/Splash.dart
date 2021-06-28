@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'dart:html' as html;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CheckVersionUpdateBloc.dart';
@@ -130,7 +132,9 @@ class _SplashState extends State<Splash> {
   void _checkCriticalVersionUpdate() async {
     VersionUpdateModel responseData = await _checkVersionUpdateBloc.checkVersionUpdateData();
     if(responseData != null) {
-      try {
+      if(kIsWeb) {
+        getTutorialsState();
+      } else {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         int appVersionNumber = int.tryParse(
             packageInfo.version.replaceAll('.', ''));
@@ -163,8 +167,6 @@ class _SplashState extends State<Splash> {
         } else {
           getTutorialsState();
         }
-      } catch(e) {
-        getTutorialsState();
       }
     }
   }
