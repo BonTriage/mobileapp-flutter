@@ -586,11 +586,13 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
   Future<void> _openSaveAndExitActionSheet() async {
     var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
-    if(result == Constant.saveAndExit) {
-      _isClickedOnSaveAndExit = true;
-      requestPermissionForNotification();
-    } else {
-      Navigator.pop(context);
+    if(result != null) {
+      if (result == Constant.saveAndExit) {
+        _isClickedOnSaveAndExit = true;
+        requestPermissionForNotification();
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 }

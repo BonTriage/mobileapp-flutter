@@ -511,6 +511,7 @@ class _TimeSectionState extends State<TimeSection>
                           _selectedEndTime = _selectedEndDate;
                         }*/
                         _selectedEndDate = DateTime.now();
+                        _selectedEndDate = DateTime(_selectedEndDate.year, _selectedEndDate.month, _selectedEndDate.day, _selectedEndDate.hour, _selectedEndDate.minute, 0, 0, 0);
                         _selectedEndTime = _selectedEndDate;
                       });
 
