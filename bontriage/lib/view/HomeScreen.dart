@@ -11,7 +11,6 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
-import 'package:mobile/view/DateRangeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MeScreenTutorial.dart';
@@ -22,7 +21,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'BottomSheetContainer.dart';
 import 'DateTimePicker.dart';
 import 'EditGraphViewBottomSheet.dart';
-import 'SignUpBottomSheet.dart';
 
 class HomeScreen extends StatefulWidget {
   final HomeScreenArgumentModel homeScreenArgumentModel;
