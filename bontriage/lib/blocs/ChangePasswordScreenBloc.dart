@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mobile/models/DeviceTokenModel.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/networking/RequestMethod.dart';
@@ -58,6 +61,10 @@ class ChangePasswordBloc {
         if(userProfileInfoModel.profileName == null) {
           userProfileInfoModel.profileName = userProfileInfoModel.firstName;
         }
+        FirebaseMessaging _fcm = FirebaseMessaging.instance;
+        var deviceToken = await _fcm.getToken();
+        deleteDeviceTokenOfTheUser(deviceToken, userProfileInfoModel.userId);
+        setDeviceTokenOfTheUser(deviceToken, userProfileInfoModel.userId);
         await _deleteAllUserData();
         await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
         await SignUpOnBoardProviders.db.deleteTableUserProgress();
@@ -96,5 +103,49 @@ class ChangePasswordBloc {
     } catch (e) {
       print(e);
     }
+  }
+  //https://mobileapp.bontriage.com/mobileapi/v0/notification/push?action=create&user_id=4776&tokenType=1&devicetoken=123456
+  /// This method will be use for to registered device token on server.
+  void setDeviceTokenOfTheUser(String deviceToken, String userId) async {
+    try {
+      int tokenType;
+      String url = WebservicePost.qaServerUrl + 'notification/push';
+      if (Platform.isAndroid) {
+        tokenType = 1;
+      } else {
+        tokenType = 2;
+      }
+      DeviceTokenModel deviceTokenModel = DeviceTokenModel();
+      deviceTokenModel.userId = int.tryParse(userId);
+      deviceTokenModel.devicetoken = deviceToken;
+      deviceTokenModel.tokenType = tokenType;
+      deviceTokenModel.action = 'create';
+      var response =
+      await _loginScreenRepository.createAndDeletePushNotificationServiceCall(url,
+          RequestMethod.POST, deviceTokenModelToJson(deviceTokenModel));
+      print(response);
+    } catch (e) {}
+  }
+
+  /// this method will be use for to delete Device Token from server.
+  void deleteDeviceTokenOfTheUser(String deviceToken, String userId) async {
+    try {
+      int tokenType;
+      String url = WebservicePost.qaServerUrl + 'notification/push';
+      if (Platform.isAndroid) {
+        tokenType = 1;
+      } else {
+        tokenType = 2;
+      }
+      DeviceTokenModel deviceTokenModel = DeviceTokenModel();
+      deviceTokenModel.userId = int.tryParse(userId);
+      deviceTokenModel.devicetoken = deviceToken;
+      deviceTokenModel.tokenType = tokenType;
+      deviceTokenModel.action = 'delete';
+      var response =
+      await _loginScreenRepository.createAndDeletePushNotificationServiceCall(url,
+          RequestMethod.POST, deviceTokenModelToJson(deviceTokenModel));
+      print(response);
+    } catch (e) {}
   }
 }

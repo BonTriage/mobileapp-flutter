@@ -36,4 +36,17 @@ class LoginScreenRepository{
     }
   }
 
+  Future<dynamic> createAndDeletePushNotificationServiceCall(String url, RequestMethod requestMethod, String requestBody) async {
+    try {
+      var response = await NetworkService(url, requestMethod,requestBody).serviceCall();
+      if (response is AppException) {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
 }

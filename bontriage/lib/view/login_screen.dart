@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/LoginScreenBloc.dart';
 import 'package:mobile/models/ForgotPasswordModel.dart';
@@ -408,7 +409,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   /// This method will be use for to get response of Login API. If response is successful then navigate the screen into Home Screen.
   /// or not then show alert to the user into the screen.
   void _loginService() async {
-    var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue);
+    FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    var deviceToken = await _fcm.getToken();
+    var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue,"");
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;

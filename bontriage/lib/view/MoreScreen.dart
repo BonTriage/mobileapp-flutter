@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/main.dart';
+import 'package:mobile/models/DeviceTokenModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
+import 'package:mobile/networking/RequestMethod.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/repository/LoginScreenRepository.dart';
 import 'package:mobile/util/Utils.dart';
+import 'package:mobile/util/WebservicePost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -166,9 +174,35 @@ class _MoreScreenState extends State<MoreScreen> {
     var result = await Utils.showConfirmationDialog(
         context, 'Are you sure want to log out?', 'Logout?');
     if (result == 'Yes') {
+      FirebaseMessaging _fcm = FirebaseMessaging.instance;
+      var deviceToken = await _fcm.getToken();
+      UserProfileInfoModel userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      deleteDeviceTokenOfTheUser("", userProfileInfoData.userId);
       await Utils.clearAllDataFromDatabaseAndCache();
       widget.navigateToOtherScreenCallback(
           Constant.welcomeStartAssessmentScreenRouter, null);
     }
+  }
+  /// this method will be use for to delete Device Token from server.
+  void deleteDeviceTokenOfTheUser(String deviceToken,String userId) async{
+    try {
+      int tokenType;
+      LoginScreenRepository _loginScreenRepository = LoginScreenRepository();
+      String url = WebservicePost.qaServerUrl +
+          'notification/push';
+      if(Platform.isAndroid){
+        tokenType = 1;
+      }else{
+        tokenType = 2;
+      }
+      DeviceTokenModel deviceTokenModel = DeviceTokenModel();
+      deviceTokenModel.userId = int.tryParse(userId);
+      deviceTokenModel.devicetoken = deviceToken;
+      deviceTokenModel.tokenType = tokenType;
+      deviceTokenModel.action = 'delete';
+      var response =
+      await _loginScreenRepository.createAndDeletePushNotificationServiceCall(url, RequestMethod.POST,deviceTokenModelToJson(deviceTokenModel));
+      print(response);
+    } catch (e) {}
   }
 }

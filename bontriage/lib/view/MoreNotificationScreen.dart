@@ -5,7 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
@@ -532,7 +532,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
     }else return textEditingController.text ?? '';
   }
 
-  void requestPermissionForNotification() async {
+/*  void requestPermissionForNotification() async {
     if(Platform.isIOS){
      var permissionResult  = await flutterLocalNotificationsPlugin
          .resolvePlatformSpecificImplementation<
@@ -549,17 +549,17 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
          await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
          if(_isClickedOnSaveAndExit) {
            Navigator.pop(context);
-           /*Future.delayed(Duration(milliseconds: 500), () {
+           *//*Future.delayed(Duration(milliseconds: 500), () {
              Navigator.pop(context);
-           });*/
+           });*//*
          }
        });
-            /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+            *//*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
            fontSize: 16,
            fontFamily: Constant.jostRegular,
            color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-       ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
+       ScaffoldMessenger.of(context).showSnackBar(snackBar);*//*
      }else{
        _isClickedOnSaveAndExit = false;
        var result = await Utils.showConfirmationDialog(context, 'You haven\'t allowed Notifications permissions to BonTriage. If you want to show notifications, please grant permissions.','Permission Required','Not now','Allow');
@@ -575,20 +575,20 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
          Navigator.pop(context);
        }
      });
-     /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+     *//*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
          height: 1.3,
          fontSize: 16,
          fontFamily: Constant.jostRegular,
          color: Colors.black)),backgroundColor: Constant.chatBubbleGreen,);
-     ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
+     ScaffoldMessenger.of(context).showSnackBar(snackBar);*//*
    }
-  }
+  }*/
 
   Future<void> _openSaveAndExitActionSheet() async {
     var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
     if(result == Constant.saveAndExit) {
       _isClickedOnSaveAndExit = true;
-      requestPermissionForNotification();
+      //requestPermissionForNotification();
     } else {
       Navigator.pop(context);
     }

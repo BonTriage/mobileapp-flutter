@@ -78,7 +78,7 @@ class _NotificationSectionState extends State<NotificationSection>
         isWeekDaysSelected = false;
         isOffSelected = true;
         _setAllNotifications();
-        flutterLocalNotificationsPlugin?.cancelAll();
+        //flutterLocalNotificationsPlugin?.cancelAll();
       }
     });
 
@@ -595,7 +595,7 @@ class _NotificationSectionState extends State<NotificationSection>
   /// This Method will be use for Delete Notification from respective Notification Section.
   Future<void> _deleteNotificationChannel(int channelId) async {
     debugPrint('ChannelId????$channelId');
-    await flutterLocalNotificationsPlugin.cancel(channelId);
+    //await flutterLocalNotificationsPlugin.cancel(channelId);
   }
 
   String _setDeleteOrEditText() {

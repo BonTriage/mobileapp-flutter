@@ -10,7 +10,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/NotificationSection.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
@@ -46,7 +46,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     _localNotificationStreamController = StreamController<dynamic>.broadcast();
     textEditingController = TextEditingController();
     Utils.saveUserProgress(0, Constant.notificationEventStep);
-    getNotificationListData();
+    //getNotificationListData();
   }
 
   @override
@@ -198,7 +198,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                               padding: EdgeInsets.symmetric(horizontal: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  requestPermissionForNotification();
+                                  //requestPermissionForNotification();
                                 //  Utils.showValidationErrorDialog(context,'Your notification has been saved successfully.','Alert!');
                                 },
                                 child: Container(
@@ -445,7 +445,7 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   /// this Method will be use for to get all notification data from the DB. If user has set any Local notifications from
   /// this screen.
-  void getNotificationListData() async {
+ /* void getNotificationListData() async {
     if (Platform.isIOS) {
       var permissionResult = await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -472,7 +472,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
     }
 
-  }
+  }*/
   setNotificationName(String notificationName) {
     LocalNotificationModel localNotificationNameModel = allNotificationListData
         .firstWhere(
@@ -485,7 +485,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       customNotificationValue = notificationName;
     }
   }
-  void requestPermissionForNotification() async{
+/*  void requestPermissionForNotification() async{
     if(Platform.isIOS){
       var permissionResult  = await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -524,7 +524,7 @@ class _NotificationScreenState extends State<NotificationScreen>
           Constant.postNotificationOnBoardRouter);
     }
 
-  }
+  }*/
 }
 
 

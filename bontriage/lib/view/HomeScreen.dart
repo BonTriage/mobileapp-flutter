@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompassHeadacheTypeActionSheet.dart';
-import 'package:mobile/view/DateRangeActionSheet.dart';
 import 'package:mobile/view/DeleteHeadacheTypeActionSheet.dart';
 import 'package:mobile/view/GenerateReportActionSheet.dart';
 import 'package:mobile/view/MeScreenTutorial.dart';
@@ -72,12 +72,12 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     _insertDataIntoLocalDatabase();
   }
 
-  /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Message also contained a notification: ${message.notification}');
       Utils.showValidationErrorDialog(context, 'From Background ${message.data.toString()}');
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void saveHomePosition() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constant.userAlreadyLoggedIn, true);
-    print('Device Token Start???${await _fcm.getToken()}???End');
+    //print('Device Token Start???${await _fcm.getToken()}???End');
   //  Utils.showValidationErrorDialog(context, 'Terminated App ${sharedPreferences.getString('notification_data')}');
     sharedPreferences.remove('notification_data');
   }
