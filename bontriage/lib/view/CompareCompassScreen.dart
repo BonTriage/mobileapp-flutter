@@ -11,6 +11,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompareCompassScreen extends StatefulWidget {
@@ -36,9 +37,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     with AutomaticKeepAliveClientMixin {
   bool darkMode = false;
   double numberOfFeatures = 4;
-  bool isMonthTapSelected = true;
-  bool isFirstLoggedSelected = false;
-  int compassValue = 2;
   DateTime _dateTime;
   int currentMonth;
 
@@ -346,52 +344,62 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                       child: Stack(
                                         children: <Widget>[
                                           Container(
-                                            child: RadarChart.light(
-                                              ticks: ticks,
-                                              features: features,
-                                              data: compassAxesData,
-                                              outlineColor: Constant
-                                                  .chatBubbleGreen
-                                                  .withOpacity(0.5),
-                                              reverseAxis: false,
-                                              compassValue: compassValue,
+                                            child: Consumer<CompareCompassInfo>(
+                                              builder: (context, data, child) {
+                                                int compassValue = data.getCompassValue();
+                                                return RadarChart.light(
+                                                  ticks: ticks,
+                                                  features: features,
+                                                  data: compassAxesData,
+                                                  outlineColor: Constant
+                                                      .chatBubbleGreen
+                                                      .withOpacity(0.5),
+                                                  reverseAxis: false,
+                                                  compassValue: compassValue,
+                                                );
+                                              },
                                             ),
                                           ),
                                           Center(
-                                            child: Container(
-                                              width: 38,
-                                              height: 38,
-                                              child: Center(
-                                                child: Text(
-                                                  isMonthTapSelected
-                                                      ? userMonthlyCompassScoreData
+                                            child: Consumer<CompareCompassInfo>(
+                                              builder: (context, data, child) {
+                                                bool isMonthTapSelected = data.isMonthTapSelected();
+                                                return Container(
+                                                  width: 38,
+                                                  height: 38,
+                                                  child: Center(
+                                                    child: Text(
+                                                      isMonthTapSelected
+                                                          ? userMonthlyCompassScoreData
                                                           .toString()
-                                                      : userFirstLoggedCompassScoreData
+                                                          : userFirstLoggedCompassScoreData
                                                           .toString(),
-                                                  style: TextStyle(
-                                                      color: isMonthTapSelected
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontSize: 14,
-                                                      fontFamily:
+                                                      style: TextStyle(
+                                                          color: isMonthTapSelected
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontSize: 14,
+                                                          fontFamily:
                                                           Constant.jostMedium),
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: isMonthTapSelected
-                                                    ? Constant
-                                                        .compareCompassHeadacheValueColor
-                                                    : Constant
-                                                        .compareCompassMonthSelectedColor,
-                                                border: Border.all(
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
                                                     color: isMonthTapSelected
                                                         ? Constant
-                                                            .compareCompassHeadacheValueColor
+                                                        .compareCompassHeadacheValueColor
                                                         : Constant
+                                                        .compareCompassMonthSelectedColor,
+                                                    border: Border.all(
+                                                        color: isMonthTapSelected
+                                                            ? Constant
+                                                            .compareCompassHeadacheValueColor
+                                                            : Constant
                                                             .compareCompassMonthSelectedColor,
-                                                    width: 1.2),
-                                              ),
+                                                        width: 1.2),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ],
@@ -438,111 +446,113 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                       SizedBox(
                         height: 20,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isMonthTapSelected = true;
-                            isFirstLoggedSelected = false;
-                            compassValue = 2;
-                          });
-                        },
-                        child: Container(
-                          height: 35,
-                          color: isMonthTapSelected
-                              ? Constant.locationServiceGreen.withOpacity(0.1)
-                              : Colors.transparent,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 25,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                      Consumer<CompareCompassInfo>(
+                        builder: (context, data, child) {
+                          bool isMonthTapSelected = data.isMonthTapSelected();
+                          return GestureDetector(
+                            onTap: () {
+                              data.updateCompareCompassInfo(2, true);
+                            },
+                            child: Container(
+                              height: 35,
+                              color: isMonthTapSelected
+                                  ? Constant.locationServiceGreen.withOpacity(0.1)
+                                  : Colors.transparent,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: 15,
-                                      height: 15,
-                                      color: Constant
-                                          .compareCompassHeadacheValueColor,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 15,
+                                          height: 15,
+                                          color: Constant
+                                              .compareCompassHeadacheValueColor,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '$monthName $currentYear',
+                                          style: TextStyle(
+                                              color: Constant.chatBubbleGreen,
+                                              fontSize: 14,
+                                              fontFamily: Constant.jostRegular),
+                                        )
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      '$monthName $currentYear',
-                                      style: TextStyle(
-                                          color: Constant.chatBubbleGreen,
-                                          fontSize: 14,
-                                          fontFamily: Constant.jostRegular),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _openDatePickerBottomSheet(
+                                            CupertinoDatePickerMode.date);
+                                      },
+                                      child: Text(
+                                        'Change',
+                                        style: TextStyle(
+                                            color: Constant
+                                                .addCustomNotificationTextColor,
+                                            fontSize: 14,
+                                            fontFamily: Constant.jostRegular),
+                                      ),
                                     )
                                   ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _openDatePickerBottomSheet(
-                                        CupertinoDatePickerMode.date);
-                                  },
-                                  child: Text(
-                                    'Change',
-                                    style: TextStyle(
-                                        color: Constant
-                                            .addCustomNotificationTextColor,
-                                        fontSize: 14,
-                                        fontFamily: Constant.jostRegular),
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        }
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isFirstLoggedSelected = true;
-                            isMonthTapSelected = false;
-                            compassValue = 3;
-                          });
-                        },
-                        child: Container(
-                          height: 35,
-                          color: isFirstLoggedSelected
-                              ? Constant.locationServiceGreen.withOpacity(0.1)
-                              : Colors.transparent,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 25,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                      Consumer<CompareCompassInfo>(
+                        builder: (context, data, child) {
+                          bool isMonthTapSelected = data.isMonthTapSelected();
+                          return GestureDetector(
+                            onTap: () {
+                              data.updateCompareCompassInfo(3, false);
+                            },
+                            child: Container(
+                              height: 35,
+                              color: (!isMonthTapSelected)
+                                  ? Constant.locationServiceGreen.withOpacity(0.1)
+                                  : Colors.transparent,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: 15,
-                                      height: 15,
-                                      color: Color(0xffB8FFFF),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 15,
+                                          height: 15,
+                                          color: Color(0xffB8FFFF),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'First logged Score',
+                                          style: TextStyle(
+                                              color: Constant.chatBubbleGreen,
+                                              fontSize: 14,
+                                              fontFamily: Constant.jostRegular),
+                                        )
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      'First logged Score',
-                                      style: TextStyle(
-                                          color: Constant.chatBubbleGreen,
-                                          fontSize: 14,
-                                          fontFamily: Constant.jostRegular),
-                                    )
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: 15,
@@ -614,7 +624,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    //setState(() {
     totalDaysInCurrentMonth =
         Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
     firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
@@ -636,7 +645,6 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
     });
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);
-    //});
   }
 
   void requestService(String firstDayOfTheCurrentMonth,
@@ -1071,7 +1079,10 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   }
 
   CompassTutorialModel _getCompassTutorialModelObj() {
-    if (isFirstLoggedSelected) {
+    var compareCompassInfo = Provider.of<CompareCompassInfo>(context);
+    bool isMonthTapSelected = compareCompassInfo.isMonthTapSelected();
+
+    if (!isMonthTapSelected) {
       return _compassTutorialModelFirstLogged;
     } else {
       return _compassTutorialModelMonthly;
@@ -1149,5 +1160,20 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
   void _removeDataFromSharedPreference() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.remove(Constant.updateOverTimeCompassData);
+  }
+}
+
+class CompareCompassInfo with ChangeNotifier {
+  int _compassValue = 2;
+  bool _isMonthTapSelected = true;
+
+  int getCompassValue() => _compassValue;
+  bool isMonthTapSelected() => _isMonthTapSelected;
+
+  updateCompareCompassInfo(int compassValue, bool isMonthTapSelected) {
+    _compassValue = compassValue;
+    _isMonthTapSelected = isMonthTapSelected;
+
+    notifyListeners();
   }
 }

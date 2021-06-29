@@ -10,8 +10,6 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'DateTimePicker.dart';
-
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
@@ -740,17 +738,6 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
       CupertinoDatePickerMode cupertinoDatePickerMode) async {
-    /*showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        ),
-        context: context,
-        builder: (context) => DateTimePicker(
-              cupertinoDatePickerMode: cupertinoDatePickerMode,
-              onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));*/
     var resultFromActionSheet = await widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
 
     if(resultFromActionSheet != null && resultFromActionSheet is DateTime)
@@ -767,27 +754,25 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    //setState(() {
-      totalDaysInCurrentMonth =
-          Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
-      firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, 1);
-      lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
-          dateTime.month, dateTime.year, totalDaysInCurrentMonth);
-      monthName = Utils.getMonthName(dateTime.month);
-      currentYear = dateTime.year;
-      currentMonth = dateTime.month;
-      _dateTime = dateTime;
-      _calendarScreenBloc.initNetworkStreamController();
-      print('show api loader 9');
-      Utils.showApiLoaderDialog(context,
-          networkStream: _calendarScreenBloc.networkDataStream,
-          tapToRetryFunction: () {
-        _calendarScreenBloc.enterSomeDummyDataToStreamController();
-        _callApiService();
-      });
-      _callApiService();
-    //});
+    totalDaysInCurrentMonth =
+        Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
+    firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, 1);
+    lastDayOfTheCurrentMonth = Utils.lastDateWithCurrentMonthAndTimeInUTC(
+        dateTime.month, dateTime.year, totalDaysInCurrentMonth);
+    monthName = Utils.getMonthName(dateTime.month);
+    currentYear = dateTime.year;
+    currentMonth = dateTime.month;
+    _dateTime = dateTime;
+    _calendarScreenBloc.initNetworkStreamController();
+    print('show api loader 9');
+    Utils.showApiLoaderDialog(context,
+        networkStream: _calendarScreenBloc.networkDataStream,
+        tapToRetryFunction: () {
+          _calendarScreenBloc.enterSomeDummyDataToStreamController();
+          _callApiService();
+        });
+    _callApiService();
   }
 
   @override

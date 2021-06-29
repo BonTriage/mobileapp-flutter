@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CalendarIntensityScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarTriggersScreen.dart';
 
@@ -22,7 +23,7 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   PageController _pageController;
   List<Widget> pageViewWidgetList;
-  int currentIndex = 0;
+  //int currentIndex = 0;
 
   StreamController<dynamic> _refreshCalendarDataStreamController;
 
@@ -77,13 +78,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    var calendarInfo = Provider.of<CalendarInfo>(context, listen: false);
+                    int currentIndex = calendarInfo.getCurrentIndex();
                     if (currentIndex == 1) {
-                      setState(() {
-                        currentIndex = currentIndex - 1;
-                        _pageController.animateToPage(currentIndex,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                      });
+                      currentIndex = currentIndex - 1;
+                      _pageController.animateToPage(currentIndex,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      calendarInfo.updateCalendarInfo(currentIndex);
                     }
                   },
                   child: CircleAvatar(
@@ -99,13 +101,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 SizedBox(
                   width: 60,
                 ),
-                Text(
-                  currentIndex == 0 ? 'Triggers' : 'Intensity',
-                  style: TextStyle(
-                      color: Constant.locationServiceGreen,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Constant.jostMedium),
+                Consumer<CalendarInfo>(
+                  builder: (context, data, child) {
+                    int currentIndex = data.getCurrentIndex();
+                    return Text(
+                      currentIndex == 0 ? 'Triggers' : 'Intensity',
+                      style: TextStyle(
+                          color: Constant.locationServiceGreen,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: Constant.jostMedium),
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 60,
@@ -113,13 +120,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    var calendarInfo = Provider.of<CalendarInfo>(context, listen: false);
+                    int currentIndex = calendarInfo.getCurrentIndex();
                     if (currentIndex == 0) {
-                      setState(() {
-                        currentIndex = currentIndex + 1;
-                        _pageController.animateToPage(currentIndex,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                      });
+                      currentIndex = currentIndex + 1;
+                      _pageController.animateToPage(currentIndex,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      calendarInfo.updateCalendarInfo(currentIndex);
                     }
                   },
                   child: CircleAvatar(
@@ -135,12 +143,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
             SizedBox(height: 10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SlideDots(isActive: currentIndex == 0),
-                SlideDots(isActive: currentIndex == 1)
-              ],
+            Consumer<CalendarInfo>(
+              builder: (context, data, child) {
+                int currentIndex = data.getCurrentIndex();
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SlideDots(isActive: currentIndex == 0),
+                    SlideDots(isActive: currentIndex == 1),
+                  ],
+                );
+              },
             ),
             Expanded(
               child: StreamBuilder<dynamic>(
@@ -154,9 +167,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       controller: _pageController,
                       scrollDirection: Axis.horizontal,
                       onPageChanged: (index) {
-                        setState(() {
-                          currentIndex = index;
-                        });
+                        var calendarInfo = Provider.of<CalendarInfo>(context, listen: false);
+                        calendarInfo.updateCalendarInfo(index);
                       },
                       reverse: false,
                       itemCount: pageViewWidgetList.length,
@@ -165,20 +177,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     return Container();
                   }
                 },
-              )/*PageView.builder(
-                itemBuilder: (context, index) {
-                  return pageViewWidgetList[index];
-                },
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                reverse: false,
-                itemCount: pageViewWidgetList.length,
-              ),*/
+              ),
             ),
           ],
         ),
@@ -197,7 +196,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       print(e);
     }
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 0) {
-     //setState(() {
       if(pageViewWidgetList.length == 1) {
         pageViewWidgetList = [
           CalendarTriggersScreen(
@@ -214,8 +212,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
             openDatePickerCallback: widget.openDatePickerCallback,),
         ];
       }
-     //});
       initPageViewSink.add('data');
     }
+  }
+}
+
+class CalendarInfo with ChangeNotifier {
+  int _currentIndex = 0;
+
+  int getCurrentIndex() => _currentIndex;
+
+  updateCalendarInfo(int currentIndex) {
+    _currentIndex = currentIndex;
+    notifyListeners();
   }
 }

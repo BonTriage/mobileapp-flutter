@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/animations/SlideFromBottomPageRoute.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/view/CalendarScreen.dart';
+import 'package:mobile/view/CalendarTriggersScreen.dart';
+import 'package:mobile/view/CompareCompassScreen.dart';
+import 'package:mobile/view/CompassScreen.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
 import 'package:mobile/view/MeScreen.dart';
 import 'package:mobile/view/MoreAgeScreen.dart';
@@ -22,6 +26,7 @@ import 'package:mobile/view/MoreSupportScreen.dart';
 import 'package:mobile/view/MoreTriggersScreen.dart';
 import 'package:mobile/view/PDFScreen.dart';
 import 'package:mobile/view/RecordScreen.dart';
+import 'package:mobile/view/TrendsScreen.dart';
 import 'package:provider/provider.dart';
 
 
@@ -97,14 +102,33 @@ class TabNavigator extends StatelessWidget {
         base64String: arguments,
       ),
       TabNavigatorRoutes.recordsRoot: (context) =>
-          RecordScreen(
-              onPush: (context, routeName) {
-                _push(context, routeName, arguments);
-              },
-            navigateToOtherScreenCallback: navigateToOtherScreenCallback,
-            showApiLoaderCallback: showApiLoaderCallback,
-            openActionSheetCallback: openActionSheetCallback,
-            openDatePickerCallback: openDatePickerCallback,
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => CalendarInfo(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => CalendarTriggerInfo(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => CompassInfo(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => CompareCompassInfo(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => TrendsInfo(),
+              ),
+            ],
+            child: RecordScreen(
+                onPush: (context, routeName) {
+                  _push(context, routeName, arguments);
+                },
+              navigateToOtherScreenCallback: navigateToOtherScreenCallback,
+              showApiLoaderCallback: showApiLoaderCallback,
+              openActionSheetCallback: openActionSheetCallback,
+              openDatePickerCallback: openDatePickerCallback,
+            ),
           ),
       TabNavigatorRoutes.discoverRoot: (context) =>
           DiscoverScreen(onPush: (context, routeName) {

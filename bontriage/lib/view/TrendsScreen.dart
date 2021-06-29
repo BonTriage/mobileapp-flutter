@@ -9,12 +9,12 @@ import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/NetworkErrorScreen.dart';
 import 'package:mobile/view/TrendsDisabilityScreen.dart';
 import 'package:mobile/view/TrendsDurationScreen.dart';
 import 'package:mobile/view/TrendsFrequencyScreen.dart';
 import 'package:mobile/view/TrendsIntensityScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 
@@ -39,7 +39,6 @@ class TrendsScreen extends StatefulWidget {
 class _TrendsScreenState extends State<TrendsScreen> {
   PageController _pageController;
   List<Widget> pageViewWidgetList;
-  int currentIndex = 0;
   RecordsTrendsScreenBloc _recordsTrendsScreenBloc;
   String selectedHeadacheName;
   RecordsTrendsDataModel recordsTrendsDataModel;
@@ -196,14 +195,15 @@ class _TrendsScreenState extends State<TrendsScreen> {
                               GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
+                                  var trendsInfo = Provider.of<TrendsInfo>(context, listen: false);
+                                  int currentIndex = trendsInfo.getCurrentIndex();
                                   if (currentIndex != 0) {
-                                    setState(() {
-                                      currentIndex = currentIndex - 1;
-                                      _pageController.animateToPage(
-                                          currentIndex,
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.easeIn);
-                                    });
+                                    currentIndex = currentIndex - 1;
+                                    _pageController.animateToPage(
+                                        currentIndex,
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn);
+                                    trendsInfo.updateTrendsInfo(currentIndex);
                                   }
                                 },
                                 child: CircleAvatar(
@@ -221,13 +221,17 @@ class _TrendsScreenState extends State<TrendsScreen> {
                               SizedBox(
                                 width: 60,
                               ),
-                              Text(
-                                getCurrentTextView(),
-                                style: TextStyle(
-                                    color: Constant.locationServiceGreen,
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: Constant.jostMedium),
+                              Consumer<TrendsInfo>(
+                                builder: (context, data, child) {
+                                  return Text(
+                                    getCurrentTextView(data.getCurrentIndex()),
+                                    style: TextStyle(
+                                        color: Constant.locationServiceGreen,
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: Constant.jostMedium),
+                                  );
+                                },
                               ),
                               SizedBox(
                                 width: 60,
@@ -235,14 +239,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
                               GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
+                                  var trendsInfo = Provider.of<TrendsInfo>(context, listen: false);
+                                  int currentIndex = trendsInfo.getCurrentIndex();
+
                                   if (currentIndex != 3) {
-                                    setState(() {
-                                      currentIndex = currentIndex + 1;
-                                      _pageController.animateToPage(
-                                          currentIndex,
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.easeIn);
-                                    });
+                                    currentIndex = currentIndex + 1;
+                                    _pageController.animateToPage(
+                                        currentIndex,
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn);
+                                    trendsInfo.updateTrendsInfo(currentIndex);
                                   }
                                 },
                                 child: CircleAvatar(
@@ -262,14 +268,19 @@ class _TrendsScreenState extends State<TrendsScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SlideDots(isActive: currentIndex == 0),
-                              SlideDots(isActive: currentIndex == 1),
-                              SlideDots(isActive: currentIndex == 2),
-                              SlideDots(isActive: currentIndex == 3)
-                            ],
+                          Consumer<TrendsInfo>(
+                            builder: (context, data, child) {
+                              int currentIndex = data.getCurrentIndex();
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SlideDots(isActive: currentIndex == 0),
+                                  SlideDots(isActive: currentIndex == 1),
+                                  SlideDots(isActive: currentIndex == 2),
+                                  SlideDots(isActive: currentIndex == 3)
+                                ],
+                              );
+                            },
                           ),
                           SizedBox(
                             height: 15,
@@ -338,11 +349,12 @@ class _TrendsScreenState extends State<TrendsScreen> {
                               scrollDirection: Axis.horizontal,
                               onPageChanged: (index) {
                                 print('trends set state 2');
-                                setState(() {
-                                  currentIndex = index;
-                                  _editGraphViewFilterModel.currentTabIndex =
-                                      currentIndex;
-                                });
+                                var trendsInfo = Provider.of<TrendsInfo>(context, listen: false);
+                                int currentIndex = trendsInfo.getCurrentIndex();
+                                currentIndex = index;
+                                _editGraphViewFilterModel.currentTabIndex =
+                                    currentIndex;
+                                trendsInfo.updateTrendsInfo(currentIndex);
                               },
                               reverse: false,
                               itemCount: pageViewWidgetList.length,
@@ -419,7 +431,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
     ];
   }
 
-  String getCurrentTextView() {
+  String getCurrentTextView(int currentIndex) {
     if (currentIndex == 0) {
       return 'Intensity';
     } else if (currentIndex == 1) {
@@ -677,5 +689,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
     if(currentPositionOfTabBar == 1 && userProfileInfoData != null) {
       currentUserHeadacheModel = await SignUpOnBoardProviders.db.getUserCurrentHeadacheData(userProfileInfoData.userId);
     }
+  }
+}
+
+class TrendsInfo with ChangeNotifier {
+  int _currentIndex = 0;
+
+  int getCurrentIndex() => _currentIndex;
+
+  updateTrendsInfo(int currentIndex) {
+    _currentIndex = currentIndex;
+    notifyListeners();
   }
 }

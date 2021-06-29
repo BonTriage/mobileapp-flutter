@@ -6,6 +6,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompareCompassScreen.dart';
 import 'package:mobile/view/OverTimeCompassScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompassScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class CompassScreen extends StatefulWidget {
 class _CompassScreenState extends State<CompassScreen> {
   PageController _pageController;
   List<Widget> pageViewWidgetList;
-  int currentIndex = 0;
+  //int currentIndex = 0;
 
   StreamController<dynamic> _initPageViewStreamController;
 
@@ -69,13 +70,15 @@ class _CompassScreenState extends State<CompassScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    var compassInfo = Provider.of<CompassInfo>(context, listen: false);
+                    int currentIndex = compassInfo.getCurrentIndex();
+
                     if (currentIndex == 1) {
-                      setState(() {
-                        currentIndex = currentIndex - 1;
-                        _pageController.animateToPage(currentIndex,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                      });
+                      currentIndex = currentIndex - 1;
+                      _pageController.animateToPage(currentIndex,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      compassInfo.updateCompassInfo(currentIndex);
                     }
                   },
                   child: CircleAvatar(
@@ -91,13 +94,18 @@ class _CompassScreenState extends State<CompassScreen> {
                 SizedBox(
                   width: 60,
                 ),
-                Text(
-                  currentIndex == 0 ? 'Over Time' : 'Compare',
-                  style: TextStyle(
-                      color: Constant.locationServiceGreen,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: Constant.jostMedium),
+                Consumer<CompassInfo>(
+                  builder: (context, data, child) {
+                    int currentIndex = data.getCurrentIndex();
+                    return Text(
+                      currentIndex == 0 ? 'Over Time' : 'Compare',
+                      style: TextStyle(
+                          color: Constant.locationServiceGreen,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: Constant.jostMedium),
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 60,
@@ -105,13 +113,15 @@ class _CompassScreenState extends State<CompassScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    var compassInfo = Provider.of<CompassInfo>(context, listen: false);
+                    int currentIndex = compassInfo.getCurrentIndex();
+
                     if (currentIndex == 0) {
-                      setState(() {
-                        currentIndex = currentIndex + 1;
-                        _pageController.animateToPage(currentIndex,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                      });
+                      currentIndex = currentIndex + 1;
+                      _pageController.animateToPage(currentIndex,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      compassInfo.updateCompassInfo(currentIndex);
                     }
                   },
                   child: CircleAvatar(
@@ -129,12 +139,17 @@ class _CompassScreenState extends State<CompassScreen> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SlideDots(isActive: currentIndex == 0),
-                SlideDots(isActive: currentIndex == 1)
-              ],
+            Consumer<CompassInfo>(
+              builder: (context, data, child) {
+                int currentIndex = data.getCurrentIndex();
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SlideDots(isActive: currentIndex == 0),
+                    SlideDots(isActive: currentIndex == 1)
+                  ],
+                );
+              },
             ),
             Expanded(
               child: StreamBuilder<dynamic>(
@@ -148,9 +163,8 @@ class _CompassScreenState extends State<CompassScreen> {
                       controller: _pageController,
                       scrollDirection: Axis.horizontal,
                       onPageChanged: (index) {
-                        setState(() {
-                          currentIndex = index;
-                        });
+                        var compassInfo = Provider.of<CompassInfo>(context, listen: false);
+                        compassInfo.updateCompassInfo(index);
                       },
                       reverse: false,
                       itemCount: pageViewWidgetList.length,
@@ -159,22 +173,8 @@ class _CompassScreenState extends State<CompassScreen> {
                     return Container();
                   }
                 },
-              ),/*PageView.builder(
-                itemBuilder: (context, index) {
-                  return pageViewWidgetList[index];
-                },
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                reverse: false,
-                itemCount: pageViewWidgetList.length,
-              ),*/
+              ),
             ),
-
           ],
         ),
       ),
@@ -194,17 +194,22 @@ class _CompassScreenState extends State<CompassScreen> {
     }
     print(currentPositionOfTabBar);
     if (currentPositionOfTabBar == 1 && recordTabBarPosition == 1) {
-      /*setState(() {
-        pageViewWidgetList = [
-          OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
-          CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback,),
-        ];
-      });*/
       pageViewWidgetList = [
         OverTimeCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback, openDatePickerCallback: widget.openDatePickerCallback,),
         CompareCompassScreen(openActionSheetCallback: widget.openActionSheetCallback, showApiLoaderCallback: widget.showApiLoaderCallback,navigateToOtherScreenCallback: widget.navigateToOtherScreenCallback, openDatePickerCallback: widget.openDatePickerCallback,),
       ];
       initPageViewSink.add('Data');
     }
+  }
+}
+
+class CompassInfo with ChangeNotifier {
+  int _currentIndex = 0;
+
+  int getCurrentIndex() => _currentIndex;
+
+  updateCompassInfo(int currentIndex) {
+    _currentIndex = currentIndex;
+    notifyListeners();
   }
 }

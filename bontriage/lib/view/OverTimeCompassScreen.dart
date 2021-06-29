@@ -605,7 +605,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
   }
 
   void _onStartDateSelected(DateTime dateTime) {
-    //setState(() {
     totalDaysInCurrentMonth =
         Utils.daysInCurrentMonth(dateTime.month, dateTime.year);
     firstDayOfTheCurrentMonth = Utils.firstDateWithCurrentMonthAndTimeInUTC(
@@ -626,7 +625,6 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
     });
     requestService(firstDayOfTheCurrentMonth, lastDayOfTheCurrentMonth,
         selectedHeadacheName);
-    //});
   }
 
   void requestService(String firstDayOfTheCurrentMonth,

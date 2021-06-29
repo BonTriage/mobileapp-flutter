@@ -3,6 +3,9 @@ import 'package:mobile/models/SignUpHeadacheAnswerListModel.dart';
 import 'package:mobile/models/UserLogHeadacheDataCalendarModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
+
+import 'CalendarTriggersScreen.dart';
 
 class DateWidget extends StatelessWidget {
   final DateTime weekDateData;
@@ -26,63 +29,77 @@ class DateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Stack(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                if(navigateToOtherScreenCallback != null) {
-                  Duration duration = DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData)).difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
-                  print('WeekData????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData))}');
-                  print('NowDateTime????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now()))}');
-                  print('Duration???${duration.inSeconds}');
-                  if (duration.inSeconds <= 0)
-                    navigateToOtherScreenCallback(
-                        Constant.onCalendarHeadacheLogDayDetailsScreenRouter,
-                        weekDateData);
-                  else
-                    Utils.showValidationErrorDialog(context, 'Invalid date selected.');
-                }
-              },
+        child: _getWidget(context),
+      ),
+    );
+  }
+
+  Widget _getWidget(BuildContext context) {
+    return (calendarType == 1) ?
+        Consumer<CalendarTriggerInfo>(
+          builder: (context, data, child) {
+            return _getDateStack(context);
+          },
+        ) :
+        _getDateStack(context);
+  }
+
+  Widget _getDateStack(BuildContext context) {
+    return Stack(
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            if(navigateToOtherScreenCallback != null) {
+              Duration duration = DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData)).difference(DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now())));
+              print('WeekData????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(weekDateData))}');
+              print('NowDateTime????${DateTime.tryParse(Utils.getDateTimeInUtcFormat(DateTime.now()))}');
+              print('Duration???${duration.inSeconds}');
+              if (duration.inSeconds <= 0)
+                navigateToOtherScreenCallback(
+                    Constant.onCalendarHeadacheLogDayDetailsScreenRouter,
+                    weekDateData);
+              else
+                Utils.showValidationErrorDialog(context, 'Invalid date selected.');
+            }
+          },
+          child: Container(
+            height: 28,
+            width: 28,
+            decoration: setDateViewWidget(calendarDateViewType),
+            padding: EdgeInsets.all(2),
+            child: Center(
+              child: Text(
+                weekDateData.day.toString(),
+                style: setTextViewStyle(calendarDateViewType),
+              ),
+            ),
+          ),
+        ),
+        setTriggersViewOne(calendarType, triggersListData.length),
+        setTriggersViewTwo(calendarType, triggersListData.length),
+        setTriggersViewThree(calendarType, triggersListData.length),
+        Visibility(
+          visible: calendarType == 0 ? false : calendarType == 2,
+          child: Container(
+            width: 31,
+            height: 31,
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: Container(
-                height: 28,
-                width: 28,
-                decoration: setDateViewWidget(calendarDateViewType),
-                padding: EdgeInsets.all(2),
-                child: Center(
-                  child: Text(
-                    weekDateData.day.toString(),
-                    style: setTextViewStyle(calendarDateViewType),
-                  ),
+                margin: EdgeInsets.only(bottom: 1, right: 3),
+                width: 16,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: setIntensityTriggerColor(),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
-            setTriggersViewOne(calendarType, triggersListData.length),
-            setTriggersViewTwo(calendarType, triggersListData.length),
-            setTriggersViewThree(calendarType, triggersListData.length),
-            Visibility(
-              visible: calendarType == 0 ? false : calendarType == 2,
-              child: Container(
-                width: 31,
-                height: 31,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 1, right: 3),
-                    width: 16,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: setIntensityTriggerColor(),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        )
+      ],
     );
   }
 
