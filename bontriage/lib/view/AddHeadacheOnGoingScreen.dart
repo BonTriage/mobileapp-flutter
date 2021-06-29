@@ -60,11 +60,12 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
 
     _isFromRecordScreen = widget.currentUserHeadacheModel.isFromRecordScreen ?? false;
 
-    /*try {
+    try {
+      if(_isFromRecordScreen)
        _dateTime = DateTime.parse(widget.currentUserHeadacheModel.selectedDate);
     } catch(e) {
       print(e.toString());
-    }*/
+    }
 
     signUpOnBoardSelectedAnswersModel.eventType = "Headache";
     signUpOnBoardSelectedAnswersModel.selectedAnswers = [];
