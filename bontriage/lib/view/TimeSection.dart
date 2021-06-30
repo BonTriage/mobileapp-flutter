@@ -576,6 +576,7 @@ class _TimeSectionState extends State<TimeSection>
                         }*/
 
                       DateTime selectedEndDate = DateTime.now();
+                      selectedEndDate = DateTime(selectedEndDate.year, selectedEndDate.month, selectedEndDate.day, selectedEndDate.hour, selectedEndDate.minute, 0, 0, 0);
                       DateTime selectedEndTime = selectedEndDate;
                       DateTime selectedEndDateAndTime = selectedEndDate;
 

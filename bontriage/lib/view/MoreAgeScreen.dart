@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 
 class MoreAgeScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
@@ -110,7 +111,6 @@ class _MoreAgeScreenState
                         onChanged: (double age) {
                           setState(() {
                             _currentAgeValue = age;
-                            //_selectedAnswers.answer = _currentAgeValue.toInt().toString();
                           });
                         },
                       ),
@@ -213,6 +213,8 @@ class _MoreAgeScreenState
 
   Future<void> _openSaveAndExitActionSheet() async {
     if (_initialAgeValue != null) {
+      var moreAgeInfo = Provider.of<MoreAgeInfo>(context, listen: false);
+      //double _currentAgeValue =
       if (_initialAgeValue != _currentAgeValue) {
         var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
         if (result != null) {
@@ -227,5 +229,16 @@ class _MoreAgeScreenState
     } else {
       Navigator.pop(context);
     }
+  }
+}
+
+class MoreAgeInfo with ChangeNotifier {
+  double _currentAgeValue = 3;
+
+  double getCurrentAgeValue() => _currentAgeValue;
+
+  updateMoreAgeInfo(double currentAgeValue) {
+    _currentAgeValue = currentAgeValue;
+    notifyListeners();
   }
 }
