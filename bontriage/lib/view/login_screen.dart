@@ -411,7 +411,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   void _loginService() async {
     FirebaseMessaging _fcm = FirebaseMessaging.instance;
     var deviceToken = await _fcm.getToken();
-    var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue,"");
+    var response = await _loginScreenBloc.getLoginOfUser(emailValue, passwordValue,deviceToken);
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;

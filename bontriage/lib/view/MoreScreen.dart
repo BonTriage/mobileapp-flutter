@@ -177,7 +177,7 @@ class _MoreScreenState extends State<MoreScreen> {
       FirebaseMessaging _fcm = FirebaseMessaging.instance;
       var deviceToken = await _fcm.getToken();
       UserProfileInfoModel userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
-      deleteDeviceTokenOfTheUser("", userProfileInfoData.userId);
+      deleteDeviceTokenOfTheUser(deviceToken, userProfileInfoData.userId);
       await Utils.clearAllDataFromDatabaseAndCache();
       widget.navigateToOtherScreenCallback(
           Constant.welcomeStartAssessmentScreenRouter, null);
