@@ -47,7 +47,7 @@ android {
         applicationId "com.bontriage.mobile"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
+        versionCode 4
         versionName "2.1.0"
         multiDexEnabled true
     }
