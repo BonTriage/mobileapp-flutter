@@ -16,7 +16,7 @@ class MoreAgeScreen extends StatefulWidget {
 class _MoreAgeScreenState
     extends State<MoreAgeScreen> {
 
-  double _currentAgeValue = 3;
+  //double _currentAgeValue = 3;
   double _initialAgeValue;
   SelectedAnswers _selectedAnswers;
 
@@ -29,8 +29,9 @@ class _MoreAgeScreenState
         double ageValue = double.tryParse(_selectedAnswers.answer);
 
         if (ageValue != null) {
-          _currentAgeValue = ageValue;
-          _initialAgeValue = _currentAgeValue;
+          var moreAgeInfo = Provider.of<MoreAgeInfo>(context, listen: false);
+          moreAgeInfo.updateCurrentAgeValue(ageValue);
+          _initialAgeValue = ageValue;
         }
       }
     }
@@ -104,14 +105,16 @@ class _MoreAgeScreenState
                         overlayColor: Constant.chatBubbleGreenTransparent,
                         trackHeight: 7,
                       ),
-                      child: Slider(
-                        value: _currentAgeValue,
-                        min: 3,
-                        max: 72,
-                        onChanged: (double age) {
-                          setState(() {
-                            _currentAgeValue = age;
-                          });
+                      child: Consumer<MoreAgeInfo>(
+                        builder: (context, data, child) {
+                          return Slider(
+                            value: data.getCurrentAgeValue(),
+                            min: 3,
+                            max: 72,
+                            onChanged: (double age) {
+                              data.updateMoreAgeInfo(age);
+                            },
+                          );
                         },
                       ),
                     ),
@@ -164,13 +167,17 @@ class _MoreAgeScreenState
                                     color: Constant.chatBubbleGreenBlue
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    _currentAgeValue.toInt().toString(),
-                                    style: TextStyle(
-                                      color: Constant.locationServiceGreen,
-                                      fontFamily: Constant.jostMedium,
-                                      fontSize: 18,
-                                    ),
+                                  child: Consumer<MoreAgeInfo>(
+                                    builder: (context, data, child) {
+                                      return Text(
+                                        data.getCurrentAgeValue().toInt().toString(),
+                                        style: TextStyle(
+                                          color: Constant.locationServiceGreen,
+                                          fontFamily: Constant.jostMedium,
+                                          fontSize: 18,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -214,12 +221,13 @@ class _MoreAgeScreenState
   Future<void> _openSaveAndExitActionSheet() async {
     if (_initialAgeValue != null) {
       var moreAgeInfo = Provider.of<MoreAgeInfo>(context, listen: false);
-      //double _currentAgeValue =
-      if (_initialAgeValue != _currentAgeValue) {
+      double currentAgeValue = moreAgeInfo.getCurrentAgeValue();
+
+      if (_initialAgeValue != currentAgeValue) {
         var result = await widget.openActionSheetCallback(Constant.saveAndExitActionSheet,null);
         if (result != null) {
           if (result == Constant.saveAndExit) {
-            _selectedAnswers.answer = _currentAgeValue.toInt().toString();
+            _selectedAnswers.answer = currentAgeValue.toInt().toString();
           }
           Navigator.pop(context, result == Constant.saveAndExit);
         }
@@ -240,5 +248,9 @@ class MoreAgeInfo with ChangeNotifier {
   updateMoreAgeInfo(double currentAgeValue) {
     _currentAgeValue = currentAgeValue;
     notifyListeners();
+  }
+
+  updateCurrentAgeValue(double currentAgeValue) {
+    _currentAgeValue = currentAgeValue;
   }
 }

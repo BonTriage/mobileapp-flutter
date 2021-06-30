@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 
 class MoreSexScreen extends StatefulWidget {
 
@@ -148,40 +149,42 @@ class _MoreSexScreenState
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.builder(
-                      itemCount: _valuesList.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _currentSelectedValue = _valuesList[index].text;
-                                  //_selectedAnswers.answer = _valuesList[index].text;
-                                  _onOptionSelected(index);
-                                });
-                              },
-                              child: Container(
-                                decoration: _getBoxDecoration(index),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  child: Text(
-                                    _valuesList[index].text,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: _getOptionTextColor(index),
-                                        fontFamily: Constant.jostRegular,
-                                        height: 1.2),
+                    child: Consumer<MoreSexInfo>(
+                      builder: (context, data, child) {
+                        return ListView.builder(
+                          itemCount: _valuesList.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _currentSelectedValue = _valuesList[index].text;
+                                    _onOptionSelected(index);
+                                    data.updateMoreSexInfo();
+                                  },
+                                  child: Container(
+                                    decoration: _getBoxDecoration(index),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                      child: Text(
+                                        _valuesList[index].text,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: _getOptionTextColor(index),
+                                            fontFamily: Constant.jostRegular,
+                                            height: 1.2),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
                     ),
@@ -226,5 +229,11 @@ class _MoreSexScreenState
     } else {
       Navigator.pop(context);
     }
+  }
+}
+
+class MoreSexInfo with ChangeNotifier {
+  updateMoreSexInfo() {
+    notifyListeners();
   }
 }

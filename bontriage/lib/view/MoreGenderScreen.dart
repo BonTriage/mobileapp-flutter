@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:provider/provider.dart';
 
 class MoreGenderScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
@@ -31,8 +32,6 @@ class _MoreGenderScreenState
       Values(isSelected: false, text: Constant.genderNonConforming),
       Values(isSelected: false, text: Constant.preferNotToAnswer),
     ];
-
-    //_currentSelectedValue = _valuesList[0].text;
 
     _currentSelectedValue = Constant.blankString;
 
@@ -148,41 +147,43 @@ class _MoreGenderScreenState
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.builder(
-                      itemCount: _valuesList.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _currentSelectedValue = _valuesList[index].text;
-                                  //_selectedAnswers.answer = _valuesList[index].text;
-                                  _onOptionSelected(index);
-                                });
-                              },
-                              child: Container(
-                                decoration: _getBoxDecoration(index),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: Text(
-                                    _valuesList[index].text,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: _getOptionTextColor(index),
-                                        fontFamily: Constant.jostRegular,
-                                        height: 1.2),
+                    child: Consumer<MoreGenderInfo>(
+                      builder: (context, data, child) {
+                        return ListView.builder(
+                          itemCount: _valuesList.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _currentSelectedValue = _valuesList[index].text;
+                                    _onOptionSelected(index);
+                                    data.updateMoreGenderInfo();
+                                  },
+                                  child: Container(
+                                    decoration: _getBoxDecoration(index),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      child: Text(
+                                        _valuesList[index].text,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: _getOptionTextColor(index),
+                                            fontFamily: Constant.jostRegular,
+                                            height: 1.2),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
                     ),
@@ -236,5 +237,11 @@ class _MoreGenderScreenState
       } else
         Navigator.pop(context);
     }
+  }
+}
+
+class MoreGenderInfo with ChangeNotifier {
+  updateMoreGenderInfo() {
+    notifyListeners();
   }
 }
