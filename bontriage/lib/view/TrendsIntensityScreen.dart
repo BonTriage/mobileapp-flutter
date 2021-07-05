@@ -9,6 +9,7 @@ import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class TrendsIntensityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
@@ -330,8 +331,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   onTap: () {
                     _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
                   },
-                  child: Text(
-                    '$monthName $currentYear',
+                  child: CustomTextWidget(
+                    text: '$monthName $currentYear',
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 15,
@@ -389,8 +390,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Mild',
+                  CustomTextWidget(
+                    text: 'Mild',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -410,8 +411,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Moderate',
+                  CustomTextWidget(
+                    text: 'Moderate',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -431,8 +432,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Severe',
+                  CustomTextWidget(
+                    text: 'Severe',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -463,17 +464,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
-                                      .headacheListModelData.length >
-                                  0
-                              ? widget
-                                  .editGraphViewFilterModel
-                                  .recordsTrendsDataModel
-                                  .headacheListModelData[0]
-                                  .text
-                              : ''*/
-                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
+                        CustomTextWidget(
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -501,17 +493,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          /*widget.editGraphViewFilterModel.recordsTrendsDataModel
-                                      .headacheListModelData.length >
-                                  1
-                              ? widget
-                                  .editGraphViewFilterModel
-                                  .recordsTrendsDataModel
-                                  .headacheListModelData[1]
-                                  .text
-                              : ''*/
-                        widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
+                        CustomTextWidget(
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -675,17 +658,6 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
   /// @param cupertinoDatePickerMode: for time and date mode selection
   void _openDatePickerBottomSheet(
       CupertinoDatePickerMode cupertinoDatePickerMode) async {
-    /*showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        ),
-        context: context,
-        builder: (context) => DateTimePicker(
-              cupertinoDatePickerMode: cupertinoDatePickerMode,
-              onDateTimeSelected: _getDateTimeCallbackFunction(0),
-            ));*/
     var resultFromActionSheet = await widget.openDatePickerCallback(
         CupertinoDatePickerMode.date,
         _getDateTimeCallbackFunction(0),
@@ -1152,8 +1124,8 @@ class _TrendsIntensityScreenState extends State<TrendsIntensityScreen>
         break;
       }
       widgetListData.add(
-        Text(
-          dotTextModelDataList[i].dotName,
+        CustomTextWidget(
+          text: dotTextModelDataList[i].dotName,
           style: TextStyle(
             color: Constant.locationServiceGreen,
             fontSize: 12,

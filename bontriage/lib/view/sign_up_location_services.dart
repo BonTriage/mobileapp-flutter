@@ -7,6 +7,7 @@ import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class SignUpLocationServices extends StatefulWidget {
   final Questions question;
@@ -92,9 +93,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  Constant.enableLocationServices,
-                  textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                CustomTextWidget(
+                  text: Constant.enableLocationServices,
                   style: TextStyle(
                     fontSize: 16,
                     color: Constant.chatBubbleGreen,
@@ -123,9 +123,8 @@ class _SignUpLocationServicesState extends State<SignUpLocationServices>
             SizedBox(
               height: 20,
             ),
-            Text(
-              Constant.enableLocationRecommended,
-              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+            CustomTextWidget(
+              text: Constant.enableLocationRecommended,
               style: TextStyle(
                   height: 1.3,
                   fontSize: 16,

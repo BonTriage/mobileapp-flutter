@@ -3,6 +3,8 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:provider/provider.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreAgeScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
   final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
@@ -83,8 +85,8 @@ class _MoreAgeScreenState
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              Constant.age,
+                            CustomTextWidget(
+                              text: Constant.age,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -128,8 +130,8 @@ class _MoreAgeScreenState
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '3',
+                                  CustomTextWidget(
+                                    text: '3',
                                     style: TextStyle(
                                       color: Constant.locationServiceGreen,
                                       fontFamily: Constant.jostMedium,
@@ -141,8 +143,8 @@ class _MoreAgeScreenState
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    '72',
+                                  CustomTextWidget(
+                                    text: '72',
                                     style: TextStyle(
                                       color: Constant.locationServiceGreen,
                                       fontFamily: Constant.jostMedium,
@@ -169,8 +171,8 @@ class _MoreAgeScreenState
                                 child: Center(
                                   child: Consumer<MoreAgeInfo>(
                                     builder: (context, data, child) {
-                                      return Text(
-                                        data.getCurrentAgeValue().toInt().toString(),
+                                      return CustomTextWidget(
+                                        text: data.getCurrentAgeValue().toInt().toString(),
                                         style: TextStyle(
                                           color: Constant.locationServiceGreen,
                                           fontFamily: Constant.jostMedium,
@@ -182,8 +184,8 @@ class _MoreAgeScreenState
                                 ),
                               ),
                               SizedBox(height: 5,),
-                              Text(
-                                Constant.yearsOld,
+                              CustomTextWidget(
+                                text: Constant.yearsOld,
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Constant.locationServiceGreen,
@@ -198,8 +200,8 @@ class _MoreAgeScreenState
                     SizedBox(height: 40,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        Constant.slideToEnterYourAge,
+                      child: CustomTextWidget(
+                        text: Constant.slideToEnterYourAge,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 14,

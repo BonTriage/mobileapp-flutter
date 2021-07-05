@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextFormFieldWidget.dart';
+
 class SignUpNameScreen extends StatefulWidget {
   final String tag;
   final String helpText;
@@ -80,14 +82,14 @@ class _SignUpNameScreenState extends State<SignUpNameScreen>
         padding: EdgeInsets.fromLTRB(Constant.chatBubbleHorizontalPadding, 0,
             Constant.chatBubbleHorizontalPadding, 50),
         child: Center(
-          child: TextField(
+          child: CustomTextFormFieldWidget(
             maxLength: 40,
             textCapitalization: TextCapitalization.sentences,
             onEditingComplete: () {
               widget.selectedAnswerCallBack(
                   widget.tag, textEditingController.text);
             },
-            onSubmitted: (String value) {
+            onFieldSubmitted: (String value) {
               widget.selectedAnswerCallBack(widget.tag, value);
               FocusScope.of(context).requestFocus(FocusNode());
             },

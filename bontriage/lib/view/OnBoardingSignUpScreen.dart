@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/SignUpScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/CustomTextFormField.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
@@ -115,7 +115,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                           children: <Widget>[
                             Container(
                               height: 35,
-                              child: CustomTextFormField(
+                              child: CustomTextFormFieldWidget(
                                 focusNode: _emailFocusNode,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {
@@ -177,7 +177,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                               height: 35,
                               child: Consumer<PasswordVisibilityInfo>(
                                 builder: (context, data, child) {
-                                  return CustomTextFormField(
+                                  return CustomTextFormFieldWidget(
                                     focusNode: _passwordFocusNode,
                                     obscureText: data.isHidden(),
                                     onFieldSubmitted: (String value) {

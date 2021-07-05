@@ -1,10 +1,8 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/main.dart';
-import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
@@ -30,11 +28,11 @@ class _MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
-    print('More Screen');
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('More Screen build func');
     return Container(
       decoration: Constant.backgroundBoxDecoration,
       child: SafeArea(
@@ -102,8 +100,8 @@ class _MoreScreenState extends State<MoreScreen> {
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               color: Constant.locationServiceGreen, width: 2)),
-                      child: Text(
-                        Constant.logOut,
+                      child: CustomTextWidget(
+                        text: Constant.logOut,
                         style: TextStyle(
                           fontSize: 14,
                           color: Constant.locationServiceGreen,
@@ -134,8 +132,8 @@ class _MoreScreenState extends State<MoreScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Constant.chatBubbleGreen),
-                        child: Text(
-                          'I need medical help',
+                        child: CustomTextWidget(
+                          text: 'I need medical help',
                           style: TextStyle(
                             fontSize: 14,
                             color: Constant.bubbleChatTextView,

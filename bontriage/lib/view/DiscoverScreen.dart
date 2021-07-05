@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class DiscoverScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
@@ -26,8 +27,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           onTap: () {
             widget.onPush(context, TabNavigatorRoutes.moreSupportRoute);
           },
-          child: Text(
-            'Demo Discover Screen',
+          child: CustomTextWidget(
+            text: 'Demo Discover Screen',
             style: TextStyle(
               color: Colors.blue,
               fontSize: 20,

@@ -14,6 +14,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddANoteWidget.dart';
 import 'package:mobile/view/AddHeadacheSection.dart';
 import 'package:mobile/view/AddNoteBottomSheet.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/DiscardChangesBottomSheet.dart';
 import 'package:mobile/view/LogDayDoubleTapDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -110,7 +111,6 @@ class _LogDayScreenState extends State<LogDayScreen>
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -120,195 +120,190 @@ class _LogDayScreenState extends State<LogDayScreen>
           return true;
         return false;
       },
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-        ),
-        child: Scaffold(
-          key: scaffoldKey,
-          body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: Container(
-              decoration: Constant.backgroundBoxDecoration,
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints:
-                      BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-                  child: SafeArea(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                      decoration: BoxDecoration(
-                        color: Constant.backgroundColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Constant.chatBubbleGreen,
-                                      fontFamily: Constant.jostMedium),
+      child: Scaffold(
+        key: scaffoldKey,
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Container(
+            decoration: Constant.backgroundBoxDecoration,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+                child: SafeArea(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                    decoration: BoxDecoration(
+                      color: Constant.backgroundColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomTextWidget(
+                                text: '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Constant.chatBubbleGreen,
+                                    fontFamily: Constant.jostMedium),
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  _showDiscardChangesBottomSheet();
+                                  //Navigator.pop(context);
+                                },
+                                child: Image(
+                                  image: AssetImage(Constant.closeIcon),
+                                  width: 22,
+                                  height: 22,
                                 ),
-                                GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    _showDiscardChangesBottomSheet();
-                                    //Navigator.pop(context);
-                                  },
-                                  child: Image(
-                                    image: AssetImage(Constant.closeIcon),
-                                    width: 22,
-                                    height: 22,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Divider(
-                              thickness: 1,
-                              color: Constant.chatBubbleGreen,
-                              height: 30,
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Divider(
+                            thickness: 1,
+                            color: Constant.chatBubbleGreen,
+                            height: 30,
                           ),
-                          StreamBuilder<dynamic>(
-                            stream: _logDayBloc.logDayDataStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if (!_isDataPopulated) {
-                                  Utils.closeApiLoaderDialog(context);
-                                  Future.delayed(Duration(milliseconds: 200), () {
-                                    _showDoubleTapDialog();
-                                  });
-                                  addNewWidgets(snapshot.data);
-                                }
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Text(
-                                        Constant.doubleTapAnItem,
-                                        style: TextStyle(
-                                            fontSize: Platform.isAndroid ? 13 : 14,
-                                            color: Constant.doubleTapTextColor,
-                                            fontFamily: Constant.jostRegular),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Column(children: _sectionWidgetList),
-                                    AddANoteWidget(
-                                      scaffoldKey: scaffoldKey,
-                                      selectedAnswerList: selectedAnswers,
-                                      noteTag: 'logday.note',
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        BouncingWidget(
-                                          onPressed: () {
-                                            _onSaveButtonClicked();
-                                          },
-                                          child: Container(
-                                            width: 110,
-                                            padding:
-                                                EdgeInsets.symmetric(vertical: 8),
-                                            decoration: BoxDecoration(
-                                              color: Constant.chatBubbleGreen,
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                Constant.save,
-                                                style: TextStyle(
-                                                    color:
-                                                        Constant.bubbleChatTextView,
-                                                    fontSize: 15,
-                                                    fontFamily:
-                                                        Constant.jostMedium),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        BouncingWidget(
-                                          onPressed: () {
-                                            if (selectedAnswers.length > 0)
-                                              _showDiscardChangesBottomSheet();
-                                            else
-                                              Navigator.pop(context, false);
-                                          },
-                                          child: Container(
-                                            width: 110,
-                                            padding:
-                                                EdgeInsets.symmetric(vertical: 8),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1.3,
-                                                  color: Constant.chatBubbleGreen),
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                Constant.cancel,
-                                                style: TextStyle(
-                                                    color: Constant.chatBubbleGreen,
-                                                    fontSize: 15,
-                                                    fontFamily:
-                                                        Constant.jostMedium),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                  ],
-                                );
-                              } else if (snapshot.hasError) {
+                        ),
+                        StreamBuilder<dynamic>(
+                          stream: _logDayBloc.logDayDataStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (!_isDataPopulated) {
                                 Utils.closeApiLoaderDialog(context);
-                                return NetworkErrorScreen(
-                                  errorMessage: snapshot.error.toString(),
-                                  tapToRetryFunction: () {
-                                    Utils.showApiLoaderDialog(context);
-                                    requestService();
-                                  },
-                                );
-                              } else {
-                                return Container();
+                                Future.delayed(Duration(milliseconds: 200), () {
+                                  _showDoubleTapDialog();
+                                });
+                                addNewWidgets(snapshot.data);
                               }
-                            },
-                          ),
-                        ],
-                      ),
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: CustomTextWidget(
+                                      text: Constant.doubleTapAnItem,
+                                      style: TextStyle(
+                                          fontSize: Platform.isAndroid ? 13 : 14,
+                                          color: Constant.doubleTapTextColor,
+                                          fontFamily: Constant.jostRegular),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Column(children: _sectionWidgetList),
+                                  AddANoteWidget(
+                                    scaffoldKey: scaffoldKey,
+                                    selectedAnswerList: selectedAnswers,
+                                    noteTag: 'logday.note',
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          _onSaveButtonClicked();
+                                        },
+                                        child: Container(
+                                          width: 110,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: Constant.chatBubbleGreen,
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: CustomTextWidget(
+                                              text: Constant.save,
+                                              style: TextStyle(
+                                                  color:
+                                                      Constant.bubbleChatTextView,
+                                                  fontSize: 15,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          if (selectedAnswers.length > 0)
+                                            _showDiscardChangesBottomSheet();
+                                          else
+                                            Navigator.pop(context, false);
+                                        },
+                                        child: Container(
+                                          width: 110,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1.3,
+                                                color: Constant.chatBubbleGreen),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: CustomTextWidget(
+                                              text: Constant.cancel,
+                                              style: TextStyle(
+                                                  color: Constant.chatBubbleGreen,
+                                                  fontSize: 15,
+                                                  fontFamily:
+                                                      Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              Utils.closeApiLoaderDialog(context);
+                              return NetworkErrorScreen(
+                                errorMessage: snapshot.error.toString(),
+                                tapToRetryFunction: () {
+                                  Utils.showApiLoaderDialog(context);
+                                  requestService();
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),

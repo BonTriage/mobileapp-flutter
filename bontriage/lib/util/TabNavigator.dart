@@ -144,9 +144,12 @@ class TabNavigator extends StatelessWidget {
             onPush: _push,
           ),
 
-      TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => MoreMyProfileScreen(
-        onPush: _push,
-        showApiLoaderCallback: showApiLoaderCallback,
+      TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => ChangeNotifierProvider(
+        create: (_) => MoreTriggerMedicationInfo(),
+        child: MoreMyProfileScreen(
+          onPush: _push,
+          showApiLoaderCallback: showApiLoaderCallback,
+        ),
       ),
 
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>

@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 
+import 'CustomTextWidget.dart';
+
 class TrendsScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
@@ -114,8 +116,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                            'We noticed you didn’t log any  headache yet. So please add any headache to see your Trends data.',
+                        child: CustomTextWidget(
+                            text: 'We noticed you didn’t log any  headache yet. So please add any headache to see your Trends data.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 height: 1.3,
@@ -146,8 +148,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Center(
-                                child: Text(
-                                  'Add Headache',
+                                child: CustomTextWidget(
+                                  text: 'Add Headache',
                                   style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 15,
@@ -177,8 +179,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(
-                            secondSelectedHeadacheName != null
+                          CustomTextWidget(
+                            text: secondSelectedHeadacheName != null
                                 ? '$selectedHeadacheName Vs $secondSelectedHeadacheName'
                                 : selectedHeadacheName,
                             style: TextStyle(
@@ -223,8 +225,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                               ),
                               Consumer<TrendsInfo>(
                                 builder: (context, data, child) {
-                                  return Text(
-                                    getCurrentTextView(data.getCurrentIndex()),
+                                  return CustomTextWidget(
+                                    text: getCurrentTextView(data.getCurrentIndex()),
                                     style: TextStyle(
                                         color: Constant.locationServiceGreen,
                                         fontSize: 19,
@@ -307,8 +309,8 @@ class _TrendsScreenState extends State<TrendsScreen> {
                                       color:
                                           Constant.backgroundTransparentColor,
                                     ),
-                                    child: Text(
-                                      'Edit graph view',
+                                    child: CustomTextWidget(
+                                      text: 'Edit graph view',
                                       style: TextStyle(
                                           color: Constant.locationServiceGreen,
                                           fontSize: 12,

@@ -9,7 +9,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChangePasswordScreen.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mobile/view/CustomTextFormField.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
 import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:provider/provider.dart';
 
@@ -281,7 +281,7 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with SingleTi
   Container _getTextFormField(int index) {
     return Container(
       width: 40,
-      child: CustomTextFormField(
+      child: CustomTextFormFieldWidget(
         focusNode: _focusNodeList[index],
         controller: _textEditingControllerList[index],
         maxLength: 1,

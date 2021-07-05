@@ -4,6 +4,8 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:provider/provider.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreGenderScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
   final Future<dynamic> Function(String,dynamic) openActionSheetCallback;
@@ -117,8 +119,8 @@ class _MoreGenderScreenState
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          Constant.gender,
+                        CustomTextWidget(
+                          text: Constant.gender,
                           style: TextStyle(
                               color: Constant.locationServiceGreen,
                               fontSize: 16,
@@ -133,8 +135,8 @@ class _MoreGenderScreenState
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    Constant.selectOne,
+                  child: CustomTextWidget(
+                    text: Constant.selectOne,
                     style: TextStyle(
                         fontSize: 13,
                         fontFamily: Constant.jostMedium,
@@ -167,8 +169,8 @@ class _MoreGenderScreenState
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
-                                      child: Text(
-                                        _valuesList[index].text,
+                                      child: CustomTextWidget(
+                                        text: _valuesList[index].text,
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: _getOptionTextColor(index),
@@ -193,8 +195,8 @@ class _MoreGenderScreenState
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      Constant.selectTheGender,
+                    child: CustomTextWidget(
+                      text: Constant.selectTheGender,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,

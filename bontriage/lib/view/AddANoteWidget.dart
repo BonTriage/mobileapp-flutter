@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 import 'AddNoteBottomSheet.dart';
 
@@ -48,8 +49,8 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
         .firstWhere((element) => element.questionTag == widget.noteTag,
             orElse: () => null);
     if (headacheNoteSelectedAnswer == null) {
-      return Text(
-        Constant.addANote,
+      return CustomTextWidget(
+        text: Constant.addANote,
         style: TextStyle(
           fontSize: 16,
           color: Constant.addCustomNotificationTextColor,
@@ -70,8 +71,8 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
             SizedBox(
               width: 5,
             ),
-            Text(
-              Constant.viewEditNote,
+            CustomTextWidget(
+              text: Constant.viewEditNote,
               style: TextStyle(
                 fontSize: 16,
                 color: Constant.addCustomNotificationTextColor,
@@ -82,8 +83,8 @@ class _AddANoteWidgetState extends State<AddANoteWidget> {
           ],
         );
       } else {
-        return Text(
-          Constant.addANote,
+        return CustomTextWidget(
+          text: Constant.addANote,
           style: TextStyle(
             fontSize: 16,
             color: Constant.addCustomNotificationTextColor,

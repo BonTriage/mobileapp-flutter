@@ -6,7 +6,7 @@ import 'package:mobile/models/RecordsTrendsDataModel.dart';
 import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'DateTimePicker.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 
 class TrendsDurationScreen extends StatefulWidget {
@@ -309,8 +309,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                   onTap: () {
                     _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
                   },
-                  child: Text(
-                    '$monthName $currentYear',
+                  child: CustomTextWidget(
+                    text: '$monthName $currentYear',
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 15,
@@ -368,7 +368,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        CustomTextWidget(
                           /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   0
@@ -378,7 +378,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                                   .headacheListModelData[0]
                                   .text
                               : ''*/
-                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -406,7 +406,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        CustomTextWidget(
                           /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   1
@@ -416,7 +416,7 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
                                   .headacheListModelData[1]
                                   .text
                               : ''*/
-                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -584,8 +584,8 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
         break;
       }
       widgetListData.add(
-        Text(
-          dotTextModelDataList[i].dotName,
+        CustomTextWidget(
+          text: dotTextModelDataList[i].dotName,
           style: TextStyle(
               color: Constant.locationServiceGreen,
               fontSize: 12,
@@ -1168,17 +1168,12 @@ class _TrendsDurationScreenState extends State<TrendsDurationScreen> {
 
   List<BarChartRodStackItem> setRodStack(
       double firstMultipleHeadache1, double secondMultipleHeadache1) {
-    var maxValue, minValue = 0.0;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
-      maxValue = firstMultipleHeadache1;
-      minValue = secondMultipleHeadache1;
       return [
         BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
         BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
       ];
     } else {
-      minValue = firstMultipleHeadache1;
-      maxValue = secondMultipleHeadache1;
       return [
         BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
         BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),

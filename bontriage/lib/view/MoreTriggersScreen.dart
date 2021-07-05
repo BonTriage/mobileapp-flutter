@@ -6,6 +6,7 @@ import 'package:mobile/models/MoreTriggerArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/SignUpBottomSheet.dart';
 
 class MoreTriggersScreen extends StatefulWidget {
@@ -105,8 +106,8 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              "Triggers",
+                            CustomTextWidget(
+                              text: "Triggers",
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -136,8 +137,8 @@ class _MoreTriggersScreenState extends State<MoreTriggersScreen> with SingleTick
                     SizedBox(height: 40,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        Constant.whichOfTheFollowingDoYouSuspect,
+                      child: CustomTextWidget(
+                        text: Constant.whichOfTheFollowingDoYouSuspect,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 14,

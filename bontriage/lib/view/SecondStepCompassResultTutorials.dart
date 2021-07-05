@@ -4,6 +4,9 @@ import 'package:mobile/util/TutorialsSliderDots.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CustomScrollBar.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
+
+import 'CustomRichTextWidget.dart';
 
 class SecondStepCompassResultTutorials extends StatefulWidget {
   final CompassTutorialModel compassTutorialModel;
@@ -75,9 +78,8 @@ class _SecondStepCompassResultTutorialsState
                 alignment: Alignment.center,
                 child: Container(
                   padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    tutorialTitleByIndex(),
-                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                  child: CustomTextWidget(
+                    text: tutorialTitleByIndex(),
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 16,
@@ -409,26 +411,17 @@ class _SecondStepCompassResultTutorialsState
   void _initPageViewWidgetList() {
     if(_pageViewWidgets == null) {
       _pageViewWidgets = [
-        Text(
-          Constant.compassTextView,
+        CustomTextWidget(
+          text: Constant.compassTextView,
           textAlign: TextAlign.center,
           style: _normalTextStyle,
-          textScaleFactor: MediaQuery
-              .of(context)
-              .textScaleFactor
-              .clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                 children: [
                   TextSpan(
@@ -443,13 +436,8 @@ class _SecondStepCompassResultTutorialsState
               ),
             ),
             SizedBox(height: 20,),
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                   children: [
                     TextSpan(
@@ -475,13 +463,8 @@ class _SecondStepCompassResultTutorialsState
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                 children: [
                   TextSpan(
@@ -496,13 +479,8 @@ class _SecondStepCompassResultTutorialsState
               ),
             ),
             SizedBox(height: 20,),
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                   children: [
                     TextSpan(
@@ -528,13 +506,8 @@ class _SecondStepCompassResultTutorialsState
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                 children: [
                   TextSpan(
@@ -549,13 +522,8 @@ class _SecondStepCompassResultTutorialsState
               ),
             ),
             SizedBox(height: 20,),
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                   children: [
                     TextSpan(
@@ -581,13 +549,8 @@ class _SecondStepCompassResultTutorialsState
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                 children: [
                   TextSpan(
@@ -602,13 +565,8 @@ class _SecondStepCompassResultTutorialsState
               ),
             ),
             SizedBox(height: 20,),
-            RichText(
+            CustomRichTextWidget(
               textAlign: TextAlign.center,
-              textScaleFactor: MediaQuery
-                  .of(context)
-                  .textScaleFactor
-                  .clamp(
-                  Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
               text: TextSpan(
                   children: [
                     TextSpan(

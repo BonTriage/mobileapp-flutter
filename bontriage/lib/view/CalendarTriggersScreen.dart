@@ -12,6 +12,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'CustomTextWidget.dart';
 import 'NetworkErrorScreen.dart';
 
 class CalendarTriggersScreen extends StatefulWidget {
@@ -167,8 +168,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                         CupertinoDatePickerMode.date);
                                     //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
                                   },
-                                  child: Text(
-                                    monthName + " " + currentYear.toString(),
+                                  child: CustomTextWidget(
+                                    text: monthName + " " + currentYear.toString(),
                                     style: TextStyle(
                                         color: Constant.chatBubbleGreen,
                                         fontSize: 15,
@@ -212,8 +213,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                               children: [
                                 TableRow(children: [
                                   Center(
-                                    child: Text(
-                                      'Su',
+                                    child: CustomTextWidget(
+                                      text: 'Su',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -221,8 +222,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'M',
+                                    child: CustomTextWidget(
+                                      text:  'M',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -230,8 +231,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Tu',
+                                    child: CustomTextWidget(
+                                      text: 'Tu',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -239,8 +240,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'W',
+                                    child: CustomTextWidget(
+                                      text: 'W',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -248,8 +249,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Th',
+                                    child: CustomTextWidget(
+                                      text: 'Th',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -257,8 +258,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'F',
+                                    child: CustomTextWidget(
+                                      text: 'F',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -266,8 +267,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Sa',
+                                    child: CustomTextWidget(
+                                      text: 'Sa',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -333,8 +334,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
                                   },
                                   behavior: HitTestBehavior.translucent,
-                                  child: Text(
-                                    monthName + " " + currentYear.toString(),
+                                  child: CustomTextWidget(
+                                    text: monthName + " " + currentYear.toString(),
                                     style: TextStyle(
                                         color: Constant.chatBubbleGreen,
                                         fontSize: 15,
@@ -378,8 +379,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                               children: [
                                 TableRow(children: [
                                   Center(
-                                    child: Text(
-                                      'Su',
+                                    child: CustomTextWidget(
+                                      text: 'Su',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -387,8 +388,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'M',
+                                    child: CustomTextWidget(
+                                      text: 'M',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -396,8 +397,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Tu',
+                                    child: CustomTextWidget(
+                                      text: 'Tu',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -405,8 +406,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'W',
+                                    child: CustomTextWidget(
+                                      text: 'W',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -414,8 +415,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Th',
+                                    child: CustomTextWidget(
+                                      text: 'Th',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -423,8 +424,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'F',
+                                    child: CustomTextWidget(
+                                      text: 'F',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -432,8 +433,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                     ),
                                   ),
                                   Center(
-                                    child: Text(
-                                      'Sa',
+                                    child: CustomTextWidget(
+                                      text: 'Sa',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Constant.locationServiceGreen,
@@ -466,8 +467,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'Headache-free day',
+                      CustomTextWidget(
+                        text: 'Headache-free day',
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.locationServiceGreen,
@@ -488,8 +489,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'Headache day',
+                      CustomTextWidget(
+                        text: 'Headache day',
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.locationServiceGreen,
@@ -526,8 +527,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                             visible: userMonthTriggersListModel.length > 0,
                             child: Container(
                               margin: EdgeInsets.only(left: 15, right: 15),
-                              child: Text(
-                                Constant.sortedCalenderTextView,
+                              child: CustomTextWidget(
+                                text: Constant.sortedCalenderTextView,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 13,
@@ -644,8 +645,8 @@ class _CalendarTriggersScreenState extends State<CalendarTriggersScreen>
                                                   SizedBox(
                                                     width: 3,
                                                   ),
-                                                  Text(
-                                                    userMonthTriggersListModel[i]
+                                                  CustomTextWidget(
+                                                    text: userMonthTriggersListModel[i]
                                                         .answerData,
                                                     style: TextStyle(
                                                         color: userMonthTriggersListModel[

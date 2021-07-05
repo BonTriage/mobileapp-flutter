@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class LogDayDoubleTapDialog extends StatefulWidget {
   @override
@@ -40,8 +41,8 @@ class _LogDayDoubleTapDialogState extends State<LogDayDoubleTapDialog> {
                     ),
                   ),
                   SizedBox(height: 5,),
-                  Text(
-                    Constant.logDayEvenFaster,
+                  CustomTextWidget(
+                    text: Constant.logDayEvenFaster,
                     style: TextStyle(
                       fontSize: 16,
                       color: Constant.chatBubbleGreen,
@@ -49,8 +50,8 @@ class _LogDayDoubleTapDialogState extends State<LogDayDoubleTapDialog> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text(
-                    isDoubleTapped ? Constant.doubleTappedItems : Constant.whenYouAreLoggingYourDay,
+                  CustomTextWidget(
+                    text: isDoubleTapped ? Constant.doubleTappedItems : Constant.whenYouAreLoggingYourDay,
                     style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontSize: 13,
@@ -88,8 +89,8 @@ class _LogDayDoubleTapDialogState extends State<LogDayDoubleTapDialog> {
                                   : Colors.transparent),
                           child: Center(
                             child: SingleChildScrollView(
-                              child: Text(
-                                isDoubleTapped ? Constant.gotIt : Constant.tryDoubleTappingMe,
+                              child: CustomTextWidget(
+                                text: isDoubleTapped ? Constant.gotIt : Constant.tryDoubleTappingMe,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 10,

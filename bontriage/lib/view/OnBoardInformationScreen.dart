@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleRightPointed.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
 import '../util/PhotoHero.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'CustomTextWidget.dart';
 
 class OnBoardInformationScreen extends StatefulWidget {
   final bool isShowNextButton;
@@ -173,8 +176,7 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                         padding: const EdgeInsets.all(15.0),
                         child: FadeTransition(
                           opacity: _animationController,
-                          child: RichText(
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          child: CustomRichTextWidget(
                             text: TextSpan(
                               children: widget.bubbleChatTextSpanList,
                             ),
@@ -206,9 +208,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
-                          child: Text(
-                            Constant.next,
-                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                          child: CustomTextWidget(
+                            text: Constant.next,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 14,
@@ -241,9 +242,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
-                            child: Text(
-                              widget.bottomButtonText ?? Constant.blankString,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            child: CustomTextWidget(
+                              text: widget.bottomButtonText ?? Constant.blankString,
                               style: TextStyle(
                                   color: Constant.bubbleChatTextView,
                                   fontSize: 15,
@@ -278,9 +278,8 @@ class _OnBoardInformationScreenState extends State<OnBoardInformationScreen>
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
-                            child: Text(
-                              widget.secondBottomButtonText ?? Constant.blankString,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            child: CustomTextWidget(
+                              text: widget.secondBottomButtonText ?? Constant.blankString,
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 15,

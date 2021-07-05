@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class CompassHeadacheTypeActionSheet extends StatefulWidget {
   final List<HeadacheListDataModel> headacheListModelData;
@@ -14,22 +15,13 @@ class CompassHeadacheTypeActionSheet extends StatefulWidget {
 
 class _CompassHeadacheTypeActionSheetState
     extends State<CompassHeadacheTypeActionSheet> {
-  List<String> _radioList;
   String _value;
-  String _dropDownValue;
 
   TextStyle _textStyle;
 
   @override
   void initState() {
     super.initState();
-
-    _radioList = [
-      Constant.singleHeadache,
-      Constant.summaryOfAllHeadacheTypes,
-    ];
-
-    _dropDownValue = widget.headacheListModelData[0].text;
 
     var userSelectedHeadache = widget.headacheListModelData
         .firstWhere((element) => element.isSelected, orElse: () => null);
@@ -58,8 +50,8 @@ class _CompassHeadacheTypeActionSheetState
             children: [
               Align(
                 alignment: Alignment.center,
-                child: Text(
-                  'Headache Type',
+                child: CustomTextWidget(
+                  text: 'Headache Type',
                   style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontSize: 16,
@@ -86,8 +78,8 @@ class _CompassHeadacheTypeActionSheetState
           SizedBox(
             height: 10,
           ),
-          Text(
-            Constant.selectTheSavedHeadacheType,
+          CustomTextWidget(
+            text: Constant.selectTheSavedHeadacheType,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: Constant.jostRegular,
@@ -120,8 +112,8 @@ class _CompassHeadacheTypeActionSheetState
                         },
                       ),
                     ),
-                    Text(
-                      widget.headacheListModelData[index].text,
+                    CustomTextWidget(
+                      text: widget.headacheListModelData[index].text,
                       style: _textStyle,
                     ),
                   ],
@@ -135,18 +127,5 @@ class _CompassHeadacheTypeActionSheetState
         ],
       ),
     );
-  }
-
-  List<DropdownMenuItem<String>> _getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> dropDownMenuItemList = [];
-
-    widget.headacheListModelData.forEach((element) {
-      dropDownMenuItemList.add(DropdownMenuItem(
-        value: element.text,
-        child: Text(element.text),
-      ));
-    });
-
-    return dropDownMenuItemList;
   }
 }

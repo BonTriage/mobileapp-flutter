@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class TriggerSelectionDialog extends StatefulWidget {
   @override
   _TriggerSelectionDialogState createState() => _TriggerSelectionDialogState();
@@ -16,7 +18,6 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _totalTime = 0;
@@ -56,84 +57,78 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    return MediaQuery(
-      data: mediaQueryData.copyWith(
-        textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor)
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-              decoration: BoxDecoration(
-                color: Constant.backgroundColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image(
-                          image: AssetImage(Constant.closeIcon),
-                          width: 20,
-                          height: 20,
-                        ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            decoration: BoxDecoration(
+              color: Constant.backgroundColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Image(
+                        image: AssetImage(Constant.closeIcon),
+                        width: 20,
+                        height: 20,
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: CustomTextWidget(
+                      text: Constant.multipleTriggers,
+                      style: TextStyle(
+                          color: Constant.chatBubbleGreen,
+                          fontSize: 16,
+                          fontFamily: Constant.jostRegular),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 0),
-                      child: Text(
-                        Constant.multipleTriggers,
-                        style: TextStyle(
-                            color: Constant.chatBubbleGreen,
-                            fontSize: 16,
-                            fontFamily: Constant.jostRegular),
-                      ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: CustomTextWidget(
+                      text: Constant.selectUpTo3Triggers,
+                      style: TextStyle(
+                          color: Constant.locationServiceGreen,
+                          fontSize: 14,
+                          fontFamily: Constant.jostRegular),
                     ),
-                    SizedBox(
-                      height: 20,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 0),
+                    child: Wrap(
+                      children: _getChipWidget(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 0),
-                      child: Text(
-                        Constant.selectUpTo3Triggers,
-                        style: TextStyle(
-                            color: Constant.locationServiceGreen,
-                            fontSize: 14,
-                            fontFamily: Constant.jostRegular),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 0),
-                      child: Wrap(
-                        children: _getChipWidget(),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -163,8 +158,8 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
               SizedBox(
                 width: 3,
               ),
-              Text(
-                element.triggerName,
+              CustomTextWidget(
+                text: element.triggerName,
                 style: TextStyle(
                     fontSize: 10,
                     color: Constant.bubbleChatTextView,
@@ -180,8 +175,8 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
             border: Border.all(color: Constant.chatBubbleGreen, width: 1),
           ),
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: Text(
-            element.triggerName,
+          child: CustomTextWidget(
+            text: element.triggerName,
             style: TextStyle(
                 fontSize: 10,
                 color: Constant.locationServiceGreen,
@@ -220,8 +215,8 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
                 ),
               ),
               SizedBox(width: 3,),
-              Text(
-                element.triggerName,
+              CustomTextWidget(
+                text: element.triggerName,
                 style: TextStyle(
                     fontSize: 12,
                     color: Constant.bubbleChatTextView,
@@ -242,8 +237,8 @@ class _TriggerSelectionDialogState extends State<TriggerSelectionDialog> {
             ),
           ),
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: Text(
-            element.triggerName,
+          child: CustomTextWidget(
+            text: element.triggerName,
             style: TextStyle(
               fontSize: 12,
               color: Constant.locationServiceGreen,

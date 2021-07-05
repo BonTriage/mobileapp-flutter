@@ -9,6 +9,8 @@ import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/NotificationSection.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,8 +94,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      Constant.notifications,
+                    CustomTextWidget(
+                      text: Constant.notifications,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 16,
@@ -164,8 +166,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 openCustomNotificationDialog(
                                     context, allNotificationListData);
                               },
-                              child: Text(
-                                Constant.addCustomNotification,
+                              child: CustomTextWidget(
+                                text: Constant.addCustomNotification,
                                 style: TextStyle(
                                     color:
                                         Constant.addCustomNotificationTextColor,
@@ -208,8 +210,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      Constant.save,
+                                    child: CustomTextWidget(
+                                      text: Constant.save,
                                       style: TextStyle(
                                           color: Constant.bubbleChatTextView,
                                           fontSize: 15,
@@ -240,8 +242,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    'Skip',
+                                  child: CustomTextWidget(
+                                    text: 'Skip',
                                     style: TextStyle(
                                         color: Constant.chatBubbleGreen,
                                         fontSize: 15,
@@ -318,11 +320,11 @@ class _NotificationScreenState extends State<NotificationScreen>
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
-                          child: TextField(
+                          child: CustomTextFormFieldWidget(
                             maxLength: 20,
                             inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
                             onEditingComplete: () {},
-                            onSubmitted: (String value) {
+                            onFieldSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
                             },
                             controller: textEditingController,
@@ -384,8 +386,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
-                                child: Text(
-                                  Constant.save,
+                                child: CustomTextWidget(
+                                  text: Constant.save,
                                   style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 15,
@@ -409,8 +411,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 8),
                                 child: Center(
-                                  child: Text(
-                                    'Delete',
+                                  child: CustomTextWidget(
+                                    text: 'Delete',
                                     style: TextStyle(
                                         color: Constant.chatBubbleGreen,
                                         fontSize: 15,

@@ -3,7 +3,7 @@ import 'package:mobile/blocs/LoginScreenBloc.dart';
 import 'package:mobile/models/ForgotPasswordModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/CustomTextFormField.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
 import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 import 'package:flutter/foundation.dart';
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           children: <Widget>[
                             Container(
                               height: 35,
-                              child: CustomTextFormField(
+                              child: CustomTextFormFieldWidget(
                                 onEditingComplete: () {
                                   emailValue = emailTextEditingController.text;
                                 },
@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     height: 35,
                                     child: Consumer<PasswordHiddenInfo>(
                                       builder: (context, data, child) {
-                                        return CustomTextFormField(
+                                        return CustomTextFormFieldWidget(
                                           obscureText: data.isHidden(),
                                           onEditingComplete: () {
                                             passwordValue = passwordTextEditingController.text;

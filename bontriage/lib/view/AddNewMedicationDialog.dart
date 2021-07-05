@@ -2,6 +2,8 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class AddNewMedicationDialog extends StatefulWidget {
   final Function(String) onSubmitClickedCallback;
@@ -64,8 +66,8 @@ class _AddNewMedicationDialogState extends State<AddNewMedicationDialog> {
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            'Add Medication',
+                          child: CustomTextWidget(
+                            text: 'Add Medication',
                             style: TextStyle(
                                 color: Constant.chatBubbleGreen,
                                 fontFamily: Constant.jostMedium,
@@ -91,7 +93,7 @@ class _AddNewMedicationDialogState extends State<AddNewMedicationDialog> {
                     SizedBox(
                       height: 20,
                     ),
-                    TextField(
+                    CustomTextFormFieldWidget(
                       controller: _textEditingController,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
@@ -132,8 +134,8 @@ class _AddNewMedicationDialogState extends State<AddNewMedicationDialog> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
-                              child: Text(
-                                Constant.submit,
+                              child: CustomTextWidget(
+                                text: Constant.submit,
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,

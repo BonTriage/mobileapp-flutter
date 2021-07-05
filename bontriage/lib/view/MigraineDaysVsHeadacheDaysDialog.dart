@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MigraineDaysVsHeadacheDaysDialog extends StatefulWidget {
   @override
@@ -42,8 +43,8 @@ class _MigraineDaysVsHeadacheDaysDialogState extends State<MigraineDaysVsHeadach
                   SizedBox(height: 10,),
                   Align(
                     alignment: Alignment.topCenter,
-                    child: Text(
-                      Constant.migraineDaysVsHeadacheDays,
+                    child: CustomTextWidget(
+                      text: Constant.migraineDaysVsHeadacheDays,
                       style: TextStyle(
                           fontSize: 16,
                           color: Constant.chatBubbleGreen,
@@ -52,8 +53,8 @@ class _MigraineDaysVsHeadacheDaysDialogState extends State<MigraineDaysVsHeadach
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text(
-                    Constant.migraineDaysVsHeadacheDaysDialogText,
+                  CustomTextWidget(
+                    text: Constant.migraineDaysVsHeadacheDaysDialogText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Constant.locationServiceGreen,

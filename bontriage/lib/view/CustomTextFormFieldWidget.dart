@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormFieldWidget extends StatelessWidget {
   final bool obscureText;
   final FocusNode focusNode;
   final TextInputAction textInputAction;
@@ -17,8 +17,12 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final int maxLength;
   final List<TextInputFormatter> inputFormatters;
+  final TextCapitalization textCapitalization;
+  final int maxLines;
+  final int minLines;
+  final String initialValue;
 
-  const CustomTextFormField({
+  const CustomTextFormFieldWidget({
     Key key,
     this.obscureText,
     this.focusNode,
@@ -33,7 +37,11 @@ class CustomTextFormField extends StatelessWidget {
     this.onEditingComplete,
     this.keyboardType,
     this.maxLength,
-    this.inputFormatters
+    this.inputFormatters,
+    this.textCapitalization,
+    this.maxLines,
+    this.minLines,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -52,12 +60,16 @@ class CustomTextFormField extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         style: style,
         cursorColor: cursorColor,
-        textAlign: textAlign,
+        textAlign: textAlign ?? TextAlign.start,
         decoration: decoration,
         onEditingComplete: onEditingComplete,
         keyboardType: keyboardType,
         maxLength: maxLength,
         inputFormatters: inputFormatters,
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
+        maxLines: maxLines ?? 1,
+        minLines: minLines,
+        initialValue: initialValue,
       ),
     );
   }

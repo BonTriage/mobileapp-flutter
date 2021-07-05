@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/PhotoHero.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ChatBubbleLeftPointed.dart';
 import 'CustomScrollBar.dart';
+import 'CustomTextWidget.dart';
 
 class TutorialChatBubble extends StatefulWidget {
   final String chatBubbleText;
@@ -170,7 +172,7 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
                           physics: BouncingScrollPhysics(),
                           child: Padding(
                             padding: const EdgeInsets.only(right: 5),
-                            child: RichText(
+                            child: CustomRichTextWidget(
                               text: TextSpan(
                                 children: widget.textSpanList,
                               ),
@@ -215,8 +217,8 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
                             BorderRadius.circular(20),
                           ),
                           child: Center(
-                            child: Text(
-                              Constant.back,
+                            child: CustomTextWidget(
+                              text: Constant.back,
                               style: TextStyle(
                                 color:
                                 Constant.bubbleChatTextView,
@@ -249,8 +251,8 @@ class _TutorialChatBubbleState extends State<TutorialChatBubble> with TickerProv
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
-                          child: Text(
-                            Constant.next,
+                          child: CustomTextWidget(
+                            text: Constant.next,
                             style: TextStyle(
                               color: Constant.bubbleChatTextView,
                               fontSize: 14,

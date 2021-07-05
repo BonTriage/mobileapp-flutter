@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class MedicalHelpActionSheet extends StatefulWidget {
   @override
   _MedicalHelpActionSheetState createState() => _MedicalHelpActionSheetState();
@@ -18,8 +20,8 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
   @override
   Widget build(BuildContext context) {
     return CupertinoActionSheet(
-          title: Text(
-            Constant.medicalHelp,
+          title: CustomTextWidget(
+            text: Constant.medicalHelp,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 18,
@@ -28,8 +30,8 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
           ),
           actions: [
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.call911,
+              child: CustomTextWidget(
+                text: Constant.call911,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle.copyWith(
                   color: Constant.deleteLogRedColor,
@@ -40,8 +42,8 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.callADoctor,
+              child: CustomTextWidget(
+                text: Constant.callADoctor,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -50,8 +52,8 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.findALocalDoctor,
+              child: CustomTextWidget(
+                text: Constant.findALocalDoctor,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -60,8 +62,8 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.openYourProviderApp,
+              child: CustomTextWidget(
+                text: Constant.openYourProviderApp,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -71,10 +73,10 @@ class _MedicalHelpActionSheetState extends State<MedicalHelpActionSheet> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text(
-              Constant.cancel,
-                overflow: TextOverflow.ellipsis,
-              style: _textStyle
+            child: CustomTextWidget(
+              text: Constant.cancel,
+              overflow: TextOverflow.ellipsis,
+              style: _textStyle,
             ),
             isDefaultAction: true,
             onPressed: () {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class SignUpAgeScreen extends StatefulWidget {
   double sliderValue;
@@ -172,9 +173,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        _minText,
-                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                      CustomTextWidget(
+                                        text: _minText,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -184,9 +184,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                       SizedBox(
                                         height: 3,
                                       ),
-                                      Text(
-                                        _minLabel,
-                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                      CustomTextWidget(
+                                        text: _minLabel,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -199,9 +198,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(
-                                        _maxText,
-                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                      CustomTextWidget(
+                                        text: _maxText,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -211,9 +209,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                       SizedBox(
                                         height: 3,
                                       ),
-                                      Text(
-                                        _maxLabel,
-                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                      CustomTextWidget(
+                                        text: _maxLabel,
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
@@ -240,9 +237,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                         shape: BoxShape.circle,
                                         color: Constant.chatBubbleGreenBlue),
                                     child: Center(
-                                      child: Text(
-                                        sliderValue.toInt().toString(),
-                                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                      child: CustomTextWidget(
+                                        text: sliderValue.toInt().toString(),
                                         style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontFamily: Constant.jostMedium,
@@ -254,9 +250,8 @@ class _SignUpAgeScreenState extends State<SignUpAgeScreen>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    _label,
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  CustomTextWidget(
+                                    text: _label,
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Constant.chatBubbleGreen,

@@ -1,11 +1,6 @@
-import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:mobile/util/PhotoHero.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/SignUpOnBoardBubbleTextView.dart';
-
-import 'ChatBubbleLeftPointed.dart';
 
 class SignUpOnBoardSplash extends StatefulWidget {
   @override

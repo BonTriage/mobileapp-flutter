@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class OnBoardMultiSelectOptions extends StatefulWidget {
   final List<Values> selectOptionList;
@@ -119,9 +120,8 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              Constant.selectAllThatApply,
-              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+            CustomTextWidget(
+              text: Constant.selectAllThatApply,
               style: TextStyle(
                   fontSize: 13,
                   fontFamily: Constant.jostMedium,
@@ -174,9 +174,8 @@ class _OnBoardMultiSelectOptionsState extends State<OnBoardMultiSelectOptions>
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
-                            child: Text(
-                              widget.selectOptionList[index].text,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                            child: CustomTextWidget(
+                              text: widget.selectOptionList[index].text,
                               style: TextStyle(
                                   fontSize: 14,
                                   color: _getOptionTextColor(index),

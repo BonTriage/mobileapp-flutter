@@ -4,6 +4,7 @@ import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/RecordCalendarHeadacheSection.dart';
 import 'package:mobile/view/RecordDayPage.dart';
 
@@ -47,103 +48,97 @@ class _CalendarHeadacheLogDayDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    return MediaQuery(
-      data: mediaQueryData.copyWith(
-        textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-      ),
-      child: Scaffold(
-        body: Container(
-          decoration: Constant.backgroundBoxDecoration,
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: mediaQueryData.size.height,
-              ),
-              child: SafeArea(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: Constant.backgroundColor,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
-                                style: TextStyle(
-                                  color: Constant.chatBubbleGreen,
-                                  fontSize: 20,
-                                  fontFamily: Constant.jostRegular,
-                                  fontWeight: FontWeight.w500,
-                                ),
+    return Scaffold(
+      body: Container(
+        decoration: Constant.backgroundBoxDecoration,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: SafeArea(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                decoration: BoxDecoration(
+                  color: Constant.backgroundColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomTextWidget(
+                              text: '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                              style: TextStyle(
+                                color: Constant.chatBubbleGreen,
+                                fontSize: 20,
+                                fontFamily: Constant.jostRegular,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                Navigator.pop(context, isDataUpdated);
-                              },
-                              child: Image(
-                                    image: AssetImage(Constant.closeIcon),
-                                    width: 22,
-                                    height: 22,
-                                  ),
                             ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Navigator.pop(context, isDataUpdated);
+                            },
+                            child: Image(
+                                  image: AssetImage(Constant.closeIcon),
+                                  width: 22,
+                                  height: 22,
+                                ),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      StreamBuilder<dynamic>(
-                          stream: calendarHeadacheLogDayDetailsBloc
-                              .calendarLogDayDetailsDataStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData && snapshot.data is UserHeadacheLogDayDetailsModel) {
-                              userHeadacheLogDayDetailsModel = snapshot.data;
-                              return Column(
-                                children: [
-                                  RecordCalendarHeadacheSection(
-                                    dateTime: _dateTime,
-                                    userHeadacheLogDayDetailsModel: userHeadacheLogDayDetailsModel,
-                                    onHeadacheTypeSelectedCallback: (headacheIdSelected) {
-                                      _headacheIdSelected = headacheIdSelected;
-                                    },
-                                    openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
-                                    onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
-                                  ),
-                                  RecordDayPage(
-                                    hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
-                                    dateTime: _dateTime,
-                                    userHeadacheLogDayDetailsModel:
-                                    userHeadacheLogDayDetailsModel,
-                                    openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
-                                    onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
-                                  ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    StreamBuilder<dynamic>(
+                        stream: calendarHeadacheLogDayDetailsBloc
+                            .calendarLogDayDetailsDataStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData && snapshot.data is UserHeadacheLogDayDetailsModel) {
+                            userHeadacheLogDayDetailsModel = snapshot.data;
+                            return Column(
+                              children: [
+                                RecordCalendarHeadacheSection(
+                                  dateTime: _dateTime,
+                                  userHeadacheLogDayDetailsModel: userHeadacheLogDayDetailsModel,
+                                  onHeadacheTypeSelectedCallback: (headacheIdSelected) {
+                                    _headacheIdSelected = headacheIdSelected;
+                                  },
+                                  openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                  onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
+                                ),
+                                RecordDayPage(
+                                  hasData:userHeadacheLogDayDetailsModel.headacheLogDayListData!= null,
+                                  dateTime: _dateTime,
+                                  userHeadacheLogDayDetailsModel:
+                                  userHeadacheLogDayDetailsModel,
+                                  openHeadacheLogDayScreenCallback: _openHeadacheLogDayScreen,
+                                  onGoingHeadacheId: calendarHeadacheLogDayDetailsBloc.onGoingHeadacheId,
+                                ),
 
-                                ],
-                              );
-                            } else {
-                              return Container(
-                                height: 100,
-                              );
-                            }
-                          })
-                    ],
-                  ),
+                              ],
+                            );
+                          } else {
+                            return Container(
+                              height: 100,
+                            );
+                          }
+                        })
+                  ],
                 ),
               ),
             ),

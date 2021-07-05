@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class AddNoteBottomSheet extends StatefulWidget {
   final Function(String) addNoteCallback;
@@ -58,8 +60,8 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
                     borderRadius: BorderRadius.circular(20),
                     color: Constant.chatBubbleGreen,
                   ),
-                  child: Text(
-                    Constant.save,
+                  child: CustomTextWidget(
+                    text: Constant.save,
                     style: TextStyle(
                       fontSize: 14,
                       color: Constant.bubbleChatTextView,
@@ -80,20 +82,12 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
               child: Column(
                 children: [
                   Container(
-                    child: TextFormField(
+                    child: CustomTextFormFieldWidget(
                       textCapitalization: TextCapitalization.sentences,
                       maxLength: 400,
-
                       focusNode: _focusNode,
                       controller: _textEditingController,
                       maxLines: 5,
-                      onChanged: (value) {
-                        /*if(value.length > 400) {
-                          value = _textEditingController.text;
-                          _textEditingController.text = value.substring(0, 400);
-                          _textEditingController.selection = TextSelection.fromPosition(TextPosition(offset: _textEditingController.text.length));
-                        }*/
-                      },
                       onFieldSubmitted: (value) {
                         widget.addNoteCallback(_textEditingController.text);
                         Navigator.pop(context, _textEditingController.text);

@@ -6,6 +6,7 @@ import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 import '../main.dart';
 
@@ -275,8 +276,8 @@ class _NotificationSectionState extends State<NotificationSection>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                setNotificationName(),
+              CustomTextWidget(
+                text: setNotificationName(),
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontSize: 14,
@@ -284,8 +285,8 @@ class _NotificationSectionState extends State<NotificationSection>
               ),
               Row(
                 children: <Widget>[
-                  Text(
-                    selectedTimerValue,
+                  CustomTextWidget(
+                    text: selectedTimerValue,
                     style: TextStyle(
                         color: Constant.notificationTextColor,
                         fontSize: 16,
@@ -381,8 +382,8 @@ class _NotificationSectionState extends State<NotificationSection>
                                     }*/
                                   });
                                 },
-                                child: Text(
-                                  'Daily',
+                                child: CustomTextWidget(
+                                  text: 'Daily',
                                   style: TextStyle(
                                       color: Constant.chatBubbleGreen,
                                       fontSize: 12,
@@ -419,8 +420,8 @@ class _NotificationSectionState extends State<NotificationSection>
                                     }
                                   });
                                 },
-                                child: Text(
-                                  'WeekDays',
+                                child: CustomTextWidget(
+                                  text: 'WeekDays',
                                   style: TextStyle(
                                       color: Constant.chatBubbleGreen,
                                       fontSize: 12,
@@ -471,8 +472,8 @@ class _NotificationSectionState extends State<NotificationSection>
                                 _removeNotificationDataFromList();
                               });
                             },
-                            child: Text(
-                              'Off',
+                            child: CustomTextWidget(
+                              text: 'Off',
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 12,
@@ -545,8 +546,8 @@ class _NotificationSectionState extends State<NotificationSection>
                             _removeNotificationDataFromList();
                           });
                         },
-                        child: Text(
-                          _setDeleteOrEditText(),
+                        child: CustomTextWidget(
+                          text: _setDeleteOrEditText(),
                           style: TextStyle(
                               color: Constant.addCustomNotificationTextColor,
                               fontSize: 14,

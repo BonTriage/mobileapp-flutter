@@ -5,6 +5,7 @@ import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class RecordCalendarHeadacheSection extends StatefulWidget {
   final UserHeadacheLogDayDetailsModel userHeadacheLogDayDetailsModel;
@@ -66,8 +67,8 @@ class _RecordCalendarHeadacheSectionState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      userHeadacheListData.length > 0
+                    CustomTextWidget(
+                      text: userHeadacheListData.length > 0
                           ? 'Headaches'
                           : 'No Headaches Logged',
                       style: TextStyle(
@@ -122,8 +123,8 @@ class _RecordCalendarHeadacheSectionState
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          userHeadacheListData[i].headacheName,
+                                        CustomTextWidget(
+                                          text: userHeadacheListData[i].headacheName,
                                           style: TextStyle(
                                               color: Constant.chatBubbleGreen,
                                               fontSize: 14,
@@ -132,8 +133,8 @@ class _RecordCalendarHeadacheSectionState
                                         SizedBox(
                                           height: 2,
                                         ),
-                                        Text(
-                                          userHeadacheListData[i].headacheInfo,
+                                        CustomTextWidget(
+                                          text: userHeadacheListData[i].headacheInfo,
                                           style: TextStyle(
                                               color: Constant
                                                   .chatBubbleGreen60Alpha,
@@ -151,8 +152,8 @@ class _RecordCalendarHeadacheSectionState
                                               visible: userHeadacheListData[i]
                                                   .headacheNote
                                                   .isNotEmpty,
-                                              child: Text(
-                                                'Note:',
+                                              child: CustomTextWidget(
+                                                text: 'Note:',
                                                 style: TextStyle(
                                                     color: Constant
                                                         .chatBubbleGreen60Alpha,
@@ -170,8 +171,8 @@ class _RecordCalendarHeadacheSectionState
                                                   .headacheNote
                                                   .isNotEmpty,
                                               child: Flexible(
-                                                child: Text(
-                                                  userHeadacheListData[i]
+                                                child: CustomTextWidget(
+                                                  text: userHeadacheListData[i]
                                                       .headacheNote,
                                                   overflow: TextOverflow.ellipsis,
                                                   maxLines: 3,
@@ -202,8 +203,8 @@ class _RecordCalendarHeadacheSectionState
                             onTap: () {
                               _openAddHeadacheScreen();
                             },
-                            child: Text(
-                              'Edit Headache',
+                            child: CustomTextWidget(
+                              text: 'Edit Headache',
                               style: TextStyle(
                                   color: Constant
                                       .addCustomNotificationTextColor,

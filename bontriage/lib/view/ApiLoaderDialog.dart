@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/networking/AppException.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/NetworkErrorScreen.dart';
 
 class ApiLoaderDialog extends StatefulWidget {
@@ -80,23 +79,17 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async => false,
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-        ),
-        child: AnimatedSize(
-          vsync: this,
-          duration: Duration(milliseconds: 350),
-          reverseDuration: Duration(milliseconds: 350),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              _getWidget(),
-            ],
-          ),
+      child: AnimatedSize(
+        vsync: this,
+        duration: Duration(milliseconds: 350),
+        reverseDuration: Duration(milliseconds: 350),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            _getWidget(),
+          ],
         ),
       ),
     );
@@ -192,8 +185,8 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                       ),
                     ),
                   ),
-                  Text(
-                    Constant.loading,
+                  CustomTextWidget(
+                    text: Constant.loading,
                     style: TextStyle(
                         fontFamily: Constant.jostRegular,
                         fontSize: 12,
@@ -255,8 +248,8 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                               ),
                             ),
                           ),
-                          Text(
-                            Constant.loading,
+                          CustomTextWidget(
+                            text: Constant.loading,
                             style: TextStyle(
                                 fontFamily: Constant.jostRegular,
                                 fontSize: 12,
@@ -337,8 +330,8 @@ class _ApiLoaderDialogState extends State<ApiLoaderDialog>
                             ),
                           ),
                         ),
-                        Text(
-                          Constant.loading,
+                        CustomTextWidget(
+                          text: Constant.loading,
                           style: TextStyle(
                               fontFamily: Constant.jostRegular,
                               fontSize: 12,

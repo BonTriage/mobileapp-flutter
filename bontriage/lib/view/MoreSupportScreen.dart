@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 class MoreSupportScreen extends StatefulWidget {
@@ -51,8 +52,8 @@ class _MoreSupportScreenState extends State<MoreSupportScreen> {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              Constant.support,
+                            CustomTextWidget(
+                              text: Constant.support,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,

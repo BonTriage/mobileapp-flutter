@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class CircleLogOptions extends StatefulWidget {
   final List<Values> logOptions;
@@ -136,8 +137,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                     child: Center(
                       child: SingleChildScrollView(
                         physics: Utils.getScrollPhysics(),
-                        child: Text(
-                          widget.logOptions[index].text,
+                        child: CustomTextWidget(
+                          text: widget.logOptions[index].text,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: (widget.logOptions[index].text == Constant.plusText) ? 20 : 12,
@@ -169,8 +170,8 @@ class _CircleLogOptionsState extends State<CircleLogOptions> {
                               Constant.backgroundTransparentColor,
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              Constant.threeDots,
+                            child: CustomTextWidget(
+                              text: Constant.threeDots,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 10,

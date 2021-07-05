@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class GenerateReportActionSheet extends StatefulWidget {
   final UserProfileInfoModel userProfileInfoModel;
 
@@ -23,8 +25,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
   @override
   Widget build(BuildContext context) {
     return CupertinoActionSheet(
-          title: Text(
-            '${widget.userProfileInfoModel.profileName}.pdf',
+          title: CustomTextWidget(
+            text: '${widget.userProfileInfoModel.profileName}.pdf',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 fontSize: 18,
@@ -33,8 +35,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
           ),
           actions: [
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.email,
+              child: CustomTextWidget(
+                text: Constant.email,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -43,8 +45,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.text,
+              child: CustomTextWidget(
+                text: Constant.text,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -53,8 +55,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.openYourProviderApp,
+              child: CustomTextWidget(
+                text: Constant.openYourProviderApp,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -63,8 +65,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(
-                Constant.print,
+              child: CustomTextWidget(
+                text: Constant.print,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
               ),
@@ -74,8 +76,8 @@ class _GenerateReportActionSheetState extends State<GenerateReportActionSheet> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text(
-                Constant.cancel,
+            child: CustomTextWidget(
+                text: Constant.cancel,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle
             ),

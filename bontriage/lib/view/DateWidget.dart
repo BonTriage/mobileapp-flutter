@@ -6,6 +6,7 @@ import 'package:mobile/util/constant.dart';
 import 'package:provider/provider.dart';
 
 import 'CalendarTriggersScreen.dart';
+import 'CustomTextWidget.dart';
 
 class DateWidget extends StatelessWidget {
   final DateTime weekDateData;
@@ -69,8 +70,8 @@ class DateWidget extends StatelessWidget {
             decoration: setDateViewWidget(calendarDateViewType),
             padding: EdgeInsets.all(2),
             child: Center(
-              child: Text(
-                weekDateData.day.toString(),
+              child: CustomTextWidget(
+                text: weekDateData.day.toString(),
                 style: setTextViewStyle(calendarDateViewType),
               ),
             ),

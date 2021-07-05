@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class DiscardChangesBottomSheet extends StatefulWidget {
   @override
   _DiscardChangesBottomSheetState createState() =>
@@ -21,10 +23,10 @@ class _DiscardChangesBottomSheetState
     return CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text(
-                Constant.saveAndExit,
-                overflow: TextOverflow.ellipsis,
-                style: _textStyle,
+            child: CustomTextWidget(
+              text: Constant.saveAndExit,
+              overflow: TextOverflow.ellipsis,
+              style: _textStyle,
             ),
             onPressed: () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -32,8 +34,8 @@ class _DiscardChangesBottomSheetState
             },
           ),
           CupertinoActionSheetAction(
-            child: Text(
-                'Discard Changes',
+            child: CustomTextWidget(
+                text: 'Discard Changes',
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle.copyWith(
                   color: Constant.deleteLogRedColor,
@@ -46,8 +48,8 @@ class _DiscardChangesBottomSheetState
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text(
-            Constant.cancel,
+          child: CustomTextWidget(
+            text: Constant.cancel,
             overflow: TextOverflow.ellipsis,
             style: _textStyle,
           ),

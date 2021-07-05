@@ -4,6 +4,8 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:provider/provider.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreSexScreen extends StatefulWidget {
 
   final List<SelectedAnswers> selectedAnswerList;
@@ -119,8 +121,8 @@ class _MoreSexScreenState
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          Constant.sex,
+                        CustomTextWidget(
+                          text: Constant.sex,
                           style: TextStyle(
                               color: Constant.locationServiceGreen,
                               fontSize: 16,
@@ -135,8 +137,8 @@ class _MoreSexScreenState
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    Constant.selectOne,
+                  child: CustomTextWidget(
+                    text: Constant.selectOne,
                     style: TextStyle(
                         fontSize: 13,
                         fontFamily: Constant.jostMedium,
@@ -168,8 +170,8 @@ class _MoreSexScreenState
                                     decoration: _getBoxDecoration(index),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Text(
-                                        _valuesList[index].text,
+                                      child: CustomTextWidget(
+                                        text: _valuesList[index].text,
                                         style: TextStyle(
                                             fontSize: 14,
                                             color: _getOptionTextColor(index),
@@ -194,8 +196,8 @@ class _MoreSexScreenState
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      Constant.toProvideDiagnosticInfo,
+                    child: CustomTextWidget(
+                      text: Constant.toProvideDiagnosticInfo,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,

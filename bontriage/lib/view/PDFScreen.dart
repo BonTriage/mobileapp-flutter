@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:share/share.dart';
 
 class PDFScreen extends StatefulWidget {
@@ -73,8 +74,8 @@ class _PDFScreenState extends State<PDFScreen> {
                       color: Constant.chatBubbleGreen,
                     ),
                   ),
-                  Text(
-                    Constant.generateReport,
+                  CustomTextWidget(
+                    text: Constant.generateReport,
                     style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -164,8 +165,8 @@ class _PDFScreenState extends State<PDFScreen> {
               color: Colors.black.withOpacity(0.5),
               borderRadius: BorderRadius.horizontal(left: Radius.circular(15), right: Radius.circular(15),)
             ),
-            child: Text(
-              _currentPageString,
+            child: CustomTextWidget(
+              text: _currentPageString,
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: Constant.jostRegular,

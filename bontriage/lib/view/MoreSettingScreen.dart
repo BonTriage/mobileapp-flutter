@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 import '../main.dart';
@@ -66,8 +67,8 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            'Settings',
+                          CustomTextWidget(
+                            text: 'Settings',
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,

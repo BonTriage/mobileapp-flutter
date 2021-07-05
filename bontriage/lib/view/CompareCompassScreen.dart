@@ -11,6 +11,8 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -168,8 +170,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                          'We noticed you didn’t log any  headache yet. So please add any headache to see your Compass data.',
+                      child: CustomTextWidget(
+                          text: 'We noticed you didn’t log any  headache yet. So please add any headache to see your Compass data.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               height: 1.3,
@@ -200,8 +202,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
-                              child: Text(
-                                'Add Headache',
+                              child: CustomTextWidget(
+                                text: 'Add Headache',
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 15,
@@ -248,8 +250,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                               color: Constant.compassMyHeadacheTextColor,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Text(
-                              selectedHeadacheName != null
+                            child: CustomTextWidget(
+                              text: selectedHeadacheName != null
                                   ? selectedHeadacheName
                                   : '',
                               style: TextStyle(
@@ -288,8 +290,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                       compassTutorialModel:
                                           _getCompassTutorialModelObj());
                                 },
-                                child: Text(
-                                  'i',
+                                child: CustomTextWidget(
+                                  text: 'i',
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Constant.chatBubbleGreen,
@@ -310,8 +312,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                       compassTutorialModel:
                                           _getCompassTutorialModelObj());
                                 },
-                                child: Text(
-                                  "Frequency",
+                                child: CustomTextWidget(
+                                  text: "Frequency",
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 16,
@@ -328,8 +330,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                         compassTutorialModel:
                                             _getCompassTutorialModelObj());
                                   },
-                                  child: Text(
-                                    "Intensity",
+                                  child: CustomTextWidget(
+                                    text: "Intensity",
                                     style: TextStyle(
                                         color: Color(0xffafd794),
                                         fontSize: 16,
@@ -368,8 +370,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                                   width: 38,
                                                   height: 38,
                                                   child: Center(
-                                                    child: Text(
-                                                      isMonthTapSelected
+                                                    child: CustomTextWidget(
+                                                      text: isMonthTapSelected
                                                           ? userMonthlyCompassScoreData
                                                           .toString()
                                                           : userFirstLoggedCompassScoreData
@@ -413,8 +415,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                         compassTutorialModel:
                                             _getCompassTutorialModelObj());
                                   },
-                                  child: Text(
-                                    "Disability",
+                                  child: CustomTextWidget(
+                                    text: "Disability",
                                     style: TextStyle(
                                         color: Color(0xffafd794),
                                         fontSize: 16,
@@ -431,8 +433,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                       compassTutorialModel:
                                           _getCompassTutorialModelObj());
                                 },
-                                child: Text(
-                                  "Duration",
+                                child: CustomTextWidget(
+                                  text: "Duration",
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 16,
@@ -476,8 +478,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text(
-                                          '$monthName $currentYear',
+                                        CustomTextWidget(
+                                          text: '$monthName $currentYear',
                                           style: TextStyle(
                                               color: Constant.chatBubbleGreen,
                                               fontSize: 14,
@@ -490,8 +492,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                         _openDatePickerBottomSheet(
                                             CupertinoDatePickerMode.date);
                                       },
-                                      child: Text(
-                                        'Change',
+                                      child: CustomTextWidget(
+                                        text: 'Change',
                                         style: TextStyle(
                                             color: Constant
                                                 .addCustomNotificationTextColor,
@@ -538,8 +540,8 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text(
-                                          'First logged Score',
+                                        CustomTextWidget(
+                                          text: 'First logged Score',
                                           style: TextStyle(
                                               color: Constant.chatBubbleGreen,
                                               fontSize: 14,
@@ -566,9 +568,7 @@ class _CompareCompassScreenState extends State<CompareCompassScreen>
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: RichText(
-                            textScaleFactor:
-                                MediaQuery.of(context).textScaleFactor,
+                          child: CustomRichTextWidget(
                             text: TextSpan(
                               children: _getBubbleTextSpans(),
                             ),

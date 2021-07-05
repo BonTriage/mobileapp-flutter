@@ -8,6 +8,8 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreGenerateReportScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
@@ -90,8 +92,8 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                               SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                Constant.generateReport,
+                              CustomTextWidget(
+                                text: Constant.generateReport,
                                 style: TextStyle(
                                     color: Constant.locationServiceGreen,
                                     fontSize: 16,
@@ -166,8 +168,8 @@ class _MoreGenerateReportScreenState extends State<MoreGenerateReportScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Constant.chatBubbleGreen),
-                          child: Text(
-                            Constant.generateReport,
+                          child: CustomTextWidget(
+                            text: Constant.generateReport,
                             style: TextStyle(
                               fontSize: 14,
                               color: Constant.bubbleChatTextView,

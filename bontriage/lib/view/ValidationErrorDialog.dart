@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class ValidationErrorDialog extends StatefulWidget {
   final String errorMessage;
   final String errorTitle;
@@ -45,8 +47,8 @@ class _ValidationErrorDialogState extends State<ValidationErrorDialog> {
                               height: 25,
                             ),
                             SizedBox(width: 5,),
-                            Text(
-                              widget.errorTitle ?? 'Error!',
+                            CustomTextWidget(
+                              text: widget.errorTitle ?? 'Error!',
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Constant.chatBubbleGreen,
@@ -73,8 +75,8 @@ class _ValidationErrorDialogState extends State<ValidationErrorDialog> {
                     ],
                   ),
                   SizedBox(height: 10,),
-                  Text(
-                    widget.errorMessage,
+                  CustomTextWidget(
+                    text: widget.errorMessage,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 16,

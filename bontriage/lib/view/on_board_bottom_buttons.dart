@@ -2,14 +2,15 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class OnBoardBottomButtons extends StatefulWidget {
-  Function backButtonFunction;
-  Function nextButtonFunction;
-  double progressPercent;
-  int onBoardPart;
-  int currentIndex;
+  final Function backButtonFunction;
+  final Function nextButtonFunction;
+  final double progressPercent;
+  final int onBoardPart;
+  final int currentIndex;
 
   OnBoardBottomButtons({
     Key key,
@@ -61,8 +62,8 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                         BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(
-                          Constant.back,
+                        child: CustomTextWidget(
+                          text: Constant.back,
                           style: TextStyle(
                             color:
                             Constant.bubbleChatTextView,
@@ -92,8 +93,8 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        Constant.next,
+                      child: CustomTextWidget(
+                        text: Constant.next,
                         style: TextStyle(
                           color: Constant.bubbleChatTextView,
                           fontSize: 14,
@@ -131,8 +132,8 @@ class _OnBoardBottomButtonsState extends State<OnBoardBottomButtons> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'PART ${widget.onBoardPart} OF 3',
+                CustomTextWidget(
+                  text: 'PART ${widget.onBoardPart} OF 3',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen, fontSize: 13,fontFamily: Constant.jostMedium),
                 ),

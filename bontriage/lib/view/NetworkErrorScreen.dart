@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class NetworkErrorScreen extends StatefulWidget {
   final String errorMessage;
@@ -23,8 +24,8 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: Align(
             alignment: Alignment.center,
-            child: Text(
-              widget.errorMessage,
+            child: CustomTextWidget(
+              text: widget.errorMessage,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -47,8 +48,8 @@ class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
                 borderRadius: BorderRadius.circular(20),
                 color: Constant.chatBubbleGreen,
               ),
-              child: Text(
-                widget.isNeedToRetry ? Constant.tapToRetry : Constant.close,
+              child: CustomTextWidget(
+                text: widget.isNeedToRetry ? Constant.tapToRetry : Constant.close,
                 style: TextStyle(
                     color: Constant.bubbleChatTextView,
                     fontSize: 14,

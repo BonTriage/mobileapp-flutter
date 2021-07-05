@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MedicationDosagePicker extends StatefulWidget {
 
@@ -27,8 +28,8 @@ class _MedicationDosagePickerState extends State<MedicationDosagePicker> {
     for(int i = 50; i <= 1000; i = i + 50) {
       _valuesList.add(i);
       _widgetList.add(Center(
-        child: Text(
-          '$i mg',
+        child: CustomTextWidget(
+          text: '$i mg',
           style: TextStyle(
               fontSize: 18,
               fontFamily: Constant.jostRegular,
@@ -91,8 +92,8 @@ class _MedicationDosagePickerState extends State<MedicationDosagePicker> {
                         int dosageValue = 50 + _currentIndex * 50;
                         Navigator.pop(context, '$dosageValue mg');
                       },
-                      child: Text(
-                        'Done',
+                      child: CustomTextWidget(
+                        text: 'Done',
                         style: TextStyle(
                             fontSize: 14,
                             fontFamily: Constant.jostMedium,

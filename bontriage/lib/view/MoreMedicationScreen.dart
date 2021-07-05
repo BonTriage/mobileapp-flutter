@@ -8,6 +8,8 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/SignUpBottomSheet.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreMedicationScreen extends StatefulWidget {
   final Function(BuildContext, String) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
@@ -111,8 +113,8 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              Constant.medication,
+                            CustomTextWidget(
+                              text: Constant.medication,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -142,8 +144,8 @@ class _MoreMedicationScreenState extends State<MoreMedicationScreen> with Single
                     SizedBox(height: 40,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        Constant.whichOfTheFollowingMedication,
+                      child: CustomTextWidget(
+                        text: Constant.whichOfTheFollowingMedication,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 14,

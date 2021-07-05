@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'CustomTextWidget.dart';
+
 class DateTimePicker extends StatefulWidget {
   final CupertinoDatePickerMode cupertinoDatePickerMode;
   final Function(DateTime) onDateTimeSelected;
@@ -69,8 +71,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
                             widget.onDateTimeSelected(_selectedDateTime);
                           Navigator.pop(context, _selectedDateTime);
                         },
-                        child: Text(
-                          'Done',
+                        child: CustomTextWidget(
+                          text: 'Done',
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: Constant.jostMedium,

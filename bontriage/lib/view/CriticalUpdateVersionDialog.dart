@@ -4,6 +4,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class CriticalUpdateVersionDialog extends StatefulWidget {
   final String errorMessage;
@@ -48,8 +49,8 @@ class _CriticalUpdateVersionDialogState
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'Update Required!',
+                              CustomTextWidget(
+                                text: 'Update Required!',
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: Constant.chatBubbleGreen,
@@ -63,8 +64,8 @@ class _CriticalUpdateVersionDialogState
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      widget.errorMessage,
+                    CustomTextWidget(
+                      text: widget.errorMessage,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
@@ -92,8 +93,8 @@ class _CriticalUpdateVersionDialogState
                             borderRadius: BorderRadius.circular(20),
                             color: Constant.chatBubbleGreen,
                           ),
-                          child: Text(
-                            'Update',
+                          child: CustomTextWidget(
+                            text: 'Update',
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 14,

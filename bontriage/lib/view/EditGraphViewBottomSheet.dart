@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/EditGraphViewFilterModel.dart';
 import 'package:mobile/models/HeadacheListDataModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class EditGraphViewBottomSheet extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
@@ -107,8 +108,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
             children: [
               Align(
                 alignment: Alignment.center,
-                child: Text(
-                  Constant.editGraphView,
+                child: CustomTextWidget(
+                  text: Constant.editGraphView,
                   style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontSize: 16,
@@ -133,16 +134,16 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
                       _popBottomSheet();
                     }
                   },
-                  child: Text(
-                    'Done',
+                  child: CustomTextWidget(
+                    text: 'Done',
                       style: TextStyle(
                           fontSize: 14,
                           fontFamily: Constant.jostMedium,
                           fontWeight: FontWeight.w500,
                           color: Constant.locationServiceGreen
                       ),
-                ),
-                  )
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -212,8 +213,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
                     SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      _errorMsg,
+                    CustomTextWidget(
+                      text: _errorMsg,
                       style: TextStyle(
                           fontSize: 14,
                           color: Constant.pinkTriggerColor,
@@ -227,8 +228,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
           SizedBox(
             height: 20,
           ),
-          Text(
-            '${Constant.headacheType}:',
+          CustomTextWidget(
+            text: '${Constant.headacheType}:',
             style: _headerTextStyle,
           ),
           Row(
@@ -250,7 +251,10 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
                   },
                 ),
               ),
-              Text(_headacheTypeRadioButtonList[0], style: _radioTextStyle),
+              CustomTextWidget(
+                text: _headacheTypeRadioButtonList[0],
+                style: _radioTextStyle,
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -307,7 +311,10 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
                     },
                   ),
                 ),
-                Text(_headacheTypeRadioButtonList[1], style: _radioTextStyle),
+                CustomTextWidget(
+                  text: _headacheTypeRadioButtonList[1],
+                  style: _radioTextStyle,
+                ),
                 SizedBox(
                   width: 10,
                 ),
@@ -387,7 +394,6 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
               ],
             ),
           ),
-
           SizedBox(
             height: 20,
           ),
@@ -399,8 +405,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
           SizedBox(
             height: 10,
           ),
-          Text(
-            Constant.otherFactors,
+          CustomTextWidget(
+            text: Constant.otherFactors,
             style: _headerTextStyle,
           ),
           Column(
@@ -418,8 +424,8 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
     dropDownStringList.forEach((element) {
       dropDownMenuItemList.add(DropdownMenuItem(
         value: element.text,
-        child: Text(
-          element.text,
+        child: CustomTextWidget(
+          text: element.text,
         ),
       ));
     });
@@ -450,7 +456,7 @@ class _EditGraphViewBottomSheetState extends State<EditGraphViewBottomSheet> wit
               },
             ),
           ),
-          Text(element, style: _radioTextStyle),
+          CustomTextWidget(text: element, style: _radioTextStyle),
         ],
       ));
     });

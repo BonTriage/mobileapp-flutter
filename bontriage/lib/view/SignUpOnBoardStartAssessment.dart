@@ -1,6 +1,7 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 import 'ChatBubbleRightPointed.dart';
 
@@ -66,8 +67,8 @@ class _StateSignUpOnBoardStartAssessment
                         ChatBubbleRightPointedPainter(Constant.chatBubbleGreen),
                     child: Container(
                       padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        Constant.letsStarted,
+                      child: CustomTextWidget(
+                        text: Constant.letsStarted,
                         style: TextStyle(
                             fontSize: 14,
                             color: Constant.bubbleChatTextView,
@@ -99,8 +100,8 @@ class _StateSignUpOnBoardStartAssessment
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
-                          child: Text(
-                            Constant.startAssessment,
+                          child: CustomTextWidget(
+                            text: Constant.startAssessment,
                             style: TextStyle(
                                 color: Constant.bubbleChatTextView,
                                 fontSize: 13.5,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class ConfirmationDialog extends StatefulWidget {
   final String dialogContent;
@@ -41,8 +42,8 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            widget.dialogTitle ?? 'Alert!',
+                          CustomTextWidget(
+                            text: widget.dialogTitle ?? 'Alert!',
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Constant.chatBubbleGreen,
@@ -57,8 +58,8 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 SizedBox(height: 10,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 9),
-                  child: Text(
-                    widget.dialogContent,
+                  child: CustomTextWidget(
+                    text: widget.dialogContent,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -82,8 +83,8 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                           Navigator.pop(context, 'Yes');
                         },
                         child: Center(
-                          child: Text(widget.positiveOption??
-                            'Yes',
+                          child: CustomTextWidget(
+                            text: widget.positiveOption?? 'Yes',
                             style: TextStyle(
                               fontFamily: Constant.jostMedium,
                               fontSize: 14,
@@ -105,8 +106,8 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                           Navigator.pop(context, 'No');
                         },
                         child: Center(
-                          child: Text(widget.negativeOption??
-                            'No',
+                          child: CustomTextWidget(
+                            text: widget.negativeOption?? 'No',
                             style: TextStyle(
                                 fontFamily: Constant.jostMedium,
                                 fontSize: 14,

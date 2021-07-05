@@ -8,6 +8,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MoreSection extends StatefulWidget {
   final String text;
@@ -122,8 +123,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: Text(
-                    widget.text,
+                  child: CustomTextWidget(
+                    text: widget.text,
                     style: TextStyle(
                         color: Constant.locationServiceGreen,
                         fontSize: 16,
@@ -137,8 +138,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     children: [
                       Expanded(
                         child: Align(
-                          child: Text(
-                            widget.moreStatus,
+                          child: CustomTextWidget(
+                            text: widget.moreStatus,
                             style: TextStyle(
                                 color: Constant.notificationTextColor,
                                 fontSize: 15,
@@ -207,8 +208,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                               borderRadius: BorderRadius.circular(10),
                               color: (clickedOnWhichButton == 0) ? Constant.selectedNotificationColor : Colors.transparent
                           ),
-                          child: Text(
-                            'Daily',
+                          child: CustomTextWidget(
+                            text: 'Daily',
                             style: TextStyle(
                                 fontSize: 10,
                                 color: Constant.chatBubbleGreen,
@@ -233,8 +234,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                               borderRadius: BorderRadius.circular(10),
                               color: (clickedOnWhichButton == 1) ? Constant.selectedNotificationColor : Colors.transparent
                           ),
-                          child: Text(
-                            'Weekdays',
+                          child: CustomTextWidget(
+                            text: 'Weekdays',
                             style: TextStyle(
                                 fontSize: 10,
                                 color: Constant.chatBubbleGreen,
@@ -258,8 +259,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                           borderRadius: BorderRadius.circular(10),
                           color: (clickedOnWhichButton == 2) ? Constant.selectedNotificationColor : Colors.transparent
                       ),
-                      child: Text(
-                        'Off',
+                      child: CustomTextWidget(
+                        text: 'Off',
                         style: TextStyle(
                             fontSize: 10,
                             color: Constant.chatBubbleGreen,
@@ -290,8 +291,8 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                   ),
                 ),
               ),
-              Text(
-                Constant.reset,
+              CustomTextWidget(
+                text: Constant.reset,
                 style: TextStyle(
                   color: Constant.addCustomNotificationTextColor,
                   fontSize: 12,

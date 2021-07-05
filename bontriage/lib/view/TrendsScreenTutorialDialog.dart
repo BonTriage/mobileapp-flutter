@@ -2,6 +2,7 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/TrendsTutorialDotModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 import 'TutorialChatBubble.dart';
 
@@ -164,8 +165,8 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    'Exercise',
+                                  CustomTextWidget(
+                                    text: 'Exercise',
                                     style: TextStyle(
                                       color: Constant.locationServiceGreen,
                                       fontSize: 12,
@@ -173,8 +174,8 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
                                     ),
                                   ),
                                   SizedBox(height: 2,),
-                                  Text(
-                                    'Reg. meals',
+                                  CustomTextWidget(
+                                    text: 'Reg. meals',
                                     style: TextStyle(
                                         color: Constant.locationServiceGreen,
                                         fontSize: 12,
@@ -182,8 +183,8 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
                                     ),
                                   ),
                                   SizedBox(height: 2,),
-                                  Text(
-                                    'Good Sleep',
+                                  CustomTextWidget(
+                                    text: 'Good Sleep',
                                     style: TextStyle(
                                         color: Constant.locationServiceGreen,
                                         fontSize: 12,
@@ -305,8 +306,8 @@ class _TrendsScreenTutorialDialogState extends State<TrendsScreenTutorialDialog>
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: Center(
-                                      child: Text(
-                                        'Got it!',
+                                      child: CustomTextWidget(
+                                        text: 'Got it!',
                                         style: TextStyle(
                                             color:
                                             Constant.bubbleChatTextView,

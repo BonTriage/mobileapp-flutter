@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/PhotoHero.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubbleRightPointed.dart';
 
@@ -89,8 +91,8 @@ class _ProfileCompleteState extends State<ProfileComplete>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      Constant.thankYouProfile,
+                    CustomTextWidget(
+                      text: Constant.thankYouProfile,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen,
@@ -148,7 +150,7 @@ class _ProfileCompleteState extends State<ProfileComplete>
                               padding: const EdgeInsets.all(15.0),
                               child: FadeTransition(
                                 opacity: _animationController,
-                                child: RichText(
+                                child: CustomRichTextWidget(
                                   text: TextSpan(
                                     children: _spannableTextViewList,
                                   ),
@@ -176,8 +178,8 @@ class _ProfileCompleteState extends State<ProfileComplete>
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
-                                child: Text(
-                                  Constant.finish,
+                                child: CustomTextWidget(
+                                  text: Constant.finish,
                                   style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 15,

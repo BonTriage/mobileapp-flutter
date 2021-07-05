@@ -10,6 +10,8 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MigraineDaysVsHeadacheDaysDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'CustomTextWidget.dart';
+
 class CalendarIntensityScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
   final Future<dynamic> Function(String,dynamic) navigateToOtherScreenCallback;
@@ -145,8 +147,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
                                     },
                                     behavior: HitTestBehavior.translucent,
-                                    child: Text(
-                                      monthName + " " + currentYear.toString(),
+                                    child: CustomTextWidget(
+                                      text: monthName + " " + currentYear.toString(),
                                       style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontSize: 15,
@@ -190,8 +192,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                 children: [
                                   TableRow(children: [
                                     Center(
-                                      child: Text(
-                                        'Su',
+                                      child: CustomTextWidget(
+                                        text: 'Su',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -199,8 +201,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'M',
+                                      child: CustomTextWidget(
+                                        text: 'M',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -208,8 +210,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Tu',
+                                      child: CustomTextWidget(
+                                        text: 'Tu',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -217,8 +219,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'W',
+                                      child: CustomTextWidget(
+                                        text: 'W',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -226,8 +228,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Th',
+                                      child: CustomTextWidget(
+                                        text: 'Th',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -235,8 +237,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'F',
+                                      child: CustomTextWidget(
+                                        text: 'F',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -244,8 +246,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Sa',
+                                      child: CustomTextWidget(
+                                        text: 'Sa',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -308,8 +310,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       //widget.openDatePickerCallback(CupertinoDatePickerMode.date, _getDateTimeCallbackFunction(0), _dateTime);
                                     },
                                     behavior: HitTestBehavior.translucent,
-                                    child: Text(
-                                      monthName + " " + currentYear.toString(),
+                                    child: CustomTextWidget(
+                                      text:  monthName + " " + currentYear.toString(),
                                       style: TextStyle(
                                           color: Constant.chatBubbleGreen,
                                           fontSize: 15,
@@ -353,8 +355,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                 children: [
                                   TableRow(children: [
                                     Center(
-                                      child: Text(
-                                        'Su',
+                                      child: CustomTextWidget(
+                                        text: 'Su',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -362,8 +364,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'M',
+                                      child: CustomTextWidget(
+                                        text: 'M',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -371,8 +373,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Tu',
+                                      child: CustomTextWidget(
+                                        text: 'Tu',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -380,8 +382,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'W',
+                                      child: CustomTextWidget(
+                                        text: 'W',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -389,8 +391,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Th',
+                                      child: CustomTextWidget(
+                                        text: 'Th',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -398,8 +400,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'F',
+                                      child: CustomTextWidget(
+                                        text: 'F',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -407,8 +409,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                       ),
                                     ),
                                     Center(
-                                      child: Text(
-                                        'Sa',
+                                      child: CustomTextWidget(
+                                        text: 'Sa',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Constant.locationServiceGreen,
@@ -447,8 +449,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              'Headache-free day',
+                            CustomTextWidget(
+                              text: 'Headache-free day',
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Constant.locationServiceGreen,
@@ -469,8 +471,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              'Headache day',
+                            CustomTextWidget(
+                              text: 'Headache day',
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Constant.locationServiceGreen,
@@ -496,8 +498,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              'Migraine day',
+                            CustomTextWidget(
+                              text: 'Migraine day',
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Constant.locationServiceGreen,
@@ -521,9 +523,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                                         color: Constant.chatBubbleGreen,
                                         width: 1.3)),
                                 child: Center(
-                                  child: Text(
-                                    'i',
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.0),
+                                  child: CustomTextWidget(
+                                    text: 'i',
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Constant.locationServiceGreen,
@@ -542,8 +543,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
             ),
             Container(
               margin: EdgeInsets.only(left: 15, right: 15),
-              child: Text(
-                Constant.calculatedSeverityCalendarTextView,
+              child: CustomTextWidget(
+                text: Constant.calculatedSeverityCalendarTextView,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
@@ -575,8 +576,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          'Mild',
+                        CustomTextWidget(
+                          text: 'Mild',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -585,8 +586,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 44,
                         ),
-                        Text(
-                          'Headache intensity between',
+                        CustomTextWidget(
+                          text: 'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -595,8 +596,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '1 - 3',
+                        CustomTextWidget(
+                          text: '1 - 3',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -621,8 +622,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          'Moderate',
+                        CustomTextWidget(
+                          text: 'Moderate',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -631,8 +632,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 13,
                         ),
-                        Text(
-                          'Headache intensity between',
+                        CustomTextWidget(
+                          text: 'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -641,8 +642,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '4 - 7',
+                        CustomTextWidget(
+                          text: '4 - 7',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -667,8 +668,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          'Severe',
+                        CustomTextWidget(
+                          text: 'Severe',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -677,8 +678,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 30,
                         ),
-                        Text(
-                          'Headache intensity between',
+                        CustomTextWidget(
+                          text: 'Headache intensity between',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -687,8 +688,8 @@ class _CalendarIntensityScreenState extends State<CalendarIntensityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '8 - 10',
+                        CustomTextWidget(
+                          text: '8 - 10',
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,

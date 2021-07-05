@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MoreLocationServicesScreen extends StatefulWidget {
   @override
@@ -63,8 +64,8 @@ class _MoreLocationServicesScreenState
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            Constant.locationServices,
+                          CustomTextWidget(
+                            text: Constant.locationServices,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -87,8 +88,8 @@ class _MoreLocationServicesScreenState
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                          child: Text(
-                            Constant.locationServices,
+                          child: CustomTextWidget(
+                            text: Constant.locationServices,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -124,8 +125,8 @@ class _MoreLocationServicesScreenState
                   SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      Constant.enablingLocationServices,
+                    child: CustomTextWidget(
+                      text: Constant.enablingLocationServices,
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,

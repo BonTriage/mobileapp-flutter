@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class DateRangeActionSheet extends StatefulWidget {
   @override
@@ -20,8 +21,8 @@ class _DateRangeActionSheetState extends State<DateRangeActionSheet> {
     return CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text(
-                Constant.last2Weeks,
+            child: CustomTextWidget(
+                text: Constant.last2Weeks,
                 overflow: TextOverflow.ellipsis,
                 style: _textStyle,
             ),
@@ -31,8 +32,8 @@ class _DateRangeActionSheetState extends State<DateRangeActionSheet> {
             },
           ),
           CupertinoActionSheetAction(
-            child: Text(
-              Constant.last4Weeks,
+            child: CustomTextWidget(
+              text: Constant.last4Weeks,
               overflow: TextOverflow.ellipsis,
               style: _textStyle,
             ),
@@ -42,8 +43,8 @@ class _DateRangeActionSheetState extends State<DateRangeActionSheet> {
             },
           ),
           CupertinoActionSheetAction(
-            child: Text(
-              Constant.last2Months,
+            child: CustomTextWidget(
+              text: Constant.last2Months,
               overflow: TextOverflow.ellipsis,
               style: _textStyle,
             ),
@@ -53,8 +54,8 @@ class _DateRangeActionSheetState extends State<DateRangeActionSheet> {
             },
           ),
           CupertinoActionSheetAction(
-            child: Text(
-              Constant.last3Months,
+            child: CustomTextWidget(
+              text: Constant.last3Months,
               overflow: TextOverflow.ellipsis,
               style: _textStyle,
             ),
@@ -65,8 +66,8 @@ class _DateRangeActionSheetState extends State<DateRangeActionSheet> {
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text(
-              Constant.cancel,
+          child: CustomTextWidget(
+              text: Constant.cancel,
               overflow: TextOverflow.ellipsis,
               style: _textStyle
           ),

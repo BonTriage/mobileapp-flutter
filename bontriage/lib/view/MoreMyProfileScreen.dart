@@ -7,7 +7,9 @@ import 'package:mobile/models/ResponseModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/MoreSection.dart';
+import 'package:provider/provider.dart';
 
 class MoreMyProfileScreen extends StatefulWidget {
   final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
@@ -83,8 +85,8 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            Constant.myProfile,
+                          CustomTextWidget(
+                            text: Constant.myProfile,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -161,7 +163,11 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 color: Constant.moreBackgroundColor,
                               ),
-                              child: _getTriggerMedicationWidget(snapshot.data),
+                              child: Consumer<MoreTriggerMedicationInfo>(
+                                builder: (context, data, child) {
+                                  return _getTriggerMedicationWidget(snapshot.data);
+                                },
+                              ),
                             ),
                             SizedBox(height: 20,),
                           ],
@@ -198,7 +204,8 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
         _moreMyProfileBloc.fetchMyProfileData();
       } else if(routeName == TabNavigatorRoutes.moreTriggersScreenRoute ||
           routeName == TabNavigatorRoutes.moreMedicationsScreenRoute) {
-        setState(() {});
+        var moreTriggerMedicationInfo = Provider.of<MoreTriggerMedicationInfo>(context, listen: false);
+        moreTriggerMedicationInfo.updateMoreTriggerMedicationInfo();
       }
     }
   }
@@ -231,8 +238,8 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
         SizedBox(height: 30,),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            Constant.headacheTypes,
+          child: CustomTextWidget(
+            text: Constant.headacheTypes,
             style: TextStyle(
                 color: Constant.addCustomNotificationTextColor,
                 fontSize: 16,
@@ -300,5 +307,11 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
         ),
       ],
     );
+  }
+}
+
+class MoreTriggerMedicationInfo with ChangeNotifier {
+  updateMoreTriggerMedicationInfo() {
+    notifyListeners();
   }
 }

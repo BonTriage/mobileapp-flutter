@@ -5,6 +5,7 @@ import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class SignUpOnBoardSecondStepPersonalizedHeadacheCompass
     extends StatefulWidget {
@@ -128,9 +129,8 @@ class _SignUpOnBoardSecondStepPersonalizedHeadacheCompassState
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.only(top: 120),
-                  child: Text(
-                    Constant.personalizedHeadacheCompass,
-                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                  child: CustomTextWidget(
+                    text: Constant.personalizedHeadacheCompass,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,

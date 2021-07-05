@@ -12,6 +12,8 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/MoreSection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'CustomTextWidget.dart';
+
 class MoreHeadachesScreen extends StatefulWidget {
   final Function(BuildContext, String, dynamic) onPush;
   final Future<dynamic> Function(String, dynamic) openActionSheetCallback;
@@ -90,8 +92,8 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                             width: 10,
                           ),
                           Expanded(
-                            child: Text(
-                              widget.moreHeadacheScreenArgumentModel.headacheTypeData.text,
+                            child: CustomTextWidget(
+                              text: widget.moreHeadacheScreenArgumentModel.headacheTypeData.text,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
@@ -141,8 +143,8 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                Constant.reCompleteInitialAssessment,
+                              CustomTextWidget(
+                                text: Constant.reCompleteInitialAssessment,
                                 style: TextStyle(
                                     color: Constant.addCustomNotificationTextColor,
                                     fontSize: 16,
@@ -175,8 +177,8 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                Constant.deleteHeadacheType,
+                              CustomTextWidget(
+                                text: Constant.deleteHeadacheType,
                                 style: TextStyle(
                                     color: Constant.pinkTriggerColor,
                                     fontSize: 16,
@@ -204,8 +206,8 @@ class _MoreHeadachesScreenState extends State<MoreHeadachesScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      _getInfoText(),
+                    child: CustomTextWidget(
+                      text: _getInfoText(),
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 14,

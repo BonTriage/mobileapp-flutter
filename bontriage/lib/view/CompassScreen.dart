@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CompareCompassScreen.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/OverTimeCompassScreen.dart';
 import 'package:mobile/view/slide_dots.dart';
 import 'package:provider/provider.dart';
@@ -97,8 +98,8 @@ class _CompassScreenState extends State<CompassScreen> {
                 Consumer<CompassInfo>(
                   builder: (context, data, child) {
                     int currentIndex = data.getCurrentIndex();
-                    return Text(
-                      currentIndex == 0 ? 'Over Time' : 'Compare',
+                    return CustomTextWidget(
+                      text: currentIndex == 0 ? 'Over Time' : 'Compare',
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 19,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+
+import 'CustomTextWidget.dart';
 
 class WelcomePage extends StatelessWidget {
   final String headerText;
@@ -26,8 +26,8 @@ class WelcomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                headerText,
+              CustomTextWidget(
+                text: headerText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Constant.chatBubbleGreen,
@@ -51,8 +51,8 @@ class WelcomePage extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
-              Text(
-                subText,
+              CustomTextWidget(
+                text: subText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Constant.locationServiceGreen,

@@ -2,9 +2,11 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/on_board_chat_bubble.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../util/constant.dart';
+import 'CustomTextFormFieldWidget.dart';
 
 class OnBoardHeadacheNameScreen extends StatefulWidget {
   @override
@@ -35,7 +37,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                 padding: EdgeInsets.symmetric(
                     horizontal: Constant.chatBubbleHorizontalPadding,
                     vertical: 80),
-                child: TextField(
+                child: CustomTextFormFieldWidget(
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 15,
@@ -77,8 +79,8 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(
-                          Constant.back,
+                        child: CustomTextWidget(
+                          text: Constant.back,
                           style: TextStyle(
                               color: Constant.bubbleChatTextView,
                               fontSize: 15,
@@ -101,8 +103,8 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(
-                          Constant.next,
+                        child: CustomTextWidget(
+                          text: Constant.next,
                           style: TextStyle(
                               color: Constant.bubbleChatTextView,
                               fontSize: 15,

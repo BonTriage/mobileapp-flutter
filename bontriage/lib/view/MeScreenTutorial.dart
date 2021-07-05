@@ -129,7 +129,6 @@ class _MeScreenTutorialDialogState extends State<MeScreenTutorialDialog> with Si
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async {
         if(_currentIndex != 0) {
@@ -140,96 +139,91 @@ class _MeScreenTutorialDialogState extends State<MeScreenTutorialDialog> with Si
         }
         return false;
       },
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-        ),
-        child: Stack(
-          children: [
-            ClipPath(
-              clipper: TutorialClipper(
-                logDayBox: _logDayRenderBox,
-                addHeadacheBox: _addHeadacheRenderBox,
-                recordsBox: _recordsRenderBox,
-                currentIndex: _currentIndex,
-                shouldClip: _shouldClip
+      child: Stack(
+        children: [
+          ClipPath(
+            clipper: TutorialClipper(
+              logDayBox: _logDayRenderBox,
+              addHeadacheBox: _addHeadacheRenderBox,
+              recordsBox: _recordsRenderBox,
+              currentIndex: _currentIndex,
+              shouldClip: _shouldClip
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
               ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
-                ),
-                child: Container(
-                  color: Constant.backgroundColor.withOpacity(0.9),
-                  child: Stack(
-                    children: [
-                      TutorialChatBubble(
-                        chatBubbleText: _chatBubbleTextList[_currentIndex],
-                        textSpanList: _textSpanList[_currentIndex],
-                        currentIndex: _currentIndex,
-                        nextButtonFunction: () {
-                          if(_currentIndex < _textSpanList.length - 1) {
-                            setState(() {
-                              _currentIndex++;
-                              _shouldClip = false;
-                            });
-                          } else {
-                            _popOrNavigateToOtherScreen();
-                          }
-                        },
-                        backButtonFunction: () {
-                          if(_currentIndex != 0) {
-                            setState(() {
-                              _currentIndex--;
-                              _shouldClip = true;
-                            });
-                          }
-                        },
-                      ),
-                      Visibility(
-                        visible: _shouldClip,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: _logDayOffset.dy + 40, right: _logDayOffset.dx - 20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Image(
-                                      image: AssetImage(Constant.tutorialArrowUp),
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                    Image(
-                                      image: AssetImage(Constant.tutorialArrowDown),
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                  ],
-                                ),
+              child: Container(
+                color: Constant.backgroundColor.withOpacity(0.9),
+                child: Stack(
+                  children: [
+                    TutorialChatBubble(
+                      chatBubbleText: _chatBubbleTextList[_currentIndex],
+                      textSpanList: _textSpanList[_currentIndex],
+                      currentIndex: _currentIndex,
+                      nextButtonFunction: () {
+                        if(_currentIndex < _textSpanList.length - 1) {
+                          setState(() {
+                            _currentIndex++;
+                            _shouldClip = false;
+                          });
+                        } else {
+                          _popOrNavigateToOtherScreen();
+                        }
+                      },
+                      backButtonFunction: () {
+                        if(_currentIndex != 0) {
+                          setState(() {
+                            _currentIndex--;
+                            _shouldClip = true;
+                          });
+                        }
+                      },
+                    ),
+                    Visibility(
+                      visible: _shouldClip,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: _logDayOffset.dy + 40, right: _logDayOffset.dx - 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Image(
+                                    image: AssetImage(Constant.tutorialArrowUp),
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  Image(
+                                    image: AssetImage(Constant.tutorialArrowDown),
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      Visibility(
-                        visible: !_shouldClip,
-                        child: Container(
-                          padding: EdgeInsets.only(left: _recordsOffset.dx - 35, top: _recordsOffset.dy - 50),
-                          child: Image(
-                            image: AssetImage(Constant.tutorialArrowDown2),
-                            width: 40,
-                            height: 40,
-                          ),
+                    ),
+                    Visibility(
+                      visible: !_shouldClip,
+                      child: Container(
+                        padding: EdgeInsets.only(left: _recordsOffset.dx - 35, top: _recordsOffset.dy - 50),
+                        child: Image(
+                          image: AssetImage(Constant.tutorialArrowDown2),
+                          width: 40,
+                          height: 40,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

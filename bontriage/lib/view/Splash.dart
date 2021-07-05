@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/CheckVersionUpdateBloc.dart';
+import 'package:mobile/models/VersionUpdateModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../util/constant.dart';
-import 'package:mobile/models/VersionUpdateModel.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -42,36 +43,30 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: MediaQuery(
-        data: mediaQueryData.copyWith(
-            textScaleFactor: 1.0
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(
-                  image: AssetImage(Constant.splashCompass),
-                  width: 78,
-                  height: 78,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  Constant.migraineMentor,
-                  style: TextStyle(
-                      color: Constant.splashTextColor,
-                      fontSize: 22,
-                      fontFamily: Constant.jostRegular),
-                ),
-              ],
-            ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage(Constant.splashCompass),
+                width: 78,
+                height: 78,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              CustomTextWidget(
+                text: Constant.migraineMentor,
+                style: TextStyle(
+                    color: Constant.splashTextColor,
+                    fontSize: 22,
+                    fontFamily: Constant.jostRegular),
+              ),
+            ],
           ),
         ),
       ),
@@ -158,15 +153,19 @@ class _SplashState extends State<Splash> {
   void _listenToNetworkStreamController() {
     _checkVersionUpdateBloc.networkStream.listen((event) {
       if(event is String && event != null && event.isNotEmpty) {
-        final snackBar = SnackBar(content: GestureDetector(
+        final snackBar = SnackBar(
+          content: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onVerticalDragStart: (_) => debugPrint("no can do!"),
-          child: Text(event,style: TextStyle(
+          child: CustomTextWidget(
+            text: event,
+            style: TextStyle(
               height: 1.3,
               fontSize: 16,
               fontFamily: Constant.jostRegular,
-              color: Colors.black)),
-          ),
+              color: Colors.black,
+            ),
+          ),),
           backgroundColor: Constant.chatBubbleGreen,
           duration: Duration(days: 3),
           action: SnackBarAction(

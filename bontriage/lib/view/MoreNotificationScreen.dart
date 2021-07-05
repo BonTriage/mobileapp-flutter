@@ -11,8 +11,10 @@ import 'package:mobile/models/LocalNotificationModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
 
 import '../main.dart';
+import 'CustomTextWidget.dart';
 import 'NotificationSection.dart';
 
 class MoreNotificationScreen extends StatefulWidget {
@@ -119,8 +121,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              Constant.notifications,
+                            CustomTextWidget(
+                              text: Constant.notifications,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -144,8 +146,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 15, top: 15, bottom: 15),
-                            child: Text(
-                              Constant.notifications,
+                            child: CustomTextWidget(
+                              text: Constant.notifications,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -251,8 +253,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                             context, allNotificationListData);
                                       },
                                       child: Container(
-                                        child: Text(
-                                          Constant.addCustomNotification,
+                                        child: CustomTextWidget(
+                                          text: Constant.addCustomNotification,
                                           style: TextStyle(
                                               color: Constant
                                                   .addCustomNotificationTextColor,
@@ -286,8 +288,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: Center(
-                                      child: Text(
-                                        Constant.save,
+                                      child: CustomTextWidget(
+                                        text: Constant.save,
                                         style: TextStyle(
                                             color: Constant.bubbleChatTextView,
                                             fontSize: 15,
@@ -305,8 +307,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               visible: isSaveButtonVisible,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: Text(
-                                  Constant.weKnowItCanBeEasy,
+                                child: CustomTextWidget(
+                                  text: Constant.weKnowItCanBeEasy,
                                   style: TextStyle(
                                       color: Constant.locationServiceGreen,
                                       fontSize: 14,
@@ -334,7 +336,6 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
 
   void openCustomNotificationDialog(BuildContext context,
       List<LocalNotificationModel> allNotificationListData) {
-    DateTime _selectedDateTime = DateTime.now();
     textEditingController.text = setInitialValue();
     showDialog<void>(
       context: context,
@@ -381,10 +382,10 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
-                          child: TextField(
+                          child: CustomTextFormFieldWidget(
                             maxLength: 20,
                             inputFormatters: [LengthLimitingTextInputFormatter(20, maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds),],
-                            onSubmitted: (String value) {
+                            onFieldSubmitted: (String value) {
                               FocusScope.of(context).requestFocus(FocusNode());
                             },
                             controller: textEditingController,
@@ -439,8 +440,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
-                                child: Text(
-                                  Constant.save,
+                                child: CustomTextWidget(
+                                  text: Constant.save,
                                   style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 15,
@@ -464,8 +465,8 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 8),
                                 child: Center(
-                                  child: Text(
-                                    'Delete',
+                                  child: CustomTextWidget(
+                                    text: 'Delete',
                                     style: TextStyle(
                                         color: Constant.chatBubbleGreen,
                                         fontSize: 15,
@@ -554,7 +555,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
            });*/
          }
        });
-            /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+            /*final snackBar = SnackBar(content: CustomTextWidget(text: 'Your notification has been saved successfully.',style: TextStyle(
            height: 1.3,
            fontSize: 16,
            fontFamily: Constant.jostRegular,
@@ -575,7 +576,7 @@ class _MoreNotificationScreenState extends State<MoreNotificationScreen>
          Navigator.pop(context);
        }
      });
-     /*final snackBar = SnackBar(content: Text('Your notification has been saved successfully.',style: TextStyle(
+     /*final snackBar = SnackBar(content: CustomTextWidget(text: 'Your notification has been saved successfully.',style: TextStyle(
          height: 1.3,
          fontSize: 16,
          fontFamily: Constant.jostRegular,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/CurrentUserHeadacheModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/DateTimePicker.dart';
 import 'package:provider/provider.dart';
 
@@ -350,8 +351,8 @@ class _TimeSectionState extends State<TimeSection>
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              Constant.start,
+            child: CustomTextWidget(
+              text: Constant.start,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.locationServiceGreen,
@@ -384,8 +385,8 @@ class _TimeSectionState extends State<TimeSection>
                               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Consumer<StartDateTimeInfo>(
                             builder: (context, data, child) {
-                              return  Text(
-                                (data.getSelectedStartDate() == null)
+                              return  CustomTextWidget(
+                                text: (data.getSelectedStartDate() == null)
                                     ? _getDateTime(DateTime.now(), 0)
                                     : _getDateTime(data.getSelectedStartDate(), 0),
                                 style: TextStyle(
@@ -404,8 +405,8 @@ class _TimeSectionState extends State<TimeSection>
               SizedBox(
                 width: 10,
               ),
-              Text(
-                Constant.at,
+              CustomTextWidget(
+                text: Constant.at,
                 style: TextStyle(
                     fontSize: 14,
                     color: Constant.locationServiceGreen,
@@ -432,8 +433,8 @@ class _TimeSectionState extends State<TimeSection>
                               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Consumer<StartDateTimeInfo>(
                             builder: (context, data, child) {
-                              return Text(
-                                (data.getSelectedStartTime() == null)
+                              return CustomTextWidget(
+                                text: (data.getSelectedStartTime() == null)
                                     ? Utils.getTimeInAmPmFormat(
                                     DateTime.now().hour, DateTime.now().minute)
                                     : _getDateTime(data.getSelectedStartTime(), 1),
@@ -460,8 +461,8 @@ class _TimeSectionState extends State<TimeSection>
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              Constant.end,
+            child: CustomTextWidget(
+              text: Constant.end,
               style: TextStyle(
                   fontSize: 14,
                   color: Constant.locationServiceGreen,
@@ -495,8 +496,8 @@ class _TimeSectionState extends State<TimeSection>
                                   horizontal: 10, vertical: 5),
                               child: Consumer<EndDateTimeInfo>(
                                 builder: (context, data, child) {
-                                  return Text(
-                                    (data.getSelectedEndDate() == null)
+                                  return CustomTextWidget(
+                                    text: (data.getSelectedEndDate() == null)
                                         ? '${Utils.getShortMonthName(_dateTime.month)} ${_dateTime.day}, ${_dateTime.year}'
                                         : _getDateTime(data.getSelectedEndDate(), 0),
                                     style: TextStyle(
@@ -515,8 +516,8 @@ class _TimeSectionState extends State<TimeSection>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    Constant.at,
+                  CustomTextWidget(
+                    text: Constant.at,
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -543,8 +544,8 @@ class _TimeSectionState extends State<TimeSection>
                                   horizontal: 10, vertical: 5),
                               child: Consumer<EndDateTimeInfo>(
                                 builder: (context, data, child) {
-                                  return Text(
-                                    (data.getSelectedEndTime() == null)
+                                  return CustomTextWidget(
+                                    text: (data.getSelectedEndTime() == null)
                                         ? Utils.getTimeInAmPmFormat(
                                         _dateTime.hour, _dateTime.minute)
                                         : _getDateTime(data.getSelectedEndTime(), 1),
@@ -585,8 +586,8 @@ class _TimeSectionState extends State<TimeSection>
 
                       endDateTimeInfo.updateEndDateTimeInfo(selectedEndDate, selectedEndTime, selectedEndDateAndTime);
                     },
-                    child: Text(
-                      Constant.reset,
+                    child: CustomTextWidget(
+                      text: Constant.reset,
                       style: TextStyle(
                           fontSize: 12,
                           fontFamily: Constant.jostRegular,
@@ -676,8 +677,8 @@ class _TimeSectionState extends State<TimeSection>
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Consumer<EndTimeExpandedInfo>(
                   builder: (context, data, child) {
-                    return Text(
-                      (data.isEndTimeExpanded())
+                    return CustomTextWidget(
+                      text: (data.isEndTimeExpanded())
                           ? Constant.tapHereIfInProgress
                           : Constant.tapHereToEnd,
                       style: TextStyle(

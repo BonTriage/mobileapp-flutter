@@ -8,6 +8,7 @@ import 'package:mobile/view/slide_dots.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CalendarTriggersScreen.dart';
+import 'CustomTextWidget.dart';
 
 class CalendarScreen extends StatefulWidget {
   final Function(Stream, Function) showApiLoaderCallback;
@@ -104,8 +105,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 Consumer<CalendarInfo>(
                   builder: (context, data, child) {
                     int currentIndex = data.getCurrentIndex();
-                    return Text(
-                      currentIndex == 0 ? 'Triggers' : 'Intensity',
+                    return CustomTextWidget(
+                      text: currentIndex == 0 ? 'Triggers' : 'Intensity',
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontSize: 19,

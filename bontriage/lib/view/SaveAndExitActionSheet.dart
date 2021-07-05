@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
 import 'dart:io' show Platform;
 
+import 'package:mobile/view/CustomTextWidget.dart';
+
 class SaveAndExitActionSheet extends StatefulWidget {
   @override
   _SaveAndExitActionSheetState createState() => _SaveAndExitActionSheetState();
@@ -20,8 +22,8 @@ class _SaveAndExitActionSheetState extends State<SaveAndExitActionSheet> {
     return CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text(
-              Constant.saveAndExit,
+            child: CustomTextWidget(
+              text: Constant.saveAndExit,
               overflow: TextOverflow.ellipsis,
               style: _textStyle
             ),
@@ -31,8 +33,8 @@ class _SaveAndExitActionSheetState extends State<SaveAndExitActionSheet> {
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text(
-              Constant.cancel,
+          child: CustomTextWidget(
+              text: Constant.cancel,
               overflow: TextOverflow.ellipsis,
               style: _textStyle.copyWith(
                 color: Constant.deleteLogRedColor,

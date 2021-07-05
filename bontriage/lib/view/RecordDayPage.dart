@@ -5,6 +5,7 @@ import 'package:mobile/models/UserHeadacheLogDayDetailsModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class RecordDayPage extends StatefulWidget {
   final bool hasData;
@@ -64,8 +65,8 @@ class _RecordDayPageState extends State<RecordDayPage>
               children: [
                 Visibility(
                   visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
-                  child: Text(
-                    'Note:',
+                  child: CustomTextWidget(
+                    text: 'Note:',
                     style: TextStyle(
                         color: Constant
                             .chatBubbleGreen60Alpha,
@@ -80,8 +81,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                 Flexible(
                   child: Visibility(
                     visible: widget.userHeadacheLogDayDetailsModel.logDayNote != null ? widget.userHeadacheLogDayDetailsModel.logDayNote.isNotEmpty : false,
-                    child: Text(
-                      widget.userHeadacheLogDayDetailsModel.logDayNote ?? Constant.blankString,
+                    child: CustomTextWidget(
+                      text: widget.userHeadacheLogDayDetailsModel.logDayNote ?? Constant.blankString,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: TextStyle(
@@ -116,8 +117,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                   width: 20,
                   height: 20,
                 ),
-                label: Text(
-                  'Add/Edit Info',
+                label: CustomTextWidget(
+                  text: 'Add/Edit Info',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -145,8 +146,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                   width: 20,
                   height: 20,
                 ),
-                label: Text(
-                  widget.onGoingHeadacheId == null ? 'Add Headache' : 'Edit On-Going Headache',
+                label: CustomTextWidget(
+                  text: widget.onGoingHeadacheId == null ? 'Add Headache' : 'Edit On-Going Headache',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontFamily: Constant.jostRegular,
@@ -162,8 +163,8 @@ class _RecordDayPageState extends State<RecordDayPage>
       return listWidget;
     } else {
       return [
-        Text(
-          'Nothing Logged!',
+        CustomTextWidget(
+          text: 'Nothing Logged!',
           style: TextStyle(
               fontSize: 18,
               color: Constant.chatBubbleGreen,
@@ -173,8 +174,8 @@ class _RecordDayPageState extends State<RecordDayPage>
         SizedBox(
           height: 5,
         ),
-        Text(
-          'Add info to better personalize your experience.',
+        CustomTextWidget(
+          text: 'Add info to better personalize your experience.',
           style: TextStyle(
               fontSize: 18,
               color: Constant.chatBubbleGreen60Alpha,
@@ -198,8 +199,8 @@ class _RecordDayPageState extends State<RecordDayPage>
             width: 20,
             height: 20,
           ),
-          label: Text(
-            'Add/Edit Info',
+          label: CustomTextWidget(
+            text: 'Add/Edit Info',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -221,8 +222,8 @@ class _RecordDayPageState extends State<RecordDayPage>
             width: 20,
             height: 20,
           ),
-          label: Text(
-            'Add/Edit Headache',
+          label: CustomTextWidget(
+            text: 'Add/Edit Headache',
             style: TextStyle(
                 color: Constant.chatBubbleGreen,
                 fontFamily: Constant.jostRegular,
@@ -311,8 +312,8 @@ class _RecordDayPageState extends State<RecordDayPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    headerText,
+                  CustomTextWidget(
+                    text: headerText,
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontFamily: Constant.jostRegular,
@@ -322,8 +323,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                   SizedBox(
                     height: 2,
                   ),
-                  Text(
-                    subText??"",
+                  CustomTextWidget(
+                    text: subText??"",
                     style: TextStyle(
                         color: Constant.chatBubbleGreen60Alpha,
                         fontFamily: Constant.jostRegular,
@@ -335,8 +336,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                   ),
                   Visibility(
                     visible: noteText.isNotEmpty,
-                    child: Text(
-                      'Note:\n$noteText',
+                    child: CustomTextWidget(
+                      text: 'Note:\n$noteText',
                       maxLines: 3,
                       style: TextStyle(
                           color: Constant.chatBubbleGreen60Alpha,
@@ -364,8 +365,8 @@ class _RecordDayPageState extends State<RecordDayPage>
                         ),
                         Visibility(
                           visible: false,
-                          child: Text(
-                            warningText,
+                          child: CustomTextWidget(
+                            text: warningText,
                             style: TextStyle(
                               color: Constant.pinkTriggerColor,
                               fontSize: 12,

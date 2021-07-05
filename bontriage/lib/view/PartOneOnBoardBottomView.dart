@@ -4,6 +4,8 @@ import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import 'CustomTextWidget.dart';
+
 class PartOneOnBoardBottomView extends StatefulWidget {
   final int currentPageIndex;
   final Function backButtonFunction;
@@ -52,8 +54,8 @@ class _PartOneOnBoardBottomViewState extends State<PartOneOnBoardBottomView> {
                         BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(
-                          Constant.back,
+                        child: CustomTextWidget(
+                          text: Constant.back,
                           style: TextStyle(
                             color:
                             Constant.bubbleChatTextView,
@@ -83,8 +85,8 @@ class _PartOneOnBoardBottomViewState extends State<PartOneOnBoardBottomView> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        Constant.next,
+                      child: CustomTextWidget(
+                        text: Constant.next,
                         style: TextStyle(
                           color: Constant.bubbleChatTextView,
                           fontSize: 14,
@@ -130,8 +132,8 @@ class _PartOneOnBoardBottomViewState extends State<PartOneOnBoardBottomView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'PART 1 OF 3',
+                CustomTextWidget(
+                  text: 'PART 1 OF 3',
                   style: TextStyle(
                       color: Constant.chatBubbleGreen,
                       fontSize: 13,

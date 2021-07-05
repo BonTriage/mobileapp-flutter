@@ -11,6 +11,8 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/models/RecordsCompassAxesResultModel.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OverTimeCompassScreen extends StatefulWidget {
@@ -182,8 +184,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                          'We noticed you didn’t log any headache yet. So please add any headache to see your Compass data.',
+                      child: CustomTextWidget(
+                          text: 'We noticed you didn’t log any headache yet. So please add any headache to see your Compass data.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               height: 1.3,
@@ -214,8 +216,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
-                              child: Text(
-                                'Add Headache',
+                              child: CustomTextWidget(
+                                text: 'Add Headache',
                                 style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 15,
@@ -275,8 +277,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               color: Constant.compassMyHeadacheTextColor,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Text(
-                              selectedHeadacheName != null
+                            child: CustomTextWidget(
+                              text: selectedHeadacheName != null
                                   ? selectedHeadacheName
                                   : '',
                               style: TextStyle(
@@ -317,8 +319,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                         compassTutorialModel:
                                             _compassTutorialModel);
                                   },
-                                  child: Text(
-                                    'i',
+                                  child: CustomTextWidget(
+                                    text: 'i',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Constant.chatBubbleGreen,
@@ -339,8 +341,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                         compassTutorialModel:
                                             _compassTutorialModel);
                                   },
-                                  child: Text(
-                                    "Frequency",
+                                  child: CustomTextWidget(
+                                    text: "Frequency",
                                     style: TextStyle(
                                         color: Color(0xffafd794),
                                         fontSize: 16,
@@ -358,8 +360,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                           compassTutorialModel:
                                               _compassTutorialModel);
                                     },
-                                    child: Text(
-                                      "Intensity",
+                                    child: CustomTextWidget(
+                                      text: "Intensity",
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 16,
@@ -398,8 +400,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                                 width: 38,
                                                 height: 38,
                                                 child: Center(
-                                                  child: Text(
-                                                    userCurrentMonthScoreData !=
+                                                  child: CustomTextWidget(
+                                                    text: userCurrentMonthScoreData !=
                                                             null
                                                         ? userCurrentMonthScoreData
                                                             .toString()
@@ -433,8 +435,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                           compassTutorialModel:
                                               _compassTutorialModel);
                                     },
-                                    child: Text(
-                                      "Disability",
+                                    child: CustomTextWidget(
+                                      text: "Disability",
                                       style: TextStyle(
                                           color: Color(0xffafd794),
                                           fontSize: 16,
@@ -451,8 +453,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                                         compassTutorialModel:
                                             _compassTutorialModel);
                                   },
-                                  child: Text(
-                                    "Duration",
+                                  child: CustomTextWidget(
+                                    text: "Duration",
                                     style: TextStyle(
                                         color: Color(0xffafd794),
                                         fontSize: 16,
@@ -495,8 +497,8 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                               _openDatePickerBottomSheet(
                                   CupertinoDatePickerMode.date);
                             },
-                            child: Text(
-                              '$monthName $currentYear',
+                            child: CustomTextWidget(
+                              text: '$monthName $currentYear',
                               style: TextStyle(
                                   color: Constant.chatBubbleGreen,
                                   fontSize: 15,
@@ -546,9 +548,7 @@ class _OverTimeCompassScreenState extends State<OverTimeCompassScreen>
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: RichText(
-                            textScaleFactor:
-                                MediaQuery.of(context).textScaleFactor,
+                          child: CustomRichTextWidget(
                             text: TextSpan(
                               children: _getBubbleTextSpans(),
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MoreFaqScreen extends StatefulWidget {
   @override
@@ -45,8 +46,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            Constant.faq,
+                          CustomTextWidget(
+                            text: Constant.faq,
                             style: TextStyle(
                                 color: Constant.locationServiceGreen,
                                 fontSize: 16,
@@ -72,8 +73,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.faqQuestion1,
+                            CustomTextWidget(
+                              text: Constant.faqQuestion1,
                               style: TextStyle(
                                 color: Constant.addCustomNotificationTextColor,
                                 fontSize: 16,
@@ -81,8 +82,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                               ),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              Constant.faqAnswer1,
+                            CustomTextWidget(
+                              text: Constant.faqAnswer1,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -99,8 +100,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.faqQuestion2,
+                            CustomTextWidget(
+                              text: Constant.faqQuestion2,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -108,8 +109,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                               ),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              Constant.faqAnswer2,
+                            CustomTextWidget(
+                              text: Constant.faqAnswer2,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -126,8 +127,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.faqQuestion3,
+                            CustomTextWidget(
+                              text: Constant.faqQuestion3,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -135,8 +136,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                               ),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              Constant.faqAnswer3,
+                            CustomTextWidget(
+                              text: Constant.faqAnswer3,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -153,8 +154,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.faqQuestion4,
+                            CustomTextWidget(
+                              text: Constant.faqQuestion4,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -162,8 +163,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                               ),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              Constant.faqAnswer4,
+                            CustomTextWidget(
+                              text: Constant.faqAnswer4,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,
@@ -180,8 +181,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              Constant.faqQuestion5,
+                            CustomTextWidget(
+                              text: Constant.faqQuestion5,
                               style: TextStyle(
                                   color: Constant.addCustomNotificationTextColor,
                                   fontSize: 16,
@@ -189,8 +190,8 @@ class _MoreFaqScreenState extends State<MoreFaqScreen> {
                               ),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              Constant.faqAnswer5,
+                            CustomTextWidget(
+                              text: Constant.faqAnswer5,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 14,

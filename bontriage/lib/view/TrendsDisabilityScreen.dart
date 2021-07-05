@@ -7,6 +7,7 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/models/TrendsFilterModel.dart';
 import 'package:mobile/models/RecordsTrendsMultipleHeadacheDataModel.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class TrendsDisabilityScreen extends StatefulWidget {
   final EditGraphViewFilterModel editGraphViewFilterModel;
@@ -227,23 +228,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                             fontSize: 10),
                         margin: 10,
                         reservedSize: 10,
-                        /* getTitles: (value) {
-                          if (value == 0) {
-                            return '0';
-                          } else if (value == 2) {
-                            return '2';
-                          } else if (value == 4) {
-                            return '4';
-                          } else if (value == 6) {
-                            return '6';
-                          } else if (value == 8) {
-                            return '8';
-                          } else if (value == 10) {
-                            return '10';
-                          } else {
-                            return '';
-                          }
-                        },*/
                       ),
                     ),
                     barGroups: showingBarGroups,
@@ -285,25 +269,6 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                 ],
               ),
             ),
-            /* Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Constant.barTutorialsTapColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        topLeft: Radius.circular(12)),
-                  ),
-                  child: Image(
-                    image: AssetImage(Constant.barQuestionMark),
-                    width: 15,
-                    height: 15,
-                  ),
-                ),
-              ],
-            ),*/
             SizedBox(
               height: 40,
             ),
@@ -334,8 +299,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                   onTap: () {
                     _openDatePickerBottomSheet(CupertinoDatePickerMode.date);
                   },
-                  child: Text(
-                    '$monthName $currentYear',
+                  child: CustomTextWidget(
+                    text: '$monthName $currentYear',
                     style: TextStyle(
                         color: Constant.chatBubbleGreen,
                         fontSize: 15,
@@ -392,8 +357,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Mild',
+                  CustomTextWidget(
+                    text: 'Mild',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -413,8 +378,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Moderate',
+                  CustomTextWidget(
+                    text: 'Moderate',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -434,8 +399,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Severe',
+                  CustomTextWidget(
+                    text: 'Severe',
                     style: TextStyle(
                         fontSize: 14,
                         color: Constant.locationServiceGreen,
@@ -466,7 +431,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        CustomTextWidget(
                           /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   0
@@ -476,7 +441,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                                   .headacheListModelData[0]
                                   .text
                               : ''*/
-                          widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected1 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -507,7 +472,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        CustomTextWidget(
                           /*widget.editGraphViewFilterModel.recordsTrendsDataModel
                                       .headacheListModelData.length >
                                   1
@@ -517,7 +482,7 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
                                   .headacheListModelData[1]
                                   .text
                               : ''*/
-                        widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
+                          text: widget.editGraphViewFilterModel.compareHeadacheTypeSelected2 ?? Constant.blankString,
                           style: TextStyle(
                               fontSize: 14,
                               color: Constant.locationServiceGreen,
@@ -1030,8 +995,8 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
         break;
       }
       widgetListData.add(
-        Text(
-          dotTextModelDataList[i].dotName,
+        CustomTextWidget(
+          text: dotTextModelDataList[i].dotName,
           style: TextStyle(
               color: Constant.locationServiceGreen,
               fontSize: 12,
@@ -1105,26 +1070,17 @@ class _TrendsDisabilityScreenState extends State<TrendsDisabilityScreen>
 
   List<BarChartRodStackItem> setRodStack(
       double firstMultipleHeadache1, double secondMultipleHeadache1) {
-    var maxValue, minValue = 0.0;
     if (firstMultipleHeadache1 >= secondMultipleHeadache1) {
-      maxValue = firstMultipleHeadache1;
-      minValue = secondMultipleHeadache1;
       return [
         BarChartRodStackItem(0, secondMultipleHeadache1, Constant.migraineColor),
         BarChartRodStackItem(secondMultipleHeadache1, firstMultipleHeadache1, Constant.otherHeadacheColor),
       ];
     } else {
-      minValue = firstMultipleHeadache1;
-      maxValue = secondMultipleHeadache1;
       return [
         BarChartRodStackItem(0, firstMultipleHeadache1, Constant.otherHeadacheColor),
         BarChartRodStackItem(firstMultipleHeadache1, secondMultipleHeadache1, Constant.migraineColor),
       ];
     }
-    /*return [
-      BarChartRodStackItem(0, minValue, Constant.otherHeadacheColor),
-      BarChartRodStackItem(minValue, maxValue, Constant.migraineColor),
-    ];*/
   }
 
   double setAxisValue(

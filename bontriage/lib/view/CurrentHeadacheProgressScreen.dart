@@ -113,278 +113,272 @@ class _CurrentHeadacheProgressScreenState
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () async {
         Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
         return false;
       },
-      child: MediaQuery(
-        data: mediaQueryData.copyWith(
-          textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
-        ),
-        child: Scaffold(
-          body: Container(
-            decoration: Constant.backgroundBoxDecoration,
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-                child: SafeArea(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    decoration: BoxDecoration(
-                      color: Constant.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomTextWidget(
-                                text: '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Constant.chatBubbleGreen,
-                                    fontFamily: Constant.jostMedium),
+      child: Scaffold(
+        body: Container(
+          decoration: Constant.backgroundBoxDecoration,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: SafeArea(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  decoration: BoxDecoration(
+                    color: Constant.backgroundColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomTextWidget(
+                              text: '${Utils.getMonthName(_dateTime.month)} ${_dateTime.day}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Constant.chatBubbleGreen,
+                                  fontFamily: Constant.jostMedium),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                //Navigator.pop(context);
+                                Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+                              },
+                              child: Image(
+                                image: AssetImage(Constant.closeIcon),
+                                width: 22,
+                                height: 22,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  //Navigator.pop(context);
-                                  Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
-                                },
-                                child: Image(
-                                  image: AssetImage(Constant.closeIcon),
-                                  width: 22,
-                                  height: 22,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                            height: 30,
-                            thickness: 1,
-                            color: Constant.chatBubbleGreen,
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          StreamBuilder(
-                            stream: _currentHeadacheProgressBloc.stream,
-                            builder: (context, snapshot) {
-                              if(snapshot.hasData) {
-                                if(snapshot.data != null && snapshot.data is CurrentUserHeadacheModel && !_isAlreadyDataFetched) {
-                                  _resetTimeSeconds(snapshot.data);
-                                }
-                                return Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: CustomTextWidget(
-                                        text: Constant.yourCurrentHeadache,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Constant.chatBubbleGreen,
-                                            fontFamily: Constant.jostMedium),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 50,
-                                    ),
-                                    Container(
-                                      width: 190,
-                                      height: 190,
-                                      child: Consumer<CurrentHeadacheTimerInfo>(
-                                        builder: (context, data, child) {
-                                          return Stack(
-                                            children: [
-                                              Visibility(
-                                                visible: data.isShowDayBorder(),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                        color: Constant.chatBubbleGreen,
-                                                        width: 3),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: ClipPath(
-                                                  clipper: ProgressClipper(
-                                                      percent: _getCurrentHeadacheProgressPercent(data.getTotalTime())),
-                                                  child: Container(
-                                                    width: 170,
-                                                    height: 170,
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Constant.chatBubbleGreen
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  height: 120,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    gradient: LinearGradient(
-                                                        begin: Alignment.topCenter,
-                                                        end: Alignment.bottomCenter,
-                                                        colors: <Color>[
-                                                          Color(0xff0E4C47),
-                                                          Color(0xff0E232F),
-                                                        ]),
-                                                  ),
-                                                  child: Center(
-                                                    child: CustomTextWidget(
-                                                      text: _getDisplayTime(data.getTotalTime()),
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontFamily: Constant.jostMedium,
-                                                          color: Constant.chatBubbleGreen),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: CustomTextWidget(
-                                        text: Constant.started,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: Constant.jostMedium,
-                                            color: Constant.chatBubbleGreen),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: CustomTextWidget(
-                                        text: (_storedDateTime != null) ? '${Utils.getShortMonthName(_storedDateTime.month)} ${_storedDateTime.day}, ${Utils.getTimeInAmPmFormat(_storedDateTime.hour, _storedDateTime.minute)}' : '${Utils.getShortMonthName(DateTime.now().month)} ${DateTime.now().day}, ${Utils.getTimeInAmPmFormat(DateTime.now().hour, DateTime.now().minute)}',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: Constant.jostRegular,
-                                            color: Constant.chatBubbleGreen),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Visibility(
-                                      visible: _isShowErrorMessage,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image(
-                                            image: AssetImage(Constant.warningPink),
-                                            width: 22,
-                                            height: 22,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          CustomTextWidget(
-                                            text: Constant.logHeadacheError,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Constant.pinkTriggerColor,
-                                                fontFamily: Constant.jostRegular),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        BouncingWidget(
-                                          onPressed: () {
-                                            Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: _currentUserHeadacheModel);
-                                          },
-                                          child: Container(
-                                            width: 130,
-                                            padding: EdgeInsets.symmetric(vertical: 7),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1.3,
-                                                  color: Constant.chatBubbleGreen),
-                                              borderRadius: BorderRadius.circular(30),
-                                            ),
-                                            child: Center(
-                                              child: CustomTextWidget(
-                                                text: Constant.addEditDetails,
-                                                style: TextStyle(
-                                                    color: Constant.chatBubbleGreen,
-                                                    fontSize: 13,
-                                                    fontFamily: Constant.jostMedium),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        BouncingWidget(
-                                          onPressed: () {
-                                            _navigateToAddHeadacheScreen();
-                                          },
-                                          child: Container(
-                                            width: 130,
-                                            padding: EdgeInsets.symmetric(vertical: 7),
-                                            decoration: BoxDecoration(
-                                              color: Constant.chatBubbleGreen,
-                                              borderRadius: BorderRadius.circular(30),
-                                            ),
-                                            child: Center(
-                                              child: CustomTextWidget(
-                                                text: Constant.endHeadache,
-                                                style: TextStyle(
-                                                    color: Constant.bubbleChatTextView,
-                                                    fontSize: 13,
-                                                    fontFamily: Constant.jostMedium),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                );
-                              } else {
-                                return Container();
+                            ),
+                          ],
+                        ),
+                        Divider(
+                          height: 30,
+                          thickness: 1,
+                          color: Constant.chatBubbleGreen,
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        StreamBuilder(
+                          stream: _currentHeadacheProgressBloc.stream,
+                          builder: (context, snapshot) {
+                            if(snapshot.hasData) {
+                              if(snapshot.data != null && snapshot.data is CurrentUserHeadacheModel && !_isAlreadyDataFetched) {
+                                _resetTimeSeconds(snapshot.data);
                               }
-                            },
-                          ),
-                        ],
-                      ),
+                              return Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: CustomTextWidget(
+                                      text: Constant.yourCurrentHeadache,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Constant.chatBubbleGreen,
+                                          fontFamily: Constant.jostMedium),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Container(
+                                    width: 190,
+                                    height: 190,
+                                    child: Consumer<CurrentHeadacheTimerInfo>(
+                                      builder: (context, data, child) {
+                                        return Stack(
+                                          children: [
+                                            Visibility(
+                                              visible: data.isShowDayBorder(),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: Constant.chatBubbleGreen,
+                                                      width: 3),
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: ClipPath(
+                                                clipper: ProgressClipper(
+                                                    percent: _getCurrentHeadacheProgressPercent(data.getTotalTime())),
+                                                child: Container(
+                                                  width: 170,
+                                                  height: 170,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Constant.chatBubbleGreen
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 120,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  gradient: LinearGradient(
+                                                      begin: Alignment.topCenter,
+                                                      end: Alignment.bottomCenter,
+                                                      colors: <Color>[
+                                                        Color(0xff0E4C47),
+                                                        Color(0xff0E232F),
+                                                      ]),
+                                                ),
+                                                child: Center(
+                                                  child: CustomTextWidget(
+                                                    text: _getDisplayTime(data.getTotalTime()),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontFamily: Constant.jostMedium,
+                                                        color: Constant.chatBubbleGreen),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: CustomTextWidget(
+                                      text: Constant.started,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: Constant.jostMedium,
+                                          color: Constant.chatBubbleGreen),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: CustomTextWidget(
+                                      text: (_storedDateTime != null) ? '${Utils.getShortMonthName(_storedDateTime.month)} ${_storedDateTime.day}, ${Utils.getTimeInAmPmFormat(_storedDateTime.hour, _storedDateTime.minute)}' : '${Utils.getShortMonthName(DateTime.now().month)} ${DateTime.now().day}, ${Utils.getTimeInAmPmFormat(DateTime.now().hour, DateTime.now().minute)}',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: Constant.jostRegular,
+                                          color: Constant.chatBubbleGreen),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Visibility(
+                                    visible: _isShowErrorMessage,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(Constant.warningPink),
+                                          width: 22,
+                                          height: 22,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CustomTextWidget(
+                                          text: Constant.logHeadacheError,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Constant.pinkTriggerColor,
+                                              fontFamily: Constant.jostRegular),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          Navigator.pushNamed(context, Constant.addHeadacheOnGoingScreenRouter, arguments: _currentUserHeadacheModel);
+                                        },
+                                        child: Container(
+                                          width: 130,
+                                          padding: EdgeInsets.symmetric(vertical: 7),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1.3,
+                                                color: Constant.chatBubbleGreen),
+                                            borderRadius: BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: CustomTextWidget(
+                                              text: Constant.addEditDetails,
+                                              style: TextStyle(
+                                                  color: Constant.chatBubbleGreen,
+                                                  fontSize: 13,
+                                                  fontFamily: Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BouncingWidget(
+                                        onPressed: () {
+                                          _navigateToAddHeadacheScreen();
+                                        },
+                                        child: Container(
+                                          width: 130,
+                                          padding: EdgeInsets.symmetric(vertical: 7),
+                                          decoration: BoxDecoration(
+                                            color: Constant.chatBubbleGreen,
+                                            borderRadius: BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: CustomTextWidget(
+                                              text: Constant.endHeadache,
+                                              style: TextStyle(
+                                                  color: Constant.bubbleChatTextView,
+                                                  fontSize: 13,
+                                                  fontFamily: Constant.jostMedium),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),

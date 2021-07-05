@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class MoreNameScreen extends StatefulWidget {
   final List<SelectedAnswers> selectedAnswerList;
@@ -80,8 +82,8 @@ class _MoreNameScreenState
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              Constant.name,
+                            CustomTextWidget(
+                              text: Constant.name,
                               style: TextStyle(
                                   color: Constant.locationServiceGreen,
                                   fontSize: 16,
@@ -96,16 +98,8 @@ class _MoreNameScreenState
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: TextField(
+                      child: CustomTextFormFieldWidget(
                         controller: _textEditingController,
-                        onChanged: (value) {
-                          /*if(value.isNotEmpty) {
-                            _selectedAnswers.answer = value;
-                          } else {
-                            _textEditingController.text = _initialNameValue;
-                            //_selectedAnswers.answer = _initialNameValue;
-                          }*/
-                        },
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
@@ -129,8 +123,8 @@ class _MoreNameScreenState
                     SizedBox(height: 20,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        Constant.tapToTypeYourName,
+                      child: CustomTextWidget(
+                        text: Constant.tapToTypeYourName,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontSize: 14,

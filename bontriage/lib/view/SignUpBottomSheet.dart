@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/CustomScrollBar.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
+
+import 'CustomTextFormFieldWidget.dart';
 
 class SignUpBottomSheet extends StatefulWidget {
   final Questions question;
@@ -27,8 +29,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
   AnimationController _animationController;
   List<String> _valuesSelectedList = [];
   ScrollController _scrollController;
-
-  bool _isShowScrollBar = false;
   GlobalKey _chipsKey = GlobalKey();
 
   @override
@@ -64,6 +64,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
             else
               widget.question.values.add(Values(text: element,
                   isSelected: true,
+                  isNewlyAdded: true,
                   valueNumber: (widget.question.values.length + 1).toString()));
           });
         } catch (e) {
@@ -103,6 +104,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
               else
                 widget.question.values.add(Values(text: element,
                     isSelected: true,
+                    isNewlyAdded: true,
                     valueNumber: (widget.question.values.length + 1).toString()));
             });
           } catch (e) {
@@ -117,6 +119,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
   void dispose() {
     _animationController.dispose();
     _scrollController.dispose();
+    widget.question.values.removeWhere((element) => element.isNewlyAdded ?? false);
     super.dispose();
   }
 
@@ -145,8 +148,9 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                       for (var i = 0; i < widget.question.values.length; i++)
                         if (widget.question.values[i].isSelected)
                           Chip(
-                            label: Text(widget.question.values[i].text,
-                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),),
+                            label: CustomTextWidget(
+                              text: widget.question.values[i].text,
+                            ),
                             backgroundColor: widget.isFromMoreScreen ? Constant.locationServiceGreen : Constant.chatBubbleGreen,
                             deleteIcon: IconButton(
                               icon: new Image.asset('images/cross.png'),
@@ -256,9 +260,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    child: Text(
-                      Constant.searchYourType,
-                      textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                    child: CustomTextWidget(
+                      text: Constant.searchYourType,
                       style: TextStyle(
                           color: Constant.selectTextColor,
                           fontSize: 14,
@@ -286,19 +289,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet>
         ],
       ),
     );
-  }
-
-  bool _getIsAlwaysShownValue() {
-    try {
-      RenderBox chipRenderBox = _chipsKey.currentContext.findRenderObject();
-      Size chipSize = chipRenderBox.size;
-
-      print('ChipsHeight???${chipSize.height}');
-
-      return chipSize.height >= 96;
-    } catch(e) {
-      return true;
-    }
   }
 }
 
@@ -384,9 +374,8 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                         _isDoneButtonClicked = true;
                         Navigator.pop(context);
                       },
-                      child: Text(
-                        "Done",
-                        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                      child: CustomTextWidget(
+                        text: "Done",
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: Constant.jostRegular,
@@ -400,7 +389,7 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                 Container(
                   height: 35,
                   margin: EdgeInsets.only(left: 10, right: 10, top: 0),
-                  child: TextField(
+                  child: CustomTextFormFieldWidget(
                     onChanged: (searchText) {
                       if (searchText
                           .trim()
@@ -495,9 +484,8 @@ class _BottomSheetContainerState extends State<BottomSheetContainer> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 15),
-                                  child: Text(
-                                    widget.question.values[index].text,
-                                    textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  child: CustomTextWidget(
+                                    text: widget.question.values[index].text,
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: _getOptionTextColor(index),

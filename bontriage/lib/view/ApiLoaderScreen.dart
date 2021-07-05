@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class ApiLoaderScreen extends StatefulWidget {
   @override
@@ -152,8 +153,8 @@ class _ApiLoaderScreenState extends State<ApiLoaderScreen> {
                 ),
               ),
             ),
-            Text(
-              Constant.loading,
+            CustomTextWidget(
+              text: Constant.loading,
               style: TextStyle(
                 fontFamily: Constant.jostRegular,
                 fontSize: 12,

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChatBubbleLeftPointed.dart';
+import 'package:mobile/view/CustomRichTextWidget.dart';
 import 'package:mobile/view/CustomScrollBar.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/PhotoHero.dart';
 
@@ -109,8 +111,7 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
           child: SingleChildScrollView(
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
-            child: RichText(
-              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+            child: CustomRichTextWidget(
               text: TextSpan(
                 children: widget.textSpanList,
               ),
@@ -129,9 +130,8 @@ class _OnBoardChatBubbleState extends State<OnBoardChatBubble>
           child: SingleChildScrollView(
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
-            child: Text(
-              widget.chatBubbleText,
-              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+            child: CustomTextWidget(
+              text: widget.chatBubbleText,
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: Constant.jostRegular,

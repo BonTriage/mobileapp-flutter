@@ -15,6 +15,8 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/AddHeadacheOnGoingScreen.dart';
 import 'package:mobile/view/AddNewMedicationDialog.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
+import 'package:mobile/view/CustomTextFormFieldWidget.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/DateTimePicker.dart';
 import 'package:mobile/view/LogDayChipList.dart';
 import 'package:mobile/view/MedicationDosagePicker.dart';
@@ -855,8 +857,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              widget.headerText,
+            child: CustomTextWidget(
+              text: widget.headerText,
               style: TextStyle(
                   fontSize: Platform.isAndroid ? 16 : 17,
                   color: Constant.chatBubbleGreen,
@@ -871,8 +873,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              widget.subText,
+            child: CustomTextWidget(
+              text: widget.subText,
               style: TextStyle(
                   fontSize: Platform.isAndroid ? 14 : 15,
                   color: Constant.locationServiceGreen,
@@ -917,8 +919,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                expandableWidgetData.helpText,
+              child: CustomTextWidget(
+                text: expandableWidgetData.helpText,
                 style: TextStyle(
                     color: Constant.locationServiceGreen,
                     fontFamily: Constant.jostRegular,
@@ -976,8 +978,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      'When did you take $medName?',
+                    child: CustomTextWidget(
+                      text: 'When did you take $medName?',
                       style: TextStyle(
                           color: Constant.locationServiceGreen,
                           fontFamily: Constant.jostRegular,
@@ -1007,8 +1009,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                 child: Padding(
                                   padding:
                                   EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  child: Text(
-                                    Utils.getTimeInAmPmFormat(_medicationDateTime.hour, _medicationDateTime.minute),
+                                  child: CustomTextWidget(
+                                    text: Utils.getTimeInAmPmFormat(_medicationDateTime.hour, _medicationDateTime.minute),
                                     style: TextStyle(
                                         color: Constant.splashColor,
                                         fontFamily: Constant.jostRegular,
@@ -1027,8 +1029,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      (questions == null)
+                    child: CustomTextWidget(
+                      text: (questions == null)
                           ? 'What dosage did you take?'
                           : questions.helpText,
                       style: TextStyle(
@@ -1076,8 +1078,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                       child: Padding(
                                         padding:
                                         EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                        child: Text(
-                                          (_additionalMedicationDosage[index].length >= 1) ? _additionalMedicationDosage[index][0] : '50 mg',
+                                        child: CustomTextWidget(
+                                          text: (_additionalMedicationDosage[index].length >= 1) ? _additionalMedicationDosage[index][0] : '50 mg',
                                           style: TextStyle(
                                               color: Constant.splashColor,
                                               fontFamily: Constant.jostRegular,
@@ -1164,8 +1166,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '+ ',
+                            CustomTextWidget(
+                              text: '+ ',
                               style: TextStyle(
                                 fontSize: Platform.isAndroid ? 14 : 15,
                                 color: Constant.addCustomNotificationTextColor,
@@ -1174,8 +1176,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                               ),
                             ),
                             Expanded(
-                              child: Text(
-                                'Add another dosage time for $medName',
+                              child: CustomTextWidget(
+                                text: 'Add another dosage time for $medName',
                                 style: TextStyle(
                                   fontSize: Platform.isAndroid ? 14 : 15,
                                   color: Constant.addCustomNotificationTextColor,
@@ -1251,8 +1253,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  'When did you take $medName?',
+                child: CustomTextWidget(
+                  text: 'When did you take $medName?',
                   style: TextStyle(
                       color: Constant.locationServiceGreen,
                       fontFamily: Constant.jostRegular,
@@ -1282,8 +1284,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                             child: Padding(
                               padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              child: Text(
-                                Utils.getTimeInAmPmFormat(
+                              child: CustomTextWidget(
+                                text: Utils.getTimeInAmPmFormat(
                                     medicationDateTime.hour,
                                     medicationDateTime
                                         .minute),
@@ -1321,8 +1323,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                       _storeExpandedWidgetDataIntoLocalModel();
                     });
                   },
-                  child: Text(
-                    'Tap here to remove this dose',
+                  child: CustomTextWidget(
+                    text: 'Tap here to remove this dose',
                     style: TextStyle(
                       fontSize: Platform.isAndroid ? 14 : 15,
                       color: Constant.addCustomNotificationTextColor,
@@ -1335,8 +1337,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
               SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  (questions == null)
+                child: CustomTextWidget(
+                  text: (questions == null)
                       ? 'What dosage did you take?'
                       : questions.helpText,
                   style: TextStyle(
@@ -1383,8 +1385,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                                   child: Padding(
                                     padding:
                                     EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                    child: Text(
-                                      (_additionalMedicationDosage[index1].length >= index + 2) ? _additionalMedicationDosage[index1][index + 1] : '50 mg',
+                                    child: CustomTextWidget(
+                                      text: (_additionalMedicationDosage[index1].length >= index + 2) ? _additionalMedicationDosage[index1][index + 1] : '50 mg',
                                       style: TextStyle(
                                           color: Constant.splashColor,
                                           fontFamily: Constant.jostRegular,
@@ -1471,8 +1473,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Text(
-              element.text,
+            child: CustomTextWidget(
+              text: element.text,
               style: TextStyle(
                   color: element.isSelected
                       ? Constant.bubbleChatTextView
@@ -2105,8 +2107,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        questions.helpText,
+                      child: CustomTextWidget(
+                        text: questions.helpText,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular,
@@ -2143,8 +2145,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        questions.helpText,
+                      child: CustomTextWidget(
+                        text: questions.helpText,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular,
@@ -2157,7 +2159,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: TextFormField(
+                      child: CustomTextFormFieldWidget(
                         minLines: 5,
                         maxLines: 6,
                         textCapitalization: TextCapitalization.sentences,
@@ -2228,8 +2230,8 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        questions.helpText,
+                      child: CustomTextWidget(
+                        text: questions.helpText,
                         style: TextStyle(
                             color: Constant.locationServiceGreen,
                             fontFamily: Constant.jostRegular,

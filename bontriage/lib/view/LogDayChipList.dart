@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 
 class LogDayChipList extends StatefulWidget {
   final Questions question;
@@ -152,8 +153,8 @@ class _LogDayChipListState extends State<LogDayChipList> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: Text(
-                  widget.question.values[index].text,
+                child: CustomTextWidget(
+                  text: widget.question.values[index].text,
                   style: TextStyle(
                       color: widget.question.values[index].isSelected
                           ? Constant.bubbleChatTextView

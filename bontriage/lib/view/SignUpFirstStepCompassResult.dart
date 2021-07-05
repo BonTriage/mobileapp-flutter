@@ -11,6 +11,7 @@ import 'package:mobile/util/RadarChart.dart';
 import 'package:mobile/util/TextToSpeechRecognition.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatBubble.dart';
 import 'CustomScrollBar.dart';
@@ -150,7 +151,6 @@ class _SignUpFirstStepCompassResultState
         });
       } catch (e) {}
     }
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -247,10 +247,9 @@ class _SignUpFirstStepCompassResultState
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 10),
-                                              child: Text(
-                                                _bubbleTextViewList[
+                                              child: CustomTextWidget(
+                                                text: _bubbleTextViewList[
                                                     _buttonPressedValue],
-                                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
                                                 style: TextStyle(
                                                     height: 1.3,
                                                     fontSize: 15,
@@ -287,9 +286,8 @@ class _SignUpFirstStepCompassResultState
                               onTap: () {
                                 Utils.showCompassTutorialDialog(context, 3, compassTutorialModel: _compassTutorialModel);
                               },
-                              child: Text(
-                                "Frequency",
-                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              child: CustomTextWidget(
+                                text: "Frequency",
                                 style: TextStyle(
                                     color: Color(0xffafd794),
                                     fontSize: 14,
@@ -304,9 +302,8 @@ class _SignUpFirstStepCompassResultState
                                 onTap: () {
                                   Utils.showCompassTutorialDialog(context, 1, compassTutorialModel: _compassTutorialModel);
                                 },
-                                child: Text(
-                                  "Intensity",
-                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                child: CustomTextWidget(
+                                  text: "Intensity",
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 14,
@@ -342,9 +339,8 @@ class _SignUpFirstStepCompassResultState
                                             width: 38,
                                             height: 38,
                                             child: Center(
-                                              child: Text(
-                                                userScoreData,
-                                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                              child: CustomTextWidget(
+                                                text: userScoreData,
                                                 style: TextStyle(
                                                     color: Color(0xff0E1712),
                                                     fontSize: 14,
@@ -370,9 +366,8 @@ class _SignUpFirstStepCompassResultState
                                 onTap: () {
                                   Utils.showCompassTutorialDialog(context, 2, compassTutorialModel: _compassTutorialModel);
                                 },
-                                child: Text(
-                                  "Disability",
-                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                child: CustomTextWidget(
+                                  text: "Disability",
                                   style: TextStyle(
                                       color: Color(0xffafd794),
                                       fontSize: 14,
@@ -387,9 +382,8 @@ class _SignUpFirstStepCompassResultState
                               onTap: () {
                                 Utils.showCompassTutorialDialog(context, 4, compassTutorialModel: _compassTutorialModel);
                               },
-                              child: Text(
-                                "Duration",
-                                textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                              child: CustomTextWidget(
+                                text: "Duration",
                                 style: TextStyle(
                                     color: Color(0xffafd794),
                                     fontSize: 14,
@@ -427,9 +421,8 @@ class _SignUpFirstStepCompassResultState
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    Constant.back,
-                                    textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                  child: CustomTextWidget(
+                                    text: Constant.back,
                                     style: TextStyle(
                                       color: Constant.bubbleChatTextView,
                                       fontSize: 14,
@@ -472,9 +465,8 @@ class _SignUpFirstStepCompassResultState
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Center(
-                                child: Text(
-                                  Constant.next,
-                                  textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
+                                child: CustomTextWidget(
+                                  text: Constant.next,
                                   style: TextStyle(
                                     color: Constant.bubbleChatTextView,
                                     fontSize: 14,
