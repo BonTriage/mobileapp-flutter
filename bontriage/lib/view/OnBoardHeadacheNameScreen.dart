@@ -75,7 +75,7 @@ class _OnBoardHeadacheNameScreenState extends State<OnBoardHeadacheNameScreen> {
                       width: 130,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Color(0xffafd794),
+                        color: Constant.chatBubbleGreen,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(

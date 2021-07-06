@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/models/LocalNotificationModel.dart';
@@ -58,8 +56,6 @@ class _NotificationSectionState extends State<NotificationSection>
   String customNotificationLogTime = "Off";
 
   String customNotificationValue = '';
-
-  //String customNotificationName = 'Custom';
 
 
   @override
@@ -347,39 +343,6 @@ class _NotificationSectionState extends State<NotificationSection>
                                     } else {
                                       isDailySelected = true;
                                     }
-
-                                    /*var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
-                                            (element) => element.notificationName == 'Daily Log',
-                                        orElse: () => null);
-                                    if (dailyLogNotificationData != null) {
-                                      dailyLogNotificationData.notificationName = 'Daily Log';
-                                      dailyLogNotificationData.notificationType = 'Daily';
-                                      if (dailyNotificationLogTime == 'Off') {
-                                        dailyLogNotificationData.notificationTime = "";
-                                        widget.allNotificationListData.remove(dailyLogNotificationData);
-                                        _deleteNotificationChannel(0);
-                                        _deleteNotificationChannel(1);
-                                      } else {
-                                        print("scheduled notification at $_dateTime");
-                                        dailyLogNotificationData.notificationTime =  _dateTime.toIso8601String();
-                                      }
-                                    } else {
-                                      LocalNotificationModel localNotificationModel = LocalNotificationModel();
-                                      localNotificationModel.notificationName = 'Daily Log';
-                                      localNotificationModel.notificationType = 'Daily';
-                                      if (dailyNotificationLogTime == 'Off') {
-                                        localNotificationModel.notificationTime = "";
-                                      } else {
-                                        localNotificationModel.notificationTime = _dateTime.toIso8601String();
-                                      }
-                                      if(dailyNotificationLogTime != 'Off') {
-                                        widget.allNotificationListData.add(localNotificationModel);
-                                      }else{
-                                        widget.allNotificationListData.remove(localNotificationModel);
-                                        _deleteNotificationChannel(0);
-                                        _deleteNotificationChannel(1);
-                                      }
-                                    }*/
                                   });
                                 },
                                 child: CustomTextWidget(

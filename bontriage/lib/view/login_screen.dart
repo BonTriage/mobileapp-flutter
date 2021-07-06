@@ -508,7 +508,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 }
 
 class PasswordHiddenInfo with ChangeNotifier {
-  bool _isHidden = false;
+  bool _isHidden = true;
 
   bool isHidden() => _isHidden;
 

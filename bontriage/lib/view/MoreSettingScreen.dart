@@ -6,6 +6,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/CustomTextWidget.dart';
 import 'package:mobile/view/MoreSection.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 
@@ -19,8 +20,6 @@ class MoreSettingScreen extends StatefulWidget {
 }
 
 class _MoreSettingScreenState extends State<MoreSettingScreen> {
-  String _notificationStatus = Constant.notAllowed;
-
   @override
   void initState() {
     super.initState();
@@ -90,12 +89,16 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MoreSection(
-                          currentTag: Constant.notifications,
-                          text: Constant.notifications,
-                          moreStatus: _notificationStatus,
-                          isShowDivider: false,
-                          navigateToOtherScreenCallback: _navigateToOtherScreen,
+                        Consumer<MoreSettingInfo>(
+                          builder: (context, data, child) {
+                            return MoreSection(
+                              currentTag: Constant.notifications,
+                              text: Constant.notifications,
+                              moreStatus: data.getNotificationStatus(),
+                              isShowDivider: false,
+                              navigateToOtherScreenCallback: _navigateToOtherScreen,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -118,6 +121,8 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
     var notificationListData =
         await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
 
+    var moreSettingInfo = Provider.of<MoreSettingInfo>(context, listen: false);
+
     if (Platform.isIOS) {
       var permissionResult = await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -129,24 +134,26 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
           );
 
       if (permissionResult ?? false) {
-        setState(() {
-          _notificationStatus = Constant.allowed;
-        });
+        moreSettingInfo.updateMoreSettingInfo(Constant.allowed);
       } else {
-        setState(() {
-          _notificationStatus = Constant.notAllowed;
-        });
+        moreSettingInfo.updateMoreSettingInfo(Constant.notAllowed);
       }
     } else {
       if (notificationListData == null || notificationListData.isEmpty) {
-        setState(() {
-          _notificationStatus = Constant.notAllowed;
-        });
+        moreSettingInfo.updateMoreSettingInfo(Constant.notAllowed);
       } else {
-        setState(() {
-          _notificationStatus = Constant.allowed;
-        });
+        moreSettingInfo.updateMoreSettingInfo(Constant.allowed);
       }
     }
+  }
+}
+
+class MoreSettingInfo with ChangeNotifier {
+  String _notificationStatus = Constant.notAllowed;
+  String getNotificationStatus() => _notificationStatus;
+
+  updateMoreSettingInfo(String notificationStatus) {
+    _notificationStatus = notificationStatus;
+    notifyListeners();
   }
 }

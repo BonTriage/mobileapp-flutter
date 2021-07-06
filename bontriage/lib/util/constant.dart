@@ -668,57 +668,51 @@ class Constant {
       ]));
 
   //colors
-  static Color backgroundColor = Color(0xff0E232F);
-  static Color chatBubbleGreen = Color(0xffAFD794);
-  static Color chatBubbleGreenBlue = Color.fromARGB(15, 175, 215, 148);
-  static Color locationServiceGreen = Color(0xffCAD7BF);
-  static Color bubbleChatTextView = Color(0xff0E1712);
-  static Color chatBubbleGreenTransparent = Color(0x26AFD794);
-  static Color chatBubbleGreen60Alpha = Color(0x99AFD794);
-
-  static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
-  static Color transparentColor = Colors.transparent;
-  static Color backgroundTransparentColor = Color(0xff0E4C47);
-  static Color oliveGreen = Color(0xff263E3E);
-  static Color editTextBoarderColor = Color(0xffAFD794);
-  static Color headacheCompassColor = Color(0xffB8FFFF);
-  static Color unselectedTextColor = Color(0x80AFD794);
-  static Color splashColor = Color(0xffD7EBC9);
-  static Color splashTextColor = Color(0xff0E232F);
-  static Color splashMigraineMentorTextColor = Color(0xff30af72);
-  static Color doubleTapTextColor = Color(0xff1DAA6D);
-  static Color sliderTrackColor = Color(0xff434351);
-  static Color notificationTextColor = Color(0x80AFD794);
-  static Color addCustomNotificationTextColor = Color(0xff1DAA6D);
-  static Color pinkTriggerColor = Color(0xffF479D9);
-
-  static Color mildTriggerColor = Color(0xff55AE88);
-  static Color moderateTriggerColor = Color(0xfff69946);
-  static Color severeTriggerColor = Color(0xffEB5757);
-  static Color migraineColor = Color(0xffB8E1FF);
-  static Color lightDurationColor = Color(0xA6B8E1FF);
-
-  static Color otherHeadacheColor = Color(0xff177D5A);
-
-
-  static Color deleteLogRedColor = Color(0xffFF2D55);
-  static Color cancelBlueColor = Color(0xff007AFF);
-  static Color moreBackgroundColor = Color(0xCC0E232F);
-  static Color whiteColorAlpha85 = Color(0xD9FFFFFF);
-  static Color greyColor = Color(0xff8C8C8C);
-  static Color actionSheetDividerColor = Color(0xffCDCED2);
-  static Color selectedNotificationColor = Color(0xff145C56);
-  static Color currentDateColor = Color(0xff68906e);
-  static Color calendarRedTriggerColor = Color(0xffD85B00);
-  static Color calendarPurpleTriggersColor = Color(0XFF7E00CB);
-  static Color calendarBlueTriggersColor = Color(0XFF00A8CD);
-  static Color compassMyHeadacheTextColor = Color(0XFF0E4C47);
-  static Color compareCompassHeadacheValueColor = Color(0xff7E00CB);
-  static Color compareCompassMonthSelectedColor = Color(0xffB8FFFF);
+  static const Color backgroundColor = Color(0xff0E232F);
+  static const Color chatBubbleGreen = Color(0xffAFD794);
+  static const Color chatBubbleGreenBlue = Color.fromARGB(15, 175, 215, 148);
+  static const Color locationServiceGreen = Color(0xffCAD7BF);
+  static const Color bubbleChatTextView = Color(0xff0E1712);
+  static const Color chatBubbleGreenTransparent = Color(0x26AFD794);
+  static const Color chatBubbleGreen60Alpha = Color(0x99AFD794);
+  static const Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
+  static const Color transparentColor = Colors.transparent;
+  static const Color backgroundTransparentColor = Color(0xff0E4C47);
+  static const Color oliveGreen = Color(0xff263E3E);
+  static const Color editTextBoarderColor = Color(0xffAFD794);
+  static const Color headacheCompassColor = Color(0xffB8FFFF);
+  static const Color unselectedTextColor = Color(0x80AFD794);
+  static const Color splashColor = Color(0xffD7EBC9);
+  static const Color splashTextColor = Color(0xff0E232F);
+  static const Color splashMigraineMentorTextColor = Color(0xff30af72);
+  static const Color doubleTapTextColor = Color(0xff1DAA6D);
+  static const Color sliderTrackColor = Color(0xff434351);
+  static const Color notificationTextColor = Color(0x80AFD794);
+  static const Color addCustomNotificationTextColor = Color(0xff1DAA6D);
+  static const Color pinkTriggerColor = Color(0xffF479D9);
+  static const Color mildTriggerColor = Color(0xff55AE88);
+  static const Color moderateTriggerColor = Color(0xfff69946);
+  static const Color severeTriggerColor = Color(0xffEB5757);
+  static const Color migraineColor = Color(0xffB8E1FF);
+  static const Color lightDurationColor = Color(0xA6B8E1FF);
+  static const Color otherHeadacheColor = Color(0xff177D5A);
+  static const Color deleteLogRedColor = Color(0xffFF2D55);
+  static const Color cancelBlueColor = Color(0xff007AFF);
+  static const Color moreBackgroundColor = Color(0xCC0E232F);
+  static const Color whiteColorAlpha85 = Color(0xD9FFFFFF);
+  static const Color greyColor = Color(0xff8C8C8C);
+  static const Color actionSheetDividerColor = Color(0xffCDCED2);
+  static const Color selectedNotificationColor = Color(0xff145C56);
+  static const Color currentDateColor = Color(0xff68906e);
+  static const Color calendarRedTriggerColor = Color(0xffD85B00);
+  static const Color calendarPurpleTriggersColor = Color(0XFF7E00CB);
+  static const Color calendarBlueTriggersColor = Color(0XFF00A8CD);
+  static const Color compassMyHeadacheTextColor = Color(0XFF0E4C47);
+  static const Color compareCompassHeadacheValueColor = Color(0xff7E00CB);
+  static const Color compareCompassMonthSelectedColor = Color(0xffB8FFFF);
   static const Color compareCompassChartValueColor = Color(0x597E00CB);
-
   static const Color compareCompassChartFirstLoggedValueColor = Color(0x007E00CB);
-  static  Color barTutorialsTapColor =Color.fromARGB(255,202, 215, 191);
+  static const Color barTutorialsTapColor =Color.fromARGB(255,202, 215, 191);
 
   static const double minTextScaleFactor = 0.8;
   static const double maxTextScaleFactor = 1.2;

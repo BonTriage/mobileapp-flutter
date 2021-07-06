@@ -140,9 +140,12 @@ class TabNavigator extends StatelessWidget {
             showApiLoaderCallback: showApiLoaderCallback,
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
-      TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
-            onPush: _push,
-          ),
+      TabNavigatorRoutes.moreSettingRoute: (context) => ChangeNotifierProvider(
+        create: (_) => MoreSettingInfo(),
+        child: MoreSettingScreen(
+              onPush: _push,
+            ),
+      ),
 
       TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => ChangeNotifierProvider(
         create: (_) => MoreTriggerMedicationInfo(),
@@ -162,8 +165,18 @@ class TabNavigator extends StatelessWidget {
           ),
       TabNavigatorRoutes.moreFaqScreenRoute: (context) => MoreFaqScreen(),
 
-      TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MoreNotificationScreen(
-        openActionSheetCallback: openActionSheetCallback,
+      TabNavigatorRoutes.moreNotificationScreenRoute: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => MoreNotificationSwitchInfo(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => MoreNotificationInfo(),
+          ),
+        ],
+        child: MoreNotificationScreen(
+          openActionSheetCallback: openActionSheetCallback,
+        ),
       ),
       TabNavigatorRoutes.moreHeadachesScreenRoute: (context) => MoreHeadachesScreen(
         openActionSheetCallback: openActionSheetCallback,
