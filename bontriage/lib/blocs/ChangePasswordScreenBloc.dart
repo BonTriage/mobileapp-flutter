@@ -33,7 +33,7 @@ class ChangePasswordBloc {
 
   /// This method will be use for implement API for to check USer Already registered in to the application or not.
   Future<dynamic> sendChangePasswordData(
-      String emailValue, String passwordValue) async {
+      String emailValue, String passwordValue, bool isFromMoreSettings) async {
     String apiResponse;
     try {
       String url = WebservicePost.qaServerUrl +
@@ -52,16 +52,18 @@ class ChangePasswordBloc {
       } else {
         apiResponse = Constant.success;
         changePasswordScreenDataSink.add(Constant.success);
-        UserProfileInfoModel userProfileInfoModel = UserProfileInfoModel();
-        userProfileInfoModel =
-            UserProfileInfoModel.fromJson(jsonDecode(response));
-        if(userProfileInfoModel.profileName == null) {
-          userProfileInfoModel.profileName = userProfileInfoModel.firstName;
+        if(!isFromMoreSettings) {
+          UserProfileInfoModel userProfileInfoModel = UserProfileInfoModel();
+          userProfileInfoModel =
+              UserProfileInfoModel.fromJson(jsonDecode(response));
+          if(userProfileInfoModel.profileName == null) {
+            userProfileInfoModel.profileName = userProfileInfoModel.firstName;
+          }
+          await _deleteAllUserData();
+          await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
+          await SignUpOnBoardProviders.db.deleteTableUserProgress();
+          await SignUpOnBoardProviders.db .insertUserProfileInfo(userProfileInfoModel);
         }
-        await _deleteAllUserData();
-        await SignUpOnBoardProviders.db.deleteTableQuestionnaires();
-        await SignUpOnBoardProviders.db.deleteTableUserProgress();
-        await SignUpOnBoardProviders.db .insertUserProfileInfo(userProfileInfoModel);
       }
     } catch (e) {
       changePasswordScreenDataSink.addError(Exception(Constant.somethingWentWrong));

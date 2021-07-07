@@ -8,6 +8,7 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ChangePasswordScreen.dart';
 
 class MoreSection extends StatefulWidget {
   final String text;
@@ -115,13 +116,20 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                   case Constant.viewReport:
                     widget.viewReportClickedCallback();
                     break;
+                  /*case Constant.profileEmailTag:
+                    widget.navigateToOtherScreenCallback(TabNavigatorRoutes.moreEmailScreenRoute, widget.selectedAnswerList);
+                    break;*/
+                  case Constant.changePassword:
+                    widget.navigateToOtherScreenCallback(Constant.changePasswordScreenRouter, null);
+                    break;
                 }
               }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
                   child: Text(
                     widget.text,
                     style: TextStyle(
@@ -131,7 +139,6 @@ class _MoreSectionState extends State<MoreSection> with SingleTickerProviderStat
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
                 Expanded(
                   child: Row(
                     children: [

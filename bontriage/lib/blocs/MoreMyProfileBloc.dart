@@ -59,6 +59,11 @@ class MoreMyProfileBloc {
             if(genderSelectedAnswers == null)
               profileSelectedAnswerList.add(SelectedAnswers(questionTag: Constant.profileGenderTag, answer: ''));
 
+            /*SelectedAnswers emailSelectedAnswer = profileSelectedAnswerList.firstWhere((element) => element.questionTag == Constant.profileEmailTag, orElse: () => null);
+            if(emailSelectedAnswer == null) {
+              profileSelectedAnswerList.add(SelectedAnswers(questionTag: Constant.profileEmailTag, answer: userProfileInfoModel.email));
+            }*/
+
             networkSink.add(Constant.success);
             myProfileSink.add(response);
             _responseModel = response;

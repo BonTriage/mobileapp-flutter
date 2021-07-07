@@ -2,16 +2,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/ChangePasswordScreen.dart';
 import 'package:mobile/view/MoreSection.dart';
 
 import '../main.dart';
 
 class MoreSettingScreen extends StatefulWidget {
   final Future<dynamic> Function(BuildContext, String, dynamic) onPush;
+  final Future<dynamic> Function(String, dynamic) navigateToOtherScreenCallback;
 
-  const MoreSettingScreen({Key key, this.onPush}) : super(key: key);
+  const MoreSettingScreen({
+    Key key,
+    this.onPush,
+    this.navigateToOtherScreenCallback,}) : super(key: key);
 
   @override
   _MoreSettingScreenState createState() => _MoreSettingScreenState();
@@ -93,6 +99,13 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                           currentTag: Constant.notifications,
                           text: Constant.notifications,
                           moreStatus: _notificationStatus,
+                          isShowDivider: true,
+                          navigateToOtherScreenCallback: _navigateToOtherScreen,
+                        ),
+                        MoreSection(
+                          currentTag: Constant.changePassword,
+                          text: Constant.changePassword,
+                          moreStatus: Constant.blankString,
                           isShowDivider: false,
                           navigateToOtherScreenCallback: _navigateToOtherScreen,
                         ),
@@ -109,8 +122,17 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
   }
 
   void _navigateToOtherScreen(String routeName, dynamic arguments) async {
-    await widget.onPush(context, routeName, arguments);
-    _checkNotificationStatus();
+    if(routeName == Constant.changePasswordScreenRouter) {
+      UserProfileInfoModel userProfileInfoModel = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+      widget.navigateToOtherScreenCallback(routeName, ChangePasswordArgumentModel(
+        emailValue: userProfileInfoModel.email,
+        isFromMoreSettings: true,
+        isFromSignUp: false,
+      ));
+    } else {
+      await widget.onPush(context, routeName, arguments);
+      _checkNotificationStatus();
+    }
   }
 
   void _checkNotificationStatus() async {

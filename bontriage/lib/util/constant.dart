@@ -231,7 +231,7 @@ class Constant {
   static String signIn = 'sign-in';
   static String toAn = ' to an';
   static String existingAccount = 'existing account';
-  static String email = 'Email';
+  static const String email = 'Email';
   static String password = 'Password';
   static const String forgotPassword = 'Forgot Password?';
   static String continueSurvey = 'Continue Survey';
@@ -313,6 +313,7 @@ class Constant {
   static String whenHeadacheStart = 'When did your headache start?';
   static String start = 'START';
   static const String notifications = 'Notifications';
+  static const String changePassword = 'Change Password';
   static const String dailyLog = 'Daily Log';
   static const String medication = 'Medication';
   static const String exercise = 'Exercise';
@@ -333,6 +334,7 @@ class Constant {
   static const String profileAgeTag = 'profile.age';
   static const String profileSexTag = 'profile.sex';
   static const String profileGenderTag = 'profile.gender';
+  static const String profileEmailTag = 'profile.emailAddress';
   static const String headacheFreeTag = 'headache.free';
   static const String headacheTypicalTag = 'headache.typical';
   static const String headacheDisabledTag = 'headache.disabled';

@@ -6,9 +6,9 @@ import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  final bool isFromSignUp;
+  final LoginScreenArgumentModel loginScreenArgumentModel;
 
-  const LoginScreen({Key key, this.isFromSignUp = false}) : super(key: key);
+  const LoginScreen({Key key, this.loginScreenArgumentModel}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -76,14 +76,17 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 children: [
                   Align(
                     alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Image(
-                        image: AssetImage(Constant.closeIcon),
-                        width: 26,
-                        height: 26,
+                    child: Visibility(
+                      visible: !widget.loginScreenArgumentModel.isFromMore,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image(
+                          image: AssetImage(Constant.closeIcon),
+                          width: 26,
+                          height: 26,
+                        ),
                       ),
                     ),
                   ),
@@ -412,10 +415,15 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     if (response is String) {
       if (response == Constant.success) {
         _isShowAlert = false;
-        if(widget.isFromSignUp) {
-          Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
+
+        if(!widget.loginScreenArgumentModel.isFromMore) {
+          if(widget.loginScreenArgumentModel.isFromSignUp) {
+            Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
+          } else {
+            Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+          }
         } else {
-          Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+          Navigator.pop(context);
         }
 
         Utils.navigateToHomeScreen(context, false);
@@ -461,7 +469,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       if(event != null && event is ForgotPasswordModel) {
         if(event.status == 1) {
           Future.delayed(Duration(milliseconds: 350), () {
-            Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: emailTextEditingController.text.trim(), isForgotPasswordFromSignUp: widget.isFromSignUp ?? false));
+            Navigator.pushNamed(context, Constant.otpValidationScreenRouter, arguments: OTPValidationArgumentModel(email: emailTextEditingController.text.trim(), isForgotPasswordFromSignUp: widget.loginScreenArgumentModel.isFromSignUp ?? false));
           });
         } else {
           setState(() {
@@ -500,4 +508,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     }
     FocusScope.of(context).requestFocus(FocusNode());
   }
+}
+
+class LoginScreenArgumentModel {
+  bool isFromSignUp;
+  bool isFromMore;
+
+  LoginScreenArgumentModel({this.isFromMore = false, this.isFromSignUp});
 }

@@ -191,7 +191,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: LoginScreen(loginScreenArgumentModel: settings.arguments,), routeSettings: routeSettings);
             }
           case Constant.signUpOnBoardSplashRouter:
             {
@@ -242,7 +242,7 @@ class MyApp extends StatelessWidget {
             }
           case Constant.loginScreenRouter:
             {
-              return SlideFromRightPageRoute(widget: LoginScreen(isFromSignUp: settings.arguments,), routeSettings: routeSettings);
+              return SlideFromRightPageRoute(widget: LoginScreen(loginScreenArgumentModel: settings.arguments,), routeSettings: routeSettings);
             }
           case Constant.onBoardingScreenSignUpRouter:
             {

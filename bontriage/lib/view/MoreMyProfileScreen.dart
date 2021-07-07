@@ -30,8 +30,6 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
     super.initState();
     _moreMyProfileBloc = MoreMyProfileBloc();
 
-    print('InitState');
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _moreMyProfileBloc.initNetworkStreamController();
       widget.showApiLoaderCallback(_moreMyProfileBloc.networkStream, () {
@@ -145,6 +143,14 @@ class _MoreMyProfileScreenState extends State<MoreMyProfileScreen> {
                                     currentTag: Constant.profileSexTag,
                                     text: Constant.sex,
                                     moreStatus: sexSelectedAnswer?.answer ?? '',
+                                    isShowDivider: true,
+                                    navigateToOtherScreenCallback: _navigateToOtherScreen,
+                                    selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,
+                                  ),
+                                  MoreSection(
+                                    currentTag: Constant.profileEmailTag,
+                                    text: Constant.email,
+                                    moreStatus: _moreMyProfileBloc.userProfileInfoModel.email ?? '',
                                     isShowDivider: false,
                                     navigateToOtherScreenCallback: _navigateToOtherScreen,
                                     selectedAnswerList: _moreMyProfileBloc.profileSelectedAnswerList,

@@ -8,6 +8,8 @@ import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/OtpValidationScreen.dart';
 
+import 'login_screen.dart';
+
 class OnBoardingSignUpScreen extends StatefulWidget {
   @override
   _OnBoardingSignUpScreenState createState() => _OnBoardingSignUpScreenState();
@@ -438,7 +440,7 @@ class _OnBoardingSignUpScreenState extends State<OnBoardingSignUpScreen> {
                             padding: const EdgeInsets.only(top: 5),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(context, Constant.loginScreenRouter, arguments: true);
+                                Navigator.pushNamed(context, Constant.loginScreenRouter, arguments: LoginScreenArgumentModel(isFromMore: false, isFromSignUp: true));
                               },
                               child: Text(
                                 Constant.signIn,

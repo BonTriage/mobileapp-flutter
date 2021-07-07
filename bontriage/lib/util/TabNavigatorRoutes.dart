@@ -14,6 +14,7 @@ class TabNavigatorRoutes {
   static const String moreHeadachesScreenRoute = 'moreHeadachesScreenRoute';
   static const String moreLocationServicesScreenRoute = 'moreLocationServicesScreenRoute';
   static const String moreNameScreenRoute = 'moreNameScreenRoute';
+  static const String moreEmailScreenRoute = 'moreEmailScreenRoute';
   static const String moreAgeScreenRoute = 'moreAgeScreenRoute';
   static const String moreGenderScreenRoute = 'moreGenderScreenRoute';
   static const String moreSexScreenRoute = 'moreSexScreenRoute';

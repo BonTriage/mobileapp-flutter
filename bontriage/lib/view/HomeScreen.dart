@@ -329,24 +329,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ///This method is used to show tutorial dialog
   void _showTutorialDialog() async {
-    bool isTutorialHasSeen = await SignUpOnBoardProviders.db.isUserHasAlreadySeenTutorial(1);
-    if(!isTutorialHasSeen) {
-      await SignUpOnBoardProviders.db.insertTutorialData(1);
-      showGeneralDialog(
-          context: context,
-          barrierColor: Colors.transparent,
-          pageBuilder: (buildContext, animation, secondaryAnimation) {
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              body: MeScreenTutorialDialog(
-                logDayGlobalKey: _logDayGlobalKey,
-                recordsGlobalKey: _recordsGlobalKey,
-                addHeadacheGlobalKey: _addHeadacheGlobalKey,
-                isFromOnBoard: widget.homeScreenArgumentModel != null ? widget.homeScreenArgumentModel.isFromOnBoard ?? false : false,
-              ),
-            );
-          }
-      );
+    try {
+      bool isTutorialHasSeen = await SignUpOnBoardProviders.db
+          .isUserHasAlreadySeenTutorial(1);
+      if (!isTutorialHasSeen) {
+        await SignUpOnBoardProviders.db.insertTutorialData(1);
+        showGeneralDialog(
+            context: context,
+            barrierColor: Colors.transparent,
+            pageBuilder: (buildContext, animation, secondaryAnimation) {
+              return Scaffold(
+                backgroundColor: Colors.transparent,
+                body: MeScreenTutorialDialog(
+                  logDayGlobalKey: _logDayGlobalKey,
+                  recordsGlobalKey: _recordsGlobalKey,
+                  addHeadacheGlobalKey: _addHeadacheGlobalKey,
+                  isFromOnBoard: widget.homeScreenArgumentModel != null ? widget
+                      .homeScreenArgumentModel.isFromOnBoard ?? false : false,
+                ),
+              );
+            }
+        );
+      }
+    } catch(e) {
+      debugPrint(e);
     }
   }
 

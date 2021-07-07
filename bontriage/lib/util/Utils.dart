@@ -7,6 +7,7 @@ import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
+import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
@@ -708,7 +709,6 @@ class Utils {
       await launch(command);
     }
   }
-
 
   ///Method to create a file of pdf from base64 string and save that file into the app directory.
   ///[base64String] is the parameter of base64 string.

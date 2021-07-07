@@ -6,6 +6,7 @@ import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/view/DiscoverScreen.dart';
 import 'package:mobile/view/MeScreen.dart';
 import 'package:mobile/view/MoreAgeScreen.dart';
+import 'package:mobile/view/MoreEmailScreen.dart';
 import 'package:mobile/view/MoreFaqScreen.dart';
 import 'package:mobile/view/MoreGenderScreen.dart';
 import 'package:mobile/view/MoreGenerateReportScreen.dart';
@@ -104,15 +105,13 @@ class TabNavigator extends StatelessWidget {
             navigateToOtherScreenCallback: navigateToOtherScreenCallback,
           ),
       TabNavigatorRoutes.moreSettingRoute: (context) => MoreSettingScreen(
-
-            onPush: _push,
-          ),
-
+        onPush: _push,
+        navigateToOtherScreenCallback: navigateToOtherScreenCallback,
+      ),
       TabNavigatorRoutes.moreMyProfileScreenRoute: (context) => MoreMyProfileScreen(
         onPush: _push,
         showApiLoaderCallback: showApiLoaderCallback,
       ),
-
       TabNavigatorRoutes.moreGenerateReportRoute: (context) =>
           MoreGenerateReportScreen(
             onPush: _push,
@@ -160,6 +159,10 @@ class TabNavigator extends StatelessWidget {
         openTriggerMedicationActionSheetCallback: openTriggerMedicationActionSheetCallback,
         moreMedicationArgumentModel: arguments,
         showApiLoaderCallback: showApiLoaderCallback,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
+      TabNavigatorRoutes.moreEmailScreenRoute: (context) => MoreEmailScreen(
+        selectedAnswerList: arguments,
         openActionSheetCallback: openActionSheetCallback,
       ),
     };

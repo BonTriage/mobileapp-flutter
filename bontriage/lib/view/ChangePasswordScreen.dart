@@ -4,6 +4,8 @@ import 'package:mobile/blocs/ChangePasswordScreenBloc.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
+import 'login_screen.dart';
+
 class ChangePasswordScreen extends StatefulWidget {
   final ChangePasswordArgumentModel changePasswordArgumentModel;
 
@@ -323,16 +325,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void changePasswordService() async {
-    var responseData = await _changePasswordBloc.sendChangePasswordData(widget.changePasswordArgumentModel.emailValue, passwordValue);
+    var responseData = await _changePasswordBloc.sendChangePasswordData(widget.changePasswordArgumentModel.emailValue, passwordValue, widget.changePasswordArgumentModel.isFromMoreSettings);
     if (responseData is String) {
       if (responseData == Constant.success) {
         _isShowAlert = false;
-        if(!widget.changePasswordArgumentModel.isFromSignUp)
-          Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
-        else
-          Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
+        if(!widget.changePasswordArgumentModel.isFromMoreSettings) {
+          if(!widget.changePasswordArgumentModel.isFromSignUp)
+            Navigator.popUntil(context, ModalRoute.withName(Constant.welcomeStartAssessmentScreenRouter));
+          else
+            Navigator.popUntil(context, ModalRoute.withName(Constant.onBoardingScreenSignUpRouter));
 
-        Utils.navigateToHomeScreen(context, false);
+          Utils.navigateToHomeScreen(context, false);
+        } else {
+          await Utils.clearAllDataFromDatabaseAndCache();
+          Navigator.popUntil(context, ModalRoute.withName(Constant.homeRouter));
+          Navigator.pushReplacementNamed(context, Constant.loginScreenRouter, arguments: LoginScreenArgumentModel(isFromSignUp: false, isFromMore: true));
+        }
       }
     }
   }
@@ -341,6 +349,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 class ChangePasswordArgumentModel {
   String emailValue;
   bool isFromSignUp;
+  bool isFromMoreSettings;
 
-  ChangePasswordArgumentModel({this.emailValue, this.isFromSignUp = false});
+  ChangePasswordArgumentModel({
+    this.emailValue,
+    this.isFromSignUp = false,
+    this.isFromMoreSettings = false,
+  });
 }

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
+import 'package:mobile/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/constant.dart';
 
@@ -150,7 +151,7 @@ class _WelcomeStartAssessmentScreenState
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pushNamed(
-                                      context, Constant.loginScreenRouter, arguments: false);
+                                      context, Constant.loginScreenRouter, arguments: LoginScreenArgumentModel(isFromSignUp: false, isFromMore: false));
                                 },
                                 child: Text(
                                   Constant.signIn,
