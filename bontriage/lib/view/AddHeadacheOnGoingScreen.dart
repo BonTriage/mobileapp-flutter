@@ -507,6 +507,18 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         if(_isUserHeadacheEnded) {
           print('Headache Ended');
           await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
+        } else {
+          var userProfileInfoData = await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
+
+          CurrentUserHeadacheModel currentUserHeadacheModel = await SignUpOnBoardProviders.db
+              .getUserCurrentHeadacheData(userProfileInfoData.userId);
+
+          currentUserHeadacheModel.isFromServer = true;
+
+          await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
+
+          await SignUpOnBoardProviders.db
+              .insertUserCurrentHeadacheData(currentUserHeadacheModel);
         }
         Navigator.pushNamed(context, Constant.addHeadacheSuccessScreenRouter);
       } else {
@@ -590,6 +602,9 @@ class _AddHeadacheOnGoingScreenState extends State<AddHeadacheOnGoingScreen>
         context: context,
         builder: (context) => DiscardChangesBottomSheet());
     if (resultOfDiscardChangesBottomSheet == Constant.discardChanges) {
+      if(!widget.currentUserHeadacheModel.isFromServer) {
+        await SignUpOnBoardProviders.db.deleteUserCurrentHeadacheData();
+      }
       //SignUpOnBoardProviders.db.deleteAllUserLogDayData();
       if(_isFromRecordScreen)
         Navigator.pop(context, _addHeadacheLogBloc.isHeadacheLogged);

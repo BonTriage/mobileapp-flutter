@@ -62,6 +62,7 @@ class CalendarScreenBloc {
               currentUserHeadacheModel.headacheId = response.headaches[0].id;
               currentUserHeadacheModel.isOnGoing = true;
               currentUserHeadacheModel.isFromRecordScreen = false;
+              currentUserHeadacheModel.isFromServer = true;
               await SignUpOnBoardProviders.db.insertUserCurrentHeadacheData(currentUserHeadacheModel);
             }
           } else {

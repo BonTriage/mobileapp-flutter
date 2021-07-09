@@ -5,8 +5,9 @@ class CurrentUserHeadacheModel {
   bool isOnGoing;
   bool isFromRecordScreen;
   int headacheId;
+  bool isFromServer;  //this attribute is to identify whether this headache date came from server or not.
 
-  CurrentUserHeadacheModel({this.userId, this.selectedDate, this.selectedEndDate, this.isOnGoing, this.isFromRecordScreen = false, this.headacheId});
+  CurrentUserHeadacheModel({this.userId, this.selectedDate, this.selectedEndDate, this.isOnGoing, this.isFromRecordScreen = false, this.headacheId, this.isFromServer = false});
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{
@@ -16,6 +17,7 @@ class CurrentUserHeadacheModel {
       'isOnGoing': isOnGoing,
       'isFromRecordScreen': isFromRecordScreen,
       'headacheId': headacheId,
+      'isFromServer': isFromServer,
     };
     return map;
   }
@@ -27,5 +29,6 @@ class CurrentUserHeadacheModel {
     isOnGoing = map['isOnGoing'];
     isFromRecordScreen = map['isFromRecordScreen'];
     headacheId = map['headacheId'];
+    isFromServer = map['isFromServer'];
   }
 }

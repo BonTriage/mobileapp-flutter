@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey _logDayGlobalKey;
   GlobalKey _addHeadacheGlobalKey;
   GlobalKey _recordsGlobalKey;
+  bool _isBackButtonPressed = false;
 
   Map<int, GlobalKey<NavigatorState>> navigatorKey = {
     0: GlobalKey<NavigatorState>(),
@@ -59,8 +60,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return WillPopScope(
-      onWillPop: () async =>
-          !await navigatorKey[currentIndex].currentState.maybePop(),
+      onWillPop: () async {
+        bool onWillPopResult = !await navigatorKey[currentIndex].currentState.maybePop();
+
+        if(onWillPopResult) {
+          if (!_isBackButtonPressed) {
+            _isBackButtonPressed = true;
+            _showAppExitSnackBar();
+
+            Future.delayed(Duration(seconds: 5), () {
+              _isBackButtonPressed = false;
+            });
+
+            return false;
+          }
+        }
+        return onWillPopResult;
+      },
       child: MediaQuery(
         data: mediaQueryData.copyWith(
           textScaleFactor: mediaQueryData.textScaleFactor.clamp(Constant.minTextScaleFactor, Constant.maxTextScaleFactor),
@@ -425,5 +441,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
       await SignUpOnBoardProviders.db.insertUserNotifications(allNotificationListData);
     }
+  }
+
+  ///This method is used to show snack bar for press again to exit
+  void _showAppExitSnackBar() {
+    final snackBar = SnackBar(content: Text('Press back again to exit.', style: TextStyle(
+        height: 1.3,
+        fontSize: 16,
+        fontFamily: Constant.jostRegular,
+        color: Colors.black)),
+      backgroundColor: Constant.chatBubbleGreen,
+      duration: Duration(seconds: 5),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
