@@ -681,7 +681,7 @@ class Constant {
 
   static Color selectTextColor = Color.fromARGB(50, 175, 215, 148);
   static Color transparentColor = Colors.transparent;
-  static Color backgroundTransparentColor = Color(0xff0E4C47);
+  static const Color backgroundTransparentColor = Color(0xff0E4C47);
   static Color oliveGreen = Color(0xff263E3E);
   static Color editTextBoarderColor = Color(0xffAFD794);
   static Color headacheCompassColor = Color(0xffB8FFFF);

@@ -16,6 +16,7 @@ import 'package:mobile/view/AddNewMedicationDialog.dart';
 import 'package:mobile/view/CircleLogOptions.dart';
 import 'package:mobile/view/DateTimePicker.dart';
 import 'package:mobile/view/LogDayChipList.dart';
+import 'package:mobile/view/LogDayMedidcationListActionSheet.dart';
 import 'package:mobile/view/MedicationDosagePicker.dart';
 import 'package:mobile/view/TimeSection.dart';
 import 'package:mobile/view/sign_up_age_screen.dart';
@@ -844,17 +845,59 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              widget.headerText,
-              style: TextStyle(
-                  fontSize: Platform.isAndroid ? 16 : 17,
-                  color: Constant.chatBubbleGreen,
-                  fontFamily: Constant.jostMedium),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.headerText,
+                  style: TextStyle(
+                      fontSize: Platform.isAndroid ? 16 : 17,
+                      color: Constant.chatBubbleGreen,
+                      fontFamily: Constant.jostMedium),
+                ),
+              ),
+              Visibility(
+                visible: widget.contentType == 'medication',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () async {
+                    Values value = await showModalBottomSheet(
+                      backgroundColor: Constant.transparentColor,
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: LogDayMedicationListActionSheet(
+                          medicationValuesList: widget.valuesList,
+                          onItemDeselect: (value) {
+                            if(value != null) {
+                              int index = int.tryParse(value.valueNumber) - 1;
+
+                              _onMedicationItemSelected(index);
+                            }
+                          },
+                        ),
+                      ),
+                    );
+
+                    if(value != null) {
+                      int index = int.tryParse(value.valueNumber) - 1;
+
+                      _onMedicationItemSelected(index);
+                    }
+                  },
+                  child: Icon(
+                    Icons.search,
+                    color: Constant.chatBubbleGreen,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(

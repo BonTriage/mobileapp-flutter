@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openTriggersMedicationActionSheet(Questions questions, Function(int) selectedAnswerCallback) {
     showModalBottomSheet(
-        backgroundColor: Constant.transparentColor  ,
+        backgroundColor: Constant.transparentColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
