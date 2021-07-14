@@ -176,6 +176,17 @@ class LogDayBloc {
   }
 
   Future<String> _getLogDaySubmissionPayload(List<SelectedAnswers> selectedAnswers, List<Questions> questionList) async {
+    var triggerAlcoholNumSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == 'triggers1.alcohol', orElse: () => null);
+    var triggerCaffeineNumSelectedAnswer = selectedAnswers.firstWhere((element) => element.questionTag == 'triggers1.caffeine', orElse: () => null);
+
+    if(triggerAlcoholNumSelectedAnswer == null) {
+      selectedAnswers.add(SelectedAnswers(questionTag: 'triggers1.alcohol', answer: '1'));
+    }
+
+    if(triggerCaffeineNumSelectedAnswer == null) {
+      selectedAnswers.add(SelectedAnswers(questionTag: 'triggers1.caffeine', answer: '1'));
+    }
+
     behaviorSelectedAnswerList.clear();
     medicationSelectedAnswerList.clear();
     triggerSelectedAnswerList.clear();

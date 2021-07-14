@@ -1448,7 +1448,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
   }
 
-  void onValueChangedCallback(String currentTag, String value) {
+  void onValueChangedCallback(String currentTag, String value, [bool isFromTextField = false]) {
     SelectedAnswers selectedAnswersObj = selectedAnswerListOfTriggers.firstWhere((element) => element.questionTag == currentTag, orElse: () => null);
     if (selectedAnswersObj != null) {
       selectedAnswersObj.answer = value;
@@ -1457,7 +1457,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
           .add(SelectedAnswers(questionTag: currentTag, answer: value));
     }
 
-    _storeExpandedWidgetDataIntoLocalModel();
+    _storeExpandedWidgetDataIntoLocalModel(-1, isFromTextField);
   }
 
   /// This method is used to get list of chips widget which will be shown when user taps on the options of sleep section
@@ -1880,7 +1880,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
     }
   }
 
-  void _storeExpandedWidgetDataIntoLocalModel([int selectedMedicationIndex]) {
+  void _storeExpandedWidgetDataIntoLocalModel([int selectedMedicationIndex, bool isFromTextField]) {
     switch (widget.contentType) {
       case 'behavior.presleep':
         String text = widget.valuesList[whichSleepItemSelected].text;
@@ -1958,13 +1958,24 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                     element1.questionTag == questionTriggerData.tag,
                     orElse: () => null);
                 if (selectedAnswerTriggerData != null) {
-                  SelectedAnswers selectedAnswerData = widget.selectedAnswers
-                      .firstWhere(
-                          (element1) =>
-                      element1.questionTag ==
-                          selectedAnswerTriggerData.questionTag &&
-                          element1.answer == selectedAnswerTriggerData.answer,
-                      orElse: () => null);
+
+                  SelectedAnswers selectedAnswerData;
+                  if(!isFromTextField) {
+                    selectedAnswerData = widget.selectedAnswers
+                        .firstWhere(
+                            (element1) =>
+                        element1.questionTag ==
+                            selectedAnswerTriggerData.questionTag &&
+                            element1.answer == selectedAnswerTriggerData.answer,
+                        orElse: () => null);
+                  } else {
+                    selectedAnswerData = widget.selectedAnswers
+                        .firstWhere(
+                            (element1) =>
+                        element1.questionTag ==
+                            selectedAnswerTriggerData.questionTag,
+                        orElse: () => null);
+                  }
                   if (selectedAnswerData == null) {
                     widget.selectedAnswers.add(SelectedAnswers(
                         questionTag: selectedAnswerTriggerData.questionTag,
@@ -2199,7 +2210,7 @@ class _AddHeadacheSectionState extends State<AddHeadacheSection>
                         textCapitalization: TextCapitalization.sentences,
                         textInputAction: TextInputAction.done,
                         onChanged: (text) {
-                          onValueChangedCallback(questionTag, text.trim());
+                          onValueChangedCallback(questionTag, text.trim(), true);
                         },
                         initialValue: (selectedTriggerValue != null)
                             ? selectedTriggerValue

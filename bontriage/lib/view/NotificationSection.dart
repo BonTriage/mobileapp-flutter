@@ -60,6 +60,10 @@ class _NotificationSectionState extends State<NotificationSection>
 
   //String customNotificationName = 'Custom';
 
+  DateTime dailyCurrentTimeValue;
+  DateTime medicationCurrentTimeValue;
+  DateTime exerciseCurrentTimeValue;
+
 
   @override
   void initState() {
@@ -341,10 +345,12 @@ class _NotificationSectionState extends State<NotificationSection>
                                   setState(() {
                                     isWeekDaysSelected = false;
                                     isOffSelected = false;
-                                    if (isDailySelected) {
-                                      isDailySelected = false;
-                                    } else {
+                                    if (!isDailySelected) {
                                       isDailySelected = true;
+
+                                      if(selectedTimerValue != null) {
+                                        selectedTimerValue = 'Daily, ${Utils.getTimeInAmPmFormat(_dateTime.hour, _dateTime.minute)}';
+                                      }
                                     }
 
                                     /*var dailyLogNotificationData = widget.allNotificationListData.firstWhere(
@@ -412,10 +418,14 @@ class _NotificationSectionState extends State<NotificationSection>
                                   setState(() {
                                     isDailySelected = false;
                                     isOffSelected = false;
-                                    if (isWeekDaysSelected) {
-                                      isWeekDaysSelected = false;
-                                    } else {
+                                    if (!isWeekDaysSelected) {
                                       isWeekDaysSelected = true;
+
+                                      if(selectedTimerValue != null) {
+                                        if(selectedTimerValue != null) {
+                                          selectedTimerValue = 'WeekDay, ${Utils.getTimeInAmPmFormat(_dateTime.hour, _dateTime.minute)}';
+                                        }
+                                      }
                                     }
                                   });
                                 },
@@ -448,27 +458,26 @@ class _NotificationSectionState extends State<NotificationSection>
                               setState(() {
                                 isWeekDaysSelected = false;
                                 isDailySelected = false;
-                                if (isOffSelected) {
-                                  isOffSelected = false;
-                                } else {
+                                if (!isOffSelected) {
                                   isOffSelected = true;
-                                }
-                                _selectedTimerValueFunc('Off');
-                                if (widget.notificationId == 0) {
-                                  _deleteNotificationChannel(0);
-                                  _deleteNotificationChannel(1);
-                                } else if(widget.notificationId == 1) {
-                                  _deleteNotificationChannel(2);
-                                  _deleteNotificationChannel(3);
-                                }else if (widget.notificationId == 2){
-                                  _deleteNotificationChannel(4);
-                                  _deleteNotificationChannel(5);
-                                } else {
-                                  _deleteNotificationChannel(6);
-                                  _deleteNotificationChannel(7);
-                                }
 
-                                _removeNotificationDataFromList();
+                                  _selectedTimerValueFunc('Off');
+                                  if (widget.notificationId == 0) {
+                                    _deleteNotificationChannel(0);
+                                    _deleteNotificationChannel(1);
+                                  } else if(widget.notificationId == 1) {
+                                    _deleteNotificationChannel(2);
+                                    _deleteNotificationChannel(3);
+                                  }else if (widget.notificationId == 2){
+                                    _deleteNotificationChannel(4);
+                                    _deleteNotificationChannel(5);
+                                  } else {
+                                    _deleteNotificationChannel(6);
+                                    _deleteNotificationChannel(7);
+                                  }
+
+                                  _removeNotificationDataFromList();
+                                }
                               });
                             },
                             child: Text(

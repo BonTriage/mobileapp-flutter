@@ -386,8 +386,87 @@ class CalendarHeadacheLogDayDetailsBloc {
               orElse: () => null);
           String triggersValues = triggersElement.value;
           List<String> formattedValues = triggersValues.split("%@");
+          String titleInfo = Constant.blankString;
+          formattedValues.forEach((triggerName) {
+
+            if(triggerName.toLowerCase() == 'foods') {
+              var mobileEventDetailTrigger = element.mobileEventDetails.firstWhere((element) => element.questionTag == 'triggers1.food', orElse: () => null);
+
+              if(mobileEventDetailTrigger == null)
+                titleInfo = '$titleInfo$triggerName\n';
+              else
+                titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger.value}\n';
+            } else if (triggerName.toLowerCase() == 'change in schedule') {
+              var mobileEventDetailTrigger = element.mobileEventDetails.firstWhere((element) => element.questionTag == 'triggers1.scheduleChange', orElse: () => null);
+
+              if(mobileEventDetailTrigger == null)
+                titleInfo = '$titleInfo$triggerName\n';
+              else
+                titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger.value}\n';
+            } else if (triggerName.toLowerCase() == 'environmental changes') {
+              var mobileEventDetailTrigger = element.mobileEventDetails.firstWhere((element) => element.questionTag == 'triggers1.environment', orElse: () => null);
+
+              if(mobileEventDetailTrigger == null)
+                titleInfo = '$titleInfo$triggerName\n';
+              else
+                titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger.value}\n';
+            } else if(triggerName.toLowerCase() == 'travel') {
+              var mobileEventDetailTrigger = element.mobileEventDetails.firstWhere((element) => element.questionTag == 'triggers1.travel', orElse: () => null);
+
+              if(mobileEventDetailTrigger != null) {
+                List<String> travelTriggerList = mobileEventDetailTrigger.value.split('%@');
+
+                if(travelTriggerList.length > 0) {
+                  titleInfo = '$titleInfo$triggerName - ${travelTriggerList.toString()}\n';
+                }
+              } else {
+                titleInfo = '$titleInfo$triggerName\n';
+              }
+            } else {
+              var mobileEventDetailTrigger = element.mobileEventDetails.firstWhere((element) => element.questionTag.contains(triggerName.toLowerCase()), orElse: () => null);
+
+              if(triggerName.toLowerCase() == 'alcohol') {
+                if(mobileEventDetailTrigger == null)
+                  titleInfo = '$titleInfo$triggerName - 1 drink\n';
+                else {
+                  int noOfAlcoholDrinks = int.tryParse(mobileEventDetailTrigger.value);
+
+                  if(noOfAlcoholDrinks == 1) {
+                    titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger
+                        .value} drink\n';
+                  } else {
+                    titleInfo =
+                    '$titleInfo$triggerName - ${mobileEventDetailTrigger
+                        .value} drinks\n';
+                  }
+                }
+              } else if (triggerName.toLowerCase() == 'caffeine') {
+                if(mobileEventDetailTrigger == null)
+                  titleInfo = '$titleInfo$triggerName - 1 cup\n';
+                else {
+                  int noOfCaffeineCups = int.tryParse(mobileEventDetailTrigger.value);
+
+                  if(noOfCaffeineCups == 1) {
+                    titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger
+                        .value} cup\n';
+                  } else {
+                    titleInfo =
+                    '$titleInfo$triggerName - ${mobileEventDetailTrigger
+                        .value} cups\n';
+                  }
+                }
+              } else {
+                if(mobileEventDetailTrigger == null)
+                  titleInfo = '$titleInfo$triggerName\n';
+                else
+                  titleInfo = '$titleInfo$triggerName - ${mobileEventDetailTrigger.value}\n';
+              }
+            }
+          });
+          
+          titleInfo = titleInfo.replaceRange(titleInfo.length - 1, titleInfo.length, Constant.blankString);
           logDayTriggersWidgetData.logDayListData.titleInfo =
-              formattedValues.toString();
+              titleInfo;
           logDayTriggersWidgetData.logDayListData.titleName = 'Triggers';
 
           logDayTriggersWidgetData.imagePath = Constant.alcoholIcon;
@@ -397,7 +476,6 @@ class CalendarHeadacheLogDayDetailsBloc {
         }
       }
     });
-
 
     response.logDayNote.forEach((element) {
       var logDayNoteData = element.mobileEventDetails.firstWhere(
