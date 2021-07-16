@@ -11,7 +11,7 @@ import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 
-class MoreMyProfileRepository {
+class MoreLocationServicesRepository {
 
   Future<dynamic> myProfileServiceCall(String url, RequestMethod requestMethod) async {
     try {
@@ -42,10 +42,6 @@ class MoreMyProfileRepository {
     } catch (e) {
       return null;
     }
-  }
-
-  Future<UserProfileInfoModel> getUserProfileInfoModel() async{
-    return await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
   }
 
   Future<String>_getProfileDataPayload(List<SelectedAnswers> selectedAnswers) async {
@@ -85,5 +81,9 @@ class MoreMyProfileRepository {
     }
 
     return jsonEncode(signUpOnBoardAnswersRequestModel);
+  }
+
+  Future<UserProfileInfoModel> getUserProfileInfoModel() async {
+    return await SignUpOnBoardProviders.db.getLoggedInUserAllInformation();
   }
 }

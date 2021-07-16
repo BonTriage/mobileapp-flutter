@@ -8,7 +8,6 @@ import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
 import 'package:mobile/util/TabNavigatorRoutes.dart';
 import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
-import 'package:mobile/view/ChangePasswordScreen.dart';
 
 class MoreSection extends StatefulWidget {
   final String text;

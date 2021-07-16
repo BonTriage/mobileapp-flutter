@@ -7,7 +7,6 @@ import 'package:mobile/models/HomeScreenArgumentModel.dart';
 import 'package:mobile/models/PartTwoOnBoardArgumentModel.dart';
 import 'package:mobile/models/QuestionsModel.dart';
 import 'package:mobile/models/SignUpOnBoardSelectedAnswersModel.dart';
-import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/models/UserProgressDataModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
 import 'package:mobile/view/ApiLoaderDialog.dart';
@@ -719,5 +718,11 @@ class Utils {
     File file = new File('$dir/$filename');
     await file.writeAsBytes(bytes);
     return file;
+  }
+
+  static Future<bool> checkLocationPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    return permission == LocationPermission.whileInUse || permission == LocationPermission.always;
   }
 }

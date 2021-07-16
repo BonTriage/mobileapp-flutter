@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/models/UserProfileInfoModel.dart';
 import 'package:mobile/providers/SignUpOnBoardProviders.dart';
+import 'package:mobile/util/Utils.dart';
 import 'package:mobile/util/constant.dart';
 import 'package:mobile/view/ChangePasswordScreen.dart';
 import 'package:mobile/view/MoreSection.dart';
@@ -25,6 +26,7 @@ class MoreSettingScreen extends StatefulWidget {
 
 class _MoreSettingScreenState extends State<MoreSettingScreen> {
   String _notificationStatus = Constant.notAllowed;
+  String _locationStatus = Constant.notAllowed;
 
   @override
   void initState() {
@@ -103,6 +105,13 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
                           navigateToOtherScreenCallback: _navigateToOtherScreen,
                         ),
                         MoreSection(
+                          currentTag: Constant.locationServices,
+                          text: Constant.locationServices,
+                          moreStatus: _locationStatus,
+                          isShowDivider: true,
+                          navigateToOtherScreenCallback: _navigateToOtherScreen,
+                        ),
+                        MoreSection(
                           currentTag: Constant.changePassword,
                           text: Constant.changePassword,
                           moreStatus: Constant.blankString,
@@ -138,6 +147,12 @@ class _MoreSettingScreenState extends State<MoreSettingScreen> {
   void _checkNotificationStatus() async {
     var notificationListData =
         await SignUpOnBoardProviders.db.getAllLocalNotificationsData();
+
+    bool isLocationAllowed = await Utils.checkLocationPermission();
+
+    if(isLocationAllowed ?? false) {
+      _locationStatus = Constant.allowed;
+    }
 
     if (Platform.isIOS) {
       var permissionResult = await flutterLocalNotificationsPlugin

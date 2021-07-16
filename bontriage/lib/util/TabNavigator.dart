@@ -132,7 +132,10 @@ class TabNavigator extends StatelessWidget {
         navigateToOtherScreenCallback: navigateToOtherScreenCallback,
         onPush: _push,
       ),
-      TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(),
+      TabNavigatorRoutes.moreLocationServicesScreenRoute: (context) => MoreLocationServicesScreen(
+        showApiLoaderCallback: showApiLoaderCallback,
+        openActionSheetCallback: openActionSheetCallback,
+      ),
       TabNavigatorRoutes.moreNameScreenRoute: (context) => MoreNameScreen(
         selectedAnswerList: arguments,
         openActionSheetCallback: openActionSheetCallback,
